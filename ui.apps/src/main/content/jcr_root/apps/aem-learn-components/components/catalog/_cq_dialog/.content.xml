@@ -13,9 +13,13 @@
                                     <column jcr:primaryType="nt:unstructured" sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
 
-                                            <showFilter jcr:primaryType="nt:unstructured" sling:resourceType="granite/ui/components/coral/foundation/form/switch" fieldLabel="Show Filter" value="true" name="./showFilter" required="{Boolean}false" />
+                                            <showFilter jcr:primaryType="nt:unstructured" 
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/switch" 
+                                            fieldLabel="Show Filter" value="true" name="./showFilter" required="{Boolean}false" />
 
-                                            <showSearch jcr:primaryType="nt:unstructured" sling:resourceType="granite/ui/components/coral/foundation/form/switch" fieldLabel="Show Search" value="true" name="./showSearch" required="{Boolean}false" />
+                                            <showSearch jcr:primaryType="nt:unstructured" 
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/switch" 
+                                            fieldLabel="Show Search" value="true" name="./showSearch" required="{Boolean}false" />
                                             <!-- 
 
                                             <pagination jcr:primaryType="nt:unstructured" sling:resourceType="granite/ui/components/coral/foundation/form/select" fieldLabel="Pagination Type" name="./pagination">

@@ -1,5 +1,10 @@
 <div
   data-sly-use.placeholderTemplate="core/wcm/components/commons/v1/templates.html"
+  data-sly-use.data="com.aemlearncomponents.core.models.Navigation"
+  data-sly-attribute.data-learning-page-url="${data.learningPageUrl}"
+  data-sly-attribute.data-community-page-url="${data.communityPageUrl}"
+  data-sly-attribute.data-support-page-url="${data.supportPageUrl}"
+  class="navigation__parent"
 >
   <div id="${component.id}" class="navigation__root">
     <div class="navigation__body"></div>

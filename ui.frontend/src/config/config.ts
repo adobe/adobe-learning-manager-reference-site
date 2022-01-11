@@ -7,4 +7,8 @@ export default {
     boardsContainer: ".boards__body",
     boardContainer: ".board__body",
   },
+
+  parentContainers: {
+    navParent: ".navigation__parent",
+  },
 };
