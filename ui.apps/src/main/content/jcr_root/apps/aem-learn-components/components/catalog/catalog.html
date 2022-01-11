@@ -1,0 +1,8 @@
+<div
+  data-sly-use.placeholderTemplate="core/wcm/components/commons/v1/templates.html"
+  data-sly-use.data="com.aemlearncomponents.core.models.Catalog"
+  class="catalog__body"
+  data-sly-attribute.data-show-filter="${data.showFilter}"
+  data-sly-attribute.data-show-search="${data.showSearch}"
+></div>
+<sly data-sly-call="${placeholderTemplate.placeholder @ isEmpty=true}"></sly>

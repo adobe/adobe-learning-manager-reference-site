@@ -1,0 +1,8 @@
+<div
+  data-sly-use.placeholderTemplate="core/wcm/components/commons/v1/templates.html"
+>
+  <div id="${component.id}" class="navigation__root">
+    <div class="navigation__body"></div>
+  </div>
+</div>
+<sly data-sly-call="${placeholderTemplate.placeholder @ isEmpty=true}"></sly>
