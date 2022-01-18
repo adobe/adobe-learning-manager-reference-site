@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:deviceGroups="[mobile/groups/responsive]"
+        cq:lastModified="{Date}2022-01-17T20:34:19.557+05:30"
+        cq:lastModifiedBy="admin"
+        cq:template="/conf/aem-learn-components/settings/wcm/templates/home-page"
+        jcr:primaryType="cq:PageContent"
+        sling:resourceType="wcm/foundation/components/page">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="wcm/foundation/components/responsivegrid">
+            <title
+                jcr:created="{Date}2022-01-17T19:56:15.615+05:30"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2022-01-17T19:56:15.615+05:30"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/title"/>
+            <contentfragment
+                jcr:created="{Date}2022-01-17T19:56:24.729+05:30"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2022-01-17T19:56:24.729+05:30"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="dam/cfm/components/contentfragment"
+                editable="{Boolean}true">
+                <cq:responsive jcr:primaryType="nt:unstructured">
+                    <default
+                        jcr:primaryType="nt:unstructured"
+                        offset="0"
+                        width="6"/>
+                </cq:responsive>
+            </contentfragment>
+            <textimage
+                jcr:created="{Date}2022-01-17T19:56:45.342+05:30"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2022-01-17T19:56:45.342+05:30"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/textimage"
+                editable="{Boolean}true">
+                <cq:responsive jcr:primaryType="nt:unstructured">
+                    <default
+                        jcr:primaryType="nt:unstructured"
+                        offset="0"
+                        width="6"/>
+                </cq:responsive>
+            </textimage>
+            <text
+                jcr:created="{Date}2022-01-17T19:56:54.343+05:30"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2022-01-17T20:19:05.294+05:30"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/text"
+                text="&lt;p style=&quot;text-align: center;&quot;>&lt;b>hfhghghg Footer Content&lt;/b>&lt;/p>&#xa;&lt;p>&amp;nbsp;&lt;/p>&#xa;"
+                textIsRich="true"/>
+            <responsivegrid
+                jcr:created="{Date}2022-01-17T20:29:30.576+05:30"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2022-01-17T20:29:30.576+05:30"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/responsivegrid">
+                <cq:responsive jcr:primaryType="nt:unstructured"/>
+                <boards
+                    jcr:created="{Date}2022-01-17T20:29:38.951+05:30"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2022-01-17T20:29:38.951+05:30"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="aem-learn-components/components/boards"/>
+                <navigation
+                    jcr:created="{Date}2022-01-17T20:29:49.900+05:30"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2022-01-17T20:34:19.547+05:30"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="aem-learn-components/components/navigation"
+                    communityPageUrl="https://www.Facebook.com"
+                    learningPageUrl="https://www.google.com"
+                    supportPageUrl="https://www.twitter.com"/>
+                <board
+                    jcr:created="{Date}2022-01-17T20:29:35.930+05:30"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2022-01-17T20:29:35.930+05:30"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="aem-learn-components/components/board"/>
+            </responsivegrid>
+        </root>
+        <cq:responsive jcr:primaryType="nt:unstructured">
+            <breakpoints jcr:primaryType="nt:unstructured">
+                <phone
+                    jcr:primaryType="nt:unstructured"
+                    title="Smaller Screen"
+                    width="{Long}650"/>
+                <tablet
+                    jcr:primaryType="nt:unstructured"
+                    title="Tablet"
+                    width="{Long}1200"/>
+            </breakpoints>
+        </cq:responsive>
+    </jcr:content>
+</jcr:root>
