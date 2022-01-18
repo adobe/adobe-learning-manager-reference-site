@@ -41,7 +41,7 @@ module.exports = {
   libs: {
     name: 'clientlib-react',
     allowProxy: true,
-    categories: ['aem-learn-components.react'],
+    categories: ['aem-learn-components.ui'],
     serializationFormat: 'xml',
     cssProcessor: ['default:none', 'min:none'],
     jsProcessor: ['default:none', 'min:none'],

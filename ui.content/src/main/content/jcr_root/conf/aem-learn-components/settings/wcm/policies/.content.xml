@@ -10,14 +10,14 @@
                         mergeList="{Boolean}true"/>
                     <default
                         jcr:description="Policy of the default page"
-                        jcr:lastModified="{Date}2022-01-17T20:33:38.174+05:30"
+                        jcr:lastModified="{Date}2022-01-18T09:58:30.376+05:30"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Default Page"
                         sling:resourceType="wcm/core/components/policy/policy"
-                        clientlibs="[wcm.foundation.components.page.responsive,aem-learn-components.dependencies,aem-learn-components.react]">
+                        clientlibs="[wcm.foundation.components.page.responsive,aem-learn-components.dependencies,aem-learn-components.ui]">
                         <jcr:content
-                            cq:lastReplicated="{Date}2022-01-17T20:33:51.424+05:30"
+                            cq:lastReplicated="{Date}2022-01-18T09:58:43.732+05:30"
                             cq:lastReplicatedBy="admin"
                             cq:lastReplicationAction="Activate"
                             jcr:mixinTypes="[cq:ReplicationStatus]"

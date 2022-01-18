@@ -3,9 +3,9 @@
     jcr:primaryType="cq:Page">
     <jcr:content
         cq:deviceGroups="[mobile/groups/responsive]"
-        cq:lastModified="{Date}2022-01-17T20:34:19.557+05:30"
+        cq:lastModified="{Date}2022-01-18T09:40:33.960+05:30"
         cq:lastModifiedBy="admin"
-        cq:lastReplicated="{Date}2022-01-18T09:23:51.524+05:30"
+        cq:lastReplicated="{Date}2022-01-18T09:42:23.985+05:30"
         cq:lastReplicatedBy="admin"
         cq:lastReplicationAction="Activate"
         cq:template="/conf/aem-learn-components/settings/wcm/templates/home-page"
@@ -36,7 +36,7 @@
                     <default
                         jcr:primaryType="nt:unstructured"
                         offset="0"
-                        width="6"/>
+                        width="12"/>
                 </cq:responsive>
             </contentfragment>
             <textimage
@@ -51,7 +51,7 @@
                     <default
                         jcr:primaryType="nt:unstructured"
                         offset="0"
-                        width="6"/>
+                        width="12"/>
                 </cq:responsive>
             </textimage>
             <text
