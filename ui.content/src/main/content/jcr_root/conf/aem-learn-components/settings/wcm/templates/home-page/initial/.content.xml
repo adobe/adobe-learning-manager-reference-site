@@ -35,6 +35,38 @@
                     height="0"
                     width="0"/>
             </textimage>
+            <responsivegrid
+                jcr:created="{Date}2022-01-17T20:29:30.576+05:30"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2022-01-18T09:23:07.643+05:30"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/responsivegrid">
+                <boards
+                    jcr:created="{Date}2022-01-17T20:29:38.951+05:30"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2022-01-17T20:29:38.951+05:30"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="aem-learn-components/components/boards"/>
+                <navigation
+                    jcr:created="{Date}2022-01-17T20:29:49.900+05:30"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2022-01-17T20:34:19.547+05:30"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="aem-learn-components/components/navigation"
+                    communityPageUrl="https://www.Facebook.com"
+                    learningPageUrl="https://www.google.com"
+                    supportPageUrl="https://www.twitter.com"/>
+                <board
+                    jcr:created="{Date}2022-01-17T20:29:35.930+05:30"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2022-01-17T20:29:35.930+05:30"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="aem-learn-components/components/board"/>
+            </responsivegrid>
         </root>
     </jcr:content>
 </jcr:root>

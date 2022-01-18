@@ -120,14 +120,14 @@
                         components="group:AemLearnComponents - Structure"/>
                     <policy_386698200551400
                         jcr:description="AEM Learn policy"
-                        jcr:lastModified="{Date}2022-01-17T20:27:39.895+05:30"
+                        jcr:lastModified="{Date}2022-01-18T09:19:20.697+05:30"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="AEM Learn policy"
                         sling:resourceType="wcm/core/components/policy/policy"
-                        components="[group:General,group:AemLearnComponents - Structure]">
+                        components="[group:AemLearnComponents - Structure]">
                         <jcr:content
-                            cq:lastReplicated="{Date}2022-01-17T20:30:00.267+05:30"
+                            cq:lastReplicated="{Date}2022-01-18T09:19:33.207+05:30"
                             cq:lastReplicatedBy="admin"
                             cq:lastReplicationAction="Activate"
                             jcr:mixinTypes="[cq:ReplicationStatus]"
