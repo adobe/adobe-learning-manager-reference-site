@@ -1,5 +1,4 @@
 import React from "react";
-import { Provider as ReduxProvider } from "react-redux"; //
 import { AuthContextProvider } from "./authContextProvider";
 
 /**
@@ -9,8 +8,9 @@ import { AuthContextProvider } from "./authContextProvider";
  */
 const contextProviders = [AuthContextProvider];
 
-export const AEMLearnContextProviders = (props: React.PropsWithChildren<{}>) => {
-  // console.log("Inside context provider", store.getState());
+export const AEMLearnContextProviders = (
+  props: React.PropsWithChildren<{}>
+) => {
   return (
     <React.Fragment>
       {contextProviders.reduceRight((child, Provider) => {

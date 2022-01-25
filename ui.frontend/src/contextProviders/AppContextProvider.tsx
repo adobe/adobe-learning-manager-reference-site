@@ -1,7 +1,7 @@
 import React from "react";
-import { Provider as ReduxProvider } from "react-redux";//
+import { Provider as ReduxProvider } from "react-redux"; //
 //import { LibContextProvider } from "adb-react-lib";
-import { AEMLearnContextProviders } from "../externalLib/contextProviders/AEMLearnContextProviders";
+import { AEMLearnContextProviders } from "../externalLib";
 
 import store from "../store/APIStore";
 
@@ -16,12 +16,9 @@ export const AppContextProvider = (props: React.PropsWithChildren<{}>) => {
   // console.log("Inside context provider", store.getState());
   return (
     <ReduxProvider store={store}>
-        {contextProviders.reduceRight((child, Provider) => {
-            return <Provider >{child}</Provider>;
+      {contextProviders.reduceRight((child, Provider) => {
+        return <Provider>{child}</Provider>;
       }, props.children)}
     </ReduxProvider>
   );
 };
-
-
- 

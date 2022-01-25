@@ -1,15 +1,13 @@
-
 import { createStore } from "redux";
-import rootReducer from "../externalLib/store/rootReducer";
+import { reducer } from "../externalLib";
 
 //import { composeWithDevTools } from "redux-devtools-extension";
 
-
 const initialState = {};
 const store = createStore(
-    rootReducer,
-  initialState as never,
+  reducer,
+  initialState as never
   //composeWithDevTools(),
 );
-console.log("reducer", rootReducer);
+console.log("reducer", reducer);
 export default store;

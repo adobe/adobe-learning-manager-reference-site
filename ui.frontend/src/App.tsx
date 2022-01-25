@@ -7,10 +7,9 @@ import Boards from "./components/boards";
 import Board from "./components/board";
 import Catalog from "./components/catalog";
 import config from "./config/config";
-import {AppContextProvider} from "./contextProviders";
-//import { useButtonContext } from "adb-react-lib";
-import { useAuthContext } from "./externalLib/contextProviders/authContextProvider";
-//import { useSelector } from "react-redux";
+import { AppContextProvider } from "./contextProviders";
+import { useAuthContext } from "./externalLib";
+import store from "./store/APIStore";
 
 const withSuspense = (Component: any) => {
   let WithSuspense: any = (props: any) => {
@@ -48,10 +47,10 @@ const TestPortal = withSuspense(Portal);
 
 const App = () => {
   const { mountingPoints } = config;
-
+  console.log(store.getState());
   return (
     <AppContextProvider>
-      <Test/>
+      <Test />
       <TestPortal selector={mountingPoints.navContainer}>
         <Navigation />
       </TestPortal>
@@ -77,14 +76,12 @@ const App = () => {
 
 const Test = () => {
   //you can use the context directly like this
-  const {accessToken, updateAccessToken} = useAuthContext();
+  const { accessToken, updateAccessToken } = useAuthContext();
   const authenticateUser = () => {
     updateAccessToken("abcd");
   };
   return (
-    <button onClick={authenticateUser}>
-      Hi From Test, {accessToken}
-    </button>
+    <button onClick={authenticateUser}>Hi From Test, {accessToken}</button>
   );
 };
 

@@ -1,5 +1,6 @@
 import React from "react";
 import config from "../../config/config";
+import { useAuthContext } from "../../externalLib";
 
 const { parentContainers } = config;
 
@@ -8,6 +9,10 @@ const dataFromAEM = (
 )?.dataset;
 
 const Navigation = () => {
+  const { accessToken, updateAccessToken } = useAuthContext();
+  const authenticateUser = () => {
+    updateAccessToken("abcd");
+  };
   return (
     <>
       <div>Hi from Navigation component</div>
@@ -37,6 +42,7 @@ const Navigation = () => {
           Support
         </a>
       </div>
+      <button onClick={authenticateUser}>Hi From Test, {accessToken}</button>
     </>
   );
 };
