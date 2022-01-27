@@ -1,1 +1,2 @@
 export const LOAD_USER = "LOAD_USER";
+export const LOAD_ACCOUNT_AND_USER = "LOAD_ACCOUNT_AND_USER";

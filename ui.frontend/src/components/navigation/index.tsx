@@ -11,10 +11,10 @@ const dataFromAEM = (
 const Navigation = () => {
   const { accessToken, updateAccessToken } = useAuthContext();
 
-  const { user, loadTheUsers } = useUser();
+  const { user, initUser } = useUser();
   const authenticateUser = () => {
     updateAccessToken("abcd");
-    loadTheUsers();
+    initUser();
   };
   return (
     <>

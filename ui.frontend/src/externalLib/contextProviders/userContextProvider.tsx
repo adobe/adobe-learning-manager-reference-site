@@ -1,12 +1,12 @@
 import React, { createContext, useContext } from "react";
 import { connect } from "react-redux";
 import { State } from "../store";
-import { loadUser } from "../store";
+import { initAccountUser } from "../store";
 
 const UserContext = createContext<any | undefined>(undefined);
 const Provider = (props: any) => {
-  const { user, loadUser, children } = props;
-  const contextValue = { user, loadUser };
+  const { user, initAccountUser, children } = props;
+  const contextValue = { user, initAccountUser };
 
   return (
     <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
@@ -16,7 +16,7 @@ const Provider = (props: any) => {
 const user = (state: State) => ({ user: state.user });
 
 const mapDispatchToProps = {
-  loadUser,
+  initAccountUser,
 };
 
 const UserContextProvider = connect(

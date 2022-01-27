@@ -8,7 +8,7 @@ import Board from "./components/board";
 import Catalog from "./components/catalog";
 import config from "./config/config";
 import { AppContextProvider } from "./contextProviders";
-import { useAuthContext, useUser, Portal } from "./externalLib";
+import { useAuthContext, useUser, Portal, useAccount } from "./externalLib";
 import store from "./store/APIStore";
 
 const App = () => {
@@ -43,17 +43,18 @@ const App = () => {
 
 const Test = () => {
   //you can use the context directly like this
-  const { accessToken, updateAccessToken } = useAuthContext();
-  const { loadTheUsers, user } = useUser();
+ // const { accessToken, updateAccessToken } = useAuthContext();
+  const { user, initUser } = useUser();
+  const { account } = useAccount();
   const authenticateUser = () => {
-    updateAccessToken("abcd");
-    loadTheUsers();
+   // updateAccessToken("977987875cfb84db2470bb52a81ecbcd");
+   initUser();
   };
-  console.log("user details : ", user);
+  //console.log("user details : ", user);
   return (
     <>
-      <button onClick={authenticateUser}>Hi From Test, {accessToken}</button>
-      User details : {user.name}
+      <button onClick={authenticateUser}>Hi From Test, </button>
+      User details : {user.name} {account.name}
     </>
   );
 };

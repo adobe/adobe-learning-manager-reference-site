@@ -1,4 +1,5 @@
 import React from "react";
+import { AccountContextProvider } from "./accountContextProvider";
 import { AuthContextProvider } from "./authContextProvider";
 import { UserContextProvider } from "./userContextProvider";
 
@@ -7,7 +8,7 @@ import { UserContextProvider } from "./userContextProvider";
  *
  * @property {React.Component[]} contextProviders
  */
-const contextProviders = [AuthContextProvider, UserContextProvider];
+const contextProviders = [AuthContextProvider, UserContextProvider, AccountContextProvider];
 
 export const AEMLearnContextProviders = (
   props: React.PropsWithChildren<{}>
