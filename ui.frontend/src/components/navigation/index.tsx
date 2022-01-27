@@ -1,6 +1,6 @@
 import React from "react";
 import config from "../../config/config";
-import { useAuthContext } from "../../externalLib";
+import { useAuthContext, useUser } from "../../externalLib";
 
 const { parentContainers } = config;
 
@@ -10,12 +10,15 @@ const dataFromAEM = (
 
 const Navigation = () => {
   const { accessToken, updateAccessToken } = useAuthContext();
+
+  const { user, loadTheUsers } = useUser();
   const authenticateUser = () => {
     updateAccessToken("abcd");
+    loadTheUsers();
   };
   return (
     <>
-      <div>Hi from Navigation component</div>
+      <div>Hi from Navigation component {user.name}</div>
       <div>
         <a
           target="_blank"

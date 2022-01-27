@@ -8,42 +8,8 @@ import Board from "./components/board";
 import Catalog from "./components/catalog";
 import config from "./config/config";
 import { AppContextProvider } from "./contextProviders";
-import { useAuthContext } from "./externalLib";
+import { useAuthContext, useUser, Portal } from "./externalLib";
 import store from "./store/APIStore";
-
-const withSuspense = (Component: any) => {
-  let WithSuspense: any = (props: any) => {
-    return (
-      <Suspense fallback={null}>
-        <Component {...props} />
-      </Suspense>
-    );
-  };
-  WithSuspense.displayName = `withSuspense(${
-    Component.displayName || Component.name
-  })`;
-  return WithSuspense;
-};
-
-const Portal = (props: any) => {
-  let { selector, children } = props;
-
-  let elem;
-  if (selector instanceof HTMLElement) {
-    elem = selector;
-  } else if (typeof selector === "string") {
-    elem = document.querySelector(selector);
-  }
-
-  if (elem) {
-    // Only render children if mounting point is available
-    return ReactDOM.createPortal(children, elem);
-  }
-
-  return null;
-};
-
-const TestPortal = withSuspense(Portal);
 
 const App = () => {
   const { mountingPoints } = config;
@@ -51,25 +17,26 @@ const App = () => {
   return (
     <AppContextProvider>
       <Test />
-      <TestPortal selector={mountingPoints.navContainer}>
+
+      <Portal selector={mountingPoints.navContainer}>
         <Navigation />
-      </TestPortal>
+      </Portal>
 
-      <TestPortal selector={mountingPoints.loOverviewContainer}>
+      <Portal selector={mountingPoints.loOverviewContainer}>
         <LoOverview />
-      </TestPortal>
+      </Portal>
 
-      <TestPortal selector={mountingPoints.catalogContainer}>
+      <Portal selector={mountingPoints.catalogContainer}>
         <Catalog />
-      </TestPortal>
+      </Portal>
 
-      <TestPortal selector={mountingPoints.boardsContainer}>
+      <Portal selector={mountingPoints.boardsContainer}>
         <Boards />
-      </TestPortal>
+      </Portal>
 
-      <TestPortal selector={mountingPoints.boardContainer}>
+      <Portal selector={mountingPoints.boardContainer}>
         <Board />
-      </TestPortal>
+      </Portal>
     </AppContextProvider>
   );
 };
@@ -77,11 +44,17 @@ const App = () => {
 const Test = () => {
   //you can use the context directly like this
   const { accessToken, updateAccessToken } = useAuthContext();
+  const { loadTheUsers, user } = useUser();
   const authenticateUser = () => {
     updateAccessToken("abcd");
+    loadTheUsers();
   };
+  console.log("user details : ", user);
   return (
-    <button onClick={authenticateUser}>Hi From Test, {accessToken}</button>
+    <>
+      <button onClick={authenticateUser}>Hi From Test, {accessToken}</button>
+      User details : {user.name}
+    </>
   );
 };
 

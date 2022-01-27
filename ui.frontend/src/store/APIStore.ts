@@ -9,5 +9,4 @@ const store = createStore(
   initialState as never
   //composeWithDevTools(),
 );
-console.log("reducer", reducer);
 export default store;

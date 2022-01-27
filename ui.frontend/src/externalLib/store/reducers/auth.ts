@@ -1,4 +1,4 @@
-import { AnyAction, combineReducers, Reducer } from "redux";
+import { AnyAction, Reducer } from "redux";
 
 const accessToken: Reducer<String, AnyAction> = (
   state: String | undefined,
