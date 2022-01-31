@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useCallback, useContext, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../store";
 import { initAccountUser } from "../store";
@@ -6,13 +6,19 @@ import { initAccountUser } from "../store";
 const AccountContext = createContext<any | undefined>(undefined);
 const Provider = (props: any) => {
   const { children } = props;
-  const account = useSelector((state: State) => state.account);
+  const accountState = useSelector((state: State) => state.account);
   const dispatch = useDispatch();
 
-  const initAccountUserUpdater = (payload: any) =>
-    dispatch(initAccountUser(payload));
+  const initAccountUserUpdater = useCallback(
+    (payload: any) => dispatch(initAccountUser(payload)),
+    [dispatch]
+  );
 
-  const contextValue = { account, initAccountUser: initAccountUserUpdater };
+  const contextValue = useMemo(() => {
+    const account = { ...accountState };
+
+    return { account, updateAccessToken: initAccountUserUpdater };
+  }, [accountState, initAccountUserUpdater]);
 
   return (
     <AccountContext.Provider value={contextValue}>

@@ -1,17 +1,24 @@
-import { createContext, useContext } from "react";
+import { createContext, useCallback, useContext, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State, initAccountUser } from "../store";
 
 const UserContext = createContext<any | undefined>(undefined);
 const Provider = (props: any) => {
   const { children } = props;
-  const user = useSelector((state: State) => state.user);
+  const userState = useSelector((state: State) => state.user);
   const dispatch = useDispatch();
 
-  const initAccountUserUpdater = (payload: any) =>
-    dispatch(initAccountUser(payload));
+  const initAccountUserUpdater = useCallback(
+    (payload: any) => dispatch(initAccountUser(payload)),
+    [dispatch]
+  );
 
-  const contextValue = { user, initAccountUser: initAccountUserUpdater };
+  const contextValue = useMemo(() => {
+    const user = { ...userState };
+
+    return { user, initAccountUser: initAccountUserUpdater };
+  }, [userState, initAccountUserUpdater]);
+
   return (
     <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
   );
@@ -20,3 +27,26 @@ const Provider = (props: any) => {
 const useUserContext = () => useContext(UserContext);
 
 export { Provider as UserContextProvider, useUserContext };
+
+// import { createContext, useContext } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import { State, initAccountUser } from "../store";
+
+// const UserContext = createContext<any | undefined>(undefined);
+// const Provider = (props: any) => {
+//   const { children } = props;
+//   const user = useSelector((state: State) => state.user);
+//   const dispatch = useDispatch();
+
+//   const initAccountUserUpdater = (payload: any) =>
+//     dispatch(initAccountUser(payload));
+
+//   const contextValue = { user, initAccountUser: initAccountUserUpdater };
+//   return (
+//     <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
+//   );
+// };
+
+// const useUserContext = () => useContext(UserContext);
+
+// export { Provider as UserContextProvider, useUserContext };

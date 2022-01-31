@@ -1,17 +1,24 @@
-import { createContext, useContext } from "react";
+import { createContext, useCallback, useContext, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { State, updateAccessToken } from "../store";
+import { State } from "../store";
+import { updateAccessToken } from "../store";
 
 const AuthContext = createContext<any | undefined>(undefined);
 const Provider = (props: any) => {
-  const accessToken = useSelector((state: State) => state.accessToken);
-  const dispatch = useDispatch();
   const { children } = props;
-  
-  const accessTokenUpdater = (payload: any) =>
-    dispatch(updateAccessToken(payload));
+  const authState = useSelector((state: State) => state.accessToken);
+  const dispatch = useDispatch();
 
-  const contextValue = { accessToken, updateAccessToken: accessTokenUpdater };
+  const updateAccessTokenUpdater = useCallback(
+    (payload: any) => dispatch(updateAccessToken(payload)),
+    [dispatch]
+  );
+
+  const contextValue = useMemo(() => {
+    const accessToken = authState;
+
+    return { accessToken, updateAccessToken: updateAccessTokenUpdater };
+  }, [authState, updateAccessTokenUpdater]);
 
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
@@ -21,14 +28,3 @@ const Provider = (props: any) => {
 const useAuthContext = () => useContext(AuthContext);
 
 export { Provider as AuthContextProvider, useAuthContext };
-
-// const accessToken = (state: State) => ({ accessToken: state.accessToken });
-
-// const mapDispatchToProps = {
-//   updateAccessToken,
-// };
-
-// const AuthContextProvider = connect(
-//   accessToken,
-//   mapDispatchToProps
-// )(Provider as any);
