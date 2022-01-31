@@ -5,7 +5,7 @@ import Board from "./components/board";
 import Catalog from "./components/catalog";
 import config from "./config/config";
 import { AppContextProvider } from "./contextProviders";
-import { useAuthContext, Portal, useAccount } from "./externalLib";
+import { useAuthContext, Portal, useAccount, AEMLearnCatalogFilters } from "./externalLib";
 
 const App = () => {
   const { mountingPoints } = config;
@@ -43,10 +43,12 @@ const Test = () => {
   const authenticateUser = () => {
     updateAccessToken(Math.random());
   };
+  const filters = ["1", "2", "3"];
   return (
     <>
       <button onClick={authenticateUser}>Get Access Token </button>
       User details : {accessToken} {account.name}
+      <AEMLearnCatalogFilters filters={filters}></AEMLearnCatalogFilters>
     </>
   );
 };
