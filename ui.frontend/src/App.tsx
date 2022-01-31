@@ -1,6 +1,3 @@
-import ReactDOM from "react-dom";
-import React, { Suspense } from "react";
-
 import Navigation from "./components/navigation";
 import LoOverview from "./components/loOverview";
 import Boards from "./components/boards";
@@ -8,19 +5,16 @@ import Board from "./components/board";
 import Catalog from "./components/catalog";
 import config from "./config/config";
 import { AppContextProvider } from "./contextProviders";
-import { useAuthContext, useUser, Portal, useAccount } from "./externalLib";
-import store from "./store/APIStore";
+import { useAuthContext, Portal, useAccount } from "./externalLib";
 
 const App = () => {
   const { mountingPoints } = config;
-  console.log(store.getState());
   return (
     <AppContextProvider>
       <Test />
 
-      <Portal selector={mountingPoints.navContainer}>
-        <Navigation />
-      </Portal>
+      <Navigation />
+      <Portal selector={mountingPoints.navContainer}></Portal>
 
       <Portal selector={mountingPoints.loOverviewContainer}>
         <LoOverview />
@@ -42,19 +36,17 @@ const App = () => {
 };
 
 const Test = () => {
+  console.log("Re-Rendering Test Component");
   //you can use the context directly like this
- // const { accessToken, updateAccessToken } = useAuthContext();
-  const { user, initUser } = useUser();
+  const { accessToken, updateAccessToken } = useAuthContext();
   const { account } = useAccount();
   const authenticateUser = () => {
-   // updateAccessToken("977987875cfb84db2470bb52a81ecbcd");
-   initUser();
+    updateAccessToken(Math.random());
   };
-  //console.log("user details : ", user);
   return (
     <>
-      <button onClick={authenticateUser}>Hi From Test, </button>
-      User details : {user.name} {account.name}
+      <button onClick={authenticateUser}>Get Access Token </button>
+      User details : {accessToken} {account.name}
     </>
   );
 };

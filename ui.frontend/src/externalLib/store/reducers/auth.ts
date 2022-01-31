@@ -2,7 +2,7 @@ import { AnyAction, Reducer } from "redux";
 
 const accessToken: Reducer<String, AnyAction> = (
   state: String | undefined,
-  action: any
+  action: AnyAction
 ) => {
   switch (action.type) {
     case "AUTHENTICATE_USER": {

@@ -1,29 +1,26 @@
-import React, { createContext, useContext } from "react";
-import { connect } from "react-redux";
+import { createContext, useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { State } from "../store";
 import { initAccountUser } from "../store";
 
 const AccountContext = createContext<any | undefined>(undefined);
 const Provider = (props: any) => {
-  const { account, initAccountUser, children } = props;
-  const contextValue = { account, initAccountUser };
+  const { children } = props;
+  const account = useSelector((state: State) => state.account);
+  const dispatch = useDispatch();
+
+  const initAccountUserUpdater = (payload: any) =>
+    dispatch(initAccountUser(payload));
+
+  const contextValue = { account, initAccountUser: initAccountUserUpdater };
 
   return (
-    <AccountContext.Provider value={contextValue}>{children}</AccountContext.Provider>
+    <AccountContext.Provider value={contextValue}>
+      {children}
+    </AccountContext.Provider>
   );
 };
 
-const account = (state: State) => ({ account: state.account });
-
-const mapDispatchToProps = {
-  initAccountUser,
-};
-
-const AccountContextProvider = connect(
-  account,
-  mapDispatchToProps
-)(Provider as any);
-
 const useAccountContext = () => useContext(AccountContext);
 
-export { AccountContextProvider, useAccountContext };
+export { Provider as AccountContextProvider, useAccountContext };

@@ -13,7 +13,6 @@ import store from "../store/APIStore";
 const contextProviders = [AEMLearnContextProviders];
 
 export const AppContextProvider = (props: React.PropsWithChildren<{}>) => {
-  // console.log("Inside context provider", store.getState());
   return (
     <ReduxProvider store={store}>
       {contextProviders.reduceRight((child, Provider) => {

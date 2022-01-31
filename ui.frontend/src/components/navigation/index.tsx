@@ -1,6 +1,5 @@
-import React from "react";
 import config from "../../config/config";
-import { useAuthContext, useUser } from "../../externalLib";
+import { useUser } from "../../externalLib";
 
 const { parentContainers } = config;
 
@@ -9,15 +8,16 @@ const dataFromAEM = (
 )?.dataset;
 
 const Navigation = () => {
-  const { accessToken, updateAccessToken } = useAuthContext();
-
+  console.log("Re-Rendering Navigation Component");
   const { user, initUser } = useUser();
   const authenticateUser = () => {
-    updateAccessToken("abcd");
     initUser();
   };
   return (
     <>
+      <br />
+      <br />
+      <br />
       <div>Hi from Navigation component {user.name}</div>
       <div>
         <a
@@ -45,7 +45,8 @@ const Navigation = () => {
           Support
         </a>
       </div>
-      <button onClick={authenticateUser}>Hi From Test, {accessToken}</button>
+      <button onClick={authenticateUser}>Get User Details</button>
+      <div> {user.name}</div>
     </>
   );
 };
