@@ -10,6 +10,7 @@ import {
   Portal,
   useAccount,
   AEMLearnCatalogFilters,
+  useCatalog,
 } from "./externalLib";
 import store from "./store/APIStore";
 
@@ -46,6 +47,7 @@ const Test = () => {
   //you can use the context directly like this
   const { accessToken, updateAccessToken } = useAuthContext();
   const { account } = useAccount();
+  const { items, fetchTrainings } = useCatalog();
   const authenticateUser = () => {
     updateAccessToken(Math.random());
   };
@@ -56,6 +58,12 @@ const Test = () => {
       <button onClick={authenticateUser}>Get Access Token </button>
       User details : {accessToken} {account.name}
       <AEMLearnCatalogFilters filters={filters}></AEMLearnCatalogFilters>
+      <button onClick={fetchTrainings}>Fetch Training</button>
+      {items?.map((item) => (
+        <div key={item.id}>
+          {item.id}
+        </div>
+      ))}
     </>
   );
 };

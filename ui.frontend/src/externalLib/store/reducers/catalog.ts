@@ -3,12 +3,12 @@ import { AEMLearnLearningObject } from "../../models";
 import { AnyAction, Reducer, combineReducers } from "redux";
 
 export interface CatalogFilterState {
-  skills: { [key: string]: boolean };
-  tags: { [key: string]: boolean };
-  types: { [key: string]: boolean };
-  statuses: { [key: string]: boolean };
-  formats: { [key: string]: boolean };
-  duration: { [key: string]: boolean };
+  loTypes: string;
+  skillName: string;
+  tags: string;
+  learnerState: string;
+  loFormat: string;
+  duration: string;
 }
 
 export interface CatalogState {
@@ -32,6 +32,8 @@ const items: Reducer<AEMLearnLearningObject[] | null, AnyAction> = (
   action: AnyAction
 ) => {
   switch (action.type) {
+    case "FETCH_TRAININGS":
+      return action.payload;
     default:
       return state || [];
   }
@@ -66,72 +68,72 @@ const sort: Reducer<
   }
 };
 
-const skills: Reducer<{ [key: string]: boolean }, AnyAction> = (
-  state: { [key: string]: boolean } | undefined,
+const skillName: Reducer<string, AnyAction> = (
+  state: string | undefined,
   action: AnyAction
 ) => {
   switch (action.type) {
     default:
-      return state || {};
+      return state || "";
   }
 };
 
-const tags: Reducer<{ [key: string]: boolean }, AnyAction> = (
-  state: { [key: string]: boolean } | undefined,
+const tags: Reducer<string, AnyAction> = (
+  state: string | undefined,
   action: AnyAction
 ) => {
   switch (action.type) {
     default:
-      return state || {};
+      return state || "";
   }
 };
 
-const types: Reducer<{ [key: string]: boolean }, AnyAction> = (
-  state: { [key: string]: boolean } | undefined,
+const loTypes: Reducer<string, AnyAction> = (
+  state: string | undefined,
   action: AnyAction
 ) => {
   switch (action.type) {
     default:
-      return state || {};
+      return state || "course,learningProgram,certification,jobAid";
   }
 };
 
-const statuses: Reducer<{ [key: string]: boolean }, AnyAction> = (
-  state: { [key: string]: boolean } | undefined,
+const learnerState: Reducer<string, AnyAction> = (
+  state: string | undefined,
   action: AnyAction
 ) => {
   switch (action.type) {
     default:
-      return state || {};
+      return state || "";
   }
 };
 
-const formats: Reducer<{ [key: string]: boolean }, AnyAction> = (
-  state: { [key: string]: boolean } | undefined,
+const loFormat: Reducer<string, AnyAction> = (
+  state: string | undefined,
   action: AnyAction
 ) => {
   switch (action.type) {
     default:
-      return state || {};
+      return state || "";
   }
 };
 
-const duration: Reducer<{ [key: string]: boolean }, AnyAction> = (
-  state: { [key: string]: boolean } | undefined,
+const duration: Reducer<string, AnyAction> = (
+  state: string | undefined,
   action: AnyAction
 ) => {
   switch (action.type) {
     default:
-      return state || {};
+      return state || "";
   }
 };
 
 const filterState: Reducer<CatalogFilterState, AnyAction> = combineReducers({
-  skills,
+  skillName,
   tags,
-  types,
-  statuses,
-  formats,
+  loTypes,
+  learnerState,
+  loFormat,
   duration,
 });
 
