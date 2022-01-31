@@ -5,7 +5,13 @@ import Board from "./components/board";
 import Catalog from "./components/catalog";
 import config from "./config/config";
 import { AppContextProvider } from "./contextProviders";
-import { useAuthContext, Portal, useAccount, AEMLearnCatalogFilters } from "./externalLib";
+import {
+  useAuthContext,
+  Portal,
+  useAccount,
+  AEMLearnCatalogFilters,
+} from "./externalLib";
+import store from "./store/APIStore";
 
 const App = () => {
   const { mountingPoints } = config;
@@ -44,6 +50,7 @@ const Test = () => {
     updateAccessToken(Math.random());
   };
   const filters = ["1", "2", "3"];
+  console.log("state : ", store.getState());
   return (
     <>
       <button onClick={authenticateUser}>Get Access Token </button>
