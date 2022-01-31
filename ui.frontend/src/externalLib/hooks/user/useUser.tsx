@@ -14,7 +14,7 @@ export const useUser = () => {
         include: "account",
       };
       const response = await RestAdapter.get({
-        url: `https://captivateprimeqe.adobe.com/primeapi/v2/user`,
+        url: `${(window as any).baseUrl}user`,
         params: params,
       });
       const userData = JsonApiParse(response).user;

@@ -8,7 +8,7 @@ const dataFromAEM = (
 )?.dataset;
 
 const Navigation = () => {
-  console.log("Re-Rendering Navigation Component");
+  // console.log("Re-Rendering Navigation Component");
   const { user, initUser } = useUser();
   const authenticateUser = () => {
     initUser();
