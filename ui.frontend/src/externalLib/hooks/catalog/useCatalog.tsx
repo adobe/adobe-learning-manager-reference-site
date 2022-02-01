@@ -3,6 +3,7 @@ import { RestAdapter } from "../../utils/restAdapter";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../store/state";
+import APIService from "../../common/APIService";
 
 type QueryParams = Record<string, string | number | boolean>;
 
@@ -14,31 +15,33 @@ export const useCatalog = () => {
 
   const fetchTrainings = useCallback(async () => {
     try {
-      const params: QueryParams = {};
-      params["sort"] = sort;
-      params["filter.loTypes"] = filterState.loTypes;
+      // const params: QueryParams = {};
+      // params["sort"] = sort;
+      // params["filter.loTypes"] = filterState.loTypes;
 
-      if (filterState.skillName) {
-        params["filter.skillName"] = filterState.skillName;
-      }
-      if (filterState.tagName) {
-        params["filter.tagName"] = filterState.tagName;
-      }
-      if (filterState.learnerState) {
-        params["filter.learnerState"] = filterState.learnerState;
-      }
-      if (filterState.loFormat) {
-        params["filter.loFormat"] = filterState.loFormat;
-      }
-      if (filterState.duration) {
-        params["filter.duration.range"] = filterState.duration;
-      }
+      // if (filterState.skillName) {
+      //   params["filter.skillName"] = filterState.skillName;
+      // }
+      // if (filterState.tagName) {
+      //   params["filter.tagName"] = filterState.tagName;
+      // }
+      // if (filterState.learnerState) {
+      //   params["filter.learnerState"] = filterState.learnerState;
+      // }
+      // if (filterState.loFormat) {
+      //   params["filter.loFormat"] = filterState.loFormat;
+      // }
+      // if (filterState.duration) {
+      //   params["filter.duration.range"] = filterState.duration;
+      // }
 
-      const response = await RestAdapter.get({
-        url: `${(window as any).baseUrl}learningObjects?page[limit]=10`,
-        params: params,
-      });
-      const itemsData = JsonApiParse(response).learningObjectList || null;
+      // const response = await RestAdapter.get({
+      //   url: `${(window as any).baseUrl}learningObjects?page[limit]=10`,
+      //   params: params,
+      // });
+      // const itemsData = JsonApiParse(response).learningObjectList || null;
+      const apiService = new APIService();
+      const itemsData = await apiService.getTrainings(filterState,sort);
 
       dispatch({
         type: "FETCH_TRAININGS",

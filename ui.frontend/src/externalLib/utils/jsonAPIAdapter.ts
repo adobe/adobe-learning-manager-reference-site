@@ -1,33 +1,33 @@
 import { JsonApiResponse } from "../models";
 
-let store : APIWidgetStore | undefined;
-export function GetStore(): APIWidgetStore {
+let store : Store | undefined;
+export function GetStore(): Store {
     if (!store) {
-        store = new APIWidgetStore();
+        store = new Store();
     }
     return store;
 }
 
-export class APIWidgetStore {
-    private cache_lxpv: any = {};
+export class Store {
+    private cache: any = {};
 
     public put(obj: any): void {
-        if (!this.cache_lxpv[obj["type"]]) {
-            this.cache_lxpv[obj["type"]] = {};
+        if (!this.cache[obj["type"]]) {
+            this.cache[obj["type"]] = {};
         }
-        this.cache_lxpv[obj["type"]][obj["id"]] = obj;
+        this.cache[obj["type"]][obj["id"]] = obj;
     }
     public get(type: string, id: string): any {
-        if (!this.cache_lxpv[type]) {
-            this.cache_lxpv[type] = {};
+        if (!this.cache[type]) {
+            this.cache[type] = {};
         }
-        return this.cache_lxpv[type][id];
+        return this.cache[type][id];
     }
 }
 
 export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
-    const storeToUse: APIWidgetStore = GetStore();
-    if (typeof jsonApiResponse == "string") jsonApiResponse = JSON.parse(jsonApiResponse);
+    const storeToUse: Store = GetStore();
+    if (typeof jsonApiResponse === "string") jsonApiResponse = JSON.parse(jsonApiResponse);
 
     if (Array.isArray(jsonApiResponse.included)) {
         for (let j = 0; j < jsonApiResponse.included.length; ++j) {
@@ -40,8 +40,8 @@ export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
     let result;
     let data = jsonApiResponse["data"];
     if (Array.isArray(data)) {
-        if (data.length && data[0]["type"] == "searchResult") {
-            data = jsonApiResponse.included.filter((item: { type: any }) => item.type == "learningObject");
+        if (data.length && data[0]["type"] === "searchResult") {
+            data = jsonApiResponse.included.filter((item: { type: any }) => item.type === "learningObject");
         }
         result = [];
         let oneObj;
@@ -55,8 +55,8 @@ export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
             }
         }
     } else {
-        if (data["type"] == "searchResult") {
-            data = jsonApiResponse.included.filter((item: { type: any }) => item.type == "learningObject");
+        if (data["type"] === "searchResult") {
+            data = jsonApiResponse.included.filter((item: { type: any }) => item.type === "learningObject");
         }
         dataType = data["type"];
         storeToUse.put(data);
@@ -64,7 +64,7 @@ export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
     }
     const retval: any = {};
     if (dataType) {
-        retval[`${dataType == "searchResult" ? "learningObject" : dataType}${isList ? "List" : ""}`] = result;
+        retval[`${dataType === "searchResult" ? "learningObject" : dataType}${isList ? "List" : ""}`] = result;
     }
     retval.links = jsonApiResponse["links"];
     retval.meta = jsonApiResponse["meta"];
@@ -72,7 +72,7 @@ export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
 }
 
 // export function JsonApiRelationshipUpdate(baseObj: JsonApiDataRef, relationRefToUpdate: JsonApiDataRef, relName: string, storeType: WidgetType) {
-//     const storeToUse: APIWidgetStore = GetStore(storeType);
+//     const storeToUse: Store = GetStore(storeType);
 //     const obj = storeToUse.get(baseObj.type, baseObj.id);
 //     //Add relationship - For now going with simple update
 //     //This might require a refactor if we need lot more functionality
@@ -83,37 +83,37 @@ export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
 export class ObjectWrapper {
     private id_lxpv: string;
     private type_lxpv: string;
-    private dataObj_lxpv: any;
-    private storeToUse_lxpv: APIWidgetStore;
+    private dataObject: any;
+    private storeToUse_lxpv: Store;
 
-    constructor(type: string, id: string, storeToUse: APIWidgetStore, dataObj: any) {
+    constructor(type: string, id: string, storeToUse: Store, dataObj: any) {
         this.id_lxpv = id;
         this.type_lxpv = type;
         this.storeToUse_lxpv = storeToUse;
         //We can think of falling back to COMMON store - might be helpful in cases like user account
         //not sideloaded in widget specific api calls, but can be accessed through fallback
-        this.dataObj_lxpv = dataObj ? dataObj : storeToUse.get(type, id);
-        //this.dataObj_lxpv = dataObj;
-        if (this.dataObj_lxpv !== undefined && !this.dataObj_lxpv._transient) {
-            this.dataObj_lxpv._transient = {};
+        this.dataObject = dataObj ? dataObj : storeToUse.get(type, id);
+        //this.dataObject = dataObj;
+        if (this.dataObject !== undefined && !this.dataObject._transient) {
+            this.dataObject._transient = {};
         }
     }
     public get(attr: string) {
-        if (attr == "id") return this.id_lxpv;
-        if (attr == "type") return this.type_lxpv;
-        if (attr == "__storedataobj") return this.dataObj_lxpv;
-        if (attr == "_transient") return this.dataObj_lxpv._transient;
+        if (attr === "id") return this.id_lxpv;
+        if (attr === "type") return this.type_lxpv;
+        if (attr === "__storedataobj") return this.dataObject;
+        if (attr === "_transient") return this.dataObject._transient;
 
-        if (this.dataObj_lxpv === undefined) return;
+        if (this.dataObject === undefined) return;
 
         let retval;
-        if (this.dataObj_lxpv.hasOwnProperty("attributes")) {
+        if (this.dataObject.hasOwnProperty("attributes")) {
             //check in attributes
-            retval = this.dataObj_lxpv["attributes"].hasOwnProperty(attr) ? this.dataObj_lxpv["attributes"][attr] : undefined;
+            retval = this.dataObject["attributes"].hasOwnProperty(attr) ? this.dataObject["attributes"][attr] : undefined;
         }
-        if (retval === undefined && this.dataObj_lxpv.hasOwnProperty("relationships")) {
+        if (retval === undefined && this.dataObject.hasOwnProperty("relationships")) {
             //check in relationships
-            retval = this.dataObj_lxpv["relationships"][attr];
+            retval = this.dataObject["relationships"][attr];
             if (retval !== undefined) {
                 const relData = retval["data"];
                 if (Array.isArray(relData)) {
@@ -129,7 +129,7 @@ export class ObjectWrapper {
         return retval;
     }
 
-    public static GetWrapper(type: string, id: string,storeToUse: APIWidgetStore,dataObj?: any): ObjectWrapper {
+    public static GetWrapper(type: string, id: string,storeToUse: Store,dataObj?: any): ObjectWrapper {
         let objWrapper = new ObjectWrapper(type, id, storeToUse, dataObj);
         objWrapper = new Proxy(objWrapper, {
             get: function (target: any, attr: string) {

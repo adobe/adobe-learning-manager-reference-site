@@ -14,8 +14,8 @@ import {
 } from "./externalLib";
 import store from "./store/APIStore";
 
-(window as any).baseUrl = "https://captivateprimestage1.adobe.com/primeapi/v2/";
-(window as any).token = "oauth c95fb6144280b7c34a89cd0336f11d6b";
+(window as any).baseUrl = "https://captivateprimeqe.adobe.com/primeapi/v2/";
+(window as any).token = "oauth 9e60a31423b12e28000a3990a1e910a2";
 
 const App = () => {
   const { mountingPoints } = config;
