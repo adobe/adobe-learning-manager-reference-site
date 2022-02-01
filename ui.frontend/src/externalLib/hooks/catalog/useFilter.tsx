@@ -1,7 +1,12 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 
-import { useDispatch, useSelector } from "react-redux";
-import { State } from "../../store/state";
+import { useDispatch } from "react-redux";
+import {
+  updateLearnerStateFilter,
+  updateLoFormatFilter,
+  updateLoTypesFilter,
+  updateSkillNameFilter,
+} from "../../store/actions/catalog/action";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { RestAdapter } from "../../utils/restAdapter";
 
@@ -17,10 +22,27 @@ export interface FilterType {
   list?: Array<FilterListObject>;
 }
 
+interface ActionMap {
+  loTypes: Function;
+}
+const ACTION_MAP = {
+  loTypes: updateLoTypesFilter,
+  learnerState: updateLearnerStateFilter,
+  skillName: updateSkillNameFilter,
+  loFormat: updateLoFormatFilter,
+};
+
+export interface UpdateFiltersEvent {
+  filterType: string;
+  checked: boolean;
+  label: string;
+}
+
 export interface Filter1State {
   loTypes: FilterType;
   learnerState: FilterType;
   skillName: FilterType;
+  loFormat: FilterType;
 }
 
 const filtersDefault: Filter1State = {
@@ -52,9 +74,25 @@ const filtersDefault: Filter1State = {
     show: true,
     list: [],
   },
+  loFormat: {
+    type: "loFormat",
+    label: "Format",
+    show: true,
+    list: [
+      { value: "ACTIVITY", label: "Activity", checked: false },
+      { value: "BLENDED", label: "Blended", checked: false },
+      { value: "SELF PACED", label: "Self Paced", checked: false },
+      {
+        value: "VIRTUAL CLASSROOM",
+        label: "Virtual Classroom",
+        checked: false,
+      },
+    ],
+  },
 };
 
 const getDefualtFiltersState = () => filtersDefault;
+
 export const useFilter = () => {
   const [filterState, setFilterState] = useState(() =>
     getDefualtFiltersState()
@@ -63,15 +101,12 @@ export const useFilter = () => {
 
   const dispatch = useDispatch();
 
-  const updateFilters = (data: {
-    filterType: string;
-    checked: boolean;
-    label: string;
-  }) => {
+  const updateFilters = (data: UpdateFiltersEvent) => {
     const filters = filterState[data.filterType as keyof Filter1State];
     let payload = "";
     filters.list?.forEach((item) => {
       if (item.label === data.label) {
+        //just update with the arguments
         item.checked = !item.checked;
       }
       if (item.checked) {
@@ -79,10 +114,9 @@ export const useFilter = () => {
       }
     });
     setFilterState({ ...filterState, [data.filterType]: { ...filters } });
-    dispatch({
-      type: `UPDATE_${data.filterType.toUpperCase()}_FILTERS`,
-      payload,
-    });
+    const action = ACTION_MAP[data.filterType as keyof ActionMap];
+
+    if (action && action instanceof Function) dispatch(action(payload));
   };
 
   useEffect(() => {
@@ -111,58 +145,3 @@ export const useFilter = () => {
     isLoading,
   };
 };
-
-// useEffect(() => {
-//   const loTypes = {
-//     type: "loTypes",
-//     label: "Type",
-//     show: true,
-//     list: [
-//       { value: "course", label: "course", checked: false },
-//       { value: "learningProgram", label: "Learning Program", checked: true },
-//       { value: "jonAid", label: "Job Aid", checked: false },
-//       { value: "certification", label: "Certification", checked: true },
-//     ],
-//   };
-//   dispatch({
-//     type: "LOAD_FILTERS",
-//     payload: {
-//       loTypes,
-//     },
-//   });
-// }, [dispatch]);
-
-// const filters = useMemo(() => {
-//   const loTypeFilters = {
-//     type: "loTypes",
-//     label: "Type",
-//     show: true,
-//     list: [
-//       { value: "course", label: "course", checked: false },
-//       { value: "learningProgram", label: "Learning Program", checked: true },
-//       { value: "jonAid", label: "Job Aid", checked: false },
-//       { value: "certification", label: "Certification", checked: true },
-//     ],
-//   };
-
-//   const learnerStateFilters = {
-//     type: "learnerState",
-//     label: "Status",
-//     show: true,
-//     list: [
-//       { value: "enrolled", label: "Enrolled", checked: true },
-//       { value: "completed", label: "Completed", checked: false },
-//       { value: "started", label: "Started", checked: false },
-//       { value: "notEnrolled", label: "Not Enrolled", checked: true },
-//     ],
-//   };
-
-//   return {
-//     loTypeFilters,
-//     learnerStateFilters,
-//   };
-// }, []);
-
-// return {
-//   ...filters,
-// };

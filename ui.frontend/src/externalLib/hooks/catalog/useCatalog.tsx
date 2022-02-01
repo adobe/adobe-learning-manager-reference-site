@@ -4,6 +4,8 @@ import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../store/state";
 import APIService from "../../common/APIService";
+import { loadTrainings } from "../../store/actions/catalog/action";
+import { AEMLearnLearningObject } from "../../models/AEMLearnModels";
 
 type QueryParams = Record<string, string | number | boolean>;
 
@@ -41,19 +43,13 @@ export const useCatalog = () => {
       // });
       // const itemsData = JsonApiParse(response).learningObjectList || null;
       const apiService = new APIService();
+      //TO-DO fix this any
       const itemsData = await apiService.getTrainings(filterState,sort);
 
-      dispatch({
-        type: "FETCH_TRAININGS",
-        payload: itemsData,
-      });
-      // setIsloading(false);
+      dispatch(loadTrainings(itemsData as AEMLearnLearningObject[]));
     } catch (e) {
-      // setIsloading(false);
-      dispatch({
-        type: "FETCH_TRAININGS",
-        payload: [],
-      });
+      dispatch(loadTrainings([] as AEMLearnLearningObject[]));
+
       console.log("Error while calling user " + e);
     }
   }, [dispatch, filterState, sort]);

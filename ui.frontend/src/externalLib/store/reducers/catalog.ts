@@ -1,7 +1,17 @@
 import { AEMLearnLearningObject } from "../../models";
 
 import { AnyAction, Reducer, combineReducers } from "redux";
+import {
+  LOAD_TRAININGS,
+  UPDATE_LEARNERSTATE_FILTERS,
+  UPDATE_LOFORMAT_FILTERS,
+  UPDATE_LOTYPES_FILTERS,
+  UPDATE_SKILLNAME_FILTERS,
+} from "../actions/catalog/actionTypes";
 
+export const DEFUALT_FILTERS_VALUE = {
+  loTypes: "course,learningProgram,certification,jobAid",
+};
 export interface CatalogFilterState {
   skillName: string;
   tagName: string;
@@ -32,7 +42,7 @@ const items: Reducer<AEMLearnLearningObject[] | null, AnyAction> = (
   action: AnyAction
 ) => {
   switch (action.type) {
-    case "FETCH_TRAININGS":
+    case LOAD_TRAININGS:
       return action.payload;
     default:
       return state || [];
@@ -73,7 +83,7 @@ const skillName: Reducer<string, AnyAction> = (
   action: AnyAction
 ) => {
   switch (action.type) {
-    case "UPDATE_SKILLNAME_FILTERS":
+    case UPDATE_SKILLNAME_FILTERS:
       return action.payload;
     default:
       return state || "";
@@ -95,10 +105,10 @@ const loTypes: Reducer<string, AnyAction> = (
   action: AnyAction
 ) => {
   switch (action.type) {
-    case "UPDATE_LOTYPES_FILTERS":
-      return action.payload || "course,learningProgram,certification,jobAid";
+    case UPDATE_LOTYPES_FILTERS:
+      return action.payload || DEFUALT_FILTERS_VALUE["loTypes"];
     default:
-      return state || "course,learningProgram,certification,jobAid";
+      return state || DEFUALT_FILTERS_VALUE["loTypes"];
   }
 };
 
@@ -107,7 +117,7 @@ const learnerState: Reducer<string, AnyAction> = (
   action: AnyAction
 ) => {
   switch (action.type) {
-    case "UPDATE_LEARNERSTATE_FILTERS":
+    case UPDATE_LEARNERSTATE_FILTERS:
       return action.payload;
     default:
       return state || "";
@@ -119,6 +129,8 @@ const loFormat: Reducer<string, AnyAction> = (
   action: AnyAction
 ) => {
   switch (action.type) {
+    case UPDATE_LOFORMAT_FILTERS:
+      return action.payload;
     default:
       return state || "";
   }
