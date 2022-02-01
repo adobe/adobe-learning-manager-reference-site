@@ -2,6 +2,9 @@ import { AEMLearnLearningObject } from "../../models";
 
 import { AnyAction, Reducer, combineReducers } from "redux";
 
+export const DEFUALT_FILTERS_VALUE = {
+  loTypes: "course,learningProgram,certification,jobAid",
+};
 export interface CatalogFilterState {
   skillName: string;
   tagName: string;
@@ -96,9 +99,9 @@ const loTypes: Reducer<string, AnyAction> = (
 ) => {
   switch (action.type) {
     case "UPDATE_LOTYPES_FILTERS":
-      return action.payload || "course,learningProgram,certification,jobAid";
+      return action.payload || DEFUALT_FILTERS_VALUE["loTypes"];
     default:
-      return state || "course,learningProgram,certification,jobAid";
+      return state || DEFUALT_FILTERS_VALUE["loTypes"];
   }
 };
 
@@ -119,6 +122,8 @@ const loFormat: Reducer<string, AnyAction> = (
   action: AnyAction
 ) => {
   switch (action.type) {
+    case "UPDATE_LOFORMAT_FILTERS":
+      return action.payload;
     default:
       return state || "";
   }

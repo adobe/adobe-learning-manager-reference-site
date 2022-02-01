@@ -17,10 +17,17 @@ export interface FilterType {
   list?: Array<FilterListObject>;
 }
 
+export interface UpdateFiltersEvent {
+  filterType: string;
+  checked: boolean;
+  label: string;
+}
+
 export interface Filter1State {
   loTypes: FilterType;
   learnerState: FilterType;
   skillName: FilterType;
+  loFormat: FilterType;
 }
 
 const filtersDefault: Filter1State = {
@@ -52,9 +59,25 @@ const filtersDefault: Filter1State = {
     show: true,
     list: [],
   },
+  loFormat: {
+    type: "loFormat",
+    label: "Format",
+    show: true,
+    list: [
+      { value: "ACTIVITY", label: "Activity", checked: false },
+      { value: "BLENDED", label: "Blended", checked: false },
+      { value: "SELF PACED", label: "Self Paced", checked: false },
+      {
+        value: "VIRTUAL CLASSROOM",
+        label: "Virtual Classroom",
+        checked: false,
+      },
+    ],
+  },
 };
 
 const getDefualtFiltersState = () => filtersDefault;
+
 export const useFilter = () => {
   const [filterState, setFilterState] = useState(() =>
     getDefualtFiltersState()
@@ -63,15 +86,12 @@ export const useFilter = () => {
 
   const dispatch = useDispatch();
 
-  const updateFilters = (data: {
-    filterType: string;
-    checked: boolean;
-    label: string;
-  }) => {
+  const updateFilters = (data: UpdateFiltersEvent) => {
     const filters = filterState[data.filterType as keyof Filter1State];
     let payload = "";
     filters.list?.forEach((item) => {
       if (item.label === data.label) {
+        //just update with the arguments
         item.checked = !item.checked;
       }
       if (item.checked) {

@@ -24,8 +24,8 @@ export const useCatalog = () => {
       if (filterState.skillName) {
         params["filter.skillName"] = filterState.skillName;
       }
-      if (filterState.tags) {
-        params["filter.tags"] = filterState.tags;
+      if (filterState.tagName) {
+        params["filter.tags"] = filterState.tagName;
       }
       if (filterState.learnerState) {
         params["filter.learnerState"] = filterState.learnerState;
@@ -42,7 +42,7 @@ export const useCatalog = () => {
         params: params,
       });
       const itemsData = JsonApiParse(response).learningObjectList;
-      debugger;
+      
       dispatch({
         type: "FETCH_TRAININGS",
         payload: itemsData,

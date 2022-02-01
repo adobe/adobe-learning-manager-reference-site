@@ -15,7 +15,7 @@ import {
 import store from "./store/APIStore";
 
 (window as any).baseUrl = "https://captivateprimestage1.adobe.com/primeapi/v2/";
-(window as any).token = "oauth c95fb6144280b7c34a89cd0336f11d6b";
+(window as any).token = "oauth 712e0f1564c5d79a974a29414a8b162b";
 
 const App = () => {
   const { mountingPoints } = config;
