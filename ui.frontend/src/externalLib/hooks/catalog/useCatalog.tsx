@@ -3,6 +3,8 @@ import { RestAdapter } from "../../utils/restAdapter";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../store/state";
+import { loadTrainings } from "../../store/actions/catalog/action";
+import { AEMLearnLearningObject } from "../../models/AEMLearnModels";
 
 type QueryParams = Record<string, string | number | boolean>;
 
@@ -36,21 +38,15 @@ export const useCatalog = () => {
 
       const response = await RestAdapter.get({
         url: `${(window as any).baseUrl}learningObjects?page[limit]=10`,
+
         params: params,
       });
       const itemsData = JsonApiParse(response).learningObjectList || null;
 
-      dispatch({
-        type: "FETCH_TRAININGS",
-        payload: itemsData,
-      });
-      // setIsloading(false);
+      dispatch(loadTrainings(itemsData));
     } catch (e) {
-      // setIsloading(false);
-      dispatch({
-        type: "FETCH_TRAININGS",
-        payload: [],
-      });
+      dispatch(loadTrainings([] as AEMLearnLearningObject[]));
+
       console.log("Error while calling user " + e);
     }
   }, [dispatch, filterState, sort]);
