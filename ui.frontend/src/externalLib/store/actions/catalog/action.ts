@@ -2,15 +2,14 @@ import { AnyAction } from "redux";
 import { AEMLearnLearningObject } from "../../../models/AEMLearnModels";
 import {
   LOAD_TRAININGS,
+  PAGINATE_TRAININGS,
   UPDATE_LEARNERSTATE_FILTERS,
   UPDATE_LOFORMAT_FILTERS,
   UPDATE_LOTYPES_FILTERS,
   UPDATE_SKILLNAME_FILTERS,
 } from "./actionTypes";
 
-export const loadTrainings = (
-  payload: AEMLearnLearningObject[]
-): AnyAction => ({
+export const loadTrainings = (payload: any): AnyAction => ({
   type: LOAD_TRAININGS,
   payload,
 });
@@ -32,5 +31,13 @@ export const updateSkillNameFilter = (payload: string): AnyAction => ({
 
 export const updateLoFormatFilter = (payload: string): AnyAction => ({
   type: UPDATE_LOFORMAT_FILTERS,
+  payload,
+});
+
+export const paginateTrainings = (payload: {
+  items: AEMLearnLearningObject[];
+  next: string;
+}): AnyAction => ({
+  type: PAGINATE_TRAININGS,
   payload,
 });

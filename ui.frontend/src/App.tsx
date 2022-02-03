@@ -9,13 +9,12 @@ import {
   useAuthContext,
   Portal,
   useAccount,
-  AEMLearnCatalogFilters,
-  useCatalog,
+  AemLearnCatalog,
 } from "./externalLib";
 import store from "./store/APIStore";
 
-(window as any).baseUrl = "https://captivateprimeqe.adobe.com/primeapi/v2/";
-(window as any).token = "oauth 9e60a31423b12e28000a3990a1e910a2";
+(window as any).baseUrl = "https://captivateprimestage1.adobe.com/primeapi/v2/";
+(window as any).token = "oauth 9b589476c3bb04418d706d182870fa57";
 
 const App = () => {
   const { mountingPoints } = config;
@@ -50,20 +49,18 @@ const Test = () => {
   //you can use the context directly like this
   const { accessToken, updateAccessToken } = useAuthContext();
   const { account } = useAccount();
-  const { items } = useCatalog();
+  // const { items, loadMoreTraining } = useCatalog();
   const authenticateUser = () => {
     updateAccessToken(Math.random());
   };
-  console.log("state : ", store.getState());
   return (
     <>
       <button onClick={authenticateUser}>Get Access Token </button>
       User details : {accessToken} {account.name}
-      <AEMLearnCatalogFilters></AEMLearnCatalogFilters>
+      {/* <button onClick={loadMoreTraining}>LoadMore</button> */}
+      {/* <AEMLearnCatalogFilters></AEMLearnCatalogFilters> */}
       {/* <button onClick={fetchTrainings}>Fetch Training</button> */}
-      {items?.map((item) => (
-        <div key={item.id}>{item.id}</div>
-      ))}
+      <AemLearnCatalog />
     </>
   );
 };

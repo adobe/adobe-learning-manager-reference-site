@@ -3,6 +3,7 @@ import { AEMLearnLearningObject } from "../../models";
 import { AnyAction, Reducer, combineReducers } from "redux";
 import {
   LOAD_TRAININGS,
+  PAGINATE_TRAININGS,
   UPDATE_LEARNERSTATE_FILTERS,
   UPDATE_LOFORMAT_FILTERS,
   UPDATE_LOTYPES_FILTERS,
@@ -33,8 +34,8 @@ export interface CatalogState {
     | "rating"
     | "-rating"
     | "dueDate";
-  //   cursor: string | null;
-  //   paginating: boolean;
+  next: string;
+  // paginating: boolean;
 }
 
 const items: Reducer<AEMLearnLearningObject[] | null, AnyAction> = (
@@ -43,7 +44,9 @@ const items: Reducer<AEMLearnLearningObject[] | null, AnyAction> = (
 ) => {
   switch (action.type) {
     case LOAD_TRAININGS:
-      return action.payload;
+      return action.payload?.items;
+    case PAGINATE_TRAININGS:
+      return [...state!, ...action.payload?.items];
     default:
       return state || [];
   }
@@ -146,6 +149,25 @@ const duration: Reducer<string, AnyAction> = (
   }
 };
 
+const next: Reducer<string, AnyAction> = (
+  state: string | undefined,
+  action: AnyAction
+) => {
+  switch (action.type) {
+    case UPDATE_LEARNERSTATE_FILTERS:
+    case UPDATE_LOFORMAT_FILTERS:
+    case UPDATE_LOTYPES_FILTERS:
+    case UPDATE_SKILLNAME_FILTERS:
+      return "";
+
+    case LOAD_TRAININGS:
+    case PAGINATE_TRAININGS:
+      return action.payload?.next;
+    default:
+      return state || "";
+  }
+};
+
 const filterState: Reducer<CatalogFilterState, AnyAction> = combineReducers({
   skillName,
   tagName,
@@ -159,6 +181,7 @@ const catalog: Reducer<CatalogState, AnyAction> = combineReducers({
   items,
   sort,
   filterState,
+  next,
 });
 
 export default catalog;
