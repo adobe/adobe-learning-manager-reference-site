@@ -54,7 +54,7 @@ export class RestAdapter {
       //if (auth.accessToken && options.url.startsWith(GetPrimeHostName())) {
       //TODO:r check if embedding as param works for cors
       //xhr.setRequestHeader("Authorization", `oauth ${auth.accessToken}`);
-      xhr.setRequestHeader("Authorization", (window as any).token);
+      xhr.setRequestHeader("Authorization", `oauth ${(window as any).primeConfig.accessToken}`);
 
       //}
       for (const header in options.headers) {

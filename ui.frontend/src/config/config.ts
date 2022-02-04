@@ -1,4 +1,4 @@
-import { AEMConfig } from "../externalLib";
+import { PrimeConfig } from "../externalLib";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
@@ -15,12 +15,13 @@ export default {
   },
 };
 
-// TODO: These will come from AEM
+// TODO: These will come from prime
 const baseUrl = "";
 const basePath = ""
 
-export const aemConfig: AEMConfig = {
-  baseApiUrl: "https://captivateprimestage1.adobe.com/primeapi/v2/",
+export const primeConfig: PrimeConfig = {
+  baseApiUrl: "https://captivateprimeqe.adobe.com/primeapi/v2/",
+  accessToken: "4c5d84c253f765eca852a2df546d2ac2",
   pagePaths: {
     baseUrl,
     instance: `${basePath}/instance.html`,

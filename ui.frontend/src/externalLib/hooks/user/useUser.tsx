@@ -1,20 +1,20 @@
 import { useCallback } from "react";
 import { RestAdapter } from "../../utils/restAdapter";
-import { useUserContext } from "../../contextProviders";
+import { useConfigContext, useUserContext } from "../../contextProviders";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { useDispatch } from "react-redux";
 
 export const useUser = () => {
   const { user, initAccountUser } = useUserContext();
   const dispatch = useDispatch();
-
+  const config = useConfigContext();
   const initUser = useCallback(async () => {
     try {
       const params = {
         include: "account",
       };
       const response = await RestAdapter.get({
-        url: `${(window as any).baseUrl}user`,
+        url: `${config.baseApiUrl}user`,
         params: params,
       });
       const userData = JsonApiParse(response).user;

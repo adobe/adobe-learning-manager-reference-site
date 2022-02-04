@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
 import { useDispatch } from "react-redux";
+import { useConfigContext } from "../../contextProviders";
 import {
   updateLearnerStateFilter,
   updateLoFormatFilter,
@@ -99,6 +100,7 @@ export const useFilter = () => {
   );
   const [isLoading, setIsLoading] = useState(true);
 
+  const config = useConfigContext();
   const dispatch = useDispatch();
 
   const updateFilters = (data: UpdateFiltersEvent) => {
@@ -122,7 +124,7 @@ export const useFilter = () => {
   useEffect(() => {
     const getSkills = async () => {
       const response = await RestAdapter.get({
-        url: `${(window as any).baseUrl}data?filter.skillName=true`,
+        url: `${config.baseApiUrl}data?filter.skillName=true`,
       });
       const skills = JsonApiParse(response)?.data?.names;
       const skillsList = skills.map((item: string) => ({

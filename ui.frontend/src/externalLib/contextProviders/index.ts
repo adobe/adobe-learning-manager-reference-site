@@ -8,4 +8,4 @@ export { AccountContextProvider, useAccountContext } from "./accountContextProvi
 
 export { ConfigContextProvider, useConfigContext } from "./configContextProvider";
 
-export type { AEMConfig } from "./configContextProvider"
+export type { PrimeConfig } from "./configContextProvider"

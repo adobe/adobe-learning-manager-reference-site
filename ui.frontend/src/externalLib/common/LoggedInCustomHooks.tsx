@@ -5,7 +5,7 @@ import ICustomHooks from "./ICustomHooks";
 
 export default class LoggedInCustomHooks implements ICustomHooks {
   async getTrainings(filterState: CatalogFilterState, sort: string) {
-    //console.log("filterState : ", filterState);
+    const baseApiUrl =  (window as any).primeConfig.baseApiUrl;
     const params: QueryParams = {};
     params["sort"] = sort;
     params["filter.loTypes"] = filterState.loTypes;
@@ -26,12 +26,12 @@ export default class LoggedInCustomHooks implements ICustomHooks {
       params["filter.duration.range"] = filterState.duration;
     }
     const response = await RestAdapter.get({
-      url: `${(window as any).baseUrl}/learningObjects?page[limit]=10`,
+      url: `${baseApiUrl}/learningObjects?`,
       params: params,
     });
     const parsedResponse = JsonApiParse(response);
     return {
-      items: parsedResponse.learningObjectList,
+      trainings: parsedResponse.learningObjectList,
       next: parsedResponse.links?.next || "",
     };
   }

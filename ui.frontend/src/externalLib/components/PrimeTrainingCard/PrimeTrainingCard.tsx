@@ -2,11 +2,11 @@ import React from "react";
 
 const PrimeTrainingCard = (props: any) => {
   
-  const cardModel = props.model;
+  const training = props.training;
 
   return (
     <>
-      <div style={{ display: "flex" }}>{cardModel.id}</div>
+      <div style={{ display: "flex" }}>{training.id}</div>
     </>
   );
 };

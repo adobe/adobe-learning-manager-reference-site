@@ -3,7 +3,7 @@ import LoOverview from "./components/loOverview";
 import Boards from "./components/boards";
 import Board from "./components/board";
 import Catalog from "./components/catalog";
-import config, { aemConfig } from "./config/config";
+import config, { primeConfig } from "./config/config";
 import { AppContextProvider } from "./contextProviders";
 import {
   useAuthContext,
@@ -13,13 +13,10 @@ import {
   ConfigContextProvider,
 } from "./externalLib";
 
-(window as any).baseUrl = "https://captivateprimestage1.adobe.com/primeapi/v2/";
-(window as any).token = "oauth 887a15f30babe76cf8345e5f1d8b7874";
-
 const App = () => {
   const { mountingPoints } = config;
   return (
-    <ConfigContextProvider config={aemConfig}>
+    <ConfigContextProvider config={primeConfig}>
       <AppContextProvider>
         <Test />
 
