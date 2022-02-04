@@ -1,4 +1,4 @@
-import { AEMLearnAccount, AEMLearnUser } from "../models/AEMLearnModels";
+import { PrimeAccount, PrimeUser } from "../models/PrimeModels";
 import { CatalogState } from "./reducers/catalog";
 export interface Authentication {
   accessToken: string;
@@ -6,7 +6,7 @@ export interface Authentication {
 
 export interface State {
   accessToken: string;
-  user: AEMLearnUser;
-  account: AEMLearnAccount;
+  user: PrimeUser;
+  account: PrimeAccount;
   catalog: CatalogState;
 }

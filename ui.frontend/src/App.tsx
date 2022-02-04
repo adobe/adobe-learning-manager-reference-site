@@ -9,12 +9,12 @@ import {
   useAuthContext,
   Portal,
   useAccount,
-  AemLearnCatalog,
+  PrimeCatalogContainer ,
 } from "./externalLib";
 import store from "./store/APIStore";
 
-(window as any).baseUrl = "https://captivateprimestage1.adobe.com/primeapi/v2/";
-(window as any).token = "oauth 9b589476c3bb04418d706d182870fa57";
+(window as any).baseUrl = "https://captivateprimeqe.adobe.com/primeapi/v2/";
+(window as any).token = "oauth acda458a799b93908b3afff78a9ef709";
 
 const App = () => {
   const { mountingPoints } = config;
@@ -58,9 +58,9 @@ const Test = () => {
       <button onClick={authenticateUser}>Get Access Token </button>
       User details : {accessToken} {account.name}
       {/* <button onClick={loadMoreTraining}>LoadMore</button> */}
-      {/* <AEMLearnCatalogFilters></AEMLearnCatalogFilters> */}
+      {/* <PrimeCatalogFilters></PrimeCatalogFilters> */}
       {/* <button onClick={fetchTrainings}>Fetch Training</button> */}
-      <AemLearnCatalog />
+      <PrimeCatalogContainer  />
     </>
   );
 };

@@ -6,24 +6,22 @@ import {
   loadTrainings,
   paginateTrainings,
 } from "../../store/actions/catalog/action";
-import { AEMLearnLearningObject } from "../../models/AEMLearnModels";
+import { PrimeLearningObject } from "../../models/PrimeModels";
 
 export const useCatalog = () => {
-  const { items, filterState, sort, next } = useSelector(
+  const { trainings, filterState, sort, next } = useSelector(
     (state: State) => state.catalog
   );
   const dispatch = useDispatch();
   //Fort any page load or filterchanges
   const fetchTrainings = useCallback(async () => {
     try {
-      //TO-DO fix this any
       const response = await APIServiceInstance.getTrainings(filterState, sort);
-
       dispatch(loadTrainings(response));
     } catch (e) {
-      dispatch(loadTrainings([] as AEMLearnLearningObject[]));
+      dispatch(loadTrainings([] as PrimeLearningObject[]));
 
-      // console.log("Error while calling user " + e);
+      console.log("Error while loading trainings " + e);
     }
   }, [dispatch, filterState, sort]);
 
@@ -37,14 +35,14 @@ export const useCatalog = () => {
     const parsedResponse = await APIServiceInstance.loadMore(next);
     dispatch(
       paginateTrainings({
-        items: parsedResponse!.learningObjectList,
+        trainings: parsedResponse!.learningObjectList,
         next: parsedResponse!.links?.next || "",
       })
     );
   }, [dispatch, next]);
 
   return {
-    items,
+    trainings,
     filterState,
     sort,
     loadMoreTraining,

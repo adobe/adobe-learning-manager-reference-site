@@ -1,8 +1,8 @@
 import React from "react";
 import { UpdateFiltersEvent, useFilter } from "../../hooks/catalog/useFilter";
-import AEMLearnCheckbox from "./AEMLearnCheckBox";
+import PrimeCheckbox from "./PrimeCheckBox";
 
-const AEMLearnCatalogFilters = (props: any) => {
+const PrimeCatalogFilters = (props: any) => {
   const {
     loTypes,
     learnerState,
@@ -30,7 +30,7 @@ const AEMLearnCatalogFilters = (props: any) => {
           <h4>{filter?.label}</h4>
           <ul>
             {filter.list?.map((item) => (
-              <AEMLearnCheckbox
+              <PrimeCheckbox
                 key={item.value}
                 filterType={filter.type!}
                 label={item.label}
@@ -52,4 +52,4 @@ const AEMLearnCatalogFilters = (props: any) => {
   );
 };
 
-export default AEMLearnCatalogFilters;
+export default PrimeCatalogFilters;

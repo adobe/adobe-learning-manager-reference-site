@@ -1,4 +1,4 @@
-export { AEMLearnContextProviders } from "./AEMLearnContextProviders";
+export { PrimeContextProviders } from "./PrimeContextProviders";
 
 export { AuthContextProvider, useAuthContext } from "./authContextProvider";
 

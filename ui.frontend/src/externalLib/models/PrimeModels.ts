@@ -1,4 +1,4 @@
-export interface AEMLearnAccount {
+export interface PrimeAccount {
 	id: string;
 	_transient: any;
 	catalogsVisible: boolean;
@@ -33,16 +33,16 @@ export interface AEMLearnAccount {
 	themeData: string;
 	timeZoneCode: string;
 	type: string;
-	accountTerminologies: AEMLearnAccountTerminology[];
-	contentLocales: AEMLearnLocalizationMetadata[];
+	accountTerminologies: PrimeAccountTerminology[];
+	contentLocales: PrimeLocalizationMetadata[];
 	filterPanelSetting: object;
-	gamificationLevels: AEMLearnGamificationLevel[];
-	learnerHelpLinks: AEMLearnHelpLink[];
-	timeZones: AEMLearnTimeZone[];
-	uiLocales: AEMLearnLocalizationMetadata[];
+	gamificationLevels: PrimeGamificationLevel[];
+	learnerHelpLinks: PrimeHelpLink[];
+	timeZones: PrimeTimeZone[];
+	uiLocales: PrimeLocalizationMetadata[];
 }
 
-export interface AEMLearnAccountTerminology {
+export interface PrimeAccountTerminology {
 	id: string;
 	_transient: any;
 	entityType: string;
@@ -51,7 +51,7 @@ export interface AEMLearnAccountTerminology {
 	pluralName: string;
 }
 
-export interface AEMLearnAdminAnnouncement {
+export interface PrimeAdminAnnouncement {
 	id: string;
 	_transient: any;
 	actionUrl: string;
@@ -59,10 +59,10 @@ export interface AEMLearnAdminAnnouncement {
 	expiryDate: string;
 	liveDate: string;
 	type: string;
-	contentMetaData: AEMLearnLocalizationContentdata[];
+	contentMetaData: PrimeLocalizationContentdata[];
 }
 
-export interface AEMLearnAnnouncement {
+export interface PrimeAnnouncement {
 	id: string;
 	_transient: any;
 	contentId: string;
@@ -79,7 +79,7 @@ export interface AEMLearnAnnouncement {
 	thumbnailUrl: string;
 }
 
-export interface AEMLearnBadge {
+export interface PrimeBadge {
 	id: string;
 	_transient: any;
 	imageUrl: string;
@@ -88,7 +88,7 @@ export interface AEMLearnBadge {
 	type: string;
 }
 
-export interface AEMLearnBoard {
+export interface PrimeBoard {
 	id: string;
 	_transient: any;
 	activityLevel: string;
@@ -105,11 +105,11 @@ export interface AEMLearnBoard {
 	userCount: number;
 	viewsCount: number;
 	visibility: string;
-	createdBy: AEMLearnUser;
-	skills: AEMLearnSkill[];
+	createdBy: PrimeUser;
+	skills: PrimeSkill[];
 }
 
-export interface AEMLearnCatalog {
+export interface PrimeCatalog {
 	id: string;
 	_transient: any;
 	dateCreated: string;
@@ -124,7 +124,7 @@ export interface AEMLearnCatalog {
 	type: string;
 }
 
-export interface AEMLearnCatalogLables {
+export interface PrimeCatalogLables {
 	id: string;
 	_transient: any;
 	description: string;
@@ -133,7 +133,7 @@ export interface AEMLearnCatalogLables {
 	values: string[];
 }
 
-export interface AEMLearnComment {
+export interface PrimeComment {
 	id: string;
 	_transient: any;
 	commentMarker: string;
@@ -150,11 +150,11 @@ export interface AEMLearnComment {
 	text: string;
 	upVote: number;
 	resource: object;
-	createdBy: AEMLearnUser;
-	parent: AEMLearnPost;
+	createdBy: PrimeUser;
+	parent: PrimePost;
 }
 
-export interface AEMLearnCounts {
+export interface PrimeCounts {
 	id: string;
 	_transient: any;
 	completed: string[];
@@ -165,23 +165,23 @@ export interface AEMLearnCounts {
 	type: string;
 }
 
-export interface AEMLearnData {
+export interface PrimeData {
 	id: string;
 	_transient: any;
 	names: string[];
 	type: string;
 }
 
-export interface AEMLearnDiscussionPost {
+export interface PrimeDiscussionPost {
 	id: string;
 	_transient: any;
 	comment: string;
 	dateCreated: string;
 	type: string;
-	learner: AEMLearnUser;
+	learner: PrimeUser;
 }
 
-export interface AEMLearnDnd {
+export interface PrimeDnd {
 	id: string;
 	_transient: any;
 	blockDirectEmail: boolean;
@@ -190,7 +190,7 @@ export interface AEMLearnDnd {
 	blockSkipLevelReportsEmail: boolean;
 }
 
-export interface AEMLearnExternalProfile {
+export interface PrimeExternalProfile {
 	id: string;
 	_transient: any;
 	accessKey: string;
@@ -210,41 +210,41 @@ export interface AEMLearnExternalProfile {
 	verifyEmail: boolean;
 }
 
-export interface AEMLearnFeedback {
+export interface PrimeFeedback {
 	id: string;
 	_transient: any;
 	score: number;
 	type: string;
-	answers: AEMLearnFeedbackAnswer[];
+	answers: PrimeFeedbackAnswer[];
 }
 
-export interface AEMLearnFeedbackAnswer {
+export interface PrimeFeedbackAnswer {
 	id: string;
 	_transient: any;
 	answer: string;
 	questionId: string;
 }
 
-export interface AEMLearnFeedbackInfo {
+export interface PrimeFeedbackInfo {
 	id: string;
 	_transient: any;
 	score: number;
 	showAutomatically: boolean;
 	type: string;
-	questions: AEMLearnFeedbackQuestion[];
+	questions: PrimeFeedbackQuestion[];
 }
 
-export interface AEMLearnFeedbackQuestion {
+export interface PrimeFeedbackQuestion {
 	id: string;
 	_transient: any;
 	answer: string;
 	mandatory: boolean;
 	questionId: string;
 	questionType: string;
-	localizedMetadata: AEMLearnLocalizationMetadata[];
+	localizedMetadata: PrimeLocalizationMetadata[];
 }
 
-export interface AEMLearnFilterPanelSetting {
+export interface PrimeFilterPanelSetting {
 	id: string;
 	_transient: any;
 	catalog: boolean;
@@ -256,7 +256,7 @@ export interface AEMLearnFilterPanelSetting {
 	type: boolean;
 }
 
-export interface AEMLearnGamificationLevel {
+export interface PrimeGamificationLevel {
 	id: string;
 	_transient: any;
 	color: string;
@@ -264,14 +264,14 @@ export interface AEMLearnGamificationLevel {
 	points: number;
 }
 
-export interface AEMLearnHelpLink {
+export interface PrimeHelpLink {
 	id: string;
 	_transient: any;
 	isDefault: boolean;
-	localizedHelpLink: AEMLearnLocalizedHelpLink[];
+	localizedHelpLink: PrimeLocalizedHelpLink[];
 }
 
-export interface AEMLearnJob {
+export interface PrimeJob {
 	id: string;
 	_transient: any;
 	callbackUrl: string;
@@ -285,7 +285,7 @@ export interface AEMLearnJob {
 	type: string;
 }
 
-export interface AEMLearnLearnerAttemptInfo {
+export interface PrimeLearnerAttemptInfo {
 	id: string;
 	_transient: any;
 	attemptsFinishedCount: number;
@@ -293,7 +293,7 @@ export interface AEMLearnLearnerAttemptInfo {
 	lastAttemptEndTime: string;
 }
 
-export interface AEMLearnLearningObject {
+export interface PrimeLearningObject {
 	id: string;
 	_transient: any;
 	authorNames: string[];
@@ -322,22 +322,22 @@ export interface AEMLearnLearningObject {
 	type: string;
 	unenrollmentAllowed: boolean;
 	uniqueId: string;
-	catalogLabels: AEMLearnCatalogLables[];
-	localizedMetadata: AEMLearnLocalizationMetadata[];
-	prequisiteConstraints: AEMLearnPrerequisiteContraints[];
+	catalogLabels: PrimeCatalogLables[];
+	localizedMetadata: PrimeLocalizationMetadata[];
+	prequisiteConstraints: PrimePrerequisiteContraints[];
 	rating: object;
-	sections: AEMLearnSections[];
-	authors: AEMLearnUser[];
-	enrollment: AEMLearnLearningObjectInstanceEnrollment;
-	instances: AEMLearnLearningObjectInstance[];
-	prerequisiteLOs: AEMLearnLearningObject[];
-	skills: AEMLearnLearningObjectSkill[];
-	subLOs: AEMLearnLearningObject[];
-	supplementaryLOs: AEMLearnLearningObject[];
-	supplementaryResources: AEMLearnResource[];
+	sections: PrimeSections[];
+	authors: PrimeUser[];
+	enrollment: PrimeLearningObjectInstanceEnrollment;
+	instances: PrimeLearningObjectInstance[];
+	prerequisiteLOs: PrimeLearningObject[];
+	skills: PrimeLearningObjectSkill[];
+	subLOs: PrimeLearningObject[];
+	supplementaryLOs: PrimeLearningObject[];
+	supplementaryResources: PrimeResource[];
 }
 
-export interface AEMLearnLearningObjectInstance {
+export interface PrimeLearningObjectInstance {
 	id: string;
 	_transient: any;
 	completionDeadline: string;
@@ -350,15 +350,15 @@ export interface AEMLearnLearningObjectInstance {
 	state: string;
 	type: string;
 	validity: string;
-	localizedMetadata: AEMLearnLocalizationMetadata[];
-	badge: AEMLearnBadge;
-	l1FeedbackInfo: AEMLearnFeedbackInfo;
-	learningObject: AEMLearnLearningObject;
-	loResources: AEMLearnLearningObjectResource[];
-	subLoInstances: AEMLearnLearningObjectInstance[];
+	localizedMetadata: PrimeLocalizationMetadata[];
+	badge: PrimeBadge;
+	l1FeedbackInfo: PrimeFeedbackInfo;
+	learningObject: PrimeLearningObject;
+	loResources: PrimeLearningObjectResource[];
+	subLoInstances: PrimeLearningObjectInstance[];
 }
 
-export interface AEMLearnLearningObjectInstanceEnrollment {
+export interface PrimeLearningObjectInstanceEnrollment {
 	id: string;
 	_transient: any;
 	completionDeadline: string;
@@ -374,14 +374,14 @@ export interface AEMLearnLearningObjectInstanceEnrollment {
 	state: string;
 	type: string;
 	url: string;
-	learner: AEMLearnUser;
-	learnerBadge: AEMLearnUserBadge;
-	learningObject: AEMLearnLearningObject;
-	loInstance: AEMLearnLearningObjectInstance;
-	loResourceGrades: AEMLearnLearningObjectResourceGrade[];
+	learner: PrimeUser;
+	learnerBadge: PrimeUserBadge;
+	learningObject: PrimeLearningObject;
+	loInstance: PrimeLearningObjectInstance;
+	loResourceGrades: PrimeLearningObjectResourceGrade[];
 }
 
-export interface AEMLearnLearningObjectResource {
+export interface PrimeLearningObjectResource {
 	id: string;
 	_transient: any;
 	checklistEvaluationStatus: string;
@@ -397,14 +397,14 @@ export interface AEMLearnLearningObjectResource {
 	type: string;
 	version: number;
 	learnerAttemptInfo: object;
-	localizedMetadata: AEMLearnLocalizationMetadata[];
+	localizedMetadata: PrimeLocalizationMetadata[];
 	multipleAttempt: object;
-	learningObject: AEMLearnLearningObject;
-	loInstance: AEMLearnLearningObjectInstance;
-	resources: AEMLearnResource[];
+	learningObject: PrimeLearningObject;
+	loInstance: PrimeLearningObjectInstance;
+	resources: PrimeResource[];
 }
 
-export interface AEMLearnLearningObjectResourceGrade {
+export interface PrimeLearningObjectResourceGrade {
 	id: string;
 	_transient: any;
 	dateCompleted: string;
@@ -415,20 +415,20 @@ export interface AEMLearnLearningObjectResourceGrade {
 	progressPercent: number;
 	score: number;
 	type: string;
-	loResource: AEMLearnLearningObjectResource;
+	loResource: PrimeLearningObjectResource;
 }
 
-export interface AEMLearnLearningObjectSkill {
+export interface PrimeLearningObjectSkill {
 	id: string;
 	_transient: any;
 	credits: number;
 	learningObjectId: string;
 	type: string;
-	learningObject: AEMLearnLearningObject;
-	skillLevel: AEMLearnSkillLevel;
+	learningObject: PrimeLearningObject;
+	skillLevel: PrimeSkillLevel;
 }
 
-export interface AEMLearnLoInstanceSummary {
+export interface PrimeLoInstanceSummary {
 	id: string;
 	_transient: any;
 	asOf: string;
@@ -439,7 +439,7 @@ export interface AEMLearnLoInstanceSummary {
 	waitlistCount: number;
 }
 
-export interface AEMLearnLocalizationContentdata {
+export interface PrimeLocalizationContentdata {
 	id: string;
 	_transient: any;
 	contentSources: string[];
@@ -449,7 +449,7 @@ export interface AEMLearnLocalizationContentdata {
 	thumbnailUrl: string;
 }
 
-export interface AEMLearnLocalizationMetadata {
+export interface PrimeLocalizationMetadata {
 	id: string;
 	_transient: any;
 	description: string;
@@ -460,7 +460,7 @@ export interface AEMLearnLocalizationMetadata {
 	type: string;
 }
 
-export interface AEMLearnLocalizedHelpLink {
+export interface PrimeLocalizedHelpLink {
 	id: string;
 	_transient: any;
 	link: string;
@@ -468,7 +468,7 @@ export interface AEMLearnLocalizedHelpLink {
 	name: string;
 }
 
-export interface AEMLearnMinimalAccount {
+export interface PrimeMinimalAccount {
 	id: string;
 	_transient: any;
 	enableOffline: boolean;
@@ -483,10 +483,10 @@ export interface AEMLearnMinimalAccount {
 	subdomain: string;
 	themeData: string;
 	type: string;
-	accountTerminologies: AEMLearnAccountTerminology[];
+	accountTerminologies: PrimeAccountTerminology[];
 }
 
-export interface AEMLearnMultipleAttempt {
+export interface PrimeMultipleAttempt {
 	id: string;
 	_transient: any;
 	allowedRevisitAfterMaxAttempts: boolean;
@@ -498,23 +498,23 @@ export interface AEMLearnMultipleAttempt {
 	timeBetweenAttempts: number;
 }
 
-export interface AEMLearnNote {
+export interface PrimeNote {
 	id: string;
 	_transient: any;
 	marker: string;
 	text: string;
 	type: string;
-	loResource: AEMLearnLearningObjectResource;
+	loResource: PrimeLearningObjectResource;
 }
 
-export interface AEMLearnPoll {
+export interface PrimePoll {
 	id: string;
 	_transient: any;
 	dateCreated: string;
 	optionId: number;
 }
 
-export interface AEMLearnPost {
+export interface PrimePost {
 	id: string;
 	_transient: any;
 	commentCount: number;
@@ -536,35 +536,35 @@ export interface AEMLearnPost {
 	viewsCount: number;
 	myPoll: object;
 	resource: object;
-	createdBy: AEMLearnUser;
-	parent: AEMLearnBoard;
+	createdBy: PrimeUser;
+	parent: PrimeBoard;
 }
 
-export interface AEMLearnPrerequisiteContraints {
+export interface PrimePrerequisiteContraints {
 	id: string;
 	_transient: any;
 	mandatory: boolean;
 	prerequisiteLOId: string;
 }
 
-export interface AEMLearnRating {
+export interface PrimeRating {
 	id: string;
 	_transient: any;
 	averageRating: number;
 	ratingsCount: number;
 }
 
-export interface AEMLearnRecommendation {
+export interface PrimeRecommendation {
 	id: string;
 	_transient: any;
 	externalSkills: object;
 	internalSkills: object;
 	reason: string[];
 	type: string;
-	learningObject: AEMLearnLearningObject;
+	learningObject: PrimeLearningObject;
 }
 
-export interface AEMLearnReply {
+export interface PrimeReply {
 	id: string;
 	_transient: any;
 	dateCreated: string;
@@ -578,16 +578,16 @@ export interface AEMLearnReply {
 	text: string;
 	upVote: number;
 	resource: object;
-	createdBy: AEMLearnUser;
+	createdBy: PrimeUser;
 }
 
-export interface AEMLearnReportAbuse {
+export interface PrimeReportAbuse {
 	id: string;
 	_transient: any;
 	reason: string;
 }
 
-export interface AEMLearnResource {
+export interface PrimeResource {
 	id: string;
 	_transient: any;
 	authorDesiredDuration: number;
@@ -614,10 +614,10 @@ export interface AEMLearnResource {
 	reportingType: string;
 	seatLimit: number;
 	type: string;
-	room: AEMLearnRoom;
+	room: PrimeRoom;
 }
 
-export interface AEMLearnRoom {
+export interface PrimeRoom {
 	id: string;
 	_transient: any;
 	roomInfo: string;
@@ -626,7 +626,7 @@ export interface AEMLearnRoom {
 	url: string;
 }
 
-export interface AEMLearnSearchResult {
+export interface PrimeSearchResult {
 	id: string;
 	_transient: any;
 	actionUrl: string;
@@ -640,56 +640,56 @@ export interface AEMLearnSearchResult {
 	skillType: string;
 	state: string;
 	type: string;
-	snippets: AEMLearnSearchSnippet[];
-	model: AEMLearnLearningObject|AEMLearnCatalog|AEMLearnSkill|AEMLearnBadge|AEMLearnBoard|AEMLearnPost|AEMLearnUser;
+	snippets: PrimeSearchSnippet[];
+	model: PrimeLearningObject|PrimeCatalog|PrimeSkill|PrimeBadge|PrimeBoard|PrimePost|PrimeUser;
 }
 
-export interface AEMLearnSearchSnippet {
+export interface PrimeSearchSnippet {
 	id: string;
 	_transient: any;
 	snippet: string;
 	snippetType: string;
 }
 
-export interface AEMLearnSections {
+export interface PrimeSections {
 	id: string;
 	_transient: any;
 	loIds: string[];
 	mandatory: boolean;
 	mandatoryLOCount: number;
 	sectionId: string;
-	localizedMetadata: AEMLearnLocalizationMetadata[];
+	localizedMetadata: PrimeLocalizationMetadata[];
 }
 
-export interface AEMLearnSkill {
+export interface PrimeSkill {
 	id: string;
 	_transient: any;
 	description: string;
 	name: string;
 	state: string;
 	type: string;
-	levels: AEMLearnSkillLevel[];
+	levels: PrimeSkillLevel[];
 }
 
-export interface AEMLearnSkillInterestSearchResult {
+export interface PrimeSkillInterestSearchResult {
 	id: string;
 	_transient: any;
 	name: string;
 	type: string;
 }
 
-export interface AEMLearnSkillLevel {
+export interface PrimeSkillLevel {
 	id: string;
 	_transient: any;
 	level: string;
 	maxCredits: number;
 	name: string;
 	type: string;
-	badge: AEMLearnBadge;
-	skill: AEMLearnSkill;
+	badge: PrimeBadge;
+	skill: PrimeSkill;
 }
 
-export interface AEMLearnSocialProfile {
+export interface PrimeSocialProfile {
 	id: string;
 	_transient: any;
 	commentCount: number;
@@ -700,7 +700,7 @@ export interface AEMLearnSocialProfile {
 	windowedStats: object;
 }
 
-export interface AEMLearnSocialResource {
+export interface PrimeSocialResource {
 	id: string;
 	_transient: any;
 	contentType: string;
@@ -710,16 +710,16 @@ export interface AEMLearnSocialResource {
 	state: string;
 }
 
-export interface AEMLearnStory {
+export interface PrimeStory {
 	id: string;
 	_transient: any;
 	dateCreated: string;
 	state: string;
 	title: string;
-	createdBy: AEMLearnUser;
+	createdBy: PrimeUser;
 }
 
-export interface AEMLearnTimeZone {
+export interface PrimeTimeZone {
 	id: string;
 	_transient: any;
 	name: string;
@@ -729,7 +729,7 @@ export interface AEMLearnTimeZone {
 	zoneId: string;
 }
 
-export interface AEMLearnUploadInfo {
+export interface PrimeUploadInfo {
 	id: string;
 	_transient: any;
 	awsKey: string;
@@ -738,7 +738,7 @@ export interface AEMLearnUploadInfo {
 	region: string;
 }
 
-export interface AEMLearnUser {
+export interface PrimeUser {
 	id: string;
 	_transient: any;
 	avatarUrl: string;
@@ -762,11 +762,11 @@ export interface AEMLearnUser {
 	uiLocale: string;
 	userType: string;
 	userUniqueId: string;
-	account: AEMLearnAccount;
-	manager: AEMLearnUser;
+	account: PrimeAccount;
+	manager: PrimeUser;
 }
 
-export interface AEMLearnUserBadge {
+export interface PrimeUserBadge {
 	id: string;
 	_transient: any;
 	assertionUrl: string;
@@ -774,12 +774,12 @@ export interface AEMLearnUserBadge {
 	expiryDate: string;
 	modelType: string;
 	type: string;
-	badge: AEMLearnBadge;
-	learner: AEMLearnUser;
-	model: AEMLearnLearningObject|AEMLearnSkillLevel;
+	badge: PrimeBadge;
+	learner: PrimeUser;
+	model: PrimeLearningObject|PrimeSkillLevel;
 }
 
-export interface AEMLearnUserCalendar {
+export interface PrimeUserCalendar {
 	id: string;
 	_transient: any;
 	courseInstanceName: string;
@@ -795,13 +795,13 @@ export interface AEMLearnUserCalendar {
 	quarter: number;
 	sessionName: string;
 	type: string;
-	containerLO: AEMLearnLearningObject;
-	course: AEMLearnLearningObject;
-	instructors: AEMLearnUser[];
-	room: AEMLearnRoom;
+	containerLO: PrimeLearningObject;
+	course: PrimeLearningObject;
+	instructors: PrimeUser[];
+	room: PrimeRoom;
 }
 
-export interface AEMLearnUserGroup {
+export interface PrimeUserGroup {
 	id: string;
 	_transient: any;
 	dateCreated: string;
@@ -813,14 +813,14 @@ export interface AEMLearnUserGroup {
 	userCount: number;
 }
 
-export interface AEMLearnUserGroupSearchResult {
+export interface PrimeUserGroupSearchResult {
 	id: string;
 	_transient: any;
 	name: string;
 	type: string;
 }
 
-export interface AEMLearnUserNotification {
+export interface PrimeUserNotification {
 	id: string;
 	_transient: any;
 	actionTaken: boolean;
@@ -836,190 +836,190 @@ export interface AEMLearnUserNotification {
 	announcement: object;
 }
 
-export interface AEMLearnUserSetting {
+export interface PrimeUserSetting {
 	id: string;
 	_transient: any;
 	type: string;
 	dndSetting: object;
 }
 
-export interface AEMLearnUserSkill {
+export interface PrimeUserSkill {
 	id: string;
 	_transient: any;
 	dateAchieved: string;
 	dateCreated: string;
 	pointsEarned: number;
 	type: string;
-	learnerBadge: AEMLearnUserBadge;
-	learningObject: AEMLearnLearningObject[];
-	skill: AEMLearnSkill;
-	skillLevel: AEMLearnSkillLevel;
-	user: AEMLearnUser;
+	learnerBadge: PrimeUserBadge;
+	learningObject: PrimeLearningObject[];
+	skill: PrimeSkill;
+	skillLevel: PrimeSkillLevel;
+	user: PrimeUser;
 }
 
-export interface AEMLearnUserSkillInterest {
+export interface PrimeUserSkillInterest {
 	id: string;
 	_transient: any;
 	dateCreated: string;
 	source: string;
 	type: string;
-	skill: AEMLearnSkill;
-	user: AEMLearnUser;
-	userSkills: AEMLearnUserSkill[];
+	skill: PrimeSkill;
+	user: PrimeUser;
+	userSkills: PrimeUserSkill[];
 }
 
-export interface AEMLearnUserStat {
+export interface PrimeUserStat {
 	id: string;
 	_transient: any;
 	postCount: number;
 }
 
-export interface AEMLearnUserStat {
+export interface PrimeUserStat {
 	id: string;
 	_transient: any;
 	postCount: number;
 }
 
-export interface AEMLearnResourceIdentifier {
+export interface PrimeResourceIdentifier {
 	id: string;
 	_transient: any;
 }
 
 export interface JsonApiResponse {
-	account: AEMLearnAccount;
-	accountList: AEMLearnAccount[];
-	accountTerminology: AEMLearnAccountTerminology;
-	accountTerminologyList: AEMLearnAccountTerminology[];
-	adminAnnouncement: AEMLearnAdminAnnouncement;
-	adminAnnouncementList: AEMLearnAdminAnnouncement[];
-	announcement: AEMLearnAnnouncement;
-	announcementList: AEMLearnAnnouncement[];
-	badge: AEMLearnBadge;
-	badgeList: AEMLearnBadge[];
-	board: AEMLearnBoard;
-	boardList: AEMLearnBoard[];
-	catalog: AEMLearnCatalog;
-	catalogList: AEMLearnCatalog[];
-	catalogLables: AEMLearnCatalogLables;
-	catalogLablesList: AEMLearnCatalogLables[];
-	comment: AEMLearnComment;
-	commentList: AEMLearnComment[];
-	counts: AEMLearnCounts;
-	countsList: AEMLearnCounts[];
-	data: AEMLearnData;
-	dataList: AEMLearnData[];
-	discussionPost: AEMLearnDiscussionPost;
-	discussionPostList: AEMLearnDiscussionPost[];
-	dnd: AEMLearnDnd;
-	dndList: AEMLearnDnd[];
-	externalProfile: AEMLearnExternalProfile;
-	externalProfileList: AEMLearnExternalProfile[];
-	feedback: AEMLearnFeedback;
-	feedbackList: AEMLearnFeedback[];
-	feedbackAnswer: AEMLearnFeedbackAnswer;
-	feedbackAnswerList: AEMLearnFeedbackAnswer[];
-	feedbackInfo: AEMLearnFeedbackInfo;
-	feedbackInfoList: AEMLearnFeedbackInfo[];
-	feedbackQuestion: AEMLearnFeedbackQuestion;
-	feedbackQuestionList: AEMLearnFeedbackQuestion[];
-	filterPanelSetting: AEMLearnFilterPanelSetting;
-	filterPanelSettingList: AEMLearnFilterPanelSetting[];
-	gamificationLevel: AEMLearnGamificationLevel;
-	gamificationLevelList: AEMLearnGamificationLevel[];
-	helpLink: AEMLearnHelpLink;
-	helpLinkList: AEMLearnHelpLink[];
-	job: AEMLearnJob;
-	jobList: AEMLearnJob[];
-	learnerAttemptInfo: AEMLearnLearnerAttemptInfo;
-	learnerAttemptInfoList: AEMLearnLearnerAttemptInfo[];
-	learningObject: AEMLearnLearningObject;
-	learningObjectList: AEMLearnLearningObject[];
-	learningObjectInstance: AEMLearnLearningObjectInstance;
-	learningObjectInstanceList: AEMLearnLearningObjectInstance[];
-	learningObjectInstanceEnrollment: AEMLearnLearningObjectInstanceEnrollment;
-	learningObjectInstanceEnrollmentList: AEMLearnLearningObjectInstanceEnrollment[];
-	learningObjectResource: AEMLearnLearningObjectResource;
-	learningObjectResourceList: AEMLearnLearningObjectResource[];
-	learningObjectResourceGrade: AEMLearnLearningObjectResourceGrade;
-	learningObjectResourceGradeList: AEMLearnLearningObjectResourceGrade[];
-	learningObjectSkill: AEMLearnLearningObjectSkill;
-	learningObjectSkillList: AEMLearnLearningObjectSkill[];
-	loInstanceSummary: AEMLearnLoInstanceSummary;
-	loInstanceSummaryList: AEMLearnLoInstanceSummary[];
-	localizationContentdata: AEMLearnLocalizationContentdata;
-	localizationContentdataList: AEMLearnLocalizationContentdata[];
-	localizationMetadata: AEMLearnLocalizationMetadata;
-	localizationMetadataList: AEMLearnLocalizationMetadata[];
-	localizedHelpLink: AEMLearnLocalizedHelpLink;
-	localizedHelpLinkList: AEMLearnLocalizedHelpLink[];
-	minimalAccount: AEMLearnMinimalAccount;
-	minimalAccountList: AEMLearnMinimalAccount[];
-	multipleAttempt: AEMLearnMultipleAttempt;
-	multipleAttemptList: AEMLearnMultipleAttempt[];
-	note: AEMLearnNote;
-	noteList: AEMLearnNote[];
-	poll: AEMLearnPoll;
-	pollList: AEMLearnPoll[];
-	post: AEMLearnPost;
-	postList: AEMLearnPost[];
-	prerequisiteContraints: AEMLearnPrerequisiteContraints;
-	prerequisiteContraintsList: AEMLearnPrerequisiteContraints[];
-	rating: AEMLearnRating;
-	ratingList: AEMLearnRating[];
-	recommendation: AEMLearnRecommendation;
-	recommendationList: AEMLearnRecommendation[];
-	reply: AEMLearnReply;
-	replyList: AEMLearnReply[];
-	reportAbuse: AEMLearnReportAbuse;
-	reportAbuseList: AEMLearnReportAbuse[];
-	resource: AEMLearnResource;
-	resourceList: AEMLearnResource[];
-	room: AEMLearnRoom;
-	roomList: AEMLearnRoom[];
-	searchResult: AEMLearnSearchResult;
-	searchResultList: AEMLearnSearchResult[];
-	searchSnippet: AEMLearnSearchSnippet;
-	searchSnippetList: AEMLearnSearchSnippet[];
-	sections: AEMLearnSections;
-	sectionsList: AEMLearnSections[];
-	skill: AEMLearnSkill;
-	skillList: AEMLearnSkill[];
-	skillInterestSearchResult: AEMLearnSkillInterestSearchResult;
-	skillInterestSearchResultList: AEMLearnSkillInterestSearchResult[];
-	skillLevel: AEMLearnSkillLevel;
-	skillLevelList: AEMLearnSkillLevel[];
-	socialProfile: AEMLearnSocialProfile;
-	socialProfileList: AEMLearnSocialProfile[];
-	socialResource: AEMLearnSocialResource;
-	socialResourceList: AEMLearnSocialResource[];
-	story: AEMLearnStory;
-	storyList: AEMLearnStory[];
-	timeZone: AEMLearnTimeZone;
-	timeZoneList: AEMLearnTimeZone[];
-	uploadInfo: AEMLearnUploadInfo;
-	uploadInfoList: AEMLearnUploadInfo[];
-	user: AEMLearnUser;
-	userList: AEMLearnUser[];
-	userBadge: AEMLearnUserBadge;
-	userBadgeList: AEMLearnUserBadge[];
-	userCalendar: AEMLearnUserCalendar;
-	userCalendarList: AEMLearnUserCalendar[];
-	userGroup: AEMLearnUserGroup;
-	userGroupList: AEMLearnUserGroup[];
-	userGroupSearchResult: AEMLearnUserGroupSearchResult;
-	userGroupSearchResultList: AEMLearnUserGroupSearchResult[];
-	userNotification: AEMLearnUserNotification;
-	userNotificationList: AEMLearnUserNotification[];
-	userSetting: AEMLearnUserSetting;
-	userSettingList: AEMLearnUserSetting[];
-	userSkill: AEMLearnUserSkill;
-	userSkillList: AEMLearnUserSkill[];
-	userSkillInterest: AEMLearnUserSkillInterest;
-	userSkillInterestList: AEMLearnUserSkillInterest[];
-	userStat: AEMLearnUserStat;
-	userStatList: AEMLearnUserStat[];
-	resourceIdentifier: AEMLearnResourceIdentifier;
-	resourceIdentifierList: AEMLearnResourceIdentifier[];
+	account: PrimeAccount;
+	accountList: PrimeAccount[];
+	accountTerminology: PrimeAccountTerminology;
+	accountTerminologyList: PrimeAccountTerminology[];
+	adminAnnouncement: PrimeAdminAnnouncement;
+	adminAnnouncementList: PrimeAdminAnnouncement[];
+	announcement: PrimeAnnouncement;
+	announcementList: PrimeAnnouncement[];
+	badge: PrimeBadge;
+	badgeList: PrimeBadge[];
+	board: PrimeBoard;
+	boardList: PrimeBoard[];
+	catalog: PrimeCatalog;
+	catalogList: PrimeCatalog[];
+	catalogLables: PrimeCatalogLables;
+	catalogLablesList: PrimeCatalogLables[];
+	comment: PrimeComment;
+	commentList: PrimeComment[];
+	counts: PrimeCounts;
+	countsList: PrimeCounts[];
+	data: PrimeData;
+	dataList: PrimeData[];
+	discussionPost: PrimeDiscussionPost;
+	discussionPostList: PrimeDiscussionPost[];
+	dnd: PrimeDnd;
+	dndList: PrimeDnd[];
+	externalProfile: PrimeExternalProfile;
+	externalProfileList: PrimeExternalProfile[];
+	feedback: PrimeFeedback;
+	feedbackList: PrimeFeedback[];
+	feedbackAnswer: PrimeFeedbackAnswer;
+	feedbackAnswerList: PrimeFeedbackAnswer[];
+	feedbackInfo: PrimeFeedbackInfo;
+	feedbackInfoList: PrimeFeedbackInfo[];
+	feedbackQuestion: PrimeFeedbackQuestion;
+	feedbackQuestionList: PrimeFeedbackQuestion[];
+	filterPanelSetting: PrimeFilterPanelSetting;
+	filterPanelSettingList: PrimeFilterPanelSetting[];
+	gamificationLevel: PrimeGamificationLevel;
+	gamificationLevelList: PrimeGamificationLevel[];
+	helpLink: PrimeHelpLink;
+	helpLinkList: PrimeHelpLink[];
+	job: PrimeJob;
+	jobList: PrimeJob[];
+	learnerAttemptInfo: PrimeLearnerAttemptInfo;
+	learnerAttemptInfoList: PrimeLearnerAttemptInfo[];
+	learningObject: PrimeLearningObject;
+	learningObjectList: PrimeLearningObject[];
+	learningObjectInstance: PrimeLearningObjectInstance;
+	learningObjectInstanceList: PrimeLearningObjectInstance[];
+	learningObjectInstanceEnrollment: PrimeLearningObjectInstanceEnrollment;
+	learningObjectInstanceEnrollmentList: PrimeLearningObjectInstanceEnrollment[];
+	learningObjectResource: PrimeLearningObjectResource;
+	learningObjectResourceList: PrimeLearningObjectResource[];
+	learningObjectResourceGrade: PrimeLearningObjectResourceGrade;
+	learningObjectResourceGradeList: PrimeLearningObjectResourceGrade[];
+	learningObjectSkill: PrimeLearningObjectSkill;
+	learningObjectSkillList: PrimeLearningObjectSkill[];
+	loInstanceSummary: PrimeLoInstanceSummary;
+	loInstanceSummaryList: PrimeLoInstanceSummary[];
+	localizationContentdata: PrimeLocalizationContentdata;
+	localizationContentdataList: PrimeLocalizationContentdata[];
+	localizationMetadata: PrimeLocalizationMetadata;
+	localizationMetadataList: PrimeLocalizationMetadata[];
+	localizedHelpLink: PrimeLocalizedHelpLink;
+	localizedHelpLinkList: PrimeLocalizedHelpLink[];
+	minimalAccount: PrimeMinimalAccount;
+	minimalAccountList: PrimeMinimalAccount[];
+	multipleAttempt: PrimeMultipleAttempt;
+	multipleAttemptList: PrimeMultipleAttempt[];
+	note: PrimeNote;
+	noteList: PrimeNote[];
+	poll: PrimePoll;
+	pollList: PrimePoll[];
+	post: PrimePost;
+	postList: PrimePost[];
+	prerequisiteContraints: PrimePrerequisiteContraints;
+	prerequisiteContraintsList: PrimePrerequisiteContraints[];
+	rating: PrimeRating;
+	ratingList: PrimeRating[];
+	recommendation: PrimeRecommendation;
+	recommendationList: PrimeRecommendation[];
+	reply: PrimeReply;
+	replyList: PrimeReply[];
+	reportAbuse: PrimeReportAbuse;
+	reportAbuseList: PrimeReportAbuse[];
+	resource: PrimeResource;
+	resourceList: PrimeResource[];
+	room: PrimeRoom;
+	roomList: PrimeRoom[];
+	searchResult: PrimeSearchResult;
+	searchResultList: PrimeSearchResult[];
+	searchSnippet: PrimeSearchSnippet;
+	searchSnippetList: PrimeSearchSnippet[];
+	sections: PrimeSections;
+	sectionsList: PrimeSections[];
+	skill: PrimeSkill;
+	skillList: PrimeSkill[];
+	skillInterestSearchResult: PrimeSkillInterestSearchResult;
+	skillInterestSearchResultList: PrimeSkillInterestSearchResult[];
+	skillLevel: PrimeSkillLevel;
+	skillLevelList: PrimeSkillLevel[];
+	socialProfile: PrimeSocialProfile;
+	socialProfileList: PrimeSocialProfile[];
+	socialResource: PrimeSocialResource;
+	socialResourceList: PrimeSocialResource[];
+	story: PrimeStory;
+	storyList: PrimeStory[];
+	timeZone: PrimeTimeZone;
+	timeZoneList: PrimeTimeZone[];
+	uploadInfo: PrimeUploadInfo;
+	uploadInfoList: PrimeUploadInfo[];
+	user: PrimeUser;
+	userList: PrimeUser[];
+	userBadge: PrimeUserBadge;
+	userBadgeList: PrimeUserBadge[];
+	userCalendar: PrimeUserCalendar;
+	userCalendarList: PrimeUserCalendar[];
+	userGroup: PrimeUserGroup;
+	userGroupList: PrimeUserGroup[];
+	userGroupSearchResult: PrimeUserGroupSearchResult;
+	userGroupSearchResultList: PrimeUserGroupSearchResult[];
+	userNotification: PrimeUserNotification;
+	userNotificationList: PrimeUserNotification[];
+	userSetting: PrimeUserSetting;
+	userSettingList: PrimeUserSetting[];
+	userSkill: PrimeUserSkill;
+	userSkillList: PrimeUserSkill[];
+	userSkillInterest: PrimeUserSkillInterest;
+	userSkillInterestList: PrimeUserSkillInterest[];
+	userStat: PrimeUserStat;
+	userStatList: PrimeUserStat[];
+	resourceIdentifier: PrimeResourceIdentifier;
+	resourceIdentifierList: PrimeResourceIdentifier[];
 	links?: JsonApiResponseLinks;
 }
 

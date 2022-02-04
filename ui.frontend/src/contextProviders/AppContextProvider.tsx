@@ -1,7 +1,7 @@
 import React from "react";
 import { Provider as ReduxProvider } from "react-redux"; //
 //import { LibContextProvider } from "adb-react-lib";
-import { AEMLearnContextProviders } from "../externalLib";
+import { PrimeContextProviders } from "../externalLib";
 
 import store from "../store/APIStore";
 
@@ -10,7 +10,7 @@ import store from "../store/APIStore";
  *
  * @property {React.Component[]} contextProviders
  */
-const contextProviders = [AEMLearnContextProviders];
+const contextProviders = [PrimeContextProviders];
 
 export const AppContextProvider = (props: React.PropsWithChildren<{}>) => {
   return (

@@ -1,5 +1,5 @@
 import { AnyAction } from "redux";
-import { AEMLearnLearningObject } from "../../../models/AEMLearnModels";
+import { PrimeLearningObject } from "../../../models/PrimeModels";
 import {
   LOAD_TRAININGS,
   PAGINATE_TRAININGS,
@@ -35,7 +35,7 @@ export const updateLoFormatFilter = (payload: string): AnyAction => ({
 });
 
 export const paginateTrainings = (payload: {
-  items: AEMLearnLearningObject[];
+  trainings: PrimeLearningObject[];
   next: string;
 }): AnyAction => ({
   type: PAGINATE_TRAININGS,
