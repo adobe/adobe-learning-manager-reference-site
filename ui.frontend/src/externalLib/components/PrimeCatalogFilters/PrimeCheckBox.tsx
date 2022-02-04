@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { VisuallyHidden } from "@react-aria/visually-hidden";
 import { useFocusRing } from "@react-aria/focus";
 
-const AEMLearnCheckbox: React.FC<{
+const PrimeCheckbox: React.FC<{
   label: string;
   filterType: string;
   checked: boolean;
@@ -23,7 +23,6 @@ const AEMLearnCheckbox: React.FC<{
   return (
     <label style={{ display: "flex", alignItems: "center" }}>
       <VisuallyHidden>
-        {/* <input {...inputProps} {...focusProps} ref={ref} /> */}
         <input
           type="checkbox"
           onChange={onChangeHandler}
@@ -67,13 +66,4 @@ const AEMLearnCheckbox: React.FC<{
   );
 };
 
-export default AEMLearnCheckbox;
-
-//
-// // let [checked, setChecked] = useState(false);
-
-//   useEffect( () => {
-//     props.onFilterChangeHandler(props.label, checked);
-//   }, [checked]);
-// //let {inputProps} = useCheckbox(props, state, ref);
-//let state = useToggleState(props);
+export default PrimeCheckbox;

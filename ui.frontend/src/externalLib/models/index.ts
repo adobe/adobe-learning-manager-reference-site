@@ -1,1 +1,1 @@
-export * from "./AEMLearnModels";
+export * from "./PrimeModels";

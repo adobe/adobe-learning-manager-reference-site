@@ -1,9 +1,9 @@
 import { AnyAction, Reducer } from "redux";
-import { AEMLearnUser } from "../../models";
+import { PrimeUser } from "../../models";
 import { LOAD_USER, LOAD_ACCOUNT_AND_USER } from "../actions";
 
-const user: Reducer<AEMLearnUser, AnyAction> = (
-  state: AEMLearnUser | undefined,
+const user: Reducer<PrimeUser, AnyAction> = (
+  state: PrimeUser | undefined,
   action: any
 ) => {
   switch (action.type) {

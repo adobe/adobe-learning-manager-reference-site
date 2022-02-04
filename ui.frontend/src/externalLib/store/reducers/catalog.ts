@@ -1,4 +1,4 @@
-import { AEMLearnLearningObject } from "../../models";
+import { PrimeLearningObject } from "../../models";
 
 import { AnyAction, Reducer, combineReducers } from "redux";
 import {
@@ -23,7 +23,7 @@ export interface CatalogFilterState {
 }
 
 export interface CatalogState {
-  items: AEMLearnLearningObject[] | null;
+  trainings: PrimeLearningObject[] | null;
   filterState: CatalogFilterState;
   sort:
     | "name"
@@ -38,15 +38,15 @@ export interface CatalogState {
   // paginating: boolean;
 }
 
-const items: Reducer<AEMLearnLearningObject[] | null, AnyAction> = (
-  state: AEMLearnLearningObject[] | null | undefined,
+const trainings: Reducer<PrimeLearningObject[] | null, AnyAction> = (
+  state: PrimeLearningObject[] | null | undefined,
   action: AnyAction
 ) => {
   switch (action.type) {
     case LOAD_TRAININGS:
-      return action.payload?.items;
+      return action.payload?.trainings;
     case PAGINATE_TRAININGS:
-      return [...state!, ...action.payload?.items];
+      return [...state!, ...action.payload?.trainings];
     default:
       return state || [];
   }
@@ -178,7 +178,7 @@ const filterState: Reducer<CatalogFilterState, AnyAction> = combineReducers({
 });
 
 const catalog: Reducer<CatalogState, AnyAction> = combineReducers({
-  items,
+  trainings,
   sort,
   filterState,
   next,

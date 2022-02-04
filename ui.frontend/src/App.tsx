@@ -9,7 +9,7 @@ import {
   useAuthContext,
   Portal,
   useAccount,
-  AemLearnCatalog,
+  PrimeCatalogContainer,
   ConfigContextProvider,
 } from "./externalLib";
 
@@ -60,9 +60,9 @@ const Test = () => {
       <button onClick={authenticateUser}>Get Access Token </button>
       User details : {accessToken} {account.name}
       {/* <button onClick={loadMoreTraining}>LoadMore</button> */}
-      {/* <AEMLearnCatalogFilters></AEMLearnCatalogFilters> */}
+      {/* <PrimeCatalogFilters></PrimeCatalogFilters> */}
       {/* <button onClick={fetchTrainings}>Fetch Training</button> */}
-      <AemLearnCatalog />
+      <PrimeCatalogContainer />
     </>
   );
 };

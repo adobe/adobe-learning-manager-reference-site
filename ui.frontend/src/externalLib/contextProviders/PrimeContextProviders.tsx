@@ -10,7 +10,7 @@ import { UserContextProvider } from "./userContextProvider";
  */
 const contextProviders = [AuthContextProvider, UserContextProvider, AccountContextProvider];
 
-export const AEMLearnContextProviders = (
+export const PrimeContextProviders = (
   props: React.PropsWithChildren<{}>
 ) => {
   return (
