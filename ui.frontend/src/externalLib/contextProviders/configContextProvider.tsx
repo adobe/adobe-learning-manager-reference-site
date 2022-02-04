@@ -11,6 +11,7 @@ export interface PrimeConfig {
     loOverview: string;
     community: string;
   };
+  locale: string;
 }
 
 const ConfigContext = createContext<any | undefined>(undefined);
