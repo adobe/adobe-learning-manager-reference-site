@@ -325,7 +325,7 @@ export interface PrimeLearningObject {
 	catalogLabels: PrimeCatalogLables[];
 	localizedMetadata: PrimeLocalizationMetadata[];
 	prequisiteConstraints: PrimePrerequisiteContraints[];
-	rating: object;
+	rating: PrimeRating;
 	sections: PrimeSections[];
 	authors: PrimeUser[];
 	enrollment: PrimeLearningObjectInstanceEnrollment;
@@ -641,7 +641,7 @@ export interface PrimeSearchResult {
 	state: string;
 	type: string;
 	snippets: PrimeSearchSnippet[];
-	model: PrimeLearningObject|PrimeCatalog|PrimeSkill|PrimeBadge|PrimeBoard|PrimePost|PrimeUser;
+	model: PrimeLearningObject | PrimeCatalog | PrimeSkill | PrimeBadge | PrimeBoard | PrimePost | PrimeUser;
 }
 
 export interface PrimeSearchSnippet {
@@ -776,7 +776,7 @@ export interface PrimeUserBadge {
 	type: string;
 	badge: PrimeBadge;
 	learner: PrimeUser;
-	model: PrimeLearningObject|PrimeSkillLevel;
+	model: PrimeLearningObject | PrimeSkillLevel;
 }
 
 export interface PrimeUserCalendar {
@@ -1024,7 +1024,7 @@ export interface JsonApiResponse {
 }
 
 export interface JsonApiResponseLinks {
-    self: string;
-    next?: string;
-    prev?: string;
+	self: string;
+	next?: string;
+	prev?: string;
 }

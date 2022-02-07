@@ -139,7 +139,7 @@ export const useFilter = () => {
       setIsLoading(false);
     };
     getSkills();
-  }, [dispatch]);
+  }, [config.baseApiUrl, dispatch]);
 
   return {
     ...filterState,
