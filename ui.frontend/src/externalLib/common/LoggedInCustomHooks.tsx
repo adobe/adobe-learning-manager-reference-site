@@ -1,11 +1,12 @@
+import { PrimeLearningObject } from "..";
 import { CatalogFilterState } from "../store/reducers/catalog";
 import { JsonApiParse } from "../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
 import ICustomHooks from "./ICustomHooks";
 
 export default class LoggedInCustomHooks implements ICustomHooks {
+  baseApiUrl = (window as any).primeConfig.baseApiUrl;
   async getTrainings(filterState: CatalogFilterState, sort: string) {
-    const baseApiUrl = (window as any).primeConfig.baseApiUrl;
     const params: QueryParams = {};
     params["sort"] = sort;
     params["filter.loTypes"] = filterState.loTypes;
@@ -26,10 +27,9 @@ export default class LoggedInCustomHooks implements ICustomHooks {
       params["filter.duration.range"] = filterState.duration;
     }
     params["page[limit]"] = 10;
-    params["include"] =
-      "enrollment,instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill";
+    params["include"] = "enrollment,skills.skillLevel.skill";
     const response = await RestAdapter.get({
-      url: `${baseApiUrl}/learningObjects?`,
+      url: `${this.baseApiUrl}/learningObjects`,
       params: params,
     });
     const parsedResponse = JsonApiParse(response);
@@ -44,5 +44,15 @@ export default class LoggedInCustomHooks implements ICustomHooks {
       url,
     });
     return JsonApiParse(response);
+  }
+  async getTraining(
+    id: string,
+    params: QueryParams
+  ): Promise<PrimeLearningObject> {
+    const response = await RestAdapter.get({
+      url: `${this.baseApiUrl}/learningObject/${id}`,
+      params: params,
+    });
+    return JsonApiParse(response).learningObject;
   }
 }

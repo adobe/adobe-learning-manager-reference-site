@@ -1,14 +1,17 @@
-import { useMemo } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useMemo, useState } from "react";
 import { useConfigContext } from "../../contextProviders/configContextProvider";
+import APIServiceInstance from "../../common/APIService";
 import {
   PrimeLearningObject,
   PrimeLocalizationMetadata,
 } from "../../models/PrimeModels";
 
 import { getPreferredLocalizedMetadata } from "../../utils/getPreferredLocalizedMetadata";
+import { QueryParams } from "../../utils/restAdapter";
 
 const DEFAULT_LOCALE = "en-US";
+const DEFAULT_INCLUDE_LO_OVERVIEW =
+  "enrollment,instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill";
 export const colors: { [key: string]: string[] } = {
   "prime-default": [
     "#455d88",
@@ -96,8 +99,12 @@ export const colors: { [key: string]: string[] } = {
   ],
 };
 
-export const useTraining = (training: PrimeLearningObject) => {
+export const useTrainingPage = (
+  trainingId: string,
+  params: QueryParams = {}
+) => {
   const { locale } = useConfigContext();
+  const [training, setTraining] = useState({} as PrimeLearningObject);
   const {
     loFormat: format,
     loType: type,
@@ -111,6 +118,26 @@ export const useTraining = (training: PrimeLearningObject) => {
     enrollment,
   } = training;
 
+  useEffect(() => {
+    const getTraining = async () => {
+      try {
+        let localParam: QueryParams = {};
+        localParam["include"] =
+          params["include"] || DEFAULT_INCLUDE_LO_OVERVIEW;
+        localParam["useCache"] = true;
+        localParam["filter.ignoreEnhancedLP"] = false;
+        //   const loEndPoint = "/learningObjects";
+        const response =
+          await APIServiceInstance.getTraining(id, localParam);
+        //ToDO : handle
+        if (response) setTraining(response);
+      } catch (e) {
+        console.log("Error while loading trainings " + e);
+      }
+    };
+    getTraining();
+  }, [id, params, trainingId]);
+
   const { name, description, overview, richTextOverview } =
     useMemo((): PrimeLocalizationMetadata => {
       return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
@@ -123,6 +150,7 @@ export const useTraining = (training: PrimeLearningObject) => {
     const colorCode = parseInt(training.id.split(":")[1], 10) % 12;
 
     return {
+      //TODO: updated the url to akamai from config
       cardIconUrl: `https://cpcontentsdev.adobe.com/public/images/default_card_icons/${colorCode}.svg`,
       color: themeColors[colorCode],
     };
@@ -164,6 +192,7 @@ export const useTraining = (training: PrimeLearningObject) => {
     cardBgStyle,
     enrollment,
   };
+  //date create, published, duration
 };
 
 /**

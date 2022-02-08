@@ -1,3 +1,3 @@
 export * from "./useCatalog";
 export * from "./useFilter";
-export * from "./useTraining"
+export * from "./useTrainingCard"

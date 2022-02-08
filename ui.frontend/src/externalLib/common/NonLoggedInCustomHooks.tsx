@@ -1,4 +1,5 @@
 import { CatalogFilterState } from "../store/reducers/catalog";
+import { QueryParams } from "../utils/restAdapter";
 // import { JsonApiParse } from "../utils/jsonAPIAdapter";
 // import { QueryParams, RestAdapter } from "../utils/restAdapter";
 import ICustomHooks from "./ICustomHooks";
@@ -8,6 +9,9 @@ export default class NonLoggedInCustomHooks implements ICustomHooks {
     return null;
   }
   async loadMore(url: string) {
+    return null;
+  }
+  async getTraining(id: string, params: QueryParams) {
     return null;
   }
 }

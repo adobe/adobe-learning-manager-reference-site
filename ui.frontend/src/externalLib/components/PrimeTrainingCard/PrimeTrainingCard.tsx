@@ -1,4 +1,4 @@
-import { useTraining } from "../../hooks/catalog/useTraining";
+import { useTrainingCard } from "../../hooks/catalog/useTrainingCard";
 
 const PrimeTrainingCard = (props: any) => {
   const training = props.training;
@@ -15,7 +15,7 @@ const PrimeTrainingCard = (props: any) => {
     description,
     cardBgStyle,
     enrollment,
-  } = useTraining(training);
+  } = useTrainingCard(training);
   return (
     <>
       <div style={{ padding: "10px", marginBottom: "40px", color: "red" }}>
@@ -33,7 +33,7 @@ const PrimeTrainingCard = (props: any) => {
           </div>
 
           <div>
-           {state}, {authorNames?.join(",")}
+            {state}, {authorNames?.join(",")}
           </div>
 
           <div>
