@@ -10,10 +10,10 @@
         sling:redirect="{Boolean}true"
         sling:redirectStatus="{Long}302"
         sling:resourceType="foundation/components/redirect"
-        redirectTarget="/content/aem-learn-components/us/en">
+        redirectTarget="/content/aem-learn-components/en">
         <image jcr:primaryType="nt:unstructured">
             <file/>
         </image>
     </jcr:content>
-    <us/>
+    <en/>
 </jcr:root>

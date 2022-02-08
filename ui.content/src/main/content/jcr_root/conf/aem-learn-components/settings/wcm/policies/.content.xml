@@ -212,10 +212,6 @@
                     sling:resourceType="wcm/core/components/policy/policy"
                     components="[group:AemLearnComponents - Content,/apps/aem-learn-components/components/form/container,group:AemLearnComponents - Structure]">
                     <jcr:content
-                        cq:lastReplicated="{Date}2022-01-17T16:28:50.162+05:30"
-                        cq:lastReplicatedBy="admin"
-                        cq:lastReplicationAction="Activate"
-                        jcr:mixinTypes="[cq:ReplicationStatus]"
                         jcr:primaryType="nt:unstructured"/>
                     <cq:authoring jcr:primaryType="nt:unstructured">
                         <assetToComponentMapping jcr:primaryType="nt:unstructured">
@@ -247,10 +243,6 @@
                     sling:resourceType="wcm/core/components/policy/policy"
                     components="[group:AemLearnComponents - Content,/apps/aem-learn-components/components/form/container]">
                     <jcr:content
-                        cq:lastReplicated="{Date}2022-01-17T16:28:50.162+05:30"
-                        cq:lastReplicatedBy="admin"
-                        cq:lastReplicationAction="Activate"
-                        jcr:mixinTypes="[cq:ReplicationStatus]"
                         jcr:primaryType="nt:unstructured"/>
                     <cq:authoring jcr:primaryType="nt:unstructured">
                         <assetToComponentMapping jcr:primaryType="nt:unstructured">
@@ -347,170 +339,9 @@
                     clientlibs="[aem-learn-components.dependencies,aem-learn-components.site]"
                     clientlibsJsHead="aem-learn-components.dependencies">
                     <jcr:content
-                        cq:lastReplicated="{Date}2022-01-17T16:28:50.162+05:30"
-                        cq:lastReplicatedBy="admin"
-                        cq:lastReplicationAction="Activate"
-                        jcr:mixinTypes="[cq:ReplicationStatus]"
                         jcr:primaryType="nt:unstructured"/>
                 </policy>
-                <policy_spa
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="AemLearnComponents SPA Page Policy"
-                    sling:resourceType="wcm/core/components/policy/policy"
-                    clientlibs="[aem-learn-components.react]">
-                    <jcr:content
-                        cq:lastReplicated="{Date}2022-01-17T11:41:45.513+05:30"
-                        cq:lastReplicatedBy="admin"
-                        cq:lastReplicationAction="Activate"
-                        jcr:mixinTypes="[cq:ReplicationStatus]"
-                        jcr:primaryType="nt:unstructured"/>
-                </policy_spa>
             </page>
-            <spa jcr:primaryType="nt:unstructured">
-                <default
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="AemLearnComponents App Policy"
-                    sling:resourceType="wcm/core/components/policy/policy"
-                    clientlibs="[wcm.foundation.components.page.responsive]"
-                    isRoot="{Boolean}true"
-                    structureDepth="3"/>
-            </spa>
         </components>
     </aem-learn-components>
-    <wcm jcr:primaryType="nt:unstructured">
-        <foundation jcr:primaryType="nt:unstructured">
-            <components jcr:primaryType="nt:unstructured">
-                <page jcr:primaryType="nt:unstructured">
-                    <jcr:content
-                        jcr:primaryType="nt:unstructured"
-                        mergeList="{Boolean}true"/>
-                    <default
-                        jcr:description="Policy of the default page"
-                        jcr:lastModified="{Date}2022-01-18T09:58:30.376+05:30"
-                        jcr:lastModifiedBy="admin"
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="Default Page"
-                        sling:resourceType="wcm/core/components/policy/policy"
-                        clientlibs="[wcm.foundation.components.page.responsive,aem-learn-components.dependencies,aem-learn-components.ui]">
-                        <jcr:content
-                            cq:lastReplicated="{Date}2022-01-18T09:58:43.732+05:30"
-                            cq:lastReplicatedBy="admin"
-                            cq:lastReplicationAction="Activate"
-                            jcr:mixinTypes="[cq:ReplicationStatus]"
-                            jcr:primaryType="nt:unstructured"
-                            mergeList="{Boolean}true"/>
-                    </default>
-                </page>
-                <responsivegrid jcr:primaryType="nt:unstructured">
-                    <jcr:content
-                        jcr:primaryType="nt:unstructured"
-                        mergeList="{Boolean}true"/>
-                    <default
-                        jcr:description="Policy of the default root parsys"
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="Default Layout Container"
-                        sling:resourceType="wcm/core/components/policy/policy"
-                        components="[/libs/dam/cfm/components/contentfragment,/libs/foundation/components/download,/libs/wcm/foundation/components/image,/libs/wcm/foundation/components/responsivegrid,/libs/wcm/foundation/components/list,/libs/foundation/components/reference,/libs/foundation/components/table,/libs/wcm/foundation/components/text,/libs/wcm/foundation/components/textimage,/libs/wcm/foundation/components/title,/libs/foundation/components/video,/libs/cq/experience-fragments/editor/components/experiencefragment]">
-                        <cq:authoring jcr:primaryType="nt:unstructured">
-                            <assetToComponentMapping jcr:primaryType="nt:unstructured">
-                                <image
-                                    jcr:primaryType="nt:unstructured"
-                                    assetGroup="media"
-                                    assetMimetype="image/*"
-                                    droptarget="image"
-                                    resourceType="wcm/foundation/components/image"
-                                    type="Images"/>
-                                <product
-                                    jcr:primaryType="nt:unstructured"
-                                    assetGroup="product"
-                                    droptarget="product-data-reference"
-                                    resourceType="commerce/components/product"
-                                    type="Products"/>
-                                <document
-                                    jcr:primaryType="nt:unstructured"
-                                    assetGroup="media"
-                                    assetMimetype="[application/vnd.openxmlformats,application/msword,application/vnd.ms-powerpoint,application/mspowerpoint,application/powerpoint,application/x-mspowerpoint,application/x-msexcel,application/x-excel,application/excel,application/vnd.ms-excel,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document]"
-                                    droptarget="file"
-                                    resourceType="foundation/components/download"
-                                    type="Images"/>
-                                <video
-                                    jcr:primaryType="nt:unstructured"
-                                    assetGroup="media"
-                                    assetMimetype="video/*"
-                                    droptarget="video"
-                                    resourceType="foundation/components/video"
-                                    type="Images"/>
-                                <fragment
-                                    jcr:primaryType="nt:unstructured"
-                                    assetGroup="media"
-                                    assetMimetype="text/html"
-                                    droptarget="fragment"
-                                    resourceType="dam/cfm/components/contentfragment"
-                                    type="Content Fragment"/>
-                                <experiencefragment
-                                    jcr:primaryType="nt:unstructured"
-                                    assetGroup="content"
-                                    assetMimetype="text/html"
-                                    droptarget="experiencefragment"
-                                    resourceType="cq/experience-fragments/editor/components/experiencefragment"
-                                    type="experiencefragment"/>
-                            </assetToComponentMapping>
-                        </cq:authoring>
-                        <jcr:content
-                            cq:lastReplicated="{Date}2022-01-17T20:10:00.205+05:30"
-                            cq:lastReplicatedBy="admin"
-                            cq:lastReplicationAction="Activate"
-                            jcr:mixinTypes="[cq:ReplicationStatus]"
-                            jcr:primaryType="nt:unstructured"
-                            mergeList="{Boolean}true"/>
-                    </default>
-                    <policy_385354363580400
-                        jcr:lastModified="{Date}2022-01-17T20:05:16.885+05:30"
-                        jcr:lastModifiedBy="admin"
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="AEM-Learn-policy"
-                        sling:resourceType="wcm/core/components/policy/policy"
-                        components="group:AemLearnComponents - Structure"/>
-                    <policy_385402586031500
-                        jcr:description="Policy to load only AEM learn component"
-                        jcr:lastModified="{Date}2022-01-17T20:06:47.269+05:30"
-                        jcr:lastModifiedBy="admin"
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="AEM Learn policy"
-                        sling:resourceType="wcm/core/components/policy/policy"
-                        components="[group:General,group:AemLearnComponents - Form,group:AemLearnComponents - Structure]"/>
-                    <policy_385551666404600
-                        jcr:description="AEM Learn policy"
-                        jcr:lastModified="{Date}2022-01-17T20:09:15.390+05:30"
-                        jcr:lastModifiedBy="admin"
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="AEM Learn policy"
-                        sling:resourceType="wcm/core/components/policy/policy"
-                        components="[group:General,group:Adaptive Form,group:Address,group:Adobe Campaign,group:Adobe Campaign Newsletter,group:AemLearnComponents - Content,group:AemLearnComponents - Form,group:AemLearnComponents - Structure,group:Analytics]"/>
-                    <policy_385951771796000
-                        jcr:lastModified="{Date}2022-01-17T20:17:55.519+05:30"
-                        jcr:lastModifiedBy="admin"
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="test"
-                        sling:resourceType="wcm/core/components/policy/policy"
-                        components="group:AemLearnComponents - Structure"/>
-                    <policy_386698200551400
-                        jcr:description="AEM Learn policy"
-                        jcr:lastModified="{Date}2022-01-18T09:19:20.697+05:30"
-                        jcr:lastModifiedBy="admin"
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="AEM Learn policy"
-                        sling:resourceType="wcm/core/components/policy/policy"
-                        components="[group:AemLearnComponents - Structure]">
-                        <jcr:content
-                            cq:lastReplicated="{Date}2022-01-18T09:19:33.207+05:30"
-                            cq:lastReplicatedBy="admin"
-                            cq:lastReplicationAction="Activate"
-                            jcr:mixinTypes="[cq:ReplicationStatus]"
-                            jcr:primaryType="nt:unstructured"/>
-                    </policy_386698200551400>
-                </responsivegrid>
-            </components>
-        </foundation>
-    </wcm>
 </jcr:root>
