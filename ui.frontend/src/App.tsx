@@ -10,6 +10,7 @@ import {
   Portal,
   useAccount,
   PrimeCatalogContainer,
+  PrimeTrainingOverview,
   ConfigContextProvider,
 } from "./externalLib";
 
@@ -60,6 +61,7 @@ const Test = () => {
       {/* <PrimeCatalogFilters></PrimeCatalogFilters> */}
       {/* <button onClick={fetchTrainings}>Fetch Training</button> */}
       <PrimeCatalogContainer />
+      <PrimeTrainingOverview/>
     </>
   );
 };

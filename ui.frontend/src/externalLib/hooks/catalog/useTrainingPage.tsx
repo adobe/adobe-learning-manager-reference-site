@@ -2,195 +2,135 @@ import { useEffect, useMemo, useState } from "react";
 import { useConfigContext } from "../../contextProviders/configContextProvider";
 import APIServiceInstance from "../../common/APIService";
 import {
-  PrimeLearningObject,
+  PrimeLearningObjectInstance,
   PrimeLocalizationMetadata,
 } from "../../models/PrimeModels";
 
 import { getPreferredLocalizedMetadata } from "../../utils/getPreferredLocalizedMetadata";
 import { QueryParams } from "../../utils/restAdapter";
+//import { cardColors } from "../../common/Theme";
 
-const DEFAULT_LOCALE = "en-US";
-const DEFAULT_INCLUDE_LO_OVERVIEW =
-  "enrollment,instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill";
-export const colors: { [key: string]: string[] } = {
-  "prime-default": [
-    "#455d88",
-    "#487789",
-    "#4d728f",
-    "#65747b",
-    "#6aa0aa",
-    "#7390a5",
-    "#787c80",
-    "#84767e",
-    "#859072",
-    "#a2988f",
-    "#bdb4b4",
-    "#bfa47a",
-  ],
-  "prime-autumn": [
-    "#cc7a7a",
-    "#e8c367",
-    "#e0a168",
-    "#f29b5f",
-    "#cca691",
-    "#e2b788",
-    "#da9084",
-    "#dd756b",
-    "#d89b8f",
-    "#f2ab6a",
-    "#e6bfbf",
-    "#a58499",
-  ],
-  "prime-carnival": [
-    "#19277c",
-    "#2d9bd8",
-    "#2ccddd",
-    "#6fce98",
-    "#e55c5c",
-    "#756dbf",
-    "#f29e57",
-    "#a8548c",
-    "#66aa9d",
-    "#9c65b8",
-    "#57caf2",
-    "#f9c94f",
-  ],
-  "prime-pebbles": [
-    "#626b99",
-    "#7aabcc",
-    "#8fc6cc",
-    "#beccb6",
-    "#d88a82",
-    "#827daf",
-    "#ccaf8f",
-    "#af82a2",
-    "#79b5aa",
-    "#af7d7d",
-    "#6b99b2",
-    "#ddc587",
-  ],
-  "prime-wintersky": [
-    "#6b99b2",
-    "#439bba",
-    "#7aabcc",
-    "#61c1db",
-    "#8fc6cc",
-    "#bcccaa",
-    "#beccb6",
-    "#c9c6af",
-    "#bfc4b8",
-    "#a5beb9",
-    "#7fabaf",
-    "#649ea7",
-  ],
-  "prime-accessible": [
-    "#075a20",
-    "#008099",
-    "#0a852f",
-    "#9f52cb",
-    "#4568f2",
-    "#ad5700",
-    "#C74E1F",
-    "#474747",
-    "#d23b00",
-    "#737373",
-    "#007ab8",
-    "#99157a",
-  ],
-};
+//const DEFAULT_LOCALE = "en-US";
+const DEFAULT_INCLUDE_LO_OVERVIEW = "enrollment,instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
+  //"enrollment,instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill";
+
+export interface Skill {
+  name: string,
+  levelName: string,
+  level: string,
+  credits: number, 
+  maxCredits: number,
+  type: string, 
+  badgeName: string,
+  badgeUrl: string,
+  badgeState: string
+}
 
 export const useTrainingPage = (
   trainingId: string,
+  instanceId: string,
   params: QueryParams = {}
 ) => {
   const { locale } = useConfigContext();
-  const [training, setTraining] = useState({} as PrimeLearningObject);
-  const {
-    loFormat: format,
-    loType: type,
-    id,
-    skills,
-    rating,
-    imageUrl,
-    state,
-    tags,
-    authorNames,
-    enrollment,
-  } = training;
+ 
+  const [currentState, setCurrentState] = useState( {trainingInstance: {} as PrimeLearningObjectInstance,isLoading:true});
+  // const [trainingInstance, setTrainingInstance] = useState({} as PrimeLearningObjectInstance);
+  // const [isLoading, setIsLoading] = useState(true);
+  const {trainingInstance, isLoading} = currentState;
+  const training = trainingInstance.learningObject;
+  // const {
+  //   rating = {},
+  //   enrollment = {},
+  // } = training;
 
   useEffect(() => {
-    const getTraining = async () => {
+    const getTrainingInstance = async () => {
       try {
-        let localParam: QueryParams = {};
-        localParam["include"] =
-          params["include"] || DEFAULT_INCLUDE_LO_OVERVIEW;
-        localParam["useCache"] = true;
-        localParam["filter.ignoreEnhancedLP"] = false;
-        //   const loEndPoint = "/learningObjects";
-        const response =
-          await APIServiceInstance.getTraining(id, localParam);
+        let queryParam: QueryParams = {};
+        queryParam["include"] = params.include || DEFAULT_INCLUDE_LO_OVERVIEW;
+        queryParam["useCache"] = true;
+        queryParam["filter.ignoreEnhancedLP"] = false;
+        const response = await APIServiceInstance.getTraining(trainingId, queryParam);
         //ToDO : handle
-        if (response) setTraining(response);
+        if (response) {
+          const trainingInstances = response.instances.filter(instance => instance.id == instanceId);
+          const trainingInstance = trainingInstances.length ? trainingInstances[0] : {} as PrimeLearningObjectInstance;
+          // setTrainingInstance(trainingInstance);
+          // setIsLoading(false);
+          setCurrentState({trainingInstance, isLoading: false });
+        }
       } catch (e) {
-        console.log("Error while loading trainings " + e);
+        console.log("Error while loading training " + e);
+        setCurrentState({trainingInstance: {} as PrimeLearningObjectInstance, isLoading: false });
       }
     };
-    getTraining();
-  }, [id, params, trainingId]);
+    getTrainingInstance();
+  }, [trainingId,instanceId,params.include]);
 
   const { name, description, overview, richTextOverview } =
     useMemo((): PrimeLocalizationMetadata => {
+      if(!training) {
+        return {} as PrimeLocalizationMetadata;
+      }
       return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
-    }, [training.localizedMetadata, locale]);
+    }, [training,locale]);
 
-  const { cardIconUrl, color }: { [key: string]: string } = useMemo(() => {
-    if (training.imageUrl) return { cardIconUrl: "", color: "" };
-    //need to get theme from the account state
-    const themeColors = colors["prime-pebbles"];
-    const colorCode = parseInt(training.id.split(":")[1], 10) % 12;
+  // const { cardIconUrl, color }: { [key: string]: string } = useMemo(() => {
+  //   //TO-DO pick from attributes or fall back to one default set of colors
+  //   const themeColors = cardColors["prime-pebbles"];
+  //   const colorCode = parseInt(training.id.split(":")[1], 10) % 12;
 
-    return {
-      //TODO: updated the url to akamai from config
-      cardIconUrl: `https://cpcontentsdev.adobe.com/public/images/default_card_icons/${colorCode}.svg`,
-      color: themeColors[colorCode],
-    };
+  //   return {
+  //     //TODO: updated the url to akamai from config
+  //     cardIconUrl: `https://cpcontentsdev.adobe.com/public/images/default_card_icons/${colorCode}.svg`,
+  //     color: themeColors[colorCode],
+  //   };
+  //   //calculate the cardIcon and color
+  // }, [training.id]);
+
+
+  const skills: Skill[] = useMemo(() => {
+      if(!training) {
+        return [];
+      }
+      const trainingSkills = training.skills.map(skill => {
+      const skillLevel = skill.skillLevel;
+      const badge = skillLevel.badge;
+      return { 
+                name: skillLevel.skill.name,
+                levelName: skillLevel.name,
+                level: skillLevel.level,
+                credits: skill.credits, 
+                maxCredits: skillLevel.maxCredits,
+                type: skill.type, 
+                badgeName: badge.name,
+                badgeUrl: badge.imageUrl,
+                badgeState: badge.state
+              }
+    });
+
+
+    return trainingSkills;
     //calculate the cardIcon and color
-  }, [training.id, training.imageUrl]);
+  }, [training]);
 
-  const cardBgStyle = useMemo(() => {
-    return training.imageUrl
-      ? {
-          backgroundImage: `url(${training.imageUrl})`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-        }
-      : {
-          background: `${color} url(
-            ${cardIconUrl}
-        ) center center no-repeat`,
-          backgroundSize: "80px",
-        };
-  }, [cardIconUrl, color, training.imageUrl]);
+
+
+ 
 
   return {
-    id,
-    format,
-    type,
-    skills,
-    rating,
-    state,
-    tags,
-    authorNames,
     name,
     description,
     overview,
     richTextOverview,
-    imageUrl,
-    cardIconUrl,
-    color,
-    cardBgStyle,
-    enrollment,
+    // cardIconUrl,
+    // color,
+    //rating,
+    skills,
+    //enrollment,
+    training,
+    trainingInstance,
+    isLoading
   };
   //date create, published, duration
 };

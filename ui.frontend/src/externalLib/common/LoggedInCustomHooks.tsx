@@ -50,7 +50,7 @@ export default class LoggedInCustomHooks implements ICustomHooks {
     params: QueryParams
   ): Promise<PrimeLearningObject> {
     const response = await RestAdapter.get({
-      url: `${this.baseApiUrl}/learningObject/${id}`,
+      url: `${this.baseApiUrl}learningObjects/${id}`,
       params: params,
     });
     return JsonApiParse(response).learningObject;

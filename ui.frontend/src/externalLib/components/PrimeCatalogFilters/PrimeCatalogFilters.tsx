@@ -3,6 +3,7 @@ import { UpdateFiltersEvent, useFilter } from "../../hooks/catalog/useFilter";
 import PrimeCheckbox from "./PrimeCheckBox";
 
 const PrimeCatalogFilters = (props: any) => {
+  const data = props.data;
   const {
     loTypes,
     learnerState,
@@ -47,7 +48,7 @@ const PrimeCatalogFilters = (props: any) => {
 
   return (
     <>
-      <div style={{ display: "flex" }}>{filterList}</div>
+     <div style={{ display: "flex" }}>{filterList}</div>
     </>
   );
 };
