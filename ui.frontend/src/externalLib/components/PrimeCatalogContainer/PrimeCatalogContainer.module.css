@@ -1,0 +1,6 @@
+@import '../../styles/variables.css';
+
+.prime {
+    width: 70%;
+    color: var(--prime-color-black);
+}
