@@ -1,7 +1,7 @@
-import { useNotification } from "../../hooks";
+import { useNotifications } from "../../hooks";
 
 const PrimeNotificationContainer = () => {
-    const { notifications } = useNotification();
+    const { notifications } = useNotifications();
   return (
     <>
       <div

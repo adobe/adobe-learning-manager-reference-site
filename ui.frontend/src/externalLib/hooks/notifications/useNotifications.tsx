@@ -11,7 +11,7 @@ import {
   } from "../../store/actions/notification/action";
 import { PrimeUserNotification } from "../../models";
 
-export const useNotification = () => {
+export const useNotifications = () => {
     
     const { notifications} = useSelector(
         (state: State) => state.notification
