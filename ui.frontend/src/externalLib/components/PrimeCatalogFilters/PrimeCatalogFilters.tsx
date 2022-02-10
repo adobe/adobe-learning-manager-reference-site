@@ -37,6 +37,12 @@ const PrimeCatalogFilters = (props: any) => {
               defaultMessage: "Edit Payment Information",
             })}
           </span>
+          <span>
+            {formatMessage({
+              id: "test.string",
+              defaultMessage: "",
+            })}
+          </span>
           <ul>
             {filter.list?.map((item) => (
               <PrimeCheckbox
