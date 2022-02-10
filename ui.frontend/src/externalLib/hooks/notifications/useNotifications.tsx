@@ -19,11 +19,12 @@ export const useNotifications = () => {
 
     const dispatch = useDispatch();
     const config = useConfigContext();
-    const user = useUserContext();
+    const {user} = useUserContext();
+    console.log(user.id);
     const fetchNotifications = useCallback(async () => {
         try {
             const response = await RestAdapter.get({
-                url: `${config.baseApiUrl}/users/13403718/userNotifications`
+                url: `${config.baseApiUrl}/users/${user.id}/userNotifications`
               });
               const parsedResponse = JsonApiParse(response);
               const notificationData: any = {}; 
@@ -35,11 +36,12 @@ export const useNotifications = () => {
           dispatch(loadNotifications([] as PrimeUserNotification[]));
           console.log("Error while loading notifications " + e);
         }
-      }, [dispatch]);
+      }, [dispatch, user.id]);
 
     useEffect(() => {
+       if (user.id)
         fetchNotifications();
-      }, [fetchNotifications]);
+      }, [fetchNotifications, user.id]);
     return {
         notifications
       };
