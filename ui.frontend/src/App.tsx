@@ -11,6 +11,7 @@ import {
   useAccount,
   PrimeCatalogContainer,
   ConfigContextProvider,
+  PrimeNotificationContainer
 } from "./externalLib";
 
 const App = () => {
@@ -54,6 +55,7 @@ const Test = () => {
   };
   return (
     <>
+      <PrimeNotificationContainer />
       <button onClick={authenticateUser}>Get Access Token </button>
       User details : {accessToken} {account.name}
       {/* <button onClick={loadMoreTraining}>LoadMore</button> */}
