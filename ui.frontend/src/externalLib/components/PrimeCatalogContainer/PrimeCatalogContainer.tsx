@@ -3,8 +3,8 @@ import { PrimeCatalogFilters } from "../PrimeCatalogFilters";
 import { PrimeTrainingsContainer } from "../PrimeTrainingsContainer";
 
 
-const PrimeCatalogContainer  = () => {
 
+const PrimeCatalogContainer  = () => {
   return (
     <>
       <PrimeCatalogFilters></PrimeCatalogFilters>

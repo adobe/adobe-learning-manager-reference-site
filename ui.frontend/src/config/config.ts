@@ -20,8 +20,8 @@ const baseUrl = "";
 const basePath = ""
 
 export const primeConfig: PrimeConfig = {
-  baseApiUrl: "https://captivateprimestage1.adobe.com/primeapi/v2/",
-  accessToken: "7049d116e33afaa4a9dcb5ef085ff76f",
+  baseApiUrl: "https://captivateprimeqe.adobe.com/primeapi/v2/",
+  accessToken: "5fcf4aec7abdc4fb02fd20d5ebfbe6d7",
   locale: "en-US",
   pagePaths: {
     baseUrl,
