@@ -1,8 +1,10 @@
 import React from "react";
+import { useIntl } from "react-intl";
 import { UpdateFiltersEvent, useFilter } from "../../hooks/catalog/useFilter";
 import PrimeCheckbox from "./PrimeCheckBox";
 
 const PrimeCatalogFilters = (props: any) => {
+  const { formatMessage } = useIntl();
   const data = props.data;
   const {
     loTypes,
@@ -29,6 +31,12 @@ const PrimeCatalogFilters = (props: any) => {
       filter.show ? (
         <div key={filter.type}>
           <h4>{filter?.label}</h4>
+          <span>
+            {formatMessage({
+              id: "prime.catalog.label",
+              defaultMessage: "Edit Payment Information",
+            })}
+          </span>
           <ul>
             {filter.list?.map((item) => (
               <PrimeCheckbox
@@ -48,7 +56,7 @@ const PrimeCatalogFilters = (props: any) => {
 
   return (
     <>
-     <div style={{ display: "flex" }}>{filterList}</div>
+      <div style={{ display: "flex" }}>{filterList}</div>
     </>
   );
 };
