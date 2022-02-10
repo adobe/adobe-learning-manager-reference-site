@@ -4,3 +4,4 @@ export * from "./PrimeCatalogContainer";
 export * from "./PrimeTrainingsContainer";
 export * from "./PrimeTrainingCard";
 export * from "./PrimeTrainingOverview";
+export * from "./PrimeTrainingOverviewHeader"
