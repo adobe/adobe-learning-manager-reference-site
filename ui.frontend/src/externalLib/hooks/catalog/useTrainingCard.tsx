@@ -6,7 +6,7 @@ import {
   PrimeLocalizationMetadata,
 } from "../../models/PrimeModels";
 
-import { getPreferredLocalizedMetadata } from "../../utils/getPreferredLocalizedMetadata";
+import { getPreferredLocalizedMetadata } from "../../utils/catalog";
 
 const DEFAULT_LOCALE = "en-US";
 export const colors: { [key: string]: string[] } = {
