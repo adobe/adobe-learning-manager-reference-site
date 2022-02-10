@@ -1,12 +1,10 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { RestAdapter } from "../../utils/restAdapter";
 import { useConfigContext, useUserContext } from "../../contextProviders";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
-import { useDispatch } from "react-redux";
 
 export const useUser = () => {
   const { user, initAccountUser } = useUserContext();
-  const dispatch = useDispatch();
   const config = useConfigContext();
   const initUser = useCallback(async () => {
     try {
@@ -20,10 +18,6 @@ export const useUser = () => {
       const userData = JsonApiParse(response).user;
       const account = userData.account;
       initAccountUser({ userData, account });
-      dispatch({
-        type: "AUTHENTICATE_USER",
-        payload: "ABCD",
-      });
     } catch (e) {
       console.log("Error while calling user " + e);
       initAccountUser({ account: { name: "error" }, userData: {} });
@@ -31,7 +25,10 @@ export const useUser = () => {
 
     //const data = await result.json();
     //before dispacthing convert it to required format
-  }, [dispatch, initAccountUser]);
+  }, [config.baseApiUrl, initAccountUser]);
+  useEffect(() => {
+    initUser();
+  }, [initUser]);
 
   return {
     user,

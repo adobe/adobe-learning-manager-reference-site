@@ -15,7 +15,7 @@ const Provider = (props: any) => {
   );
 
   const contextValue = useMemo(() => {
-    const account = { ...accountState };
+    const account = accountState;
 
     return { account, updateAccessToken: initAccountUserUpdater };
   }, [accountState, initAccountUserUpdater]);
