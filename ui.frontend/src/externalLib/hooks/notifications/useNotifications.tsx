@@ -2,6 +2,7 @@ import { useCallback, useEffect , useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {  RestAdapter } from "../../utils/restAdapter";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
+import { getNotificationAsAstring } from "../../utils/notificationFormatter"
 import { useConfigContext, useUserContext } from "../../contextProviders";
 import { State } from "../../store/state";
 
@@ -28,8 +29,11 @@ export const useNotifications = () => {
               });
               const parsedResponse = JsonApiParse(response);
               const notificationData: any = {}; 
+              parsedResponse.userNotificationList?.map(entry => entry.message = getNotificationAsAstring(entry, "en-US"));
               notificationData["notifications"] = parsedResponse.userNotificationList || [];
               notificationData["next"] = parsedResponse.links?.next || "";
+
+              console.log(notificationData["notifications"]);
               dispatch(loadNotifications(notificationData));
               
         } catch (e) {
