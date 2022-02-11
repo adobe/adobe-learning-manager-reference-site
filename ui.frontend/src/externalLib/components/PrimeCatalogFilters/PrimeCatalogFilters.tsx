@@ -13,6 +13,7 @@ const PrimeCatalogFilters = (props: any) => {
     loFormat,
     updateFilters,
     isLoading,
+    tagName,
   } = useFilter();
 
   const onChangeHandler = (data: UpdateFiltersEvent) => {
@@ -26,7 +27,7 @@ const PrimeCatalogFilters = (props: any) => {
       </>
     );
 
-  const filterList = [loTypes, learnerState, skillName, loFormat].map(
+  const filterList = [loTypes, learnerState, skillName, loFormat, tagName].map(
     (filter) =>
       filter.show ? (
         <div key={filter.type}>

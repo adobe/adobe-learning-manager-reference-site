@@ -7,9 +7,14 @@ import {
   updateLoFormatFilter,
   updateLoTypesFilter,
   updateSkillNameFilter,
+  updateTagsFilter,
 } from "../../store/actions/catalog/action";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { RestAdapter } from "../../utils/restAdapter";
+import {
+  getQueryParamsIObjectFromUrl,
+  locationUpdate,
+} from "../../utils/catalog";
 
 export interface FilterListObject {
   value: string;
@@ -31,6 +36,7 @@ const ACTION_MAP = {
   learnerState: updateLearnerStateFilter,
   skillName: updateSkillNameFilter,
   loFormat: updateLoFormatFilter,
+  tagName: updateTagsFilter,
 };
 
 export interface UpdateFiltersEvent {
@@ -44,9 +50,10 @@ export interface Filter1State {
   learnerState: FilterType;
   skillName: FilterType;
   loFormat: FilterType;
+  tagName: FilterType;
 }
 
-const filtersDefault: Filter1State = {
+const filtersDefaultState: Filter1State = {
   loTypes: {
     type: "loTypes",
     label: "Type",
@@ -90,9 +97,44 @@ const filtersDefault: Filter1State = {
       },
     ],
   },
+  //TO-DO : Add pagination for filters
+  tagName: {
+    type: "tagName",
+    label: "Tags",
+    show: true,
+    list: [],
+  },
 };
 
-const getDefualtFiltersState = () => filtersDefault;
+const handleTest = (list: any, filtersFromUrl: any, type: string) => {
+  list?.forEach((item: any) => {
+    if (filtersFromUrl[type]?.includes(item.value)) {
+      item.checked = true;
+    }
+  });
+  return list;
+};
+
+const getDefualtFiltersState = () => {
+  const filtersFromUrl = getQueryParamsIObjectFromUrl();
+  let filtersDefault = filtersDefaultState;
+  filtersDefault.loTypes.list = handleTest(
+    filtersDefault.loTypes.list,
+    filtersFromUrl,
+    "loTypes"
+  );
+  filtersDefault.learnerState.list = handleTest(
+    filtersDefault.learnerState.list,
+    filtersFromUrl,
+    "learnerState"
+  );
+  filtersDefault.loFormat.list = handleTest(
+    filtersDefault.loFormat.list,
+    filtersFromUrl,
+    "loFormat"
+  );
+  return filtersDefault;
+};
 
 export const useFilter = () => {
   const [filterState, setFilterState] = useState(() =>
@@ -108,13 +150,13 @@ export const useFilter = () => {
     let payload = "";
     filters.list?.forEach((item) => {
       if (item.label === data.label) {
-        //just update with the arguments
         item.checked = !item.checked;
       }
       if (item.checked) {
         payload = payload ? `${payload},${item.value}` : `${item.value}`;
       }
     });
+    locationUpdate({ [data.filterType as string]: payload });
     setFilterState({ ...filterState, [data.filterType]: { ...filters } });
     const action = ACTION_MAP[data.filterType as keyof ActionMap];
 
@@ -122,16 +164,20 @@ export const useFilter = () => {
   };
 
   useEffect(() => {
+    const filtersFromUrl = getQueryParamsIObjectFromUrl();
     const getSkills = async () => {
-      const response = await RestAdapter.get({
+      let skillsPromise = await RestAdapter.get({
         url: `${config.baseApiUrl}data?filter.skillName=true`,
       });
-      const skills = JsonApiParse(response)?.data?.names;
-      const skillsList = skills.map((item: string) => ({
+
+      const skills = JsonApiParse(skillsPromise)?.data?.names;
+      let skillsList = skills.map((item: string) => ({
         value: item,
         label: item,
         checked: false,
       }));
+      skillsList = handleTest(skillsList, filtersFromUrl, "skillName");
+
       setFilterState((prevState) => ({
         ...prevState,
         skillName: { ...prevState.skillName, list: skillsList },
@@ -147,3 +193,22 @@ export const useFilter = () => {
     isLoading,
   };
 };
+
+// let tagPromise = RestAdapter.get({
+//   url: `${config.baseApiUrl}data?filter.tagName=true`,
+// });
+
+// let [skillsResponse, tagResponse] = await Promise.all([
+//   skillsPromise,
+//   tagPromise,
+// ]);
+// const tags = JsonApiParse(tagResponse)?.data?.names;
+
+// let tagsList = tags.map((item: string) => ({
+//   value: item,
+//   label: item,
+//   checked: false,
+// }));
+// tagsList = handleTest(tagsList, filtersFromUrl, "skillName");
+
+// tagName: { ...prevState.tagName, list: tagsList },

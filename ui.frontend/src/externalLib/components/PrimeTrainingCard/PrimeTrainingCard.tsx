@@ -15,10 +15,14 @@ const PrimeTrainingCard = (props: any) => {
     description,
     cardBgStyle,
     enrollment,
+    cardClickHandler,
   } = useTrainingCard(training);
   return (
     <>
-      <div style={{ padding: "10px", marginBottom: "40px", color: "red" }}>
+      <div
+        style={{ padding: "10px", marginBottom: "40px", color: "red" }}
+        onClick={cardClickHandler}
+      >
         <div
           style={{
             width: "256px",
