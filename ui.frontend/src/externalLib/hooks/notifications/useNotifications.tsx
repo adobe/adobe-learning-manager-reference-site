@@ -17,7 +17,7 @@ export const useNotifications = () => {
     const { notifications} = useSelector(
         (state: State) => state.notification
       );
-
+    const [isLoading, setIsLoading] = useState(true);
     const dispatch = useDispatch();
     const config = useConfigContext();
     const {user} = useUserContext();
@@ -35,10 +35,11 @@ export const useNotifications = () => {
 
               console.log(notificationData["notifications"]);
               dispatch(loadNotifications(notificationData));
-              
+              setIsLoading(false);
         } catch (e) {
           dispatch(loadNotifications([] as PrimeUserNotification[]));
           console.log("Error while loading notifications " + e);
+          setIsLoading(false);          
         }
       }, [dispatch, user.id]);
 
@@ -47,6 +48,7 @@ export const useNotifications = () => {
         fetchNotifications();
       }, [fetchNotifications, user.id]);
     return {
-        notifications
+        notifications, 
+        isLoading
       };
 }

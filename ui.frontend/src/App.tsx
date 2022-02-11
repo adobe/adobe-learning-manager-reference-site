@@ -14,6 +14,7 @@ import {
   PrimeNotificationContainer,
   useUserContext,
   PrimeCatalogContainer,
+  PrimeCatalogFilters
 } from "./externalLib";
 
 const App = (props: any) => {
@@ -64,7 +65,6 @@ const Test = () => {
       <button onClick={authenticateUser}>Get Access Token </button>
       User details : {accessToken} {account.name}
       {/* <button onClick={loadMoreTraining}>LoadMore</button> */}
-      {/* <PrimeCatalogFilters></PrimeCatalogFilters> */}
       {/* <button onClick={fetchTrainings}>Fetch Training</button> */}
       <PrimeCatalogContainer />
       {/* <PrimeTrainingOverview /> */}

@@ -1,7 +1,16 @@
 import { useNotifications } from "../../hooks";
+import { PrimeNotificationItem } from "./PrimeNotificationItem";
 
 const PrimeNotificationContainer = () => {
-    const { notifications } = useNotifications();
+    const { notifications, isLoading } = useNotifications();
+    
+    if (isLoading)
+    return (
+      <>
+        <span>laoding notifications...</span>
+      </>
+    );
+
   return (
     <>
       <div
@@ -12,11 +21,13 @@ const PrimeNotificationContainer = () => {
           flexWrap: "wrap",
         }}
       >
-        Notifications come here !!!
-        {notifications?.length}
-        {notifications?.map((entry) => (
-          entry.message
-        ))}
+        <ul>
+          {notifications?.map((entry) => (
+            <PrimeNotificationItem
+            message={entry.message}>
+            </PrimeNotificationItem>
+          ))}
+        </ul>
       </div>
       
     </>
