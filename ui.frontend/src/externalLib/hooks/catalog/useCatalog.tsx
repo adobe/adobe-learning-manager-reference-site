@@ -7,6 +7,7 @@ import {
   paginateTrainings,
 } from "../../store/actions/catalog/action";
 import { PrimeLearningObject } from "../../models/PrimeModels";
+import { getQueryParamsIObjectFromUrl } from "../../utils/catalog";
 
 export const useCatalog = () => {
   const { trainings, filterState, sort, next } = useSelector(
@@ -16,7 +17,12 @@ export const useCatalog = () => {
   //Fort any page load or filterchanges
   const fetchTrainings = useCallback(async () => {
     try {
-      const response = await APIServiceInstance.getTrainings(filterState, sort);
+      //mergind filters with url
+      let mergedFilters = { ...filterState, ...getQueryParamsIObjectFromUrl() };
+      const response = await APIServiceInstance.getTrainings(
+        mergedFilters,
+        sort
+      );
       dispatch(loadTrainings(response));
     } catch (e) {
       dispatch(loadTrainings([] as PrimeLearningObject[]));
@@ -26,6 +32,7 @@ export const useCatalog = () => {
   }, [dispatch, filterState, sort]);
 
   useEffect(() => {
+    console.log("inside fetchTraining useeffect");
     fetchTrainings();
   }, [fetchTrainings]);
 

@@ -27,7 +27,8 @@ export default class LoggedInCustomHooks implements ICustomHooks {
       params["filter.duration.range"] = filterState.duration;
     }
     params["page[limit]"] = 10;
-    params["include"] = "enrollment,skills.skillLevel.skill";
+    params["include"] =
+      "instances.loResources.resources,instances.badge,supplementaryResources,enrollment.loResourceGrades,skills.skillLevel.skill";
     const response = await RestAdapter.get({
       url: `${this.baseApiUrl}/learningObjects`,
       params: params,

@@ -11,7 +11,6 @@ import {
   Portal,
   useAccount,
   ConfigContextProvider,
-  useUserContext,
   PrimeCatalogContainer,
 } from "./externalLib";
 
@@ -52,7 +51,7 @@ const Test = () => {
   //you can use the context directly like this
   const { accessToken, updateAccessToken } = useAuthContext();
   const { account } = useAccount();
-  const { user } = useUserContext();
+  // const { user } = useUserContext();
   // const { items, loadMoreTraining } = useCatalog();
   const authenticateUser = () => {
     updateAccessToken(Math.random());

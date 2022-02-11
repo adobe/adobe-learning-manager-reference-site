@@ -1,5 +1,4 @@
 import config from "../../config/config";
-import { useUser } from "../../externalLib";
 
 const { parentContainers } = config;
 
@@ -8,17 +7,17 @@ const dataFromAEM = (
 )?.dataset;
 
 const Navigation = () => {
-  // console.log("Re-Rendering Navigation Component");
-  const { user, initUser } = useUser();
-  const authenticateUser = () => {
-    initUser();
-  };
+  // // console.log("Re-Rendering Navigation Component");
+  // const { user, initUser } = useUser();
+  // const authenticateUser = () => {
+  //   initUser();
+  // };
   return (
     <>
       <br />
       <br />
       <br />
-      <div>Hi from Navigation component {user.name}</div>
+      <div>Hi from Navigation component</div>
       <div>
         <a
           target="_blank"
@@ -45,8 +44,6 @@ const Navigation = () => {
           Support
         </a>
       </div>
-      <button onClick={authenticateUser}>Get User Details</button>
-      <div> {user.name}</div>
     </>
   );
 };
