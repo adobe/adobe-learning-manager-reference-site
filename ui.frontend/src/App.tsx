@@ -7,16 +7,16 @@ import config, { primeConfig } from "./config/config";
 import { AppContextProvider } from "./contextProviders";
 import { IntlProvider } from "react-intl";
 import {
-  useAuthContext,
   Portal,
-  useAccount,
   ConfigContextProvider,
   PrimeNotificationContainer,
   PrimeCatalogContainer,
 } from "./externalLib";
+import store from "./store/APIStore";
 
 const App = (props: any) => {
   const { mountingPoints } = config;
+  store.subscribe(() => console.log(store.getState()));
   return (
     <IntlProvider locale={props.locale} messages={props.messages}>
       <ConfigContextProvider config={primeConfig}>
@@ -48,20 +48,9 @@ const App = (props: any) => {
 };
 
 const Test = () => {
-  // console.log("Re-Rendering Test Component");
-  //you can use the context directly like this
-  const { accessToken, updateAccessToken } = useAuthContext();
-  const { account } = useAccount();
-  // const { user } = useUserContext();
-  // const { items, loadMoreTraining } = useCatalog();
-  const authenticateUser = () => {
-    updateAccessToken(Math.random());
-  };
   return (
     <>
       <PrimeNotificationContainer />
-      <button onClick={authenticateUser}>Get Access Token </button>
-      User details : {accessToken} {account.name}
       {/* <button onClick={loadMoreTraining}>LoadMore</button> */}
       {/* <PrimeCatalogFilters></PrimeCatalogFilters> */}
       {/* <button onClick={fetchTrainings}>Fetch Training</button> */}

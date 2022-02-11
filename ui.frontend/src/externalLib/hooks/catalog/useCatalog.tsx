@@ -7,21 +7,22 @@ import {
   paginateTrainings,
 } from "../../store/actions/catalog/action";
 import { PrimeLearningObject } from "../../models/PrimeModels";
-import { getQueryParamsIObjectFromUrl } from "../../utils/catalog";
+import { useSearch } from "./useSearch";
+import { useFilter } from "./useFilter";
 
 export const useCatalog = () => {
-  const { trainings, filterState, sort, next } = useSelector(
+  const { trainings, sort, next } = useSelector(
     (state: State) => state.catalog
   );
+  const { query } = useSearch();
+  const { filters } = useFilter();
   const dispatch = useDispatch();
-  //Fort any page load or filterchanges
   const fetchTrainings = useCallback(async () => {
     try {
-      //mergind filters with url
-      let mergedFilters = { ...filterState, ...getQueryParamsIObjectFromUrl() };
       const response = await APIServiceInstance.getTrainings(
-        mergedFilters,
-        sort
+        filters,
+        sort,
+        query
       );
       dispatch(loadTrainings(response));
     } catch (e) {
@@ -29,7 +30,7 @@ export const useCatalog = () => {
 
       console.log("Error while loading trainings " + e);
     }
-  }, [dispatch, filterState, sort]);
+  }, [dispatch, filters, query, sort]);
 
   useEffect(() => {
     console.log("inside fetchTraining useeffect");
@@ -50,7 +51,7 @@ export const useCatalog = () => {
 
   return {
     trainings,
-    filterState,
+    filters,
     sort,
     loadMoreTraining,
   };

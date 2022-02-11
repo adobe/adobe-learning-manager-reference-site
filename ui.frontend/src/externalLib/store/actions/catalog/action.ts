@@ -8,6 +8,7 @@ import {
   UPDATE_LOTYPES_FILTERS,
   UPDATE_SKILLNAME_FILTERS,
   UPDATE_TAGS_FILTERS,
+  UPDATE_SEARCH_TEXT
 } from "./actionTypes";
 
 export const loadTrainings = (payload: any): AnyAction => ({
@@ -38,6 +39,11 @@ export const updateLoFormatFilter = (payload: string): AnyAction => ({
 
 export const updateTagsFilter = (payload: string): AnyAction => ({
   type: UPDATE_TAGS_FILTERS,
+  payload,
+});
+
+export const updateSearchText = (payload: string): AnyAction => ({
+  type: UPDATE_SEARCH_TEXT,
   payload,
 });
 

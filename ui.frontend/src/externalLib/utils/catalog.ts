@@ -61,7 +61,13 @@ export function locationUpdate(params: any) {
     const location = (window as any).location;
     const existingQueryParams = new URLSearchParams(decodeURI(location.search));
     for (let key in params) {
-        existingQueryParams.set(key, params[key]);
+        if (params[key]) {
+            existingQueryParams.set(key, params[key]);
+        }
+        else {
+            existingQueryParams.delete(key)
+        }
+
     }
     const newurl =
         window.location.protocol +

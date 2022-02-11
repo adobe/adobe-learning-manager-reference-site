@@ -6,3 +6,4 @@ export * from "./PrimeTrainingCard";
 export * from "./PrimeNotificationContainer";
 export * from "./PrimeTrainingOverview";
 export * from "./PrimeTrainingOverviewHeader"
+export * from "./PrimeCatalogSearch"

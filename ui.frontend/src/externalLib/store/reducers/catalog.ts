@@ -7,6 +7,7 @@ import {
   UPDATE_LEARNERSTATE_FILTERS,
   UPDATE_LOFORMAT_FILTERS,
   UPDATE_LOTYPES_FILTERS,
+  UPDATE_SEARCH_TEXT,
   UPDATE_SKILLNAME_FILTERS,
 } from "../actions/catalog/actionTypes";
 
@@ -26,15 +27,16 @@ export interface CatalogState {
   trainings: PrimeLearningObject[] | null;
   filterState: CatalogFilterState;
   sort:
-    | "name"
-    | "date"
-    | "-name"
-    | "-date"
-    | "effectiveness"
-    | "rating"
-    | "-rating"
-    | "dueDate";
+  | "name"
+  | "date"
+  | "-name"
+  | "-date"
+  | "effectiveness"
+  | "rating"
+  | "-rating"
+  | "dueDate";
   next: string;
+  query: string;
   // paginating: boolean;
 }
 
@@ -75,11 +77,11 @@ const sort: Reducer<
     | undefined,
   action: AnyAction
 ) => {
-  switch (action.type) {
-    default:
-      return state || "-date";
-  }
-};
+    switch (action.type) {
+      default:
+        return state || "-date";
+    }
+  };
 
 const skillName: Reducer<string, AnyAction> = (
   state: string | undefined,
@@ -149,6 +151,18 @@ const duration: Reducer<string, AnyAction> = (
   }
 };
 
+const query: Reducer<string, AnyAction> = (
+  state: string | undefined,
+  action: AnyAction
+) => {
+  switch (action.type) {
+    case UPDATE_SEARCH_TEXT:
+      return action.payload;
+    default:
+      return state || "";
+  }
+};
+
 const next: Reducer<string, AnyAction> = (
   state: string | undefined,
   action: AnyAction
@@ -182,6 +196,7 @@ const catalog: Reducer<CatalogState, AnyAction> = combineReducers({
   sort,
   filterState,
   next,
+  query
 });
 
 export default catalog;

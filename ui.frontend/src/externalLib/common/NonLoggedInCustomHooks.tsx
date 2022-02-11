@@ -5,7 +5,11 @@ import { QueryParams } from "../utils/restAdapter";
 import ICustomHooks from "./ICustomHooks";
 
 export default class NonLoggedInCustomHooks implements ICustomHooks {
-  async getTrainings(filterState: CatalogFilterState, sort: string) {
+  async getTrainings(
+    filterState: CatalogFilterState,
+    sort: string,
+    searchText: string
+  ) {
     return null;
   }
   async loadMore(url: string) {
