@@ -11,6 +11,7 @@ import {
   Portal,
   useAccount,
   ConfigContextProvider,
+  PrimeNotificationContainer,
   PrimeCatalogContainer,
 } from "./externalLib";
 
@@ -58,6 +59,7 @@ const Test = () => {
   };
   return (
     <>
+      <PrimeNotificationContainer />
       <button onClick={authenticateUser}>Get Access Token </button>
       User details : {accessToken} {account.name}
       {/* <button onClick={loadMoreTraining}>LoadMore</button> */}

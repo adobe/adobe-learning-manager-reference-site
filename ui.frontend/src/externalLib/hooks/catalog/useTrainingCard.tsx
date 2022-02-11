@@ -11,7 +11,6 @@ import {
   getPreferredLocalizedMetadata,
   isJobaid,
   isJobaidContentTypeUrl,
-  shouldRedirectToInstanceScreen,
 } from "../../utils/catalog";
 
 export const useTrainingCard = (training: PrimeLearningObject) => {
