@@ -33,7 +33,6 @@ export const useCatalog = () => {
   }, [dispatch, filters, query, sort]);
 
   useEffect(() => {
-    console.log("inside fetchTraining useeffect");
     fetchTrainings();
   }, [fetchTrainings]);
 

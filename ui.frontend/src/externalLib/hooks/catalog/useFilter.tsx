@@ -107,7 +107,7 @@ const filtersDefaultState: Filter1State = {
   },
 };
 
-const handleTest = (list: any, filtersFromUrl: any, type: string) => {
+const updateFilterList = (list: any, filtersFromUrl: any, type: string) => {
   list?.forEach((item: any) => {
     if (filtersFromUrl[type]?.includes(item.value)) {
       item.checked = true;
@@ -119,17 +119,17 @@ const handleTest = (list: any, filtersFromUrl: any, type: string) => {
 const getDefualtFiltersState = () => {
   const filtersFromUrl = getQueryParamsIObjectFromUrl();
   let filtersDefault = filtersDefaultState;
-  filtersDefault.loTypes.list = handleTest(
+  filtersDefault.loTypes.list = updateFilterList(
     filtersDefault.loTypes.list,
     filtersFromUrl,
     "loTypes"
   );
-  filtersDefault.learnerState.list = handleTest(
+  filtersDefault.learnerState.list = updateFilterList(
     filtersDefault.learnerState.list,
     filtersFromUrl,
     "learnerState"
   );
-  filtersDefault.loFormat.list = handleTest(
+  filtersDefault.loFormat.list = updateFilterList(
     filtersDefault.loFormat.list,
     filtersFromUrl,
     "loFormat"
@@ -141,15 +141,18 @@ export const useFilter = () => {
   const [filterState, setFilterState] = useState(() =>
     getDefualtFiltersState()
   );
-  const filters = useSelector((state: State) => state.catalog.filterState);
+  const filtersFromState = useSelector(
+    (state: State) => state.catalog.filterState
+  );
   const [isLoading, setIsLoading] = useState(true);
 
   const config = useConfigContext();
   const dispatch = useDispatch();
 
   const updateFilters = (data: UpdateFiltersEvent) => {
-    const filters = filterState[data.filterType as keyof Filter1State];
+    const filters = filterState[data.filterType as keyof Filter1State]!;
     let payload = "";
+
     filters.list?.forEach((item) => {
       if (item.label === data.label) {
         item.checked = !item.checked;
@@ -158,6 +161,7 @@ export const useFilter = () => {
         payload = payload ? `${payload},${item.value}` : `${item.value}`;
       }
     });
+    
     locationUpdate({ [data.filterType as string]: payload });
     setFilterState({ ...filterState, [data.filterType]: { ...filters } });
     const action = ACTION_MAP[data.filterType as keyof ActionMap];
@@ -178,7 +182,7 @@ export const useFilter = () => {
         label: item,
         checked: false,
       }));
-      skillsList = handleTest(skillsList, queryParams, "skillName");
+      skillsList = updateFilterList(skillsList, queryParams, "skillName");
 
       setFilterState((prevState) => ({
         ...prevState,
@@ -192,8 +196,8 @@ export const useFilter = () => {
 
   const computedFilters = useMemo(() => {
     const queryParams = getQueryParamsIObjectFromUrl();
-    return { ...filters, ...queryParams };
-  }, [filters]);
+    return { ...filtersFromState, ...queryParams };
+  }, [filtersFromState]);
 
   return {
     ...filterState,
@@ -218,6 +222,24 @@ export const useFilter = () => {
 //   label: item,
 //   checked: false,
 // }));
-// tagsList = handleTest(tagsList, filtersFromUrl, "skillName");
+// tagsList = updateFilterList(tagsList, filtersFromUrl, "skillName");
 
 // tagName: { ...prevState.tagName, list: tagsList },
+
+/**
+ * for (let i = 0; i < filters.list!?.length; i++) {
+      let item = filters.list![i];
+
+      if (item.label === data.label) {
+        item.checked = !item.checked;
+        if (item.checked) {
+          let previousValue =
+            filtersFromState[data.filterType as keyof Filter1State];
+          payload = previousValue
+            ? `${previousValue},${item.value}`
+            : `${item.value}`;
+        }
+        break;
+      }
+    }
+ */
