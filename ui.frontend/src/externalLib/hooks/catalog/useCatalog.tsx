@@ -14,7 +14,7 @@ export const useCatalog = () => {
   const { trainings, sort, next } = useSelector(
     (state: State) => state.catalog
   );
-  const { query, handleSearch } = useSearch();
+  const { query, handleSearch, resetSearch } = useSearch();
   const { filters, filterState, updateFilters } = useFilter();
   const dispatch = useDispatch();
 
@@ -31,7 +31,18 @@ export const useCatalog = () => {
 
       console.log("Error while loading trainings " + e);
     }
-  }, [dispatch, filters, query, sort]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    dispatch,
+    filters.duration,
+    filters.learnerState,
+    filters.loFormat,
+    filters.loTypes,
+    filters.skillName,
+    filters.tagName,
+    query,
+    sort,
+  ]);
 
   useEffect(() => {
     fetchTrainings();
@@ -54,6 +65,7 @@ export const useCatalog = () => {
     loadMoreTraining,
     query,
     handleSearch,
+    resetSearch,
     filters,
     filterState,
     updateFilters,

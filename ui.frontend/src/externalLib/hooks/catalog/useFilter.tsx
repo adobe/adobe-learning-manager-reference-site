@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useConfigContext } from "../../contextProviders";
 import {
+  updateFiltersOnLoad,
   updateLearnerStateFilter,
   updateLoFormatFilter,
   updateLoTypesFilter,
@@ -187,6 +188,9 @@ export const useFilter = () => {
       setIsLoading(false);
     };
     getSkills();
+    //update state merged with filters in url
+    const updatedFilters = { ...filters, ...queryParams };
+    dispatch(updateFiltersOnLoad(updatedFilters));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

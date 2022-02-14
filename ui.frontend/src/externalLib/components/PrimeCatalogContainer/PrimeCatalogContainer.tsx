@@ -12,13 +12,18 @@ const PrimeCatalogContainer = () => {
     loadMoreTraining,
     query,
     handleSearch,
+    resetSearch,
     filterState,
     updateFilters,
   } = useCatalog();
 
   return (
     <div className={styles.primeCss}>
-      <PrimeCatalogSearch query={query} handleSearch={handleSearch} />
+      <PrimeCatalogSearch
+        query={query}
+        handleSearch={handleSearch}
+        resetSearch={resetSearch}
+      />
       <PrimeCatalogFilters
         filterState={filterState}
         updateFilters={updateFilters}
