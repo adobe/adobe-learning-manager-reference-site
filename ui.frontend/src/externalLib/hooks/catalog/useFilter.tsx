@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useConfigContext } from "../../contextProviders";
 import {
+  updateFiltersOnLoad,
   updateLearnerStateFilter,
   updateLoFormatFilter,
   updateLoTypesFilter,
@@ -15,6 +16,7 @@ import {
   getQueryParamsIObjectFromUrl,
   locationUpdate,
 } from "../../utils/catalog";
+import { State } from "../../store/state";
 
 export interface FilterListObject {
   value: string;
@@ -140,6 +142,7 @@ export const useFilter = () => {
   const [filterState, setFilterState] = useState(() =>
     getDefualtFiltersState()
   );
+  const filters = useSelector((state: State) => state.catalog.filterState);
   const [isLoading, setIsLoading] = useState(true);
 
   const config = useConfigContext();
@@ -164,7 +167,7 @@ export const useFilter = () => {
   };
 
   useEffect(() => {
-    const filtersFromUrl = getQueryParamsIObjectFromUrl();
+    const queryParams = getQueryParamsIObjectFromUrl();
     const getSkills = async () => {
       let skillsPromise = await RestAdapter.get({
         url: `${config.baseApiUrl}data?filter.skillName=true`,
@@ -176,7 +179,7 @@ export const useFilter = () => {
         label: item,
         checked: false,
       }));
-      skillsList = handleTest(skillsList, filtersFromUrl, "skillName");
+      skillsList = handleTest(skillsList, queryParams, "skillName");
 
       setFilterState((prevState) => ({
         ...prevState,
@@ -185,12 +188,22 @@ export const useFilter = () => {
       setIsLoading(false);
     };
     getSkills();
-  }, [config.baseApiUrl, dispatch]);
+    //update state merged with filters in url
+    const updatedFilters = { ...filters, ...queryParams };
+    dispatch(updateFiltersOnLoad(updatedFilters));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const computedFilters = useMemo(() => {
+    const queryParams = getQueryParamsIObjectFromUrl();
+    return { ...filters, ...queryParams };
+  }, [filters]);
 
   return {
-    ...filterState,
+    filterState,
     updateFilters,
     isLoading,
+    filters: computedFilters,
   };
 };
 
