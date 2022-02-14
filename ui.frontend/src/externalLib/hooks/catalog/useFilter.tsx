@@ -196,7 +196,7 @@ export const useFilter = () => {
   }, [filters]);
 
   return {
-    ...filterState,
+    filterState,
     updateFilters,
     isLoading,
     filters: computedFilters,

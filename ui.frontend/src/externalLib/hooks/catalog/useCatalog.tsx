@@ -14,9 +14,10 @@ export const useCatalog = () => {
   const { trainings, sort, next } = useSelector(
     (state: State) => state.catalog
   );
-  const { query } = useSearch();
-  const { filters } = useFilter();
+  const { query, handleSearch } = useSearch();
+  const { filters, filterState, updateFilters } = useFilter();
   const dispatch = useDispatch();
+
   const fetchTrainings = useCallback(async () => {
     try {
       const response = await APIServiceInstance.getTrainings(
@@ -33,7 +34,6 @@ export const useCatalog = () => {
   }, [dispatch, filters, query, sort]);
 
   useEffect(() => {
-    console.log("inside fetchTraining useeffect");
     fetchTrainings();
   }, [fetchTrainings]);
 
@@ -51,8 +51,12 @@ export const useCatalog = () => {
 
   return {
     trainings,
-    filters,
-    sort,
     loadMoreTraining,
+    query,
+    handleSearch,
+    filters,
+    filterState,
+    updateFilters,
+    sort,
   };
 };
