@@ -12,16 +12,22 @@ import { QueryParams, RestAdapter } from "../../utils/restAdapter";
 
 
 export const useBoard = () => {
+  const DEFAULT_SORT_VALUE = "dateUpdated";
   const { items, next } = useSelector(
     (state: State) => state.social.boards
   );
   const dispatch = useDispatch();
   //Fort any page load or filterchanges
-  const fetchBoards = useCallback(async () => {
+  const fetchBoards = useCallback(async (sortFilter: any, skill: any) => {
     try {
       const baseApiUrl =  (window as any).primeConfig.baseApiUrl;
       const params: QueryParams = {};
-      params["sort"] = "name";
+      params["sort"] = sortFilter ? sortFilter : DEFAULT_SORT_VALUE;
+      //To-do add for skill
+      params["filter.state"]= "ACTIVE";
+      params["page[offset]"]= "0";
+      params["page[limit]"]= "10";
+
       params["include"] = "createdBy,skills";
       const response = await RestAdapter.get({
         url: `${baseApiUrl}/boards?`,
@@ -42,7 +48,7 @@ export const useBoard = () => {
 
   
   useEffect(() => {
-    fetchBoards();
+    fetchBoards(DEFAULT_SORT_VALUE, null);
   }, [fetchBoards]);
 
   // for pagination
@@ -60,6 +66,6 @@ export const useBoard = () => {
   return {
     items,
     loadMoreBoard,
-    
+    fetchBoards
   };
 };

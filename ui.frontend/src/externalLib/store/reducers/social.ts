@@ -40,6 +40,7 @@ import {
     OPEN_POST_OPTIONS,
     SHOW_CONFIRMATION_DIALOG,
     HIDE_CONFIRMATION_DIALOG,
+    SOCIAL_BOARD_DELETE_SUCCESS,
     SOCIAL_POST_DELETE_SUCCESS,
     DISMISS_PANEL,
     LOAD_COMMENTS,
@@ -184,6 +185,9 @@ const items: Reducer<PrimeBoard[], AnyAction> = (
             return state!.length === 0
                 ? []
                 : state?.filter((item) => item.id !== action.payload.id);
+        }
+        case SOCIAL_BOARD_DELETE_SUCCESS: {
+            return state?.filter((item: PrimeBoard) => item.id !== action.payload.id);
         }
         default:
             return state ? state : null;

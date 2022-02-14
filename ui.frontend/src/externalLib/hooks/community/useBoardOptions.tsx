@@ -2,7 +2,8 @@ import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import {
     addBoardToFavourites,
-    removeBoardFromFavourites
+    removeBoardFromFavourites,
+    deleteBoard
 } from "../../store/actions/social/action";
 import { RestAdapter } from "../../utils/restAdapter";
 
@@ -26,8 +27,28 @@ export const useBoardOptions = () => {
         dispatch(removeBoardFromFavourites({id:boardId}));
     }, [dispatch]);
 
+    const deleteBoardFromServer = useCallback(async (boardId, accountId) => {
+        const baseApiUrl =  (window as any).primeConfig.socialBaseApiUrl;
+        await RestAdapter.ajax({
+            url: `${baseApiUrl}/account/${accountId}/board/${boardId}`,
+            method:"DELETE"
+        });
+        dispatch(deleteBoard({id:boardId}));
+    }, [dispatch]);
+
+    const reportBoard = useCallback(async (boardId) => {
+        const baseApiUrl =  (window as any).primeConfig.baseApiUrl;
+        await RestAdapter.ajax({
+            url: `${baseApiUrl}/boards/${boardId}/reportAbuse`,
+            method:"POST"
+        });
+        // dispatch(removeBoardFromFavourites({id:boardId}));
+    }, [dispatch]);
+
     return {
         addBoardToFavourite,
-        removeBoardFromFavourite
+        removeBoardFromFavourite,
+        deleteBoardFromServer,
+        reportBoard
     };
 };

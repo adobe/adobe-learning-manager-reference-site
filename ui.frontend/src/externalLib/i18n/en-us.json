@@ -16,5 +16,6 @@
   "prime.community.board.removeFromFavourites": "Remove from Favourites",
   "prime.community.board.addToFavourites": "Add to Favourites",
   "prime.community.board.delete": "Delete",
-  "prime.community.board.report": "Report"
+  "prime.community.board.report": "Report",
+  "prime.community.board.sortBy": "Sort by"
 }

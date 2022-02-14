@@ -48,6 +48,7 @@ const PrimeCommunityBoard  = (props: any) => {
 
   return (
     <>
+    <div className={styles.primeBoardWrapper}>
       <div className={styles.primeBoardItem}>
         <div className="prime-title-skills-container">
           {/* <span id="sr-only">${i18n(state.locale).BOARD}</span> */}
@@ -146,6 +147,7 @@ const PrimeCommunityBoard  = (props: any) => {
               </span>
             </div>
         </div>
+      </div>
       </div>
     </>
   );

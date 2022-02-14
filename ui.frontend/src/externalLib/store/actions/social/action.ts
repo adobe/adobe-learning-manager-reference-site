@@ -4,7 +4,8 @@ import {
     LOAD_SOCIAL_BOARDS,
     PAGINATE_SOCIAL_BOARDS,
     SOCIAL_ADD_BOARD_FAVORITE_SUCCESS,
-    SOCIAL_REMOVE_BOARD_FAVORITE_SUCCESS
+    SOCIAL_REMOVE_BOARD_FAVORITE_SUCCESS,
+    SOCIAL_BOARD_DELETE_SUCCESS
 } from "./actionTypes";
 
 export const loadBoards = (payload: any): AnyAction => ({
@@ -19,6 +20,11 @@ export const addBoardToFavourites = (payload: any): AnyAction => ({
 
 export const removeBoardFromFavourites = (payload: any): AnyAction => ({
   type: SOCIAL_REMOVE_BOARD_FAVORITE_SUCCESS,
+  payload,
+});
+
+export const deleteBoard = (payload: any): AnyAction => ({
+  type: SOCIAL_BOARD_DELETE_SUCCESS,
   payload,
 });
 
