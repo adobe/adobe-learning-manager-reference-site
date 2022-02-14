@@ -1,8 +1,3 @@
-import Navigation from "./components/navigation";
-import LoOverview from "./components/loOverview";
-import Boards from "./components/boards";
-import Board from "./components/board";
-import Catalog from "./components/catalog";
 import config, { primeConfig } from "./config/config";
 import { AppContextProvider } from "./contextProviders";
 import { IntlProvider } from "react-intl";
@@ -21,42 +16,15 @@ const App = (props: any) => {
     <IntlProvider locale={props.locale} messages={props.messages}>
       <ConfigContextProvider config={primeConfig}>
         <AppContextProvider>
-          <Test />
-
-          <Navigation />
-          <Portal selector={mountingPoints.navContainer}></Portal>
-
-          <Portal selector={mountingPoints.loOverviewContainer}>
-            <LoOverview />
+          <Portal selector={mountingPoints.notificationContainer}>
+            <PrimeNotificationContainer />
           </Portal>
-
           <Portal selector={mountingPoints.catalogContainer}>
-            <Catalog />
-          </Portal>
-
-          <Portal selector={mountingPoints.boardsContainer}>
-            <Boards />
-          </Portal>
-
-          <Portal selector={mountingPoints.boardContainer}>
-            <Board />
+            <PrimeCatalogContainer />
           </Portal>
         </AppContextProvider>
       </ConfigContextProvider>
     </IntlProvider>
-  );
-};
-
-const Test = () => {
-  return (
-    <>
-      <PrimeNotificationContainer />
-      {/* <button onClick={loadMoreTraining}>LoadMore</button> */}
-      {/* <PrimeCatalogFilters></PrimeCatalogFilters> */}
-      {/* <button onClick={fetchTrainings}>Fetch Training</button> */}
-      <PrimeCatalogContainer />
-      {/* <PrimeTrainingOverview /> */}
-    </>
   );
 };
 

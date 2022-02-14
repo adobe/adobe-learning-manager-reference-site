@@ -4,6 +4,8 @@ import { AnyAction, Reducer, combineReducers } from "redux";
 import {
   LOAD_TRAININGS,
   PAGINATE_TRAININGS,
+  RESET_SEARCH_TEXT,
+  UPDATE_FILTERS_ON_LOAD,
   UPDATE_LEARNERSTATE_FILTERS,
   UPDATE_LOFORMAT_FILTERS,
   UPDATE_LOTYPES_FILTERS,
@@ -90,6 +92,8 @@ const skillName: Reducer<string, AnyAction> = (
   switch (action.type) {
     case UPDATE_SKILLNAME_FILTERS:
       return action.payload;
+    case UPDATE_FILTERS_ON_LOAD:
+      return action.payload.skillName;
     default:
       return state || "";
   }
@@ -100,6 +104,8 @@ const tagName: Reducer<string, AnyAction> = (
   action: AnyAction
 ) => {
   switch (action.type) {
+    case UPDATE_FILTERS_ON_LOAD:
+      return action.payload.tagName;
     default:
       return state || "";
   }
@@ -112,6 +118,8 @@ const loTypes: Reducer<string, AnyAction> = (
   switch (action.type) {
     case UPDATE_LOTYPES_FILTERS:
       return action.payload || DEFUALT_FILTERS_VALUE["loTypes"];
+    case UPDATE_FILTERS_ON_LOAD:
+      return action.payload.loTypes;
     default:
       return state || DEFUALT_FILTERS_VALUE["loTypes"];
   }
@@ -124,6 +132,8 @@ const learnerState: Reducer<string, AnyAction> = (
   switch (action.type) {
     case UPDATE_LEARNERSTATE_FILTERS:
       return action.payload;
+    case UPDATE_FILTERS_ON_LOAD:
+      return action.payload.learnerState;
     default:
       return state || "";
   }
@@ -136,6 +146,8 @@ const loFormat: Reducer<string, AnyAction> = (
   switch (action.type) {
     case UPDATE_LOFORMAT_FILTERS:
       return action.payload;
+    case UPDATE_FILTERS_ON_LOAD:
+      return action.payload.loFormat;
     default:
       return state || "";
   }
@@ -146,6 +158,8 @@ const duration: Reducer<string, AnyAction> = (
   action: AnyAction
 ) => {
   switch (action.type) {
+    case UPDATE_FILTERS_ON_LOAD:
+      return action.payload.duration;
     default:
       return state || "";
   }
@@ -157,6 +171,8 @@ const query: Reducer<string, AnyAction> = (
 ) => {
   switch (action.type) {
     case UPDATE_SEARCH_TEXT:
+      return action.payload;
+    case RESET_SEARCH_TEXT:
       return action.payload;
     default:
       return state || "";

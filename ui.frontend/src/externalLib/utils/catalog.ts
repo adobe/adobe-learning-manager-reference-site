@@ -86,3 +86,11 @@ export function getQueryParamsIObjectFromUrl() {
     const params: URLSearchParams = new URLSearchParams(decodeURI(location.search));
     return Object.fromEntries(params.entries());
 }
+
+export function debounce(fn: Function, time = 250) {
+    let timeoutId: ReturnType<typeof setTimeout>;
+    return function (this: any, ...args: any[]) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => fn.apply(this, args), time);
+    };
+};
