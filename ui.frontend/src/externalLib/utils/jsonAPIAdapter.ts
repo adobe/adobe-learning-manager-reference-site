@@ -129,12 +129,36 @@ export class ObjectWrapper {
         return retval;
     }
 
+    public set(attr: string, value: any) {
+        
+        if (this.dataObject === undefined) return;
+        if (this.dataObject.hasOwnProperty("attributes")) {
+            //check in attributes
+            if (this.dataObject["attributes"].hasOwnProperty(attr)) {
+                 this.dataObject["attributes"][attr] = value;
+                 return;
+            }
+        }
+        if (this.dataObject.hasOwnProperty("relationships")) {
+            //check in relationships
+            let propToUpdate = this.dataObject["relationships"][attr]; 
+            if (propToUpdate) {
+                this.dataObject["relationships"][attr] = value; 
+            }
+        }
+
+    }
+
     public static GetWrapper(type: string, id: string,storeToUse: Store,dataObj?: any): ObjectWrapper {
         let objWrapper = new ObjectWrapper(type, id, storeToUse, dataObj);
         objWrapper = new Proxy(objWrapper, {
             get: function (target: any, attr: string) {
                 return target.get(attr);
             },
+            set: function(target, attr, value, receiver) {
+                target.set(attr, value);
+                return true;
+              }
         });
         return objWrapper;
     }
