@@ -193,7 +193,7 @@ export const useFilter = () => {
     };
     getSkills();
     //update state merged with filters in url
-    const updatedFilters = { ...filters, ...queryParams };
+    const updatedFilters = { ...filtersFromState, ...queryParams };
     dispatch(updateFiltersOnLoad(updatedFilters));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

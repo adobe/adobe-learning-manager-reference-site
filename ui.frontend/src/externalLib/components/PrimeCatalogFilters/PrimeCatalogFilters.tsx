@@ -1,6 +1,6 @@
 import React from "react";
 import { useIntl } from "react-intl";
-import { UpdateFiltersEvent, useFilter } from "../../hooks/catalog/useFilter";
+import { UpdateFiltersEvent } from "../../hooks/catalog/useFilter";
 import PrimeCheckbox from "./PrimeCheckBox";
 
 const PrimeCatalogFilters = (props: any) => {
