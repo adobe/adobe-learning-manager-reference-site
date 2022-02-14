@@ -1,0 +1,56 @@
+.notificationItem {
+    list-style: none;
+    display: flex;
+    padding: 0.5rem;
+    justify-content: space-between;
+    border-bottom: 1px solid #555;
+
+    margin: 0 0 0 -10px;
+    color: #fff;
+    list-style-type: none;
+    min-height: 32px;
+  }
+
+  .notificationrow {
+	border-bottom: 1px solid rgb(225, 225, 225);
+    background-color: transparent;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 130ms ease-in-out;
+}
+
+.notificationcell {
+	overflow-x: scroll;
+	color: rgb(75, 75, 75);
+	position: relative;
+	box-sizing: border-box;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 14px 16px;
+    min-height: 20px;
+}
+
+.notificationtext {
+	font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    font-style: normal;
+    letter-spacing: 0;
+    text-transform: none;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.notificationdate {
+	font-style: normal;
+    font-weight: 400;
+	font-size: 11px;
+    font-weight: 700;
+    line-height: 1.5;
+    font-style: normal;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin-top: 0;
+    margin-bottom: 0;
+}

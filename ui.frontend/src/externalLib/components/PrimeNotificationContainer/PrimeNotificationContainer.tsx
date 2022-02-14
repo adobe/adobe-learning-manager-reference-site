@@ -1,6 +1,9 @@
 import { useNotifications } from "../../hooks";
 import { PrimeNotificationItem } from "./PrimeNotificationItem";
 
+
+import styles from "./PrimeNotificationContainer.module.css";
+
 const PrimeNotificationContainer = () => {
     const { notifications, isLoading } = useNotifications();
     
@@ -12,25 +15,21 @@ const PrimeNotificationContainer = () => {
     );
 
   return (
-    <>
-      <div
-        style={{
-          margin: "10px",
-          padding: "10px",
-          display: "flex",
-          flexWrap: "wrap",
-        }}
-      >
-        <ul>
-          {notifications?.map((entry) => (
-            <PrimeNotificationItem
-            message={entry.message}>
-            </PrimeNotificationItem>
-          ))}
-        </ul>
+    
+      <div className={styles.notificationtable}>
+        <div className={styles.notificationlist}>
+          <ul>
+            {notifications?.map((entry) => (
+              <PrimeNotificationItem
+              message={entry.message}
+              key={entry.id}
+              >
+              </PrimeNotificationItem>
+            ))}
+          </ul>
+        </div>
       </div>
-      
-    </>
+    
   );
 };
 

@@ -25,7 +25,7 @@ export const useNotifications = () => {
     const fetchNotifications = useCallback(async () => {
         try {
             const response = await RestAdapter.get({
-                url: `${config.baseApiUrl}/users/${user.id}/userNotifications`
+                url: `${config.baseApiUrl}/users/10866105/userNotifications`
               });
               const parsedResponse = JsonApiParse(response);
               const notificationData: any = {}; 
@@ -44,7 +44,7 @@ export const useNotifications = () => {
       }, [dispatch, user.id]);
 
     useEffect(() => {
-       if (user.id)
+       
         fetchNotifications();
       }, [fetchNotifications, user.id]);
     return {
