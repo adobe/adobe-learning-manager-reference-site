@@ -1,9 +1,11 @@
-import { useCatalog } from "../../hooks/catalog";
 import { useLoadMore } from "../../hooks/loadMore";
+import { PrimeLearningObject } from "../../models/PrimeModels";
 import { PrimeTrainingCard } from "../PrimeTrainingCard";
 
-const PrimeTrainingsContainer = () => {
-  const { trainings, loadMoreTraining } = useCatalog();
+const PrimeTrainingsContainer: React.FC<{
+  trainings: PrimeLearningObject[] | null;
+  loadMoreTraining: () => void;
+}> = ({ trainings, loadMoreTraining }) => {
   const [elementRef] = useLoadMore({
     trainings,
     callback: loadMoreTraining,
