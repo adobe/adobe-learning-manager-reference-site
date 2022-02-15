@@ -78,12 +78,6 @@ const filtersDefaultState: Filter1State = {
       { value: "notenrolled", label: "Not Enrolled", checked: false },
     ],
   },
-  skillName: {
-    type: "skillName",
-    label: "Skills",
-    show: true,
-    list: [],
-  },
   loFormat: {
     type: "loFormat",
     label: "Format",
@@ -100,6 +94,12 @@ const filtersDefaultState: Filter1State = {
     ],
   },
   //TO-DO : Add pagination for filters
+  skillName: {
+    type: "skillName",
+    label: "Skills",
+    show: true,
+    list: [],
+  },
   tagName: {
     type: "tagName",
     label: "Tags",
@@ -162,7 +162,7 @@ export const useFilter = () => {
         payload = payload ? `${payload},${item.value}` : `${item.value}`;
       }
     });
-    
+
     locationUpdate({ [data.filterType as string]: payload });
     setFilterState({ ...filterState, [data.filterType]: { ...filters } });
     const action = ACTION_MAP[data.filterType as keyof ActionMap];

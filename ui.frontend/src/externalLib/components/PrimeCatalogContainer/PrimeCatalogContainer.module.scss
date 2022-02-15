@@ -1,0 +1,20 @@
+.primeCss {
+  padding: 10px 0;
+}
+
+.primeCatalogHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 60px;
+  .primateCatalogLabel {
+    font-size: 18px;
+    letter-spacing: 0px;
+    color: #000000;
+    margin: 0;
+  }
+}
+
+.primeFiltersCatalogContainer {
+  display: flex;
+}

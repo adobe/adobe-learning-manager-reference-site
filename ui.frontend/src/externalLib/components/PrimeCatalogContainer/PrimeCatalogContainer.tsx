@@ -4,7 +4,7 @@ import { PrimeCatalogFilters } from "../PrimeCatalogFilters";
 import PrimeCatalogSearch from "../PrimeCatalogSearch/PrimeCatalogSearch";
 import { PrimeTrainingsContainer } from "../PrimeTrainingsContainer";
 
-import styles from "./PrimeCatalogContainer.module.css";
+import styles from "./PrimeCatalogContainer.module.scss";
 
 const PrimeCatalogContainer = () => {
   const {
@@ -19,20 +19,27 @@ const PrimeCatalogContainer = () => {
 
   return (
     <div className={styles.primeCss}>
-      <PrimeCatalogSearch
-        query={query}
-        handleSearch={handleSearch}
-        resetSearch={resetSearch}
-      />
-      <PrimeCatalogFilters
-        filterState={filterState}
-        updateFilters={updateFilters}
-      ></PrimeCatalogFilters>
+      <div className={styles.primeCatalogHeader}>
+        <h1 className={styles.primateCatalogLabel}>
+          Collection of Courses, Certificates and More
+        </h1>
+        <PrimeCatalogSearch
+          query={query}
+          handleSearch={handleSearch}
+          resetSearch={resetSearch}
+        />
+      </div>
+      <div className={styles.primeFiltersCatalogContainer}>
+        <PrimeCatalogFilters
+          filterState={filterState}
+          updateFilters={updateFilters}
+        ></PrimeCatalogFilters>
 
-      <PrimeTrainingsContainer
-        trainings={trainings}
-        loadMoreTraining={loadMoreTraining}
-      ></PrimeTrainingsContainer>
+        <PrimeTrainingsContainer
+          trainings={trainings}
+          loadMoreTraining={loadMoreTraining}
+        ></PrimeTrainingsContainer>
+      </div>
     </div>
   );
 };

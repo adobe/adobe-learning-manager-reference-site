@@ -20,9 +20,11 @@ export const useSearch = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleSearch = useCallback(
     debounce((text: string) => {
+      locationUpdate({ searchText: text });
       if (text.length >= DEFAULT_MIN_LENGTH) {
-        locationUpdate({ searchText: text });
         dispatch(updateSearchText(text));
+      } else if (text.length === 0) {
+        dispatch(resetSearchText());
       }
     }),
     [dispatch, debounce]

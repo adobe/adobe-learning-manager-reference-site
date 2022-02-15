@@ -1,3 +1,5 @@
+import styles from "./PrimeCatalogSearch.module.scss";
+
 const PrimeCatalogSearch: React.FC<{
   query: string;
   handleSearch: (text: string) => void;
@@ -9,8 +11,11 @@ const PrimeCatalogSearch: React.FC<{
   };
   return (
     <>
-      <input defaultValue={query} onChange={searchChangedHandler} />{" "}
-      <button onClick={resetSearch}>Clear</button>
+      <input
+        className={styles.primeSearchInput}
+        defaultValue={query}
+        onInput={searchChangedHandler}
+      />{" "}
     </>
   );
 };
