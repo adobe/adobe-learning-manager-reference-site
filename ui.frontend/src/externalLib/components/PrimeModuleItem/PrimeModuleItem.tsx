@@ -1,54 +1,75 @@
-import React, { useContext } from "react";
-import { PrimeLearningObjectResource } from "../../models/PrimeModels";
+import React, { useContext, useMemo } from "react";
+import {
+  PrimeLearningObjectResource,
+  PrimeResource,
+} from "../../models/PrimeModels";
 import { useConfigContext } from "../../contextProviders";
-
-function getFilteredLocalizedData_lxpv<T>(
-  localizedMetadata: T[],
-  locale: string
-): T[] {
-  return localizedMetadata.filter((resource: any) => {
-    return resource.locale === locale;
-  });
-}
+import styles from "./PrimeModuleItem.module.css";
+import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 
 const PrimeModuleItem = (props: any) => {
   const loResource: PrimeLearningObjectResource = props.loResource;
   const config = useConfigContext();
   const locale = config.locale;
   let localizedMetadata = loResource.localizedMetadata;
-  let preferredLocalizedData = getFilteredLocalizedData_lxpv(
+  const { name, description, overview } = getPreferredLocalizedMetadata(
     localizedMetadata,
     locale
   );
-  if (!preferredLocalizedData) {
-    preferredLocalizedData = getFilteredLocalizedData_lxpv(
-      localizedMetadata,
-      "en-US"
+
+  const descriptionTextHTML = description && (
+    <div className={styles.primeModuleDescription}>{description}</div>
+  );
+
+  const resource = useMemo((): PrimeResource => {
+    return (
+      loResource.resources.filter((item) => item.locale == locale)[0] ||
+      loResource.resources.filter((item) => item.locale == "en-US")[0] ||
+      loResource.resources[0]
     );
-  }
-  if (!preferredLocalizedData) {
-    preferredLocalizedData = localizedMetadata;
-  }
-  const localizedData = preferredLocalizedData[0];
+  }, [loResource.resources, locale]);
 
   return (
-    <>
-      <div style={{ display: "flex", margin: "10px" }}>
-        {localizedData.name} ,{" "}
-        {loResource.resources.map((item) => {
-          // debugger;
-          return (
-            <span key={item.id}>
-              {item.authorDesiredDuration} {item.contentType}, {loResource.loResourceType}
-              {/* {item.dateCreated},  */}
-              {/* {loResource.learningObject.loFormat} */}
-            </span>
-          );
-        })}
+    <div className={styles.primeModuleContainer}>
+      <div className={styles.headerContainer}>
+        <div>{name}</div>
+        <div>{loResource.resourceType}</div>
       </div>
-      {/* <div style={{ display: "flex" }}>{loResource.resourceType}</div>
-      <div style={{ display: "flex" }}>{loResource.resources}</div> */}
-    </>
+      <div className={styles.primeModuleWrapperContainer}>
+        {" "}
+        {descriptionTextHTML}
+        <div className={styles.primeModuleMetaDataContainer}>
+          <div className={styles.primeModuleMetadata}>
+            <div className={styles.primeModuleIcon}>Icon</div>
+            <div className={styles.primeModuleDetails}>
+              {resource.dateStart} - {resource.completionDeadline}
+            </div>
+          </div>
+          <div className={styles.primeModuleMetadata}>
+            <div className={styles.primeModuleIcon}>Icon</div>
+            <div className={styles.primeModuleDetails}>
+              {resource.seatLimit}
+            </div>
+          </div>
+          <div className={styles.primeModuleMetadata}>
+            <div className={styles.primeModuleIcon}>Icon</div>
+  <div className={styles.primeModuleDetails}>{resource.location}</div>
+          </div>
+          <div className={styles.primeModuleMetadata}>
+            <div className={styles.primeModuleIcon}>Icon</div>
+  <div className={styles.primeModuleDetails}>{resource.instructorNames?.join(", ")}</div>
+          </div>
+          <div className={styles.primeModuleMetadata}>
+            <div className={styles.primeModuleIcon}>Icon</div>
+            <div className={styles.primeModuleDetails}>{resource.authorDesiredDuration || resource.desiredDuration}</div>
+          </div>
+          <div className={styles.primeModuleMetadata}>
+            <div className={styles.primeModuleIcon}>Icon</div>
+            <div className={styles.primeModuleDetails}>Description</div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

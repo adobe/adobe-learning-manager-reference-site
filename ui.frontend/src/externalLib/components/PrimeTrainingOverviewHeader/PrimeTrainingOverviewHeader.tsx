@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./PrimeTrainingOverviewHeader.module.css";
 
 const PrimeTrainingOverviewHeader: React.FC<{
   format: string;
@@ -7,9 +8,11 @@ const PrimeTrainingOverviewHeader: React.FC<{
 }> = (props) => {
   const { format, title, color } = props;
   return (
-    <div style={{ backgroundColor: color }}>
-      <h6>{format}</h6>
-      <h5>{title}</h5>
+    <div style={{ backgroundColor: color }} className={styles.primeTrainingHeader}>
+      <div className={styles.primeTraingingHeadingContainer}>
+        <div className={styles.primeTrainingFormat}>{format}</div>
+        <div role="heading" className={styles.primeTrainingTitle} id={title} aria-label={title} title={title} data-automationid={title}>{title}</div>
+      </div>
     </div>
   );
 };

@@ -6,7 +6,9 @@ import {
   ConfigContextProvider,
   PrimeNotificationContainer,
   PrimeCatalogContainer,
-  PrimeCatalogFilters
+  PrimeTrainingOverview,
+  useUserContext,
+  useUser,
 } from "./externalLib";
 import store from "./store/APIStore";
 

@@ -1,0 +1,64 @@
+@import "../../styles/variables.css";
+
+.primeModuleContainer {
+    width: 100%;
+    border: 1px solid #c9c9c9;
+    clear: both;
+    text-align: left!important;
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.primeModuleDescription {
+    font-size: var(--prime-font-size-small);
+}
+  
+  .primeModuleDetails {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; 
+    padding: 20px;
+    
+  }
+  
+  .primeModuleIcon {
+   padding: 20px;
+  }
+
+  .primeModuleWrapperContainer {
+    background-color:#f7f7f7;
+    border-color: #ECECEC;
+    border: 1px solid #c9c9c9;
+  }
+  
+  .primeModuleMetaDataContainer {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .primeModuleMetadata {
+      width: 50%;
+      display: flex;
+      
+  }
+  
+  .primeModuleContainer > div {
+    background-color: #f1f1f1;
+    padding: 20px;
+  }
+  
+  @media screen and (max-width: 500px) {
+    .primeModuleMetaDataContainer {
+      display: flex;
+      background-color: DodgerBlue;
+      flex-direction: columns;
+    }
+    
+    .primeModuleMetadata {
+      width: 100%;
+      display: flex;
+      
+      }
+  }
