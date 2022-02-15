@@ -109,6 +109,7 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     cardBgStyle,
     enrollment,
     cardClickHandler,
+    training,
   };
   //date create, published, duration
 };

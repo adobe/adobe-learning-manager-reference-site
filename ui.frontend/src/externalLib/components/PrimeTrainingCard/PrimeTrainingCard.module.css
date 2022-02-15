@@ -1,0 +1,285 @@
+@import "../../styles/variables.css";
+.primeTrainingsListItem {
+  margin-bottom: 40px;
+  padding-left: 20px;
+}
+.primeTrainingsListItem * {
+  box-sizing: border-box;
+}
+.primeTrainingCard {
+  height: 205px;
+  width: 256px;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgb(0 0 0 / 20%);
+  position: relative;
+  transition: all 0.2s ease-in;
+}
+.primeTrainingCard.hover {
+  box-shadow: 0 5px 10px rgb(0 0 0 / 20%);
+}
+
+.primeTrainingCard.hover .primeTrainingBottomBar {
+  bottom: 0;
+}
+
+.primeTrainingCard.hover .primeTrainingDescriptionContainer {
+  display: flex;
+  background-color: var(--prime-color-white);
+}
+
+.primeTrainingCard.hover .primeTrainingType {
+  padding-bottom: 10px;
+  margin-bottom: 0;
+}
+
+.primeTrainingCard.hover .primeTrainingExtra {
+  display: none;
+}
+
+.primeTrainingCard.hover .primeTrainingBackdrop {
+  background-color: rgba(0, 0, 0, 0.65);
+}
+.primeTrainingCard.hover .primeTrainingTopBar {
+  opacity: 0.2;
+}
+
+.primeTrainingCard.hover .showOnHover {
+  display: block;
+}
+.primeTrainingImage {
+  height: 205px;
+  width: 256px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.primeTrainingDetailsContainer {
+  z-index: 1;
+  background: transparent;
+}
+
+.primeTrainingTopBar {
+  position: absolute;
+  width: 100%;
+  letter-spacing: 0px;
+  color: var(--prime-color-white);
+  opacity: 1;
+  font-size: 11px;
+  padding: 15px 15px 15px 10px;
+}
+.primeTrainingFormat {
+  width: 50%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.primeTrainingBottomBar {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  padding: 0px 10px;
+  color: var(--prime-color-white);
+  bottom: 0;
+}
+
+.primeTrainingPrice {
+  align-items: center;
+  justify-content: center;
+  background: var(--prime-color-white);
+  border-radius: 12px;
+  font-size: 11px;
+  color: var(--prime-color-black);
+  font-weight: bold;
+  padding: 3px 8px;
+}
+.primeTrainingTitle {
+  margin: 8px 0;
+  letter-spacing: 0px;
+  opacity: 1;
+  font-size: 19px;
+  line-height: 24px;
+  text-transform: capitalize;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.primeTrainingType {
+  font-size: 10px;
+  line-height: 13px;
+  letter-spacing: 0px;
+  opacity: 1;
+  text-transform: capitalize;
+  margin-bottom: 20px;
+}
+.primeTrainingThumbnail {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.primeTrainingSkillsLabel {
+  font-size: 9px;
+  font-weight: bold;
+  line-height: 11px;
+  letter-spacing: 0px;
+  color: var(--prime-color-black);
+}
+.primeTrainingSkillsLabel::after {
+  content: ":";
+}
+.primeTrainingSkillsValue {
+  font-size: 9px;
+  line-height: 11px;
+  letter-spacing: 0px;
+  color: #000000;
+  padding-left: 5px;
+}
+
+.primeTrainingBackdrop {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.75) 100%
+  );
+}
+.primeTrainingExtra {
+  width: 100%;
+  height: 30px;
+  bottom: 0;
+  left: 0;
+  font-size: 1.2rem;
+  padding: 0 10px;
+  background: rgba(255, 255, 255, 0.8);
+  position: absolute;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+}
+.primeTrainingExtraWrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.primeTrainingExtraLabel {
+  font-size: 9px;
+  font-weight: bold;
+  line-height: 11px;
+  letter-spacing: 0px;
+  color: var(--prime-color-black);
+}
+.primeTrainingExtraLabel span {
+  font-weight: normal;
+  padding-left: 5px;
+  font-size: 12px;
+}
+.primeTrainingExtraLabel span:first-child:after {
+  content: ":";
+}
+
+.primeTrainingExtraLabel .primeTrainingExtraIcon {
+  margin-left: auto;
+}
+
+.primeTrainingProgressBarContainer {
+  width: 100%;
+  height: 6px;
+  background: #dfdfdf;
+  border-radius: 0.5rem;
+
+}
+.primeTrainingProgressBarContainer .primeTrainingProgressBar {
+  width: 0;
+  height: 100%;
+  border-radius: 0.5rem;
+  transition: width 750ms ease-in-out;
+  -webkit-transition: width 750ms ease-in-out;
+  background: linear-gradient(90deg, #55b36f, #0f870f);
+}
+.primeTrainingSkillsContainer {
+  display: flex;
+  align-items: center;
+}
+.primeTrainingDescriptionContainer {
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px;
+  margin-left: -10px;
+  margin-right: -10px;
+  color: black;
+}
+
+.primeTrainingSkillsContainer {
+  display: flex;
+  align-items: center;
+  display: flex;
+  font-size: 11px;
+}
+.primeTrainingSkillsContainer div {
+  width: 50%;
+}
+.primeTrainingPercentComplete {
+  padding-left: 10px;
+}
+
+.primeTrainingDescription {
+  font-size: 10px;
+  line-height: 13px;
+  overflow: hidden;
+  letter-spacing: 0px;
+  color: #292929;
+  z-index: 2;
+  margin: 0 0 10px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.primeTrainingLoadingHover {
+  display: flex;
+  align-items: center;
+  display: flex;
+  font-size: 11px;
+  display: flex;
+  color: black;
+  font-size: 11px;
+}
+.primeTrainingLoadingHover div {
+  width: 50%;
+}
+.primeTrainingSkillsLabel {
+  font-size: 9px;
+  font-weight: bold;
+  line-height: 11px;
+  letter-spacing: 0px;
+  color: var(--prime-color-black);
+}
+.primeTrainingSkillsLabel::after {
+  content: ":";
+}
+.primeTrainingSkillsValue {
+  font-size: 9px;
+  line-height: 11px;
+  letter-spacing: 0px;
+  color: var(--prime-color-black);
+  padding-left: 5px;
+}
+.primeTrainingCompleted {
+  font-size: 11px;
+  line-height: 13px;
+}
+
+.showOnHover {
+  display: none;
+}

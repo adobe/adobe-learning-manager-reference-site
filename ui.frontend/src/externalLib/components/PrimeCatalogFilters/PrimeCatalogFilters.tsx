@@ -2,6 +2,7 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { UpdateFiltersEvent } from "../../hooks/catalog/useFilter";
 import PrimeCheckbox from "./PrimeCheckBox";
+import styles from "./PrimeCatalogFilters.module.css";
 
 const PrimeCatalogFilters = (props: any) => {
   const { formatMessage } = useIntl();
@@ -20,24 +21,16 @@ const PrimeCatalogFilters = (props: any) => {
       </>
     );
 
-  const filterList = [loTypes, learnerState, skillName, loFormat, tagName].map(
+  const filterList = [loTypes, learnerState, loFormat, skillName, tagName].map(
     (filter) =>
       filter.show ? (
-        <div key={filter.type}>
-          <h4>{filter?.label}</h4>
-          <span>
+        <div key={filter.type} className={styles.primeFilterTypeContainer}>
+          <h3 className={styles.primeFilterTypeLabel}>
             {formatMessage({
-              id: "prime.catalog.label",
-              defaultMessage: "Edit Payment Information",
+              id: filter?.label,
             })}
-          </span>
-          <span>
-            {formatMessage({
-              id: "test.string",
-              defaultMessage: "",
-            })}
-          </span>
-          <ul>
+          </h3>
+          <ul className={styles.primeFiltersListContainer}>
             {filter.list?.map((item: any) => (
               <PrimeCheckbox
                 key={item.value}
@@ -56,7 +49,7 @@ const PrimeCatalogFilters = (props: any) => {
 
   return (
     <>
-      <div style={{ display: "flex" }}>{filterList}</div>
+      <div className={styles.primeFilterContainer}>{filterList}</div>
     </>
   );
 };
