@@ -17,7 +17,7 @@ export const useNotifications = () => {
     const { notifications} = useSelector(
         (state: State) => state.notification
       );
-
+    const [isLoading, setIsLoading] = useState(true);
     const dispatch = useDispatch();
     const config = useConfigContext();
     const {user} = useUserContext();
@@ -25,7 +25,7 @@ export const useNotifications = () => {
     const fetchNotifications = useCallback(async () => {
         try {
             const response = await RestAdapter.get({
-                url: `${config.baseApiUrl}/users/${user.id}/userNotifications`
+                url: `${config.baseApiUrl}/users/10866105/userNotifications`
               });
               const parsedResponse = JsonApiParse(response);
               const notificationData: any = {}; 
@@ -35,18 +35,20 @@ export const useNotifications = () => {
 
               console.log(notificationData["notifications"]);
               dispatch(loadNotifications(notificationData));
-              
+              setIsLoading(false);
         } catch (e) {
           dispatch(loadNotifications([] as PrimeUserNotification[]));
           console.log("Error while loading notifications " + e);
+          setIsLoading(false);          
         }
       }, [dispatch, user.id]);
 
     useEffect(() => {
-       if (user.id)
+       
         fetchNotifications();
       }, [fetchNotifications, user.id]);
     return {
-        notifications
+        notifications, 
+        isLoading
       };
 }
