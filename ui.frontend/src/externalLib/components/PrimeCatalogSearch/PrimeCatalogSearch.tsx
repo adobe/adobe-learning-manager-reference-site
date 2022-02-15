@@ -1,4 +1,5 @@
 import styles from "./PrimeCatalogSearch.module.scss";
+import { useIntl } from "react-intl";
 
 const PrimeCatalogSearch: React.FC<{
   query: string;
@@ -9,12 +10,17 @@ const PrimeCatalogSearch: React.FC<{
     const { value } = event.target;
     handleSearch(value);
   };
+  const { formatMessage } = useIntl();
   return (
     <>
       <input
         className={styles.primeSearchInput}
         defaultValue={query}
         onInput={searchChangedHandler}
+        placeholder={formatMessage({
+          id: "prime.catalog.search.placeholder",
+          defaultMessage: "Search",
+        })}
       />{" "}
     </>
   );

@@ -1,5 +1,4 @@
 {
-  "prime.catalog.label": "Catalog label",
   "prime.community.board.lowActivity": "Low Activity",
   "prime.community.board.normalActivity": "Normal Activity",
   "prime.community.board.highActivity": "High Activity",
@@ -16,6 +15,16 @@
   "prime.community.board.removeFromFavourites": "Remove from Favourites",
   "prime.community.board.addToFavourites": "Add to Favourites",
   "prime.community.board.delete": "Delete",
-  "prime.community.board.report": "Report", 
-  "prime.notification.icon": "User Notifications"
+  "prime.community.board.report": "Report",
+  "prime.notification.icon": "User Notifications",
+  "prime.catalog.header": "Collection of Courses, Certificates and More",
+  "prime.catalog.search.placeholder": "Search",
+  "prime.catalog.filter.loType.label": "Type",
+  "prime.catalog.filter.status.label": "Status",
+  "prime.catalog.filter.format.label": "Format",
+  "prime.catalog.filter.skills.label": "Skills",
+  "prime.catalog.filter.tags.label": "Tags",
+  "prime.catalog.card.complete.label": "Complete",
+  "prime.catalog.card.skills.label": "Skills",
+  "prime.catalog.card.progress.percent": "{0} % complete"
 }

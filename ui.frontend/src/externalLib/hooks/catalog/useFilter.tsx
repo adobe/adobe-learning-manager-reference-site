@@ -58,7 +58,7 @@ export interface Filter1State {
 const filtersDefaultState: Filter1State = {
   loTypes: {
     type: "loTypes",
-    label: "Type",
+    label: "prime.catalog.filter.loType.label",
     show: true,
     list: [
       { value: "course", label: "course", checked: false },
@@ -69,7 +69,7 @@ const filtersDefaultState: Filter1State = {
   },
   learnerState: {
     type: "learnerState",
-    label: "Status",
+    label: "prime.catalog.filter.status.label",
     show: true,
     list: [
       { value: "enrolled", label: "Enrolled", checked: false },
@@ -80,7 +80,7 @@ const filtersDefaultState: Filter1State = {
   },
   loFormat: {
     type: "loFormat",
-    label: "Format",
+    label: "prime.catalog.filter.format.label",
     show: true,
     list: [
       { value: "ACTIVITY", label: "Activity", checked: false },
@@ -96,13 +96,13 @@ const filtersDefaultState: Filter1State = {
   //TO-DO : Add pagination for filters
   skillName: {
     type: "skillName",
-    label: "Skills",
+    label: "prime.catalog.filter.skills.label",
     show: true,
     list: [],
   },
   tagName: {
     type: "tagName",
-    label: "Tags",
+    label: "prime.catalog.filter.tags.label",
     show: true,
     list: [],
   },

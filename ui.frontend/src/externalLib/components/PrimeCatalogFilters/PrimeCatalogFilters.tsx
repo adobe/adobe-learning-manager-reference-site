@@ -25,7 +25,11 @@ const PrimeCatalogFilters = (props: any) => {
     (filter) =>
       filter.show ? (
         <div key={filter.type} className={styles.primeFilterTypeContainer}>
-          <h3 className={styles.primeFilterTypeLabel}>{filter?.label}</h3>
+          <h3 className={styles.primeFilterTypeLabel}>
+            {formatMessage({
+              id: filter?.label,
+            })}
+          </h3>
           <ul className={styles.primeFiltersListContainer}>
             {filter.list?.map((item: any) => (
               <PrimeCheckbox

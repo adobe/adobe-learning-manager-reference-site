@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTrainingCard } from "../../hooks/catalog/useTrainingCard";
 import { PrimeLearningObject } from "../../models/PrimeModels";
+import { useIntl } from "react-intl";
 
 import styles from "./PrimeTrainingCard.module.scss";
 
@@ -20,6 +21,7 @@ const PrimeTrainingCard: React.FC<{
     cardClickHandler,
   } = useTrainingCard(training);
   const [isHovered, setIsHovered] = useState(false);
+  const { formatMessage } = useIntl();
 
   const onMouseEnterHandler = () => {
     setIsHovered(true);
@@ -46,7 +48,12 @@ const PrimeTrainingCard: React.FC<{
     ""
   );
   const hasCompletedTrainingHtml = enrollment?.hasPassed ? (
-    <div className={styles.primeTrainingCompleted}>Complete</div>
+    <div className={styles.primeTrainingCompleted}>
+      {formatMessage({
+        id: "prime.catalog.card.complete.label",
+        defaultMessage: "Complete",
+      })}
+    </div>
   ) : (
     enrollmentHtml
   );
@@ -85,7 +92,12 @@ const PrimeTrainingCard: React.FC<{
                     <div className={styles.primeTrainingExtraWrapper}>
                       <div>Icon</div>
                       <div className={styles.primeTrainingExtraLabel}>
-                        <span>Skills</span>
+                        <span>
+                          {formatMessage({
+                            id: "prime.catalog.card.skills.label",
+                            defaultMessage: "Skills",
+                          })}
+                        </span>
                         <span className={styles.primeTrainingSkillsExtraValue}>
                           {skillsAsString}
                         </span>
@@ -100,7 +112,10 @@ const PrimeTrainingCard: React.FC<{
                   {descriptHtml}
                   <div className={styles.primeTrainingSkillsContainer}>
                     <span className={styles.primeTrainingSkillsLabel}>
-                      Skills
+                      {formatMessage({
+                        id: "prime.catalog.card.skills.label",
+                        defaultMessage: "Skills",
+                      })}
                     </span>
                     <span className={styles.primeTrainingSkillsValue}>
                       {skillsAsString}
@@ -111,7 +126,13 @@ const PrimeTrainingCard: React.FC<{
                       <>
                         {enrollmentHtml}
                         <div className={styles.primeTrainingPercentComplete}>
-                          {enrollment?.progressPercent}% complete
+                          {formatMessage(
+                            {
+                              id: "prime.catalog.card.progress.percent",
+                              defaultMessage: `${enrollment?.progressPercent}% completes`,
+                            },
+                            { "0": enrollment?.progressPercent }
+                          )}
                         </div>
                       </>
                     ) : (

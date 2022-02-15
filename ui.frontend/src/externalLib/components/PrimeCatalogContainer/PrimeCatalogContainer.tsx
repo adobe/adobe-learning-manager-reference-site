@@ -3,6 +3,7 @@ import { useCatalog } from "../../hooks/catalog/useCatalog";
 import { PrimeCatalogFilters } from "../PrimeCatalogFilters";
 import PrimeCatalogSearch from "../PrimeCatalogSearch/PrimeCatalogSearch";
 import { PrimeTrainingsContainer } from "../PrimeTrainingsContainer";
+import { useIntl } from "react-intl";
 
 import styles from "./PrimeCatalogContainer.module.scss";
 
@@ -16,12 +17,16 @@ const PrimeCatalogContainer = () => {
     filterState,
     updateFilters,
   } = useCatalog();
+  const { formatMessage } = useIntl();
 
   return (
     <div className={styles.primeCss}>
       <div className={styles.primeCatalogHeader}>
         <h1 className={styles.primateCatalogLabel}>
-          Collection of Courses, Certificates and More
+          {formatMessage({
+            id: "prime.catalog.header",
+            defaultMessage: "Collection of Courses, Certificates and More",
+          })}
         </h1>
         <PrimeCatalogSearch
           query={query}
