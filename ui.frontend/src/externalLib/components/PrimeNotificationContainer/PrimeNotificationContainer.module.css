@@ -1,4 +1,21 @@
-.notificationList {
+.notificationDropdown{
+  list-style:none
+}
+.notificationBellIcon {
+  padding: 0 !important;
+  margin-top: 6px;
+  margin-left: 20px;
+  height: 36px;
+  width: 36px;
+  vertical-align: middle;
+  display: inline-block;
+  fill: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  background: transparent;
+  border:none
+}
+
+.notificationContainer {
   width: 320px;
   padding: 5px 0;
   margin: 2px 0 0;
@@ -18,21 +35,22 @@
   overflow-y: auto;
 }
 
-
-.notificationtable {
-	border-collapse: separate;
-    border-spacing: 0;
+/*
+The below makes the small arrow on top of the notificationbox 
+*/
+.notificationContainer:after {
+  position: absolute;
+  top: 45px;
+  left: 25px;
+  display: inline-block;
+  border-right: 14px solid transparent;
+  border-bottom: 14px solid #292929;
+  border-left: 14px solid transparent;
+  content: "";
 }
 
-.notificationlist {
-        border: 1px solid rgba(0, 0, 0, .15);
-          border-radius: 4px;
-        border-style: solid;
-    background-color: rgb(255, 255, 255);
-    position: relative;
-    border-width: 1px;
-    border-radius: 4px;
-    overflow: auto;
-    vertical-align: top;
-    width: 320px;
+.notificationList {
+  margin: 0px; 
+  padding: 0px; 
 }
+

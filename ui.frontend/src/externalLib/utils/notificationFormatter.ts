@@ -1,11 +1,12 @@
 import { PrimeUserNotification } from "../models/";
+import moment from "moment";
 
 const feedbackChannels: Array<string> = [
     "course::l1FeedbackPrompt",
     "learningProgram::l1Feedback",
 ];
 
-function modifyTime(dateToModify: string, locale: string) {
+export function modifyTime(dateToModify: string, locale: string) {
     const local = new Date(dateToModify).toLocaleDateString(locale, {
         day: "numeric",
         month: "short",
@@ -15,6 +16,21 @@ function modifyTime(dateToModify: string, locale: string) {
     });
 
     return local;
+}
+
+export function modifyTimeDDMMYY(dateToModify: string, locale: string) {
+    const local = new Date(dateToModify).toLocaleDateString(locale, {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+        
+    });
+
+    return local;
+}
+
+export function modifyTimeElapsed(dateToModify: string) {
+    return moment(dateToModify, moment.ISO_8601).fromNow();
 }
 
 export function getNotificationAsAstring(
