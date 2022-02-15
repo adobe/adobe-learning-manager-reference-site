@@ -1,7 +1,7 @@
 import { useLoadMore } from "../../hooks/loadMore";
 import { PrimeLearningObject } from "../../models/PrimeModels";
 import { PrimeTrainingCard } from "../PrimeTrainingCard";
-import styles from "./PrimeTrainingsContainer.module.scss";
+import styles from "./PrimeTrainingsContainer.module.css";
 
 const PrimeTrainingsContainer: React.FC<{
   trainings: PrimeLearningObject[] | null;

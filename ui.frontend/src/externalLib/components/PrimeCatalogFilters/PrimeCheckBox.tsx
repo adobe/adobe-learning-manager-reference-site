@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { VisuallyHidden } from "@react-aria/visually-hidden";
 import { useFocusRing } from "@react-aria/focus";
-import styles from "./PrimeCheckBox.module.scss";
+import styles from "./PrimeCheckBox.module.css";
 
 const PrimeCheckbox: React.FC<{
   label: string;

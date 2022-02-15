@@ -2,7 +2,7 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { UpdateFiltersEvent } from "../../hooks/catalog/useFilter";
 import PrimeCheckbox from "./PrimeCheckBox";
-import styles from "./PrimeCatalogFilters.module.scss";
+import styles from "./PrimeCatalogFilters.module.css";
 
 const PrimeCatalogFilters = (props: any) => {
   const { formatMessage } = useIntl();

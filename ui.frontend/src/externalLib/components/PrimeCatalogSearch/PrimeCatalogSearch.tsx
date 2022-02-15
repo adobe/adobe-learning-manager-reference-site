@@ -1,4 +1,4 @@
-import styles from "./PrimeCatalogSearch.module.scss";
+import styles from "./PrimeCatalogSearch.module.css";
 import { useIntl } from "react-intl";
 
 const PrimeCatalogSearch: React.FC<{

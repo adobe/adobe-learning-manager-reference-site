@@ -3,7 +3,7 @@ import { useTrainingCard } from "../../hooks/catalog/useTrainingCard";
 import { PrimeLearningObject } from "../../models/PrimeModels";
 import { useIntl } from "react-intl";
 
-import styles from "./PrimeTrainingCard.module.scss";
+import styles from "./PrimeTrainingCard.module.css";
 
 const PrimeTrainingCard: React.FC<{
   training: PrimeLearningObject;

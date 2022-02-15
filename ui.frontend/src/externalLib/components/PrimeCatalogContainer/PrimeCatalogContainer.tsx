@@ -5,7 +5,7 @@ import PrimeCatalogSearch from "../PrimeCatalogSearch/PrimeCatalogSearch";
 import { PrimeTrainingsContainer } from "../PrimeTrainingsContainer";
 import { useIntl } from "react-intl";
 
-import styles from "./PrimeCatalogContainer.module.scss";
+import styles from "./PrimeCatalogContainer.module.css";
 
 const PrimeCatalogContainer = () => {
   const {
@@ -21,18 +21,21 @@ const PrimeCatalogContainer = () => {
 
   return (
     <div className={styles.primeCss}>
-      <div className={styles.primeCatalogHeader}>
-        <h1 className={styles.primateCatalogLabel}>
-          {formatMessage({
-            id: "prime.catalog.header",
-            defaultMessage: "Collection of Courses, Certificates and More",
-          })}
-        </h1>
-        <PrimeCatalogSearch
-          query={query}
-          handleSearch={handleSearch}
-          resetSearch={resetSearch}
-        />
+      <div className={styles.primeCatalogHeaderContainer}>
+        <div className={styles.primeCatalogHeader}>
+          <h1 className={styles.primateCatalogLabel}>
+            {formatMessage({
+              id: "prime.catalog.header",
+              defaultMessage: "Collection of Courses, Certificates and More",
+            })}
+          </h1>
+          <PrimeCatalogSearch
+            query={query}
+            handleSearch={handleSearch}
+            resetSearch={resetSearch}
+          />
+        </div>
+        <div>{query ? "search applied for " + query : ""}</div>
       </div>
       <div className={styles.primeFiltersCatalogContainer}>
         <PrimeCatalogFilters
