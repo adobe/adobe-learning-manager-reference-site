@@ -1,20 +1,13 @@
 import React from "react";
 import { useIntl } from "react-intl";
-import { UpdateFiltersEvent, useFilter } from "../../hooks/catalog/useFilter";
+import { UpdateFiltersEvent } from "../../hooks/catalog/useFilter";
 import PrimeCheckbox from "./PrimeCheckBox";
 
 const PrimeCatalogFilters = (props: any) => {
   const { formatMessage } = useIntl();
-  const data = props.data;
-  const {
-    loTypes,
-    learnerState,
-    skillName,
-    loFormat,
-    updateFilters,
-    isLoading,
-    tagName,
-  } = useFilter();
+  const { loTypes, learnerState, skillName, loFormat, isLoading, tagName } =
+    props.filterState;
+  const { updateFilters } = props;
 
   const onChangeHandler = (data: UpdateFiltersEvent) => {
     updateFilters(data);
@@ -45,7 +38,7 @@ const PrimeCatalogFilters = (props: any) => {
             })}
           </span>
           <ul>
-            {filter.list?.map((item) => (
+            {filter.list?.map((item: any) => (
               <PrimeCheckbox
                 key={item.value}
                 filterType={filter.type!}

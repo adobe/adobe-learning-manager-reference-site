@@ -6,7 +6,11 @@ import ICustomHooks from "./ICustomHooks";
 
 export default class LoggedInCustomHooks implements ICustomHooks {
   baseApiUrl = (window as any).primeConfig.baseApiUrl;
-  async getTrainings(filterState: CatalogFilterState, sort: string) {
+  async getTrainings(
+    filterState: CatalogFilterState,
+    sort: string,
+    searchText: string
+  ) {
     const params: QueryParams = {};
     params["sort"] = sort;
     params["filter.loTypes"] = filterState.loTypes;
@@ -29,8 +33,17 @@ export default class LoggedInCustomHooks implements ICustomHooks {
     params["page[limit]"] = 10;
     params["include"] =
       "instances.loResources.resources,instances.badge,supplementaryResources,enrollment.loResourceGrades,skills.skillLevel.skill";
+    let url = `${this.baseApiUrl}/learningObjects`;
+    if (searchText) {
+      url = `${this.baseApiUrl}/search`;
+      params["query"] = searchText;
+      params["snippetType"] =
+        "courseName,courseOverview,courseDescription,moduleName,certificationName,certificationOverview,certificationDescription,jobAidName,jobAidDescription,lpName,lpDescription,lpOverview,embedLpName,embedLpDesc,embedLpOverview,skillName,skillDescription,note,badgeName,courseTag,moduleTag,jobAidTag,lpTag,certificationTag,embedLpTag,discussion";
+      params["include"] =
+        "model.instances.loResources.resources,model.instances.badge,model.supplementaryResources,model.enrollment.loResourceGrades,model.skills.skillLevel.skill";
+    }
     const response = await RestAdapter.get({
-      url: `${this.baseApiUrl}/learningObjects`,
+      url,
       params: params,
     });
     const parsedResponse = JsonApiParse(response);

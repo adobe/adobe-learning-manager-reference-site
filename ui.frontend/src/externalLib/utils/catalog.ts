@@ -38,7 +38,13 @@ export function locationUpdate(params: any) {
     const location = (window as any).location;
     const existingQueryParams = new URLSearchParams(decodeURI(location.search));
     for (let key in params) {
-        existingQueryParams.set(key, params[key]);
+        if (params[key]) {
+            existingQueryParams.set(key, params[key]);
+        }
+        else {
+            existingQueryParams.delete(key)
+        }
+
     }
     const newurl =
         window.location.protocol +
@@ -57,3 +63,11 @@ export function getQueryParamsIObjectFromUrl() {
     const params: URLSearchParams = new URLSearchParams(decodeURI(location.search));
     return Object.fromEntries(params.entries());
 }
+
+export function debounce(fn: Function, time = 250) {
+    let timeoutId: ReturnType<typeof setTimeout>;
+    return function (this: any, ...args: any[]) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => fn.apply(this, args), time);
+    };
+};

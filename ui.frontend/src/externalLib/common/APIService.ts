@@ -15,14 +15,14 @@ class APIService {
     return true;
   }
 
-  public async getTrainings(filterState: CatalogFilterState, sort: string) {
+  public async getTrainings(filterState: CatalogFilterState, sort: string, searchText: string) {
     if (this.isUserLoggedIn()) {
       //this.customHooks = new LoggedInCustomHooks();
-      return new LoggedInCustomHooks().getTrainings(filterState, sort);
+      return new LoggedInCustomHooks().getTrainings(filterState, sort, searchText);
     }
     //this.customHooks = new NonLoggedInCustomHooks();
     // return this.customHooks.getTrainings(filterState,sort);
-    return new NonLoggedInCustomHooks().getTrainings(filterState, sort);
+    return new NonLoggedInCustomHooks().getTrainings(filterState, sort, searchText);
   }
 
   public async loadMore(url: string) {

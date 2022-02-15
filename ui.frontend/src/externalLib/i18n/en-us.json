@@ -1,3 +1,21 @@
 {
-  "prime.catalog.label": "Catalog label"
+  "prime.catalog.label": "Catalog label",
+  "prime.community.board.lowActivity": "Low Activity",
+  "prime.community.board.normalActivity": "Normal Activity",
+  "prime.community.board.highActivity": "High Activity",
+  "prime.community.board.skill": "Skills",
+  "prime.community.board.public": "Public Board",
+  "prime.community.board.private": "Private Board",
+  "prime.community.board.activityCalc": "Calculated daily based on the number of new posts, comments, participants, views, likes and dislikes",
+  "prime.community.board.post.label": "Post(s)",
+  "prime.community.board.view.label": "View(s)",
+  "prime.community.board.people.label": "People",
+  "prime.community.board.createdOn.label": "Created on ",
+  "prime.community.board.by.label": " by ",
+  "prime.community.board.anonymous.label": "Anonymous",
+  "prime.community.board.removeFromFavourites": "Remove from Favourites",
+  "prime.community.board.addToFavourites": "Add to Favourites",
+  "prime.community.board.delete": "Delete",
+  "prime.community.board.report": "Report", 
+  "prime.notification.icon": "User Notifications"
 }

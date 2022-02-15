@@ -1,0 +1,39 @@
+.notificationItem {
+    list-style: none;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+
+    font-weight: 400;
+    font-size: 14px;
+
+    border-bottom: 1px solid #555;
+    color: #d4d4d4;
+    list-style-type: none;
+    min-height: 32px;
+    
+
+  }
+
+  .notificationIcon {
+    background-repeat: no-repeat;
+    width: 21px;
+    height: 21px;
+    display: flex;
+    vertical-align: top;
+    
+    fill: #7f7f7f !important;
+
+  }
+
+  .notificationText{
+    padding: 0 1rem;
+  }
+
+  .notificationTime {
+    font-style: italic;
+    margin: 0;
+    border: 0;
+    color: #8f8f8f;
+    float:right;
+  }

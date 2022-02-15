@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useConfigContext } from "../../contextProviders";
 import {
+  updateFiltersOnLoad,
   updateLearnerStateFilter,
   updateLoFormatFilter,
   updateLoTypesFilter,
@@ -15,6 +16,7 @@ import {
   getQueryParamsIObjectFromUrl,
   locationUpdate,
 } from "../../utils/catalog";
+import { State } from "../../store/state";
 
 export interface FilterListObject {
   value: string;
@@ -106,7 +108,7 @@ const filtersDefaultState: Filter1State = {
   },
 };
 
-const handleTest = (list: any, filtersFromUrl: any, type: string) => {
+const updateFilterList = (list: any, filtersFromUrl: any, type: string) => {
   list?.forEach((item: any) => {
     if (filtersFromUrl[type]?.includes(item.value)) {
       item.checked = true;
@@ -118,17 +120,17 @@ const handleTest = (list: any, filtersFromUrl: any, type: string) => {
 const getDefualtFiltersState = () => {
   const filtersFromUrl = getQueryParamsIObjectFromUrl();
   let filtersDefault = filtersDefaultState;
-  filtersDefault.loTypes.list = handleTest(
+  filtersDefault.loTypes.list = updateFilterList(
     filtersDefault.loTypes.list,
     filtersFromUrl,
     "loTypes"
   );
-  filtersDefault.learnerState.list = handleTest(
+  filtersDefault.learnerState.list = updateFilterList(
     filtersDefault.learnerState.list,
     filtersFromUrl,
     "learnerState"
   );
-  filtersDefault.loFormat.list = handleTest(
+  filtersDefault.loFormat.list = updateFilterList(
     filtersDefault.loFormat.list,
     filtersFromUrl,
     "loFormat"
@@ -140,14 +142,18 @@ export const useFilter = () => {
   const [filterState, setFilterState] = useState(() =>
     getDefualtFiltersState()
   );
+  const filtersFromState = useSelector(
+    (state: State) => state.catalog.filterState
+  );
   const [isLoading, setIsLoading] = useState(true);
 
   const config = useConfigContext();
   const dispatch = useDispatch();
 
   const updateFilters = (data: UpdateFiltersEvent) => {
-    const filters = filterState[data.filterType as keyof Filter1State];
+    const filters = filterState[data.filterType as keyof Filter1State]!;
     let payload = "";
+
     filters.list?.forEach((item) => {
       if (item.label === data.label) {
         item.checked = !item.checked;
@@ -156,6 +162,7 @@ export const useFilter = () => {
         payload = payload ? `${payload},${item.value}` : `${item.value}`;
       }
     });
+    
     locationUpdate({ [data.filterType as string]: payload });
     setFilterState({ ...filterState, [data.filterType]: { ...filters } });
     const action = ACTION_MAP[data.filterType as keyof ActionMap];
@@ -164,7 +171,7 @@ export const useFilter = () => {
   };
 
   useEffect(() => {
-    const filtersFromUrl = getQueryParamsIObjectFromUrl();
+    const queryParams = getQueryParamsIObjectFromUrl();
     const getSkills = async () => {
       let skillsPromise = await RestAdapter.get({
         url: `${config.baseApiUrl}data?filter.skillName=true`,
@@ -176,7 +183,7 @@ export const useFilter = () => {
         label: item,
         checked: false,
       }));
-      skillsList = handleTest(skillsList, filtersFromUrl, "skillName");
+      skillsList = updateFilterList(skillsList, queryParams, "skillName");
 
       setFilterState((prevState) => ({
         ...prevState,
@@ -185,12 +192,22 @@ export const useFilter = () => {
       setIsLoading(false);
     };
     getSkills();
-  }, [config.baseApiUrl, dispatch]);
+    //update state merged with filters in url
+    const updatedFilters = { ...filtersFromState, ...queryParams };
+    dispatch(updateFiltersOnLoad(updatedFilters));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const computedFilters = useMemo(() => {
+    const queryParams = getQueryParamsIObjectFromUrl();
+    return { ...filtersFromState, ...queryParams };
+  }, [filtersFromState]);
 
   return {
-    ...filterState,
+    filterState,
     updateFilters,
     isLoading,
+    filters: computedFilters,
   };
 };
 
@@ -209,6 +226,24 @@ export const useFilter = () => {
 //   label: item,
 //   checked: false,
 // }));
-// tagsList = handleTest(tagsList, filtersFromUrl, "skillName");
+// tagsList = updateFilterList(tagsList, filtersFromUrl, "skillName");
 
 // tagName: { ...prevState.tagName, list: tagsList },
+
+/**
+ * for (let i = 0; i < filters.list!?.length; i++) {
+      let item = filters.list![i];
+
+      if (item.label === data.label) {
+        item.checked = !item.checked;
+        if (item.checked) {
+          let previousValue =
+            filtersFromState[data.filterType as keyof Filter1State];
+          payload = previousValue
+            ? `${previousValue},${item.value}`
+            : `${item.value}`;
+        }
+        break;
+      }
+    }
+ */

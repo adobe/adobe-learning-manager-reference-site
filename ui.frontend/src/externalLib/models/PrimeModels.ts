@@ -152,6 +152,28 @@ export interface PrimeComment {
 	resource: object;
 	createdBy: PrimeUser;
 	parent: PrimePost;
+	previewData: PrimeCommentMetaData;
+}
+
+export interface PrimeCommentMetaData {
+    author: string;
+    author_url: string;
+    description: string;
+    perks: string;
+    html: string;
+    provider_name: string;
+    thumbnail_height: number;
+    thumbnail_url: string;
+    thumbnail_width: string;
+    title: string;
+    type: string;
+    url: string;
+}
+
+export interface PrimeCommentCreationAttributes {
+    // resource: object;
+    state: "ACTIVE";
+    text: string;
 }
 
 export interface PrimeCounts {
@@ -538,6 +560,35 @@ export interface PrimePost {
 	resource: object;
 	createdBy: PrimeUser;
 	parent: PrimeBoard;
+	previewData: PrimePostMetaData;
+	userPoll: {
+        optionId: number;
+    };
+}
+
+export interface PrimePostMetaData {
+    author: string;
+    author_url: string;
+    description: string;
+    perks: string;
+    html: string;
+    provider_name: string;
+    thumbnail_height: number;
+    thumbnail_url: string;
+    thumbnail_width: string;
+    title: string;
+    type: string;
+    url: string;
+}
+
+export interface PrimePostCreationAttributes {
+    postingType: "DEFAULT" | "QUESTION" | "POLL";
+    resource: {
+        contentType: "VIDEO" | "URL" | "IMAGE" | "TEXT" | "FILE" | "OTHER";
+        data: string;
+    };
+    state: "ACTIVE";
+    text: string;
 }
 
 export interface PrimePrerequisiteContraints {
@@ -579,6 +630,31 @@ export interface PrimeReply {
 	upVote: number;
 	resource: object;
 	createdBy: PrimeUser;
+	previewData: PrimeReplyMetaData;
+}
+
+export interface PrimeReplyMetaData {
+    author: string;
+    author_url: string;
+    description: string;
+    perks: string;
+    html: string;
+    provider_name: string;
+    thumbnail_height: number;
+    thumbnail_url: string;
+    thumbnail_width: string;
+    title: string;
+    type: string;
+    url: string;
+}
+
+export interface PrimeReplyCreationAttributes {
+    resource?: {
+        contentType: "VIDEO" | "URL" | "IMAGE" | "TEXT" | "FILE" | "AUDIO" | "OTHER";
+        data: string;
+    };
+    state: "ACTIVE";
+    text: string;
 }
 
 export interface PrimeReportAbuse {

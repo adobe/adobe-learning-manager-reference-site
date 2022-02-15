@@ -8,6 +8,7 @@ export default {
     loOverviewContainer: ".looverview__body",
     boardsContainer: ".boards__body",
     boardContainer: ".board__body",
+    notificationContainer: '.notification__body'
   },
 
   parentContainers: {
