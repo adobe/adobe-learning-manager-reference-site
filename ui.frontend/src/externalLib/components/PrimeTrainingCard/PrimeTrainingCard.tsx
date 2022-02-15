@@ -31,7 +31,7 @@ const PrimeTrainingCard: React.FC<{
     setIsHovered(false);
   };
 
-  const skillsAsString = skills.map((item) => item.skillLevel.name).join(",");
+  const skillsAsString = skills?.map((item) => item.skillLevel.name).join(",");
   const descriptHtml = description ? (
     <p className={styles.primeTrainingDescription}>{description}</p>
   ) : (

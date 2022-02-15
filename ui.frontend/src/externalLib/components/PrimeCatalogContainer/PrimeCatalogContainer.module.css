@@ -17,6 +17,43 @@
   margin: 0;
 }
 
-.primeFiltersCatalogContainer {
+.primeCatalogFiltersContainer {
   display: flex;
+}
+
+.primeCatalogSearchAppliedContainer {
+  display: flex;
+  align-items: center;
+}
+.primeCatalogSearchAppliedContainer p {
+  display: flex;
+  align-items: center;
+}
+
+.primeCatalogSearchAppliedLabel {
+  text-align: left;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0px;
+  color: #292929;
+  margin: 10px 0;
+}
+.primeCatalogSearchTextContainer {
+  color: #ffffff;
+  margin-left: 10px;
+  background-color: #717171;
+  border-radius: 11px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 15px;
+  height: 22px;
+  border-radius: 25px;
+  min-width: 30px;
+}
+.primeCatalogSearchText {
+  margin-right: 10px;
+}
+.primeCatalogSearchReset {
+  cursor: pointer;
 }

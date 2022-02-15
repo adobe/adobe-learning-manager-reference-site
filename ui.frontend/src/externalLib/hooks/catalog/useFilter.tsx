@@ -172,26 +172,50 @@ export const useFilter = () => {
 
   useEffect(() => {
     const queryParams = getQueryParamsIObjectFromUrl();
-    const getSkills = async () => {
-      let skillsPromise = await RestAdapter.get({
-        url: `${config.baseApiUrl}data?filter.skillName=true`,
-      });
+    const getFilters = async () => {
+      try {
+        const [skillsPromise, tagsPromise] = await Promise.all([
+          RestAdapter.get({
+            url: `${config.baseApiUrl}data?filter.skillName=true`,
+          }),
+          RestAdapter.get({
+            url: `${config.baseApiUrl}data?filter.tagName=true`,
+          }),
+        ]);
+        const skills = JsonApiParse(skillsPromise)?.data?.names;
+        let skillsList = skills.map((item: string) => ({
+          value: item,
+          label: item,
+          checked: false,
+        }));
+        skillsList = updateFilterList(skillsList, queryParams, "skillName");
 
-      const skills = JsonApiParse(skillsPromise)?.data?.names;
-      let skillsList = skills.map((item: string) => ({
-        value: item,
-        label: item,
-        checked: false,
-      }));
-      skillsList = updateFilterList(skillsList, queryParams, "skillName");
+        const tags = JsonApiParse(tagsPromise)?.data?.names;
+        let tagsList = tags.map((item: string) => ({
+          value: item,
+          label: item,
+          checked: false,
+        }));
+        tagsList = updateFilterList(tagsList, queryParams, "tagName");
 
-      setFilterState((prevState) => ({
-        ...prevState,
-        skillName: { ...prevState.skillName, list: skillsList },
-      }));
-      setIsLoading(false);
+        setFilterState((prevState) => ({
+          ...prevState,
+          skillName: {
+            ...prevState.skillName,
+            list: skillsList,
+          },
+          tagName: {
+            ...prevState.tagName,
+            list: tagsList,
+          },
+        }));
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
     };
-    getSkills();
+
+    getFilters();
     //update state merged with filters in url
     const updatedFilters = { ...filtersFromState, ...queryParams };
     dispatch(updateFiltersOnLoad(updatedFilters));

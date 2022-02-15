@@ -19,6 +19,25 @@ const PrimeCatalogContainer = () => {
   } = useCatalog();
   const { formatMessage } = useIntl();
 
+  const showingSearchHtml = query ? (
+    <div className={styles.primeCatalogSearchAppliedContainer}>
+      <p className={styles.primeCatalogSearchAppliedLabel}>
+        Showing results for
+        <div className={styles.primeCatalogSearchTextContainer}>
+          <span className={styles.primeCatalogSearchText}>{query}</span>
+          <span
+            className={styles.primeCatalogSearchReset}
+            onClick={resetSearch}
+          >
+            X
+          </span>
+        </div>
+      </p>
+    </div>
+  ) : (
+    ""
+  );
+
   return (
     <div className={styles.primeCss}>
       <div className={styles.primeCatalogHeaderContainer}>
@@ -29,15 +48,13 @@ const PrimeCatalogContainer = () => {
               defaultMessage: "Collection of Courses, Certificates and More",
             })}
           </h1>
-          <PrimeCatalogSearch
-            query={query}
-            handleSearch={handleSearch}
-            resetSearch={resetSearch}
-          />
+          <div style={{ width: "265px" }}>
+            <PrimeCatalogSearch query={query} handleSearch={handleSearch} />
+          </div>
         </div>
-        <div>{query ? "search applied for " + query : ""}</div>
+        {showingSearchHtml}
       </div>
-      <div className={styles.primeFiltersCatalogContainer}>
+      <div className={styles.primeCatalogFiltersContainer}>
         <PrimeCatalogFilters
           filterState={filterState}
           updateFilters={updateFilters}

@@ -21,7 +21,7 @@ const App = (props: any) => {
             <PrimeNotificationContainer />
           </Portal>
           <Portal selector={mountingPoints.catalogContainer}>
-            <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+            <div style={{ maxWidth: "1084px", margin: "0 auto" }}>
               <PrimeCatalogContainer />
             </div>
           </Portal>

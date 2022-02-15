@@ -11,7 +11,7 @@ import {
   locationUpdate,
 } from "../../utils/catalog";
 
-const DEFAULT_MIN_LENGTH = 3;
+const DEFAULT_MIN_LENGTH = 1;
 
 export const useSearch = () => {
   const query = useSelector((state: State) => state.catalog.query);
@@ -20,10 +20,14 @@ export const useSearch = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleSearch = useCallback(
     debounce((text: string) => {
-      locationUpdate({ searchText: text });
-      if (text.length >= DEFAULT_MIN_LENGTH) {
+      let trimmedText = text.trim();
+      
+      if (trimmedText.length === 0) return;
+
+      locationUpdate({ searchText: trimmedText });
+      if (trimmedText.length >= DEFAULT_MIN_LENGTH) {
         dispatch(updateSearchText(text));
-      } else if (text.length === 0) {
+      } else if (trimmedText.length === 0) {
         dispatch(resetSearchText());
       }
     }),
