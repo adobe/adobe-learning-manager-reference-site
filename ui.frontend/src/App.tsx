@@ -13,6 +13,9 @@ import {
   ConfigContextProvider,
   PrimeNotificationContainer,
   PrimeCatalogContainer,
+  PrimeTrainingOverview,
+  useUserContext,
+  useUser,
 } from "./externalLib";
 
 const App = (props: any) => {
@@ -52,20 +55,21 @@ const Test = () => {
   //you can use the context directly like this
   const { accessToken, updateAccessToken } = useAuthContext();
   const { account } = useAccount();
-  // const { user } = useUserContext();
+  const { user } = useUser();
   // const { items, loadMoreTraining } = useCatalog();
   const authenticateUser = () => {
     updateAccessToken(Math.random());
   };
   return (
     <>
-      <PrimeNotificationContainer />
+      {/* <PrimeNotificationContainer /> */}
       <button onClick={authenticateUser}>Get Access Token </button>
       User details : {accessToken} {account.name}
       {/* <button onClick={loadMoreTraining}>LoadMore</button> */}
       {/* <PrimeCatalogFilters></PrimeCatalogFilters> */}
       {/* <button onClick={fetchTrainings}>Fetch Training</button> */}
-      <PrimeCatalogContainer />
+      {/* <PrimeCatalogContainer /> */}
+      <PrimeTrainingOverview />
       {/* <PrimeTrainingOverview /> */}
     </>
   );

@@ -8,10 +8,11 @@ import { cardColors } from "../../common/Theme";
 
 import {
   getJobaidUrl,
-  getPreferredLocalizedMetadata,
   isJobaid,
   isJobaidContentTypeUrl,
 } from "../../utils/catalog";
+
+import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 
 export const useTrainingCard = (training: PrimeLearningObject) => {
   const { locale } = useConfigContext();
