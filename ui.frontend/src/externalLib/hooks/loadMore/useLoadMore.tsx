@@ -10,9 +10,11 @@ const useLoadMore = (props: any) => {
   const { items, callback } = props;
 
   useEffect(() => {
+    
     const localRef = elementRef.current!;
+    
     let observer: IntersectionObserver;
-
+    if (localRef) {
     observer = new IntersectionObserver((entities) => {
       const isIntersecting = entities[0].isIntersecting;
       if (isIntersecting) {
@@ -21,9 +23,11 @@ const useLoadMore = (props: any) => {
       }
     }, options);
     observer.observe(localRef);
+  }
     return () => {
-      // console.log("Removing the intersection observer");
-      observer.unobserve(localRef);
+      // console.log("Removing tshe intersection observer");
+      if (observer) 
+        observer.unobserve(localRef);
     };
   }, [callback, items]);
 
