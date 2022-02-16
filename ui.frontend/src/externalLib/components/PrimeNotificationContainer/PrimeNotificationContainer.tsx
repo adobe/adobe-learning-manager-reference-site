@@ -28,7 +28,7 @@ const PrimeNotificationContainer = () => {
   };
   return (
     <>
-      <li className={styles.notificationDropdown}>
+      <div className={styles.notificationDropdown}>
         <button
           type="button"
           className={styles.notificationBellIcon}
@@ -47,7 +47,7 @@ const PrimeNotificationContainer = () => {
             loadMoreNotifications={loadMoreNotifications}
           />
         )}
-      </li>
+      </div>
     </>
   );
 };
