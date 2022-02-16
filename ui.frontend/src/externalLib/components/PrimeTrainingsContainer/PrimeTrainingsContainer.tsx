@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { useLoadMore } from "../../hooks/loadMore";
 import { PrimeLearningObject } from "../../models/PrimeModels";
 import { PrimeTrainingCard } from "../PrimeTrainingCard";
@@ -7,9 +8,11 @@ const PrimeTrainingsContainer: React.FC<{
   trainings: PrimeLearningObject[] | null;
   loadMoreTraining: () => void;
 }> = ({ trainings, loadMoreTraining }) => {
-  const [elementRef] = useLoadMore({
-    trainings,
+  const elementRef = useRef(null);
+  useLoadMore({
+    items: trainings,
     callback: loadMoreTraining,
+    elementRef,
   });
   return (
     <div className={styles.primeTrainingsContainer}>
