@@ -36,9 +36,7 @@ const PrimeNotificationContainer = () => {
       setShowNotifications((prevState) => !prevState) ;
     }
   return (
-    <>
-    
-      <li className={styles.notificationDropdown}>
+      <div className={styles.notificationDropdown}>
       <button 
       type="button"
       className={styles.notificationBellIcon} 
@@ -64,9 +62,7 @@ const PrimeNotificationContainer = () => {
           <div ref={elementRef}>TO DO add Loading more..</div> 
         </div>
       }      
-    </li>
-    
-    </>
+    </div>
   );
 };
 

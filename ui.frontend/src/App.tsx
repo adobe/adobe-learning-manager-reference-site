@@ -11,6 +11,7 @@ import {
   useUser,
 } from "./externalLib";
 import store from "./store/APIStore";
+import "./App.css";
 
 const App = (props: any) => {
   const { mountingPoints } = config;
@@ -19,13 +20,14 @@ const App = (props: any) => {
     <IntlProvider locale={props.locale} messages={props.messages}>
       <ConfigContextProvider config={primeConfig}>
         <AppContextProvider>
-          <Portal selector={mountingPoints.notificationContainer}>
+          {/* <Portal selector={mountingPoints.notificationContainer}>
             <PrimeNotificationContainer />
-          </Portal>
-          <Portal selector={mountingPoints.catalogContainer}>
-            <div style={{ maxWidth: "1084px", margin: "0 auto" }}>
+          </Portal> */}
+          {/* <Portal selector={mountingPoints.catalogContainer}>
               <PrimeCatalogContainer />
-            </div>
+          </Portal> */}
+          <Portal selector={mountingPoints.trainingOverviewContainer}>
+              <PrimeTrainingOverview />
           </Portal>
         </AppContextProvider>
       </ConfigContextProvider>

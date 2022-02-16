@@ -1,12 +1,15 @@
 import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
 import { useTrainingPage } from "../../hooks/catalog/useTrainingPage";
 import { PrimeModuleList } from "../PrimeModuleList";
+import { convertSecondsToTimeText } from "../../utils/dateTime";
 
 const PrimeTrainingOverview = (props: any) => {
   //const trainingInstance: PrimeLearningObjectInstance = props.training;
-  const trainingId = "course:1926880"; //TO-DO get training id
-  const instanceId = "course:1926880_2174497"; // TO-DO get instance id
+  const trainingId = "course:1926880"; //TO-DO get training id "course:1943266"; //
+  const instanceId = "course:1926880_2174497"; // TO-DO get instance id "course:1943266_2191842" //
   //1926880/instance/2174497/preview
+
+  //course/1943266/instance/2191842/preview
   const {
     name,
     description,
@@ -41,6 +44,8 @@ const PrimeTrainingOverview = (props: any) => {
         <div>Authors: {training.authorNames.join(",")}</div>
         <div>Skills : {skills.map((skill) => skill.name).join(",")}</div>
         {/* <div>Overview : {overview}</div> */}
+
+        <div>Duration is ::{convertSecondsToTimeText(training.duration)}</div>
         <PrimeModuleList
             loResources={trainingInstance.loResources}
         ></PrimeModuleList>
