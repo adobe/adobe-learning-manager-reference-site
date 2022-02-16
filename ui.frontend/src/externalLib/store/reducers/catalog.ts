@@ -11,6 +11,7 @@ import {
   UPDATE_LOTYPES_FILTERS,
   UPDATE_SEARCH_TEXT,
   UPDATE_SKILLNAME_FILTERS,
+  UPDATE_TAGS_FILTERS
 } from "../actions/catalog/actionTypes";
 
 export const DEFUALT_FILTERS_VALUE = {
@@ -104,6 +105,8 @@ const tagName: Reducer<string, AnyAction> = (
   action: AnyAction
 ) => {
   switch (action.type) {
+    case UPDATE_TAGS_FILTERS:
+      return action.payload;
     case UPDATE_FILTERS_ON_LOAD:
       return action.payload.tagName;
     default:

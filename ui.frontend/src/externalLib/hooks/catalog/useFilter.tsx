@@ -58,7 +58,7 @@ export interface Filter1State {
 const filtersDefaultState: Filter1State = {
   loTypes: {
     type: "loTypes",
-    label: "Type",
+    label: "prime.catalog.filter.loType.label",
     show: true,
     list: [
       { value: "course", label: "course", checked: false },
@@ -69,7 +69,7 @@ const filtersDefaultState: Filter1State = {
   },
   learnerState: {
     type: "learnerState",
-    label: "Status",
+    label: "prime.catalog.filter.status.label",
     show: true,
     list: [
       { value: "enrolled", label: "Enrolled", checked: false },
@@ -78,15 +78,9 @@ const filtersDefaultState: Filter1State = {
       { value: "notenrolled", label: "Not Enrolled", checked: false },
     ],
   },
-  skillName: {
-    type: "skillName",
-    label: "Skills",
-    show: true,
-    list: [],
-  },
   loFormat: {
     type: "loFormat",
-    label: "Format",
+    label: "prime.catalog.filter.format.label",
     show: true,
     list: [
       { value: "ACTIVITY", label: "Activity", checked: false },
@@ -100,9 +94,15 @@ const filtersDefaultState: Filter1State = {
     ],
   },
   //TO-DO : Add pagination for filters
+  skillName: {
+    type: "skillName",
+    label: "prime.catalog.filter.skills.label",
+    show: true,
+    list: [],
+  },
   tagName: {
     type: "tagName",
-    label: "Tags",
+    label: "prime.catalog.filter.tags.label",
     show: true,
     list: [],
   },
@@ -162,7 +162,7 @@ export const useFilter = () => {
         payload = payload ? `${payload},${item.value}` : `${item.value}`;
       }
     });
-    
+
     locationUpdate({ [data.filterType as string]: payload });
     setFilterState({ ...filterState, [data.filterType]: { ...filters } });
     const action = ACTION_MAP[data.filterType as keyof ActionMap];
@@ -172,26 +172,50 @@ export const useFilter = () => {
 
   useEffect(() => {
     const queryParams = getQueryParamsIObjectFromUrl();
-    const getSkills = async () => {
-      let skillsPromise = await RestAdapter.get({
-        url: `${config.baseApiUrl}data?filter.skillName=true`,
-      });
+    const getFilters = async () => {
+      try {
+        const [skillsPromise, tagsPromise] = await Promise.all([
+          RestAdapter.get({
+            url: `${config.baseApiUrl}data?filter.skillName=true`,
+          }),
+          RestAdapter.get({
+            url: `${config.baseApiUrl}data?filter.tagName=true`,
+          }),
+        ]);
+        const skills = JsonApiParse(skillsPromise)?.data?.names;
+        let skillsList = skills.map((item: string) => ({
+          value: item,
+          label: item,
+          checked: false,
+        }));
+        skillsList = updateFilterList(skillsList, queryParams, "skillName");
 
-      const skills = JsonApiParse(skillsPromise)?.data?.names;
-      let skillsList = skills.map((item: string) => ({
-        value: item,
-        label: item,
-        checked: false,
-      }));
-      skillsList = updateFilterList(skillsList, queryParams, "skillName");
+        const tags = JsonApiParse(tagsPromise)?.data?.names;
+        let tagsList = tags.map((item: string) => ({
+          value: item,
+          label: item,
+          checked: false,
+        }));
+        tagsList = updateFilterList(tagsList, queryParams, "tagName");
 
-      setFilterState((prevState) => ({
-        ...prevState,
-        skillName: { ...prevState.skillName, list: skillsList },
-      }));
-      setIsLoading(false);
+        setFilterState((prevState) => ({
+          ...prevState,
+          skillName: {
+            ...prevState.skillName,
+            list: skillsList,
+          },
+          tagName: {
+            ...prevState.tagName,
+            list: tagsList,
+          },
+        }));
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
     };
-    getSkills();
+
+    getFilters();
     //update state merged with filters in url
     const updatedFilters = { ...filtersFromState, ...queryParams };
     dispatch(updateFiltersOnLoad(updatedFilters));

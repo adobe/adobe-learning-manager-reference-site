@@ -6,7 +6,7 @@ import {
   PrimeLocalizationMetadata,
 } from "../../models/PrimeModels";
 
-import { getPreferredLocalizedMetadata } from "../../utils/catalog";
+import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 import { QueryParams } from "../../utils/restAdapter";
 import { cardColors } from "../../common/Theme";
 

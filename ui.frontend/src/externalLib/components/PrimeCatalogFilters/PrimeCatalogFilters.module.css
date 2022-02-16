@@ -1,0 +1,39 @@
+.primeFilterContainer {
+  width: 256px;
+}
+
+.primeFilterTypeContainer {
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+.primeFilterTypeLabel {
+  font-size: 15px;
+  letter-spacing: 0px;
+  color: #565656;
+  opacity: 1;
+  margin: 20px 0;
+}
+.primeFiltersListContainer {
+  padding: 0;
+  margin-bottom: 30px;
+  overflow-y: auto;
+  max-height: 170px;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

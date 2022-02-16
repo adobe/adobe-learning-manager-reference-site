@@ -1,0 +1,11 @@
+.primeSearchInput {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: inset 0px 1px 3px #00000029;
+  border: 1px solid #bcbcbc;
+  border-radius: 2px;
+  opacity: 1;
+  font-size: 15px;
+  padding: 10px 12px;
+  width: 100%;
+  box-sizing: border-box;
+}

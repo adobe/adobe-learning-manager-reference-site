@@ -6,7 +6,9 @@ import {
   ConfigContextProvider,
   PrimeNotificationContainer,
   PrimeCatalogContainer,
-  PrimeCatalogFilters
+  PrimeTrainingOverview,
+  useUserContext,
+  useUser,
 } from "./externalLib";
 import store from "./store/APIStore";
 
@@ -21,7 +23,9 @@ const App = (props: any) => {
             <PrimeNotificationContainer />
           </Portal>
           <Portal selector={mountingPoints.catalogContainer}>
-            <PrimeCatalogContainer />
+            <div style={{ maxWidth: "1084px", margin: "0 auto" }}>
+              <PrimeCatalogContainer />
+            </div>
           </Portal>
         </AppContextProvider>
       </ConfigContextProvider>
