@@ -1,34 +1,43 @@
 import { useNotifications } from "../../hooks";
 import { PrimeNotificationItem } from "./PrimeNotificationItem";
+import { useLoadMore } from "../../hooks/loadMore";
 
-import  {useState} from "react";
+import  {useState,useRef, useEffect, useCallback} from "react";
 import { useIntl } from "react-intl";
 
 import styles from "./PrimeNotificationContainer.module.css";
 
 import {
   GEN_NOTIFICATION_SVG
-} from "../../utils/inline_svg"
+} from "../../utils/inline_svg";
 
 const PrimeNotificationContainer = () => {
 
     const { formatMessage } = useIntl();
-    const { notifications, isLoading } = useNotifications();
+    const { notifications, isLoading , loadMoreNotifications} = useNotifications();
     
-    const [showNotifications, setShowNotifications] = useState(false);
+
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  const [elementRef] =
+  useLoadMore({
+    notifications,
+    callback: loadMoreNotifications,
+  });
 
     if (isLoading)
     return (
       <>
-        <span>laoding notifications...</span>
+        <span>loading notifications...</span>
       </>
     );
-
+      
     const toggleShowNotifications = () => {
-      setShowNotifications((prevState) => !prevState)
+      setShowNotifications((prevState) => !prevState) ;
     }
   return (
     <>
+    
       <li className={styles.notificationDropdown}>
       <button 
       type="button"
@@ -46,16 +55,17 @@ const PrimeNotificationContainer = () => {
           <ul className={styles.notificationList}>
             {notifications?.map((entry) => (
               <PrimeNotificationItem
-              message={entry.message}
-              messageTime={entry.dateCreated}
+              notification={entry}
               key={entry.id}
               >
               </PrimeNotificationItem>
             ))}
           </ul>
-        </div>   
-      } 
+          <div ref={elementRef}>TO DO add Loading more..</div> 
+        </div>
+      }      
     </li>
+    
     </>
   );
 };

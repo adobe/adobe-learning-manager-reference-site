@@ -6,11 +6,12 @@ import {
 
 import {modifyTimeDDMMYY} from "../../utils/notificationFormatter";
 import {modifyTimeElapsed} from "../../utils/notificationFormatter";
+import { PrimeNotificationText } from "./PrimeNotificationText";
 
 
 const PrimeNotificationItem = (props: any) => {
-    const message = props.message; 
-    const messageTime = props.messageTime; 
+    const notification = props.notification; 
+    const messageTime = notification.dateCreated;
     return (
         <li className={styles.notificationItem}>
             <div className={styles.notificationIcon}>
@@ -18,17 +19,17 @@ const PrimeNotificationItem = (props: any) => {
             </div>
             <div className={styles.notificationText}>
                 <div>
-                    {message}
+                    <PrimeNotificationText notification={notification}>
+                    
+                    </PrimeNotificationText>
                 </div>
                 <div className={styles.notificationTime}>
                     {
                     /* {modifyTimeDDMMYY(messageTime, "en-US")} */
                     }
                     {modifyTimeElapsed(messageTime)}
-
                 </div>
             </div>
-           
         </li>
         
     );

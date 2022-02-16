@@ -1,9 +1,9 @@
 import { useCallback, useEffect , useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {  RestAdapter } from "../../utils/restAdapter";
+import { QueryParams, RestAdapter } from "../../utils/restAdapter";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
-import { getNotificationAsAstring } from "../../utils/notificationFormatter"
 import { useConfigContext, useUserContext } from "../../contextProviders";
+import APIServiceInstance from "../../common/APIService";
 import { State } from "../../store/state";
 
 import {
@@ -14,7 +14,7 @@ import { PrimeUserNotification } from "../../models";
 
 export const useNotifications = () => {
     
-    const { notifications} = useSelector(
+    const { notifications, next} = useSelector(
         (state: State) => state.notification
       );
     const [isLoading, setIsLoading] = useState(true);
@@ -24,12 +24,14 @@ export const useNotifications = () => {
     console.log(user.id);
     const fetchNotifications = useCallback(async () => {
         try {
+          const params: QueryParams = {};
+          params["page[limit]"] = 6;
             const response = await RestAdapter.get({
-                url: `${config.baseApiUrl}/users/10866105/userNotifications`
+                url: `${config.baseApiUrl}/users/10866105/userNotifications`, 
+                params: params
               });
               const parsedResponse = JsonApiParse(response);
               const notificationData: any = {}; 
-              parsedResponse.userNotificationList?.map(entry => entry.message = getNotificationAsAstring(entry, "en-US"));
               notificationData["notifications"] = parsedResponse.userNotificationList || [];
               notificationData["next"] = parsedResponse.links?.next || "";
 
@@ -47,8 +49,22 @@ export const useNotifications = () => {
        
         fetchNotifications();
       }, [fetchNotifications, user.id]);
+
+        //for pagination
+    const loadMoreNotifications = useCallback(async () => {
+      if (!next) return;
+      const parsedResponse = await APIServiceInstance.loadMore(next);
+      dispatch(
+        paginateNotifications({
+          notifications: parsedResponse!.userNotificationList || [],
+          next: parsedResponse!.links?.next || "",
+        })
+      );
+    }, [dispatch, next]);
+
     return {
         notifications, 
-        isLoading
+        isLoading, 
+        loadMoreNotifications
       };
 }
