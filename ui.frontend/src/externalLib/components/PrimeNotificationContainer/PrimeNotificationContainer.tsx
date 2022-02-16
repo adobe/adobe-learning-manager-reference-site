@@ -1,5 +1,5 @@
 import { useNotifications } from "../../hooks";
-import { PrimeNotificationsList } from "./PrimeNotificationList";
+import { PrimeNotificationList } from "../PrimeNotificationList";
 
 
 import { useState } from "react";
@@ -42,7 +42,7 @@ const PrimeNotificationContainer = () => {
           {GEN_NOTIFICATION_SVG()}
         </button>
         {showNotifications && (
-          <PrimeNotificationsList
+          <PrimeNotificationList
             notifications={notifications}
             loadMoreNotifications={loadMoreNotifications}
           />

@@ -6,7 +6,7 @@ import {
 
 import {modifyTimeDDMMYY} from "../../utils/notificationFormatter";
 import {modifyTimeElapsed} from "../../utils/notificationFormatter";
-import { PrimeNotificationText } from "./PrimeNotificationText";
+import { PrimeNotificationText } from "../PrimeNotificationText";
 
 
 const PrimeNotificationItem = (props: any) => {
@@ -34,4 +34,4 @@ const PrimeNotificationItem = (props: any) => {
         
     );
 };
-export { PrimeNotificationItem}
+export default PrimeNotificationItem
