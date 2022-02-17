@@ -1,8 +1,8 @@
 import {  useRef} from "react";
-import { PrimeNotificationItem } from "./PrimeNotificationItem";
+import { PrimeNotificationItem } from "../PrimeNotificationItem";
 import { useLoadMore } from "../../hooks/loadMore";
 
-import styles from "./PrimeNotificationContainer.module.css";
+import styles from "./PrimeNotificationList.module.css";
 
 const PrimeNotificationsList = (props: any) => {
     const { notifications, loadMoreNotifications } = props;
@@ -28,4 +28,4 @@ const PrimeNotificationsList = (props: any) => {
     );
   };
 
-  export {PrimeNotificationsList};
+  export default PrimeNotificationsList;
