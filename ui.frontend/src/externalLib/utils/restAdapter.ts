@@ -1,7 +1,7 @@
 //import { Auth } from "../common";
 //import { GetPrimeAuth, GetPrimeApiBasePath, GetPrimeHostName } from "./windowWrapper";
-
-export type QueryParams = Record<string, string | number | boolean>;
+//To-Do check with yogesh
+export type QueryParams = Record<string, string | number | boolean | Array<any>>;
 
 export interface IRestAdapterGetOptions {
   url: string;
