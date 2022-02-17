@@ -25,7 +25,9 @@ export const useNotifications = () => {
     const fetchNotifications = useCallback(async () => {
         try {
           const params: QueryParams = {};
-          params["page[limit]"] = 6;
+          params["page[limit]"] = 10;
+          params["announcementsOnly"]=false; 
+          params["userSelectedChannels"] = ["jobAid::adminEnrollment","certification::adminEnrollment","certification::autoEnrollment","certification::completed","certification::badgeIssued","certification::completionReminder","certification::expired","certification::recurrenceEnrollment","certification::republished","certification::learnerCertificationApprovalRequestApproved","certification::learnerCertificationApprovalRequestDenied","certification::deadlineMissed","course::adminEnrollment","course::autoEnrollment","course::badgeIssued","course::l1FeedbackPrompt","course::deadlineMissed","course::completed","course::completionReminder","course::sessionReminder","course::republished","course::courseOpenForEnrollment","course::learnerEnrollmentRequestApproved","course::learnerEnrollmentRequestDenied","course::waitListCleared","course::learnerNominationRequest","learningProgram::adminEnrollment","learningProgram::autoEnrollment","learningProgram::badgeIssued","learningProgram::republished","learningProgram::deadlineMissed","learningProgram::completionReminder","learningProgram::completed","learningProgram::l1Feedback","competency::assigned","competency::badgeIssued","competency::achieved","manager::added","admin::added","author::added","integrationAdmin::added"];
             const response = await RestAdapter.get({
                 url: `${config.baseApiUrl}/users/10866105/userNotifications`, 
                 params: params
