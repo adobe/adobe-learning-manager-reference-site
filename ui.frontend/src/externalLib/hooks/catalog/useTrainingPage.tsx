@@ -94,6 +94,7 @@ export const useTrainingPage = (
   const {
     cardIconUrl = "",
     color = "",
+    bannerUrl = "",
   }: { [key: string]: string } = useMemo(() => {
     //TO-DO pick from attributes or fall back to one default set of colors
     const themeColors = cardColors["prime-pebbles"];
@@ -103,6 +104,7 @@ export const useTrainingPage = (
       //TODO: updated the url to akamai from config
       cardIconUrl: `https://cpcontentsdev.adobe.com/public/images/default_card_icons/${colorCode}.svg`,
       color: themeColors[colorCode],
+      bannerUrl: training.bannerUrl
     };
   }, [training]);
 
@@ -126,33 +128,6 @@ export const useTrainingPage = (
     return trainingSkills;
   }, [training]);
 
-  const hasSingleActiveInstance: boolean = useMemo(() => {
-    const instances = training.instances;
-    const checkIfEnrollmentDeadlineNotPassed = (
-      instance: PrimeLearningObjectInstance
-    ) => {
-      const enrollmentDeadlineStr = instance.enrollmentDeadline;
-      return enrollmentDeadlineStr &&
-        new Date(enrollmentDeadlineStr) < new Date()
-        ? false
-        : true;
-    };
-    let count = 0;
-    for (let i = 0; i < instances.length; i++) {
-      const instance = instances[i];
-      if (
-        instance.state == "Active" &&
-        checkIfEnrollmentDeadlineNotPassed(instance)
-      ) {
-        count++;
-      }
-      if (count > 1) {
-        return false;
-      }
-    }
-    return count == 0 ? false : true;
-  }, [training.instances]);
-
   const instanceBadge: InstanceBadge = useMemo(() => {
     return {
       badgeName: trainingInstance?.badge?.name,
@@ -168,6 +143,7 @@ export const useTrainingPage = (
     richTextOverview,
     cardIconUrl,
     color,
+    bannerUrl,
     //rating,
     skills,
     //enrollment,
@@ -175,7 +151,6 @@ export const useTrainingPage = (
     trainingInstance,
     isLoading,
     instanceBadge,
-    hasSingleActiveInstance,
   };
   //date create, published, duration
 };

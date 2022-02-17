@@ -6,7 +6,7 @@ import {
   ConfigContextProvider,
   PrimeNotificationContainer,
   PrimeCatalogContainer,
-  PrimeTrainingOverview,
+  PrimeTrainingPage,
   useUserContext,
   useUser,
 } from "./externalLib";
@@ -26,8 +26,8 @@ const App = (props: any) => {
           {/* <Portal selector={mountingPoints.catalogContainer}>
               <PrimeCatalogContainer />
           </Portal> */}
-          <Portal selector={mountingPoints.trainingOverviewContainer}>
-              <PrimeTrainingOverview />
+          <Portal selector={mountingPoints.trainingOverviewPage}>
+              <PrimeTrainingPage />
           </Portal>
         </AppContextProvider>
       </ConfigContextProvider>

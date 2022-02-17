@@ -12,7 +12,6 @@ const PrimeTrainingCard: React.FC<{
     format,
     type,
     skills,
-
     name,
     description,
     imageUrl,

@@ -5,6 +5,7 @@ const PrimeTrainingOverviewHeader: React.FC<{
   format: string;
   title: string;
   color: string;
+  bannerUrl: string;
 }> = (props) => {
   const { format, title, color } = props;
   return (

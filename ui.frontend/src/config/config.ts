@@ -5,7 +5,7 @@ export default {
   mountingPoints: {
     navContainer: ".navigation__container",
     catalogContainer: ".catalog__container",
-    trainingOverviewContainer: ".training__overview__container",
+    trainingOverviewPage: ".training__page__container",
     boardsContainer: ".boards__container",
     boardContainer: ".board__container",
     notificationContainer: '.notification__container'
@@ -23,7 +23,7 @@ const basePath = ""
 
 export const primeConfig: PrimeConfig = {
   baseApiUrl: "https://captivateprimeqe.adobe.com/primeapi/v2/",
-  accessToken: "171a39b9b31694558dea6276fab13e94",
+  accessToken: "e9971628d93fcde126496a7f2e5126d2",
   locale: "en-US",
   pagePaths: {
     baseUrl,
