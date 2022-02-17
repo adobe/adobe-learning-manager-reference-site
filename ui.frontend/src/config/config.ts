@@ -3,12 +3,13 @@ import { PrimeConfig } from "../externalLib";
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   mountingPoints: {
-    navContainer: ".navigation__body",
-    catalogContainer: ".catalog__body",
-    loOverviewContainer: ".looverview__body",
-    boardsContainer: ".boards__body",
-    boardContainer: ".board__body",
-    notificationContainer: '.notification__body'
+    navContainer: ".navigation__container",
+    catalogContainer: ".catalog__container",
+    trainingOverviewContainer: ".training__overview__container",
+    boardsContainer: ".boards__container",
+    boardContainer: ".board__container",
+    notificationContainer: '.notification__container'
+
   },
 
   parentContainers: {
@@ -22,7 +23,7 @@ const basePath = ""
 
 export const primeConfig: PrimeConfig = {
   baseApiUrl: "https://captivateprimeqe.adobe.com/primeapi/v2/",
-  accessToken: "47f72bcb7b87d93f26369d77b2fadfc9",
+  accessToken: "171a39b9b31694558dea6276fab13e94",
   locale: "en-US",
   pagePaths: {
     baseUrl,

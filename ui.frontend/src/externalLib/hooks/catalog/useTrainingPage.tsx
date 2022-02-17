@@ -91,18 +91,20 @@ export const useTrainingPage = (
     return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
   }, [training, locale]);
 
-  const { cardIconUrl = "", color = "" }: { [key: string]: string } =
-    useMemo(() => {
-      //TO-DO pick from attributes or fall back to one default set of colors
-      const themeColors = cardColors["prime-pebbles"];
-      const colorCode = parseInt(training?.id.split(":")[1], 10) % 12;
+  const {
+    cardIconUrl = "",
+    color = "",
+  }: { [key: string]: string } = useMemo(() => {
+    //TO-DO pick from attributes or fall back to one default set of colors
+    const themeColors = cardColors["prime-pebbles"];
+    const colorCode = parseInt(training?.id.split(":")[1], 10) % 12;
 
-      return {
-        //TODO: updated the url to akamai from config
-        cardIconUrl: `https://cpcontentsdev.adobe.com/public/images/default_card_icons/${colorCode}.svg`,
-        color: themeColors[colorCode],
-      };
-    }, [training]);
+    return {
+      //TODO: updated the url to akamai from config
+      cardIconUrl: `https://cpcontentsdev.adobe.com/public/images/default_card_icons/${colorCode}.svg`,
+      color: themeColors[colorCode],
+    };
+  }, [training]);
 
   const skills: Skill[] = useMemo(() => {
     const trainingSkills = training?.skills.map((skill) => {
@@ -123,6 +125,33 @@ export const useTrainingPage = (
 
     return trainingSkills;
   }, [training]);
+
+  const hasSingleActiveInstance: boolean = useMemo(() => {
+    const instances = training.instances;
+    const checkIfEnrollmentDeadlineNotPassed = (
+      instance: PrimeLearningObjectInstance
+    ) => {
+      const enrollmentDeadlineStr = instance.enrollmentDeadline;
+      return enrollmentDeadlineStr &&
+        new Date(enrollmentDeadlineStr) < new Date()
+        ? false
+        : true;
+    };
+    let count = 0;
+    for (let i = 0; i < instances.length; i++) {
+      const instance = instances[i];
+      if (
+        instance.state == "Active" &&
+        checkIfEnrollmentDeadlineNotPassed(instance)
+      ) {
+        count++;
+      }
+      if (count > 1) {
+        return false;
+      }
+    }
+    return count == 0 ? false : true;
+  }, [training.instances]);
 
   const instanceBadge: InstanceBadge = useMemo(() => {
     return {
@@ -146,6 +175,7 @@ export const useTrainingPage = (
     trainingInstance,
     isLoading,
     instanceBadge,
+    hasSingleActiveInstance,
   };
   //date create, published, duration
 };
