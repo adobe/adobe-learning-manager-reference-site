@@ -1,6 +1,6 @@
 import styles from "./PrimeNotificationText.module.css";
 
-import {modifyTime} from "../../utils/notificationFormatter";
+import {modifyTime} from "../../utils/dateTime";
 import { useConfigContext, useUserContext } from "../../contextProviders";
 
 const feedbackChannels: Array<string> = [
