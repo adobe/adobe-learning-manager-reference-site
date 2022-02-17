@@ -1,0 +1,1 @@
+export { default as PrimeNotificationItem  } from "./PrimeNotificationItem";
