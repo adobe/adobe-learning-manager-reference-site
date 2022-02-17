@@ -104,7 +104,7 @@ export const useTrainingPage = (
       //TODO: updated the url to akamai from config
       cardIconUrl: `https://cpcontentsdev.adobe.com/public/images/default_card_icons/${colorCode}.svg`,
       color: themeColors[colorCode],
-      bannerUrl: training.bannerUrl
+      bannerUrl: training?.bannerUrl
     };
   }, [training]);
 
