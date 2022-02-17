@@ -7,6 +7,43 @@ import { useConfigContext } from "../../contextProviders";
 import styles from "./PrimeModuleItem.module.css";
 import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 import { convertSecondsToTimeText } from "../../utils/dateTime";
+import {
+  ACTIVITY_SVG,
+  CAPTIVATE_SVG,
+  DOC_SVG,
+  HTML_SVG,
+  PDF_SVG,
+  PPT_SVG,
+  PRESENTER_SVG,
+  SCORM_SVG,
+  AUDIO_SVG,
+  URL_SVG,
+  VIDEO_SVG,
+  XLS_SVG,
+  REJECT_SVG,
+  CALENDAR_SVG,
+  CLOCK_SVG,
+  LINK_SVG,
+  SEATS_SVG,
+  VENUE_SVG,
+  SKILLS_SVG,
+  MULTILINGUAL_SVG,
+  DEFAULT_USER_SVG,
+  VIRTUAL_CLASSROOM_SVG,
+  CLASSROOM_SVG,
+  USER_SVG,
+} from "../../utils/inline_svg";
+
+const CLASSROOM = "Classroom";
+const VIRTUAL_CLASSROOM = "Virtual Classroom";
+const ELEARNING = "Elearning";
+const ACTIVITY = "Activity";
+const VIDEO = "VIDEO";
+const PPTX = "PPTX";
+const DOC = "DOC";
+const PDF = "PDF";
+const XLS = "XLS";
+const AUDIO = "AUDIO";
 
 const PrimeModuleItem = (props: any) => {
   const loResource: PrimeLearningObjectResource = props.loResource;
@@ -26,8 +63,8 @@ const PrimeModuleItem = (props: any) => {
   }, [loResource.resources, locale]);
 
   const isClassroomOrVC =
-    loResource.resourceType == "Classroom" ||
-    loResource.resourceType == "Virtual Classroom";
+    loResource.resourceType == CLASSROOM ||
+    loResource.resourceType == VIRTUAL_CLASSROOM;
 
   const hasSessionDetails =
     resource.dateStart && resource.completionDeadline ? true : false;
@@ -35,6 +72,8 @@ const PrimeModuleItem = (props: any) => {
   const durationText = convertSecondsToTimeText(
     resource.authorDesiredDuration || resource.desiredDuration
   );
+
+  const moduleIcon = getModuleIcon(resource.contentType);
 
   const sessionsTemplate = getSessionsTemplate(
     styles,
@@ -54,10 +93,13 @@ const PrimeModuleItem = (props: any) => {
   return (
     <div className={styles.container}>
       <div className={styles.headerContainer}>
-        <div>{name}</div>
-        <div className={styles.resourceAndDuration}>
-          <span>{loResource.resourceType}</span>
-          <span>{durationText}</span>
+        <div className={styles.icon}> {moduleIcon}</div>
+        <div className={styles.headerWrapper}>
+          <div>{name}</div>
+          <div className={styles.resourceAndDuration}>
+            <span>{loResource.resourceType}</span>
+            <span>{durationText}</span>
+          </div>
         </div>
       </div>
       <div className={styles.wrapperContainer}>
@@ -66,6 +108,31 @@ const PrimeModuleItem = (props: any) => {
       </div>
     </div>
   );
+};
+
+const getModuleIcon = (contentType: string) => {
+  switch (contentType) {
+    case CLASSROOM:
+      return CLASSROOM_SVG();
+    case VIRTUAL_CLASSROOM:
+      return VIRTUAL_CLASSROOM_SVG();
+    case ACTIVITY:
+      return ACTIVITY_SVG();
+    case VIDEO:
+      return VIDEO_SVG();
+    case AUDIO:
+      return AUDIO_SVG();
+    case PPTX:
+      return PPT_SVG();
+    case DOC:
+      return DOC_SVG();
+    case PDF:
+      return PDF_SVG();
+    case XLS:
+      return XLS_SVG();
+    default:
+      return SCORM_SVG();
+  }
 };
 
 const getDescriptionTemplate = (
@@ -106,7 +173,7 @@ const getSessionsTemplate = (
   return (
     <div className={styles.metaDataContainer}>
       <div className={styles.metadata}>
-        <div className={styles.icon}>Icon</div>
+        <div className={styles.icon}>{CALENDAR_SVG()}</div>
         <div className={styles.details}>
           {resource.dateStart} - {resource.completionDeadline}
         </div>
@@ -114,24 +181,24 @@ const getSessionsTemplate = (
 
       {resource.seatLimit && (
         <div className={styles.metadata}>
-          <div className={styles.icon}>Icon</div>
+          <div className={styles.icon}>{SEATS_SVG()}</div>
           <div className={styles.details}>{resource.seatLimit}</div>
         </div>
       )}
 
       {resource.location && (
         <div className={styles.metadata}>
-          <div className={styles.icon}>Icon</div>
+          <div className={styles.icon}>{VENUE_SVG()}</div>
           <div className={styles.details}>{resource.location}</div>
         </div>
       )}
 
       <div className={styles.metadata}>
-        <div className={styles.icon}>Icon</div>
+        <div className={styles.icon}>{USER_SVG()}</div>
         <div className={styles.details}>{instructorNames}</div>
       </div>
       <div className={styles.metadata}>
-        <div className={styles.icon}>Icon</div>
+        <div className={styles.icon}>{CLOCK_SVG()}</div>
         <div className={styles.details}>{durationText}</div>
       </div>
     </div>
