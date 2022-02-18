@@ -28,7 +28,7 @@ const PrimeTrainingPage = (props: any) => {
     isLoading,
     instanceBadge,
   } = useTrainingPage(trainingId, instanceId);
-  if (isLoading) {
+  if (isLoading || !training) {
     return <div>Loading details. Please wait....</div>;
   }
 

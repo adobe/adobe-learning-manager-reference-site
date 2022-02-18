@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/aria-role */
 import { useState } from "react";
 import { useTrainingCard } from "../../hooks/catalog/useTrainingCard";
 import { PrimeLearningObject } from "../../models/PrimeModels";
@@ -62,7 +63,11 @@ const PrimeTrainingCard: React.FC<{
   }`;
   return (
     <>
-      <li className={styles.primeTrainingsListItem} onClick={cardClickHandler}>
+      <li
+        role="anchor"
+        className={styles.primeTrainingsListItem}
+        onClick={cardClickHandler}
+      >
         <div className={cardClass} onMouseLeave={onMouseLeaveHandler}>
           <div
             style={{ ...cardBgStyle }}

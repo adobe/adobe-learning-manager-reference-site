@@ -8,7 +8,8 @@ export default {
     trainingOverviewPage: ".training__page__container",
     boardsContainer: ".boards__container",
     boardContainer: ".board__container",
-    notificationContainer: '.notification__container'
+    notificationContainer: '.notification__container',
+    instanceContainer: '.instance__container'
 
   },
 
@@ -22,8 +23,9 @@ const baseUrl = "";
 const basePath = ""
 
 export const primeConfig: PrimeConfig = {
-  baseApiUrl: "https://captivateprimeqe.adobe.com/primeapi/v2/",
-  accessToken: "e9971628d93fcde126496a7f2e5126d2",
+  baseApiUrl: "https://captivateprimestage1.adobe.com/primeapi/v2/",
+  accessToken: "507ba6cc33c9e2473827bf359c4f2cf2",
+  cdnBaseUrl: "https://cpcontentsdev.adobe.com",
   locale: "en-US",
   pagePaths: {
     baseUrl,
