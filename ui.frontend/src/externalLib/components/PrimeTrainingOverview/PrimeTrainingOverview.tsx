@@ -16,8 +16,11 @@ const PrimeTrainingPage = (props: any) => {
     trainingInstance,
     instanceBadge,
   } = props;
-
-
+  
+  const moduleReources = trainingInstance.loResources.filter( (loResource :any) => loResource.loResourceType == "Content");
+  const testOutResources = trainingInstance.loResources.filter( (loResource :any) => loResource.loResourceType == "Test Out");
+  
+  
   return (
     <>
     {/* <div style={{ display: "flex" }}>
@@ -36,9 +39,15 @@ const PrimeTrainingPage = (props: any) => {
        </header>
      </div>
         
-  
      <PrimeModuleList
-         loResources={trainingInstance.loResources}
+         loResources={moduleReources}
+     ></PrimeModuleList>
+    <header role="heading" className={styles.header}> 
+        <div className={styles.loResourceType}>Testout</div> 
+      
+       </header>
+    <PrimeModuleList
+         loResources={testOutResources}
      ></PrimeModuleList>
       </>
      
