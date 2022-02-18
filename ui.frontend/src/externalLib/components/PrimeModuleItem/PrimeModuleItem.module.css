@@ -79,10 +79,19 @@
   .metaDataContainer {
     display: flex;
     flex-direction: columns;
+   
+  }
+
+  .container {
+    max-width: 80%;
   }
 
   .metadata {
     width: 100%;
     display: flex;
+  }
+
+  .headerWrapper{
+    width: 80%;
   }
 }
