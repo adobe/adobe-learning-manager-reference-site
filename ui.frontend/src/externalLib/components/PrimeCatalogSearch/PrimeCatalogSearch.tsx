@@ -22,7 +22,7 @@ const PrimeCatalogSearch: React.FC<{
   return (
     <>
       <input
-        className={styles.primeSearchInput}
+        className={styles.input}
         value={state}
         onKeyPress={searchChangedHandler}
         onChange={(event) => setState(event.target.value)}

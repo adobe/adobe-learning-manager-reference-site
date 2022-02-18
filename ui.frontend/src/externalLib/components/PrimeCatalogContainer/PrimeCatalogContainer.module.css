@@ -1,36 +1,49 @@
-.primeCss {
-  padding: 10px 0;
+.pageContainer {
+  /* width: 1084px; */
+  margin: 0 auto;
+}
+@media screen and (min-width: 1024px) {
+  .pageContainer {
+    width: 930px;
+  }
+}
+@media screen and (min-width: 1366px) {
+  .pageContainer {
+    width: 1084px;
+  }
 }
 
-.primeCatalogHeaderContainer {
+.headerContainer {
   margin-bottom: 60px;
 }
-.primeCatalogHeader {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.primateCatalogLabel {
+.label {
   font-size: 18px;
   letter-spacing: 0px;
   color: #000000;
   margin: 0;
 }
-
-.primeCatalogFiltersContainer {
+.searchContainer {
+  width: 265px;
+}
+.filtersContainer {
   display: flex;
 }
 
-.primeCatalogSearchAppliedContainer {
-  display: flex;
-  align-items: center;
-}
-.primeCatalogSearchAppliedContainer p {
+.searchAppliedContainer {
   display: flex;
   align-items: center;
 }
+.searchAppliedContainer p {
+  display: flex;
+  align-items: center;
+}
 
-.primeCatalogSearchAppliedLabel {
+.searchAppliedLabel {
   text-align: left;
   font-size: 14px;
   line-height: 20px;
@@ -39,7 +52,7 @@
   margin: 10px 0;
   display: flex;
 }
-.primeCatalogSearchTextContainer {
+.searchTextContainer {
   color: #ffffff;
   margin-left: 10px;
   background-color: #717171;
@@ -52,10 +65,10 @@
   border-radius: 25px;
   min-width: 30px;
 }
-.primeCatalogSearchText {
+.searchText {
   margin-right: 10px;
 }
-.primeCatalogSearchReset {
+.searchReset {
   cursor: pointer;
   width: 16px;
   height: 16px;

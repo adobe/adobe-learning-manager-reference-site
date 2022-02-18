@@ -1,12 +1,12 @@
 @import "../../styles/variables.css";
-.primeTrainingsListItem {
+.listItem {
   margin-bottom: 40px;
   padding-left: 20px;
 }
-.primeTrainingsListItem * {
+.listItem * {
   box-sizing: border-box;
 }
-.primeTrainingCard {
+.card {
   height: 205px;
   width: 256px;
   cursor: pointer;
@@ -14,51 +14,45 @@
   position: relative;
   transition: all 0.2s ease-in;
 }
-.primeTrainingCard.hover {
+.card.hover {
   box-shadow: 0 5px 10px rgb(0 0 0 / 20%);
 }
 
-.primeTrainingCard.hover .primeTrainingBottomBar {
+.card.hover .bottomBar {
   bottom: 0;
 }
 
-.primeTrainingCard.hover .primeTrainingDescriptionContainer {
+.card.hover .descriptionContainer {
   display: flex;
   background-color: var(--prime-color-white);
 }
 
-.primeTrainingCard.hover .primeTrainingType {
+.card.hover .trainingType {
   padding-bottom: 10px;
   margin-bottom: 0;
 }
 
-.primeTrainingCard.hover .primeTrainingExtra {
+.card.hover .extra {
   display: none;
 }
 
-.primeTrainingCard.hover .primeTrainingBackdrop {
+.card.hover .backdrop {
   background-color: rgba(0, 0, 0, 0.65);
 }
-.primeTrainingCard.hover .primeTrainingTopBar {
+.card.hover .topBar {
   opacity: 0.2;
 }
 
-.primeTrainingCard.hover .showOnHover {
+.card.hover .showOnHover {
   display: block;
 }
-.primeTrainingImage {
-  height: 205px;
-  width: 256px;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-.primeTrainingDetailsContainer {
+
+.detailsContainer {
   z-index: 1;
   background: transparent;
 }
 
-.primeTrainingTopBar {
+.topBar {
   position: absolute;
   width: 100%;
   letter-spacing: 0px;
@@ -67,7 +61,7 @@
   font-size: 11px;
   padding: 15px 15px 15px 10px;
 }
-.primeTrainingFormat {
+.format {
   width: 50%;
   overflow: hidden;
   white-space: nowrap;
@@ -78,7 +72,7 @@
   cursor: pointer;
 }
 
-.primeTrainingBottomBar {
+.bottomBar {
   position: absolute;
   width: 100%;
   height: auto;
@@ -87,7 +81,7 @@
   bottom: 0;
 }
 
-.primeTrainingPrice {
+.price {
   align-items: center;
   justify-content: center;
   background: var(--prime-color-white);
@@ -97,7 +91,7 @@
   font-weight: bold;
   padding: 3px 8px;
 }
-.primeTrainingTitle {
+.title {
   margin: 8px 0;
   letter-spacing: 0px;
   opacity: 1;
@@ -109,7 +103,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.primeTrainingType {
+.trainingType {
   font-size: 10px;
   line-height: 13px;
   letter-spacing: 0px;
@@ -117,24 +111,24 @@
   text-transform: capitalize;
   margin-bottom: 20px;
 }
-.primeTrainingThumbnail {
+.thumbnail {
   width: 100%;
   height: 100%;
   position: absolute;
   top: 0;
   left: 0;
 }
-.primeTrainingSkillsLabel {
+.lillsLabel {
   font-size: 9px;
   font-weight: bold;
   line-height: 11px;
   letter-spacing: 0px;
   color: var(--prime-color-black);
 }
-.primeTrainingSkillsLabel::after {
+.lillsLabel::after {
   content: ":";
 }
-.primeTrainingSkillsValue {
+.lillsValue {
   font-size: 9px;
   line-height: 11px;
   letter-spacing: 0px;
@@ -142,7 +136,7 @@
   padding-left: 5px;
 }
 
-.primeTrainingBackdrop {
+.backdrop {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -154,7 +148,7 @@
     rgba(0, 0, 0, 0.75) 100%
   );
 }
-.primeTrainingExtra {
+.extra {
   width: 100%;
   height: 30px;
   bottom: 0;
@@ -167,12 +161,12 @@
   align-items: center;
   display: flex;
 }
-.primeTrainingExtraWrapper {
+.extraWrapper {
   display: flex;
   align-items: center;
   width: 100%;
 }
-.primeTrainingExtraLabel {
+.extraLabel {
   font-size: 9px;
   font-weight: bold;
   letter-spacing: 0px;
@@ -182,22 +176,22 @@
   text-overflow: ellipsis;
   width: 80%;
 }
-.primeTrainingExtraLabel span {
+.extraLabel span {
   font-weight: normal;
   padding-left: 5px;
   font-size: 12px;
 }
-.primeTrainingExtraLabel span:first-child:after {
+.extraLabel span:first-child:after {
   content: ":";
 }
 
-.primeTrainingProgressBarContainer {
+.progressBarContainer {
   width: 100%;
   height: 6px;
   background: #dfdfdf;
   border-radius: 0.5rem;
 }
-.primeTrainingProgressBarContainer .primeTrainingProgressBar {
+.progressBarContainer .progressBar {
   width: 0;
   height: 100%;
   border-radius: 0.5rem;
@@ -205,11 +199,11 @@
   -webkit-transition: width 750ms ease-in-out;
   background: linear-gradient(90deg, #55b36f, #0f870f);
 }
-.primeTrainingSkillsContainer {
+.skillsContainer {
   display: flex;
   align-items: center;
 }
-.primeTrainingDescriptionContainer {
+.descriptionContainer {
   flex-direction: column;
   justify-content: center;
   padding: 10px;
@@ -218,20 +212,20 @@
   color: black;
 }
 
-.primeTrainingSkillsContainer {
+.skillsContainer {
   display: flex;
   align-items: center;
   display: flex;
   font-size: 11px;
 }
-.primeTrainingSkillsContainer div {
+.skillsContainer div {
   width: 50%;
 }
-.primeTrainingPercentComplete {
+.percentComplete {
   padding-left: 10px;
 }
 
-.primeTrainingDescription {
+.description {
   font-size: 10px;
   line-height: 13px;
   overflow: hidden;
@@ -244,36 +238,24 @@
   -webkit-box-orient: vertical;
 }
 
-.primeTrainingLoadingHover {
-  display: flex;
-  align-items: center;
-  display: flex;
-  font-size: 11px;
-  display: flex;
-  color: black;
-  font-size: 11px;
-}
-.primeTrainingLoadingHover div {
-  width: 50%;
-}
-.primeTrainingSkillsLabel {
+.skiillsLabel {
   font-size: 9px;
   font-weight: bold;
   line-height: 11px;
   letter-spacing: 0px;
   color: var(--prime-color-black);
 }
-.primeTrainingSkillsLabel::after {
+.skiillsLabel::after {
   content: ":";
 }
-.primeTrainingSkillsValue {
+.skillsValue {
   font-size: 9px;
   line-height: 11px;
   letter-spacing: 0px;
   color: var(--prime-color-black);
   padding-left: 5px;
 }
-.primeTrainingCompleted {
+.completed {
   font-size: 11px;
   line-height: 13px;
 }
@@ -287,7 +269,7 @@
   height: 25px;
 }
 
-.primeTrainingExtraIcon {
+.extraIcon {
   margin-left: auto;
   width: 24px;
   height: 24px;

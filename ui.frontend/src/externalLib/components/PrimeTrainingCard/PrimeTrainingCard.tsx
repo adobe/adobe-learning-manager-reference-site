@@ -33,15 +33,15 @@ const PrimeTrainingCard: React.FC<{
   };
 
   const skillsAsString = skills?.map((item) => item.skillLevel.name).join(",");
-  const descriptHtml = description ? (
-    <p className={styles.primeTrainingDescription}>{description}</p>
+  const descriptionHtml = description ? (
+    <p className={styles.description}>{description}</p>
   ) : (
     ""
   );
   const enrollmentHtml = enrollment ? (
-    <div className={styles.primeTrainingProgressBarContainer}>
+    <div className={styles.progressBarContainer}>
       <div
-        className={styles.primeTrainingProgressBar}
+        className={styles.progressBar}
         style={{ width: enrollment.progressPercent + "%" }}
       ></div>
     </div>
@@ -49,7 +49,7 @@ const PrimeTrainingCard: React.FC<{
     ""
   );
   const hasCompletedTrainingHtml = enrollment?.hasPassed ? (
-    <div className={styles.primeTrainingCompleted}>
+    <div className={styles.completed}>
       {formatMessage({
         id: "prime.catalog.card.complete.label",
         defaultMessage: "Complete",
@@ -59,78 +59,70 @@ const PrimeTrainingCard: React.FC<{
     enrollmentHtml
   );
 
-  const cardClass = `${styles.primeTrainingCard} ${
-    isHovered ? styles.hover : ""
-  }`;
+  const cardClass = `${styles.card} ${isHovered ? styles.hover : ""}`;
   return (
     <>
-      <li
-        role="anchor"
-        className={styles.primeTrainingsListItem}
-        onClick={cardClickHandler}
-      >
+      <li role="anchor" className={styles.listItem} onClick={cardClickHandler}>
         <div className={cardClass} onMouseLeave={onMouseLeaveHandler}>
           <div
             style={{ ...cardBgStyle }}
-            className={styles.primeTrainingThumbnail}
+            className={styles.thumbnail}
           ></div>
 
-          {imageUrl ? <div className={styles.primeTrainingBackdrop}></div> : ""}
+          {imageUrl ? <div className={styles.backdrop}></div> : ""}
 
-          <div className={styles.primeTrainingDetailsContainer}>
-            <div className={styles.primeTrainingTopBar}>
-              <div className={styles.primeTrainingFormat}>{format}</div>
+          <div className={styles.detailsContainer}>
+            <div className={styles.topBar}>
+              <div className={styles.format}>{format}</div>
             </div>
 
-            <div className={styles.primeTrainingBottomBar}>
-              <span className={styles.primeTrainingPrice}>$9009</span>
-              <div className={styles.primeTrainingTitle}>{name}</div>
-              <div className={styles.primeTrainingType}>
+            <div className={styles.bottomBar}>
+              <span className={styles.price}>$9009</span>
+              <div className={styles.title}>{name}</div>
+              <div className={styles.trainingType}>
                 {type} - {training.loFormat}
               </div>
               <div
-                className={styles.primeTrainingDescriptionContainer}
+                className={styles.descriptionContainer}
                 onMouseEnter={onMouseEnterHandler}
               >
-                <div className={styles.primeTrainingExtra}>
+                <div className={styles.extra}>
                   {hasCompletedTrainingHtml || (
-                    <div className={styles.primeTrainingExtraWrapper}>
+                    <div className={styles.extraWrapper}>
                       <div className={styles.sendIcon}>{SEND_SVG()}</div>
-                      <div className={styles.primeTrainingExtraLabel}>
+                      <div className={styles.extraLabel}>
                         <span>
                           {formatMessage({
                             id: "prime.catalog.card.skills.label",
                             defaultMessage: "Skills",
                           })}
                         </span>
-                        <span className={styles.primeTrainingSkillsExtraValue}>
+                        <span>
                           {skillsAsString}
                         </span>
                       </div>
-                      <div className={styles.primeTrainingExtraIcon}>
+                      <div className={styles.extraIcon}>
                         {THREE_DOTS_MENU_SVG()}
                       </div>
                     </div>
                   )}
                 </div>
                 <div className={styles.showOnHover}>
-                  {descriptHtml}
-                  <div className={styles.primeTrainingSkillsContainer}>
-                    <span className={styles.primeTrainingSkillsLabel}>
+                  {descriptionHtml}
+                  <div className={styles.skillsContainer}>
+                    <span className={styles.skiillsLabel}>
                       {formatMessage({
                         id: "prime.catalog.card.skills.label",
                         defaultMessage: "Skills",
                       })}
                     </span>
-                    <span className={styles.primeTrainingSkillsValue}>
-                      {skillsAsString}
-                    </span>
+                    <span className={styles.skillsValue}>{skillsAsString}</span>
                   </div>
-                  <div className={styles.primeTrainingSkillsContainer}>
+                  <div className={styles.skillsContainer}>
                     {enrollment ? (
                       <>
                         {enrollmentHtml}
-                        <div className={styles.primeTrainingPercentComplete}>
+                        <div className={styles.percentComplete}>
                           {formatMessage(
                             {
                               id: "prime.catalog.card.progress.percent",

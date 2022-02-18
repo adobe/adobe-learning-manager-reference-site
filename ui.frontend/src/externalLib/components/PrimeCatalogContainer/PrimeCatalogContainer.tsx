@@ -21,15 +21,12 @@ const PrimeCatalogContainer = () => {
   const { formatMessage } = useIntl();
 
   const showingSearchHtml = query ? (
-    <div className={styles.primeCatalogSearchAppliedContainer}>
-      <div className={styles.primeCatalogSearchAppliedLabel}>
+    <div className={styles.searchAppliedContainer}>
+      <div className={styles.searchAppliedLabel}>
         Showing results for
-        <div className={styles.primeCatalogSearchTextContainer}>
-          <span className={styles.primeCatalogSearchText}>{query}</span>
-          <span
-            className={styles.primeCatalogSearchReset}
-            onClick={resetSearch}
-          >
+        <div className={styles.searchTextContainer}>
+          <span className={styles.searchText}>{query}</span>
+          <span className={styles.searchReset} onClick={resetSearch}>
             {CLOSE_SVG()}
           </span>
         </div>
@@ -40,22 +37,22 @@ const PrimeCatalogContainer = () => {
   );
 
   return (
-    <div className={styles.primeCss}>
-      <div className={styles.primeCatalogHeaderContainer}>
-        <div className={styles.primeCatalogHeader}>
-          <h1 className={styles.primateCatalogLabel}>
+    <div className={styles.pageContainer}>
+      <div className={styles.headerContainer}>
+        <div className={styles.header}>
+          <h1 className={styles.label}>
             {formatMessage({
               id: "prime.catalog.header",
               defaultMessage: "Collection of Courses, Certificates and More",
             })}
           </h1>
-          <div style={{ width: "265px" }}>
+          <div className={styles.searchContainer}>
             <PrimeCatalogSearch query={query} handleSearch={handleSearch} />
           </div>
         </div>
         {showingSearchHtml}
       </div>
-      <div className={styles.primeCatalogFiltersContainer}>
+      <div className={styles.filtersContainer}>
         <PrimeCatalogFilters
           filterState={filterState}
           updateFilters={updateFilters}
