@@ -1,0 +1,17 @@
+@import "../../styles/variables.css";
+.overviewcontainer {
+    display: flex;
+    width: 50%;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.loResourceType {
+    font-weight: var(--prime-font-weight-600);
+}
