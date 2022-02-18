@@ -1,17 +1,24 @@
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useConfigContext } from "../../contextProviders/configContextProvider";
 import { useInstancePage } from "../../hooks/instance/useInstancePage";
+import { PrimeLearningObjectResource } from "../../models/PrimeModels";
+import { dateBasedOnLocale } from "../../utils/dateTime";
+import { SORT_ORDER_SVG } from "../../utils/inline_svg";
+import { getResourceBasedOnLocale } from "../../utils/instance";
 import { getPreferredLocalizedMetadata } from "../../utils/translationService";
+import { useIntl } from "react-intl";
 import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
+
 import styles from "./PrimeInstancePage.module.css";
-import { getInstanceLocation } from "../../utils/instance";
 
 const PrimeInstancePage = (props: any) => {
   //To Do: needs to get form URL
-  // const [list, setList] = useState([]);
   const trainingId = "course:5813667";
+  const { formatMessage } = useIntl();
+  const [list, setList] = useState([] as any[]);
+  const [isAscendingOrder, setIsAscendingOrder] = useState(true);
   const { locale } = useConfigContext();
   const {
     isLoading,
@@ -24,34 +31,50 @@ const PrimeInstancePage = (props: any) => {
     selectInstanceHandler,
   } = useInstancePage(trainingId);
 
-  const list = useMemo(() => {
-    if (!activeInstances || !activeInstances.length) return [];
-    let list: any = [];
-    for (let instance of activeInstances) {
-      let item: any = {};
-      item.id = instance.id;
-      item.name = getPreferredLocalizedMetadata(
-        instance.localizedMetadata,
-        locale
-      )?.name;
-      item.format = training.loFormat;
+  useEffect(() => {
+    if (activeInstances && activeInstances.length) {
+      let list: any = [];
+      activeInstances.forEach((instance) => {
+        let item: any = {};
+        item.id = instance.id;
+        item.name = getPreferredLocalizedMetadata(
+          instance.localizedMetadata,
+          locale
+        )?.name;
+        item.format = training.loFormat;
 
-      let [location, instructorsName] = getInstanceLocation(
-        instance.loResources,
-        locale
-      );
-      item.location = location;
-      item.instructorsName = instructorsName;
-
-      list.push(item);
+        let [location, instructorsName] = getInstanceLocationAndInstructorsName(
+          instance.loResources,
+          locale
+        );
+        item.location = location;
+        item.instructorsName = instructorsName;
+        item.date = getStartDateforInstance(instance.loResources, locale);
+        list.push(item);
+      });
+      setList(list);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locale, training.loFormat]);
 
-    return list;
-  }, [activeInstances, locale, training.loFormat]);
+  const applySort = (sortParam: string) => {
+    const sortedList = sortList(list, sortParam, isAscendingOrder);
+    setList(sortedList as any[]);
+    setIsAscendingOrder((prevState) => !prevState);
+  };
 
   if (isLoading) {
     return <span>Getting data. Please wait...</span>;
   }
+
+  const headerLabel = formatMessage(
+    {
+      id: "prime.instance.header.label",
+    },
+    {
+      0: name,
+    }
+  );
 
   return (
     <>
@@ -62,10 +85,7 @@ const PrimeInstancePage = (props: any) => {
         bannerUrl={bannerUrl}
       />
       <section className={styles.pageContainer}>
-        <h2 className={styles.courseInfoHeader}>
-          The Course <span>{name}</span>, has the following Course variations.
-          Select one to see further details.
-        </h2>
+        <h2 className={styles.courseInfoHeader}>{headerLabel}</h2>
         <div className={styles.courseDetailsContainer}>
           <div className={styles.card} style={{ ...cardBgStyle }}>
             <div className={styles.band}></div>
@@ -83,13 +103,42 @@ const PrimeInstancePage = (props: any) => {
                 <div
                   className={`${styles.instanceNameDiv} ${styles.commonHeader}`}
                 >
-                  Instance Name
+                  {formatMessage({
+                    id: "prime.instance.name",
+                    defaultMessage: "Instance Name",
+                  })}
+                  <span
+                    onClick={() => applySort("name")}
+                    className={styles.sortIcon}
+                  >
+                    {SORT_ORDER_SVG()}
+                  </span>
                 </div>
-                <div className={`${styles.dateDiv} ${styles.commonHeader}`}>
-                  Start Date
+                <div className={`${styles.dateDiv} ${styles.commonHeader} `}>
+                  {formatMessage({
+                    id: "prime.instance.start.date",
+                    defaultMessage: "Start Date",
+                  })}
+
+                  <span
+                    onClick={() => applySort("date")}
+                    className={styles.sortIcon}
+                  >
+                    {SORT_ORDER_SVG()}
+                  </span>
                 </div>
-                <div className={`${styles.location} ${styles.commonHeader}`}>
-                  Location
+                <div className={`${styles.locationDiv} ${styles.commonHeader}`}>
+                  {formatMessage({
+                    id: "prime.instance.location",
+                    defaultMessage: "Location",
+                  })}
+
+                  <span
+                    onClick={() => applySort("location")}
+                    className={styles.sortIcon}
+                  >
+                    {SORT_ORDER_SVG()}
+                  </span>
                 </div>
                 <div
                   className={`${styles.action} ${styles.commonHeader}`}
@@ -102,18 +151,18 @@ const PrimeInstancePage = (props: any) => {
                   key={item.id}
                   name={item.name}
                   format={item.format}
-                  date={"date"}
+                  date={item.date}
                   location={item.location}
                   instructorsName={item.instructorsName}
-                  id={list.id}
+                  id={item.id}
                   selectInstanceHandler={selectInstanceHandler}
+                  locale={locale}
                 />
               ))}
             </ul>
           </>
         )}
       </section>
-      {/* <img style={{ ...cardBgStyle }} alt="" /> */}
     </>
   );
 };
@@ -131,7 +180,10 @@ const PrimeInstanceItem = (props: any) => {
     location,
     instructorsName,
     selectInstanceHandler,
+    locale,
   } = props;
+  const { formatMessage } = useIntl();
+
   const selectHandler = () => {
     selectInstanceHandler(id);
   };
@@ -142,10 +194,16 @@ const PrimeInstanceItem = (props: any) => {
           {name}
         </a>
         <p className={styles.instanceLoFormat}>{format}</p>
-        <p style={{ margin: 0 }}>instructors: {instructorsName}</p>
+        <p className={styles.instructorsName}>
+          {formatMessage({
+            id: "prime.instance.instructors",
+            defaultMessage: "Instructors",
+          })}
+          : {instructorsName}
+        </p>
       </div>
       <div className={styles.dateDiv}>
-        <p className={styles.startDate}>{date}</p>
+        <p className={styles.startDate}>{dateBasedOnLocale(date, locale)}</p>
       </div>
 
       <div className={styles.locationDiv}>
@@ -153,9 +211,59 @@ const PrimeInstanceItem = (props: any) => {
       </div>
       <div className={styles.actionDiv}>
         <button className={styles.button} onClick={selectHandler}>
-          See details
+          {formatMessage({
+            id: "prime.instance.see.details",
+            defaultMessage: "See details",
+          })}
         </button>
       </div>
     </li>
   );
+};
+
+const getStartDateforInstance = (
+  loResources: PrimeLearningObjectResource[],
+  locale: string
+): Date => {
+  let dateArray: any[] = [];
+  loResources.forEach((loResource) => {
+    const resource = getResourceBasedOnLocale(loResource, locale);
+    if (resource.dateStart) dateArray.push(new Date(resource.dateStart));
+  });
+  return dateArray.sort((a, b) => a - b)[0];
+};
+
+const getInstanceLocationAndInstructorsName = (
+  loResources: PrimeLearningObjectResource[],
+  locale: string
+): string[] => {
+  let location: string[] = [];
+  let instructorNames: string[] = [];
+  loResources.forEach((loResource) => {
+    const resource = getResourceBasedOnLocale(loResource, locale);
+
+    if (resource.location) location.push(resource.location);
+    if (resource.instructorNames?.length)
+      instructorNames.push(resource.instructorNames.join(", "));
+  });
+  return [location.join(", "), instructorNames.join(", ")];
+};
+
+const sortList = (list: any[], sortParam: string, sortOrder: any) => {
+  let listCopy = [...list];
+  if (sortParam === "name" || sortParam === "location") {
+    return sortOrder
+      ? listCopy.sort((a: any, b: any) =>
+          b[sortParam].localeCompare(a[sortParam])
+        )
+      : listCopy.sort((a: any, b: any) =>
+          a[sortParam].localeCompare(b[sortParam])
+        );
+  }
+
+  if (sortParam === "date") {
+    return sortOrder
+      ? listCopy.sort((a: any, b: any) => a.date - b.date)
+      : listCopy.sort((a: any, b: any) => b.date - a.date);
+  }
 };

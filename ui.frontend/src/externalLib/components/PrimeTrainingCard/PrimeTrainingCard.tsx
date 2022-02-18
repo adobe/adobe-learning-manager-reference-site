@@ -5,6 +5,7 @@ import { PrimeLearningObject } from "../../models/PrimeModels";
 import { useIntl } from "react-intl";
 
 import styles from "./PrimeTrainingCard.module.css";
+import { SEND_SVG, THREE_DOTS_MENU_SVG } from "../../utils/inline_svg";
 
 const PrimeTrainingCard: React.FC<{
   training: PrimeLearningObject;
@@ -94,7 +95,7 @@ const PrimeTrainingCard: React.FC<{
                 <div className={styles.primeTrainingExtra}>
                   {hasCompletedTrainingHtml || (
                     <div className={styles.primeTrainingExtraWrapper}>
-                      <div>Icon</div>
+                      <div className={styles.sendIcon}>{SEND_SVG()}</div>
                       <div className={styles.primeTrainingExtraLabel}>
                         <span>
                           {formatMessage({
@@ -107,7 +108,7 @@ const PrimeTrainingCard: React.FC<{
                         </span>
                       </div>
                       <div className={styles.primeTrainingExtraIcon}>
-                        3 dots
+                        {THREE_DOTS_MENU_SVG()}
                       </div>
                     </div>
                   )}

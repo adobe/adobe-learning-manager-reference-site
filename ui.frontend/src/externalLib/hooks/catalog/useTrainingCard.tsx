@@ -68,6 +68,8 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     //if jobAid, need to enroll and open player or new tab
     if (isJobaid(training)) {
       console.log("This is a JOBAid");
+      //if user logged in, then enroll if not already enrolled.
+      //training.enrollment
       //need to enroll silently here and then do the following
       if (isJobaidContentTypeUrl(training)) {
         window.open(getJobaidUrl(training), "_blank");
@@ -77,6 +79,13 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
       }
       return;
     }
+    //if user Loggedin 
+      //training.enrollment.loInstance
+      //if enrollment is there ---got overview with instance and return
+    
+    //if single Active instance --- go to overview
+    // else show instance page
+    
 
     console.log("This is not a JOBAid");
 

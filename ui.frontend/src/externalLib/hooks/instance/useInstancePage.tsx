@@ -67,11 +67,13 @@ export const useInstancePage = (
 
   const activeInstances: PrimeLearningObjectInstance[] = useMemo(() => {
     const instances = training.instances;
-    return instances?.filter(
-      (instance) =>
-        instance.state === "Active" &&
-        checkIfEnrollmentDeadlineNotPassed(instance)
-    );
+    return instances?.length
+      ? instances?.filter(
+          (instance) =>
+            instance.state === "Active" &&
+            checkIfEnrollmentDeadlineNotPassed(instance)
+        )
+      : [];
   }, [training.instances]);
 
   const { cardIconUrl, color, bannerUrl } = useCardIcon(training);

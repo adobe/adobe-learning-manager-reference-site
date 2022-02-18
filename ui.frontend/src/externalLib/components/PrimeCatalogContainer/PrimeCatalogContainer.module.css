@@ -37,6 +37,7 @@
   letter-spacing: 0px;
   color: #292929;
   margin: 10px 0;
+  display: flex;
 }
 .primeCatalogSearchTextContainer {
   color: #ffffff;
@@ -56,4 +57,6 @@
 }
 .primeCatalogSearchReset {
   cursor: pointer;
+  width: 16px;
+  height: 16px;
 }

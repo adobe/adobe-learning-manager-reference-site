@@ -18,7 +18,7 @@
 }
 
 .courseInfoHeader {
-  font-size: var(--prime-font-16px);
+  font-size: var(--prime-font-size-medium);
   line-height: 26px;
   letter-spacing: 0px;
   color: var(--prime-color-nc2);
@@ -48,7 +48,7 @@
   width: 100%;
 }
 .title {
-  font-size: var(--prime-font-16px);
+  font-size: var(--prime-font-size-medium);
   line-height: 26px;
   letter-spacing: 0px;
   color: var(--prime-color-nc2);
@@ -78,7 +78,7 @@
   border-bottom: 2px solid rgba(0, 0, 0, 0.1);
 }
 .commonHeader {
-  font-size: var(--prime-font-12px);
+  font-size: var(--prime-font-size-small);
   color: var(--prime-color-nc2);
   line-height: 17px;
   letter-spacing: 0px;
@@ -125,7 +125,7 @@
   cursor: pointer;
 }
 .instanceLoFormat {
-  font-size: var(--prime-font-12px);
+  font-size: var(--prime-font-size-small);
   line-height: 19px;
   letter-spacing: 0px;
   color: var(--prime-color-nc4);
@@ -133,7 +133,7 @@
   margin: 0 0 20px 0;
 }
 .startDate {
-  font-size: var(--prime-font-12px);
+  font-size: var(--prime-font-size-small);
   line-height: 15px;
   letter-spacing: 0px;
   color: var(--prime-color-nc4);
@@ -141,7 +141,7 @@
   margin: 0;
 }
 .location {
-  font-size: var(--prime-font-12px);
+  font-size: var(--prime-font-size-small);
   line-height: 15px;
   letter-spacing: 0px;
   color: var(--prime-color-nc4);
@@ -158,10 +158,10 @@
   color: var(--prime-color-primary);
   background-color: var(--prime-color-white);
   padding: 3px 20px;
-  font-size: var(--prime-font-12px);
+  font-size: var(--prime-font-size-small);
   min-height: 32px;
   min-width: 72px;
-  font-weight: 600;
+  /* font-weight: 600; */
 }
 .button:hover,
 .button:focus,
@@ -170,4 +170,24 @@
   background-color: var(--prime-color-primary);
   border-color: var(--prime-color-primary);
   outline: none;
+}
+.instructorsName {
+  font-size: var(--prime-font-size-small);
+  line-height: 19px;
+  letter-spacing: 0px;
+  color: var(--prime-color-nc2);
+  opacity: 1;
+  margin: 0;
+}
+
+.sortIcon {
+  cursor: pointer;
+  position: relative;
+  left: 5px;
+  top: 5px;
+}
+.sortIcon svg {
+  fill: var(--prime-color-nc3);
+  width: 16px;
+  height: 16px;
 }

@@ -6,6 +6,7 @@ import { PrimeTrainingsContainer } from "../PrimeTrainingsContainer";
 import { useIntl } from "react-intl";
 
 import styles from "./PrimeCatalogContainer.module.css";
+import { CLOSE_SVG } from "../../utils/inline_svg";
 
 const PrimeCatalogContainer = () => {
   const {
@@ -21,7 +22,7 @@ const PrimeCatalogContainer = () => {
 
   const showingSearchHtml = query ? (
     <div className={styles.primeCatalogSearchAppliedContainer}>
-      <p className={styles.primeCatalogSearchAppliedLabel}>
+      <div className={styles.primeCatalogSearchAppliedLabel}>
         Showing results for
         <div className={styles.primeCatalogSearchTextContainer}>
           <span className={styles.primeCatalogSearchText}>{query}</span>
@@ -29,10 +30,10 @@ const PrimeCatalogContainer = () => {
             className={styles.primeCatalogSearchReset}
             onClick={resetSearch}
           >
-            X
+            {CLOSE_SVG()}
           </span>
         </div>
-      </p>
+      </div>
     </div>
   ) : (
     ""

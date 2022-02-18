@@ -26,5 +26,11 @@
   "prime.catalog.filter.tags.label": "Tags",
   "prime.catalog.card.complete.label": "Complete",
   "prime.catalog.card.skills.label": "Skills",
-  "prime.catalog.card.progress.percent": "{0} % complete"
+  "prime.catalog.card.progress.percent": "{0}% complete",
+  "prime.instance.header.label": "The Course <span>{0}</span>, has the following Course variations.Select one to see further details.",
+  "prime.instance.name": "Instance Name",
+  "prime.instance.start.date": "Start Date",
+  "prime.instance.location": "Location",
+  "prime.instance.see.details": "See details",
+  "prime.instance.instructors": "Instructors"
 }
