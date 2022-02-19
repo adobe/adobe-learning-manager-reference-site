@@ -5,30 +5,25 @@
         cq:deviceGroups="[mobile/groups/responsive]"
         cq:template="/conf/aem-learn-components/settings/wcm/templates/page-content"
         jcr:primaryType="cq:PageContent"
-        sling:resourceType="wcm/foundation/components/page">
+        sling:resourceType="aem-learn-components/components/page">
         <root
             jcr:primaryType="nt:unstructured"
             sling:resourceType="aem-learn-components/components/container"
             layout="responsiveGrid">
             <experiencefragment-header
+                cq:styleIds="[1568592491109]"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="aem-learn-components/components/experiencefragment"
                 fragmentVariationPath="/content/experience-fragments/aem-learn-components/en/site/header/master"/>
-            <container
-                jcr:primaryType="nt:unstructured"
-                sling:resourceType="aem-learn-components/components/container"
+            <container jcr:primaryType="nt:unstructured" 
+                sling:resourceType="aem-learn-components/components/container" 
                 layout="responsiveGrid">
-                <title
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="aem-learn-components/components/title"
-                    editable="{Boolean}true"/>
-                <container
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="aem-learn-components/components/container"
-                    editable="{Boolean}true"
-                    layout="responsiveGrid"/>
+                <container jcr:primaryType="nt:unstructured" 
+                    sling:resourceType="aem-learn-components/components/container" 
+                    editable="{Boolean}true" />
             </container>
             <experiencefragment-footer
+                cq:styleIds="[1568592503946]"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="aem-learn-components/components/experiencefragment"
                 fragmentVariationPath="/content/experience-fragments/aem-learn-components/en/site/footer/master"/>
