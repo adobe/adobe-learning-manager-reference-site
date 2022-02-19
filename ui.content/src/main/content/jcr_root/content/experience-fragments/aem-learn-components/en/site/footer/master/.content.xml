@@ -16,7 +16,7 @@
             <text
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="aem-learn-components/components/text"
-                text="&lt;p&gt;&lt;a href=&quot;/content/aem-learn-components/language-masters/en/terms.html&quot;&gt;Terms of Use&lt;/a&gt; | &lt;a href=&quot;/content/aem-learn-components/language-masters/en/privacy.html&quot;&gt;Privacy Policy&lt;/a&gt; | &lt;a href=&quot;/content/aem-learn-components/language-masters/en/cookie.html&quot;&gt;Cookie Policy&lt;/a&gt; | &lt;a href=&quot;/content/aem-learn-components/language-masters/en/about&quot;&gt;About Adobe&lt;/a&gt;&lt;/p&gt;"
+                text="&lt;p&gt;&lt;a href=&quot;/content/aem-learn-components/language-masters/en/terms.html&quot;&gt;Terms of Use&lt;/a&gt; | &lt;a href=&quot;/content/aem-learn-components/language-masters/en/privacy.html&quot;&gt;Privacy Policy&lt;/a&gt; | &lt;a href=&quot;/content/aem-learn-components/language-masters/en/cookie.html&quot;&gt;Cookie Policy&lt;/a&gt; | &lt;a href=&quot;/content/aem-learn-components/language-masters/en/about.html&quot;&gt;About Adobe&lt;/a&gt;&lt;/p&gt;"
                 textIsRich="true"/>
         </root>
     </jcr:content>
