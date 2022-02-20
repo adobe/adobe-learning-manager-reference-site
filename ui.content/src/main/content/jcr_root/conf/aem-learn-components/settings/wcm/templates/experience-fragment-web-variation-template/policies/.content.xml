@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:lastModified="{Date}2020-07-09T08:31:28.918-07:00"
+        cq:lastModifiedBy="admin"
+        cq:policy="aem-learn-components/components/xfpage/policy_1572461714642"
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="wcm/core/components/policies/mappings">
+        <root
+            cq:policy="aem-learn-components/components/container/content-default"
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="wcm/core/components/policies/mapping">
+            <container
+                cq:policy="aem-learn-components/components/container/policy_70911755464249"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/core/components/policies/mapping">
+                <aem-learn-components jcr:primaryType="nt:unstructured">
+                    <components jcr:primaryType="nt:unstructured">
+                        <button
+                            cq:policy="aem-learn-components/components/button/policy_1568591661081"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="wcm/core/components/policies/mapping"/>
+                        <image
+                            cq:policy="aem-learn-components/components/image/policy_126406575098243"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="wcm/core/components/policies/mapping"/>
+                        <text
+                            cq:policy="aem-learn-components/components/text/policy_1570746487640"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="wcm/core/components/policies/mapping"/>
+                        <title
+                            cq:policy="aem-learn-components/components/title/policy_349626543823562"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="wcm/core/components/policies/mapping"/>
+                        <teaser
+                            cq:policy="aem-learn-components/components/teaser/policy_1555539430196"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="wcm/core/components/policies/mapping"/>
+                        <separator
+                            cq:policy="aem-learn-components/components/separator/policy_1571075710034"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="wcm/core/components/policies/mapping"/>
+                        <accordion
+                            cq:policy="aem-learn-components/components/accordion/policy_1571070092603"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="wcm/core/components/policies/mapping"/>
+                        <carousel
+                            cq:policy="aem-learn-components/components/carousel/policy_1555540352044"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="wcm/core/components/policies/mapping"/>
+                        <languagenavigation
+                            cq:policy="aem-learn-components/components/languagenavigation/policy_1568591782049"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="wcm/core/components/policies/mapping"/>
+                        <navigation
+                            cq:policy="aem-learn-components/components/navigation/policy_126213313123863"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="wcm/core/components/policies/mapping"/>
+                        <search
+                            cq:policy="aem-learn-components/components/search/policy_1555431088440"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="wcm/core/components/policies/mapping"/>
+                        <container
+                            cq:policy="aem-learn-components/components/container/policy_70911755464249"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="wcm/core/components/policies/mapping"/>
+                    </components>
+                </aem-learn-components>
+                <cq jcr:primaryType="nt:unstructured">
+                    <experience-fragments jcr:primaryType="nt:unstructured">
+                        <editor jcr:primaryType="nt:unstructured">
+                            <components jcr:primaryType="nt:unstructured">
+                                <buildingblock
+                                    cq:policy="cq/experience-fragments/editor/components/buildingblock/policy_1571358645901"
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="wcm/core/components/policies/mapping"/>
+                            </components>
+                        </editor>
+                    </experience-fragments>
+                </cq>
+            </container>
+        </root>
+    </jcr:content>
+</jcr:root>

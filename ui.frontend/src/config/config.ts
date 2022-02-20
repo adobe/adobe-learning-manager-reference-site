@@ -20,7 +20,7 @@ export default {
 
 // TODO: These will come from prime
 const baseUrl = "";
-const basePath = ""
+const basePath = "";
 
 export const primeConfig: PrimeConfig = {
   baseApiUrl: "https://captivateprimestage1.adobe.com/primeapi/v2/",
@@ -33,5 +33,5 @@ export const primeConfig: PrimeConfig = {
     catalog: `${basePath}/catalog.html`,
     loOverview: `${basePath}/loOverview.html`,
     community: `${basePath}/community.html`,
-  }
-}
+  },
+};

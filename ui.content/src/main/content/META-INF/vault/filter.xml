@@ -3,4 +3,5 @@
     <filter root="/conf/aem-learn-components" mode="merge"/>
     <filter root="/content/aem-learn-components" mode="merge"/>
     <filter root="/content/experience-fragments/aem-learn-components" mode="merge"/>
+    <filter root="/content/dam/aem-learn-components" mode="merge"/>
 </workspaceFilter>
