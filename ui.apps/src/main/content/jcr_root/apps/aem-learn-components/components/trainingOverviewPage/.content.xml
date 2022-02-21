@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
-    jcr:description="Aem Learn Catalog Component"
+    jcr:description="AEM Learn Training Overview Component"
     jcr:primaryType="cq:Component"
-    jcr:title="Catalog"
+    jcr:title="Training Overview"
     componentGroup="AemLearnComponents - Structure"/>
