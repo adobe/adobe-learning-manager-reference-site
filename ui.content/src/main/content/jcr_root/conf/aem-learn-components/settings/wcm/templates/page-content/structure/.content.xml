@@ -12,52 +12,25 @@
         jcr:isCheckedOut="{Boolean}true"
         jcr:mixinTypes="[mix:versionable]"
         jcr:primaryType="cq:PageContent"
-        jcr:uuid="ec361950-accc-47b1-90b9-077a44873714"
-        sling:resourceType="wcm/foundation/components/page">
+        sling:resourceType="aem-learn-components/components/page">
         <root
             jcr:primaryType="nt:unstructured"
             sling:resourceType="aem-learn-components/components/container"
             layout="responsiveGrid">
             <experiencefragment-header
+                cq:styleIds="[1568592491109]"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="aem-learn-components/components/experiencefragment"
                 fragmentVariationPath="/content/experience-fragments/aem-learn-components/en/site/header/master"/>
-            <container
-                jcr:primaryType="nt:unstructured"
-                sling:resourceType="aem-learn-components/components/container"
+            <container jcr:primaryType="nt:unstructured" 
+                sling:resourceType="aem-learn-components/components/container" 
                 layout="responsiveGrid">
-                <title
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="aem-learn-components/components/title"
-                    editable="{Boolean}true"/>
-                <boards
-                    jcr:created="{Date}2022-02-21T12:27:02.151+05:30"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2022-02-21T12:27:02.151+05:30"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="aem-learn-components/components/boards"/>
-                <catalog
-                    jcr:created="{Date}2022-02-21T12:27:06.031+05:30"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2022-02-21T12:27:06.031+05:30"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="aem-learn-components/components/catalog"/>
-                <trainingOverviewPage
-                    jcr:created="{Date}2022-02-21T12:27:11.868+05:30"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2022-02-21T12:27:11.868+05:30"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="aem-learn-components/components/trainingOverviewPage"/>
-                <container
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="aem-learn-components/components/container"
-                    editable="{Boolean}true"
-                    layout="responsiveGrid"/>
+                <container jcr:primaryType="nt:unstructured" 
+                    sling:resourceType="aem-learn-components/components/container" 
+                    editable="{Boolean}true" />
             </container>
             <experiencefragment-footer
+                cq:styleIds="[1568592503946]"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="aem-learn-components/components/experiencefragment"
                 fragmentVariationPath="/content/experience-fragments/aem-learn-components/en/site/footer/master"/>

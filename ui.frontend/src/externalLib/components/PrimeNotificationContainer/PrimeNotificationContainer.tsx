@@ -13,6 +13,7 @@ const PrimeNotificationContainer = () => {
   const {
     notifications,
     isLoading,
+    unreadCount,
     loadMoreNotifications,
   } = useNotifications();
 
@@ -38,6 +39,11 @@ const PrimeNotificationContainer = () => {
         onClick={toggleShowNotifications}
       >
         {GEN_NOTIFICATION_SVG()}
+            {unreadCount > 0 && 
+            <div className={styles.notificationCountStyle}>
+              {unreadCount}
+            </div>
+            } 
       </button>
       {showNotifications && (
         <PrimeNotificationList

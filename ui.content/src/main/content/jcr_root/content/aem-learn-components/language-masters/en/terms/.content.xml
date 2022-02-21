@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:lastModified="{Date}2022-02-19T22:28:01.678+05:30"
+        cq:lastModifiedBy="admin"
+        cq:template="/conf/aem-learn-components/settings/wcm/templates/page-content"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Terms"
+        sling:resourceType="aem-learn-components/components/page">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="aem-learn-components/components/container"
+            layout="responsiveGrid">
+            <container
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="aem-learn-components/components/container"
+                layout="responsiveGrid">
+                <title
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="aem-learn-components/components/title"/>
+                <container
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="aem-learn-components/components/container"
+                    layout="responsiveGrid">
+                    <text
+                        jcr:created="{Date}2022-02-19T22:23:30.464+05:30"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2022-02-19T22:28:01.674+05:30"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="aem-learn-components/components/text"
+                        text="&lt;h1>Adobe General Terms of Use&lt;/h1>&#xa;&lt;p>&amp;nbsp;&lt;/p>&#xa;&lt;p>Published 16 March2020. Effective as of 16 April2020. These Terms replace and supersede all prior versions.&lt;/p>&#xa;&lt;p>&amp;nbsp;&lt;/p>&#xa;&lt;p>&lt;b>THE MANDATORY ARBITRATION PROVISION AND CLASS ACTION WAIVER IN SECTION 14 (DISPUTE RESOLUTION) BELOW GOVERN THE RESOLUTION OF DISPUTES. PLEASE READ THEM CAREFULLY. IF YOU DO NOT AGREE WITH THE MANDATORY ARBITRATION PROVISION AND CLASS ACTION WAIVER IN THE TERMS, PLEASE DO NOT USE THE SERVICES OR SOFTWARE.&lt;/b>&lt;/p>&#xa;&lt;p>&amp;nbsp;&lt;/p>&#xa;&lt;p>These General Terms of Use (“&lt;b>General Terms&lt;/b>”), along with any applicable Additional Terms (see section 1.2 (Additional Terms) below) (collectively, the “&lt;b>Terms&lt;/b>”) govern your use of and access to our website, customer support, discussion forums or other interactive areas or services and services such as Creative Cloud (collectively, the “&lt;b>Services&lt;/b>”) and software that we include as part of the Services, as well as any applications, including mobile applications, Sample Files and Content Files (defined below), scripts, instruction sets and related documentation (collectively, the “&lt;b>Software&lt;/b>”). If you have agreed to the&amp;nbsp;&lt;a href=&quot;https://www.adobe.com/in/legal/subscription-terms.html&quot;>Subscription and Cancellation Terms&lt;/a>, then such terms are also considered part of the Terms. If you are using and accessing the Services and Software through Adobe’s Value Incentive Plan (“&lt;b>VIP&lt;/b>”) programme, then the Subscription and Cancellation Terms do not apply to you, but the remainder of these Terms will govern your use of and access to the Services and Software. If you have entered into another agreement with us concerning specific Services or Software, then the terms of that agreement control where it conflicts with the Terms.&amp;nbsp;&lt;/p>&#xa;&lt;p>&amp;nbsp;&lt;/p>&#xa;&lt;p>&lt;b>&lt;u>You must be 13 or older to register for an individual Adobe ID&lt;/u>. Schools that participate in the primary and secondary education named user offering may issue a child under 13 an enterprise-level Adobe ID, consistent with the&amp;nbsp;&lt;a href=&quot;http://www.adobe.com/go/primary-secondary-terms&quot;>K-12 (Primary and Secondary) and Higher Education Additional Terms for Student Data&lt;/a>.&lt;/b>&lt;/p>&#xa;&lt;p>&lt;b>1. Your Agreement with Adobe.&lt;/b>&lt;/p>&#xa;&lt;p>&amp;nbsp;&lt;/p>&#xa;&lt;p>1.1&amp;nbsp;&lt;b>Choice of Law and Contracting Entity. If you reside in North America (inclusive of United States, Canada, Mexico, United States territories and possessions and United States military bases wherever located), your relationship is with Adobe Inc., a United States company and the Terms are governed by the law of California, U.S.A., unless preempted by U.S. federal law, without regard to conflict of law rules. If you reside outside of North America, your relationship is with Adobe Systems Software Ireland Limited and the Terms are governed by the law of Ireland.&amp;nbsp;&lt;/b>For customers in Australia, Adobe Systems Software Ireland Limited is acting as an authorised agent of Adobe Systems Pty Ltd. and is entering into this contract in its capacity as agent for Adobe Systems Pty Ltd. You may have additional rights under your local law. We do not seek to limit those rights where it is prohibited to do so by law.&lt;/p>&#xa;&lt;p>&amp;nbsp;&lt;/p>&#xa;&lt;p>1.2&amp;nbsp;&lt;b>Additional Terms.&lt;/b>&amp;nbsp;Our Services and Software are licensed, not sold, to you and may also be subject to one or more of the additional terms below (“&lt;b>Additional Terms&lt;/b>”). If there is any conflict between the terms in the General Terms and the Additional Terms, then the Additional Terms govern in relation to that Service or Software. The Additional Terms are subject to change as described in section 1.6 (Updates to Terms) below.&lt;/p>&#xa;"
+                        textIsRich="true"/>
+                </container>
+            </container>
+        </root>
+    </jcr:content>
+</jcr:root>

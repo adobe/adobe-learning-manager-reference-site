@@ -9,3 +9,4 @@ export * from "./PrimeNotificationContainer";
 export * from "./PrimeTrainingPage";
 export * from "./PrimeTrainingOverviewHeader"
 export * from "./PrimeCatalogSearch"
+export * from "./PrimeInstancePage"

@@ -3,9 +3,16 @@
   --prime-color-white: #fff;
   --prime-icon-color: #eb5e00;
   --prime-color-nc1: #f1f1f1;
+  --prime-color-nc2: #292929;
+  --prime-color-nc3: #717171;
+  --prime-color-nc4: ##565656;
   --prime-text-shadow: 0.2rem 0.2rem 0.2rem #565656;
+  
   --prime-font-size-small: 14px;
+  --prime-font-size-medium: 16px;
   --prime-font-size-large: 24px;
   --prime-font-weight-medium: 400;
+
+  --prime-color-primary: #306eb5;
   --prime-font-weight-600: 600;
 }

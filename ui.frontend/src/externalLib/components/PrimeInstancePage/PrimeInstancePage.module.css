@@ -1,0 +1,193 @@
+@import "../../styles/variables.css";
+* {
+  box-sizing: border-box;
+}
+.pageContainer {
+  /* width: 1084px; */
+  margin: 0 auto;
+}
+@media screen and (min-width: 1024px) {
+  .pageContainer {
+    width: 930px;
+  }
+}
+@media screen and (min-width: 1366px) {
+  .pageContainer {
+    width: 1084px;
+  }
+}
+
+.courseInfoHeader {
+  font-size: var(--prime-font-size-medium);
+  line-height: 26px;
+  letter-spacing: 0px;
+  color: var(--prime-color-nc2);
+  margin: 40px 0;
+  font-weight: normal;
+}
+.courseInfoHeader span {
+  font-weight: bold;
+}
+.courseDetailsContainer {
+  display: flex;
+  margin-bottom: 25px;
+}
+
+.card {
+  width: 112px;
+  height: 112px;
+  margin-right: 20px;
+  border-radius: 3px;
+  display: flex;
+  align-items: flex-end;
+}
+.band {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 0px 0px 3px 3px;
+  height: 23px;
+  width: 100%;
+}
+.title {
+  font-size: var(--prime-font-size-medium);
+  line-height: 26px;
+  letter-spacing: 0px;
+  color: var(--prime-color-nc2);
+  opacity: 1;
+  margin: 0;
+  text-transform: capitalize;
+}
+.type {
+  font-size: var(--prime-font-size-small);
+  line-height: 26px;
+  letter-spacing: 0px;
+  color: var(--prime-color-nc3);
+  opacity: 1;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.instancesContainer {
+  border-top: 2px solid #707070;
+  opacity: 1;
+}
+.instancesHeaderSection {
+  display: flex;
+  padding-bottom: 10px;
+  height: 60px;
+  align-items: flex-end;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+.commonHeader {
+  font-size: var(--prime-font-size-small);
+  color: var(--prime-color-nc2);
+  line-height: 17px;
+  letter-spacing: 0px;
+  opacity: 1;
+  font-weight: bold;
+}
+.instanceNameDiv {
+  width: 50%;
+}
+.dateDiv {
+  width: 15%;
+}
+.locationDiv {
+  width: 15%;
+}
+.actionDiv {
+  width: 20%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: start;
+}
+
+.instanceList {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* //might need to move to another item component */
+.instanceListItem {
+  padding: 20px 0 12px 0;
+  display: flex;
+  border-bottom: 1px solid #cccccc;
+}
+.instanceName {
+  font-size: var(--prime-font-size-small);
+  line-height: 18px;
+  letter-spacing: 0px;
+  color: var(--prime-color-primary);
+  opacity: 1;
+  margin: 0 0 5px 0;
+  display: inline-flex;
+  text-decoration: none;
+  cursor: pointer;
+}
+.instanceLoFormat {
+  font-size: var(--prime-font-size-small);
+  line-height: 19px;
+  letter-spacing: 0px;
+  color: var(--prime-color-nc4);
+  opacity: 1;
+  margin: 0 0 20px 0;
+}
+.startDate {
+  font-size: var(--prime-font-size-small);
+  line-height: 15px;
+  letter-spacing: 0px;
+  color: var(--prime-color-nc4);
+  opacity: 1;
+  margin: 0;
+}
+.location {
+  font-size: var(--prime-font-size-small);
+  line-height: 15px;
+  letter-spacing: 0px;
+  color: var(--prime-color-nc4);
+  opacity: 1;
+  margin: 0;
+}
+
+.button {
+  margin: 0;
+  transition: all 0.13s ease-out;
+  cursor: pointer;
+  border: 2px solid var(--prime-color-primary);
+  border-radius: 21px;
+  color: var(--prime-color-primary);
+  background-color: var(--prime-color-white);
+  padding: 3px 20px;
+  font-size: var(--prime-font-size-small);
+  min-height: 32px;
+  min-width: 72px;
+  /* font-weight: 600; */
+}
+.button:hover,
+.button:focus,
+.button:focus-visible {
+  color: var(--prime-color-white);
+  background-color: var(--prime-color-primary);
+  border-color: var(--prime-color-primary);
+  outline: none;
+}
+.instructorsName {
+  font-size: var(--prime-font-size-small);
+  line-height: 19px;
+  letter-spacing: 0px;
+  color: var(--prime-color-nc2);
+  opacity: 1;
+  margin: 0;
+}
+
+.sortIcon {
+  cursor: pointer;
+  position: relative;
+  left: 5px;
+  top: 5px;
+}
+.sortIcon svg {
+  fill: var(--prime-color-nc3);
+  width: 16px;
+  height: 16px;
+}

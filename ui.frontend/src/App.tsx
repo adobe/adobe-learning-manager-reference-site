@@ -1,22 +1,17 @@
-import { lazy, Suspense } from "react";
 import config, { primeConfig } from "./config/config";
 import { AppContextProvider } from "./contextProviders";
 import { IntlProvider } from "react-intl";
-
 import {
   Portal,
   ConfigContextProvider,
   PrimeNotificationContainer,
-  //PrimeCatalogContainer,
+  PrimeCatalogContainer,
   PrimeTrainingPage,
   useUserContext,
   useUser,
 } from "./externalLib";
 import store from "./store/APIStore";
 import "./App.css";
-
-
-const  PrimeCatalogContainer = lazy(() => import("./externalLib/components/PrimeCatalogContainer/PrimeCatalogContainer"));
 
 const App = (props: any) => {
   const { mountingPoints } = config;
@@ -28,12 +23,9 @@ const App = (props: any) => {
           {/* <Portal selector={mountingPoints.notificationContainer}>
             <PrimeNotificationContainer />
           </Portal> */}
-         
-          <Portal selector={mountingPoints.catalogContainer}>
-            <Suspense fallback={<div>Loading...</div>}>
+          {/* <Portal selector={mountingPoints.catalogContainer}>
               <PrimeCatalogContainer />
-            </Suspense>
-          </Portal>
+          </Portal> */}
           <Portal selector={mountingPoints.trainingOverviewPage}>
               <PrimeTrainingPage />
           </Portal>
