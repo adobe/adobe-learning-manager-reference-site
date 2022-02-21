@@ -8,6 +8,7 @@
         cq:lastReplicated="{Date}2022-02-21T12:27:35.975+05:30"
         cq:lastReplicatedBy="admin"
         cq:lastReplicationAction="Activate"
+        cq:deviceGroups="[/etc/mobile/groups/responsive]"
         cq:template="/conf/aem-learn-components/settings/wcm/templates/page-content"
         jcr:isCheckedOut="{Boolean}true"
         jcr:mixinTypes="[mix:versionable]"
