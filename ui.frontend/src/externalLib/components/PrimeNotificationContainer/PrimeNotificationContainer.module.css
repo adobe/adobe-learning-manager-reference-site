@@ -16,3 +16,19 @@
   border:none
 }
 
+
+.notificationCountStyle {
+  font-weight: 700;
+  font-size: 10px;
+  color: #fff;
+  text-align: center;
+  background-color: #e61414;
+  border-radius: 10px;
+  display: inline-block;
+  line-height: 1;
+  padding: 1px 2px;
+  border: 2px solid #fff;
+  position: relative;
+  top: -41px;
+  left: 8px;
+}
