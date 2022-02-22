@@ -2,17 +2,20 @@
 <jcr:root xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="cd28256f-f150-4ccd-b247-88af24af6708">
+    jcr:uuid="1b861ffb-3f4f-455e-9608-293c7bad061d">
     <jcr:content
         dam:assetState="processed"
-        jcr:lastModified="{Date}2020-07-10T13:21:39.762-07:00"
+        jcr:lastModified="{Date}2022-02-20T10:51:01.856+05:30"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
-            dam:extracted="{Date}2020-07-10T13:21:39.679-07:00"
+            dam:extracted="{Date}2022-02-20T10:50:59.658+05:30"
             dam:sha1="f5a0e06b4b09110093335f74034a18a3ccdc1402"
             dam:size="{Long}1360"
             dc:format="image/svg+xml"
+            dc:modified="{Date}2022-02-20T10:50:59.455+05:30"
+            jcr:lastModified="{Date}2022-02-20T10:50:59.455+05:30"
+            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"/>
         <related jcr:primaryType="nt:unstructured"/>

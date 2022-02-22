@@ -34,6 +34,11 @@ export class RestAdapter {
     return this.ajax(options as IRestAdapterAjaxOptions);
   }
 
+  public static patch(options: IRestAdapterAjaxOptions): Promise<unknown> {
+    (options as IRestAdapterAjaxOptions).method = "PATCH";
+    return this.ajax(options as IRestAdapterAjaxOptions);
+  }
+
   public static ajax(options: IRestAdapterAjaxOptions): Promise<unknown> {
     //const auth: Auth = GetPrimeAuth();
     // if (options.url.startsWith(GetPrimeApiBasePath())) {

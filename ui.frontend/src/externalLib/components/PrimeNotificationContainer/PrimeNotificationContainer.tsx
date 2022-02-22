@@ -1,7 +1,7 @@
 import { useNotifications } from "../../hooks";
 import { PrimeNotificationList } from "../PrimeNotificationList";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 
 import styles from "./PrimeNotificationContainer.module.css";
@@ -15,17 +15,26 @@ const PrimeNotificationContainer = () => {
     isLoading,
     unreadCount,
     loadMoreNotifications,
+    markReadNotification
   } = useNotifications();
 
   const [showNotifications, setShowNotifications] = useState(false);
+
+  
+
+  const toggleShowNotifications = () => {
+    setShowNotifications((prevState) => !prevState);
+  };
+
+  useEffect(() => {
+    if (showNotifications)
+      markReadNotification();
+  },[notifications, showNotifications]);
 
   if (isLoading) {
     return <span>loading notifications...</span>;
   }
 
-  const toggleShowNotifications = () => {
-    setShowNotifications((prevState) => !prevState);
-  };
   return (
     <div className={styles.notificationDropdown}>
       <button
