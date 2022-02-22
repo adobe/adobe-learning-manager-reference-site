@@ -15,7 +15,7 @@ import {
 import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 
 export const useTrainingCard = (training: PrimeLearningObject) => {
-  const { locale } = useConfigContext();
+  const { locale, pagePaths } = useConfigContext();
   const {
     loFormat: format,
     loType: type,
@@ -79,13 +79,15 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
       }
       return;
     }
-    //if user Loggedin 
-      //training.enrollment.loInstance
-      //if enrollment is there ---got overview with instance and return
-    
+
+    console.log("redirecting to Overview Page");
+    (window as any).location = pagePaths.loOverview;
+    //if user Loggedin
+    //training.enrollment.loInstance
+    //if enrollment is there ---got overview with instance and return
+
     //if single Active instance --- go to overview
     // else show instance page
-    
 
     console.log("This is not a JOBAid");
 
