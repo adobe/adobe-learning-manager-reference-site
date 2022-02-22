@@ -15,3 +15,7 @@
 .loResourceType {
     font-weight: var(--prime-font-weight-600);
 }
+
+.custom > div[role="tablist"] {
+    border-bottom-color: transparent;
+}

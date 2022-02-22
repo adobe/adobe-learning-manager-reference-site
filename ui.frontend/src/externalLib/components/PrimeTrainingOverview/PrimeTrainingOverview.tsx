@@ -4,7 +4,7 @@ import { PrimeModuleList } from "../PrimeModuleList";
 import { convertSecondsToTimeText } from "../../utils/dateTime";
 import { PrimeLearningObject } from "../../models/PrimeModels";
 import styles from "./PrimeTrainingOverview.module.css";
-import { Provider, lightTheme } from "@adobe/react-spectrum";
+
 import { Item, TabList, TabPanels, Tabs } from "@react-spectrum/tabs";
 
 const PrimeTrainingPage = (props: any) => {
@@ -38,9 +38,9 @@ const PrimeTrainingPage = (props: any) => {
      <div>Skills : {skills.map((skill: { name: any; }) => skill.name).join(",")}</div> */}
 
 
-      <Provider theme={lightTheme} colorScheme={"light"}>
+     
         <Tabs aria-label="Chat log quiet example">
-          <TabList>
+          <TabList id="tabList" UNSAFE_className={styles.custom}>
             <Item key="Modules">Modules</Item>
             <Item key="Testout">Testout</Item>
           </TabList>
@@ -59,7 +59,7 @@ const PrimeTrainingPage = (props: any) => {
             </Item>
           </TabPanels>
         </Tabs>
-      </Provider>
+     
     </>
   );
 };

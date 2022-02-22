@@ -7,7 +7,7 @@ import { PrimeModuleList } from "../PrimeModuleList";
 import { convertSecondsToTimeText } from "../../utils/dateTime";
 import { PrimeLearningObject } from "../../models/PrimeModels";
 import { config } from "process";
-
+import { Provider, lightTheme } from "@adobe/react-spectrum";
 const PrimeTrainingPage = (props: any) => {
   //const trainingInstance: PrimeLearningObjectInstance = props.training;
   const trainingId = "course:1926880"; //TO-DO get training id "course:1943266"; //
@@ -34,7 +34,7 @@ const PrimeTrainingPage = (props: any) => {
   }
 
   return (
-    <>
+    <Provider theme={lightTheme} colorScheme={"light"}>
 
     {/* <Portal mountingPoint={config.banner}> */}
       <PrimeTrainingOverviewHeader
@@ -53,7 +53,7 @@ const PrimeTrainingPage = (props: any) => {
         trainingInstance={trainingInstance}
         instanceBadge={instanceBadge}
       />
-    </>
+    </Provider>
   );
 };
 
