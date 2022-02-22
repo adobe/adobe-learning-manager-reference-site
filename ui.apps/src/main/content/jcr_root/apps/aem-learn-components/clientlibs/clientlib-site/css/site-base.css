@@ -23,6 +23,94 @@
   left: 50%;
 }
 
+.experiencefragment.cmp-experiencefragment--header {
+  height: 70px;
+  z-index: 1030;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+@media (max-width: 415px) {
+  .experiencefragment.cmp-experiencefragment--header {
+    height: 56px;
+  }
+}
+
+.experiencefragment.cmp-experiencefragment--header .cmp-title__text {
+  color: #292929;
+  font-size: 14px;
+  opacity: 1;
+}
+
+.experiencefragment.cmp-experiencefragment--header .cmp-title__link {
+  color: #292929;
+  font-size: 14px;
+  opacity: 1;
+}
+
+.cmp-layoutcontainer--header {
+  background-color: #fff;
+  /* padding-top: 50px;
+  padding-bottom: 50px; */
+  margin-top: 0;
+  -webkit-transition: padding-bottom 0s ease, padding-top 0s;
+  -webkit-transition: padding-bottom 0s ease-out,
+    padding-top 0s ease ease-out 0s;
+  transition: padding-bottom 0s ease-out, padding-top 0s ease ease-out 0s;
+}
+
+.cmp-layoutcontainer--header .aem-Grid {
+  max-width: 873pt;
+  margin: 0 auto;
+  padding: 0 14px;
+  float: unset !important;
+}
+
+.experiencefragment.cmp-experiencefragment--footer {
+  background: #292929 0% 0% no-repeat padding-box;
+  border: 1px solid #707070;
+  height: 70px;
+  color: #ebebeb;
+  padding-left: 30%;
+}
+
+.experiencefragment.cmp-experiencefragment--footer a {
+  color: #ebebeb;
+  font-size: 14px;
+  letter-spacing: 0px;
+  text-align: left;
+}
+
+@media (max-width: 1024px) {
+  .cmp-layoutcontainer--header {
+    /* padding-top: 15px;
+    padding-bottom: 15px; */
+  }
+}
+
+.scrolly .cmp-layoutcontainer--header {
+  -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.26);
+  box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.26);
+  -webkit-transition: padding-bottom 0.5s ease, padding-top 0.5s;
+  -webkit-transition: padding-bottom 0.5s ease-out,
+    padding-top 0.5s ease ease-out 0.25s;
+  transition: padding-bottom 0.5s ease-out, padding-top 0.5s ease ease-out 0.25s;
+}
+
+@media (min-width: 1025px) {
+  .scrolly .cmp-layoutcontainer--header {
+    /* padding-top: 15px;
+    padding-bottom: 5px; */
+  }
+}
+
+.footer-separator {
+  color: #fb704b;
+}
+
 @charset "utf-8";
 @-webkit-keyframes fadeIn {
   0% {
@@ -421,12 +509,12 @@ body .root {
   max-width: 105pc;
   margin: 0 auto;
 }
-
+/* 
 @media (max-width: 1024px) {
   body .root {
     padding-top: 130px;
   }
-}
+} */
 
 .h1,
 .h2,
@@ -985,23 +1073,6 @@ p {
   float: left;
 }
 
-.experiencefragment.cmp-experiencefragment--header {
-  z-index: 1030;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.experiencefragment.cmp-experiencefragment--footer {
-  background-color: #202020;
-  color: #ebebeb;
-  padding: 1.5rem 0 1.5rem;
-  margin-top: 3rem;
-  padding-left: 30%;
-}
-
 .cmp-experience-fragment--contributor {
   text-align: center;
   display: -webkit-box;
@@ -1227,47 +1298,6 @@ p {
   color: #ebebeb;
   font-size: 14px;
   text-transform: uppercase;
-}
-
-.cmp-layoutcontainer--header {
-  background-color: #fff;
-  padding-top: 50px;
-  padding-bottom: 50px;
-  margin-top: 0;
-  -webkit-transition: padding-bottom 0s ease, padding-top 0s;
-  -webkit-transition: padding-bottom 0s ease-out,
-    padding-top 0s ease ease-out 0s;
-  transition: padding-bottom 0s ease-out, padding-top 0s ease ease-out 0s;
-}
-
-.cmp-layoutcontainer--header .aem-Grid {
-  max-width: 873pt;
-  margin: 0 auto;
-  padding: 0 14px;
-  float: unset !important;
-}
-
-@media (max-width: 1024px) {
-  .cmp-layoutcontainer--header {
-    padding-top: 15px;
-    padding-bottom: 15px;
-  }
-}
-
-.scrolly .cmp-layoutcontainer--header {
-  -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.26);
-  box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.26);
-  -webkit-transition: padding-bottom 0.5s ease, padding-top 0.5s;
-  -webkit-transition: padding-bottom 0.5s ease-out,
-    padding-top 0.5s ease ease-out 0.25s;
-  transition: padding-bottom 0.5s ease-out, padding-top 0.5s ease ease-out 0.25s;
-}
-
-@media (min-width: 1025px) {
-  .scrolly .cmp-layoutcontainer--header {
-    padding-top: 15px;
-    padding-bottom: 5px;
-  }
 }
 
 .cmp-layout-container--modal {
