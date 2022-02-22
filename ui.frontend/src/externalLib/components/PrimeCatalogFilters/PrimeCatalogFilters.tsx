@@ -25,7 +25,7 @@ const PrimeCatalogFilters = (props: any) => {
     (filter) =>
       filter.show ? (
         <div key={filter.type} className={styles.container}>
-          <h3 className={styles.label}>
+          <h3 className={styles.typeLabel}>
             {formatMessage({
               id: filter?.label,
             })}
@@ -49,7 +49,10 @@ const PrimeCatalogFilters = (props: any) => {
 
   return (
     <>
-      <div className={styles.primeFilterContainer}>{filterList}</div>
+      <div className={styles.primeFilterContainer}>
+        <h3 className={styles.filtersLabel}>Filters</h3>
+        {filterList}
+      </div>
     </>
   );
 };

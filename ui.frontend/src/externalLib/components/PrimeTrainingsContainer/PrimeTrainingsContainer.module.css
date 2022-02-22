@@ -1,12 +1,12 @@
 .primeTrainingsContainer {
-  display: flex;
-  display: "flex";
+  display: flex;  
   flex-wrap: wrap;
   width: calc(100% - 256px);
 }
 .primeTrainingsList {
   display: flex;
   flex-wrap: wrap;
+  align-self: self-start;
   list-style: none;
   margin: 0;
   padding: 0;

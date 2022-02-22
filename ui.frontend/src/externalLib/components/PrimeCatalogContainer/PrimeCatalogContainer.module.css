@@ -1,18 +1,8 @@
+@import "../../styles/variables.css";
+
 .pageContainer {
-  /* width: 1084px; */
   margin: 0 auto;
 }
-@media screen and (min-width: 1024px) {
-  .pageContainer {
-    width: 930px;
-  }
-}
-@media screen and (min-width: 1366px) {
-  .pageContainer {
-    width: 1084px;
-  }
-}
-
 .headerContainer {
   margin-bottom: 60px;
 }
@@ -24,7 +14,7 @@
 .label {
   font-size: 18px;
   letter-spacing: 0px;
-  color: #000000;
+  color: var(--prime-color-black);
   margin: 0;
 }
 .searchContainer {
@@ -45,17 +35,17 @@
 
 .searchAppliedLabel {
   text-align: left;
-  font-size: 14px;
+  font-size: var(--prime-font-size-small);
   line-height: 20px;
   letter-spacing: 0px;
-  color: #292929;
+  color: var(--prime-color-nc2);
   margin: 10px 0;
   display: flex;
 }
 .searchTextContainer {
-  color: #ffffff;
+  color: var(--prime-color-white);
   margin-left: 10px;
-  background-color: #717171;
+  background-color: var(--prime-color-nc3);
   border-radius: 11px;
   display: flex;
   justify-content: space-between;
@@ -63,7 +53,7 @@
   padding: 0 15px;
   height: 22px;
   border-radius: 25px;
-  min-width: 30px;
+  min-width: 20px;
 }
 .searchText {
   margin-right: 10px;

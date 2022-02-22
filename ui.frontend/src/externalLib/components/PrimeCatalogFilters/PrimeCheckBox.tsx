@@ -33,8 +33,8 @@ const PrimeCheckbox: React.FC<{
         />
       </VisuallyHidden>
       <svg
-        width="24"
-        height="24"
+        width="22"
+        height="22"
         aria-hidden="true"
         className={styles.primeCheckBoxSVG}
       >
