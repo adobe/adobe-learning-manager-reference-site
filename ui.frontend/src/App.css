@@ -3,7 +3,18 @@
   margin: 0 auto;
 }
 
-.training__overview__container {
+.training__page__container {
   max-width: 100%;
   margin: 0 auto;
+}
+
+:root {
+  --prime-color-black: #000000;
+  --prime-color-white: #fff;
+  /* --prime-icon-color: blue; */
+  --prime-color-nc1: #f1f1f1;
+  --prime-text-shadow: 0.2rem 0.2rem 0.2rem #565656;
+  --prime-font-size-small: 14px;
+  --prime-font-size-large: 24px;
+  --prime-font-weight-medium: 400;
 }

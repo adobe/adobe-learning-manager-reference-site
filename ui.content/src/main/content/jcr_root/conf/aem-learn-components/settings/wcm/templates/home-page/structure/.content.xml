@@ -2,7 +2,7 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:deviceGroups="[mobile/groups/responsive]"
+        cq:deviceGroups="[/etc/mobile/groups/responsive]"
         cq:lastModified="{Date}2022-01-18T09:40:33.960+05:30"
         cq:lastModifiedBy="admin"
         cq:lastReplicated="{Date}2022-01-18T09:42:23.985+05:30"
@@ -13,7 +13,7 @@
         jcr:mixinTypes="[mix:versionable]"
         jcr:primaryType="cq:PageContent"
         jcr:uuid="dbfa9149-9d08-44fd-9aaf-ce22236ce7d3"
-        sling:resourceType="wcm/foundation/components/page">
+        sling:resourceType="aem-learn-components/components/page">
         <root
             jcr:primaryType="nt:unstructured"
             sling:resourceType="wcm/foundation/components/responsivegrid">

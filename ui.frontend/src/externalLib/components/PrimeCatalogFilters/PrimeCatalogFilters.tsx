@@ -24,13 +24,13 @@ const PrimeCatalogFilters = (props: any) => {
   const filterList = [loTypes, learnerState, loFormat, skillName, tagName].map(
     (filter) =>
       filter.show ? (
-        <div key={filter.type} className={styles.primeFilterTypeContainer}>
-          <h3 className={styles.primeFilterTypeLabel}>
+        <div key={filter.type} className={styles.container}>
+          <h3 className={styles.label}>
             {formatMessage({
               id: filter?.label,
             })}
           </h3>
-          <ul className={styles.primeFiltersListContainer}>
+          <ul className={styles.listContainer}>
             {filter.list?.map((item: any) => (
               <PrimeCheckbox
                 key={item.value}

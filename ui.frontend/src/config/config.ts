@@ -5,10 +5,11 @@ export default {
   mountingPoints: {
     navContainer: ".navigation__container",
     catalogContainer: ".catalog__container",
-    trainingOverviewContainer: ".training__overview__container",
+    trainingOverviewPage: ".training__page__container",
     boardsContainer: ".boards__container",
     boardContainer: ".board__container",
-    notificationContainer: '.notification__container'
+    notificationContainer: '.notification__container',
+    instanceContainer: '.instance__container'
 
   },
 
@@ -18,18 +19,19 @@ export default {
 };
 
 // TODO: These will come from prime
-const baseUrl = "";
-const basePath = ""
+const baseUrl = "http://localhost:4502/content/aem-learn-components/language-masters/en/non-log";
+const basePath = "";
 
 export const primeConfig: PrimeConfig = {
-  baseApiUrl: "https://captivateprimeqe.adobe.com/primeapi/v2/",
-  accessToken: "171a39b9b31694558dea6276fab13e94",
+  baseApiUrl: "https://captivateprimestage1.adobe.com/primeapi/v2/",
+  accessToken: "d93a4e9cf3384d374ef144f97af0eae4",
+  cdnBaseUrl: "https://cpcontentsdev.adobe.com",
   locale: "en-US",
   pagePaths: {
     baseUrl,
-    instance: `${basePath}/instance.html`,
-    catalog: `${basePath}/catalog.html`,
-    loOverview: `${basePath}/loOverview.html`,
-    community: `${basePath}/community.html`,
-  }
-}
+    instance: `${baseUrl}/instance.html`,
+    catalog: `${baseUrl}/catalog.html`,
+    loOverview: `${baseUrl}/looverview/{0}/{1}/instance/{}`,
+    community: `${baseUrl}/community.html`,
+  },
+};

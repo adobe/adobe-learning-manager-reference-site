@@ -12,11 +12,12 @@ export interface PrimeConfig {
     community: string;
   };
   locale: string;
+  cdnBaseUrl: string;
 }
 
 const ConfigContext = createContext<any | undefined>(undefined);
 
-const Provider: React.FC<{config: PrimeConfig}> = (props) => {
+const Provider: React.FC<{ config: PrimeConfig }> = (props) => {
   const [config] = useState(props.config);
 
   (window as any).primeConfig = config;

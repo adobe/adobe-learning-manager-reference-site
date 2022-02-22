@@ -1,18 +1,18 @@
-.primeFilterContainer {
+.container {
   width: 256px;
 }
 
-.primeFilterTypeContainer {
+.typeContainer {
   border-top: 1px solid rgba(0, 0, 0, 0.2);
 }
-.primeFilterTypeLabel {
+.typeLabel {
   font-size: 15px;
   letter-spacing: 0px;
   color: #565656;
   opacity: 1;
   margin: 20px 0;
 }
-.primeFiltersListContainer {
+.listContainer {
   padding: 0;
   margin-bottom: 30px;
   overflow-y: auto;
