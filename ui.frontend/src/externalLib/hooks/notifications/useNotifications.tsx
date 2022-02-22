@@ -22,13 +22,15 @@ export const useNotifications = () => {
   const dispatch = useDispatch();
   const config = useConfigContext();
   const { user } = useUserContext();
+  const pageLimit = 10; 
+  const channels = ["jobAid::adminEnrollment", "certification::adminEnrollment", "certification::autoEnrollment", "certification::completed", "certification::badgeIssued", "certification::completionReminder", "certification::expired", "certification::recurrenceEnrollment", "certification::republished", "certification::learnerCertificationApprovalRequestApproved", "certification::learnerCertificationApprovalRequestDenied", "certification::deadlineMissed", "course::adminEnrollment", "course::autoEnrollment", "course::badgeIssued", "course::l1FeedbackPrompt", "course::deadlineMissed", "course::completed", "course::completionReminder", "course::sessionReminder", "course::republished", "course::courseOpenForEnrollment", "course::learnerEnrollmentRequestApproved", "course::learnerEnrollmentRequestDenied", "course::waitListCleared", "course::learnerNominationRequest", "learningProgram::adminEnrollment", "learningProgram::autoEnrollment", "learningProgram::badgeIssued", "learningProgram::republished", "learningProgram::deadlineMissed", "learningProgram::completionReminder", "learningProgram::completed", "learningProgram::l1Feedback", "competency::assigned", "competency::badgeIssued", "competency::achieved", "manager::added", "admin::added", "author::added", "integrationAdmin::added"]; 
   console.log(user.id);
   const fetchNotifications = useCallback(async () => {
     try {
       const params: QueryParams = {};
-      params["page[limit]"] = 10;
+      params["page[limit]"] = pageLimit
       params["announcementsOnly"] = false;
-      params["userSelectedChannels"] = ["jobAid::adminEnrollment", "certification::adminEnrollment", "certification::autoEnrollment", "certification::completed", "certification::badgeIssued", "certification::completionReminder", "certification::expired", "certification::recurrenceEnrollment", "certification::republished", "certification::learnerCertificationApprovalRequestApproved", "certification::learnerCertificationApprovalRequestDenied", "certification::deadlineMissed", "course::adminEnrollment", "course::autoEnrollment", "course::badgeIssued", "course::l1FeedbackPrompt", "course::deadlineMissed", "course::completed", "course::completionReminder", "course::sessionReminder", "course::republished", "course::courseOpenForEnrollment", "course::learnerEnrollmentRequestApproved", "course::learnerEnrollmentRequestDenied", "course::waitListCleared", "course::learnerNominationRequest", "learningProgram::adminEnrollment", "learningProgram::autoEnrollment", "learningProgram::badgeIssued", "learningProgram::republished", "learningProgram::deadlineMissed", "learningProgram::completionReminder", "learningProgram::completed", "learningProgram::l1Feedback", "competency::assigned", "competency::badgeIssued", "competency::achieved", "manager::added", "admin::added", "author::added", "integrationAdmin::added"];
+      params["userSelectedChannels"] =  channels; 
       const response = await RestAdapter.get({
         url: `${config.baseApiUrl}/users/10866105/userNotifications`,
         params: params
@@ -68,13 +70,60 @@ export const useNotifications = () => {
         notifications: parsedResponse!.userNotificationList || [],
         next: parsedResponse!.links?.next || "",
       })
-    );
+    ); 
   }, [dispatch, next]);
+
+
+  const markReadNotification = useCallback(async (data= []) => {
+    let notificationToRead = data?.length ? data: notifications; 
+
+    if (notificationToRead ) {
+      for (let i = 0; i < notificationToRead.length; i++) {
+          let notification = notificationToRead[i]; 
+          if (notification.read == false) {
+            let notificationId = notification.id; 
+            notification.read = true;  
+            const requestBody: any = getUserNotificationBody(notification);
+              const response = await RestAdapter.patch({
+                url: `${config.baseApiUrl}/users/10866105/userNotifications/${notificationId}`,
+                method:"PATCH",
+                headers: { "content-type": "application/vnd.api+json;charset=UTF-8" },
+                body: JSON.stringify(requestBody),
+              });
+              setUnreadCount(0); 
+           }
+      }
+    }
+  }, [dispatch, notifications]);
+
+
+  const getUserNotificationBody = (notification: any) => {
+          const userNotification = {} as PrimeUserNotification;
+            userNotification.channel = notification.channel;
+            userNotification.modelIds = notification.modelIds;
+            userNotification.dateCreated = notification.dateCreated;
+            userNotification.actionTaken = true;
+            userNotification.message = notification.message;
+            userNotification.modelNames = notification.modelNames;
+            userNotification.modelTypes = notification.modelTypes;
+            userNotification.modelIds = notification.modelIds; 
+            userNotification.read = notification.read;
+            userNotification.role = notification.role;
+
+            const notificationData: any = {};
+            notificationData["id"] = notification.id;
+            notificationData["type"] = "userNotification";
+            notificationData["attributes"] = userNotification;
+            const requestBody: any = {};
+            requestBody["data"] = notificationData;
+            return requestBody; 
+  }
 
   return {
     notifications,
     isLoading,
     unreadCount,
-    loadMoreNotifications
+    loadMoreNotifications,
+    markReadNotification
   };
 }
