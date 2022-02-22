@@ -1,11 +1,25 @@
+@import "../../styles/variables.css";
+.container {
+  position: relative;
+}
+
 .input {
-  background: #ffffff 0% 0% no-repeat padding-box;
-  box-shadow: inset 0px 1px 3px #00000029;
-  border: 1px solid #bcbcbc;
+  background: var(--prime-color-white) 0% 0% no-repeat padding-box;
+  /* box-shadow: inset 0px 1px 3px #000000; */
+  border: 1px solid var(--prime-color-nc5);
   border-radius: 2px;
   opacity: 1;
-  font-size: 15px;
+  font-size: var(--prime-font-size-small);
   padding: 10px 12px;
   width: 100%;
   box-sizing: border-box;
+}
+.searchIcon {
+  fill: var(--prime-color-nc3);
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
 }

@@ -585,3 +585,22 @@ export const SORT_ORDER_SVG = () => {
     </svg>
   );
 };
+
+export const SEARCH_ICON_SVG = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 16 16"
+    >
+      <g id="Smock_Search_18_N" transform="translate(0.076 -0.001)">
+        <rect id="Canvas" transform="translate(-0.076 0.001)" opacity="0" />
+        <path
+          id="Path_6814"
+          data-name="Path 6814"
+          d="M14.434,13.16,11.087,9.814a5.523,5.523,0,1,0-1.273,1.273l3.347,3.347a.9.9,0,0,0,1.274-1.274ZM2.733,6.608a3.876,3.876,0,1,1,3.876,3.876A3.876,3.876,0,0,1,2.733,6.608Z"
+          transform="translate(0.38 0.172)"
+        />
+      </g>
+    </svg>
+  );
+};
