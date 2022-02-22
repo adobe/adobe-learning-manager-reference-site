@@ -91,8 +91,8 @@ const PrimeModuleItem = (props: any) => {
   );
 
   return (
-    <div className={styles.container}>
-      <div className={styles.headerContainer}>
+    <li className={styles.container}>
+      <div className={styles.headerContainer} tabIndex={0}>
         <div className={styles.icon}> {moduleIcon}</div>
         <div className={styles.headerWrapper}>
           <div>{name}</div>
@@ -106,7 +106,7 @@ const PrimeModuleItem = (props: any) => {
         {descriptionTextHTML}
         {sessionsTemplate}
       </div>
-    </div>
+    </li>
   );
 };
 

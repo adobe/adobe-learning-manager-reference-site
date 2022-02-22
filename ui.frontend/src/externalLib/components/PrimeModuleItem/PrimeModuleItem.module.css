@@ -2,7 +2,7 @@
 
 .container {
   max-width: 50%;
-  margin: 0 auto;
+  /* margin: 0 auto; */
   border: 1px solid #c9c9c9;
   clear: both;
   text-align: left !important;
@@ -30,11 +30,11 @@
 
 
 .headerIcon {
-  width: 40px;
-  height: 40px;
   display: flex;
   padding: 10px;
 }
+
+
 
 .details {
   overflow: hidden;
@@ -43,13 +43,19 @@
 }
 
 .icon {
-  width: 36px;
-  height: 36px;
   display: flex;
   padding: 10px;
 }
-.headerIcon svg , .icon svg {
+.headerIcon svg {
   fill: var(--prime-icon-color);
+  width: 40px;
+  height: 40px;
+}
+
+.icon svg {
+  fill: var(--prime-icon-color);
+  width: 36px;
+  height: 36px;
 }
 
 .wrapperContainer {

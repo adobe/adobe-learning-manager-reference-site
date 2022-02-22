@@ -2,8 +2,8 @@
 .overviewcontainer {
     display: flex;
     width: 50%;
-    margin: 0 auto;
-    padding: 10px;
+    /* margin: 0 auto; */
+    padding: 10px 0;
 }
 
 .header {

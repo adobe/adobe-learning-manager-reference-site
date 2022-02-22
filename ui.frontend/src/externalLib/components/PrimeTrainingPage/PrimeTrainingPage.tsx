@@ -6,6 +6,7 @@ import { useTrainingPage } from "../../hooks/catalog/useTrainingPage";
 import { PrimeModuleList } from "../PrimeModuleList";
 import { convertSecondsToTimeText } from "../../utils/dateTime";
 import { PrimeLearningObject } from "../../models/PrimeModels";
+import { config } from "process";
 
 const PrimeTrainingPage = (props: any) => {
   //const trainingInstance: PrimeLearningObjectInstance = props.training;
@@ -34,12 +35,15 @@ const PrimeTrainingPage = (props: any) => {
 
   return (
     <>
+
+    {/* <Portal mountingPoint={config.banner}> */}
       <PrimeTrainingOverviewHeader
         format={training.loFormat}
         color={color}
         title={name}
         bannerUrl={bannerUrl}
       />
+      {/* </Portal> */}
       <PrimeTrainingOverview
         description={description}
         overview={overview}
