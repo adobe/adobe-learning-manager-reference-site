@@ -2,8 +2,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { dateBasedOnLocale } from "../../utils/dateTime";
 import { useIntl } from "react-intl";
-import { Button } from "@adobe/react-spectrum";
 
+import { Button } from "@adobe/react-spectrum";
 import styles from "./PrimeInstanceItem.module.css";
 
 const PrimeInstanceItem = (props: any) => {
@@ -24,7 +24,7 @@ const PrimeInstanceItem = (props: any) => {
   };
   return (
     <li className={styles.instanceListItem}>
-      <div className={styles.instanceNameDiv}>
+      <div className={styles.instanceNameWrapper}>
         <a className={styles.instanceName} onClick={selectHandler} tabIndex={0}>
           {name}
         </a>
@@ -37,14 +37,14 @@ const PrimeInstanceItem = (props: any) => {
           : {instructorsName}
         </p>
       </div>
-      <div className={styles.dateDiv}>
+      <div className={styles.dateWrapper}>
         <p className={styles.startDate}>{dateBasedOnLocale(date, locale)}</p>
       </div>
 
-      <div className={styles.locationDiv}>
+      <div className={styles.locationWrapper}>
         <p className={styles.startDate}>{location}</p>
       </div>
-      <div className={styles.actionDiv}>
+      <div className={styles.actionWrapper}>
         <Button
           variant="primary"
           onPress={selectHandler}

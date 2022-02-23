@@ -102,7 +102,7 @@ const PrimeInstancePage = (props: any) => {
             <div className={styles.instancesContainer}>
               <div className={styles.instancesHeaderSection}>
                 <div
-                  className={`${styles.instanceNameDiv} ${styles.commonHeader}`}
+                  className={`${styles.instanceNameWrapper} ${styles.commonHeader}`}
                 >
                   {formatMessage({
                     id: "prime.instance.name",
@@ -115,7 +115,7 @@ const PrimeInstancePage = (props: any) => {
                     {SORT_ORDER_SVG()}
                   </span>
                 </div>
-                <div className={`${styles.dateDiv} ${styles.commonHeader} `}>
+                <div className={`${styles.dateWrapper} ${styles.commonHeader} `}>
                   {formatMessage({
                     id: "prime.instance.start.date",
                     defaultMessage: "Start Date",
@@ -128,7 +128,7 @@ const PrimeInstancePage = (props: any) => {
                     {SORT_ORDER_SVG()}
                   </span>
                 </div>
-                <div className={`${styles.locationDiv} ${styles.commonHeader}`}>
+                <div className={`${styles.locationWrapper} ${styles.commonHeader}`}>
                   {formatMessage({
                     id: "prime.instance.location",
                     defaultMessage: "Location",
