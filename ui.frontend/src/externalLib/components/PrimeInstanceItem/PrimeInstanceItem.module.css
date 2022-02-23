@@ -1,0 +1,82 @@
+@import "../../styles/variables.css";
+
+.instanceNameDiv {
+  width: 50%;
+}
+.dateDiv {
+  width: 15%;
+}
+.locationDiv {
+  width: 15%;
+}
+.actionDiv {
+  width: 20%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: start;
+}
+
+.instanceListItem {
+  padding: 20px 0 12px 0;
+  display: flex;
+  border-bottom: 1px solid var(--prime-color-nc8);
+}
+.instanceName {
+  font-size: var(--prime-font-size-small);
+  line-height: 18px;
+  letter-spacing: 0px;
+  color: var(--prime-color-primary);
+  opacity: 1;
+  margin: 0 0 5px 0;
+  display: inline-flex;
+  text-decoration: none;
+  cursor: pointer;
+}
+.instanceLoFormat {
+  font-size: var(--prime-font-size-small);
+  line-height: 19px;
+  letter-spacing: 0px;
+  color: var(--prime-color-nc4);
+  opacity: 1;
+  margin: 0 0 20px 0;
+}
+.startDate {
+  font-size: var(--prime-font-size-small);
+  line-height: 15px;
+  letter-spacing: 0px;
+  color: var(--prime-color-nc4);
+  opacity: 1;
+  margin: 0;
+}
+.location {
+  font-size: var(--prime-font-size-small);
+  line-height: 15px;
+  letter-spacing: 0px;
+  color: var(--prime-color-nc4);
+  opacity: 1;
+  margin: 0;
+}
+
+.button {
+  cursor: pointer;
+  border: 2px solid var(--prime-color-primary);
+  color: var(--prime-color-primary);
+  background-color: var(--prime-color-white);
+  font-size: var(--prime-font-size-small);
+}
+.button:hover,
+.button:focus,
+.button:focus-visible {
+  color: var(--prime-color-white);
+  background-color: var(--prime-color-primary);
+  border-color: var(--prime-color-primary);
+  outline: none;
+}
+.instructorsName {
+  font-size: var(--prime-font-size-small);
+  line-height: 19px;
+  letter-spacing: 0px;
+  color: var(--prime-color-nc2);
+  opacity: 1;
+  margin: 0;
+}

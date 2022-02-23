@@ -35,8 +35,6 @@ const PrimeTrainingPage = (props: any) => {
 
   return (
     <Provider theme={lightTheme} colorScheme={"light"}>
-
-    {/* <Portal mountingPoint={config.banner}> */}
       <PrimeTrainingOverviewHeader
         format={training.loFormat}
         color={color}

@@ -4,12 +4,13 @@ import { useEffect, useState } from "react";
 import { useConfigContext } from "../../contextProviders/configContextProvider";
 import { useInstancePage } from "../../hooks/instance/useInstancePage";
 import { PrimeLearningObjectResource } from "../../models/PrimeModels";
-import { dateBasedOnLocale } from "../../utils/dateTime";
 import { SORT_ORDER_SVG } from "../../utils/inline_svg";
 import { getResourceBasedOnLocale } from "../../utils/instance";
 import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 import { useIntl } from "react-intl";
 import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
+import { Provider, lightTheme } from "@adobe/react-spectrum";
+import { PrimeInstanceItem } from "../PrimeInstanceItem";
 
 import styles from "./PrimeInstancePage.module.css";
 
@@ -77,7 +78,7 @@ const PrimeInstancePage = (props: any) => {
   );
 
   return (
-    <>
+    <Provider theme={lightTheme} colorScheme={"light"}>
       <PrimeTrainingOverviewHeader
         format={training.loFormat}
         color={color}
@@ -163,63 +164,10 @@ const PrimeInstancePage = (props: any) => {
           </>
         )}
       </section>
-    </>
+    </Provider>
   );
 };
 export default PrimeInstancePage;
-
-// one for location
-// one for earliest date
-
-const PrimeInstanceItem = (props: any) => {
-  const {
-    id,
-    name,
-    format,
-    date,
-    location,
-    instructorsName,
-    selectInstanceHandler,
-    locale,
-  } = props;
-  const { formatMessage } = useIntl();
-
-  const selectHandler = () => {
-    selectInstanceHandler(id);
-  };
-  return (
-    <li className={styles.instanceListItem}>
-      <div className={styles.instanceNameDiv}>
-        <a className={styles.instanceName} onClick={selectHandler} tabIndex={0}>
-          {name}
-        </a>
-        <p className={styles.instanceLoFormat}>{format}</p>
-        <p className={styles.instructorsName}>
-          {formatMessage({
-            id: "prime.instance.instructors",
-            defaultMessage: "Instructors",
-          })}
-          : {instructorsName}
-        </p>
-      </div>
-      <div className={styles.dateDiv}>
-        <p className={styles.startDate}>{dateBasedOnLocale(date, locale)}</p>
-      </div>
-
-      <div className={styles.locationDiv}>
-        <p className={styles.startDate}>{location}</p>
-      </div>
-      <div className={styles.actionDiv}>
-        <button className={styles.button} onClick={selectHandler}>
-          {formatMessage({
-            id: "prime.instance.see.details",
-            defaultMessage: "See details",
-          })}
-        </button>
-      </div>
-    </li>
-  );
-};
 
 const getStartDateforInstance = (
   loResources: PrimeLearningObjectResource[],
