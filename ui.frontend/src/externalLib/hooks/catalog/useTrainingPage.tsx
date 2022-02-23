@@ -8,7 +8,7 @@ import {
 
 import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 import { QueryParams } from "../../utils/restAdapter";
-import { cardColors } from "../../common/Theme";
+import { useCardIcon } from "../../utils/hooks";
 
 //const DEFAULT_LOCALE = "en-US";
 const DEFAULT_INCLUDE_LO_OVERVIEW =
@@ -95,18 +95,7 @@ export const useTrainingPage = (
     cardIconUrl = "",
     color = "",
     bannerUrl = "",
-  }: { [key: string]: string } = useMemo(() => {
-    //TO-DO pick from attributes or fall back to one default set of colors
-    const themeColors = cardColors["prime-pebbles"];
-    const colorCode = parseInt(training?.id.split(":")[1], 10) % 12;
-
-    return {
-      //TODO: updated the url to akamai from config
-      cardIconUrl: `https://cpcontentsdev.adobe.com/public/images/default_card_icons/${colorCode}.svg`,
-      color: themeColors[colorCode],
-      bannerUrl: training?.bannerUrl
-    };
-  }, [training]);
+  } = useCardIcon(training);
 
   const skills: Skill[] = useMemo(() => {
     const trainingSkills = training?.skills.map((skill) => {

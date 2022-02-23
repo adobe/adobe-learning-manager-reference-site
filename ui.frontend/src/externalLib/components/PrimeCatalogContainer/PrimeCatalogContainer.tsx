@@ -4,6 +4,8 @@ import { PrimeCatalogFilters } from "../PrimeCatalogFilters";
 import PrimeCatalogSearch from "../PrimeCatalogSearch/PrimeCatalogSearch";
 import { PrimeTrainingsContainer } from "../PrimeTrainingsContainer";
 import { useIntl } from "react-intl";
+import { Provider, lightTheme } from "@adobe/react-spectrum";
+
 
 import styles from "./PrimeCatalogContainer.module.css";
 import { CLOSE_SVG } from "../../utils/inline_svg";
@@ -37,33 +39,35 @@ const PrimeCatalogContainer = () => {
   );
 
   return (
-    <div className={styles.pageContainer}>
-      <div className={styles.headerContainer}>
-        <div className={styles.header}>
-          <h1 className={styles.label}>
-            {formatMessage({
-              id: "prime.catalog.header",
-              defaultMessage: "Collection of Courses, Certificates and More",
-            })}
-          </h1>
-          <div className={styles.searchContainer}>
-            <PrimeCatalogSearch query={query} handleSearch={handleSearch} />
+    <Provider theme={lightTheme} colorScheme={"light"}>
+      <div className={styles.pageContainer}>
+        <div className={styles.headerContainer}>
+          <div className={styles.header}>
+            <h1 className={styles.label}>
+              {formatMessage({
+                id: "prime.catalog.header",
+                defaultMessage: "Collection of Courses, Certificates and More",
+              })}
+            </h1>
+            <div className={styles.searchContainer}>
+              <PrimeCatalogSearch query={query} handleSearch={handleSearch} />
+            </div>
           </div>
+          {showingSearchHtml}
         </div>
-        {showingSearchHtml}
-      </div>
-      <div className={styles.filtersContainer}>
-        <PrimeCatalogFilters
-          filterState={filterState}
-          updateFilters={updateFilters}
-        ></PrimeCatalogFilters>
+        <div className={styles.filtersContainer}>
+          <PrimeCatalogFilters
+            filterState={filterState}
+            updateFilters={updateFilters}
+          ></PrimeCatalogFilters>
 
-        <PrimeTrainingsContainer
-          trainings={trainings}
-          loadMoreTraining={loadMoreTraining}
-        ></PrimeTrainingsContainer>
+          <PrimeTrainingsContainer
+            trainings={trainings}
+            loadMoreTraining={loadMoreTraining}
+          ></PrimeTrainingsContainer>
+        </div>
       </div>
-    </div>
+    </Provider>
   );
 };
 

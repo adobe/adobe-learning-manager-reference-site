@@ -8,7 +8,7 @@ export interface PrimeConfig {
     baseUrl: string;
     instance: string;
     catalog: string;
-    loOverview: string;
+    trainingOverview: string;
     community: string;
   };
   locale: string;

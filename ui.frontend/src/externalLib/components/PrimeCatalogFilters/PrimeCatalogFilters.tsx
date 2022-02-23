@@ -32,13 +32,14 @@ const PrimeCatalogFilters = (props: any) => {
           </h3>
           <ul className={styles.listContainer}>
             {filter.list?.map((item: any) => (
-              <PrimeCheckbox
-                key={item.value}
-                filterType={filter.type!}
-                label={item.label}
-                checked={item.checked}
-                changeHandler={onChangeHandler}
-              />
+              <li key={item.value}>
+                <PrimeCheckbox
+                  filterType={filter.type!}
+                  label={item.label}
+                  checked={item.checked}
+                  changeHandler={onChangeHandler}
+                />
+              </li>
             ))}
           </ul>
         </div>

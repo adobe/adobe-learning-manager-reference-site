@@ -1,15 +1,15 @@
 @import "../../styles/variables.css";
 
-.instanceNameDiv {
+.instanceNameWrapper {
   width: 50%;
 }
-.dateDiv {
+.dateWrapper {
   width: 15%;
 }
-.locationDiv {
+.locationWrapper {
   width: 15%;
 }
-.actionDiv {
+.actionWrapper {
   width: 20%;
   display: flex;
   justify-content: flex-end;
