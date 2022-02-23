@@ -24,14 +24,14 @@ const basePath = "";
 
 export const primeConfig: PrimeConfig = {
   baseApiUrl: "https://captivateprimestage1.adobe.com/primeapi/v2/",
-  accessToken: "d93a4e9cf3384d374ef144f97af0eae4",
+  accessToken: "c24f9994ed159a25416ad5e96f0541f8",
   cdnBaseUrl: "https://cpcontentsdev.adobe.com",
   locale: "en-US",
   pagePaths: {
     baseUrl,
     instance: `${baseUrl}/instance.html`,
     catalog: `${baseUrl}/catalog.html`,
-    loOverview: `${baseUrl}/looverview/{0}/{1}/instance/{}`,
+    trainingOverview: `${baseUrl}/trainingOverview.html`,
     community: `${baseUrl}/community.html`,
   },
 };

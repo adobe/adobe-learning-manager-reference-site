@@ -20,7 +20,7 @@ export const useInstancePage = (
 ) => {
   const {
     locale,
-    pagePaths: { loOverview },
+    pagePaths: { trainingOverview },
   } = useConfigContext();
 
   const [currentState, setCurrentState] = useState({
@@ -83,9 +83,9 @@ export const useInstancePage = (
     (instanceId: string) => {
       //redirection need to happen here
       console.log(training);
-      console.log(instanceId, loOverview);
+      console.log(instanceId, trainingOverview);
     },
-    [training, loOverview]
+    [training, trainingOverview]
   );
 
   return {

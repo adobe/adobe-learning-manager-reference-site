@@ -60,7 +60,7 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     }
 
     console.log("redirecting to Overview Page");
-    (window as any).location = pagePaths.loOverview;
+    (window as any).location = pagePaths.trainingOverview;
     //if user Loggedin
     //training.enrollment.loInstance
     //if enrollment is there ---got overview with instance and return
@@ -78,7 +78,7 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     //     training.enrollment.dateEnrolled
     //   );
     // }
-  }, [pagePaths.loOverview, training]);
+  }, [pagePaths.trainingOverview, training]);
 
   return {
     id,
