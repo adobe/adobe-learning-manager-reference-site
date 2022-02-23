@@ -13,6 +13,7 @@ import {
 } from "../../utils/catalog";
 
 import { getPreferredLocalizedMetadata } from "../../utils/translationService";
+import { useCardBackgroundStyle, useCardIcon } from "../../utils/hooks";
 
 export const useTrainingCard = (training: PrimeLearningObject) => {
   const { locale, pagePaths } = useConfigContext();
@@ -34,35 +35,13 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
       return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
     }, [training.localizedMetadata, locale]);
 
-  const { cardIconUrl, color }: { [key: string]: string } = useMemo(() => {
-    if (training.imageUrl) return { cardIconUrl: "", color: "" };
-    //need to get theme from the account state
-    const themeColors = cardColors["prime-pebbles"];
-    const colorCode = parseInt(training.id.split(":")[1], 10) % 12;
+  const {
+    cardIconUrl = "",
+    color = "",
+    bannerUrl = "",
+  } = useCardIcon(training);
 
-    return {
-      //TODO: updated the url to akamai from config
-      cardIconUrl: `https://cpcontentsdev.adobe.com/public/images/default_card_icons/${colorCode}.svg`,
-      color: themeColors[colorCode],
-    };
-    //calculate the cardIcon and color
-  }, [training.id, training.imageUrl]);
-
-  const cardBgStyle = useMemo(() => {
-    return training.imageUrl
-      ? {
-          backgroundImage: `url(${training.imageUrl})`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-        }
-      : {
-          background: `${color} url(
-            ${cardIconUrl}
-        ) center center no-repeat`,
-          backgroundSize: "80px",
-        };
-  }, [cardIconUrl, color, training.imageUrl]);
+  const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
 
   const cardClickHandler = useCallback(() => {
     //if jobAid, need to enroll and open player or new tab
@@ -99,7 +78,7 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     //     training.enrollment.dateEnrolled
     //   );
     // }
-  }, [training]);
+  }, [pagePaths.loOverview, training]);
 
   return {
     id,
@@ -121,6 +100,7 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     enrollment,
     cardClickHandler,
     training,
+    bannerUrl,
   };
   //date create, published, duration
 };
