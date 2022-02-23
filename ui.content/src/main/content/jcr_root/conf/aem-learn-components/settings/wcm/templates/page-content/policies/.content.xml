@@ -61,6 +61,7 @@
                                 sling:resourceType="wcm/core/components/policies/mapping"/>
                         </components>
                     </aem-learn-components>
+                </container>
             </container>
         </root>
     </jcr:content>
