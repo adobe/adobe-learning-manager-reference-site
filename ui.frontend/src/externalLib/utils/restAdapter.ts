@@ -40,28 +40,12 @@ export class RestAdapter {
   }
 
   public static ajax(options: IRestAdapterAjaxOptions): Promise<unknown> {
-    //const auth: Auth = GetPrimeAuth();
-    // if (options.url.startsWith(GetPrimeApiBasePath())) {
-    //     //prefix captivateprime api url
-    //     options.url = GetPrimeHostName() + options.url;
-    //     options.params = options.params || {};
-    //     options.params["omitDeprecated"] = true;
-    //     if (auth.csrfToken) {
-    //         options.params["csrf_token"] = auth.csrfToken;
-    //     }
-    // }
-
     return new Promise(function (resolve, reject) {
       const xhr = new XMLHttpRequest();
       xhr.open(options.method, getUrl(options.url, options.params));
       xhr.withCredentials =
         options.withCredentials === undefined ? true : options.withCredentials;
-      //if (auth.accessToken && options.url.startsWith(GetPrimeHostName())) {
-      //TODO:r check if embedding as param works for cors
-      //xhr.setRequestHeader("Authorization", `oauth ${auth.accessToken}`);
-      xhr.setRequestHeader("Authorization", `oauth ${(window as any).primeConfig.accessToken}`);
-
-      //}
+      xhr.setRequestHeader("Authorization", `oauth ${(window as any).alm.config.accessToken}`);
       for (const header in options.headers) {
         xhr.setRequestHeader(header, options.headers[header]);
       }
@@ -87,4 +71,4 @@ export class RestAdapter {
     });
   }
 }
-export {};
+export { };

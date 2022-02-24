@@ -20,8 +20,17 @@
 .searchContainer {
   width: 265px;
 }
-.filtersContainer {
+.filtersAndListConatiner {
   display: flex;
+}
+.filtersContainer {
+  width: 256px;
+}
+.listContainer {
+  width: calc(100% - 256px);
+}
+.listContainer.full {
+  width: 100%;
 }
 
 .searchAppliedContainer {
