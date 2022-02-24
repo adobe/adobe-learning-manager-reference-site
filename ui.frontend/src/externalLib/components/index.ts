@@ -8,5 +8,7 @@ export * from "./PrimeTrainingCard";
 export * from "./PrimeNotificationContainer";
 export * from "./PrimeTrainingPage";
 export * from "./PrimeTrainingOverviewHeader"
+export * from "./PrimeCourseOverview"
 export * from "./PrimeCatalogSearch"
 export * from "./PrimeInstancePage"
+//export * from "./PrimeCourseItemContainer"

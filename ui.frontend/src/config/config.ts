@@ -20,18 +20,17 @@ export default {
 
 // TODO: These will come from prime
 const baseUrl = "http://localhost:4502/content/aem-learn-components/language-masters/en/non-log";
-const basePath = "";
 
 export const primeConfig: PrimeConfig = {
   baseApiUrl: "https://captivateprimestage1.adobe.com/primeapi/v2/",
-  accessToken: "d93a4e9cf3384d374ef144f97af0eae4",
+  accessToken: "7342b65be7ad2e331c3625ab4b8c26bf",
   cdnBaseUrl: "https://cpcontentsdev.adobe.com",
   locale: "en-US",
   pagePaths: {
     baseUrl,
     instance: `${baseUrl}/instance.html`,
     catalog: `${baseUrl}/catalog.html`,
-    loOverview: `${baseUrl}/looverview/{0}/{1}/instance/{}`,
+    trainingOverview: `${baseUrl}/traininvOverview?primeTrainingId=course:1234?primeTrainingInstanceId`,
     community: `${baseUrl}/community.html`,
   },
 };

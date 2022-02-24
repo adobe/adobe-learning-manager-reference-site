@@ -1,37 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { useConfigContext } from "../../contextProviders/configContextProvider";
 import APIServiceInstance from "../../common/APIService";
-import {
-  PrimeLearningObjectInstance,
-  PrimeLocalizationMetadata,
-} from "../../models/PrimeModels";
-
-import { getPreferredLocalizedMetadata } from "../../utils/translationService";
+import { PrimeLearningObjectInstance } from "../../models/PrimeModels";
+import { useCardIcon, useCardBackgroundStyle, useSkills, useBadge, useLocalizedMetaData, filterTrainingInstance } from "../../utils/hooks";
 import { QueryParams } from "../../utils/restAdapter";
-import { cardColors } from "../../common/Theme";
 
-//const DEFAULT_LOCALE = "en-US";
 const DEFAULT_INCLUDE_LO_OVERVIEW =
   "enrollment,instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
 //"enrollment,instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill";
-
-export interface Skill {
-  name: string;
-  levelName: string;
-  level: string;
-  credits: number;
-  maxCredits: number;
-  type: string;
-  badgeName: string;
-  badgeUrl: string;
-  badgeState: string;
-}
-
-export interface InstanceBadge {
-  badgeName: string;
-  badgeUrl: string;
-  badgeState: string;
-}
 
 export const useTrainingPage = (
   trainingId: string,
@@ -39,7 +15,6 @@ export const useTrainingPage = (
   params: QueryParams = {}
 ) => {
   const { locale } = useConfigContext();
-
   const [currentState, setCurrentState] = useState({
     trainingInstance: {} as PrimeLearningObjectInstance,
     isLoading: true,
@@ -58,14 +33,19 @@ export const useTrainingPage = (
           trainingId,
           queryParam
         );
-        //ToDO : handle
+       
         if (response) {
-          const trainingInstances = response.instances.filter(
-            (instance) => instance.id === instanceId
-          );
-          const trainingInstance = trainingInstances.length
-            ? trainingInstances[0]
-            : ({} as PrimeLearningObjectInstance);
+          // const enrollment = response.enrollment;
+          // if(enrollment) {
+          //   instanceId = enrollment.loInstance.id;
+          // }
+          // const trainingInstances = response.instances.filter(
+          //   (instance) => instance.id === instanceId
+          // );
+          // const trainingInstance = trainingInstances.length
+          //   ? trainingInstances[0]
+          //   : ({} as PrimeLearningObjectInstance);
+          const trainingInstance = filterTrainingInstance(response, instanceId);
           setCurrentState({ trainingInstance, isLoading: false });
         }
       } catch (e) {
@@ -84,57 +64,12 @@ export const useTrainingPage = (
     description = "",
     overview = "",
     richTextOverview = "",
-  } = useMemo((): PrimeLocalizationMetadata => {
-    if (!training) {
-      return {} as PrimeLocalizationMetadata;
-    }
-    return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
-  }, [training, locale]);
+  } = useLocalizedMetaData(training,locale);
 
-  const {
-    cardIconUrl = "",
-    color = "",
-    bannerUrl = "",
-  }: { [key: string]: string } = useMemo(() => {
-    //TO-DO pick from attributes or fall back to one default set of colors
-    const themeColors = cardColors["prime-pebbles"];
-    const colorCode = parseInt(training?.id.split(":")[1], 10) % 12;
-
-    return {
-      //TODO: updated the url to akamai from config
-      cardIconUrl: `https://cpcontentsdev.adobe.com/public/images/default_card_icons/${colorCode}.svg`,
-      color: themeColors[colorCode],
-      bannerUrl: training?.bannerUrl
-    };
-  }, [training]);
-
-  const skills: Skill[] = useMemo(() => {
-    const trainingSkills = training?.skills.map((skill) => {
-      const skillLevel = skill.skillLevel;
-      const badge = skillLevel.badge;
-      return {
-        name: skillLevel.skill.name,
-        levelName: skillLevel.name,
-        level: skillLevel.level,
-        credits: skill.credits,
-        maxCredits: skillLevel.maxCredits,
-        type: skill.type,
-        badgeName: badge?.name,
-        badgeUrl: badge?.imageUrl,
-        badgeState: badge?.state,
-      };
-    });
-
-    return trainingSkills;
-  }, [training]);
-
-  const instanceBadge: InstanceBadge = useMemo(() => {
-    return {
-      badgeName: trainingInstance?.badge?.name,
-      badgeState: trainingInstance?.badge?.state,
-      badgeUrl: trainingInstance?.badge?.imageUrl,
-    };
-  }, [trainingInstance]);
+  const { cardIconUrl, color, bannerUrl } = useCardIcon(training);
+  const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
+  const skills =  useSkills(training);
+  const instanceBadge = useBadge(trainingInstance);
 
   return {
     name,
@@ -144,6 +79,7 @@ export const useTrainingPage = (
     cardIconUrl,
     color,
     bannerUrl,
+    cardBgStyle,
     //rating,
     skills,
     //enrollment,
@@ -154,47 +90,3 @@ export const useTrainingPage = (
   };
   //date create, published, duration
 };
-
-/**
- * imageUrl,
-    duration,
-    enrollmentType,
-    state,
-    rating,
-    authorNames,
-    bannerUrl,
-    dateCreated,
-    datePublished,
-    dateUpdated,
- */
-
-/**
-     *
-{
-	id	
-	format --> Self Paced,
-	skills,
-	type --> course etc.
-	price,
-	rating -- {averageRating: 5, ratingsCount: 1}
-	image --- if Not-- cardIcon & color
-	state
-	tags
-	authorNaames:[]
-	name,description --> based on locale else en-us
-	
-	progressbar,
-
-}
-     */
-
-//   let data = training.localizedMetadata.find(
-//     (item) => item.locale === locale
-//   );
-//   //TO DO: Need to check with Yogesh on this preferences
-//   return (
-//     data ||
-//     training.localizedMetadata.find(
-//       (item) => item.locale === DEFAULT_LOCALE
-//     )! ||
-//     training.localizedMetadata[0]

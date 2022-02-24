@@ -13,7 +13,7 @@
   width: 20%;
   display: flex;
   justify-content: flex-end;
-  align-items: start;
+  align-items: flex-start;
 }
 
 .instanceListItem {
