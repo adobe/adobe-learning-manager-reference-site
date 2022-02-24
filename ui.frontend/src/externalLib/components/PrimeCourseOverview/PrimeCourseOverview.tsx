@@ -24,9 +24,13 @@ const PrimeCourseOverview = (props: any) => {
     training,
     trainingInstance,
     instanceBadge,
+    showDuration = true,
+    showNotes = true,
   } = props;
 
-  const filterLoReources = (loResourceType: string) => {
+  const filterLoReources = (
+    loResourceType: string
+  ): PrimeLearningObjectResource[] => {
     return trainingInstance.loResources.filter(
       (loResource: PrimeLearningObjectResource) =>
         loResource.loResourceType == loResourceType
@@ -35,7 +39,9 @@ const PrimeCourseOverview = (props: any) => {
 
   const moduleReources = filterLoReources("Content");
   const testOutResources = filterLoReources("Test Out");
-
+  const showTestout = testOutResources.length != 0;
+  const showTabs = showTestout && showNotes;
+  const classNames = `${styles.tablist} ${showTabs ? "" : styles.hide}`;
   return (
     <>
       {/* <div style={{ display: "flex" }}>
@@ -49,25 +55,33 @@ const PrimeCourseOverview = (props: any) => {
      <div>Skills : {skills.map((skill: { name: any; }) => skill.name).join(",")}</div> */}
 
       <Tabs aria-label="Module list">
-        <TabList id="tabList" UNSAFE_className={styles.tablist}>
+        <TabList id="tabList" UNSAFE_className={classNames}>
           <Item key="Modules">Modules</Item>
-          <Item key="Testout">Testout</Item>
+          {showTestout && <Item key="Testout">Testout</Item>}
+          {showNotes && <Item key="Notes">Notes</Item>}
         </TabList>
         <TabPanels>
           <Item key="Modules">
-            <div className={styles.overviewcontainer}>
-              <header role="heading" className={styles.header}>
-                <div className={styles.loResourceType}>Core Content</div>
-                <div>{convertSecondsToTimeText(training.duration)}</div>
-              </header>
-            </div>
+            {showDuration && (
+              <div className={styles.overviewcontainer}>
+                <header role="heading" className={styles.header}>
+                  <div className={styles.loResourceType}>Core Content</div>
+                  <div>{convertSecondsToTimeText(training.duration)}</div>
+                </header>
+              </div>
+            )}
             <PrimeModuleList loResources={moduleReources}></PrimeModuleList>
           </Item>
-          <Item key="Testout">
-            <PrimeModuleList loResources={testOutResources}></PrimeModuleList>
-          </Item>
+          {showTestout && (
+            <Item key="Testout">
+              <PrimeModuleList loResources={testOutResources}></PrimeModuleList>
+            </Item>
+          )}
+          {showNotes && <Item key="Notes">You have no notes.</Item>}
         </TabPanels>
       </Tabs>
+
+      {/* <PrimeModuleList loResources={moduleReources}></PrimeModuleList>  */}
     </>
   );
 };

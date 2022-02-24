@@ -40,9 +40,10 @@ const PrimeTrainingOverview: React.FC<{
     <>
     {subLos.map((subLo) => {
       const loType = subLo.loType;
+     
       //Although its guaranteed that all child LOs will be courses only, still explicitly adding this check. 
       if(loType === COURSE) {
-        return <PrimeCourseItemContainer training={subLo}></PrimeCourseItemContainer>
+        return <PrimeCourseItemContainer key={subLo.id} training={subLo} ></PrimeCourseItemContainer>
        }
     })}
     </>

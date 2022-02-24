@@ -39,6 +39,8 @@ const PrimeCourseItemContainer: React.FC<{
         training={training}
         trainingInstance={trainingInstance}
         instanceBadge={instanceBadge}
+        showDuration={false}
+        showNotes={false}
       />
       {/* <div className={styles.headerContainer} tabIndex={0}>
         <div className={styles.icon}> {moduleIcon}</div>

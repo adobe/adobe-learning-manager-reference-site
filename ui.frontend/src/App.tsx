@@ -15,7 +15,7 @@ import "./App.css";
 
 const App = (props: any) => {
   // const { mountingPoints } = config;
-  store.subscribe(() => console.log(store.getState()));
+  //store.subscribe(() => console.log(store.getState()));
   return (
     <IntlProvider locale={props.locale} messages={props.messages}>
       <ConfigContextProvider config={primeConfig}>
@@ -23,12 +23,12 @@ const App = (props: any) => {
           {/* <Portal selector={mountingPoints.notificationContainer}>
             <PrimeNotificationContainer />
           </Portal> */}
-          <Portal selector={mountingPoints.catalogContainer}>
+          {/* <Portal selector={mountingPoints.catalogContainer}>
             <PrimeCatalogContainer />
-          </Portal>
-          {/* <Portal selector={mountingPoints.trainingOverviewPage}>
-              <PrimeTrainingPage />
           </Portal> */}
+          <Portal selector={mountingPoints.trainingOverviewPage}>
+              <PrimeTrainingPage />
+          </Portal>
         </AppContextProvider>
       </ConfigContextProvider>
     </IntlProvider>

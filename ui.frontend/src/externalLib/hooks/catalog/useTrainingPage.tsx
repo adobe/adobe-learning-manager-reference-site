@@ -6,7 +6,7 @@ import { useCardIcon, useCardBackgroundStyle, useSkills, useBadge, useLocalizedM
 import { QueryParams } from "../../utils/restAdapter";
 
 const DEFAULT_INCLUDE_LO_OVERVIEW =
-  "enrollment,instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
+  "enrollment,subLOs.instances.learningObject.enrollment,instances.loResources.resources,subLOs.instances.loResources.resources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
 //"enrollment,instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill";
 
 export const useTrainingPage = (

@@ -18,7 +18,7 @@ const baseUrl = "http://localhost:4502/content/aem-learn-components/language-mas
 
 export const primeConfig: PrimeConfig = {
   baseApiUrl: "https://captivateprimestage1.adobe.com/primeapi/v2/",
-  accessToken: "f793cf026d175e1bac6ff8f826c084cf",
+  accessToken: "26e3ea930a6d70a280b788731da7ef70",
   cdnBaseUrl: "https://cpcontentsdev.adobe.com",
   locale: "en-US",
   pagePaths: {

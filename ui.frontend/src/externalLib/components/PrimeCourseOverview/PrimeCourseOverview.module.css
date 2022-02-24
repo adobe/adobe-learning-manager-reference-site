@@ -19,6 +19,10 @@
    padding-bottom: 10px;
 }
 
+.hide {
+    display: none !important;
+}
+
 .tablist > div[role="tablist"] {
     border-bottom-color: transparent;
 }

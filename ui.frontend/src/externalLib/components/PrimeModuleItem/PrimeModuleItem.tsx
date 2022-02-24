@@ -66,6 +66,8 @@ const PrimeModuleItem = (props: any) => {
     loResource.resourceType == CLASSROOM ||
     loResource.resourceType == VIRTUAL_CLASSROOM;
 
+  const isElearning =   loResource.resourceType == ELEARNING;
+
   const hasSessionDetails =
     resource.dateStart && resource.completionDeadline ? true : false;
 
@@ -87,6 +89,7 @@ const PrimeModuleItem = (props: any) => {
     styles,
     description,
     isClassroomOrVC,
+    isElearning,
     hasSessionDetails
   );
 
@@ -141,8 +144,12 @@ const getDescriptionTemplate = (
   },
   description: string,
   isClassroomOrVC: boolean,
+  isElearning: boolean,
   hasSessionDetails: boolean
 ) => {
+  if(isElearning) {
+    return "";
+  }
   if (isClassroomOrVC && !hasSessionDetails) {
     return (
       <div className={styles.moduleDescription}>

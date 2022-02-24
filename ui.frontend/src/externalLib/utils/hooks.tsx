@@ -41,7 +41,11 @@ const useCardBackgroundStyle = (
   cardIconUrl: string,
   color: string
 ) => {
+  
   return useMemo(() => {
+    if (!training) {
+      return {};
+    }
     return training.imageUrl
       ? {
           backgroundImage: `url(${training.imageUrl})`,
@@ -55,7 +59,7 @@ const useCardBackgroundStyle = (
               ) center center no-repeat`,
           backgroundSize: "80px",
         };
-  }, [cardIconUrl, color, training.imageUrl]);
+  }, [cardIconUrl, color, training]);
 };
 
 const useSkills = (training: PrimeLearningObject): Skill[] => {
