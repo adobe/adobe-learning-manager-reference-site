@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/aria-role */
 import { useState } from "react";
 import { useTrainingCard } from "../../hooks/catalog/useTrainingCard";
@@ -62,12 +63,15 @@ const PrimeTrainingCard: React.FC<{
   const cardClass = `${styles.card} ${isHovered ? styles.hover : ""}`;
   return (
     <>
-      <li role="anchor" className={styles.listItem} onClick={cardClickHandler}>
-        <div className={cardClass} onMouseLeave={onMouseLeaveHandler}>
-          <div
-            style={{ ...cardBgStyle }}
-            className={styles.thumbnail}
-          ></div>
+      <li className={styles.listItem}>
+        <a
+          className={cardClass}
+          onMouseLeave={onMouseLeaveHandler}
+          // eslint-disable-next-line no-script-url
+          href="javascript:void(0)"
+          onClick={cardClickHandler}
+        >
+          <div style={{ ...cardBgStyle }} className={styles.thumbnail}></div>
 
           {imageUrl ? <div className={styles.backdrop}></div> : ""}
 
@@ -97,9 +101,7 @@ const PrimeTrainingCard: React.FC<{
                             defaultMessage: "Skills",
                           })}
                         </span>
-                        <span>
-                          {skillsAsString}
-                        </span>
+                        <span>{skillsAsString}</span>
                       </div>
                       <div className={styles.extraIcon}>
                         {THREE_DOTS_MENU_SVG()}
@@ -140,7 +142,7 @@ const PrimeTrainingCard: React.FC<{
               </div>
             </div>
           </div>
-        </div>
+        </a>
       </li>
     </>
   );
