@@ -12,7 +12,13 @@
   cursor: pointer;
   box-shadow: 0 0 5px rgb(0 0 0 / 20%);
   position: relative;
-  transition: all 0.2s ease-in;
+  transition: box-shadow 0.2s ease-in;
+  display: block;
+}
+
+.card:focus-within{
+  outline: 2px solid var(--prime-color-primary);
+  outline-offset: 2px;
 }
 .card.hover {
   box-shadow: 0 5px 10px rgb(0 0 0 / 20%);
