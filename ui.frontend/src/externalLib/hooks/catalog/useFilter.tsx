@@ -39,6 +39,10 @@ const ACTION_MAP = {
   skillName: updateSkillNameFilter,
   loFormat: updateLoFormatFilter,
   tagName: updateTagsFilter,
+  //catalog
+  //duration
+  //price
+  //skill level
 };
 
 export interface UpdateFiltersEvent {
@@ -59,7 +63,7 @@ const filtersDefaultState: Filter1State = {
   loTypes: {
     type: "loTypes",
     label: "prime.catalog.filter.loType.label",
-    show: true,
+    // show: true,
     list: [
       { value: "course", label: "course", checked: false },
       { value: "learningProgram", label: "Learning Program", checked: false },
@@ -70,7 +74,7 @@ const filtersDefaultState: Filter1State = {
   learnerState: {
     type: "learnerState",
     label: "prime.catalog.filter.status.label",
-    show: true,
+    // show: true,
     list: [
       { value: "enrolled", label: "Enrolled", checked: false },
       { value: "completed", label: "Completed", checked: false },
@@ -81,7 +85,7 @@ const filtersDefaultState: Filter1State = {
   loFormat: {
     type: "loFormat",
     label: "prime.catalog.filter.format.label",
-    show: true,
+    // show: true,
     list: [
       { value: "ACTIVITY", label: "Activity", checked: false },
       { value: "BLENDED", label: "Blended", checked: false },
@@ -97,13 +101,13 @@ const filtersDefaultState: Filter1State = {
   skillName: {
     type: "skillName",
     label: "prime.catalog.filter.skills.label",
-    show: true,
+    // show: true,
     list: [],
   },
   tagName: {
     type: "tagName",
     label: "prime.catalog.filter.tags.label",
-    show: true,
+    // show: true,
     list: [],
   },
 };

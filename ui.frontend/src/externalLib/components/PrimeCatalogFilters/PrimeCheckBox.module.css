@@ -19,3 +19,16 @@
   top: 5px;
   position: relative;
 }
+
+.primeChechbox {
+  min-height: 25px!important;
+}
+.primeChechbox span {
+  margin-top: 3px;
+  text-transform: capitalize;
+}
+
+.primeChechbox span:first-of-type {
+  margin: 0;
+  margin-top: 5px;
+}

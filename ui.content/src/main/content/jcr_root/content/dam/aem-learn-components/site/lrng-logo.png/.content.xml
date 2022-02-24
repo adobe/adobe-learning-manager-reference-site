@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jcr:root xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
-    jcr:mixinTypes="[mix:referenceable]"
+    jcr:isCheckedOut="{Boolean}true"
+    jcr:mixinTypes="[mix:referenceable,mix:versionable]"
     jcr:primaryType="dam:Asset"
     jcr:uuid="a6637b3b-23d3-47ef-91da-b1b47eb77b59">
     <jcr:content
+        cq:name="lrng-logo.png"
+        cq:parentPath="/content/dam/aem-learn-components/site"
         dam:assetState="processed"
-        jcr:lastModified="{Date}2022-02-20T10:59:14.809+05:30"
+        jcr:lastModified="{Date}2022-02-24T15:26:26.640+05:30"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
             dam:Bitsperpixel="{Long}32"
-            dam:extracted="{Date}2022-02-20T10:59:14.427+05:30"
+            dam:extracted="{Date}2022-02-24T15:26:25.308+05:30"
             dam:Fileformat="PNG"
             dam:MIMEtype="image/png"
             dam:Numberofimages="{Long}1"
@@ -20,9 +23,12 @@
             dam:Physicalwidthindpi="{Long}144"
             dam:Physicalwidthininches="{Decimal}1.7570347785949707"
             dam:Progressive="no"
-            dam:sha1="ab200b6c813ee4ddf84ba17187e7116149b94a2a"
+            dam:sha1="b79080a7523d633e73dd4c6445ddec414d25b6cb"
             dam:size="{Long}20071"
             dc:format="image/png"
+            dc:modified="{Date}2022-02-24T15:26:24.161+05:30"
+            jcr:lastModified="{Date}2022-02-24T15:26:24.150+05:30"
+            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"
             tiff:ImageLength="{Long}154"

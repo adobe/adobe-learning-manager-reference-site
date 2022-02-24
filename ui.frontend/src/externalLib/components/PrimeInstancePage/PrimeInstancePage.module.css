@@ -2,20 +2,6 @@
 * {
   box-sizing: border-box;
 }
-.pageContainer {
-  /* width: 1084px; */
-  margin: 0 auto;
-}
-@media screen and (min-width: 1024px) {
-  .pageContainer {
-    width: 930px;
-  }
-}
-@media screen and (min-width: 1366px) {
-  .pageContainer {
-    width: 1084px;
-  }
-}
 
 .courseInfoHeader {
   font-size: var(--prime-font-size-medium);
@@ -85,16 +71,16 @@
   opacity: 1;
   font-weight: bold;
 }
-.instanceNameDiv {
+.instanceNameWrapper {
   width: 50%;
 }
-.dateDiv {
+.dateWrapper {
   width: 15%;
 }
-.locationDiv {
+.locationWrapper {
   width: 15%;
 }
-.actionDiv {
+.actionWrapper {
   width: 20%;
   display: flex;
   justify-content: flex-end;

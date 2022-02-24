@@ -5,7 +5,6 @@
 
 .input {
   background: var(--prime-color-white) 0% 0% no-repeat padding-box;
-  /* box-shadow: inset 0px 1px 3px #000000; */
   border: 1px solid var(--prime-color-nc5);
   border-radius: 2px;
   opacity: 1;
@@ -22,4 +21,9 @@
   cursor: pointer;
   width: 16px;
   height: 16px;
+}
+
+.customInput input {
+  padding-right: 30px;
+  height: 100%;
 }

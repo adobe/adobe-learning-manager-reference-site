@@ -4,6 +4,7 @@ import { PrimeCatalogFilters } from "../PrimeCatalogFilters";
 import PrimeCatalogSearch from "../PrimeCatalogSearch/PrimeCatalogSearch";
 import { PrimeTrainingsContainer } from "../PrimeTrainingsContainer";
 import { useIntl } from "react-intl";
+import { Provider, lightTheme } from "@adobe/react-spectrum";
 
 import styles from "./PrimeCatalogContainer.module.css";
 import { CLOSE_SVG } from "../../utils/inline_svg";
@@ -17,10 +18,11 @@ const PrimeCatalogContainer = () => {
     resetSearch,
     filterState,
     updateFilters,
+    catalogAttributes,
   } = useCatalog();
   const { formatMessage } = useIntl();
 
-  const showingSearchHtml = query ? (
+  const showingSearchHtml = query && (
     <div className={styles.searchAppliedContainer}>
       <div className={styles.searchAppliedLabel}>
         Showing results for
@@ -32,38 +34,54 @@ const PrimeCatalogContainer = () => {
         </div>
       </div>
     </div>
-  ) : (
-    ""
+  );
+
+  const listContainerCss = `${styles.listContainer} ${
+    catalogAttributes?.showFilters === "false" && styles.full
+  } `;
+
+  const filtesHtml = catalogAttributes?.showFilters === "false" || (
+    <div className={styles.filtersContainer}>
+      <PrimeCatalogFilters
+        filterState={filterState}
+        updateFilters={updateFilters}
+        catalogAttributes={catalogAttributes}
+      ></PrimeCatalogFilters>
+    </div>
+  );
+
+  const searchHtml = catalogAttributes?.showSearch === "false" || (
+    <div className={styles.searchContainer}>
+      <PrimeCatalogSearch query={query} handleSearch={handleSearch} />
+    </div>
   );
 
   return (
-    <div className={styles.pageContainer}>
-      <div className={styles.headerContainer}>
-        <div className={styles.header}>
-          <h1 className={styles.label}>
-            {formatMessage({
-              id: "prime.catalog.header",
-              defaultMessage: "Collection of Courses, Certificates and More",
-            })}
-          </h1>
-          <div className={styles.searchContainer}>
-            <PrimeCatalogSearch query={query} handleSearch={handleSearch} />
+    <Provider theme={lightTheme} colorScheme={"light"}>
+      <div className={styles.pageContainer}>
+        <div className={styles.headerContainer}>
+          <div className={styles.header}>
+            <h1 className={styles.label}>
+              {formatMessage({
+                id: "prime.catalog.header",
+                defaultMessage: "Collection of Courses, Certificates and More",
+              })}
+            </h1>
+            {searchHtml}
+          </div>
+          {catalogAttributes?.showSearch === "false" || showingSearchHtml}
+        </div>
+        <div className={styles.filtersAndListConatiner}>
+          {filtesHtml}
+          <div className={listContainerCss}>
+            <PrimeTrainingsContainer
+              trainings={trainings}
+              loadMoreTraining={loadMoreTraining}
+            ></PrimeTrainingsContainer>
           </div>
         </div>
-        {showingSearchHtml}
       </div>
-      <div className={styles.filtersContainer}>
-        <PrimeCatalogFilters
-          filterState={filterState}
-          updateFilters={updateFilters}
-        ></PrimeCatalogFilters>
-
-        <PrimeTrainingsContainer
-          trainings={trainings}
-          loadMoreTraining={loadMoreTraining}
-        ></PrimeTrainingsContainer>
-      </div>
-    </div>
+    </Provider>
   );
 };
 

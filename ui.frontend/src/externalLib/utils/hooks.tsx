@@ -12,6 +12,13 @@ import { getPreferredLocalizedMetadata } from "./translationService";
 const useCardIcon = (training: PrimeLearningObject) => {
   const { cdnBaseUrl } = useConfigContext();
   const cardIconDetials: { [key: string]: string } = useMemo(() => {
+    if (!training) {
+      return {
+        cardIconUrl: "",
+        color: "",
+        bannerUrl: "",
+      };
+    }
     //TO-DO pick from attributes or fall back to one default set of colors
     const themeColors = cardColors["prime-default"];
     const colorCode = training? parseInt(training.id?.split(":")[1], 10) % 12 : 0;
@@ -22,7 +29,7 @@ const useCardIcon = (training: PrimeLearningObject) => {
       color: themeColors[colorCode],
       bannerUrl: training?.bannerUrl,
     };
-  }, [cdnBaseUrl, training?.bannerUrl, training?.id]);
+  }, [cdnBaseUrl, training]);
 
   return {
     ...cardIconDetials,

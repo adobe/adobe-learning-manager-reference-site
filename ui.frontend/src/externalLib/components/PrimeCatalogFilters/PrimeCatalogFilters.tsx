@@ -8,7 +8,7 @@ const PrimeCatalogFilters = (props: any) => {
   const { formatMessage } = useIntl();
   const { loTypes, learnerState, skillName, loFormat, isLoading, tagName } =
     props.filterState;
-  const { updateFilters } = props;
+  const { updateFilters, catalogAttributes } = props;
 
   const onChangeHandler = (data: UpdateFiltersEvent) => {
     updateFilters(data);
@@ -17,13 +17,13 @@ const PrimeCatalogFilters = (props: any) => {
   if (isLoading)
     return (
       <>
-        <span>laoding filters...</span>
+        <span>loading filters...</span>
       </>
     );
 
   const filterList = [loTypes, learnerState, loFormat, skillName, tagName].map(
-    (filter) =>
-      filter.show ? (
+    (filter) => {
+      return catalogAttributes[filter.type] !== "false" ? (
         <div key={filter.type} className={styles.container}>
           <h3 className={styles.typeLabel}>
             {formatMessage({
@@ -32,19 +32,21 @@ const PrimeCatalogFilters = (props: any) => {
           </h3>
           <ul className={styles.listContainer}>
             {filter.list?.map((item: any) => (
-              <PrimeCheckbox
-                key={item.value}
-                filterType={filter.type!}
-                label={item.label}
-                checked={item.checked}
-                changeHandler={onChangeHandler}
-              />
+              <li key={item.value}>
+                <PrimeCheckbox
+                  filterType={filter.type!}
+                  label={item.label}
+                  checked={item.checked}
+                  changeHandler={onChangeHandler}
+                />
+              </li>
             ))}
           </ul>
         </div>
       ) : (
         ""
-      )
+      );
+    }
   );
 
   return (
