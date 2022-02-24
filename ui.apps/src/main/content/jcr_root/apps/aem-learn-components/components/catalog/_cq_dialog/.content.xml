@@ -10,6 +10,12 @@
                                 <items jcr:primaryType="nt:unstructured">
                                     <column jcr:primaryType="nt:unstructured" sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
+                                            <showCatalogFilter 
+                                            jcr:primaryType="nt:unstructured" 
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/switch" 
+                                            fieldLabel="Show Catalog Filter" 
+                                            name="./showCatalogFilter" 
+                                            required="{Boolean}false" value="true" />
                                             <showFilters 
                                             jcr:primaryType="nt:unstructured" 
                                             sling:resourceType="granite/ui/components/coral/foundation/form/switch" 
@@ -22,12 +28,6 @@
                                             fieldLabel="Show Search" 
                                             name="./showSearch" 
                                             required="{Boolean}false" value="true" />                                            
-                                            <showCatalog 
-                                            jcr:primaryType="nt:unstructured" 
-                                            sling:resourceType="granite/ui/components/coral/foundation/form/switch" 
-                                            fieldLabel="Show Catalog Filter" 
-                                            name="./showCatalog" 
-                                            required="{Boolean}false" value="true" />
                                              <typeFilter 
                                             jcr:primaryType="nt:unstructured" 
                                             sling:resourceType="granite/ui/components/coral/foundation/form/switch" 

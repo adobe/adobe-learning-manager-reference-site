@@ -22,8 +22,7 @@
                 <container
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="aem-learn-components/components/container"
-                    layout="responsiveGrid">
-                </container>
+                    layout="responsiveGrid"/>
             </container>
         </root>
     </jcr:content>

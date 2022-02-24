@@ -6,7 +6,7 @@ public interface Catalog {
 
     String getShowSearch();
 
-    String getShowCatalog();
+    String getShowCatalogFilter();
 
     String getTypeFilter();
 

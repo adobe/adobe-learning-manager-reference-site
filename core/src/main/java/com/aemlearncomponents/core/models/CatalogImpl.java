@@ -28,11 +28,11 @@ public class CatalogImpl implements Catalog {
     }
 
     @ValueMapValue
-    String showCatalog;
+    String showCatalogFilter;
 
     @Override
-    public String getShowCatalog() {
-        return showCatalog;
+    public String getShowCatalogFilter() {
+        return showCatalogFilter;
     }
     
     @ValueMapValue
