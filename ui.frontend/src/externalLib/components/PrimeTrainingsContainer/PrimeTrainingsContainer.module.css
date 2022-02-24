@@ -1,7 +1,6 @@
 .primeTrainingsContainer {
-  display: flex;  
+  display: flex;
   flex-wrap: wrap;
-  width: calc(100% - 256px);
 }
 .primeTrainingsList {
   display: flex;

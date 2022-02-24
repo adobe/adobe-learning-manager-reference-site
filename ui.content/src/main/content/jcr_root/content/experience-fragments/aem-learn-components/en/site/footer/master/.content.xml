@@ -16,7 +16,7 @@
             <text
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="aem-learn-components/components/text"
-                text="&lt;p&gt;&lt;a href=&quot;/content/aem-learn-components/language-masters/en/terms.html&quot;&gt;Terms of Use&lt;/a&gt;&lt;span class=&quot;footer-separator&quot;&gt; | &lt;/span&gt;&lt;a href=&quot;/content/aem-learn-components/language-masters/en/privacy.html&quot;&gt;Privacy Policy&lt;/a&gt;&lt;span class=&quot;footer-separator&quot;&gt; | &lt;/span&gt;&lt;a href=&quot;/content/aem-learn-components/language-masters/en/cookie.html&quot;&gt;Cookie Policy&lt;/a&gt;&lt;span class=&quot;footer-separator&quot;&gt; | &lt;/span&gt;&lt;a href=&quot;/content/aem-learn-components/language-masters/en/about.html&quot;&gt;About Adobe&lt;/a&gt;&lt;/p&gt;"
+                text="&lt;p>&lt;a href=&quot;/content/aem-learn-components/language-masters/en/terms.html&quot;>Terms of Use&lt;/a>&lt;span class=&quot;footer-separator&quot;> | &lt;/span>&lt;a href=&quot;/content/aem-learn-components/language-masters/en/privacy.html&quot;>Privacy Policy&lt;/a>&lt;span class=&quot;footer-separator&quot;> | &lt;/span>&lt;a href=&quot;/content/aem-learn-components/language-masters/en/cookie.html&quot;>Cookie Policy&lt;/a>&lt;span class=&quot;footer-separator&quot;> | &lt;/span>&lt;a href=&quot;/content/aem-learn-components/language-masters/en/about.html&quot;>About Adobe&lt;/a>&lt;/p>"
                 textIsRich="true"/>
         </root>
     </jcr:content>

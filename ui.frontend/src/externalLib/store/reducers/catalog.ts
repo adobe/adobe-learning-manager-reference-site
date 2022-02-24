@@ -49,7 +49,7 @@ const trainings: Reducer<PrimeLearningObject[] | null, AnyAction> = (
 ) => {
   switch (action.type) {
     case LOAD_TRAININGS:
-      return action.payload?.trainings;
+      return action.payload?.trainings || [];
     case PAGINATE_TRAININGS:
       return [...state!, ...action.payload?.trainings];
     default:
@@ -195,7 +195,7 @@ const next: Reducer<string, AnyAction> = (
 
     case LOAD_TRAININGS:
     case PAGINATE_TRAININGS:
-      return action.payload?.next;
+      return action.payload?.next || "";
     default:
       return state || "";
   }

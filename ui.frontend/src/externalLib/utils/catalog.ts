@@ -1,4 +1,7 @@
 import { PrimeLearningObject } from "../models/PrimeModels";
+import { CatalogFilterState } from "../store/reducers/catalog";
+import { getALMKeyValue } from "./global";
+import { QueryParams } from "./restAdapter";
 
 export function shouldRedirectToInstanceScreen(
     training: PrimeLearningObject
@@ -71,3 +74,35 @@ export function debounce(fn: Function, time = 250) {
         timeoutId = setTimeout(() => fn.apply(this, args), time);
     };
 };
+
+
+export function getParamsForCatalogApi(filterState: CatalogFilterState,) {
+    const params: QueryParams = {};
+    const catalogAttributes = getALMKeyValue("catalogAttributes");
+
+    if (catalogAttributes?.showFilters !== "false") {
+        if (catalogAttributes?.loTypes !== "false") {
+            params["filter.loTypes"] = filterState.loTypes;
+        }
+
+        if (filterState.skillName && catalogAttributes?.skillName !== "false") {
+            params["filter.skillName"] = filterState.skillName;
+        }
+        if (filterState.tagName && catalogAttributes?.tagName !== "false") {
+            params["filter.tags"] = filterState.tagName;
+        }
+        if (
+            filterState.learnerState &&
+            catalogAttributes?.learnerState !== "false"
+        ) {
+            params["filter.learnerState"] = filterState.learnerState;
+        }
+        if (filterState.loFormat && catalogAttributes?.loFormat !== "false") {
+            params["filter.loFormat"] = filterState.loFormat;
+        }
+        if (filterState.duration && catalogAttributes?.duration !== "false") {
+            params["filter.duration.range"] = filterState.duration;
+        }
+    }
+    return params
+}

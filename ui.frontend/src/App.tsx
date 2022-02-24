@@ -1,4 +1,4 @@
-import config, { primeConfig } from "./config/config";
+import { mountingPoints, primeConfig } from "./config/config";
 import { AppContextProvider } from "./contextProviders";
 import { IntlProvider } from "react-intl";
 import {
@@ -14,7 +14,7 @@ import store from "./store/APIStore";
 import "./App.css";
 
 const App = (props: any) => {
-  const { mountingPoints } = config;
+  // const { mountingPoints } = config;
   store.subscribe(() => console.log(store.getState()));
   return (
     <IntlProvider locale={props.locale} messages={props.messages}>
@@ -23,12 +23,12 @@ const App = (props: any) => {
           {/* <Portal selector={mountingPoints.notificationContainer}>
             <PrimeNotificationContainer />
           </Portal> */}
-          {/* <Portal selector={mountingPoints.catalogContainer}>
-              <PrimeCatalogContainer />
-          </Portal> */}
-          <Portal selector={mountingPoints.trainingOverviewPage}>
-              <PrimeTrainingPage />
+          <Portal selector={mountingPoints.catalogContainer}>
+            <PrimeCatalogContainer />
           </Portal>
+          {/* <Portal selector={mountingPoints.trainingOverviewPage}>
+              <PrimeTrainingPage />
+          </Portal> */}
         </AppContextProvider>
       </ConfigContextProvider>
     </IntlProvider>

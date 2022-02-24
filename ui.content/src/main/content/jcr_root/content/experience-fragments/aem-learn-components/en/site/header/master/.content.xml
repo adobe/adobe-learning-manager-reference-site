@@ -12,14 +12,12 @@
         <root
             jcr:primaryType="nt:unstructured"
             sling:resourceType="aem-learn-components/components/container">
-            
             <container
                 cq:styleIds="[1554340406437]"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="aem-learn-components/components/container"
                 layout="responsiveGrid">
                 <cq:responsive jcr:primaryType="nt:unstructured"/>
-                
                 <image
                     cq:styleIds="[1568592012684]"
                     jcr:primaryType="nt:unstructured"
@@ -44,7 +42,6 @@
                             width="1"/>
                     </cq:responsive>
                 </image>
-                
                 <title
                     cq:styleIds="[1568996465682]"
                     jcr:primaryType="nt:unstructured"
@@ -59,7 +56,6 @@
                             width="1"/>
                     </cq:responsive>
                 </title>
-
                 <title_985876544
                     cq:styleIds="[1568996465682]"
                     jcr:primaryType="nt:unstructured"
@@ -74,7 +70,6 @@
                             width="1"/>
                     </cq:responsive>
                 </title_985876544>
-
                 <title_985876545
                     cq:styleIds="[1568996465682]"
                     jcr:primaryType="nt:unstructured"
@@ -88,7 +83,6 @@
                             width="1"/>
                     </cq:responsive>
                 </title_985876545>
-
                 <title_985876546
                     cq:styleIds="[1568996465682]"
                     jcr:primaryType="nt:unstructured"
@@ -102,25 +96,7 @@
                             width="1"/>
                     </cq:responsive>
                 </title_985876546>
-                
             </container>
-            
-<!--            <navigation
-                jcr:primaryType="nt:unstructured"
-                sling:resourceType="aem-learn-components/components/navigation"
-                collectAllPages="false"
-                navigationRoot="/content/aem-learn-components/en"
-                skipNavigationRoot="false"
-                structureDepth="1"/>
-            <languagenavigation
-                jcr:primaryType="nt:unstructured"
-                sling:resourceType="aem-learn-components/components/languagenavigation"
-                navigationRoot="/content/aem-learn-components"
-                structureDepth="2"/>
-            <search
-                jcr:primaryType="nt:unstructured"
-                sling:resourceType="aem-learn-components/components/search"
-                searchRoot="/content/aem-learn-components"/> -->
         </root>
     </jcr:content>
 </jcr:root>
