@@ -21,11 +21,14 @@
 }
 
 .primeChechbox {
-  min-height: 25px!important;
+  min-height: 25px !important;
 }
-.primeChechbox span {
+.primeChechbox span[class^="spectrum-Checkbox-label"] {
   margin-top: 3px;
   text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .primeChechbox span:first-of-type {

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTrainingCard } from "../../hooks/catalog/useTrainingCard";
 import { PrimeLearningObject } from "../../models/PrimeModels";
 import { useIntl } from "react-intl";
+import { ProgressBar } from "@adobe/react-spectrum";
 
 import styles from "./PrimeTrainingCard.module.css";
 import { SEND_SVG, THREE_DOTS_MENU_SVG } from "../../utils/inline_svg";
@@ -40,12 +41,12 @@ const PrimeTrainingCard: React.FC<{
     ""
   );
   const enrollmentHtml = enrollment ? (
-    <div className={styles.progressBarContainer}>
-      <div
-        className={styles.progressBar}
-        style={{ width: enrollment.progressPercent + "%" }}
-      ></div>
-    </div>
+    
+    <ProgressBar
+      showValueLabel={false}
+      value={enrollment.progressPercent}
+      UNSAFE_className={styles.progressBar}
+    />
   ) : (
     ""
   );
@@ -67,7 +68,7 @@ const PrimeTrainingCard: React.FC<{
         <a
           className={cardClass}
           onMouseLeave={onMouseLeaveHandler}
-          href="#!"
+          href={"#"}
           onClick={cardClickHandler}
         >
           <div style={{ ...cardBgStyle }} className={styles.thumbnail}></div>
@@ -148,3 +149,11 @@ const PrimeTrainingCard: React.FC<{
 };
 
 export default PrimeTrainingCard;
+
+
+// <div className={styles.progressBarContainer}>
+    //   <div
+    //     className={styles.progressBar}
+    //     style={{ width: enrollment.progressPercent + "%" }}
+    //   ></div>
+    // </div>

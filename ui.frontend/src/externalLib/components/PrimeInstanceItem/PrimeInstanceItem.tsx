@@ -27,7 +27,7 @@ const PrimeInstanceItem = (props: any) => {
   return (
     <li className={styles.instanceListItem}>
       <div className={styles.instanceNameWrapper}>
-        <a className={styles.instanceName} onClick={selectHandler} href={"#!"}>
+        <a className={styles.instanceName} onClick={selectHandler} href={"#"}>
           {name}
         </a>
         <p className={styles.instanceLoFormat}>{format}</p>
