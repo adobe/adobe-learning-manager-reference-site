@@ -70,6 +70,7 @@ const DEFAULT_DATE_OPTIONS: any = {
   year: 'numeric', month: 'short', day: 'numeric'
 }
 export function dateBasedOnLocale(date: string, locale: string, options: any = {}) {
+  if (!date) return "";
   const dateOptions = { ...DEFAULT_DATE_OPTIONS, options }
   return new Date(date).toLocaleDateString(locale, dateOptions);
 }

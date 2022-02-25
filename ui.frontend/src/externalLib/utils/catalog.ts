@@ -1,22 +1,8 @@
-import { PrimeLearningObject } from "../models/PrimeModels";
+import { PrimeLearningObject, PrimeLearningObjectInstance } from "../models/PrimeModels";
 import { CatalogFilterState } from "../store/reducers/catalog";
 import { getALMKeyValue } from "./global";
 import { QueryParams } from "./restAdapter";
-
-export function shouldRedirectToInstanceScreen(
-    training: PrimeLearningObject
-): boolean {
-    //only 1 instance / if only 1 active instance / Or user is already enrolled
-    if (
-        (training.instances &&
-            (training.instances.length === 1 ||
-                training.instances?.filter((i) => i && i.state === "Active").length === 1)) ||
-        training.enrollment
-    ) {
-        return false;
-    }
-    return true;
-}
+import { getWindowObject } from "./global"
 
 
 export function isJobaid(training: PrimeLearningObject): boolean {
@@ -35,10 +21,22 @@ export function getJobaidUrl(training: PrimeLearningObject): string {
     return training.instances[0]?.loResources[0]?.resources[0]?.location;
 }
 
+export function getActiveInstances(
+    training: PrimeLearningObject
+): PrimeLearningObjectInstance[] {
+    return training.instances?.filter((i) => i && i.state === "Active");
+}
+
+export function getDefaultIntsance(
+    training: PrimeLearningObject
+): PrimeLearningObjectInstance[] {
+    return training.instances?.filter((i) => i && i.isDefault);
+}
+
 
 
 export function locationUpdate(params: any) {
-    const location = (window as any).location;
+    const location = getWindowObject().location;
     const existingQueryParams = new URLSearchParams(decodeURI(location.search));
     for (let key in params) {
         if (params[key]) {
@@ -62,7 +60,7 @@ export function locationUpdate(params: any) {
 
 
 export function getQueryParamsIObjectFromUrl() {
-    const location = (window as any).location;
+    const location = getWindowObject().location;
     const params: URLSearchParams = new URLSearchParams(decodeURI(location.search));
     return Object.fromEntries(params.entries());
 }

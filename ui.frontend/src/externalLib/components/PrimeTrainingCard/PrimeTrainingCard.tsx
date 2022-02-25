@@ -67,8 +67,7 @@ const PrimeTrainingCard: React.FC<{
         <a
           className={cardClass}
           onMouseLeave={onMouseLeaveHandler}
-          // eslint-disable-next-line no-script-url
-          href="javascript:void(0)"
+          href="#!"
           onClick={cardClickHandler}
         >
           <div style={{ ...cardBgStyle }} className={styles.thumbnail}></div>

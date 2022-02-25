@@ -10,13 +10,17 @@ import {
   getJobaidUrl,
   isJobaid,
   isJobaidContentTypeUrl,
+  getActiveInstances,
+  getDefaultIntsance,
 } from "../../utils/catalog";
+import { getALMObject } from "../../utils/global";
 
 import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 import { useCardBackgroundStyle, useCardIcon } from "../../utils/hooks";
 
 export const useTrainingCard = (training: PrimeLearningObject) => {
-  const { locale, pagePaths } = useConfigContext();
+  const { locale } = useConfigContext();
+
   const {
     loFormat: format,
     loType: type,
@@ -44,6 +48,8 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
   const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
 
   const cardClickHandler = useCallback(() => {
+    if (!training) return;
+
     //if jobAid, need to enroll and open player or new tab
     if (isJobaid(training)) {
       console.log("This is a JOBAid");
@@ -58,24 +64,26 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
       }
       return;
     }
-
-    //if user Loggedin
-    //training.enrollment.loInstance
-    //if enrollment is there ---got overview with instance and return
-
-    //if single Active instance --- go to overview
-    // else show instance page
-
-    console.log("This is not a JOBAid");
-
-    // if (shouldRedirectToInstanceScreen(training)) {
-    //   console.log("redirect to Instance Screen", training.enrollment);
-    // } else {
-    //   console.log(
-    //     "redirect to Overview Screen",
-    //     training.enrollment.dateEnrolled
-    //   );
-    // }
+    //TODO: if user Loggedin --
+    let alm = getALMObject();
+    if (training.enrollment) {
+      alm?.redirectToTrainingOverview(
+        training.id,
+        training.enrollment.loInstance.id
+      );
+      return;
+    }
+    const activeInstances = getActiveInstances(training);
+    if (activeInstances?.length === 1) {
+      alm?.redirectToTrainingOverview(training.id, activeInstances[0].id);
+      return;
+    }
+    if (activeInstances?.length === 0) {
+      const defaultInstance = getDefaultIntsance(training);
+      alm?.redirectToTrainingOverview(training.id, defaultInstance[0]?.id);
+      return;
+    }
+    alm?.redirectToInstancePage(training.id);
   }, [training]);
 
   return {
