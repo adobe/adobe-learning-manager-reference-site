@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTrainingCard } from "../../hooks/catalog/useTrainingCard";
 import { PrimeLearningObject } from "../../models/PrimeModels";
 import { useIntl } from "react-intl";
+import { ProgressBar } from "@adobe/react-spectrum";
 
 import styles from "./PrimeTrainingCard.module.css";
 import { SEND_SVG, THREE_DOTS_MENU_SVG } from "../../utils/inline_svg";
@@ -33,19 +34,19 @@ const PrimeTrainingCard: React.FC<{
     setIsHovered(false);
   };
 
-  const skillsAsString = skills?.map((item) => item.skillLevel.name).join(",");
+  const skillsAsString = skills?.map((item) => item.skillLevel?.skill?.name).join(",");
   const descriptionHtml = description ? (
     <p className={styles.description}>{description}</p>
   ) : (
     ""
   );
   const enrollmentHtml = enrollment ? (
-    <div className={styles.progressBarContainer}>
-      <div
-        className={styles.progressBar}
-        style={{ width: enrollment.progressPercent + "%" }}
-      ></div>
-    </div>
+    
+    <ProgressBar
+      showValueLabel={false}
+      value={enrollment.progressPercent}
+      UNSAFE_className={styles.progressBar}
+    />
   ) : (
     ""
   );
@@ -67,8 +68,7 @@ const PrimeTrainingCard: React.FC<{
         <a
           className={cardClass}
           onMouseLeave={onMouseLeaveHandler}
-          // eslint-disable-next-line no-script-url
-          href="javascript:void(0)"
+          href={"#"}
           onClick={cardClickHandler}
         >
           <div style={{ ...cardBgStyle }} className={styles.thumbnail}></div>
@@ -81,7 +81,7 @@ const PrimeTrainingCard: React.FC<{
             </div>
 
             <div className={styles.bottomBar}>
-              <span className={styles.price}>$9009</span>
+              {/* <span className={styles.price}>$9009</span> */}
               <div className={styles.title}>{name}</div>
               <div className={styles.trainingType}>
                 {type} - {training.loFormat}
@@ -149,3 +149,11 @@ const PrimeTrainingCard: React.FC<{
 };
 
 export default PrimeTrainingCard;
+
+
+// <div className={styles.progressBarContainer}>
+    //   <div
+    //     className={styles.progressBar}
+    //     style={{ width: enrollment.progressPercent + "%" }}
+    //   ></div>
+    // </div>

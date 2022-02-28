@@ -16,7 +16,7 @@
   display: block;
 }
 
-.card:focus-within{
+.card:focus-within {
   outline: 2px solid var(--prime-color-primary);
   outline-offset: 2px;
 }
@@ -197,12 +197,12 @@
   background: #dfdfdf;
   border-radius: 0.5rem;
 }
-.progressBarContainer .progressBar {
-  width: 0;
+.progressBar div[class^="spectrum-BarLoader-fill"] {
+  /* width: 0;
   height: 100%;
-  border-radius: 0.5rem;
-  transition: width 750ms ease-in-out;
-  -webkit-transition: width 750ms ease-in-out;
+  border-radius: 0.5rem; */
+  /* transition: width 750ms ease-in-out;
+  -webkit-transition: width 750ms ease-in-out; */
   background: linear-gradient(90deg, #55b36f, #0f870f);
 }
 .skillsContainer {

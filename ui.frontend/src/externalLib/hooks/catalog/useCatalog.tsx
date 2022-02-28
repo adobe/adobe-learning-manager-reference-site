@@ -53,6 +53,9 @@ export const useCatalog = () => {
     filters.loTypes,
     filters.skillName,
     filters.tagName,
+    filters.skillLevel,
+    filters.duration,
+    filters.catalogs,
     query,
     sort,
   ]);

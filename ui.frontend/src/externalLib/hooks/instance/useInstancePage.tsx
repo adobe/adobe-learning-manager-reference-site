@@ -10,6 +10,7 @@ import { useCardIcon, useCardBackgroundStyle } from "../../utils/hooks";
 import { checkIfEnrollmentDeadlineNotPassed } from "../../utils/instance";
 import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 import { useConfigContext } from "../../contextProviders/configContextProvider";
+import { getWindowObject } from "../../utils/global";
 
 const DEFAULT_INCLUDE_LO_OVERVIEW =
   "enrollment,instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
@@ -18,10 +19,7 @@ export const useInstancePage = (
   trainingId: string,
   params: QueryParams = {}
 ) => {
-  const {
-    locale,
-    pagePaths: { trainingOverview },
-  } = useConfigContext();
+  const { locale } = useConfigContext();
 
   const [currentState, setCurrentState] = useState({
     training: {} as PrimeLearningObject,
@@ -81,11 +79,9 @@ export const useInstancePage = (
 
   const selectInstanceHandler = useCallback(
     (instanceId: string) => {
-      //redirection need to happen here
-      console.log(training);
-      console.log(instanceId, trainingOverview);
+      getWindowObject().alm.redirectToTrainingOverview(training.id, instanceId);
     },
-    [training, trainingOverview]
+    [training.id]
   );
 
   return {
