@@ -34,7 +34,7 @@ const PrimeTrainingCard: React.FC<{
     setIsHovered(false);
   };
 
-  const skillsAsString = skills?.map((item) => item.skillLevel.name).join(",");
+  const skillsAsString = skills?.map((item) => item.skillLevel?.skill?.name).join(",");
   const descriptionHtml = description ? (
     <p className={styles.description}>{description}</p>
   ) : (
@@ -81,7 +81,7 @@ const PrimeTrainingCard: React.FC<{
             </div>
 
             <div className={styles.bottomBar}>
-              <span className={styles.price}>$9009</span>
+              {/* <span className={styles.price}>$9009</span> */}
               <div className={styles.title}>{name}</div>
               <div className={styles.trainingType}>
                 {type} - {training.loFormat}

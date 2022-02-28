@@ -101,6 +101,12 @@ export function getParamsForCatalogApi(filterState: CatalogFilterState,) {
         if (filterState.duration && catalogAttributes?.duration !== "false") {
             params["filter.duration.range"] = filterState.duration;
         }
+        if (filterState.skillLevel && catalogAttributes?.skillLevel !== "false") {
+            params["filter.skill.level"] = filterState.skillLevel;
+        }
+        if (filterState.catalogs && catalogAttributes?.catalogs !== "false") {
+            params["filter.catalogIds"] = filterState.catalogs;
+        }
     }
     return params
 }

@@ -5,11 +5,14 @@ import {
   LOAD_TRAININGS,
   PAGINATE_TRAININGS,
   RESET_SEARCH_TEXT,
+  UPDATE_CATALOGS_FILTERS,
+  UPDATE_DURATION_FILTERS,
   UPDATE_FILTERS_ON_LOAD,
   UPDATE_LEARNERSTATE_FILTERS,
   UPDATE_LOFORMAT_FILTERS,
   UPDATE_LOTYPES_FILTERS,
   UPDATE_SEARCH_TEXT,
+  UPDATE_SKILLLEVEL_FILTERS,
   UPDATE_SKILLNAME_FILTERS,
   UPDATE_TAGS_FILTERS
 } from "../actions/catalog/actionTypes";
@@ -24,6 +27,8 @@ export interface CatalogFilterState {
   learnerState: string;
   loFormat: string;
   duration: string;
+  skillLevel: string;
+  catalogs: string;
 }
 
 export interface CatalogState {
@@ -161,6 +166,8 @@ const duration: Reducer<string, AnyAction> = (
   action: AnyAction
 ) => {
   switch (action.type) {
+    case UPDATE_DURATION_FILTERS:
+      return action.payload;
     case UPDATE_FILTERS_ON_LOAD:
       return action.payload.duration;
     default:
@@ -201,6 +208,33 @@ const next: Reducer<string, AnyAction> = (
   }
 };
 
+const skillLevel: Reducer<string, AnyAction> = (
+  state: string | undefined,
+  action: AnyAction
+) => {
+  switch (action.type) {
+    case UPDATE_SKILLLEVEL_FILTERS:
+      return action.payload;
+    case UPDATE_FILTERS_ON_LOAD:
+      return action.payload.skillLevel;
+    default:
+      return state || "";
+  }
+};
+const catalogs: Reducer<string, AnyAction> = (
+  state: string | undefined,
+  action: AnyAction
+) => {
+  switch (action.type) {
+    case UPDATE_CATALOGS_FILTERS:
+      return action.payload;
+    case UPDATE_FILTERS_ON_LOAD:
+      return action.payload.catalogs;
+    default:
+      return state || "";
+  }
+};
+
 const filterState: Reducer<CatalogFilterState, AnyAction> = combineReducers({
   skillName,
   tagName,
@@ -208,6 +242,8 @@ const filterState: Reducer<CatalogFilterState, AnyAction> = combineReducers({
   learnerState,
   loFormat,
   duration,
+  skillLevel,
+  catalogs
 });
 
 const catalog: Reducer<CatalogState, AnyAction> = combineReducers({

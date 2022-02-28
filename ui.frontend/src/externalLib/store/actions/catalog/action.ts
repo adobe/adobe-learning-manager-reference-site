@@ -10,7 +10,10 @@ import {
   UPDATE_TAGS_FILTERS,
   UPDATE_SEARCH_TEXT,
   UPDATE_FILTERS_ON_LOAD,
-  RESET_SEARCH_TEXT
+  RESET_SEARCH_TEXT,
+  UPDATE_SKILLLEVEL_FILTERS,
+  UPDATE_DURATION_FILTERS,
+  UPDATE_CATALOGS_FILTERS
 } from "./actionTypes";
 
 export const loadTrainings = (payload: any): AnyAction => ({
@@ -33,6 +36,11 @@ export const updateSkillNameFilter = (payload: string): AnyAction => ({
   payload,
 });
 
+export const updateSkillLevelFilter = (payload: string): AnyAction => ({
+  type: UPDATE_SKILLLEVEL_FILTERS,
+  payload,
+});
+
 export const updateLoFormatFilter = (payload: string): AnyAction => ({
   type: UPDATE_LOFORMAT_FILTERS,
   payload,
@@ -41,6 +49,16 @@ export const updateLoFormatFilter = (payload: string): AnyAction => ({
 
 export const updateTagsFilter = (payload: string): AnyAction => ({
   type: UPDATE_TAGS_FILTERS,
+  payload,
+});
+
+export const updateDurationFilter = (payload: any): AnyAction => ({
+  type: UPDATE_DURATION_FILTERS,
+  payload,
+});
+
+export const updateCatalogsFilter = (payload: any): AnyAction => ({
+  type: UPDATE_CATALOGS_FILTERS,
   payload,
 });
 
@@ -58,6 +76,7 @@ export const updateFiltersOnLoad = (payload: any): AnyAction => ({
   type: UPDATE_FILTERS_ON_LOAD,
   payload,
 });
+
 
 export const paginateTrainings = (payload: {
   trainings: PrimeLearningObject[];
