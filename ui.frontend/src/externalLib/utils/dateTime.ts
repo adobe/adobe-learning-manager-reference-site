@@ -59,7 +59,7 @@ export function modifyTime(dateToModify: string, locale: string) {
   const local = new Date(dateToModify).toLocaleDateString(locale, {
     day: "numeric",
     month: "short",
-    year: "numeric",
+    year: "numeric", 
     hour: "2-digit",
     minute: "2-digit",
   });
