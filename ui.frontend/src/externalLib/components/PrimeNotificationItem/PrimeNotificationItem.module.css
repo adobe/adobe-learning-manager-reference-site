@@ -1,16 +1,14 @@
 .notificationItem {
     list-style: none;
-    padding-top: 18px;
-    padding-left:20px; 
-    padding-bottom: 20px;
+    padding: 18px 20px 20px 20px;
     display: flex;
     justify-content: space-between;
     font-weight: 600;
     font-size: 14px;
     border: 1px solid #F8F8F8;
+    opacity: 1;
     color: #292929;
     list-style-type: none;
-    height: 88px;
     line-height:22px; 
   }
 
@@ -45,7 +43,6 @@
     border: 1px solid #FFFFFF;
     color: #292929;
     list-style-type: none;
-    height: 88px;
     background: #F4F4F4;
     line-height:22px; 
   }
