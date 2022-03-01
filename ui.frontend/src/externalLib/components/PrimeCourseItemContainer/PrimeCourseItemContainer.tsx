@@ -1,22 +1,11 @@
-import React, { useContext, useMemo } from "react";
-import {
-  PrimeLearningObject,
-  PrimeLearningObjectResource,
-  PrimeResource,
-} from "../../models/PrimeModels";
-import { useConfigContext } from "../../contextProviders";
-import styles from "./PrimeCourseItemContainer.module.css";
+import { Button } from "@adobe/react-spectrum";
+import ChevronDown from "@spectrum-icons/workflow/ChevronDown";
+import ChevronUp from "@spectrum-icons/workflow/ChevronUp";
+import React, { useState } from "react";
 import { PrimeCourseOverview } from "..";
-import {
-  useLocalizedMetaData,
-  useCardIcon,
-  useSkills,
-  useBadge,
-  filterTrainingInstance,
-} from "../../utils/hooks";
 import { useTrainingPage } from "../../hooks/catalog/useTrainingPage";
 import { PrimeTrainingItemContainerHeader } from "../PrimeTrainingItemContainerHeader";
-
+import styles from "./PrimeCourseItemContainer.module.css";
 const PrimeCourseItemContainer: React.FC<{
   trainingId: string;
 }> = (props) => {
@@ -26,9 +15,6 @@ const PrimeCourseItemContainer: React.FC<{
     description,
     overview,
     richTextOverview,
-    cardIconUrl,
-    color,
-    bannerUrl,
     skills,
     training,
     trainingInstance,
@@ -37,23 +23,15 @@ const PrimeCourseItemContainer: React.FC<{
     instanceBadge,
   } = useTrainingPage(trainingId);
 
-  // const config = useConfigContext();
-  // const locale = config.locale;
-
-  // const {
-  //   name = "",
-  //   description = "",
-  //   overview = "",
-  //   richTextOverview = "",
-  // } = useLocalizedMetaData(training,locale);
-
-  // const { cardIconUrl, color, bannerUrl } = useCardIcon(training);
-  // const skills =  useSkills(training);
-  // const trainingInstance = filterTrainingInstance(training);
-  // const instanceBadge = useBadge(trainingInstance);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   if (isLoading) {
-    return <span>Loading...</span>;
+    return <span></span>;
   }
+
+  const clickHandler = () => {
+    setIsCollapsed((prevState) => !prevState);
+  };
+
   return (
     <li className={styles.container}>
       <PrimeTrainingItemContainerHeader
@@ -64,31 +42,25 @@ const PrimeCourseItemContainer: React.FC<{
         overview={overview}
         richTextOverview={richTextOverview}
       />
-      <PrimeCourseOverview
-        description={description}
-        overview={overview}
-        richTextOverview={richTextOverview}
-        skills={skills}
-        training={training}
-        trainingInstance={trainingInstance}
-        instanceBadge={instanceBadge}
-        showDuration={false}
-        showNotes={false}
-      />
-      {/* <div className={styles.headerContainer} tabIndex={0}>
-        <div className={styles.icon}> {moduleIcon}</div>
-        <div className={styles.headerWrapper}>
-          <div>{name}</div>
-          <div className={styles.resourceAndDuration}>
-            <span>{loResource.resourceType}</span>
-            <span>{durationText}</span>
-          </div>
-        </div>
+
+      <div className={styles.collapsibleContainer}>
+        <Button variant="overBackground" isQuiet onPress={clickHandler}>
+          {isCollapsed ? <ChevronDown /> : <ChevronUp />}
+        </Button>
       </div>
-      <div className={styles.wrapperContainer}>
-        {descriptionTextHTML}
-        {sessionsTemplate}
-      </div> */}
+      {!isCollapsed && (
+        <PrimeCourseOverview
+          description={description}
+          overview={overview}
+          richTextOverview={richTextOverview}
+          skills={skills}
+          training={training}
+          trainingInstance={trainingInstance}
+          instanceBadge={instanceBadge}
+          showDuration={false}
+          showNotes={false}
+        />
+      )}
     </li>
   );
 };

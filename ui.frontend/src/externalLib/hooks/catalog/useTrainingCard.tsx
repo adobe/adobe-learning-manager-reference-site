@@ -4,19 +4,16 @@ import {
   PrimeLearningObject,
   PrimeLocalizationMetadata,
 } from "../../models/PrimeModels";
-import { cardColors } from "../../common/Theme";
-
 import {
+  getActiveInstances,
+  getDefaultIntsance,
   getJobaidUrl,
   isJobaid,
   isJobaidContentTypeUrl,
-  getActiveInstances,
-  getDefaultIntsance,
 } from "../../utils/catalog";
 import { getALMObject } from "../../utils/global";
-
-import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 import { useCardBackgroundStyle, useCardIcon } from "../../utils/hooks";
+import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 
 export const useTrainingCard = (training: PrimeLearningObject) => {
   const { locale } = useConfigContext();
@@ -34,16 +31,18 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     enrollment,
   } = training;
 
-  const { name, description, overview, richTextOverview } =
-    useMemo((): PrimeLocalizationMetadata => {
-      return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
-    }, [training.localizedMetadata, locale]);
-
   const {
-    cardIconUrl = "",
-    color = "",
-    bannerUrl = "",
-  } = useCardIcon(training);
+    name,
+    description,
+    overview,
+    richTextOverview,
+  } = useMemo((): PrimeLocalizationMetadata => {
+    return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
+  }, [training.localizedMetadata, locale]);
+
+  const { cardIconUrl = "", color = "", bannerUrl = "" } = useCardIcon(
+    training
+  );
 
   const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
 

@@ -1,24 +1,10 @@
-import styles from "./PrimeTrainingItemContainerHeader.module.css";
-import { getALMKeyValue } from "../../utils/global";
 import { convertSecondsToTimeText } from "../../utils/dateTime";
+import { getALMKeyValue } from "../../utils/global";
+import styles from "./PrimeTrainingItemContainerHeader.module.css";
 
 const PrimeTrainingItemContainerHeader = (props: any) => {
-  const {
-    name,
-    format,
-    date,
-    description,
-    overview,
-    cardBgStyle,
-    training,
-  } = props;
+  const { name, description, overview, cardBgStyle, training } = props;
   //const { formatMessage } = useIntl();
-
-  // const selectHandler = () => {
-  //   selectInstanceHandler(id);
-  // };
-  const desc = overview || description;
-  // const desc;
 
   let { pagePaths } = getALMKeyValue("config");
   const trainingLink = `${pagePaths.trainingOverview}/trainingId=${training.id}`;
