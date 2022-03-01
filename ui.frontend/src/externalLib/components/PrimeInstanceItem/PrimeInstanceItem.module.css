@@ -80,3 +80,82 @@
   opacity: 1;
   margin: 0;
 }
+.mobileOnly {
+  display: none;
+}
+
+@media screen and (max-width: 414px) {
+  .instanceListItem {
+    background: var(--prime-color-nc9);
+    border: none;
+    padding: 18px 20px;
+    flex-direction: column;
+    margin-bottom: 3px;
+  }
+  .instanceNameWrapper {
+    width: 60%;
+  }
+  .dateWrapper {
+    width: 100%;
+  }
+  .locationWrapper {
+    width: 100%;
+  }
+  .actionWrapper {
+    position: absolute;
+    right: 20px;
+    width: auto;
+  }
+  .actionWrapper button {
+    min-height: 32px;
+    height: 32px;
+    line-height: 15px;
+  }
+  .instanceName {
+    margin: 0 0 8px 0;
+    font-size: var(--prime-font-size-medium);
+    line-height: 22px;
+    letter-spacing: 0px;
+    color: var(--prime-color-primary);
+    opacity: 1;
+    font-weight: 600;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .instanceLoFormat {
+    display: none;
+  }
+  .instructorsName {
+    margin: 0 0 8px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .dateWrapper {
+    margin: 0 0 8px 0;
+  }
+  .locationWrapper {
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .mobileOnly {
+    display: inline-block;
+  }
+  .icon svg {
+    color: var(--prime-icon-color);
+    height: 16px;
+    width: 16px;
+    position: relative;
+    top: 3px;
+    margin-right: 10px;
+  }
+  .aboveMobile {
+    display: none;
+  }
+}

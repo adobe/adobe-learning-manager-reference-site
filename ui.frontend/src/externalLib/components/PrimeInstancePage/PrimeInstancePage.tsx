@@ -59,8 +59,9 @@ const PrimeInstancePage = (props: any) => {
       });
       setList(list);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locale, training.loFormat]);
+    
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeInstances.length, locale, training.loFormat]);
 
   const applySort = (sortParam: string) => {
     const sortedList = sortList(list, sortParam, isAscendingOrder);
@@ -91,6 +92,7 @@ const PrimeInstancePage = (props: any) => {
       />
       <section className={styles.pageContainer}>
         <h2 className={styles.courseInfoHeader}>{headerLabel}</h2>
+        {/* Hidden in mobile */}
         <div className={styles.courseDetailsContainer}>
           <div className={styles.card} style={{ ...cardBgStyle }}>
             <div className={styles.band}></div>
@@ -99,6 +101,13 @@ const PrimeInstancePage = (props: any) => {
             <h3 className={styles.title}>{name}</h3>
             <p className={styles.type}>{training?.type}</p>
           </div>
+        </div>
+
+        {/* Shown only in Mobile */}
+        <div className={styles.selectInstanceContainer}>
+          <h3 className={styles.selectInstance}>
+            Select An Instance
+          </h3>
         </div>
 
         {list!?.length > 0 && (

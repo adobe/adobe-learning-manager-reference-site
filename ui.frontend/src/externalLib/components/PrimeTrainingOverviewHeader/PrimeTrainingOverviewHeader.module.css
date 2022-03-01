@@ -54,3 +54,9 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+@media screen and (max-width: 414px) {
+  .header {
+    padding: 0 20px;
+  }
+}
