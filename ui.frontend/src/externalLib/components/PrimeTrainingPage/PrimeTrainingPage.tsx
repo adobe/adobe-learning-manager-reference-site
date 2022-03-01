@@ -1,9 +1,9 @@
 import { lightTheme, Provider } from "@adobe/react-spectrum";
 import { useTrainingPage } from "../../hooks/catalog/useTrainingPage";
+import { convertSecondsToTimeText } from "../../utils/dateTime";
 import { PrimeCourseOverview } from "../PrimeCourseOverview";
 import { PrimeTrainingOverview } from "../PrimeTrainingOverview";
 import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
-
 const COURSE = "course";
 const LEARNING_PROGRAM = "learningProgram";
 const CERTIFICATION = "certification";
@@ -40,6 +40,15 @@ const PrimeTrainingPage = (props: any) => {
     return <div>Loading....</div>;
   }
 
+  // const [{ name : skillName,
+  //   levelName,
+  //   level,
+  //   credits,
+  //   maxCredits,
+  //   type,
+  //   badgeName,
+  //   badgeUrl,
+  //   badgeState}] = skills;
   const loType = training.loType;
 
   return (
@@ -50,6 +59,28 @@ const PrimeTrainingPage = (props: any) => {
         title={name}
         bannerUrl={bannerUrl}
       />
+      <p
+        dangerouslySetInnerHTML={{
+          __html: richTextOverview || overview || description,
+        }}
+      ></p>
+      Duration : {convertSecondsToTimeText(training.duration)}
+      {skills.map((skill) => {
+        return (
+          <>
+            {skill.name} {skill.levelName}
+          </>
+        );
+      })}
+      {training.authors?.map((author) => {
+        return (
+          <div>
+            <img src={author.avatarUrl} />
+            {author.name}
+            {author.bio}
+          </div>
+        );
+      })}
       {loType === COURSE && (
         <PrimeCourseOverview
           name={name}
