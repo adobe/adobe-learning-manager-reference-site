@@ -1,10 +1,12 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { useCatalog } from "../../hooks/catalog/useCatalog";
 import { PrimeCatalogFilters } from "../PrimeCatalogFilters";
 import PrimeCatalogSearch from "../PrimeCatalogSearch/PrimeCatalogSearch";
 import { PrimeTrainingsContainer } from "../PrimeTrainingsContainer";
 import { useIntl } from "react-intl";
-import { Provider, lightTheme } from "@adobe/react-spectrum";
+import { Provider, lightTheme, Button } from "@adobe/react-spectrum";
+import Filter from "@spectrum-icons/workflow/Filter";
+import Close from "@spectrum-icons/workflow/Close";
 
 import styles from "./PrimeCatalogContainer.module.css";
 import { CLOSE_SVG } from "../../utils/inline_svg";
@@ -21,6 +23,7 @@ const PrimeCatalogContainer = () => {
     catalogAttributes,
   } = useCatalog();
   const { formatMessage } = useIntl();
+  const [showFiltersOnMobile, setShowFiltersOnMobile] = useState(false);
 
   const showingSearchHtml = query && (
     <div className={styles.searchAppliedContainer}>
@@ -40,8 +43,24 @@ const PrimeCatalogContainer = () => {
     catalogAttributes?.showFilters === "false" && styles.full
   } `;
 
-  const filtesHtml = catalogAttributes?.showFilters === "false" || (
-    <div className={styles.filtersContainer}>
+  const filtersCss = `${styles.filtersContainer} ${
+    showFiltersOnMobile ? styles.onMobile : ""
+  }`;
+
+  const toggleFiltersonMobile = () => {
+    setShowFiltersOnMobile((prevState) => !prevState);
+  };
+
+  const filtersHtml = catalogAttributes?.showFilters === "false" || (
+    <div className={filtersCss}>
+      <Button
+        UNSAFE_className={styles.closeIcon}
+        variant="primary"
+        isQuiet
+        onPress={toggleFiltersonMobile}
+      >
+        <Close aria-aria-label="Close" />
+      </Button>
       <PrimeCatalogFilters
         filterState={filterState}
         updateFilters={updateFilters}
@@ -52,6 +71,17 @@ const PrimeCatalogContainer = () => {
 
   const searchHtml = catalogAttributes?.showSearch === "false" || (
     <div className={styles.searchContainer}>
+      <Button
+        variant="primary"
+        UNSAFE_className={styles.button}
+        onPress={toggleFiltersonMobile}
+      >
+        {formatMessage({
+          id: "prime.catalog.filter",
+          defaultMessage: "Filters",
+        })}
+        <Filter aria-details="true" />
+      </Button>
       <PrimeCatalogSearch query={query} handleSearch={handleSearch} />
     </div>
   );
@@ -67,13 +97,17 @@ const PrimeCatalogContainer = () => {
                 defaultMessage: "Collection of Courses, Certificates and More",
               })}
             </h1>
+
             {searchHtml}
           </div>
           {catalogAttributes?.showSearch === "false" || showingSearchHtml}
         </div>
         <div className={styles.filtersAndListConatiner}>
-          {filtesHtml}
-          <div className={listContainerCss}>
+          {filtersHtml}
+          <div
+            className={listContainerCss}
+            aria-hidden={showFiltersOnMobile ? "true" : "false"}
+          >
             <PrimeTrainingsContainer
               trainings={trainings}
               loadMoreTraining={loadMoreTraining}

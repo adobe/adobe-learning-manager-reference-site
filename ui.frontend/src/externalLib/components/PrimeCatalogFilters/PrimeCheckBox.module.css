@@ -29,6 +29,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: var(--prime-font-size-small);
 }
 
 .primeChechbox span:first-of-type {

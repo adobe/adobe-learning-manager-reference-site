@@ -26,4 +26,13 @@
 .customInput input {
   padding-right: 30px;
   height: 100%;
+  font-size: var(--prime-font-size-small);
+  border-color: var(--prime-color-nc3) !important;
+}
+
+@media screen and (max-width: 414px) {
+  .container {
+    margin-left: auto;
+    width: 70%;
+  }
 }
