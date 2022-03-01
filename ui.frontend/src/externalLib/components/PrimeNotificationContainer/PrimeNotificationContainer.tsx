@@ -57,6 +57,7 @@ const PrimeNotificationContainer = () => {
       {showNotifications && (
         <PrimeNotificationList
           notifications={notifications}
+          unreadCount={unreadCount}
           loadMoreNotifications={loadMoreNotifications}
         />
       )}

@@ -84,12 +84,12 @@ export class ObjectWrapper {
     private id_lxpv: string;
     private type_lxpv: string;
     private dataObject: any;
-    private storeToUse_lxpv: Store;
+    private ALMStore: Store;
 
     constructor(type: string, id: string, storeToUse: Store, dataObj: any) {
         this.id_lxpv = id;
         this.type_lxpv = type;
-        this.storeToUse_lxpv = storeToUse;
+        this.ALMStore = storeToUse;
         //We can think of falling back to COMMON store - might be helpful in cases like user account
         //not sideloaded in widget specific api calls, but can be accessed through fallback
         this.dataObject = dataObj ? dataObj : storeToUse.get(type, id);
@@ -121,9 +121,9 @@ export class ObjectWrapper {
                     let oneObj;
                     for (let ii = 0; ii < relData.length; ++ii) {
                         oneObj = relData[ii];
-                        retval.push(ObjectWrapper.GetWrapper(oneObj["type"], oneObj["id"],this.storeToUse_lxpv));
+                        retval.push(ObjectWrapper.GetWrapper(oneObj["type"], oneObj["id"],this.ALMStore));
                     }
-                } else retval = relData ? ObjectWrapper.GetWrapper(relData["type"], relData["id"],this.storeToUse_lxpv) : undefined;
+                } else retval = relData ? ObjectWrapper.GetWrapper(relData["type"], relData["id"],this.ALMStore) : undefined;
             }
         }
         return retval;
@@ -173,7 +173,7 @@ export class ObjectWrapper {
 //     private currentCursor_lxpv: string | null = null;
 //     private pageLimit_lxpv: number;
 //     private cursorBased_lxpv: boolean | undefined = undefined;
-//     private storeToUse_lxpv: WidgetType;
+//     private ALMStore: WidgetType;
 //     private fetchedAll_lxpv = false;
 //     private callFailed_lxpv = false;
 //     private callee_lxpv: IJsonApiPaginatee;
@@ -182,7 +182,7 @@ export class ObjectWrapper {
 //     constructor(options: IRestAdapterGetOptions, pageLimit: number, storeToUse: WidgetType, callee: IJsonApiPaginatee) {
 //         this.options_lxpv = options;
 //         this.pageLimit_lxpv = pageLimit;
-//         this.storeToUse_lxpv = storeToUse;
+//         this.ALMStore = storeToUse;
 //         this.callee_lxpv = callee;
 //     }
 
@@ -220,7 +220,7 @@ export class ObjectWrapper {
 
 //     private parseResonse_lxpv(response: any) {
 //         this.runningPromise_lxpv = null;
-//         const parsedResponse = JsonApiParse(response, this.storeToUse_lxpv);
+//         const parsedResponse = JsonApiParse(response, this.ALMStore);
 //         const links = parsedResponse.links;
 //         const nextLink = links?.next;
 //         if (!nextLink) {

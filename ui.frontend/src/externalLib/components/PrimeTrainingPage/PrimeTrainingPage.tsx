@@ -1,19 +1,14 @@
-import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
+import { lightTheme, Provider } from "@adobe/react-spectrum";
+import { useTrainingPage } from "../../hooks/catalog/useTrainingPage";
 import { PrimeCourseOverview } from "../PrimeCourseOverview";
 import { PrimeTrainingOverview } from "../PrimeTrainingOverview";
-
-import { useTrainingPage } from "../../hooks/catalog/useTrainingPage";
-import { PrimeModuleList } from "../PrimeModuleList";
-import { convertSecondsToTimeText } from "../../utils/dateTime";
-import { PrimeLearningObject, PrimeLearningObjectResource } from "../../models/PrimeModels";
-import { config } from "process";
-import { Provider, lightTheme } from "@adobe/react-spectrum";
+import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
 
 const COURSE = "course";
 const LEARNING_PROGRAM = "learningProgram";
 const CERTIFICATION = "certification";
-const TRAINING_ID_STR="trainingId";
-const TRAINING_INSTANCE_ID_STR="trainingInstanceId";
+const TRAINING_ID_STR = "trainingId";
+const TRAINING_INSTANCE_ID_STR = "trainingInstanceId";
 const PrimeTrainingPage = (props: any) => {
   //const trainingInstance: PrimeLearningObjectInstance = props.training;
   // const trainingId = "course:1926880"; //TO-DO get training id "course:1943266"; //
@@ -21,15 +16,18 @@ const PrimeTrainingPage = (props: any) => {
   //1926880/instance/2174497/preview
   const location = (window as any).location;
   const queryParams = new URLSearchParams(decodeURI(location.search));
-  const trainingId = "learningProgram:79030" || queryParams.get(TRAINING_ID_STR) || "";
-  const trainingInstanceId = "learningProgram:79030_83137" || queryParams.get(TRAINING_INSTANCE_ID_STR) || "";
- 
+  const trainingId =
+    "learningProgram:79030" || queryParams.get(TRAINING_ID_STR) || "";
+  const trainingInstanceId =
+    "learningProgram:79030_83137" ||
+    queryParams.get(TRAINING_INSTANCE_ID_STR) ||
+    "";
+
   const {
     name,
     description,
     overview,
     richTextOverview,
-    cardIconUrl,
     color,
     bannerUrl,
     skills,
@@ -43,7 +41,6 @@ const PrimeTrainingPage = (props: any) => {
   }
 
   const loType = training.loType;
-  
 
   return (
     <Provider theme={lightTheme} colorScheme={"light"}>
@@ -53,26 +50,30 @@ const PrimeTrainingPage = (props: any) => {
         title={name}
         bannerUrl={bannerUrl}
       />
-      {loType == COURSE && <PrimeCourseOverview
-        name={name}
-        description={description}
-        overview={overview}
-        richTextOverview={richTextOverview}
-        skills={skills}
-        training={training}
-        trainingInstance={trainingInstance}
-        instanceBadge={instanceBadge}
-      />}
-       {loType !== COURSE && <PrimeTrainingOverview
-        name={name}
-        description={description}
-        overview={overview}
-        richTextOverview={richTextOverview}
-        skills={skills}
-        training={training}
-        trainingInstance={trainingInstance}
-        instanceBadge={instanceBadge}
-      />}
+      {loType === COURSE && (
+        <PrimeCourseOverview
+          name={name}
+          description={description}
+          overview={overview}
+          richTextOverview={richTextOverview}
+          skills={skills}
+          training={training}
+          trainingInstance={trainingInstance}
+          instanceBadge={instanceBadge}
+        />
+      )}
+      {(loType === CERTIFICATION || loType === LEARNING_PROGRAM) && (
+        <PrimeTrainingOverview
+          name={name}
+          description={description}
+          overview={overview}
+          richTextOverview={richTextOverview}
+          skills={skills}
+          training={training}
+          trainingInstance={trainingInstance}
+          instanceBadge={instanceBadge}
+        />
+      )}
     </Provider>
   );
 };

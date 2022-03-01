@@ -2,11 +2,11 @@ import { Button } from "@adobe/react-spectrum";
 import ChevronDown from "@spectrum-icons/workflow/ChevronDown";
 import ChevronUp from "@spectrum-icons/workflow/ChevronUp";
 import React, { useState } from "react";
-import { PrimeCourseOverview } from "..";
 import { useTrainingPage } from "../../hooks/catalog/useTrainingPage";
+import { PrimeCourseItemContainer } from "../PrimeCourseItemContainer";
 import { PrimeTrainingItemContainerHeader } from "../PrimeTrainingItemContainerHeader";
-import styles from "./PrimeCourseItemContainer.module.css";
-const PrimeCourseItemContainer: React.FC<{
+import styles from "./PrimeLPItemContainer.module.css";
+const PrimeLPItemContainer: React.FC<{
   trainingId: string;
 }> = (props) => {
   const { trainingId } = props;
@@ -15,6 +15,9 @@ const PrimeCourseItemContainer: React.FC<{
     description,
     overview,
     richTextOverview,
+    cardIconUrl,
+    color,
+    bannerUrl,
     skills,
     training,
     trainingInstance,
@@ -31,7 +34,7 @@ const PrimeCourseItemContainer: React.FC<{
   const clickHandler = () => {
     setIsCollapsed((prevState) => !prevState);
   };
-
+  const subLos = training.subLOs;
   return (
     <li className={styles.container}>
       <PrimeTrainingItemContainerHeader
@@ -42,27 +45,26 @@ const PrimeCourseItemContainer: React.FC<{
         overview={overview}
         richTextOverview={richTextOverview}
       />
-
       <div className={styles.collapsibleContainer}>
         <Button variant="overBackground" isQuiet onPress={clickHandler}>
           {isCollapsed ? <ChevronDown /> : <ChevronUp />}
         </Button>
       </div>
       {!isCollapsed && (
-        <PrimeCourseOverview
-          description={description}
-          overview={overview}
-          richTextOverview={richTextOverview}
-          skills={skills}
-          training={training}
-          trainingInstance={trainingInstance}
-          instanceBadge={instanceBadge}
-          showDuration={false}
-          showNotes={false}
-        />
+        <ul>
+          {subLos.map((subLo) => {
+            // There will only be list of courses inside nested LP
+            return (
+              <PrimeCourseItemContainer
+                key={subLo.id}
+                trainingId={subLo.id}
+              ></PrimeCourseItemContainer>
+            );
+          })}
+        </ul>
       )}
     </li>
   );
 };
 
-export default PrimeCourseItemContainer;
+export default PrimeLPItemContainer;

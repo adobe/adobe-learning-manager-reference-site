@@ -21,7 +21,9 @@ const useCardIcon = (training: PrimeLearningObject) => {
     }
     //TO-DO pick from attributes or fall back to one default set of colors
     const themeColors = cardColors["prime-default"];
-    const colorCode = training? parseInt(training.id?.split(":")[1], 10) % 12 : 0;
+    const colorCode = training
+      ? parseInt(training.id?.split(":")[1], 10) % 12
+      : 0;
 
     return {
       //TODO: updated the url to akamai from config
@@ -41,7 +43,6 @@ const useCardBackgroundStyle = (
   cardIconUrl: string,
   color: string
 ) => {
-  
   return useMemo(() => {
     if (!training) {
       return {};
@@ -95,33 +96,41 @@ const useBadge = (
   }, [trainingInstance]);
 };
 
-
-const useLocalizedMetaData = (training: PrimeLearningObject, locale: string) => {
+const useLocalizedMetaData = (
+  training: PrimeLearningObject,
+  locale: string
+) => {
   return useMemo((): PrimeLocalizationMetadata => {
     if (!training) {
       return {} as PrimeLocalizationMetadata;
     }
     return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
   }, [training, locale]);
-  
-}
+};
 
-const filterTrainingInstance = (training: PrimeLearningObject, instanceId: string = "") => {
-    const enrollment = training.enrollment;
-    instanceId = enrollment?.loInstance.id || instanceId; 
-    const trainingInstances = training.instances.filter(
-      (instance) => {
-        if(instanceId) {
-          return instance.id === instanceId;
-        } else {
-          return instance.isDefault && instance.state === "Active";
-        }
-      }
-    );
-    return trainingInstances.length
-      ? trainingInstances[0]
-      : ({} as PrimeLearningObjectInstance);
-}
+const filterTrainingInstance = (
+  training: PrimeLearningObject,
+  instanceId: string = ""
+) => {
+  const enrollment = training.enrollment;
+  instanceId = enrollment?.loInstance.id || instanceId;
+  const trainingInstances = training.instances.filter((instance) => {
+    if (instanceId) {
+      return instance.id === instanceId;
+    } else {
+      return instance.isDefault; //&& instance.state == "Active";
+    }
+  });
+  return trainingInstances.length
+    ? trainingInstances[0]
+    : ({} as PrimeLearningObjectInstance);
+};
 
-
-export { useCardIcon, useCardBackgroundStyle, useSkills, useBadge, useLocalizedMetaData, filterTrainingInstance };
+export {
+  useCardIcon,
+  useCardBackgroundStyle,
+  useSkills,
+  useBadge,
+  useLocalizedMetaData,
+  filterTrainingInstance,
+};

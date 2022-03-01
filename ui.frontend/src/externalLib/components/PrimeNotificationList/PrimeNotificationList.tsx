@@ -5,7 +5,7 @@ import { useLoadMore } from "../../hooks/loadMore";
 import styles from "./PrimeNotificationList.module.css";
 
 const PrimeNotificationsList = (props: any) => {
-    const { notifications, loadMoreNotifications } = props;
+    const { notifications, loadMoreNotifications , unreadCount} = props;
     const elementRef = useRef(null);
     useLoadMore({
       items: notifications,
@@ -14,7 +14,16 @@ const PrimeNotificationsList = (props: any) => {
       elementRef,
     });
     return (
-      <div className={styles.notificationContainer} id="notifications">
+      <div>
+      <div className={styles.unreadCountItem}>
+          <div className={styles.unreadCountText}>
+            {unreadCount} New
+          </div>
+          <div className={styles.unreadCountNotificationText}>
+            Notifications
+          </div>
+      </div>
+      <div className={styles.notificationListBox} id="notifications">
         <ul className={styles.notificationList}>
           {notifications?.map((entry: any) => (
             <PrimeNotificationItem
@@ -23,7 +32,8 @@ const PrimeNotificationsList = (props: any) => {
             ></PrimeNotificationItem>
           ))}
         </ul>
-        <div ref={elementRef}>TO DO add Loading more..</div>
+        <div ref={elementRef}></div>
+      </div>
       </div>
     );
   };

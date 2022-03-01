@@ -1,17 +1,33 @@
-import { useEffect, useMemo, useState } from "react";
-import { useConfigContext } from "../../contextProviders/configContextProvider";
+import { useEffect, useState } from "react";
 import APIServiceInstance from "../../common/APIService";
+import { useConfigContext } from "../../contextProviders/configContextProvider";
 import { PrimeLearningObjectInstance } from "../../models/PrimeModels";
-import { useCardIcon, useCardBackgroundStyle, useSkills, useBadge, useLocalizedMetaData, filterTrainingInstance } from "../../utils/hooks";
+import {
+  filterTrainingInstance,
+  useBadge,
+  useCardBackgroundStyle,
+  useCardIcon,
+  useLocalizedMetaData,
+  useSkills,
+} from "../../utils/hooks";
 import { QueryParams } from "../../utils/restAdapter";
 
-const DEFAULT_INCLUDE_LO_OVERVIEW =
-  "enrollment,subLOs.instances.learningObject.enrollment,instances.loResources.resources,subLOs.instances.loResources.resources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
-//"enrollment,instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill";
+const COURSE = "course";
+const LEARING_PROGRAM = "learningProgram";
+const CERTIFICATION = "certification";
 
+const INCLUDES_FOR_COURSE =
+  "authors,enrollment,instances.loResources.resources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
+
+const INCLUDESL_FOR_LP_CERT =
+  "authors,enrollment,subLOs.instances,instances.badge, skills.skillLevel.badge";
+// const DEFAULT_INCLUDE_LO_OVERVIEW =
+//   "enrollment,subLOs.instances.learningObject.enrollment,instances.loResources.resources,subLOs.instances.loResources.resources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
+//"enrollment,instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill";
+//subLOs.instances.learningObject
 export const useTrainingPage = (
   trainingId: string,
-  instanceId: string,
+  instanceId: string = "",
   params: QueryParams = {}
 ) => {
   const { locale } = useConfigContext();
@@ -26,25 +42,20 @@ export const useTrainingPage = (
     const getTrainingInstance = async () => {
       try {
         let queryParam: QueryParams = {};
-        queryParam["include"] = params.include || DEFAULT_INCLUDE_LO_OVERVIEW;
+        let loType = trainingId.split(":")[0];
+        if (loType == COURSE) {
+          queryParam["include"] = params.include || INCLUDES_FOR_COURSE;
+        } else if (loType == CERTIFICATION || loType == LEARING_PROGRAM) {
+          queryParam["include"] = params.include || INCLUDESL_FOR_LP_CERT;
+        }
         queryParam["useCache"] = true;
         queryParam["filter.ignoreEnhancedLP"] = false;
         const response = await APIServiceInstance.getTraining(
           trainingId,
           queryParam
         );
-       
+
         if (response) {
-          // const enrollment = response.enrollment;
-          // if(enrollment) {
-          //   instanceId = enrollment.loInstance.id;
-          // }
-          // const trainingInstances = response.instances.filter(
-          //   (instance) => instance.id === instanceId
-          // );
-          // const trainingInstance = trainingInstances.length
-          //   ? trainingInstances[0]
-          //   : ({} as PrimeLearningObjectInstance);
           const trainingInstance = filterTrainingInstance(response, instanceId);
           setCurrentState({ trainingInstance, isLoading: false });
         }
@@ -64,11 +75,11 @@ export const useTrainingPage = (
     description = "",
     overview = "",
     richTextOverview = "",
-  } = useLocalizedMetaData(training,locale);
+  } = useLocalizedMetaData(training, locale);
 
   const { cardIconUrl, color, bannerUrl } = useCardIcon(training);
   const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
-  const skills =  useSkills(training);
+  const skills = useSkills(training);
   const instanceBadge = useBadge(trainingInstance);
 
   return {

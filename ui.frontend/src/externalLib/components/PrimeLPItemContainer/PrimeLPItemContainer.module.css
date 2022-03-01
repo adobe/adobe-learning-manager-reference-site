@@ -98,6 +98,14 @@
   }
 }
 
+ul {
+  margin: 0;
+}
+
+ul > li {
+  max-width: 100% !important;
+}
+
 .collapsibleContainer {
   background: no-repeat padding-box var(--prime-color-nc5);
   border: none;

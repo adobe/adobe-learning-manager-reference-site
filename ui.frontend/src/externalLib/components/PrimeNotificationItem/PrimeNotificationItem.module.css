@@ -1,18 +1,15 @@
 .notificationItem {
     list-style: none;
-    padding: 0.5rem;
+    padding: 18px 20px 20px 20px;
     display: flex;
     justify-content: space-between;
-
-    font-weight: 400;
+    font-weight: 600;
     font-size: 14px;
-
-    border-bottom: 1px solid #555;
-    color: #d4d4d4;
+    border: 1px solid #F8F8F8;
+    opacity: 1;
+    color: #292929;
     list-style-type: none;
-    min-height: 32px;
-    
-
+    line-height:22px; 
   }
 
   .notificationIcon {
@@ -21,21 +18,19 @@
     height: 21px;
     display: flex;
     vertical-align: top;
-    
     fill: #7f7f7f !important;
 
   }
 
-  .notificationText{
-    padding: 0 1rem;
+  .notificationTime {
+    margin-top: 8px;
+    border: 0;
+    color: #8F8F8F;
+    height: 20px;
+    font-size: 12px;
   }
 
-  .notificationTime {
-    font-style: italic;
-    margin: 0;
-    border: 0;
-    color: #8f8f8f;
-    float:right;
-  }
+
+
 
  

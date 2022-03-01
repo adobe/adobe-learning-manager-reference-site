@@ -1,16 +1,8 @@
-import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
-import { useTrainingPage } from "../../hooks/catalog/useTrainingPage";
-import { PrimeModuleList } from "../PrimeModuleList";
-import { convertSecondsToTimeText } from "../../utils/dateTime";
-import {
-  PrimeLearningObject,
-  PrimeLearningObjectInstance,
-  PrimeLearningObjectResource,
-} from "../../models/PrimeModels";
-import styles from "./PrimeCourseOverview.module.css";
-
 import { Item, TabList, TabPanels, Tabs } from "@react-spectrum/tabs";
-import { Certificate } from "crypto";
+import { PrimeLearningObjectResource } from "../../models/PrimeModels";
+import { convertSecondsToTimeText } from "../../utils/dateTime";
+import { PrimeModuleList } from "../PrimeModuleList";
+import styles from "./PrimeCourseOverview.module.css";
 
 const COURSE = "course";
 
@@ -40,7 +32,7 @@ const PrimeCourseOverview = (props: any) => {
   const moduleReources = filterLoReources("Content");
   const testOutResources = filterLoReources("Test Out");
   const showTestout = testOutResources.length != 0;
-  const showTabs = showTestout && showNotes;
+  const showTabs = showTestout || showNotes;
   const classNames = `${styles.tablist} ${showTabs ? "" : styles.hide}`;
   return (
     <>
