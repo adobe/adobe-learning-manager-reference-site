@@ -43,7 +43,7 @@ const PrimeInstanceItem = (props: any) => {
               })}
               {" : "}
             </span>
-            <span className={`${styles.mobileOnly} ${styles.icon}`}>
+            <span className={`${styles.mobileOnly} ${styles.icon}`} aria-hidden="true">
               <User />
             </span>
             {instructorsName}
@@ -53,7 +53,7 @@ const PrimeInstanceItem = (props: any) => {
       <div className={styles.dateWrapper}>
         {dateValue && (
           <p className={styles.startDate}>
-            <span className={`${styles.mobileOnly} ${styles.icon}`}>
+            <span className={`${styles.mobileOnly} ${styles.icon}`} aria-hidden="true">
               <Calendar />
             </span>
             {dateValue}
@@ -64,7 +64,7 @@ const PrimeInstanceItem = (props: any) => {
       <div className={styles.locationWrapper}>
         {location && (
           <p className={styles.startDate}>
-            <span className={`${styles.mobileOnly} ${styles.icon}`}>
+            <span className={`${styles.mobileOnly} ${styles.icon}`} aria-hidden="true">
               <Location />
             </span>
             {location}
