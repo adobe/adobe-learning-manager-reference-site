@@ -6,12 +6,12 @@ import {
 
 import {timeSince, modifyTime} from "../../utils/dateTime"
 import { PrimeNotificationText } from "../PrimeNotificationText";
-
+import { useConfigContext } from "../../contextProviders";
 
 const PrimeNotificationItem = (props: any) => {
     const notification = props.notification; 
     const messageTime = notification.dateCreated;
-    if (notification && notification.read) {
+    const config = useConfigContext();
     return (
         <li className={styles.notificationItem}>
             <div>
@@ -20,25 +20,10 @@ const PrimeNotificationItem = (props: any) => {
                     </PrimeNotificationText>
                 </div>
                 <div className={styles.notificationTime}>
-                    {modifyTime(messageTime, "en-US")}
+                    {modifyTime(messageTime, config.locale)}
                 </div>
             </div>
         </li>
     );
-    } else {
-        return (
-        <li className={styles.notificationItemUnread}>
-            <div>
-                <div>
-                    <PrimeNotificationText notification={notification}>    
-                    </PrimeNotificationText>
-                </div>
-                <div className={styles.notificationTime}>
-                    {modifyTime(messageTime, "en-US")}
-                </div>
-            </div>
-        </li>
-        )
-    }
 };
 export default PrimeNotificationItem

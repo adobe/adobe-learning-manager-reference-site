@@ -31,29 +31,6 @@
   }
 
 
-  .notificationItemUnread {
-    list-style: none;
-    padding-top: 18px;
-    padding-left:20px; 
-    padding-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    font-weight: 600;
-    font-size: 14px;
-    border: 1px solid #FFFFFF;
-    color: #292929;
-    list-style-type: none;
-    background: #F4F4F4;
-    line-height:22px; 
-  }
-
-  .unreadSymbol {
-    width: 9px;
-    height: 9px;
-    background: #E00808 0% 0% no-repeat padding-box;
-    opacity: 1;
-  }
-
 
 
  

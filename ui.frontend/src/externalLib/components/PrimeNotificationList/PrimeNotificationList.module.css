@@ -1,4 +1,4 @@
-.notificationContainer {
+.notificationListBox {
     width: 414px;
     font-size: 16px;
     list-style: none;
@@ -7,21 +7,8 @@
     opacity: 1;
     max-height: 500px;
     overflow-y: auto;
+    border: 1px solid #F4F4F4;
   }
-  
-  /*
-  The below makes the small arrow on top of the notificationbox 
-  */
-  /* .notificationContainer:after {
-    position: absolute;
-    top: 45px;
-    left: 25px;
-    display: inline-block;
-    border-right: 14px solid transparent;
-    border-bottom: 14px solid #292929;
-    border-left: 14px solid transparent;
-    content: "";
-  } */
   
   .notificationList {
     margin: 0px; 
@@ -32,6 +19,7 @@
   .unreadCountItem { 
     padding: 20px; 
     display: flex;
+    border: 1px solid #F4F4F4;
   }
 
   .unreadCountText {

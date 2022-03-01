@@ -23,7 +23,7 @@ const PrimeNotificationsList = (props: any) => {
             Notifications
           </div>
       </div>
-      <div className={styles.notificationContainer} id="notifications">
+      <div className={styles.notificationListBox} id="notifications">
         <ul className={styles.notificationList}>
           {notifications?.map((entry: any) => (
             <PrimeNotificationItem
