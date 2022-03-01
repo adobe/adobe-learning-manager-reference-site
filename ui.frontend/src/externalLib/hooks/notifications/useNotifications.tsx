@@ -81,7 +81,7 @@ export const useNotifications = () => {
       for (let i = 0; i < notificationToRead.length; i++) {
           let notification = notificationToRead[i]; 
           if (notification.read == false) {
-            let notificationId = notification.id; 
+            let notificationId = notification.id;  
             notification.read = true;  
             const requestBody: any = getUserNotificationBody(notification);
               const response = await RestAdapter.patch({

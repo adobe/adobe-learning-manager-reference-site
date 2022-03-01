@@ -11,12 +11,16 @@ import { useIntl } from "react-intl";
 import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
 import { Provider, lightTheme } from "@adobe/react-spectrum";
 import { PrimeInstanceItem } from "../PrimeInstanceItem";
+import { getQueryParamsIObjectFromUrl } from "../../utils/catalog";
 
 import styles from "./PrimeInstancePage.module.css";
 
 const PrimeInstancePage = (props: any) => {
-  //To Do: needs to get form URL
-  const trainingId = "course:5813667";
+  const [trainingId] = useState(() => {
+    const params = getQueryParamsIObjectFromUrl();
+    return params.trainingId;
+  });
+
   const { formatMessage } = useIntl();
   const [list, setList] = useState([] as any[]);
   const [isAscendingOrder, setIsAscendingOrder] = useState(true);
@@ -55,8 +59,9 @@ const PrimeInstancePage = (props: any) => {
       });
       setList(list);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locale, training.loFormat]);
+    
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeInstances.length, locale, training.loFormat]);
 
   const applySort = (sortParam: string) => {
     const sortedList = sortList(list, sortParam, isAscendingOrder);
@@ -87,6 +92,7 @@ const PrimeInstancePage = (props: any) => {
       />
       <section className={styles.pageContainer}>
         <h2 className={styles.courseInfoHeader}>{headerLabel}</h2>
+        {/* Hidden in mobile */}
         <div className={styles.courseDetailsContainer}>
           <div className={styles.card} style={{ ...cardBgStyle }}>
             <div className={styles.band}></div>
@@ -95,6 +101,13 @@ const PrimeInstancePage = (props: any) => {
             <h3 className={styles.title}>{name}</h3>
             <p className={styles.type}>{training?.type}</p>
           </div>
+        </div>
+
+        {/* Shown only in Mobile */}
+        <div className={styles.selectInstanceContainer}>
+          <h3 className={styles.selectInstance}>
+            Select An Instance
+          </h3>
         </div>
 
         {list!?.length > 0 && (
@@ -115,7 +128,9 @@ const PrimeInstancePage = (props: any) => {
                     {SORT_ORDER_SVG()}
                   </span>
                 </div>
-                <div className={`${styles.dateWrapper} ${styles.commonHeader} `}>
+                <div
+                  className={`${styles.dateWrapper} ${styles.commonHeader} `}
+                >
                   {formatMessage({
                     id: "prime.instance.start.date",
                     defaultMessage: "Start Date",
@@ -128,7 +143,9 @@ const PrimeInstancePage = (props: any) => {
                     {SORT_ORDER_SVG()}
                   </span>
                 </div>
-                <div className={`${styles.locationWrapper} ${styles.commonHeader}`}>
+                <div
+                  className={`${styles.locationWrapper} ${styles.commonHeader}`}
+                >
                   {formatMessage({
                     id: "prime.instance.location",
                     defaultMessage: "Location",

@@ -4,34 +4,26 @@ import {
     NOTIFICATION_ICON_SVG
   } from "../../utils/inline_svg"
 
-import {timeSince} from "../../utils/dateTime"
+import {timeSince, modifyTime} from "../../utils/dateTime"
 import { PrimeNotificationText } from "../PrimeNotificationText";
-
+import { useConfigContext } from "../../contextProviders";
 
 const PrimeNotificationItem = (props: any) => {
     const notification = props.notification; 
     const messageTime = notification.dateCreated;
-    
+    const config = useConfigContext();
     return (
         <li className={styles.notificationItem}>
-            <div className={styles.notificationIcon}>
-                {NOTIFICATION_ICON_SVG()}
-            </div>
-            <div className={styles.notificationText}>
+            <div>
                 <div>
-                    <PrimeNotificationText notification={notification}>
-                    
+                    <PrimeNotificationText notification={notification}>    
                     </PrimeNotificationText>
                 </div>
                 <div className={styles.notificationTime}>
-                    {
-                    /* {modifyTimeDDMMYY(messageTime, "en-US")} */
-                    }
-                    {timeSince(messageTime)} ago
+                    {modifyTime(messageTime, config.locale)}
                 </div>
             </div>
         </li>
-        
     );
 };
 export default PrimeNotificationItem

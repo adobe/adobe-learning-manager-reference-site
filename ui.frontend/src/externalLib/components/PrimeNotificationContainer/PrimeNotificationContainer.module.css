@@ -1,6 +1,7 @@
 .notificationDropdown{
   list-style:none;
-  position:absolute
+  position:absolute; 
+  padding-left:20px;
 }
 .notificationBellIcon {
   padding: 0 !important;

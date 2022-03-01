@@ -1,8 +1,10 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/aria-role */
 import { useState } from "react";
 import { useTrainingCard } from "../../hooks/catalog/useTrainingCard";
 import { PrimeLearningObject } from "../../models/PrimeModels";
 import { useIntl } from "react-intl";
+import { ProgressBar } from "@adobe/react-spectrum";
 
 import styles from "./PrimeTrainingCard.module.css";
 import { SEND_SVG, THREE_DOTS_MENU_SVG } from "../../utils/inline_svg";
@@ -32,19 +34,19 @@ const PrimeTrainingCard: React.FC<{
     setIsHovered(false);
   };
 
-  const skillsAsString = skills?.map((item) => item.skillLevel.name).join(",");
+  const skillsAsString = skills?.map((item) => item.skillLevel?.skill?.name).join(",");
   const descriptionHtml = description ? (
     <p className={styles.description}>{description}</p>
   ) : (
     ""
   );
   const enrollmentHtml = enrollment ? (
-    <div className={styles.progressBarContainer}>
-      <div
-        className={styles.progressBar}
-        style={{ width: enrollment.progressPercent + "%" }}
-      ></div>
-    </div>
+    
+    <ProgressBar
+      showValueLabel={false}
+      value={enrollment.progressPercent}
+      UNSAFE_className={styles.progressBar}
+    />
   ) : (
     ""
   );
@@ -62,12 +64,14 @@ const PrimeTrainingCard: React.FC<{
   const cardClass = `${styles.card} ${isHovered ? styles.hover : ""}`;
   return (
     <>
-      <li role="anchor" className={styles.listItem} onClick={cardClickHandler}>
-        <div className={cardClass} onMouseLeave={onMouseLeaveHandler}>
-          <div
-            style={{ ...cardBgStyle }}
-            className={styles.thumbnail}
-          ></div>
+      <li className={styles.listItem}>
+        <a
+          className={cardClass}
+          onMouseLeave={onMouseLeaveHandler}
+          href={"#"}
+          onClick={cardClickHandler}
+        >
+          <div style={{ ...cardBgStyle }} className={styles.thumbnail}></div>
 
           {imageUrl ? <div className={styles.backdrop}></div> : ""}
 
@@ -77,7 +81,7 @@ const PrimeTrainingCard: React.FC<{
             </div>
 
             <div className={styles.bottomBar}>
-              <span className={styles.price}>$9009</span>
+              {/* <span className={styles.price}>$9009</span> */}
               <div className={styles.title}>{name}</div>
               <div className={styles.trainingType}>
                 {type} - {training.loFormat}
@@ -97,9 +101,7 @@ const PrimeTrainingCard: React.FC<{
                             defaultMessage: "Skills",
                           })}
                         </span>
-                        <span>
-                          {skillsAsString}
-                        </span>
+                        <span>{skillsAsString}</span>
                       </div>
                       <div className={styles.extraIcon}>
                         {THREE_DOTS_MENU_SVG()}
@@ -140,10 +142,18 @@ const PrimeTrainingCard: React.FC<{
               </div>
             </div>
           </div>
-        </div>
+        </a>
       </li>
     </>
   );
 };
 
 export default PrimeTrainingCard;
+
+
+// <div className={styles.progressBarContainer}>
+    //   <div
+    //     className={styles.progressBar}
+    //     style={{ width: enrollment.progressPercent + "%" }}
+    //   ></div>
+    // </div>

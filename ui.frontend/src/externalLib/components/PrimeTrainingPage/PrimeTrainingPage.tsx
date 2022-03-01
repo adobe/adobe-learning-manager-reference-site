@@ -2,8 +2,6 @@ import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
 import { PrimeCourseOverview } from "../PrimeCourseOverview";
 import { PrimeTrainingOverview } from "../PrimeTrainingOverview";
 
-import { PrimeTrainingInstances } from "../PrimeTrainingInstances";
-
 import { useTrainingPage } from "../../hooks/catalog/useTrainingPage";
 import { PrimeModuleList } from "../PrimeModuleList";
 import { convertSecondsToTimeText } from "../../utils/dateTime";
