@@ -1,6 +1,7 @@
 import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
 import { InstanceBadge, Skill } from "../../models/common";
 import { PrimeCourseItemContainer } from "../PrimeCourseItemContainer";
+import { PrimeLPItemContainer } from "../PrimeLPItemContainer";
 import { convertSecondsToTimeText } from "../../utils/dateTime";
 import { PrimeLearningObject, PrimeLearningObjectInstance, PrimeLearningObjectResource } from "../../models/PrimeModels";
 import styles from "./PrimeTrainingOverview.module.css";
@@ -32,18 +33,21 @@ const PrimeTrainingOverview: React.FC<{
 
   const { locale } = useConfigContext();
 
-  const subLos = trainingInstance.subLoInstances.map(subLo => {
-    return subLo.learningObject;
-  });
+  // const subLos = trainingInstance.subLoInstances.map(subLo => {
+  //   return subLo.learningObject;
+  // });
+
+  const subLos = training.subLOs;
 
   return (
     <>
     {subLos.map((subLo) => {
       const loType = subLo.loType;
-     
-      //Although its guaranteed that all child LOs will be courses only, still explicitly adding this check. 
       if(loType === COURSE) {
-        return <PrimeCourseItemContainer key={subLo.id} training={subLo} ></PrimeCourseItemContainer>
+        return <PrimeCourseItemContainer key={subLo.id} trainingId={subLo.id} ></PrimeCourseItemContainer>
+       } else if (loType == LEARNING_PROGRAM) {
+         return <PrimeLPItemContainer key={subLo.id} trainingId={subLo.id} ></PrimeLPItemContainer>
+       
        }
     })}
     </>

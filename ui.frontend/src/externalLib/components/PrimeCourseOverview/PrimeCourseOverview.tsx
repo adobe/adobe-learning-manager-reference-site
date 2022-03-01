@@ -10,7 +10,6 @@ import {
 import styles from "./PrimeCourseOverview.module.css";
 
 import { Item, TabList, TabPanels, Tabs } from "@react-spectrum/tabs";
-import { Certificate } from "crypto";
 
 const COURSE = "course";
 

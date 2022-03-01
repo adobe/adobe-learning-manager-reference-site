@@ -7,30 +7,63 @@ import {
 import { useConfigContext } from "../../contextProviders";
 import styles from "./PrimeCourseItemContainer.module.css";
 import { PrimeCourseOverview } from "..";
-import { useLocalizedMetaData, useCardIcon, useSkills, useBadge, filterTrainingInstance } from "../../utils/hooks";
+import {
+  useLocalizedMetaData,
+  useCardIcon,
+  useSkills,
+  useBadge,
+  filterTrainingInstance,
+} from "../../utils/hooks";
+import { useTrainingPage } from "../../hooks/catalog/useTrainingPage";
+import { PrimeTrainingItemContainerHeader } from "../PrimeTrainingItemContainerHeader";
 
 const PrimeCourseItemContainer: React.FC<{
-  training: PrimeLearningObject;
+  trainingId: string;
 }> = (props) => {
-
-  const { training } = props;
-  const config = useConfigContext();
-  const locale = config.locale;
-
+  const { trainingId } = props;
   const {
-    name = "",
-    description = "",
-    overview = "",
-    richTextOverview = "",
-  } = useLocalizedMetaData(training,locale);
+    name,
+    description,
+    overview,
+    richTextOverview,
+    cardIconUrl,
+    color,
+    bannerUrl,
+    skills,
+    training,
+    trainingInstance,
+    isLoading,
+    cardBgStyle,
+    instanceBadge,
+  } = useTrainingPage(trainingId);
 
-  const { cardIconUrl, color, bannerUrl } = useCardIcon(training);
-  const skills =  useSkills(training);
-  const trainingInstance = filterTrainingInstance(training);
-  const instanceBadge = useBadge(trainingInstance);
-  
+  // const config = useConfigContext();
+  // const locale = config.locale;
+
+  // const {
+  //   name = "",
+  //   description = "",
+  //   overview = "",
+  //   richTextOverview = "",
+  // } = useLocalizedMetaData(training,locale);
+
+  // const { cardIconUrl, color, bannerUrl } = useCardIcon(training);
+  // const skills =  useSkills(training);
+  // const trainingInstance = filterTrainingInstance(training);
+  // const instanceBadge = useBadge(trainingInstance);
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
   return (
     <li className={styles.container}>
+      <PrimeTrainingItemContainerHeader
+        name={name}
+        description={description}
+        cardBgStyle={cardBgStyle}
+        training={training}
+        overview={overview}
+        richTextOverview={richTextOverview}
+      />
       <PrimeCourseOverview
         description={description}
         overview={overview}
@@ -59,6 +92,5 @@ const PrimeCourseItemContainer: React.FC<{
     </li>
   );
 };
-
 
 export default PrimeCourseItemContainer;

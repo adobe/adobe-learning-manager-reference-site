@@ -114,7 +114,7 @@ const filterTrainingInstance = (training: PrimeLearningObject, instanceId: strin
         if(instanceId) {
           return instance.id === instanceId;
         } else {
-          return instance.isDefault && instance.state == "Active";
+          return instance.isDefault; //&& instance.state == "Active";
         }
       }
     );

@@ -65,7 +65,7 @@ const PrimeTrainingPage = (props: any) => {
         trainingInstance={trainingInstance}
         instanceBadge={instanceBadge}
       />}
-       {loType !== COURSE && <PrimeTrainingOverview
+       {(loType == CERTIFICATION || loType == LEARNING_PROGRAM) && <PrimeTrainingOverview
         name={name}
         description={description}
         overview={overview}
