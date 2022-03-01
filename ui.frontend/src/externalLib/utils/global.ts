@@ -19,12 +19,12 @@ export function getALMKeyValue(key: string) {
 
 function redirectToTrainingOverview(trainingId: string, trainingInstanceId: string) {
     let { pagePaths } = getALMKeyValue("config");
-    getWindowObject().location = `${pagePaths.trainingOverview}?trainingId=${trainingId}&trainingInstanceId=${trainingInstanceId}`
+    getWindowObject().location = `${pagePaths.trainingOverview}/trainingId=${trainingId}&trainingInstanceId=${trainingInstanceId}`
 }
 
 function redirectToInstancePage(trainingId: string) {
     let { pagePaths } = getALMKeyValue("config");
-    getWindowObject().location = `${pagePaths.instance}?trainingId=${trainingId}`
+    getWindowObject().location = `${pagePaths.instance}/trainingId=${trainingId}`
 }
 function initGLobalALMObject() {
     getWindowObject().alm = {
