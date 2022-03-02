@@ -60,4 +60,11 @@ export default class LoggedInCustomHooks implements ICustomHooks {
     });
     return JsonApiParse(response).learningObject;
   }
+
+  async getTrainingInstanceSummary(trainingId: string, instanceId: string) {
+    const response = await RestAdapter.get({
+      url: `${this.baseApiUrl}learningObjects/${trainingId}/instances/${instanceId}/summary`,
+    });
+    return JsonApiParse(response);
+  }
 }

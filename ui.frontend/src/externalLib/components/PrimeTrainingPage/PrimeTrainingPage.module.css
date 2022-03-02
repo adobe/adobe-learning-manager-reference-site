@@ -1,0 +1,15 @@
+@import "../../styles/variables.css";
+
+.contentContainer {
+  display: flex;
+}
+
+.left {
+  width: calc(100% - 256px);
+  padding-right: 120px;
+}
+
+.right {
+  width: 256px;
+  padding: 20px 0;
+}

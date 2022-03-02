@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import APIServiceInstance from "../../common/APIService";
 import { useConfigContext } from "../../contextProviders/configContextProvider";
-import { PrimeLearningObjectInstance } from "../../models/PrimeModels";
+import {
+  PrimeLearningObjectInstance,
+  PrimeLoInstanceSummary,
+} from "../../models/PrimeModels";
 import {
   filterTrainingInstance,
   useBadge,
@@ -20,7 +23,7 @@ const INCLUDES_FOR_COURSE =
   "authors,enrollment,instances.loResources.resources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
 
 const INCLUDESL_FOR_LP_CERT =
-  "authors,enrollment,subLOs.instances,instances.badge, skills.skillLevel.badge";
+  "authors,enrollment,subLOs.instances,subLOs.enrollment,instances.badge, skills.skillLevel.badge,skills.skillLevel.skill";
 // const DEFAULT_INCLUDE_LO_OVERVIEW =
 //   "enrollment,subLOs.instances.learningObject.enrollment,instances.loResources.resources,subLOs.instances.loResources.resources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
 //"enrollment,instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill";
@@ -36,6 +39,9 @@ export const useTrainingPage = (
     isLoading: true,
   });
   const { trainingInstance, isLoading } = currentState;
+  const [instanceSummary, setInstanceSummary] = useState(
+    {} as PrimeLoInstanceSummary
+  );
   const training = trainingInstance.learningObject;
 
   useEffect(() => {
@@ -43,9 +49,9 @@ export const useTrainingPage = (
       try {
         let queryParam: QueryParams = {};
         let loType = trainingId.split(":")[0];
-        if (loType == COURSE) {
+        if (loType === COURSE) {
           queryParam["include"] = params.include || INCLUDES_FOR_COURSE;
-        } else if (loType == CERTIFICATION || loType == LEARING_PROGRAM) {
+        } else if (loType === CERTIFICATION || loType === LEARING_PROGRAM) {
           queryParam["include"] = params.include || INCLUDESL_FOR_LP_CERT;
         }
         queryParam["useCache"] = true;
@@ -69,6 +75,25 @@ export const useTrainingPage = (
     };
     getTrainingInstance();
   }, [trainingId, instanceId, params.include]);
+
+  useEffect(() => {
+    const getSummary = async () => {
+      const response = await APIServiceInstance.getTrainingInstanceSummary(
+        trainingInstance.learningObject.id,
+        trainingInstance.id
+      );
+      if (response) {
+        setInstanceSummary(response.loInstanceSummary);
+        console.log(response.loInstanceSummary);
+      }
+
+      try {
+      } catch (error) {}
+    };
+    if (trainingInstance?.id) {
+      getSummary();
+    }
+  }, [trainingInstance]);
 
   const {
     name = "",
@@ -98,6 +123,7 @@ export const useTrainingPage = (
     trainingInstance,
     isLoading,
     instanceBadge,
+    instanceSummary,
   };
   //date create, published, duration
 };
