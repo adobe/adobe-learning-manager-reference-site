@@ -1,12 +1,12 @@
 import { useMemo } from "react";
 import { cardColors } from "../common/Theme";
 import { useConfigContext } from "../contextProviders/configContextProvider";
+import { CardBgStyle, InstanceBadge, Skill } from "../models/common";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
   PrimeLocalizationMetadata,
 } from "../models/PrimeModels";
-import { Skill, InstanceBadge } from "../models/common";
 import { getPreferredLocalizedMetadata } from "./translationService";
 
 const useCardIcon = (training: PrimeLearningObject) => {
@@ -42,7 +42,7 @@ const useCardBackgroundStyle = (
   training: PrimeLearningObject,
   cardIconUrl: string,
   color: string
-) => {
+): CardBgStyle => {
   return useMemo(() => {
     if (!training) {
       return {};

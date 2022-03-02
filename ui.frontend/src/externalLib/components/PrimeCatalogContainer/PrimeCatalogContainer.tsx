@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
+import { Button, lightTheme, Provider } from "@adobe/react-spectrum";
+import Close from "@spectrum-icons/workflow/Close";
+import Filter from "@spectrum-icons/workflow/Filter";
+import { useState } from "react";
+import { useIntl } from "react-intl";
 import { useCatalog } from "../../hooks/catalog/useCatalog";
+import { CLOSE_SVG } from "../../utils/inline_svg";
 import { PrimeCatalogFilters } from "../PrimeCatalogFilters";
 import PrimeCatalogSearch from "../PrimeCatalogSearch/PrimeCatalogSearch";
 import { PrimeTrainingsContainer } from "../PrimeTrainingsContainer";
-import { useIntl } from "react-intl";
-import { Provider, lightTheme, Button } from "@adobe/react-spectrum";
-import Filter from "@spectrum-icons/workflow/Filter";
-import Close from "@spectrum-icons/workflow/Close";
-
 import styles from "./PrimeCatalogContainer.module.css";
-import { CLOSE_SVG } from "../../utils/inline_svg";
 
 const PrimeCatalogContainer = () => {
   const {
@@ -59,7 +58,7 @@ const PrimeCatalogContainer = () => {
         isQuiet
         onPress={toggleFiltersonMobile}
       >
-        <Close aria-aria-label="Close" />
+        <Close aria-label="Close" />
       </Button>
       <PrimeCatalogFilters
         filterState={filterState}

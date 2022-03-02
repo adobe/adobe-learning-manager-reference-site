@@ -42,6 +42,7 @@ const PrimeLPItemContainer: React.FC<{
         description={description}
         cardBgStyle={cardBgStyle}
         training={training}
+        trainingInstance={trainingInstance}
         overview={overview}
         richTextOverview={richTextOverview}
       />

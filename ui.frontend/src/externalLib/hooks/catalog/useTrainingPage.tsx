@@ -19,7 +19,7 @@ const CERTIFICATION = "certification";
 const INCLUDES_FOR_COURSE =
   "authors,enrollment,instances.loResources.resources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
 
-const INCLUDESL_FOR_LP_CERT =
+const INCLUDES_FOR_LP_CERT =
   "authors,enrollment,subLOs.instances,instances.badge, skills.skillLevel.badge";
 // const DEFAULT_INCLUDE_LO_OVERVIEW =
 //   "enrollment,subLOs.instances.learningObject.enrollment,instances.loResources.resources,subLOs.instances.loResources.resources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
@@ -43,10 +43,10 @@ export const useTrainingPage = (
       try {
         let queryParam: QueryParams = {};
         let loType = trainingId.split(":")[0];
-        if (loType == COURSE) {
+        if (loType === COURSE) {
           queryParam["include"] = params.include || INCLUDES_FOR_COURSE;
-        } else if (loType == CERTIFICATION || loType == LEARING_PROGRAM) {
-          queryParam["include"] = params.include || INCLUDESL_FOR_LP_CERT;
+        } else if (loType === CERTIFICATION || loType === LEARING_PROGRAM) {
+          queryParam["include"] = params.include || INCLUDES_FOR_LP_CERT;
         }
         queryParam["useCache"] = true;
         queryParam["filter.ignoreEnhancedLP"] = false;
