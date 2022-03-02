@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workspaceFilter version="1.0">
     <filter root="/apps/aem-learn-components"/>
+    <filter root="/apps/aem-learn-components/configuration"/>
     <filter root="/apps/msm/lrng_blueprint" mode="merge"/>
+    <filter root="/apps/cq/core/content/nav/tools/cloudservices/almconfig"/>
 </workspaceFilter>
