@@ -43,9 +43,17 @@ const PrimeTrainingItemContainerHeader: React.FC<{
     }
   };
 
+  let statusText = "";
+  if (training.enrollment?.state) {
+    const { state } = training.enrollment;
+    if (state === "STARTED") {
+      statusText = "In Progress";
+    } else if (state === "COMPLETED") {
+      statusText = "Completed";
+    }
+  }
   return (
     <div className={styles.headerContainer} onClick={onClickHandler}>
-      {training.id}
       {/* <h2 className={styles.courseInfoHeader}>{name} </h2> */}
       <div className={styles.metadata}>
         <div className={styles.metadataContents}>
@@ -63,7 +71,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
             </>
           )}
         </div>
-        <div className={styles.status}>{training.enrollment?.state}</div>
+        {statusText && <div className={styles.status}>{statusText}</div>}
       </div>
       <div className={styles.trainingDetailsContainer}>
         <div className={styles.card} style={{ ...cardBgStyle }}></div>

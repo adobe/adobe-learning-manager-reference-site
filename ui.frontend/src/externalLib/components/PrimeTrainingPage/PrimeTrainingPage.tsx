@@ -105,10 +105,13 @@ const PrimeTrainingPage = (props: any) => {
                   trainingIds.indexOf(trainingId2.id)
               );
               return (
-                <>
-                  {name}
-                  <PrimeTrainingOverview trainings={subLOs} />
-                </>
+                <section className={styles.trainingOverviewContainer}>
+                  <h3 className={styles.sectionName}>{name}</h3>
+                  <PrimeTrainingOverview
+                    trainings={subLOs}
+                    launchPlayerHandler={launchPlayerHandler}
+                  />
+                </section>
               );
             })}
         </div>
