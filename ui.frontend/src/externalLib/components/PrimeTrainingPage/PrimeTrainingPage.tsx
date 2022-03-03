@@ -1,6 +1,7 @@
 import { lightTheme, Provider } from "@adobe/react-spectrum";
 import { useTrainingPage } from "../../hooks/catalog/useTrainingPage";
 import { convertSecondsToTimeText } from "../../utils/dateTime";
+import { getWindowObject } from "../../utils/global";
 import { PrimeCourseOverview } from "../PrimeCourseOverview";
 import { PrimeTrainingOverview } from "../PrimeTrainingOverview";
 import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
@@ -18,7 +19,7 @@ const PrimeTrainingPage = (props: any) => {
   // const trainingId = queryParams.get(TRAINING_ID_STR) || "";
   // const trainingInstanceId = queryParams.get(TRAINING_INSTANCE_ID_STR) || "";
 
-  const location = (window as any).location;
+  const location = getWindowObject().location;
   const queryParams = new URLSearchParams(decodeURI(location.search));
   const trainingId =
     "learningProgram:79030" || queryParams.get(TRAINING_ID_STR) || "";
@@ -45,17 +46,9 @@ const PrimeTrainingPage = (props: any) => {
   if (isLoading || !training) {
     return <div>Loading....</div>;
   }
-
-  // const [{ name : skillName,
-  //   levelName,
-  //   level,
-  //   credits,
-  //   maxCredits,
-  //   type,
-  //   badgeName,
-  //   badgeUrl,
-  //   badgeState}] = skills;
   const loType = training.loType;
+  const sections = training.sections;
+
   return (
     <Provider theme={lightTheme} colorScheme={"light"}>
       <PrimeTrainingOverviewHeader
@@ -84,18 +77,28 @@ const PrimeTrainingPage = (props: any) => {
               instanceBadge={instanceBadge}
             />
           )}
-          {(loType === CERTIFICATION || loType === LEARNING_PROGRAM) && (
-            <PrimeTrainingOverview
-              name={name}
-              description={description}
-              overview={overview}
-              richTextOverview={richTextOverview}
-              skills={skills}
-              training={training}
-              trainingInstance={trainingInstance}
-              instanceBadge={instanceBadge}
-            />
+          {loType === CERTIFICATION && (
+            <PrimeTrainingOverview trainings={training.subLOs} />
           )}
+          {loType === LEARNING_PROGRAM &&
+            sections.map((section, index) => {
+              const trainingIds = section.loIds;
+              //const name = section.localizedMetadata;
+              const subLOs = training.subLOs.filter(
+                (subLO) => trainingIds.indexOf(subLO.id) !== -1
+              );
+              subLOs.sort(
+                (trainingId1, trainingId2) =>
+                  trainingIds.indexOf(trainingId1.id) -
+                  trainingIds.indexOf(trainingId2.id)
+              );
+              return (
+                <>
+                  Section {index}
+                  <PrimeTrainingOverview trainings={subLOs} />
+                </>
+              );
+            })}
         </div>
         <div className={styles.right}>
           <PrimeTrainingPageExtraDetails
@@ -107,22 +110,6 @@ const PrimeTrainingPage = (props: any) => {
             enrollmentHandler={enrollmentHandler}
             launchPlayerHandler={launchPlayerHandler}
           />
-          {/* {skills.map((skill) => {
-            return (
-              <>
-                {skill.name} {skill.levelName}
-              </>
-            );
-          })}
-          {training.authors?.map((author) => {
-            return (
-              <div>
-                <img src={author.avatarUrl} />
-                {author.name}
-                {author.bio}
-              </div>
-            );
-          })} */}
         </div>
       </div>
     </Provider>
