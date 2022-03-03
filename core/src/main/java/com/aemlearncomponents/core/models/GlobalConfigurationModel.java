@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.aemlearncomponents.core.services.GlobalConfigurationService;
 import com.day.cq.wcm.api.Page;
+import com.google.gson.JsonObject;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class GlobalConfigurationModel {
@@ -34,7 +35,8 @@ public class GlobalConfigurationModel {
 
 	@PostConstruct
 	protected void init() {
-		configs = configService.getAdminConfigs(currentPage);
+		JsonObject jsonConfigs = configService.getAdminConfigs(currentPage);
+		configs = jsonConfigs.toString();
 		//		PageManager pageManager = request.getResourceResolver().adaptTo(PageManager.class);
 		//		currentPagePath = Optional.ofNullable(pageManager)
 		//				.map(pm -> pm.getContainingPage(request.getResource()))

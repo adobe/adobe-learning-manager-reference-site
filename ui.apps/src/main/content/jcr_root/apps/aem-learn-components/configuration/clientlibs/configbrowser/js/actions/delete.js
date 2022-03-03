@@ -65,4 +65,4 @@
       name: "cq.wcm.alm.configuration.delete",
       handler: deleteHandler,
     });
-})(Granite.$);
+})(jQuery);
