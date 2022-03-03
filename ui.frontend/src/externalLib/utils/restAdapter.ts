@@ -1,7 +1,8 @@
-//import { Auth } from "../common";
-//import { GetPrimeAuth, GetPrimeApiBasePath, GetPrimeHostName } from "./windowWrapper";
-//To-Do check with yogesh
-export type QueryParams = Record<string, string | number | boolean | Array<any>>;
+import { getALMKeyValue } from "../utils/global";
+export type QueryParams = Record<
+  string,
+  string | number | boolean | Array<any>
+>;
 
 export interface IRestAdapterGetOptions {
   url: string;
@@ -45,7 +46,10 @@ export class RestAdapter {
       xhr.open(options.method, getUrl(options.url, options.params));
       xhr.withCredentials =
         options.withCredentials === undefined ? true : options.withCredentials;
-      xhr.setRequestHeader("Authorization", `oauth ${(window as any).alm.config.accessToken}`);
+      xhr.setRequestHeader(
+        "Authorization",
+        `oauth ${getALMKeyValue("config").accessToken}`
+      );
       for (const header in options.headers) {
         xhr.setRequestHeader(header, options.headers[header]);
       }
@@ -71,4 +75,4 @@ export class RestAdapter {
     });
   }
 }
-export { };
+export {};

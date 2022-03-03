@@ -35,6 +35,8 @@ export const useTrainingPage = (
     trainingInstance: {} as PrimeLearningObjectInstance,
     isLoading: true,
   });
+
+  //const [error, setError] = useState(null);
   const { trainingInstance, isLoading } = currentState;
   const training = trainingInstance.learningObject;
 
@@ -55,12 +57,18 @@ export const useTrainingPage = (
           queryParam
         );
 
+        // const response = await getApiServiceInstance().getTraining(
+        //   trainingId,
+        //   queryParam
+        // );
+
         if (response) {
           const trainingInstance = filterTrainingInstance(response, instanceId);
           setCurrentState({ trainingInstance, isLoading: false });
         }
       } catch (e) {
         console.log("Error while loading training " + e);
+        //setError(e);
         setCurrentState({
           trainingInstance: {} as PrimeLearningObjectInstance,
           isLoading: false,
@@ -98,6 +106,7 @@ export const useTrainingPage = (
     trainingInstance,
     isLoading,
     instanceBadge,
+    //error,
   };
   //date create, published, duration
 };

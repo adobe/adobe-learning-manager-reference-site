@@ -54,6 +54,12 @@ export default class LoggedInCustomHooks implements ICustomHooks {
     id: string,
     params: QueryParams
   ): Promise<PrimeLearningObject> {
+    // const INCLUDES_FOR_COURSE =
+    //   "authors,enrollment,instances.loResources.resources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
+
+    // const INCLUDES_FOR_LP_CERT =
+    //   "authors,enrollment,subLOs.instances,instances.badge, skills.skillLevel.badge";
+    // params["include"] params.include || INCLUDES_FOR_COURSE;
     const response = await RestAdapter.get({
       url: `${this.baseApiUrl}learningObjects/${id}`,
       params: params,
@@ -61,3 +67,8 @@ export default class LoggedInCustomHooks implements ICustomHooks {
     return JsonApiParse(response).learningObject;
   }
 }
+
+// APIServiceInstance.registerServiceInstance(
+//   SERVICEINSTANCE.PRIME,
+//   new LoggedInCustomHooks()
+// );
