@@ -4,7 +4,6 @@ import { setALMKeyValue } from "../utils/global";
 export interface PrimeConfig {
   ALMbaseUrl: string;
   baseApiUrl: string;
-  hostUrl: string;
   accessToken: string;
   pagePaths: {
     baseUrl: string;

@@ -4,7 +4,7 @@ import { IntlProvider } from "react-intl";
 import {
   Portal,
   ConfigContextProvider,
-  // PrimeNotificationContainer,
+  PrimeNotificationContainer,
   PrimeCatalogContainer,
   PrimeTrainingPage,
   useUserContext,
