@@ -9,6 +9,10 @@
   padding: 10px;
   /* height: 140px; */
   border: 1px solid #c7c7c7;
+  cursor: pointer;
+}
+.headerContainer:hover {
+  background-color: var(--prime-color-nc11);
 }
 
 .metadata {
@@ -51,6 +55,7 @@
   margin-right: 10px;
   border-radius: 10px !important;
   flex: 0 0 auto;
+  background-size: 50px !important;
 }
 
 .title {

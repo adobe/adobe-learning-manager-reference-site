@@ -17,8 +17,9 @@ const PrimeTrainingOverview: React.FC<{
   training: PrimeLearningObject;
   trainingInstance: PrimeLearningObjectInstance;
   instanceBadge: InstanceBadge;
+  launchPlayerHandler: Function;
 }> = (props) => {
-  const { training } = props;
+  const { training, launchPlayerHandler } = props;
 
   const subLos = training.subLOs;
 
@@ -31,6 +32,7 @@ const PrimeTrainingOverview: React.FC<{
             <PrimeCourseItemContainer
               key={subLo.id}
               trainingId={subLo.id}
+              launchPlayerHandler={launchPlayerHandler}
             ></PrimeCourseItemContainer>
           );
         } else if (loType === LEARNING_PROGRAM) {
@@ -38,6 +40,7 @@ const PrimeTrainingOverview: React.FC<{
             <PrimeLPItemContainer
               key={subLo.id}
               trainingId={subLo.id}
+              launchPlayerHandler={launchPlayerHandler}
             ></PrimeLPItemContainer>
           );
         }

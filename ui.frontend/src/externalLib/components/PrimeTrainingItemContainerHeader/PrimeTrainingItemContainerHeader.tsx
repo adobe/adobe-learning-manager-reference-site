@@ -15,6 +15,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
   cardBgStyle: CardBgStyle;
   training: PrimeLearningObject;
   trainingInstance: PrimeLearningObjectInstance;
+  launchPlayerHandler: Function;
 }> = (props) => {
   const {
     name,
@@ -23,6 +24,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
     cardBgStyle,
     training,
     trainingInstance,
+    launchPlayerHandler,
   } = props;
   //const { formatMessage } = useIntl();
 
@@ -34,8 +36,15 @@ const PrimeTrainingItemContainerHeader: React.FC<{
 
   let loType = training.loType;
 
+  const onClickHandler = (event: any) => {
+    if (event.target?.tagName !== "A") {
+      launchPlayerHandler({ id: training.id });
+    }
+  };
+
   return (
-    <section className={styles.headerContainer}>
+    <div className={styles.headerContainer} onClick={onClickHandler}>
+      {training.id}
       {/* <h2 className={styles.courseInfoHeader}>{name} </h2> */}
       <div className={styles.metadata}>
         <div className={styles.metadataContents}>
@@ -69,7 +78,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
           <p className={styles.description}>{overview || description}</p>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

@@ -94,6 +94,7 @@ const PrimeTrainingPage = (props: any) => {
               training={training}
               trainingInstance={trainingInstance}
               instanceBadge={instanceBadge}
+              launchPlayerHandler={launchPlayerHandler}
             />
           )}
         </div>

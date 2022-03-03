@@ -8,8 +8,9 @@ import { PrimeTrainingItemContainerHeader } from "../PrimeTrainingItemContainerH
 import styles from "./PrimeCourseItemContainer.module.css";
 const PrimeCourseItemContainer: React.FC<{
   trainingId: string;
+  launchPlayerHandler: Function;
 }> = (props) => {
-  const { trainingId } = props;
+  const { trainingId, launchPlayerHandler } = props;
   const {
     name,
     description,
@@ -42,6 +43,7 @@ const PrimeCourseItemContainer: React.FC<{
         cardBgStyle={cardBgStyle}
         training={training}
         trainingInstance={trainingInstance}
+        launchPlayerHandler={launchPlayerHandler}
       />
 
       <div className={styles.collapsibleContainer}>
@@ -60,6 +62,7 @@ const PrimeCourseItemContainer: React.FC<{
           instanceBadge={instanceBadge}
           showDuration={false}
           showNotes={false}
+          launchPlayerHandler={launchPlayerHandler}
         />
       )}
     </li>

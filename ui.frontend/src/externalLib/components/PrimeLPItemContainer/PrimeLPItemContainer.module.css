@@ -107,7 +107,7 @@ ul > li {
 }
 
 .collapsibleContainer {
-  background: no-repeat padding-box var(--prime-color-nc5);
+  background: no-repeat padding-box var(--prime-color-nc12);
   border: none;
   display: flex;
   justify-content: center;

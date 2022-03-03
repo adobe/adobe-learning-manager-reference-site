@@ -18,6 +18,7 @@ const PrimeCourseOverview = (props: any) => {
     instanceBadge,
     showDuration = true,
     showNotes = true,
+    launchPlayerHandler,
   } = props;
 
   const filterLoReources = (
@@ -62,11 +63,19 @@ const PrimeCourseOverview = (props: any) => {
                 </header>
               </div>
             )}
-            <PrimeModuleList loResources={moduleReources}></PrimeModuleList>
+            <PrimeModuleList
+              launchPlayerHandler={launchPlayerHandler}
+              loResources={moduleReources}
+              trainingId={training.id}
+            ></PrimeModuleList>
           </Item>
           {showTestout && (
             <Item key="Testout">
-              <PrimeModuleList loResources={testOutResources}></PrimeModuleList>
+              <PrimeModuleList
+                launchPlayerHandler={launchPlayerHandler}
+                loResources={testOutResources}
+                trainingId={training.id}
+              ></PrimeModuleList>
             </Item>
           )}
           {showNotes && <Item key="Notes">You have no notes.</Item>}
