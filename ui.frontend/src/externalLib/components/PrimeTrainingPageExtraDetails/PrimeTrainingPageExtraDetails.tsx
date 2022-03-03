@@ -1,17 +1,15 @@
 import { Button } from "@adobe/react-spectrum";
+import Send from "@spectrum-icons/workflow/Send";
+import UserGroup from "@spectrum-icons/workflow/UserGroup";
 import { useMemo } from "react";
+import { InstanceBadge, Skill } from "../../models/common";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
   PrimeLoInstanceSummary,
 } from "../../models/PrimeModels";
-import { Skill, InstanceBadge } from "../../models/common";
-import Send from "@spectrum-icons/workflow/Send";
-import User from "@spectrum-icons/workflow/User";
-import UserGroup from "@spectrum-icons/workflow/UserGroup";
-
-import styles from "./PrimeTrainingPageExtraDetails.module.css";
 import { LEARNER_BADGE_SVG } from "../../utils/inline_svg";
+import styles from "./PrimeTrainingPageExtraDetails.module.css";
 
 const PrimeTrainingPageExtraDetails: React.FC<{
   trainingInstance: PrimeLearningObjectInstance;
@@ -20,6 +18,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
   badge: InstanceBadge;
   instanceSummary: PrimeLoInstanceSummary;
   enrollmentHandler: () => void;
+  launchPlayerHandler: () => void;
 }> = ({
   trainingInstance,
   skills,
@@ -27,13 +26,11 @@ const PrimeTrainingPageExtraDetails: React.FC<{
   badge,
   instanceSummary,
   enrollmentHandler,
+  launchPlayerHandler,
 }) => {
   const action: string = useMemo(() => {
     // if(trainingInstance.seatLimit)
 
-    if (trainingInstance.state === "Retired") {
-      return "registerInterest";
-    }
     if (trainingInstance.learningObject.enrollment) {
       const { enrollment } = trainingInstance.learningObject;
       if (enrollment.progressPercent === 0) {
@@ -43,6 +40,8 @@ const PrimeTrainingPageExtraDetails: React.FC<{
         return "revisit";
       }
       return "continue";
+    } else if (trainingInstance.state === "Retired") {
+      return "registerInterest";
     } else {
       return "enroll";
     }
@@ -113,6 +112,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
           <Button
             variant="primary"
             UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
+            onPress={launchPlayerHandler}
           >
             Revisit
           </Button>
@@ -121,6 +121,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
           <Button
             variant="primary"
             UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
+            onPress={launchPlayerHandler}
           >
             Continue
           </Button>

@@ -13,11 +13,19 @@ const CERTIFICATION = "certification";
 const TRAINING_ID_STR = "trainingId";
 const TRAINING_INSTANCE_ID_STR = "trainingInstanceId";
 const PrimeTrainingPage = (props: any) => {
+  // const location = (window as any).location;
+  // const queryParams = new URLSearchParams(decodeURI(location.search));
+  // const trainingId = queryParams.get(TRAINING_ID_STR) || "";
+  // const trainingInstanceId = queryParams.get(TRAINING_INSTANCE_ID_STR) || "";
+
   const location = (window as any).location;
   const queryParams = new URLSearchParams(decodeURI(location.search));
-  const trainingId = queryParams.get(TRAINING_ID_STR) || "";
-  const trainingInstanceId = queryParams.get(TRAINING_INSTANCE_ID_STR) || "";
-
+  const trainingId =
+    "learningProgram:79030" || queryParams.get(TRAINING_ID_STR) || "";
+  const trainingInstanceId =
+    "learningProgram:79030_83137" ||
+    queryParams.get(TRAINING_INSTANCE_ID_STR) ||
+    "";
   const {
     name,
     description,
@@ -32,6 +40,7 @@ const PrimeTrainingPage = (props: any) => {
     instanceBadge,
     instanceSummary,
     enrollmentHandler,
+    launchPlayerHandler,
   } = useTrainingPage(trainingId, trainingInstanceId);
   if (isLoading || !training) {
     return <div>Loading....</div>;
@@ -96,6 +105,7 @@ const PrimeTrainingPage = (props: any) => {
             badge={instanceBadge}
             instanceSummary={instanceSummary}
             enrollmentHandler={enrollmentHandler}
+            launchPlayerHandler={launchPlayerHandler}
           />
           {/* {skills.map((skill) => {
             return (

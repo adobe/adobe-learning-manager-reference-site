@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from "react";
 import { setALMKeyValue } from "../utils/global";
 
 export interface PrimeConfig {
+  ALMbaseUrl: string;
   baseApiUrl: string;
   accessToken: string;
   pagePaths: {

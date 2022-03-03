@@ -1,7 +1,7 @@
 @import "../../styles/variables.css";
 
 .container {
-  max-width: 50%;
+  max-width: 100%;
   /* margin: 0 auto; */
   border: 1px solid #c9c9c9;
   clear: both;
@@ -78,14 +78,14 @@
   justify-content: space-between;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 414px) {
   .metaDataContainer {
     display: flex;
     flex-direction: columns;
   }
 
   .container {
-    max-width: 80%;
+    max-width: 100%;
   }
 
   .metadata {
@@ -94,7 +94,7 @@
   }
 
   .headerWrapper {
-    width: 80%;
+    width: 100%;
   }
 }
 

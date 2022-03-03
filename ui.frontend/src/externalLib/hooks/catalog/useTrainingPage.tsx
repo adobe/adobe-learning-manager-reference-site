@@ -13,6 +13,7 @@ import {
   useLocalizedMetaData,
   useSkills,
 } from "../../utils/hooks";
+import { LaunchPlayer } from "../../utils/playback-utils";
 import { QueryParams } from "../../utils/restAdapter";
 
 const COURSE = "course";
@@ -117,6 +118,13 @@ export const useTrainingPage = (
     }
   }, [trainingId, trainingInstance.id]);
 
+  const launchPlayerHandler = useCallback(async () => {
+    const refreshTraining = () => {
+      setRefreshTraining((prevState) => !prevState);
+    };
+    LaunchPlayer(trainingId, refreshTraining);
+  }, [trainingId, trainingInstance.id]);
+
   const {
     name = "",
     description = "",
@@ -147,6 +155,7 @@ export const useTrainingPage = (
     instanceBadge,
     instanceSummary,
     enrollmentHandler,
+    launchPlayerHandler,
   };
   //date create, published, duration
 };

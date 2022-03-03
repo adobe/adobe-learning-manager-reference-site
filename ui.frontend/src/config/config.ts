@@ -17,9 +17,12 @@ export { mountingPoints };
 const baseUrl =
   "http://localhost:4502/content/aem-learn-components/language-masters/en/non-log";
 
+const ALMbaseUrl = "https://captivateprimestage1.adobe.com";
+
 export const primeConfig: PrimeConfig = {
-  baseApiUrl: "https://captivateprimestage1.adobe.com/primeapi/v2/",
-  accessToken: "b1ea21cacccbeb7edba055e092937057",
+  ALMbaseUrl,
+  baseApiUrl: `${ALMbaseUrl}/primeapi/v2/`,
+  accessToken: "44309a3d6349fd8b3d8b23d499854224",
   cdnBaseUrl: "https://cpcontentsdev.adobe.com",
   locale: "en-US",
   pagePaths: {

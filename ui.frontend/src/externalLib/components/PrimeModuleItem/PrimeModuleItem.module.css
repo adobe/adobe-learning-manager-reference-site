@@ -28,13 +28,10 @@
   line-height: 1.25rem;
 }
 
-
 .headerIcon {
   display: flex;
   padding: 10px;
 }
-
-
 
 .details {
   overflow: hidden;
@@ -81,15 +78,14 @@
   justify-content: space-between;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 414px) {
   .metaDataContainer {
     display: flex;
     flex-direction: columns;
-   
   }
 
   .container {
-    max-width: 80%;
+    max-width: 100%;
   }
 
   .metadata {
@@ -97,7 +93,7 @@
     display: flex;
   }
 
-  .headerWrapper{
-    width: 80%;
+  .headerWrapper {
+    width: 100%;
   }
 }
