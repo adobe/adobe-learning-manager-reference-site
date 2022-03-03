@@ -19,7 +19,15 @@ const PrimeTrainingPageExtraDetails: React.FC<{
   training: PrimeLearningObject;
   badge: InstanceBadge;
   instanceSummary: PrimeLoInstanceSummary;
-}> = ({ trainingInstance, skills, training, badge, instanceSummary }) => {
+  enrollmentHandler: () => void;
+}> = ({
+  trainingInstance,
+  skills,
+  training,
+  badge,
+  instanceSummary,
+  enrollmentHandler,
+}) => {
   const action: string = useMemo(() => {
     // if(trainingInstance.seatLimit)
 
@@ -96,6 +104,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
           <Button
             variant="primary"
             UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
+            onPress={enrollmentHandler}
           >
             Enroll
           </Button>

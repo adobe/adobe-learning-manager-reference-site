@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import APIServiceInstance from "../../common/APIService";
 import { useConfigContext } from "../../contextProviders/configContextProvider";
 import {
@@ -42,6 +42,7 @@ export const useTrainingPage = (
   const [instanceSummary, setInstanceSummary] = useState(
     {} as PrimeLoInstanceSummary
   );
+  const [refreshTraining, setRefreshTraining] = useState(false);
   const training = trainingInstance.learningObject;
 
   useEffect(() => {
@@ -74,7 +75,7 @@ export const useTrainingPage = (
       }
     };
     getTrainingInstance();
-  }, [trainingId, instanceId, params.include]);
+  }, [trainingId, instanceId, params.include, refreshTraining]);
 
   useEffect(() => {
     const getSummary = async () => {
@@ -94,6 +95,19 @@ export const useTrainingPage = (
       getSummary();
     }
   }, [trainingInstance]);
+
+  const enrollmentHandler = useCallback(async () => {
+    let queryParam: QueryParams = {
+      loId: trainingId,
+      loInstanceId: trainingInstance.id,
+    };
+    try {
+      await APIServiceInstance.enrollToTraining(queryParam);
+      setRefreshTraining((prevState) => !prevState);
+    } catch (error) {
+      //TODO : handle error
+    }
+  }, [trainingId, trainingInstance.id]);
 
   const {
     name = "",
@@ -124,6 +138,7 @@ export const useTrainingPage = (
     isLoading,
     instanceBadge,
     instanceSummary,
+    enrollmentHandler,
   };
   //date create, published, duration
 };

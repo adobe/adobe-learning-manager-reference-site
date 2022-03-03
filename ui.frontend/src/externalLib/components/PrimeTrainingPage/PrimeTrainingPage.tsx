@@ -31,6 +31,7 @@ const PrimeTrainingPage = (props: any) => {
     isLoading,
     instanceBadge,
     instanceSummary,
+    enrollmentHandler,
   } = useTrainingPage(trainingId, trainingInstanceId);
   if (isLoading || !training) {
     return <div>Loading....</div>;
@@ -94,6 +95,7 @@ const PrimeTrainingPage = (props: any) => {
             trainingInstance={trainingInstance}
             badge={instanceBadge}
             instanceSummary={instanceSummary}
+            enrollmentHandler={enrollmentHandler}
           />
           {/* {skills.map((skill) => {
             return (
