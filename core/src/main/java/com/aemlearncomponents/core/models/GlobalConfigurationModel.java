@@ -1,11 +1,11 @@
 package com.aemlearncomponents.core.models;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.slf4j.Logger;
@@ -26,8 +26,8 @@ public class GlobalConfigurationModel {
 	@ScriptVariable
 	private Page currentPage;
 	
-	@Inject
-	private transient GlobalConfigurationService configService;
+	@OSGiService
+	private GlobalConfigurationService configService;
 
 	private String currentPagePath;
 	private String configs;

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -13,6 +12,7 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.jcr.resource.api.JcrResourceConstants;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +41,7 @@ public class ConfigurationColumnViewItem {
     private static final String ALM_BUCKET_PATH = StringUtils.join(new String[] { CONF_CONTAINER_BUCKET_NAME, CLOUDCONFIGS_BUCKET_NAME,
             ALM_CONFIG_NAME }, "/");
 
-    @Inject
+    @SlingObject
     private Resource resource;
 
     private boolean hasALMSetting;

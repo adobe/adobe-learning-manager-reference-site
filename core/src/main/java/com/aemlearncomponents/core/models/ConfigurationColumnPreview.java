@@ -3,7 +3,6 @@ package com.aemlearncomponents.core.models;
 import java.util.Calendar;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -31,9 +30,6 @@ public class ConfigurationColumnPreview {
 
     @Self
     public SlingHttpServletRequest request;
-
-    @Inject
-    public Resource resource;
 
     boolean isFolder = false;
 
