@@ -1,7 +1,9 @@
 import { lightTheme, Provider } from "@adobe/react-spectrum";
+import { useConfigContext } from "../../contextProviders/configContextProvider";
 import { useTrainingPage } from "../../hooks/catalog/useTrainingPage";
 import { convertSecondsToTimeText } from "../../utils/dateTime";
 import { getWindowObject } from "../../utils/global";
+import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 import { PrimeCourseOverview } from "../PrimeCourseOverview";
 import { PrimeTrainingOverview } from "../PrimeTrainingOverview";
 import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
@@ -43,6 +45,9 @@ const PrimeTrainingPage = (props: any) => {
     enrollmentHandler,
     launchPlayerHandler,
   } = useTrainingPage(trainingId, trainingInstanceId);
+  const config = useConfigContext();
+  const locale = config.locale;
+
   if (isLoading || !training) {
     return <div>Loading....</div>;
   }
@@ -81,9 +86,13 @@ const PrimeTrainingPage = (props: any) => {
             <PrimeTrainingOverview trainings={training.subLOs} />
           )}
           {loType === LEARNING_PROGRAM &&
-            sections.map((section, index) => {
+            sections.map((section) => {
               const trainingIds = section.loIds;
               //const name = section.localizedMetadata;
+              const { name } = getPreferredLocalizedMetadata(
+                section.localizedMetadata,
+                locale
+              );
               const subLOs = training.subLOs.filter(
                 (subLO) => trainingIds.indexOf(subLO.id) !== -1
               );
@@ -94,7 +103,7 @@ const PrimeTrainingPage = (props: any) => {
               );
               return (
                 <>
-                  Section {index}
+                  {name}
                   <PrimeTrainingOverview trainings={subLOs} />
                 </>
               );
