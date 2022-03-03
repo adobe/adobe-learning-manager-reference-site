@@ -7,7 +7,7 @@ import {
 import { PrimeBoard } from "../../models/PrimeModels";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
-
+import { getALMConfig } from "../../utils/global";
 
 export const useBoard = (boardId: any) => {
     const { item } = useSelector(
@@ -17,7 +17,7 @@ export const useBoard = (boardId: any) => {
     
     const fetchBoard = useCallback(async () => {
     try {
-        const baseApiUrl =  (window as any).primeConfig.baseApiUrl;
+        const baseApiUrl =  getALMConfig().baseApiUrl;
         const params: QueryParams = {};
         params["filter.state"]= "ACTIVE";
         params["include"] = "createdBy,skills";

@@ -1,0 +1,1 @@
+export { default as PrimeCommunityAddPostDialog } from "./PrimeCommunityAddPostDialog";

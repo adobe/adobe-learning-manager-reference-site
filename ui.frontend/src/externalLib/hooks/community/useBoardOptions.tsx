@@ -7,7 +7,7 @@ import {
 } from "../../store/actions/social/action";
 import { RestAdapter } from "../../utils/restAdapter";
 import { State } from "../../store/state";
-
+import { getALMConfig } from "../../utils/global";
 
 export const useBoardOptions = () => {
     const { item } = useSelector(
@@ -15,7 +15,7 @@ export const useBoardOptions = () => {
     );
     const dispatch = useDispatch();
     const addBoardToFavourite = useCallback(async (boardId) => {
-        const baseApiUrl =  (window as any).primeConfig.baseApiUrl;
+        const baseApiUrl =  getALMConfig().baseApiUrl;
         await RestAdapter.ajax({
             url: `${baseApiUrl}/boards/${boardId}/favorite`,
             method:"POST"
@@ -24,7 +24,7 @@ export const useBoardOptions = () => {
     }, [dispatch]);
 
     const removeBoardFromFavourite = useCallback(async (boardId) => {
-        const baseApiUrl =  (window as any).primeConfig.baseApiUrl;
+        const baseApiUrl =  getALMConfig().baseApiUrl;
         await RestAdapter.ajax({
             url: `${baseApiUrl}/boards/${boardId}/favorite`,
             method:"DELETE"
@@ -33,7 +33,7 @@ export const useBoardOptions = () => {
     }, [dispatch]);
 
     const deleteBoardFromServer = useCallback(async (boardId, accountId) => {
-        const baseApiUrl =  (window as any).primeConfig.socialBaseApiUrl;
+        const baseApiUrl =  getALMConfig().baseApiUrl;
         await RestAdapter.ajax({
             url: `${baseApiUrl}/account/${accountId}/board/${boardId}`,
             method:"DELETE"
@@ -42,7 +42,7 @@ export const useBoardOptions = () => {
     }, [dispatch]);
 
     const reportBoard = useCallback(async (boardId) => {
-        const baseApiUrl =  (window as any).primeConfig.baseApiUrl;
+        const baseApiUrl =  getALMConfig().baseApiUrl;
         await RestAdapter.ajax({
             url: `${baseApiUrl}/boards/${boardId}/reportAbuse`,
             method:"POST"

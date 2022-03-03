@@ -1,0 +1,18 @@
+.primePostSectionWrapper {
+    display:flex;
+    justify-content: center;
+    margin: 10px;
+}
+
+.primePostSection {
+    border-radius: 2px;
+    opacity: 1;
+    padding: 10px 30px;
+    width: 75%;
+    max-width: 716px;
+    border: 1px solid #D5D5D5;
+    border-radius: 2px;
+    max-width: 716px;
+    opacity: 1;
+    position: relative;
+}
