@@ -1,15 +1,15 @@
 import { getALMConfig, getWindowObject } from "./global";
-let currentLearningObjectId = "";
+// let currenttrainingId = "";
 
-export function LaunchPlayer(learningObjectId: string, callBackFn: Function) {
+export function LaunchPlayer(props: any) {
   const ClosePlayer = (event: MessageEvent) => {
-    if (event.data == "status:close") {
-      handlePlayerClose(currentLearningObjectId);
-      callBackFn && callBackFn();
+    if (event.data === "status:close") {
+      handlePlayerClose(props.trainingId);
+      props.callBackFn && typeof (props.callBackFn) == "function" && props.callBackFn();
     }
   };
   getWindowObject().addEventListener("message", ClosePlayer, false);
-  const playeURL: string = GetPlayerURl(learningObjectId);
+  const playeURL: string = GetPlayerURl(props.trainingId, props.moduleId);
   cleanUp();
   const overlay = document.createElement("div");
   overlay.id = "primePlayerOverlay";
@@ -48,7 +48,7 @@ export function LaunchPlayer(learningObjectId: string, callBackFn: Function) {
   //   };
   // iframe["contentWindow"]?.postMessage(JSON.stringify(msg), "*");
 
-  currentLearningObjectId = learningObjectId;
+  // currenttrainingId = trainingId;
   //   GetPrimeObj()._playerLaunchTimeStamp = Date.now();
 }
 
@@ -73,13 +73,17 @@ function handlePlayerClose(trainingId: string) {
   cleanUp();
 }
 
-export function GetPlayerURl(learningObjectId: string): string {
+export function GetPlayerURl(trainingId = "", moduleId = ""): string {
   const primeConfig = getALMConfig();
   const hostName = primeConfig.ALMbaseUrl;
   const playerEndPoint = "/app/player?";
-  const key = `lo_id=${learningObjectId}`;
+  const key = `lo_id=${trainingId}`;
   const accessToken = primeConfig.accessToken;
   const authKey = `access_token=${accessToken}`;
   //to-do handle preview/guest
-  return `${hostName}${playerEndPoint}${key}&${authKey}&hostname=${hostName}&trapfocus=true`;
+  let url = `${hostName}${playerEndPoint}${key}&${authKey}&hostname=${hostName}&trapfocus=true`;
+  if (moduleId) {
+    url += `&module_id=${moduleId}`
+  }
+  return url;
 }

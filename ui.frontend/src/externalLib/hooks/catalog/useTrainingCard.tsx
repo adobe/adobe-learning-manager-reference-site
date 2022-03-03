@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from "react";
+import APIServiceInstance from "../../common/APIService";
 import { useConfigContext } from "../../contextProviders/configContextProvider";
 import {
   PrimeLearningObject,
@@ -13,6 +14,8 @@ import {
 } from "../../utils/catalog";
 import { getALMObject } from "../../utils/global";
 import { useCardBackgroundStyle, useCardIcon } from "../../utils/hooks";
+import { LaunchPlayer } from "../../utils/playback-utils";
+import { QueryParams } from "../../utils/restAdapter";
 import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 
 export const useTrainingCard = (training: PrimeLearningObject) => {
@@ -31,35 +34,41 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     enrollment,
   } = training;
 
-  const {
-    name,
-    description,
-    overview,
-    richTextOverview,
-  } = useMemo((): PrimeLocalizationMetadata => {
-    return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
-  }, [training.localizedMetadata, locale]);
+  const { name, description, overview, richTextOverview } =
+    useMemo((): PrimeLocalizationMetadata => {
+      return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
+    }, [training.localizedMetadata, locale]);
 
-  const { cardIconUrl = "", color = "", bannerUrl = "" } = useCardIcon(
-    training
-  );
+  const {
+    cardIconUrl = "",
+    color = "",
+    bannerUrl = "",
+  } = useCardIcon(training);
 
   const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
 
-  const cardClickHandler = useCallback(() => {
+  const cardClickHandler = useCallback(async () => {
     if (!training) return;
 
     //if jobAid, need to enroll and open player or new tab
     if (isJobaid(training)) {
-      console.log("This is a JOBAid");
-      //if user logged in, then enroll if not already enrolled.
-      //training.enrollment
-      //need to enroll silently here and then do the following
-      if (isJobaidContentTypeUrl(training)) {
-        window.open(getJobaidUrl(training), "_blank");
-      } else {
-        // need to open the player here
-        console.log("Open Player here");
+      try {
+        if (!training.enrollment) {
+          let queryParam: QueryParams = {
+            loId: training.id,
+            loInstanceId: training.instances[0].id,
+          };
+          await APIServiceInstance.enrollToTraining(queryParam);
+        }
+        //if user logged in, then enroll if not already enrolled.
+        //need to enroll silently here and then do the following
+        if (isJobaidContentTypeUrl(training)) {
+          window.open(getJobaidUrl(training), "_blank");
+        } else {
+          LaunchPlayer({ trainingId: training.id });
+        }
+      } catch (error) {
+        //TODO : handle error
       }
       return;
     }

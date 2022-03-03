@@ -15,6 +15,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
   cardBgStyle: CardBgStyle;
   training: PrimeLearningObject;
   trainingInstance: PrimeLearningObjectInstance;
+  launchPlayerHandler: Function;
 }> = (props) => {
   const {
     name,
@@ -23,6 +24,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
     cardBgStyle,
     training,
     trainingInstance,
+    launchPlayerHandler,
   } = props;
   //const { formatMessage } = useIntl();
 
@@ -34,8 +36,24 @@ const PrimeTrainingItemContainerHeader: React.FC<{
 
   let loType = training.loType;
 
+  const onClickHandler = (event: any) => {
+    //NOTE: Don't open player in case training name is clicked
+    if (event.target?.tagName !== "A") {
+      launchPlayerHandler({ id: training.id });
+    }
+  };
+
+  let statusText = "";
+  if (training.enrollment?.state) {
+    const { state } = training.enrollment;
+    if (state === "STARTED") {
+      statusText = "In Progress";
+    } else if (state === "COMPLETED") {
+      statusText = "Completed";
+    }
+  }
   return (
-    <section className={styles.headerContainer}>
+    <div className={styles.headerContainer} onClick={onClickHandler}>
       {/* <h2 className={styles.courseInfoHeader}>{name} </h2> */}
       <div className={styles.metadata}>
         <div className={styles.metadataContents}>
@@ -53,7 +71,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
             </>
           )}
         </div>
-        <div className={styles.status}>{training.enrollment?.state}</div>
+        {statusText && <div className={styles.status}>{statusText}</div>}
       </div>
       <div className={styles.trainingDetailsContainer}>
         <div className={styles.card} style={{ ...cardBgStyle }}></div>
@@ -69,7 +87,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
           <p className={styles.description}>{overview || description}</p>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

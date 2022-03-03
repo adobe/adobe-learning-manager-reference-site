@@ -8,8 +8,9 @@ import { PrimeTrainingItemContainerHeader } from "../PrimeTrainingItemContainerH
 import styles from "./PrimeLPItemContainer.module.css";
 const PrimeLPItemContainer: React.FC<{
   trainingId: string;
+  launchPlayerHandler: Function;
 }> = (props) => {
-  const { trainingId } = props;
+  const { trainingId, launchPlayerHandler } = props;
   const {
     name,
     description,
@@ -45,6 +46,7 @@ const PrimeLPItemContainer: React.FC<{
         trainingInstance={trainingInstance}
         overview={overview}
         richTextOverview={richTextOverview}
+        launchPlayerHandler={launchPlayerHandler}
       />
       <div className={styles.collapsibleContainer}>
         <Button variant="overBackground" isQuiet onPress={clickHandler}>
@@ -59,6 +61,7 @@ const PrimeLPItemContainer: React.FC<{
               <PrimeCourseItemContainer
                 key={subLo.id}
                 trainingId={subLo.id}
+                launchPlayerHandler={launchPlayerHandler}
               ></PrimeCourseItemContainer>
             );
           })}

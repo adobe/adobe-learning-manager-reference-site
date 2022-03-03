@@ -11,10 +11,11 @@ const PrimeTrainingOverview: React.FC<{
   // richTextOverview: string;
   // skills: Skill[];
   trainings: PrimeLearningObject[];
+  launchPlayerHandler: Function;
   // trainingInstance: PrimeLearningObjectInstance;
   // instanceBadge: InstanceBadge;
 }> = (props) => {
-  const { trainings } = props;
+  const { trainings, launchPlayerHandler } = props;
 
   //const subLos = training.subLOs;
 
@@ -27,6 +28,7 @@ const PrimeTrainingOverview: React.FC<{
             <PrimeCourseItemContainer
               key={trainings.id}
               trainingId={trainings.id}
+              launchPlayerHandler={launchPlayerHandler}
             ></PrimeCourseItemContainer>
           );
         } else if (loType === LEARNING_PROGRAM) {
@@ -34,6 +36,7 @@ const PrimeTrainingOverview: React.FC<{
             <PrimeLPItemContainer
               key={trainings.id}
               trainingId={trainings.id}
+              launchPlayerHandler={launchPlayerHandler}
             ></PrimeLPItemContainer>
           );
         }

@@ -118,12 +118,16 @@ export const useTrainingPage = (
     }
   }, [trainingId, trainingInstance.id]);
 
-  const launchPlayerHandler = useCallback(async () => {
-    const refreshTraining = () => {
-      setRefreshTraining((prevState) => !prevState);
-    };
-    LaunchPlayer(trainingId, refreshTraining);
-  }, [trainingId, trainingInstance.id]);
+  const launchPlayerHandler = useCallback(
+    async ({ id, moduleId } = {}) => {
+      const refreshTraining = () => {
+        setRefreshTraining((prevState) => !prevState);
+      };
+      let test = id || trainingId;
+      LaunchPlayer({ trainingId: test, callBackFn: refreshTraining, moduleId });
+    },
+    [trainingId]
+  );
 
   const {
     name = "",

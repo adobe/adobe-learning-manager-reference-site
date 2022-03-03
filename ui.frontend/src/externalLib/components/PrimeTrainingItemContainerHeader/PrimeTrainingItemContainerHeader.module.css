@@ -8,7 +8,11 @@
 .headerContainer {
   padding: 10px;
   /* height: 140px; */
-  border: 1px solid #c7c7c7;
+  /* border: 1px solid #c7c7c7; */
+  cursor: pointer;
+}
+.headerContainer:hover {
+  background-color: var(--prime-color-nc11);
 }
 
 .metadata {
@@ -51,6 +55,7 @@
   margin-right: 10px;
   border-radius: 10px !important;
   flex: 0 0 auto;
+  background-size: 50px !important;
 }
 
 .title {
@@ -85,7 +90,25 @@
 
 .authorNames {
   text-transform: lowercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
 }
 .authorNames:first-letter {
   text-transform: uppercase;
+}
+
+.status {
+  font-size: 13px;
+  color: var(--prime-icon-color);
+}
+
+@media screen and (max-width: 414px) {
+  .title {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }

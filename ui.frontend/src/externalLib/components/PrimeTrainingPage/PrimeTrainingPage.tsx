@@ -83,7 +83,10 @@ const PrimeTrainingPage = (props: any) => {
             />
           )}
           {loType === CERTIFICATION && (
-            <PrimeTrainingOverview trainings={training.subLOs} />
+            <PrimeTrainingOverview
+              trainings={training.subLOs}
+              launchPlayerHandler={launchPlayerHandler}
+            />
           )}
           {loType === LEARNING_PROGRAM &&
             sections.map((section) => {
@@ -102,10 +105,13 @@ const PrimeTrainingPage = (props: any) => {
                   trainingIds.indexOf(trainingId2.id)
               );
               return (
-                <>
-                  {name}
-                  <PrimeTrainingOverview trainings={subLOs} />
-                </>
+                <section className={styles.trainingOverviewContainer}>
+                  <h3 className={styles.sectionName}>{name}</h3>
+                  <PrimeTrainingOverview
+                    trainings={subLOs}
+                    launchPlayerHandler={launchPlayerHandler}
+                  />
+                </section>
               );
             })}
         </div>

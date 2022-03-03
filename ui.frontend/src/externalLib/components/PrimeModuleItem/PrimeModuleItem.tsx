@@ -38,8 +38,14 @@ const AUDIO = "AUDIO";
 
 const PrimeModuleItem = (props: any) => {
   const loResource: PrimeLearningObjectResource = props.loResource;
+
+  // loResource.learningObject.
+
+  const launchPlayerHandler = props.launchPlayerHandler;
   const config = useConfigContext();
   const locale = config.locale;
+  const trainingId = props.trainingId;
+
   let localizedMetadata = loResource.localizedMetadata;
   const { name, description, overview } = getPreferredLocalizedMetadata(
     localizedMetadata,
@@ -87,7 +93,14 @@ const PrimeModuleItem = (props: any) => {
 
   return (
     <li className={styles.container}>
-      <div className={styles.headerContainer} tabIndex={0}>
+      <div
+        className={styles.headerContainer}
+        tabIndex={0}
+        data-test={loResource.id}
+        onClick={() =>
+          launchPlayerHandler({ id: trainingId, moduleId: loResource.id })
+        }
+      >
         <div className={styles.icon}> {moduleIcon}</div>
         <div className={styles.headerWrapper}>
           <div>{name}</div>
