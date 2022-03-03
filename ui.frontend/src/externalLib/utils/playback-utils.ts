@@ -81,5 +81,5 @@ export function GetPlayerURl(learningObjectId: string): string {
   const accessToken = primeConfig.accessToken;
   const authKey = `access_token=${accessToken}`;
   //to-do handle preview/guest
-  return `${hostName}${playerEndPoint}${key}&${authKey}&hostname=${hostName}`;
+  return `${hostName}${playerEndPoint}${key}&${authKey}&hostname=${hostName}&trapfocus=true`;
 }
