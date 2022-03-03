@@ -37,6 +37,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
   let loType = training.loType;
 
   const onClickHandler = (event: any) => {
+    //NOTE: Don't open player in case training name is clicked
     if (event.target?.tagName !== "A") {
       launchPlayerHandler({ id: training.id });
     }
