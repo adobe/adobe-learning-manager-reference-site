@@ -1,46 +1,49 @@
 package com.aemlearncomponents.core.models;
 
-import java.util.Optional;
-import java.util.stream.IntStream;
-
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.aemlearncomponents.core.services.GlobalConfigurationService;
 import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.PageManager;
-import com.google.gson.JsonObject;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class GlobalConfigurationModel {
 
+	private static final Logger LOG = LoggerFactory.getLogger(GlobalConfigurationModel.class);
+
 	@Self
 	protected SlingHttpServletRequest request;
+
+	@ScriptVariable
+	private Page currentPage;
 	
+	@Inject
+	private transient GlobalConfigurationService configService;
+
 	private String currentPagePath;
-	
-	private static final String[] colors = {"#00000", "#ffffff", "#445566"};
-	
+	private String configs;
+
+
 	@PostConstruct
 	protected void init() {
-		PageManager pageManager = request.getResourceResolver().adaptTo(PageManager.class);
-		currentPagePath = Optional.ofNullable(pageManager)
-                .map(pm -> pm.getContainingPage(request.getResource()))
-                .map(Page::getPath).orElse("");
+		configs = configService.getAdminConfigs(currentPage);
+		//		PageManager pageManager = request.getResourceResolver().adaptTo(PageManager.class);
+		//		currentPagePath = Optional.ofNullable(pageManager)
+		//				.map(pm -> pm.getContainingPage(request.getResource()))
+		//				.map(Page::getPath).orElse("");
 
 	}
 
 	public String getConfig() {
-		JsonObject globalConfig = new JsonObject();
-		
-		JsonObject primeColors = new JsonObject();
-		IntStream.range(0, colors.length).forEach(index -> primeColors.addProperty(String.valueOf(index), colors[index]));
-		globalConfig.add("primeColors", primeColors);
-		
-		return globalConfig.toString();
+		return configs;
 	}
 
 }

@@ -37,10 +37,11 @@ const PrimeCourseItemContainer: React.FC<{
       <PrimeTrainingItemContainerHeader
         name={name}
         description={description}
-        cardBgStyle={cardBgStyle}
-        training={training}
         overview={overview}
         richTextOverview={richTextOverview}
+        cardBgStyle={cardBgStyle}
+        training={training}
+        trainingInstance={trainingInstance}
       />
 
       <div className={styles.collapsibleContainer}>

@@ -1,13 +1,33 @@
+import { CardBgStyle } from "../../models/common";
+import {
+  PrimeLearningObject,
+  PrimeLearningObjectInstance,
+} from "../../models/PrimeModels";
 import { convertSecondsToTimeText } from "../../utils/dateTime";
 import { getALMKeyValue } from "../../utils/global";
 import styles from "./PrimeTrainingItemContainerHeader.module.css";
 
-const PrimeTrainingItemContainerHeader = (props: any) => {
-  const { name, description, overview, cardBgStyle, training } = props;
+const PrimeTrainingItemContainerHeader: React.FC<{
+  name: string;
+  description: string;
+  overview: string;
+  richTextOverview: string;
+  cardBgStyle: CardBgStyle;
+  training: PrimeLearningObject;
+  trainingInstance: PrimeLearningObjectInstance;
+}> = (props) => {
+  const {
+    name,
+    description,
+    overview,
+    cardBgStyle,
+    training,
+    trainingInstance,
+  } = props;
   //const { formatMessage } = useIntl();
 
   let { pagePaths } = getALMKeyValue("config");
-  const trainingLink = `${pagePaths.trainingOverview}/trainingId=${training.id}`;
+  const trainingLink = `${pagePaths.trainingOverview}?trainingId=${training.id}&trainingInstanceId=${trainingInstance.id}`;
   const authorNames = training.authorNames?.length
     ? training.authorNames.join(", ")
     : "";

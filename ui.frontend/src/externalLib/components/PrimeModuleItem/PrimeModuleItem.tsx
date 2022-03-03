@@ -1,38 +1,29 @@
-import React, { useContext, useMemo } from "react";
+import React, { useMemo } from "react";
+import { useConfigContext } from "../../contextProviders";
 import {
   PrimeLearningObjectResource,
   PrimeResource,
 } from "../../models/PrimeModels";
-import { useConfigContext } from "../../contextProviders";
-import styles from "./PrimeModuleItem.module.css";
-import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 import { convertSecondsToTimeText } from "../../utils/dateTime";
 import {
   ACTIVITY_SVG,
-  CAPTIVATE_SVG,
+  AUDIO_SVG,
+  CALENDAR_SVG,
+  CLASSROOM_SVG,
+  CLOCK_SVG,
   DOC_SVG,
-  HTML_SVG,
   PDF_SVG,
   PPT_SVG,
-  PRESENTER_SVG,
   SCORM_SVG,
-  AUDIO_SVG,
-  URL_SVG,
-  VIDEO_SVG,
-  XLS_SVG,
-  REJECT_SVG,
-  CALENDAR_SVG,
-  CLOCK_SVG,
-  LINK_SVG,
   SEATS_SVG,
-  VENUE_SVG,
-  SKILLS_SVG,
-  MULTILINGUAL_SVG,
-  DEFAULT_USER_SVG,
-  VIRTUAL_CLASSROOM_SVG,
-  CLASSROOM_SVG,
   USER_SVG,
+  VENUE_SVG,
+  VIDEO_SVG,
+  VIRTUAL_CLASSROOM_SVG,
+  XLS_SVG,
 } from "../../utils/inline_svg";
+import { getPreferredLocalizedMetadata } from "../../utils/translationService";
+import styles from "./PrimeModuleItem.module.css";
 
 const CLASSROOM = "Classroom";
 const VIRTUAL_CLASSROOM = "Virtual Classroom";
@@ -56,17 +47,17 @@ const PrimeModuleItem = (props: any) => {
   );
   const resource = useMemo((): PrimeResource => {
     return (
-      loResource.resources.filter((item) => item.locale == locale)[0] ||
-      loResource.resources.filter((item) => item.locale == "en-US")[0] ||
+      loResource.resources.filter((item) => item.locale === locale)[0] ||
+      loResource.resources.filter((item) => item.locale === "en-US")[0] ||
       loResource.resources[0]
     );
   }, [loResource.resources, locale]);
 
   const isClassroomOrVC =
-    loResource.resourceType == CLASSROOM ||
-    loResource.resourceType == VIRTUAL_CLASSROOM;
+    loResource.resourceType === CLASSROOM ||
+    loResource.resourceType === VIRTUAL_CLASSROOM;
 
-  const isElearning =   loResource.resourceType == ELEARNING;
+  const isElearning = loResource.resourceType === ELEARNING;
 
   const hasSessionDetails =
     resource.dateStart && resource.completionDeadline ? true : false;
@@ -88,6 +79,7 @@ const PrimeModuleItem = (props: any) => {
   let descriptionTextHTML = getDescriptionTemplate(
     styles,
     description,
+    overview,
     isClassroomOrVC,
     isElearning,
     hasSessionDetails
@@ -143,11 +135,12 @@ const getDescriptionTemplate = (
     readonly [key: string]: string;
   },
   description: string,
+  overview: string,
   isClassroomOrVC: boolean,
   isElearning: boolean,
   hasSessionDetails: boolean
 ) => {
-  if(isElearning) {
+  if (isElearning) {
     return "";
   }
   if (isClassroomOrVC && !hasSessionDetails) {
@@ -158,7 +151,10 @@ const getDescriptionTemplate = (
     );
   }
   return (
-    description && <div className={styles.moduleDescription}>{description}</div>
+    description ||
+    (overview && (
+      <div className={styles.moduleDescription}>{description || overview}</div>
+    ))
   );
 };
 
