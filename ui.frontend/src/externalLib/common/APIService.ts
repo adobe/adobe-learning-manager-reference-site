@@ -6,6 +6,7 @@ import { QueryParams } from "../utils/restAdapter";
 class APIService {
   //customHooks: ICustomHooks;
 
+  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
   constructor() {
     //this.customHooks = this.isUserLoggedIn() ? new LoggedInCustomHooks() : new NonLoggedInCustomHooks();
   }
@@ -38,6 +39,16 @@ class APIService {
   public async getTraining(id: string, params: QueryParams) {
     if (this.isUserLoggedIn()) {
       return new LoggedInCustomHooks().getTraining(id, params);
+    }
+  }
+  public async getTrainingInstanceSummary(trainingId: string, instanceId: string) {
+    if (this.isUserLoggedIn()) {
+      return new LoggedInCustomHooks().getTrainingInstanceSummary(trainingId, instanceId);
+    }
+  }
+  public async enrollToTraining(params: QueryParams = {}) {
+    if (this.isUserLoggedIn()) {
+      return new LoggedInCustomHooks().enrollToTraining(params);
     }
   }
 }
