@@ -1,0 +1,1 @@
+export { default as PrimeCommunityObjectBody } from "./PrimeCommunityObjectBody";

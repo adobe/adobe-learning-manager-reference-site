@@ -1,0 +1,17 @@
+.primePostDescription, .primePostPreview {
+    margin-left: 50px;
+    margin-bottom: 30px;
+}
+
+.primePostPreview {
+    margin-bottom: 20px;
+}
+
+.primePostVideoIframe {
+    height: 17rem;
+    width: 92%
+}
+
+.primePostImage {
+    width:100%;
+}

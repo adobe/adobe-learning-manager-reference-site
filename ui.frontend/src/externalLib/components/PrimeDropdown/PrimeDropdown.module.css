@@ -1,0 +1,33 @@
+.primeDropdown {
+    color:#999999;
+    font-size:12px;
+    margin-right: 25px;
+}
+
+.primeDropdownIcon {
+    vertical-align: middle;
+}
+
+.primeDropdownValue:hover, .primeDropdownIcon:hover {
+    cursor: pointer;
+}
+.primeDropdownOptionList {
+    position: absolute;
+    border: 1px solid #dedede;
+    background-color: #fafafa;
+    min-width: 120px;
+    box-shadow: 0 0 3px 0 rgb(0 0 0 / 10%);
+    padding: 8px 0px;
+    z-index: 100;
+}
+
+.primeDropdownOption {
+    list-style: none;
+    padding:7px;
+    z-index: 100;
+}
+
+.primeDropdownOption:hover {
+    background-color: #dedede;
+    cursor:pointer;
+}

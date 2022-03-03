@@ -12,50 +12,75 @@ import {
   SOCIAL_LEARNER_CLOCK_SVG
 } from "../../utils/inline_svg"
 import { PrimeCommunityBoardOptions } from "../PrimeCommunityBoardOptions";
+import { PrimeAlertDialog } from "../PrimeAlertDialog";
+import { formatDate } from "../../utils/dateTime";
 
 import styles from "./PrimeCommunityBoard.module.css";
-import  {useState} from "react";
+import { useState } from "react";
 import { useIntl } from "react-intl";
+import { useBoardOptions } from "../../hooks/community";
+
 
 const PrimeCommunityBoard  = (props: any) => {
   const { formatMessage } = useIntl();
   let board = props.board;
   let showBoardOptions = false;
   const [isBoardOptionsOpen, setIsBoardOptionsOpen] = useState(showBoardOptions);
-
+  const { reportBoard } = useBoardOptions();
+  const [ showConfirmation, setShowConfirmation ] = useState(false);
   
   const boardSkills = board.skills.map((skill: any, index: any) => {
     return (index ? ', ': '') + skill.name;
   });
 
-  // const showBoardOptionsHandler = () => {
-  //   setIsBoardOptionsOpen(true);
-  // };
-
-  // const hideBoardOptionsHandler = () => {
-  //   setIsBoardOptionsOpen(false);
-  // };
-
   const toggleBoardOptionsHandler = () => {
     setIsBoardOptionsOpen((prevState) => !prevState);
   };
 
-  const formatDate = (dateString: any) => {
-    const options = { year: "numeric", month: "short", day: "2-digit" } as const;
-    const value =  (new Date(dateString).toLocaleDateString(undefined, options)).split(" ");
-    return value[1] + " " + value[0] + ", " + value[2];
+  const boardNameClickHandler = () => {
+    console.log(board.id);
+    props.boardClickHandler(board);
+  }
+
+  const reportBoardHandler = () => {
+    setShowConfirmation(true);
+  }
+
+  const callReportBoard = async() => {
+    try {
+      await reportBoard(board.id);
+    } catch(Exception){};
+    hideConfirmationDialog();
+  }
+
+  const hideConfirmationDialog = () => {
+      setShowConfirmation(false);
   }
 
   return (
     <>
+    <div className={styles.primeBoardWrapper}>
       <div className={styles.primeBoardItem}>
         <div className="prime-title-skills-container">
           {/* <span id="sr-only">${i18n(state.locale).BOARD}</span> */}
           <button className={styles.primeBoardOptions} onClick={toggleBoardOptionsHandler} id={"prime-board-options-" + board.id}>
             {SOCIAL_MORE_OPTIONS_SVG()}
-            {isBoardOptionsOpen && <PrimeCommunityBoardOptions board={board} boardOptionsHandler={toggleBoardOptionsHandler}></PrimeCommunityBoardOptions>}
+            {isBoardOptionsOpen && 
+              <PrimeCommunityBoardOptions board={board} boardOptionsHandler={toggleBoardOptionsHandler} reportBoardHandler={reportBoardHandler}></PrimeCommunityBoardOptions>
+            }  
           </button>
-          <div className={styles.primeBoardName} role="link" tabIndex={0}>{board.name}</div>
+          {showConfirmation &&
+            <PrimeAlertDialog
+            variant="confirmation"
+            title="Confirmation Required"
+            primaryActionLabel="Report"
+            onPrimaryAction={callReportBoard}
+            secondaryActionLabel="Cancel"
+            onSecondaryAction={hideConfirmationDialog}
+            body="Are you sure you want to report this board? A notification will be sent to the board administrator and moderators."
+            ></PrimeAlertDialog>
+          }
+          <div className={styles.primeBoardName} role="link" tabIndex={0} onClick={boardNameClickHandler}>{board.name}</div>
           <div className={styles.primeBoardSkill}>
             {formatMessage({
               id: "prime.community.board.skills",
@@ -146,6 +171,7 @@ const PrimeCommunityBoard  = (props: any) => {
               </span>
             </div>
         </div>
+      </div>
       </div>
     </>
   );

@@ -88,3 +88,10 @@ export function dateBasedOnLocale(
   const dateOptions = { ...DEFAULT_DATE_OPTIONS, options };
   return new Date(date).toLocaleDateString(locale, dateOptions);
 }
+
+//inputFormat => 2022-02-13T14:00:39.000Z, outputFormat => Feb 13, 2022
+export function formatDate(dateString: any) {
+  const options = { year: "numeric", month: "short", day: "2-digit" } as const;
+  const value =  (new Date(dateString).toLocaleDateString(undefined, options)).split(" ");
+  return value[1] + " " + value[0] + ", " + value[2]; // MMM DD, YYYY
+}

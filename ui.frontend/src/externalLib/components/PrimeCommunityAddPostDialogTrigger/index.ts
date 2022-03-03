@@ -1,0 +1,1 @@
+export { default as PrimeCommunityAddPostDialogTrigger } from "./PrimeCommunityAddPostDialogTrigger";

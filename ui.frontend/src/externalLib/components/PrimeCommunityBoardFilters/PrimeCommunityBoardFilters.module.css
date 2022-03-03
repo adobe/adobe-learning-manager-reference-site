@@ -1,0 +1,15 @@
+.primeBoardOptionsWrapper {
+    display:flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.primeBoardFilters {
+    margin-top: 50px;
+    border-radius: 2px;
+    opacity: 1;
+    padding: 10px;
+    width: 75%;
+    max-width: 716px;
+    display:flex;
+}

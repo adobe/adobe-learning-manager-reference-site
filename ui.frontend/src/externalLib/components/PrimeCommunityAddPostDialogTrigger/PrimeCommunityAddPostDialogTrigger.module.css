@@ -1,0 +1,15 @@
+.primeDialogLaunchButton {
+    background: #306EB5;
+    border-radius: 22px;
+    opacity: 1;
+    color: #FFFFFF;
+    padding:8px 22px;
+    font-size: 13px;
+    border: none;
+}
+
+.primeDialogLaunchButton:hover {
+    cursor: pointer;
+    background: #4283d0;
+    color: #FFFFFF;
+}

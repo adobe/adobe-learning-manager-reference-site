@@ -3,6 +3,10 @@ export * from "./PrimeCatalogFilters";
 export * from "./PrimeCatalogContainer";
 export * from "./PrimeCommunityBoardList";
 export * from "./PrimeCommunityBoard";
+export * from "./PrimeCommunityBoardPage";
+export * from "./PrimeCommunityPost";
+export * from "./PrimeCommunityPosts";
+export * from "./PrimeCommunityComment";
 export * from "./PrimeTrainingsContainer";
 export * from "./PrimeTrainingCard";
 export * from "./PrimeNotificationContainer";
@@ -12,3 +16,13 @@ export * from "./PrimeCourseOverview"
 export * from "./PrimeCatalogSearch"
 export * from "./PrimeInstancePage"
 //export * from "./PrimeCourseItemContainer"
+export * from "./PrimeCommunityObjectInput";
+export * from "./PrimeCommunityObjectActions";
+export * from "./PrimeCommunityObjectHeader";
+export * from "./PrimeCommunityObjectBody";
+export * from "./PrimeCommunityObjectInput";
+export * from "./PrimeCommunityAddPost";
+export * from "./PrimeCommunityAddPostDialog";
+export * from "./PrimeCommunityAddPostDialogTrigger";
+export * from "./PrimeAlertDialog";
+export * from "./PrimeCommunityObjectOptions";
