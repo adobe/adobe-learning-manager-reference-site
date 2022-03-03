@@ -34,4 +34,4 @@
     init();
     formElement.on("submit", formSubmitHandler);
   });
-})(window, document, Granite, Granite.$);
+})(window, document, Granite, jQuery);
