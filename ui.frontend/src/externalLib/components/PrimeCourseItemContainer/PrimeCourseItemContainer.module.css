@@ -1,7 +1,7 @@
 @import "../../styles/variables.css";
 
 .container {
-  max-width: 50%;
+  max-width: 100%;
   /* margin: 0 auto; */
   border: 1px solid #c9c9c9;
   clear: both;

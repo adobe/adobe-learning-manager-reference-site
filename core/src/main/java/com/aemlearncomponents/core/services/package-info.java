@@ -14,6 +14,6 @@
  *  limitations under the License.
  */
 @Version("1.0")
-package com.aemlearncomponents.it.tests;
+package com.aemlearncomponents.core.services;
 
 import org.osgi.annotation.versioning.Version;

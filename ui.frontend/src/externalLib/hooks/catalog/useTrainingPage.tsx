@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import APIServiceInstance from "../../common/APIService";
 import { useConfigContext } from "../../contextProviders/configContextProvider";
-import { PrimeLearningObjectInstance } from "../../models/PrimeModels";
+import {
+  PrimeLearningObjectInstance,
+  PrimeLoInstanceSummary,
+} from "../../models/PrimeModels";
 import {
   filterTrainingInstance,
   useBadge,
@@ -19,8 +22,8 @@ const CERTIFICATION = "certification";
 const INCLUDES_FOR_COURSE =
   "authors,enrollment,instances.loResources.resources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
 
-const INCLUDES_FOR_LP_CERT =
-  "authors,enrollment,subLOs.instances,instances.badge, skills.skillLevel.badge";
+const INCLUDESL_FOR_LP_CERT =
+  "authors,enrollment,subLOs.instances,subLOs.enrollment,instances.badge, skills.skillLevel.badge,skills.skillLevel.skill";
 // const DEFAULT_INCLUDE_LO_OVERVIEW =
 //   "enrollment,subLOs.instances.learningObject.enrollment,instances.loResources.resources,subLOs.instances.loResources.resources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
 //"enrollment,instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill";
@@ -38,6 +41,10 @@ export const useTrainingPage = (
 
   //const [error, setError] = useState(null);
   const { trainingInstance, isLoading } = currentState;
+  const [instanceSummary, setInstanceSummary] = useState(
+    {} as PrimeLoInstanceSummary
+  );
+  const [refreshTraining, setRefreshTraining] = useState(false);
   const training = trainingInstance.learningObject;
 
   useEffect(() => {
@@ -48,7 +55,7 @@ export const useTrainingPage = (
         if (loType === COURSE) {
           queryParam["include"] = params.include || INCLUDES_FOR_COURSE;
         } else if (loType === CERTIFICATION || loType === LEARING_PROGRAM) {
-          queryParam["include"] = params.include || INCLUDES_FOR_LP_CERT;
+          queryParam["include"] = params.include || INCLUDESL_FOR_LP_CERT;
         }
         queryParam["useCache"] = true;
         queryParam["filter.ignoreEnhancedLP"] = false;
@@ -76,7 +83,39 @@ export const useTrainingPage = (
       }
     };
     getTrainingInstance();
-  }, [trainingId, instanceId, params.include]);
+  }, [trainingId, instanceId, params.include, refreshTraining]);
+
+  useEffect(() => {
+    const getSummary = async () => {
+      const response = await APIServiceInstance.getTrainingInstanceSummary(
+        trainingInstance.learningObject.id,
+        trainingInstance.id
+      );
+      if (response) {
+        setInstanceSummary(response.loInstanceSummary);
+        console.log(response.loInstanceSummary);
+      }
+
+      try {
+      } catch (error) {}
+    };
+    if (trainingInstance?.id) {
+      getSummary();
+    }
+  }, [trainingInstance]);
+
+  const enrollmentHandler = useCallback(async () => {
+    let queryParam: QueryParams = {
+      loId: trainingId,
+      loInstanceId: trainingInstance.id,
+    };
+    try {
+      await APIServiceInstance.enrollToTraining(queryParam);
+      setRefreshTraining((prevState) => !prevState);
+    } catch (error) {
+      //TODO : handle error
+    }
+  }, [trainingId, trainingInstance.id]);
 
   const {
     name = "",
@@ -106,7 +145,8 @@ export const useTrainingPage = (
     trainingInstance,
     isLoading,
     instanceBadge,
-    //error,
+    instanceSummary,
+    enrollmentHandler,
   };
   //date create, published, duration
 };

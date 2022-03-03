@@ -71,6 +71,22 @@ class APIService {
   //    }
 
   // }
+  public async getTrainingInstanceSummary(
+    trainingId: string,
+    instanceId: string
+  ) {
+    if (this.isUserLoggedIn()) {
+      return new LoggedInCustomHooks().getTrainingInstanceSummary(
+        trainingId,
+        instanceId
+      );
+    }
+  }
+  public async enrollToTraining(params: QueryParams = {}) {
+    if (this.isUserLoggedIn()) {
+      return new LoggedInCustomHooks().enrollToTraining(params);
+    }
+  }
 }
 
 const APIServiceInstance = new APIService();

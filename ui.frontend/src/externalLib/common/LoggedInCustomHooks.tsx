@@ -66,6 +66,21 @@ export default class LoggedInCustomHooks implements ICustomHooks {
     });
     return JsonApiParse(response).learningObject;
   }
+
+  async getTrainingInstanceSummary(trainingId: string, instanceId: string) {
+    const response = await RestAdapter.get({
+      url: `${this.baseApiUrl}learningObjects/${trainingId}/instances/${instanceId}/summary`,
+    });
+    return JsonApiParse(response);
+  }
+  async enrollToTraining(params: QueryParams = {}) {
+    const response = await RestAdapter.post({
+      url: `${this.baseApiUrl}enrollments`,
+      method: "POST",
+      params,
+    });
+    return JsonApiParse(response);
+  }
 }
 
 // APIServiceInstance.registerServiceInstance(
