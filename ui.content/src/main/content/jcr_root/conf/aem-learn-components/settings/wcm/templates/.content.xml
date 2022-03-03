@@ -5,5 +5,7 @@
     <home-page/>
     <page-content/>
     <xf-web-variation/>
+    <experience-fragment-web-variation-template/>
     <rep:policy/>
+    <page-content1/>
 </jcr:root>

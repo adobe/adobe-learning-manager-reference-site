@@ -1,31 +1,37 @@
-import { useEffect, useRef } from "react";
-
-const options = {
+import { useEffect } from "react";
+export interface Options {
+  root?: null | Element;
+  rootMargin?: string;
+  threshold?: number;
+}
+let options: Options = {
   root: null,
   rootMargin: "100px",
   threshold: 1.0,
 };
 const useLoadMore = (props: any) => {
-  const elementRef = useRef(null);
-  const { items, callback } = props;
+  const { items, callback, containerId, elementRef } = props;
 
   useEffect(() => {
-    const localRef = elementRef.current!;
+    const localRef = elementRef?.current!;
     let observer: IntersectionObserver;
+    if (localRef) {
+      options = containerId
+        ? { ...options, root: document.getElementById(containerId) }
+        : options;
 
-    observer = new IntersectionObserver((entities) => {
-      const isIntersecting = entities[0].isIntersecting;
-      if (isIntersecting) {
-        // console.log("calling callback from  the intersection observer");
-        callback();
-      }
-    }, options);
-    observer.observe(localRef);
+      observer = new IntersectionObserver((entities) => {
+        const isIntersecting = entities[0].isIntersecting;
+        if (isIntersecting) {
+          callback instanceof Function && callback();
+        }
+      }, options);
+      observer.observe(localRef);
+    }
     return () => {
-      // console.log("Removing the intersection observer");
-      observer.unobserve(localRef);
+      if (observer) observer.unobserve(localRef);
     };
-  }, [callback, items]);
+  }, [callback, items, containerId, elementRef]);
 
   return [elementRef];
 };

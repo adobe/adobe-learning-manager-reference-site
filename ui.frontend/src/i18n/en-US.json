@@ -1,3 +1,7 @@
 {
-"test.string": "My Localized string"
+"test.string": "My Localized string",
+"prime.text.noDescription": "No description available",
+"prime.text.coreContent": "Core Content",
+"prime.text.seatsAvailable": "Seats Available",
+"prime.text.enroll": "Enroll"
 }

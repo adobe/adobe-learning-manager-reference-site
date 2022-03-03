@@ -1,13 +1,22 @@
-import React from "react";
 import { useIntl } from "react-intl";
 import { UpdateFiltersEvent } from "../../hooks/catalog/useFilter";
 import PrimeCheckbox from "./PrimeCheckBox";
+import styles from "./PrimeCatalogFilters.module.css";
 
 const PrimeCatalogFilters = (props: any) => {
   const { formatMessage } = useIntl();
-  const { loTypes, learnerState, skillName, loFormat, isLoading, tagName } =
-    props.filterState;
-  const { updateFilters } = props;
+  const {
+    loTypes,
+    learnerState,
+    skillName,
+    loFormat,
+    isLoading,
+    tagName,
+    skillLevel,
+    duration,
+    catalogs,
+  } = props.filterState;
+  const { updateFilters, catalogAttributes } = props;
 
   const onChangeHandler = (data: UpdateFiltersEvent) => {
     updateFilters(data);
@@ -16,47 +25,51 @@ const PrimeCatalogFilters = (props: any) => {
   if (isLoading)
     return (
       <>
-        <span>laoding filters...</span>
+        <span>loading filters...</span>
       </>
     );
 
-  const filterList = [loTypes, learnerState, skillName, loFormat, tagName].map(
-    (filter) =>
-      filter.show ? (
-        <div key={filter.type}>
-          <h4>{filter?.label}</h4>
-          <span>
-            {formatMessage({
-              id: "prime.catalog.label",
-              defaultMessage: "Edit Payment Information",
-            })}
-          </span>
-          <span>
-            {formatMessage({
-              id: "test.string",
-              defaultMessage: "",
-            })}
-          </span>
-          <ul>
-            {filter.list?.map((item: any) => (
+  const filterList = [
+    catalogs,
+    loTypes,
+    learnerState,
+    loFormat,
+    skillName,
+    tagName,
+    skillLevel,
+    duration,
+  ].map((filter) => {
+    return catalogAttributes[filter.type] !== "false" ? (
+      <div key={filter.type} className={styles.container}>
+        <h3 className={styles.typeLabel}>
+          {formatMessage({
+            id: filter?.label,
+          })}
+        </h3>
+        <ul className={styles.listContainer}>
+          {filter.list?.map((item: any) => (
+            <li key={item.value}>
               <PrimeCheckbox
-                key={item.value}
                 filterType={filter.type!}
                 label={item.label}
                 checked={item.checked}
                 changeHandler={onChangeHandler}
               />
-            ))}
-          </ul>
-        </div>
-      ) : (
-        ""
-      )
-  );
+            </li>
+          ))}
+        </ul>
+      </div>
+    ) : (
+      ""
+    );
+  });
 
   return (
     <>
-      <div style={{ display: "flex" }}>{filterList}</div>
+      <div className={styles.primeFilterContainer}>
+        <h3 className={styles.filtersLabel}>Filters</h3>
+        {filterList}
+      </div>
     </>
   );
 };

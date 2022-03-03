@@ -1,0 +1,31 @@
+@import "../../styles/variables.css";
+
+.contentContainer {
+  display: flex;
+}
+
+.left {
+  width: calc(100% - 256px);
+  padding-right: 120px;
+}
+
+.right {
+  width: 256px;
+  padding: 20px 0;
+}
+
+@media screen and (max-width: 414px) {
+  .left {
+    order: 2;
+    width: 100%;
+    padding: 20px;
+  }
+  .right {
+    order: 1;
+    width: 100%;
+    padding: 20px;
+  }
+  .contentContainer {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,137 @@
+@import "../../styles/variables.css";
+* {
+  box-sizing: border-box;
+}
+
+.courseInfoHeader {
+  font-size: var(--prime-font-size-medium);
+  line-height: 26px;
+  letter-spacing: 0px;
+  color: var(--prime-color-nc2);
+  margin: 40px 0;
+  font-weight: normal;
+}
+.courseInfoHeader span {
+  font-weight: bold;
+}
+.courseDetailsContainer {
+  display: flex;
+  margin-bottom: 25px;
+}
+
+.card {
+  width: 112px;
+  height: 112px;
+  margin-right: 20px;
+  border-radius: 3px;
+  display: flex;
+  align-items: flex-end;
+}
+.band {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 0px 0px 3px 3px;
+  height: 23px;
+  width: 100%;
+}
+.title {
+  font-size: var(--prime-font-size-medium);
+  line-height: 26px;
+  letter-spacing: 0px;
+  color: var(--prime-color-nc2);
+  opacity: 1;
+  margin: 0;
+  text-transform: capitalize;
+}
+.type {
+  font-size: var(--prime-font-size-small);
+  line-height: 26px;
+  letter-spacing: 0px;
+  color: var(--prime-color-nc3);
+  opacity: 1;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.instancesContainer {
+  border-top: 2px solid #707070;
+  opacity: 1;
+}
+.instancesHeaderSection {
+  display: flex;
+  padding-bottom: 10px;
+  height: 60px;
+  align-items: flex-end;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+.commonHeader {
+  font-size: var(--prime-font-size-small);
+  color: var(--prime-color-nc2);
+  line-height: 17px;
+  letter-spacing: 0px;
+  opacity: 1;
+  font-weight: bold;
+}
+.instanceNameWrapper {
+  width: 50%;
+}
+.dateWrapper {
+  width: 15%;
+}
+.locationWrapper {
+  width: 15%;
+}
+.actionWrapper {
+  width: 20%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.instanceList {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sortIcon {
+  cursor: pointer;
+  position: relative;
+  left: 5px;
+  top: 5px;
+}
+.sortIcon svg {
+  fill: var(--prime-color-nc3);
+  width: 16px;
+  height: 16px;
+}
+.selectInstanceContainer {
+  display: none;
+}
+
+@media screen and (max-width: 414px) {
+  .courseInfoHeader {
+    margin: 30px 20px 20px 20px;
+    line-height: 20px;
+  }
+  .courseDetailsContainer {
+    display: none;
+  }
+  .selectInstanceContainer {
+    display: block;
+    padding: 20px 20px 10px 20px;
+    background: var(--prime-color-nc9);
+    letter-spacing: 0px;
+    margin-bottom: 3px;
+  }
+  .selectInstance {
+    color: var(--prime-color-black);
+    opacity: 1;
+    font-size: 20px;
+    line-height: 25px;
+    font-weight: normal;
+    margin: 0;
+  }
+  .instancesContainer {
+    display: none;
+  }
+}

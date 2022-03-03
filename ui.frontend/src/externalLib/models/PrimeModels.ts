@@ -806,12 +806,13 @@ export interface PrimeTimeZone {
 }
 
 export interface PrimeUploadInfo {
-	id: string;
-	_transient: any;
+	// id: string;
+	// _transient: any;
 	awsKey: string;
 	bucket: string;
 	key: string;
 	region: string;
+	awsUrl: string;
 }
 
 export interface PrimeUser {
@@ -1104,3 +1105,8 @@ export interface JsonApiResponseLinks {
 	next?: string;
 	prev?: string;
 }
+
+export interface PrimeFileUpload {
+	fileName: string;
+	uploadProgress: number;
+  }

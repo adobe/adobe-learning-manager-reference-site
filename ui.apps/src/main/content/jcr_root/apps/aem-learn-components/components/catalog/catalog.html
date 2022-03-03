@@ -1,8 +1,21 @@
 <div
   data-sly-use.placeholderTemplate="core/wcm/components/commons/v1/templates.html"
   data-sly-use.data="com.aemlearncomponents.core.models.Catalog"
-  class="catalog__body"
-  data-sly-attribute.data-show-filter="${data.showFilter}"
+  class="catalog__container"
+  data-sly-attribute.data-show-filters="${data.showFilters}"
   data-sly-attribute.data-show-search="${data.showSearch}"
+  data-sly-attribute.data-catalog="${data.showCatalogFilter}"
+  data-sly-attribute.data-lo-types="${data.typeFilter}"
+  data-sly-attribute.data-skill-name="${data.skillsFilter}"
+  data-sly-attribute.data-lo-format="${data.formatFilter}"
+  data-sly-attribute.data-duration="${data.durationFilter}"
+  data-sly-attribute.data-price="${data.priceFilter}"
+  data-sly-attribute.data-skills-level="${data.skillsLevelFilter}"
+  data-sly-attribute.data-learner-state="${data.statusFilter}"
+  data-sly-attribute.data-tag-name="${data.tagsFilter}"
 ></div>
 <sly data-sly-call="${placeholderTemplate.placeholder @ isEmpty=true}"></sly>
+<sly
+  data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"
+  data-sly-call="${clientlib.all @ categories='aem-learn-components.site'}"
+/>

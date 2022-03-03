@@ -1,12 +1,13 @@
 import { useBoardOptions } from "../../hooks/community";
 import { useIntl } from "react-intl";
 import styles from "./PrimeCommunityBoardOptions.module.css";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
+import { PrimeAlertDialog } from "..";
 
 const PrimeCommunityBoardOptions  = (props: any) => {
     const ref = useRef<any>();
     const { formatMessage } = useIntl();
-    const { addBoardToFavourite, removeBoardFromFavourite, reportBoard } = useBoardOptions();
+    const { addBoardToFavourite, removeBoardFromFavourite } = useBoardOptions();
     const boardId = props.board.id;
     // const accountId = props.board.createdBy.account.id;
     const isFavourite = props.board.isFavorite;
@@ -35,18 +36,20 @@ const PrimeCommunityBoardOptions  = (props: any) => {
     //     deleteBoardFromServer(boardId, accountId);
     // }
 
-    const reportBoardHandler = () => {
-        reportBoard(boardId);
-    }
-
     const copyUrl = (url: string) => {
-        navigator.clipboard.writeText(url); //need to check in all browsers
+        navigator.clipboard.writeText(url); //to-do need to check in all browsers
     }
 
     const copyUrlHandler = () => {
-        const hostUrl = "https://captivateprimestage1.adobe.com"    //to get from server injections
+        const hostUrl = "https://captivateprimestage1.adobe.com"    //to-do get from server injections
         const boardUrl = hostUrl + "/app/learner/#/social/board/" + boardId;
         copyUrl(boardUrl);
+    }
+
+    const reportBoardHandler = () => {
+        if(typeof props.reportBoardHandler === 'function') {
+            props.reportBoardHandler();
+        }
     }
 
     return (
@@ -97,6 +100,7 @@ const PrimeCommunityBoardOptions  = (props: any) => {
                 }
             </div>
         </div>
+
         </>
     );
 };

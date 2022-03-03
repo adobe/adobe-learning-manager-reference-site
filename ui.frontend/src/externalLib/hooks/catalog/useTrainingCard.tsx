@@ -4,17 +4,20 @@ import {
   PrimeLearningObject,
   PrimeLocalizationMetadata,
 } from "../../models/PrimeModels";
-import { cardColors } from "../../common/Theme";
-
 import {
+  getActiveInstances,
+  getDefaultIntsance,
   getJobaidUrl,
-  getPreferredLocalizedMetadata,
   isJobaid,
   isJobaidContentTypeUrl,
 } from "../../utils/catalog";
+import { getALMObject } from "../../utils/global";
+import { useCardBackgroundStyle, useCardIcon } from "../../utils/hooks";
+import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 
 export const useTrainingCard = (training: PrimeLearningObject) => {
   const { locale } = useConfigContext();
+
   const {
     loFormat: format,
     loType: type,
@@ -28,45 +31,29 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     enrollment,
   } = training;
 
-  const { name, description, overview, richTextOverview } =
-    useMemo((): PrimeLocalizationMetadata => {
-      return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
-    }, [training.localizedMetadata, locale]);
+  const {
+    name,
+    description,
+    overview,
+    richTextOverview,
+  } = useMemo((): PrimeLocalizationMetadata => {
+    return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
+  }, [training.localizedMetadata, locale]);
 
-  const { cardIconUrl, color }: { [key: string]: string } = useMemo(() => {
-    if (training.imageUrl) return { cardIconUrl: "", color: "" };
-    //need to get theme from the account state
-    const themeColors = cardColors["prime-pebbles"];
-    const colorCode = parseInt(training.id.split(":")[1], 10) % 12;
+  const { cardIconUrl = "", color = "", bannerUrl = "" } = useCardIcon(
+    training
+  );
 
-    return {
-      //TODO: updated the url to akamai from config
-      cardIconUrl: `https://cpcontentsdev.adobe.com/public/images/default_card_icons/${colorCode}.svg`,
-      color: themeColors[colorCode],
-    };
-    //calculate the cardIcon and color
-  }, [training.id, training.imageUrl]);
-
-  const cardBgStyle = useMemo(() => {
-    return training.imageUrl
-      ? {
-          backgroundImage: `url(${training.imageUrl})`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-        }
-      : {
-          background: `${color} url(
-            ${cardIconUrl}
-        ) center center no-repeat`,
-          backgroundSize: "80px",
-        };
-  }, [cardIconUrl, color, training.imageUrl]);
+  const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
 
   const cardClickHandler = useCallback(() => {
+    if (!training) return;
+
     //if jobAid, need to enroll and open player or new tab
     if (isJobaid(training)) {
       console.log("This is a JOBAid");
+      //if user logged in, then enroll if not already enrolled.
+      //training.enrollment
       //need to enroll silently here and then do the following
       if (isJobaidContentTypeUrl(training)) {
         window.open(getJobaidUrl(training), "_blank");
@@ -76,17 +63,26 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
       }
       return;
     }
-
-    console.log("This is not a JOBAid");
-
-    // if (shouldRedirectToInstanceScreen(training)) {
-    //   console.log("redirect to Instance Screen", training.enrollment);
-    // } else {
-    //   console.log(
-    //     "redirect to Overview Screen",
-    //     training.enrollment.dateEnrolled
-    //   );
-    // }
+    //TODO: if user Loggedin --
+    let alm = getALMObject();
+    if (training.enrollment) {
+      alm?.redirectToTrainingOverview(
+        training.id,
+        training.enrollment.loInstance.id
+      );
+      return;
+    }
+    const activeInstances = getActiveInstances(training);
+    if (activeInstances?.length === 1) {
+      alm?.redirectToTrainingOverview(training.id, activeInstances[0].id);
+      return;
+    }
+    if (activeInstances?.length === 0) {
+      const defaultInstance = getDefaultIntsance(training);
+      alm?.redirectToTrainingOverview(training.id, defaultInstance[0]?.id);
+      return;
+    }
+    alm?.redirectToInstancePage(training.id);
   }, [training]);
 
   return {
@@ -108,6 +104,8 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     cardBgStyle,
     enrollment,
     cardClickHandler,
+    training,
+    bannerUrl,
   };
   //date create, published, duration
 };

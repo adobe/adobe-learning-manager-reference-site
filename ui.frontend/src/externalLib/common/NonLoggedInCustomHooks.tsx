@@ -18,4 +18,10 @@ export default class NonLoggedInCustomHooks implements ICustomHooks {
   async getTraining(id: string, params: QueryParams) {
     return null;
   }
+  async getTrainingInstanceSummary(trainingId: string, instanceId: string) {
+    return null;
+  }
+  async enrollToTraining(params: QueryParams = {}) {
+    return null;
+  }
 }

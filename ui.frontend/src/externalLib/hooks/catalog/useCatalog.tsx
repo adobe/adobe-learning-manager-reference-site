@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../store/state";
 import APIServiceInstance from "../../common/APIService";
@@ -9,8 +9,21 @@ import {
 import { PrimeLearningObject } from "../../models/PrimeModels";
 import { useSearch } from "./useSearch";
 import { useFilter } from "./useFilter";
+import { getALMKeyValue, setALMKeyValue } from "../../utils/global";
+
+const setFiltersOptions = () => {
+  const config = getALMKeyValue("config");
+  if (config) {
+    let cssSelector = config.mountingPoints?.catalogContainer;
+    let value = document.querySelector(cssSelector)?.dataset;
+    setALMKeyValue("catalogAttributes", value);
+    return value;
+  }
+};
 
 export const useCatalog = () => {
+  //To Do: need to check a better way of doping this
+  const [catalogAttributes] = useState(() => setFiltersOptions());
   const { trainings, sort, next } = useSelector(
     (state: State) => state.catalog
   );
@@ -40,6 +53,9 @@ export const useCatalog = () => {
     filters.loTypes,
     filters.skillName,
     filters.tagName,
+    filters.skillLevel,
+    filters.duration,
+    filters.catalogs,
     query,
     sort,
   ]);
@@ -70,5 +86,6 @@ export const useCatalog = () => {
     filterState,
     updateFilters,
     sort,
+    catalogAttributes,
   };
 };

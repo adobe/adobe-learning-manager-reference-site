@@ -13,7 +13,7 @@ const PrimeCommunityBoardFilters  = (props: any) => {
         "Gamification": 1, 
         "General": 2
     };
-    
+
     const skillFilterLabel = {id: "prime.community.board.skill", defaultMessage: "Skill"}
 
     let defaultSortFilter = "Date Updated";

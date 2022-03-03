@@ -1,68 +1,50 @@
-import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
-import { useTrainingPage } from "../../hooks/catalog/useTrainingPage";
-import { PrimeModuleList } from "../PrimeModuleList";
+import { InstanceBadge, Skill } from "../../models/common";
+import {
+  PrimeLearningObject,
+  PrimeLearningObjectInstance,
+} from "../../models/PrimeModels";
+import { PrimeCourseItemContainer } from "../PrimeCourseItemContainer";
+import { PrimeLPItemContainer } from "../PrimeLPItemContainer";
 
-const PrimeTrainingOverview = (props: any) => {
-  //const trainingInstance: PrimeLearningObjectInstance = props.training;
-  const trainingId = "course:3079361"; //TO-DO get training id
-  const instanceId = "course:3079361_5746412"; // TO-DO get instance id
+const COURSE = "course";
+const LEARNING_PROGRAM = "learningProgram";
+const PrimeTrainingOverview: React.FC<{
+  name: string;
+  description: string;
+  overview: string;
+  richTextOverview: string;
+  skills: Skill[];
+  training: PrimeLearningObject;
+  trainingInstance: PrimeLearningObjectInstance;
+  instanceBadge: InstanceBadge;
+}> = (props) => {
+  const { training } = props;
 
-  const {
-    name,
-    description,
-    overview,
-    richTextOverview,
-    cardIconUrl,
-    color,
-    skills,
-    training,
-    trainingInstance,
-    isLoading,
-    instanceBadge,
-  } = useTrainingPage(trainingId, instanceId);
-  if (isLoading) {
-    return <div>Lading details. Please wiat....</div>;
-  }
+  const subLos = training.subLOs;
 
   return (
     <>
-      <PrimeTrainingOverviewHeader
-        format={training.loFormat}
-        color={color}
-        title={name}
-      />
-      <div style={{ display: "flex" }}>
-        {training.id} , {name}, {instanceBadge.badgeName},
-      </div>
-      <div>
-        Enrollment :
-        {training.enrollment ? training.enrollment.id : "NOT_enrolled"}
-      </div>
-      <div>Authors: {training.authorNames.join(",")}</div>
-      <div>Skills : {skills.map((skill) => skill.name).join(",")}</div>
-      {/* <div>Overview : {overview}</div> */}
-      <PrimeModuleList
-        loResources={trainingInstance.loResources}
-      ></PrimeModuleList>
+      {subLos.map((subLo) => {
+        const loType = subLo.loType;
+        if (loType === COURSE) {
+          return (
+            <PrimeCourseItemContainer
+              key={subLo.id}
+              trainingId={subLo.id}
+            ></PrimeCourseItemContainer>
+          );
+        } else if (loType === LEARNING_PROGRAM) {
+          return (
+            <PrimeLPItemContainer
+              key={subLo.id}
+              trainingId={subLo.id}
+            ></PrimeLPItemContainer>
+          );
+        }
+        return <></>;
+      })}
     </>
   );
 };
 
 export default PrimeTrainingOverview;
-
-{
-  /* <div>
-        instances:
-        {training.instances.map((item) => {
-          console.log(item, item.loResources.length);
-          return item.loResources.map((lo) => {
-            return (
-              <div key={lo.id}>
-                {lo.resourceType},{lo.type},{lo.localizedMetadata[0].name},
-                {lo.localizedMetadata[0].type}
-              </div>
-            );
-          });
-        })}
-      </div> */
-}

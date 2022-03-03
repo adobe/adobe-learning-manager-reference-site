@@ -1,0 +1,62 @@
+@import "../../styles/variables.css";
+
+.header {
+  -webkit-transition: height 0.2s;
+  -ms-transition: height 0.2s;
+  -moz-transition: height 0.2s;
+  -o-transition: height 0.2s;
+  transition: height 0.2s;
+  height: 150px;
+  width: 100%;
+  background-repeat: repeat-x;
+}
+
+.headingContainer {
+  /* TO DO */
+  /* width: 1084px; */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-style: normal;
+  font-weight: var(--prime-font-size-large) !important;
+}
+@media screen and (min-width: 1024px) {
+  .headingContainer {
+    width: 930px;
+  }
+}
+@media screen and (min-width: 1366px) {
+  .headingContainer {
+    width: 1084px;
+  }
+}
+
+.format {
+  margin-top: 20px;
+  height: 30px;
+  letter-spacing: 1px;
+  text-shadow: var(--prime-text-shadow);
+  font-size: var(--prime-font-size-medium);
+  color: var(--prime-color-white);
+  line-height: 1.42857;
+}
+
+.title {
+  margin-top: 35px;
+  text-align: left;
+  color: var(--prime-color-white);
+  line-height: 120%;
+  vertical-align: bottom;
+  text-shadow: var(--prime-text-shadow);
+  font-size: var(--prime-font-size-large);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media screen and (max-width: 414px) {
+  .header {
+    padding: 0 20px;
+  }
+}

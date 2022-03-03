@@ -1,0 +1,48 @@
+.notificationListBox {
+    width: 414px;
+    font-size: 16px;
+    list-style: none;
+    background-color: #ffffff;;
+    background-clip: padding-box;
+    opacity: 1;
+    max-height: 500px;
+    overflow-y: auto;
+    border: 1px solid #F4F4F4;
+  }
+  
+  .notificationList {
+    margin: 0px; 
+    padding: 0px; 
+    width:100%; 
+  }
+
+  .unreadCountItem { 
+    padding: 20px; 
+    display: flex;
+    border: 1px solid #F4F4F4;
+  }
+
+  .unreadCountText {
+    height: 30px;
+    background: #FF6803 0% 0% no-repeat padding-box;
+    border-radius: 166px;
+    opacity: 1;
+    font-size: 14px;
+    font-weight:600;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    padding:6px 10px 5px 10px; 
+    
+  }
+
+  .unreadCountNotificationText{
+    height:20px; 
+    font-size: 14px;
+    font-weight:600; 
+    color: #292929;
+    opacity: 1;
+    margin-left:8px; 
+    margin-top:8px; 
+  }
+  
+  

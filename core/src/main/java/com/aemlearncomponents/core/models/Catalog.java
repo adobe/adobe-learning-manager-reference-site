@@ -1,9 +1,26 @@
 package com.aemlearncomponents.core.models;
 
 public interface Catalog {
-    
-    String getShowFilter();
+
+    Boolean getShowFilters();
 
     String getShowSearch();
 
+    String getShowCatalogFilter();
+
+    String getTypeFilter();
+
+    String getSkillsFilter();
+
+    String getFormatFilter();
+
+    String getDurationFilter();
+
+    String getPriceFilter();
+
+    String getSkillsLevelFilter();
+
+    String getStatusFilter();
+
+    String getTagsFilter();
 }

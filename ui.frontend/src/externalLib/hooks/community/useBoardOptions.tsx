@@ -1,13 +1,18 @@
 import { useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
     addBoardToFavourites,
     removeBoardFromFavourites,
     deleteBoard
 } from "../../store/actions/social/action";
 import { RestAdapter } from "../../utils/restAdapter";
+import { State } from "../../store/state";
+
 
 export const useBoardOptions = () => {
+    const { item } = useSelector(
+        (state: State) => state.social.board
+    );
     const dispatch = useDispatch();
     const addBoardToFavourite = useCallback(async (boardId) => {
         const baseApiUrl =  (window as any).primeConfig.baseApiUrl;
@@ -46,6 +51,7 @@ export const useBoardOptions = () => {
     }, [dispatch]);
 
     return {
+        item,
         addBoardToFavourite,
         removeBoardFromFavourite,
         deleteBoardFromServer,

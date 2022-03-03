@@ -12,6 +12,7 @@ import {
 
 import { AnyAction, combineReducers, Reducer } from "redux";
 import { 
+    LOAD_SOCIAL_BOARD,
     LOAD_SOCIAL_BOARDS,
     PAGINATE_SOCIAL_BOARDS,
     PAGINATION_START_SOCIAL_BOARDS,
@@ -43,6 +44,7 @@ import {
     SOCIAL_BOARD_DELETE_SUCCESS,
     SOCIAL_POST_DELETE_SUCCESS,
     DISMISS_PANEL,
+    GET_COMMENTS_FOR_POST,
     LOAD_COMMENTS,
     LOAD_REPLIES,
     PAGINATE_REPLIES,
@@ -70,6 +72,14 @@ import {
 // import post from "./post";
 // import comment from "./comment";
 // import reply from "./reply";
+
+export interface SelectedBoardState {
+    item: PrimeBoard;
+}
+
+export interface SelectedPostState {
+    item: PrimePost;
+}
 
 export interface BoardState {
     items: PrimeBoard[];
@@ -114,6 +124,7 @@ export interface CreatePostDetails {
 
 export interface SocialState {
     selectedTab: string;
+    board: SelectedBoardState;
     boards: BoardState;
     boardOptions: BoardOptions;
     selectedBoard: PrimeBoard;
@@ -148,11 +159,36 @@ const selectedTab: Reducer<string, AnyAction> = (
     }
 };
 
+const item: Reducer<PrimeBoard, AnyAction> = (
+    state: PrimeBoard | undefined,
+    action: AnyAction
+) => {
+    switch (action.type) {
+        case LOAD_SOCIAL_BOARD:
+            return action.payload.item;
+        case SOCIAL_ADD_BOARD_FAVORITE_SUCCESS: {
+            if (state) {
+                state.isFavorite = true;
+            }
+            return state;
+        }
+        case SOCIAL_REMOVE_BOARD_FAVORITE_SUCCESS: {
+            if (state) {
+                state.isFavorite = false;
+            }
+            return state;
+        }
+        default:
+            return state ? state : null;
+    };
+}
+
 const items: Reducer<PrimeBoard[], AnyAction> = (
     state: PrimeBoard[] | undefined,
     action: AnyAction
 ) => {
     switch (action.type) {
+
         case LOAD_SOCIAL_BOARDS:
             return action.payload.items;
         case CHANGE_SOCIAL_TAB:
@@ -160,7 +196,7 @@ const items: Reducer<PrimeBoard[], AnyAction> = (
         case PAGINATE_SOCIAL_BOARDS:
             return [...state!, ...action.payload.items];
         case SOCIAL_ADD_BOARD_FAVORITE_SUCCESS: {
-            if (state!.length == 0) {
+            if (state === null || state!.length === 0) {
                 return [];
             }
             // eslint-disable-next-line no-case-declarations
@@ -171,7 +207,7 @@ const items: Reducer<PrimeBoard[], AnyAction> = (
             return state;
         }
         case SOCIAL_REMOVE_BOARD_FAVORITE_SUCCESS: {
-            if (state!.length == 0) {
+            if (state === null || state!.length === 0) {
                 return [];
             }
             // eslint-disable-next-line no-case-declarations
@@ -182,7 +218,7 @@ const items: Reducer<PrimeBoard[], AnyAction> = (
             return state;
         }
         case SOCIAL_REMOVE_BOARD_FROM_LIST: {
-            return state!.length === 0
+            return state === null || state!.length === 0
                 ? []
                 : state?.filter((item) => item.id !== action.payload.id);
         }
@@ -288,11 +324,11 @@ const postsItems: Reducer<PrimePost[], AnyAction> = (
 ) => {
     switch (action.type) {
         case LOAD_BOARD_DETAILS:
-            return action.items || [];
+            return action.payload.items || [];
         case PAGINATE_SOCIAL_BOARD_POSTS:
-            return [...state!, ...action.items];
+            return [...state!, ...action.payload.items];
         case LOAD_COMMENTS:
-            if (!action.selectedPostId) {
+            if (!action.payload.selectedPostId) {
                 return state;
             }
             if (!state) {
@@ -300,12 +336,12 @@ const postsItems: Reducer<PrimePost[], AnyAction> = (
             }
             // eslint-disable-next-line no-case-declarations
             const index = state?.findIndex(
-                (item) => item.id === action.selectedPostId
+                (item) => item.id === action.payload.selectedPostId
             );
             if (index < 0) return state;
             // eslint-disable-next-line no-case-declarations
             const post = state[index];
-            post.commentCount = action.items.length;
+            post.commentCount = action.payload.items.length;
             state[index] = post;
             return state;
         case ADD_USER_POLL_FOR_POST: {
@@ -521,6 +557,10 @@ const replyOptions: Reducer<ReplyOptions, AnyAction> = combineReducers({
 });
 //reducers for reply options ends
 
+const board: Reducer<SelectedBoardState, AnyAction> = combineReducers({
+    item
+});
+
 const boards: Reducer<BoardState, AnyAction> = combineReducers({
     items,
     // paginating,
@@ -623,11 +663,17 @@ const commentsItems: Reducer<PrimeComment[], AnyAction> = (
 ) => {
     switch (action.type) {
         case LOAD_COMMENTS:
-            return action.items || [];
+            //Keep only comments of other posts
+            state = state?.filter((item: PrimeComment) => item.parent.id !== action.payload.selectedPostId).map((comment) => comment);
+            //if current post has comments, merge it with state
+            if(action.payload.items) {
+                return state ? state.concat(action.payload.items) : action.payload.items;
+            }
+            return [];
         case PAGINATE_COMMENTS:
-            return [...state!, ...action.items];
+            return [...state!, ...action.payload.items];
         case LOAD_REPLIES:
-            if (!action.selectedCommentId) {
+            if (!action.payload.selectedCommentId) {
                 return state;
             }
             if (!state) {
@@ -635,12 +681,12 @@ const commentsItems: Reducer<PrimeComment[], AnyAction> = (
             }
             // eslint-disable-next-line no-case-declarations
             const index = state?.findIndex(
-                (item) => item.id === action.selectedCommentId
+                (item) => item.id === action.payload.selectedCommentId
             );
             if (index < 0) return state;
             // eslint-disable-next-line no-case-declarations
             const cmt = state[index];
-            cmt.replyCount = action.items.length;
+            cmt.replyCount = action.payload.items.length;
             state[index] = cmt;
             return state;
         case UPDATE_COMMENT: {
@@ -683,6 +729,18 @@ const commentsItems: Reducer<PrimeComment[], AnyAction> = (
     }
 };
 
+// const getCommentPostId: Reducer<number, AnyAction> = (
+//     state: number | undefined,
+//     action: AnyAction
+// ) => {
+//     switch (action.type) {
+//         case LOAD_COMMENTS:
+//             return action.payload.selectedPostId;
+//         default:
+//             return -1;
+//     }
+// };
+
 const commentsNext: Reducer<string, AnyAction> = (
     state: string | undefined,
     action: AnyAction
@@ -690,7 +748,7 @@ const commentsNext: Reducer<string, AnyAction> = (
     switch (action.type) {
         case LOAD_COMMENTS:
         case PAGINATE_COMMENTS:
-            return action.next;
+            return action.payload.next;
         default:
             return state || null;
     }
@@ -711,12 +769,14 @@ const commentsPaginating: Reducer<boolean, AnyAction> = (
 };
 const comments: Reducer<
     {
+        // postId: number,
         items: PrimeComment[];
         paginating: boolean;
         next: string;
     },
     AnyAction
 > = combineReducers({
+    // postId: getCommentPostId,
     items: commentsItems,
     next: commentsNext,
     paginating: commentsPaginating,
@@ -730,9 +790,16 @@ const replyItems: Reducer<PrimeReply[], AnyAction> = (
 ) => {
     switch (action.type) {
         case LOAD_REPLIES:
-            return action.items || [];
+            //to-do reply needs parent id
+            //Keep only replies of other comments
+            //state = state?.filter((item: PrimeReply) => item.parent.id !== action.payload.selectedPostId).map((comment) => comment);
+            //if current comment has replies, merge it with state
+            if(action.payload.items) {
+                return state ? state.concat(action.payload.items) : action.payload.items;
+            }
+            return [];
         case PAGINATE_REPLIES:
-            return [...state!, ...action.items];
+            return [...state!, ...action.payload.items];
         case UPDATE_REPLY: {
             if (!state) {
                 return [];
@@ -782,7 +849,7 @@ const replyNext: Reducer<string, AnyAction> = (
     switch (action.type) {
         case LOAD_REPLIES:
         case PAGINATE_REPLIES:
-            return action.next;
+            return action.payload.next;
         default:
             return state || null;
     }
@@ -817,6 +884,7 @@ const replies: Reducer<
 
 const social: Reducer<SocialState, AnyAction> = combineReducers({
     selectedTab,
+    board,
     boards,
     boardOptions,
     selectedBoard,

@@ -82,7 +82,7 @@
     <dependencies>
         <dependency>
             <groupId>com.aemlearncomponents</groupId>
-            <artifactId>aem-learn-components.core</artifactId>
+            <artifactId>aem-learn-components-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

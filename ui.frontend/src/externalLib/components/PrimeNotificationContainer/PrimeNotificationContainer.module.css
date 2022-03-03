@@ -1,0 +1,35 @@
+.notificationDropdown{
+  list-style:none;
+  position:absolute; 
+  padding-left:20px;
+}
+.notificationBellIcon {
+  padding: 0 !important;
+  margin-top: 6px;
+  margin-left: 20px;
+  height: 36px;
+  width: 36px;
+  vertical-align: middle;
+  display: inline-block;
+  fill: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  background: transparent;
+  border:none
+}
+
+
+.notificationCountStyle {
+  font-weight: 700;
+  font-size: 10px;
+  color: #fff;
+  text-align: center;
+  background-color: #e61414;
+  border-radius: 10px;
+  display: inline-block;
+  line-height: 1;
+  padding: 1px 2px;
+  border: 2px solid #fff;
+  position: relative;
+  top: -41px;
+  left: 8px;
+}

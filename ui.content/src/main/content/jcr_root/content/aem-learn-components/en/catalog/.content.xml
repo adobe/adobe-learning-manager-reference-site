@@ -7,7 +7,7 @@
         cq:template="/conf/aem-learn-components/settings/wcm/templates/page-content"
         jcr:primaryType="cq:PageContent"
         jcr:title="AEM Learn Catalog Page"
-        sling:resourceType="wcm/foundation/components/page"
+        sling:resourceType="aem-learn-components/components/page"
         pageTitle="AEM Learn Catalog Page">
         <root
             jcr:primaryType="nt:unstructured"
@@ -22,8 +22,7 @@
                 <container
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="aem-learn-components/components/container"
-                    layout="responsiveGrid">
-                </container>
+                    layout="responsiveGrid"/>
             </container>
         </root>
     </jcr:content>

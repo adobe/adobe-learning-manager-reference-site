@@ -1,42 +1,8 @@
-import { PrimeLearningObject } from "../models/PrimeModels";
-
-const DEFAULT_LOCALE = "en-US";
-
-export function getPreferredLocalizedMetadata<T>(localizedMetadata: T[], locale: string): T {
-
-    if (!localizedMetadata) {
-        //TO DO: need to hanlde this 
-        return {} as T
-    }
-    let data = localizedMetadata.find(
-        (item: any) => item.locale === locale
-    );
-
-    return (
-        data ||
-        localizedMetadata.find(
-            (item: any) => item.locale === DEFAULT_LOCALE
-        )! ||
-        localizedMetadata[0]
-    );
-}
-
-
-
-export function shouldRedirectToInstanceScreen(
-    training: PrimeLearningObject
-): boolean {
-    //only 1 instance / if only 1 active instance / Or user is already enrolled
-    if (
-        (training.instances &&
-            (training.instances.length === 1 ||
-                training.instances?.filter((i) => i && i.state === "Active").length === 1)) ||
-        training.enrollment
-    ) {
-        return false;
-    }
-    return true;
-}
+import { PrimeLearningObject, PrimeLearningObjectInstance } from "../models/PrimeModels";
+import { CatalogFilterState } from "../store/reducers/catalog";
+import { getALMKeyValue } from "./global";
+import { QueryParams } from "./restAdapter";
+import { getWindowObject } from "./global"
 
 
 export function isJobaid(training: PrimeLearningObject): boolean {
@@ -55,10 +21,22 @@ export function getJobaidUrl(training: PrimeLearningObject): string {
     return training.instances[0]?.loResources[0]?.resources[0]?.location;
 }
 
+export function getActiveInstances(
+    training: PrimeLearningObject
+): PrimeLearningObjectInstance[] {
+    return training.instances?.filter((i) => i && i.state === "Active");
+}
+
+export function getDefaultIntsance(
+    training: PrimeLearningObject
+): PrimeLearningObjectInstance[] {
+    return training.instances?.filter((i) => i && i.isDefault);
+}
+
 
 
 export function locationUpdate(params: any) {
-    const location = (window as any).location;
+    const location = getWindowObject().location;
     const existingQueryParams = new URLSearchParams(decodeURI(location.search));
     for (let key in params) {
         if (params[key]) {
@@ -82,7 +60,7 @@ export function locationUpdate(params: any) {
 
 
 export function getQueryParamsIObjectFromUrl() {
-    const location = (window as any).location;
+    const location = getWindowObject().location;
     const params: URLSearchParams = new URLSearchParams(decodeURI(location.search));
     return Object.fromEntries(params.entries());
 }
@@ -94,3 +72,41 @@ export function debounce(fn: Function, time = 250) {
         timeoutId = setTimeout(() => fn.apply(this, args), time);
     };
 };
+
+
+export function getParamsForCatalogApi(filterState: CatalogFilterState,) {
+    const params: QueryParams = {};
+    const catalogAttributes = getALMKeyValue("catalogAttributes");
+
+    if (catalogAttributes?.showFilters !== "false") {
+        if (catalogAttributes?.loTypes !== "false") {
+            params["filter.loTypes"] = filterState.loTypes;
+        }
+
+        if (filterState.skillName && catalogAttributes?.skillName !== "false") {
+            params["filter.skillName"] = filterState.skillName;
+        }
+        if (filterState.tagName && catalogAttributes?.tagName !== "false") {
+            params["filter.tags"] = filterState.tagName;
+        }
+        if (
+            filterState.learnerState &&
+            catalogAttributes?.learnerState !== "false"
+        ) {
+            params["filter.learnerState"] = filterState.learnerState;
+        }
+        if (filterState.loFormat && catalogAttributes?.loFormat !== "false") {
+            params["filter.loFormat"] = filterState.loFormat;
+        }
+        if (filterState.duration && catalogAttributes?.duration !== "false") {
+            params["filter.duration.range"] = filterState.duration;
+        }
+        if (filterState.skillLevel && catalogAttributes?.skillLevel !== "false") {
+            params["filter.skill.level"] = filterState.skillLevel;
+        }
+        if (filterState.catalogs && catalogAttributes?.catalogs !== "false") {
+            params["filter.catalogIds"] = filterState.catalogs;
+        }
+    }
+    return params
+}

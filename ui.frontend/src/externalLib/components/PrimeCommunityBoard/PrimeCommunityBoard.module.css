@@ -1,19 +1,20 @@
 .primeBoardWrapper{
     display:flex;
     justify-content: center;
+    margin: 10px;
+    padding: 10px;
 }
 
 .primeBoardItem {
     max-width: 716px;
     width: 75%;
-    height: 229px;
-    padding: 50px;
+    max-height: 300px;
+    padding: 30px;
     background: #FFFFFF 0% 0% no-repeat padding-box;
     box-shadow: 0px 0px 3px #0000001A;
     border: 1px solid #D5D5D5;
     border-radius: 2px;
     opacity: 1;
-    z-index: 1;
     position: relative;
 }
 
@@ -26,6 +27,9 @@
     letter-spacing: 0px;
     color: #306EB5;
     opacity: 1;
+}
+.primeBoardName:hover  {
+    cursor: pointer;
 }
 
 .primeBoardOptions {
@@ -64,6 +68,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .primeBoardActivityStats{

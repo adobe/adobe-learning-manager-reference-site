@@ -1,10 +1,9 @@
-// import React from "react";
 import { PrimeCommunityBoard } from "../PrimeCommunityBoard";
 import { PrimeCommunityBoardFilters } from "../PrimeCommunityBoardFilters";
-import { useBoard } from "../../hooks/community";
+import { useBoards } from "../../hooks/community";
 
 const PrimeCommunityBoardList  = () => {
-    const { items, fetchBoards } = useBoard();
+    const { items, fetchBoards } = useBoards();
 
     const sortFilterChangeHandler = (sortValue: any) => {
         fetchBoards(sortValue, null);
@@ -18,9 +17,7 @@ const PrimeCommunityBoardList  = () => {
         <>
         <PrimeCommunityBoardFilters sortFilterChangeHandler={sortFilterChangeHandler} skillFilterChangeHandler={skillFilterChangeHandler}></PrimeCommunityBoardFilters>
         {items?.map((board) => (
-            <div style={{ margin: "10px", padding: "10px" }} key={board.id}>
-            <PrimeCommunityBoard board={board}></PrimeCommunityBoard>
-            </div>
+            <PrimeCommunityBoard board={board} key={board.id}></PrimeCommunityBoard>
         ))}
         </>
     );
