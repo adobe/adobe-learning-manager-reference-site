@@ -140,6 +140,38 @@
                         name="./primeCdnBaseUrl"
                         cq:showOnCreate="{Boolean}true"/>
 
+                    <instancePath 
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Instance Path"
+                        fieldDescription="Instance Path"
+                        name="./instancePath"
+                        cq:showOnCreate="{Boolean}true"/>
+
+                    <catalogPath 
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Catalog Path"
+                        fieldDescription="Catalog Path"
+                        name="./catalogPath"
+                        cq:showOnCreate="{Boolean}true"/>
+
+                    <trainingOverviewPath 
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Training Overview Path"
+                        fieldDescription="Training Overview Path"
+                        name="./trainingOverviewPath"
+                        cq:showOnCreate="{Boolean}true"/>
+
+                    <communityPath 
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Community Path"
+                        fieldDescription="CommunityPath"
+                        name="./communityPath"
+                        cq:showOnCreate="{Boolean}true"/>
+
                     <locale
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/select"
@@ -163,37 +195,6 @@
                         text="Site Map"
                         value="siteMap"
                         cq:showOnCreate="{Boolean}true"/>
-
-                    <magentoStoreDelete jcr:primaryType="nt:unstructured"
-                                         sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
-                                         name="./magentoStore@Delete"
-                                         cq:showOnCreate="{Boolean}true"/>
-
-                    <graphqlEndpoint jcr:primaryType="nt:unstructured"
-                                     sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                     fieldLabel="GraphQL Proxy Path"
-                                     fieldDescription="Path of the GraphQL endpoint proxy used by client-side CIF components."
-                                     name="./magentoGraphqlEndpoint"
-                                     required="{Boolean}true"
-                                     value="/magento/graphql"
-                                     defaultValue="/magento/graphql"
-                                     cq:showOnCreate="{Boolean}true"/>
-
-                    <graphqlEndpointDelete jcr:primaryType="nt:unstructured"
-                                           sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
-                                           name="./magentoGraphqlEndpoint@Delete"
-                                           cq:showOnCreate="{Boolean}true"/>
-
-                    <magentoRootCategoryId jcr:primaryType="nt:unstructured"
-                                           sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                           name="./magentoRootCategoryId"
-                                           fieldLabel="Catalog Root Category Id"
-                                           required="{Boolean}true"/>
-
-                    <magentoRootCategoryIdDelete jcr:primaryType="nt:unstructured"
-                                                 sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
-                                                 name="./magentoRootCategoryId@Delete"
-                                                 cq:showOnCreate="{Boolean}true"/>
                 </items>
             </column>
         </items>
