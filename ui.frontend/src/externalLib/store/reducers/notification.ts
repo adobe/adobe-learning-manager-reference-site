@@ -3,7 +3,7 @@ import { PrimeUserNotification } from "../../models";
 
 import {
     LOAD_NOTIFICATIONS,
-    PAGINATE_NOTIFICATIONS,
+    PAGINATE_NOTIFICATIONS
   } from "../actions/notification/actionTypes";
 
   export interface NotificationState {

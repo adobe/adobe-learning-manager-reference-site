@@ -6,7 +6,7 @@ import { useIntl } from "react-intl";
 
 import styles from "./PrimeNotificationContainer.module.css";
 
-import { GEN_NOTIFICATION_SVG } from "../../utils/inline_svg";
+import Bell from "@spectrum-icons/workflow/Bell";
 
 const PrimeNotificationContainer = () => {
   const { formatMessage } = useIntl();
@@ -14,22 +14,32 @@ const PrimeNotificationContainer = () => {
     notifications,
     isLoading,
     unreadCount,
+    fetchNotifications,
     loadMoreNotifications,
-    markReadNotification
+    markReadNotification, 
+    redirectLoPage,
+    pollUnreadNotificationCount 
   } = useNotifications();
 
   const [showNotifications, setShowNotifications] = useState(false);
 
-  
-
   const toggleShowNotifications = () => {
     setShowNotifications((prevState) => !prevState);
   };
-
+  
   useEffect(() => {
-    if (showNotifications)
-      markReadNotification();
-  },[notifications, showNotifications]);
+    
+    let timer: any ;
+
+    if (showNotifications) {
+      fetchNotifications();  
+    } else {
+      markReadNotification(); 
+      timer = setInterval(pollUnreadNotificationCount, 10*1000);
+    }
+    return () => timer && clearInterval(timer);
+    
+  },[fetchNotifications, showNotifications]);
 
   if (isLoading) {
     return <span>loading notifications...</span>;
@@ -47,7 +57,7 @@ const PrimeNotificationContainer = () => {
         id="userNotificationIcon"
         onClick={toggleShowNotifications}
       >
-        {GEN_NOTIFICATION_SVG()}
+        {<Bell />}
             {unreadCount > 0 && 
             <div className={styles.notificationCountStyle}>
               {unreadCount}
@@ -59,6 +69,7 @@ const PrimeNotificationContainer = () => {
           notifications={notifications}
           unreadCount={unreadCount}
           loadMoreNotifications={loadMoreNotifications}
+          redirectLoPage={redirectLoPage}
         />
       )}
     </div>

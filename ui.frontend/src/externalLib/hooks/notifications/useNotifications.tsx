@@ -6,10 +6,14 @@ import { PrimeUserNotification } from "../../models";
 import {
   loadNotifications,
   paginateNotifications,
+  prependNotifications
 } from "../../store/actions/notification/action";
 import { State } from "../../store/state";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
+import { getALMObject } from "../../utils/global";
+import { getALMKeyValue } from "../../utils/global";
+
 
 export const useNotifications = () => {
   const { notifications, next } = useSelector(
@@ -18,9 +22,9 @@ export const useNotifications = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
   const dispatch = useDispatch();
-  const config = useConfigContext();
+  const config = getALMKeyValue("config");
   const { user } = useUserContext();
-  const pageLimit = 10;
+  const pageLimit = 6;
   const channels = [
     "jobAid::adminEnrollment",
     "certification::adminEnrollment",
@@ -72,7 +76,7 @@ export const useNotifications = () => {
       params["announcementsOnly"] = false;
       params["userSelectedChannels"] = channels;
       const response = await RestAdapter.get({
-        url: `${config.baseApiUrl}/users/10866105/userNotifications`,
+        url: `${config.baseApiUrl}/users/13403718/userNotifications`,
         params: params,
       });
       const parsedResponse = JsonApiParse(response);
@@ -80,14 +84,7 @@ export const useNotifications = () => {
       notificationData["notifications"] =
         parsedResponse.userNotificationList || [];
       notificationData["next"] = parsedResponse.links?.next || "";
-      let count = 0;
-      parsedResponse.userNotificationList?.forEach((entry) => {
-        if (entry.read === false) {
-          count++;
-        }
-      });
-      setUnreadCount(count);
-      console.log(notificationData["notifications"]);
+      setUnreadCount(0);
       dispatch(loadNotifications(notificationData));
       setIsLoading(false);
     } catch (e) {
@@ -97,9 +94,36 @@ export const useNotifications = () => {
     }
   }, [dispatch]);
 
+
+  const pollUnreadNotificationCount = useCallback(async () => {
+    try {
+      const params: QueryParams = {};
+      params["page[limit]"] = pageLimit;
+      params["announcementsOnly"] = false;
+      params["userSelectedChannels"] = channels;
+      params["read"]= false; 
+      const response = await RestAdapter.get({
+        url: `${config.baseApiUrl}/users/13403718/userNotifications`,
+        params: params,
+      });
+      const parsedResponse = JsonApiParse(response);
+      let count = 0;
+      if (parsedResponse && parsedResponse.userNotificationList )
+        count = parsedResponse.userNotificationList.length; 
+
+      setUnreadCount(count);
+      setIsLoading(false);
+    } catch (e) {
+      
+      console.log("Error while loading notifications " + e);
+      setIsLoading(false);
+    }
+  }, [dispatch]);
+
+
   useEffect(() => {
-    fetchNotifications();
-  }, [fetchNotifications]);
+    pollUnreadNotificationCount();
+  }, [pollUnreadNotificationCount]);
 
   //for pagination
   const loadMoreNotifications = useCallback(async () => {
@@ -116,57 +140,47 @@ export const useNotifications = () => {
   const markReadNotification = useCallback(
     async (data = []) => {
       let notificationToRead = data?.length ? data : notifications;
-
+      let unreadNotificationIds = []; 
       if (notificationToRead) {
-        for (let i = 0; i < notificationToRead.length; i++) {
-          let notification = notificationToRead[i];
-          if (notification.read === false) {
-            let notificationId = notification.id;
-            notification.read = true;
-            const requestBody: any = getUserNotificationBody(notification);
-            await RestAdapter.patch({
-              url: `${config.baseApiUrl}/users/10866105/userNotifications/${notificationId}`,
-              method: "PATCH",
-              headers: {
-                "content-type": "application/vnd.api+json;charset=UTF-8",
-              },
-              body: JSON.stringify(requestBody),
-            });
-            setUnreadCount(0);
-          }
+            for (let i = 0; i < notificationToRead.length; i++) {
+              let notification = notificationToRead[i];
+              if (notification.read === false) {
+                unreadNotificationIds.push(notification.id);
+              }
+            }
+            if (unreadNotificationIds.length > 0 ) {
+              await RestAdapter.put({
+                url: `${config.baseApiUrl}/users/13403718/userNotificationsMarkRead`,
+                method: "PUT",
+                headers: {
+                  "content-type": "application/json;charset=UTF-8",
+                },
+                body: JSON.stringify(unreadNotificationIds),
+              });
+            }
         }
-      }
-    },
-    [dispatch, notifications]
+      },[dispatch, notifications]
   );
 
-  const getUserNotificationBody = (notification: any) => {
-    const userNotification = {} as PrimeUserNotification;
-    userNotification.channel = notification.channel;
-    userNotification.modelIds = notification.modelIds;
-    userNotification.dateCreated = notification.dateCreated;
-    userNotification.actionTaken = true;
-    userNotification.message = notification.message;
-    userNotification.modelNames = notification.modelNames;
-    userNotification.modelTypes = notification.modelTypes;
-    userNotification.modelIds = notification.modelIds;
-    userNotification.read = notification.read;
-    userNotification.role = notification.role;
+  const redirectLoPage = useCallback(
+    (trainingId) => {
+    let alm = getALMObject();
+    alm?.redirectToTrainingOverview(
+      trainingId
+    );
+    return;
+  },[]
+  );
 
-    const notificationData: any = {};
-    notificationData["id"] = notification.id;
-    notificationData["type"] = "userNotification";
-    notificationData["attributes"] = userNotification;
-    const requestBody: any = {};
-    requestBody["data"] = notificationData;
-    return requestBody;
-  };
 
   return {
     notifications,
     isLoading,
     unreadCount,
+    fetchNotifications,
     loadMoreNotifications,
     markReadNotification,
+    redirectLoPage,
+    pollUnreadNotificationCount
   };
 };

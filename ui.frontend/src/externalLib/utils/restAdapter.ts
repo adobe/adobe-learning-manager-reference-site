@@ -40,6 +40,11 @@ export class RestAdapter {
     return this.ajax(options as IRestAdapterAjaxOptions);
   }
 
+  public static put(options: IRestAdapterAjaxOptions): Promise<unknown> {
+    (options as IRestAdapterAjaxOptions).method = "PUT";
+    return this.ajax(options as IRestAdapterAjaxOptions);
+  }
+
   public static ajax(options: IRestAdapterAjaxOptions): Promise<unknown> {
     return new Promise(function (resolve, reject) {
       const xhr = new XMLHttpRequest();
