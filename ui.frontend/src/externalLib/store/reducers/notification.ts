@@ -3,8 +3,7 @@ import { PrimeUserNotification } from "../../models";
 
 import {
     LOAD_NOTIFICATIONS,
-    PAGINATE_NOTIFICATIONS,
-    PREPEND_NOTIFICATIONS
+    PAGINATE_NOTIFICATIONS
   } from "../actions/notification/actionTypes";
 
   export interface NotificationState {
@@ -22,9 +21,6 @@ const notifications: Reducer<PrimeUserNotification[] | null, AnyAction> = (
     }
     case PAGINATE_NOTIFICATIONS: {
       return [...state!, ...action.payload?.notifications];
-    }
-    case PREPEND_NOTIFICATIONS: {
-      return [ ...action.payload?.notifications, ...state!];
     }
     default:
       return state || [];
