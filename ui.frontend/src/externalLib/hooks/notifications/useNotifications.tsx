@@ -84,14 +84,7 @@ export const useNotifications = () => {
       notificationData["notifications"] =
         parsedResponse.userNotificationList || [];
       notificationData["next"] = parsedResponse.links?.next || "";
-      let count = 0;
-      parsedResponse.userNotificationList?.forEach((entry) => {
-        if (entry.read === false) {
-          count++;
-        }
-      });
-      setUnreadCount(count);
-      console.log(notificationData["notifications"]);
+      setUnreadCount(0);
       dispatch(loadNotifications(notificationData));
       setIsLoading(false);
     } catch (e) {
@@ -129,50 +122,8 @@ export const useNotifications = () => {
 
 
   useEffect(() => {
-    fetchNotifications();
-  }, [fetchNotifications]);
-
-
-  const pollNotifications = useCallback(async () => {
-    
-      try {
-      const params: QueryParams = {};
-        params["page[limit]"] = pageLimit;
-        params["announcementsOnly"] = false;
-        params["userSelectedChannels"] = channels;
-        // params["read"]=false; 
-        const response = await RestAdapter.get({
-          url: `${config.baseApiUrl}/users/10866105/userNotifications`,
-          params: params,
-        });
-        const parsedResponse = JsonApiParse(response);
-        const notificationData: any = {};
-        notificationData["notifications"] = parsedResponse.userNotificationList || [];
-        notificationData["next"] = parsedResponse.links?.next || "";
-        // let count = 0; 
-        // if (parsedResponse.userNotificationList) 
-        //   count += parsedResponse.userNotificationList.length;  
-        // setUnreadCount(unreadCount + count); 
-        // if (count > 0 )
-        //   dispatch(prependNotifications(notificationData));
-
-
-        let count = 0;
-        parsedResponse.userNotificationList?.forEach((entry) => {
-        if (entry.read === false) {
-          count++;
-        }
-        });
-        setUnreadCount(count);
-        dispatch(loadNotifications(notificationData));
-
-      } catch (e) {
-        
-        console.log("Error while loading notifications " + e);
-        
-      }
-    
-  },[dispatch])
+    pollUnreadNotificationCount();
+  }, [pollUnreadNotificationCount]);
 
   //for pagination
   const loadMoreNotifications = useCallback(async () => {
@@ -250,9 +201,10 @@ export const useNotifications = () => {
     notifications,
     isLoading,
     unreadCount,
+    fetchNotifications,
     loadMoreNotifications,
     markReadNotification,
     redirectLoPage,
-    pollNotifications
+    pollUnreadNotificationCount
   };
 };

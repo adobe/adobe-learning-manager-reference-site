@@ -14,10 +14,11 @@ const PrimeNotificationContainer = () => {
     notifications,
     isLoading,
     unreadCount,
+    fetchNotifications,
     loadMoreNotifications,
     markReadNotification, 
     redirectLoPage,
-    pollNotifications
+    pollUnreadNotificationCount 
   } = useNotifications();
 
   const [showNotifications, setShowNotifications] = useState(false);
@@ -30,13 +31,14 @@ const PrimeNotificationContainer = () => {
     let timer: any ;
 
     if (showNotifications) {
-      markReadNotification();  
+      fetchNotifications();  
     } else {
-      timer = setInterval(pollNotifications, 10*1000);
+      markReadNotification(); 
+      timer = setInterval(pollUnreadNotificationCount, 10*1000);
     }
     return () => timer && clearInterval(timer);
     
-  },[markReadNotification, showNotifications]);
+  },[fetchNotifications, showNotifications]);
 
   if (isLoading) {
     return <span>loading notifications...</span>;
