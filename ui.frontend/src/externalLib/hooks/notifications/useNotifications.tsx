@@ -76,7 +76,7 @@ export const useNotifications = () => {
       params["announcementsOnly"] = false;
       params["userSelectedChannels"] = channels;
       const response = await RestAdapter.get({
-        url: `${config.baseApiUrl}/users/10866105/userNotifications`,
+        url: `${config.baseApiUrl}/users/13403718/userNotifications`,
         params: params,
       });
       const parsedResponse = JsonApiParse(response);
@@ -103,7 +103,7 @@ export const useNotifications = () => {
       params["userSelectedChannels"] = channels;
       params["read"]= false; 
       const response = await RestAdapter.get({
-        url: `${config.baseApiUrl}/users/10866105/userNotifications`,
+        url: `${config.baseApiUrl}/users/13403718/userNotifications`,
         params: params,
       });
       const parsedResponse = JsonApiParse(response);
@@ -140,51 +140,27 @@ export const useNotifications = () => {
   const markReadNotification = useCallback(
     async (data = []) => {
       let notificationToRead = data?.length ? data : notifications;
-
+      let unreadNotificationIds = []; 
       if (notificationToRead) {
-        for (let i = 0; i < notificationToRead.length; i++) {
-          let notification = notificationToRead[i];
-          if (notification.read === false) {
-            let notificationId = notification.id;
-            notification.read = true;
-            const requestBody: any = getUserNotificationBody(notification);
-            await RestAdapter.patch({
-              url: `${config.baseApiUrl}/users/10866105/userNotifications/${notificationId}`,
-              method: "PATCH",
-              headers: {
-                "content-type": "application/vnd.api+json;charset=UTF-8",
-              },
-              body: JSON.stringify(requestBody),
-            });
-            setUnreadCount(0);
-          }
+            for (let i = 0; i < notificationToRead.length; i++) {
+              let notification = notificationToRead[i];
+              if (notification.read === false) {
+                unreadNotificationIds.push(notification.id);
+              }
+            }
+            if (unreadNotificationIds.length > 0 ) {
+              await RestAdapter.put({
+                url: `${config.baseApiUrl}/users/13403718/userNotificationsMarkRead`,
+                method: "PUT",
+                headers: {
+                  "content-type": "application/json;charset=UTF-8",
+                },
+                body: JSON.stringify(unreadNotificationIds),
+              });
+            }
         }
-      }
-    },
-    [dispatch, notifications]
+      },[dispatch, notifications]
   );
-
-  const getUserNotificationBody = (notification: any) => {
-    const userNotification = {} as PrimeUserNotification;
-    userNotification.channel = notification.channel;
-    userNotification.modelIds = notification.modelIds;
-    userNotification.dateCreated = notification.dateCreated;
-    userNotification.actionTaken = true;
-    userNotification.message = notification.message;
-    userNotification.modelNames = notification.modelNames;
-    userNotification.modelTypes = notification.modelTypes;
-    userNotification.modelIds = notification.modelIds;
-    userNotification.read = notification.read;
-    userNotification.role = notification.role;
-
-    const notificationData: any = {};
-    notificationData["id"] = notification.id;
-    notificationData["type"] = "userNotification";
-    notificationData["attributes"] = userNotification;
-    const requestBody: any = {};
-    requestBody["data"] = notificationData;
-    return requestBody;
-  };
 
   const redirectLoPage = useCallback(
     (trainingId) => {

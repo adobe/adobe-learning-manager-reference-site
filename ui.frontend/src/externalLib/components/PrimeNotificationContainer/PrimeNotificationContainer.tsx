@@ -28,6 +28,7 @@ const PrimeNotificationContainer = () => {
   };
   
   useEffect(() => {
+    
     let timer: any ;
 
     if (showNotifications) {
