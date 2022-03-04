@@ -6,10 +6,14 @@ import { PrimeUserNotification } from "../../models";
 import {
   loadNotifications,
   paginateNotifications,
+  prependNotifications
 } from "../../store/actions/notification/action";
 import { State } from "../../store/state";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
+import { getALMObject } from "../../utils/global";
+import { getALMKeyValue } from "../../utils/global";
+
 
 export const useNotifications = () => {
   const { notifications, next } = useSelector(
@@ -18,9 +22,9 @@ export const useNotifications = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
   const dispatch = useDispatch();
-  const config = useConfigContext();
+  const config = getALMKeyValue("config");
   const { user } = useUserContext();
-  const pageLimit = 10;
+  const pageLimit = 6;
   const channels = [
     "jobAid::adminEnrollment",
     "certification::adminEnrollment",
@@ -97,9 +101,78 @@ export const useNotifications = () => {
     }
   }, [dispatch]);
 
+
+  const pollUnreadNotificationCount = useCallback(async () => {
+    try {
+      const params: QueryParams = {};
+      params["page[limit]"] = pageLimit;
+      params["announcementsOnly"] = false;
+      params["userSelectedChannels"] = channels;
+      params["read"]= false; 
+      const response = await RestAdapter.get({
+        url: `${config.baseApiUrl}/users/10866105/userNotifications`,
+        params: params,
+      });
+      const parsedResponse = JsonApiParse(response);
+      let count = 0;
+      if (parsedResponse && parsedResponse.userNotificationList )
+        count = parsedResponse.userNotificationList.length; 
+
+      setUnreadCount(count);
+      setIsLoading(false);
+    } catch (e) {
+      
+      console.log("Error while loading notifications " + e);
+      setIsLoading(false);
+    }
+  }, [dispatch]);
+
+
   useEffect(() => {
     fetchNotifications();
   }, [fetchNotifications]);
+
+
+  const pollNotifications = useCallback(async () => {
+    
+      try {
+      const params: QueryParams = {};
+        params["page[limit]"] = pageLimit;
+        params["announcementsOnly"] = false;
+        params["userSelectedChannels"] = channels;
+        // params["read"]=false; 
+        const response = await RestAdapter.get({
+          url: `${config.baseApiUrl}/users/10866105/userNotifications`,
+          params: params,
+        });
+        const parsedResponse = JsonApiParse(response);
+        const notificationData: any = {};
+        notificationData["notifications"] = parsedResponse.userNotificationList || [];
+        notificationData["next"] = parsedResponse.links?.next || "";
+        // let count = 0; 
+        // if (parsedResponse.userNotificationList) 
+        //   count += parsedResponse.userNotificationList.length;  
+        // setUnreadCount(unreadCount + count); 
+        // if (count > 0 )
+        //   dispatch(prependNotifications(notificationData));
+
+
+        let count = 0;
+        parsedResponse.userNotificationList?.forEach((entry) => {
+        if (entry.read === false) {
+          count++;
+        }
+        });
+        setUnreadCount(count);
+        dispatch(loadNotifications(notificationData));
+
+      } catch (e) {
+        
+        console.log("Error while loading notifications " + e);
+        
+      }
+    
+  },[dispatch])
 
   //for pagination
   const loadMoreNotifications = useCallback(async () => {
@@ -162,11 +235,24 @@ export const useNotifications = () => {
     return requestBody;
   };
 
+  const redirectLoPage = useCallback(
+    (trainingId) => {
+    let alm = getALMObject();
+    alm?.redirectToTrainingOverview(
+      trainingId
+    );
+    return;
+  },[]
+  );
+
+
   return {
     notifications,
     isLoading,
     unreadCount,
     loadMoreNotifications,
     markReadNotification,
+    redirectLoPage,
+    pollNotifications
   };
 };

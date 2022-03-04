@@ -1,19 +1,26 @@
 import styles from "./PrimeNotificationText.module.css";
 
 import {modifyTime} from "../../utils/dateTime";
-import { useConfigContext, useUserContext } from "../../contextProviders";
+import { getALMKeyValue } from "../../utils/global";
 
 const feedbackChannels: Array<string> = [
     "course::l1FeedbackPrompt",
     "learningProgram::l1Feedback",
   ];
 
-  
-
+ 
 const PrimeNotificationText = (props: any) => {
-    const config = useConfigContext();
-    const notif = props.notification; 
+
+    const config = getALMKeyValue("config");
+    
+    const notif = props.notification;
+    const redirectLoPage= props.redirectLoPage; 
     let message = notif.message;
+    let modelIds = notif.modelIds;
+    let trainingId;  
+    if (modelIds && modelIds.length > 0) {
+        trainingId = modelIds[0].split(":")[1];
+    }
     let name1 = -1,
         name0 = -1,
         endname0 = -1,
@@ -55,13 +62,19 @@ const PrimeNotificationText = (props: any) => {
                         {x} 
                             {["date", "time"].includes(notif.modelTypes[0])
                                 ? modifyTime(notif.modelNames[0], config.locale)
-                                : <span className={styles.loLink}>{notif.modelNames[0]} </span>
+                                : <span className={styles.loLink} onClick={() => {
+                                    const id = notif.modelIds[0].split(":")[1];
+                                    redirectLoPage(id);
+                                }}>{notif.modelNames[0]}</span>
                             }
                         {y} 
                             {name1 > 0
                                 ? ["date", "time"].includes(notif.modelTypes[1])
                                 ? modifyTime(notif.modelNames[1], config.locale)
-                                : <span className={styles.loLink}>{notif.modelNames[1]}</span>
+                                : <span className={styles.loLink} onClick={() => {
+                                    const id = notif.modelIds[0].split(":")[1];
+                                    redirectLoPage(id);
+                                }}>{notif.modelNames[1]}</span>
                                 : null}
                         {z}    
                 </div>  
@@ -80,13 +93,19 @@ const PrimeNotificationText = (props: any) => {
                         
                             {["date", "time"].includes(notif.modelTypes[1])
                                 ? modifyTime(notif.modelNames[1], config.locale)
-                                : <span className={styles.loLink}>{notif.modelNames[1]}</span>
+                                : <span className={styles.loLink} onClick={() => {
+                                    const id = notif.modelIds[0].split(":")[1];
+                                    redirectLoPage(id);
+                                }}>{notif.modelNames[1]}</span>
                             }
                         {y} 
                             {name1 > 0
                                 ? ["date", "time"].includes(notif.modelTypes[0])
                                 ? modifyTime(notif.modelNames[0], config.locale)
-                                : <span className={styles.loLink}> {notif.modelNames[0]} </span>
+                                : <span className={styles.loLink} onClick={() => {
+                                    const id = notif.modelIds[0].split(":")[1];
+                                    redirectLoPage(id);
+                                }}> {notif.modelNames[0]} </span>
                             : null}
                         {z}    
                 </div>  
@@ -95,4 +114,5 @@ const PrimeNotificationText = (props: any) => {
     }
     
 }
+
 export default PrimeNotificationText
