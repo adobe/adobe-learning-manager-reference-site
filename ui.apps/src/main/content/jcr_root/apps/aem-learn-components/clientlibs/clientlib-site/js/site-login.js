@@ -11,18 +11,36 @@ window.ALM.primeConfigs = window.ALM.primeConfigs || {};
   const CP_OAUTH_STATE = "cpState";
   const CP_OAUTH_RESPONSE_TYPE = "CODE";
 
+  const WCM_AUTHOR_MODE = "author";
+  const WCM_NON_AUTHOR_MODE = "non-author";
+
   const CP_ACCESS_TOKEN_URL = "/cpoauth.cpAccessToken.html";
 
   function handlePageLoad() {
-    if (!isUserLoggedInPrime()) {
+    if (!isPrimeUserLoggedIn()) {
       const currentUrl = new URL(window.location.href);
+      const pathName = currentUrl.pathname;
+      if (isAuthor()) {
+        var data = {
+          _charset_: "UTF-8",
+          mode: WCM_AUTHOR_MODE,
+          pagePath: pathName,
+        };
+        fetchAccessToken(data);
+      }
+
       var oauthState = currentUrl.searchParams.get("state");
       var code = currentUrl.searchParams.get("code");
       if (CP_OAUTH_STATE == oauthState && code) {
-        const pathName = currentUrl.pathname;
         // learner got here from cp oauth with code and state.
         // make call to backend AEM to fetch access_token. On getting refresh the page.
-        fetchAccessToken(code, pathName);
+        var data = {
+          _charset_: "UTF-8",
+          mode: WCM_NON_AUTHOR_MODE,
+          code: code,
+          pagePath: pathName,
+        };
+        fetchAccessToken(data);
         //document.location.reload();
       } else {
         // redirect learner to cp oauth
@@ -30,6 +48,10 @@ window.ALM.primeConfigs = window.ALM.primeConfigs || {};
         document.location.href = cpOauth;
       }
     }
+  }
+
+  function isAuthor() {
+    return window.ALM.primeConfigs.authorMode == true;
   }
 
   function getCpOauthUrl() {
@@ -46,7 +68,7 @@ window.ALM.primeConfigs = window.ALM.primeConfigs || {};
   }
 
   // fetch access_token from AEM
-  function fetchAccessToken(code, pathName) {
+  function fetchAccessToken(data) {
     const ACCESS_TOKEN_URL = Granite.HTTP.externalize(CP_ACCESS_TOKEN_URL);
 
     $.ajax({
@@ -71,20 +93,20 @@ window.ALM.primeConfigs = window.ALM.primeConfigs || {};
     });
   }
 
-  function getAccessTokenCookie() {
+  function getAccessToken() {
     let cookieValues = document.cookie.match(
       `(^|[^;]+)\\s*${ACCESS_TOKEN_COOKIE_NAME}\\s*=\\s*([^;]+)`
     );
     return cookieValues ? cookieValues.pop() : "";
   }
 
-  function isUserLoggedInPrime() {
-    let cookieValue = getAccessTokenCookie();
+  function isPrimeUserLoggedIn() {
+    let cookieValue = getAccessToken();
     return cookieValue == "" ? false : true;
   }
 
   handlePageLoad();
 
-  window.ALM.isUserLoggedInPrime = isUserLoggedInPrime;
-  window.ALM.getAccessTokenCookie = getAccessTokenCookie;
+  window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
+  window.ALM.getAccessToken = getAccessToken;
 })(window, document, Granite, jQuery);

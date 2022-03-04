@@ -55,6 +55,8 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
 
 	private final static String ACCESS_TOKEN_COOKIE_NAME = "alm-cp-token";
 
+	private final static String AUTHOR_MODE = "author";
+
 	@Reference
 	private transient GlobalConfigurationService configService;
 
@@ -65,7 +67,6 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
 	protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response)
 	{
 		try {
-			String code = request.getParameter("code");
 			String pagePath = request.getParameter("pagePath");
 
 			Page currentPage = getCurrentPage(request, pagePath);
@@ -75,30 +76,49 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				return;
 			}
+
 			JsonObject jsonConfigs = configService.getAdminConfigs(currentPage);
-			
+
 			String primeUrl = jsonConfigs.get("primeUrl").getAsString(),
 					clientId = jsonConfigs.get("clientId").getAsString(),
 					clientSecret = jsonConfigs.get("clientSecret").getAsString();
 
-			Pair<String, Integer> refreshTokenResp = tokenService.getRefreshToken(primeUrl, clientId, clientSecret, code);
-			if (refreshTokenResp == null)
-			{
-				LOGGER.error("CPPrime:: Exception in fetching refresh_token");
-				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				return;
-			}
-			
-			Pair<String, Integer> accessTokenResp = tokenService.getAccessToken(primeUrl, clientId, clientSecret, refreshTokenResp.getLeft());
-			if (accessTokenResp == null)
-			{
-				LOGGER.error("CPPrime:: Exception in fetching access_token");
-				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				return;
-			}
+			String mode = request.getParameter("mode");
 
-			setAccessTokenCookie(request, response, accessTokenResp.getLeft(), accessTokenResp.getRight());
+			if(AUTHOR_MODE.equals(mode))
+			{
+				String authorRefreshToken = jsonConfigs.get("authorRefreshToken").getAsString();
+				Pair<String, Integer> accessTokenResp = tokenService.getAccessToken(primeUrl, clientId, clientSecret, authorRefreshToken);
+				if (accessTokenResp == null)
+				{
+					LOGGER.error("CPPrime:: Exception in fetching access_token");
+					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+					return;
+				}
+				setAccessTokenCookie(request, response, accessTokenResp.getLeft(), accessTokenResp.getRight());
+			}
+			else
+			{
+				String code = request.getParameter("code");
 
+				Pair<String, Integer> refreshTokenResp = tokenService.getRefreshToken(primeUrl, clientId, clientSecret, code);
+				if (refreshTokenResp == null)
+				{
+					LOGGER.error("CPPrime:: Exception in fetching refresh_token");
+					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+					return;
+				}
+
+				Pair<String, Integer> accessTokenResp = tokenService.getAccessToken(primeUrl, clientId, clientSecret, refreshTokenResp.getLeft());
+				if (accessTokenResp == null)
+				{
+					LOGGER.error("CPPrime:: Exception in fetching access_token");
+					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+					return;
+				}
+
+				setAccessTokenCookie(request, response, accessTokenResp.getLeft(), accessTokenResp.getRight());
+			}
 		} catch (IOException ioe)
 		{
 			LOGGER.error("CPPrime:: IOException while fetching access_token", ioe);
