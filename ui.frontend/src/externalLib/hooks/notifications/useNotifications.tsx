@@ -5,8 +5,7 @@ import { useConfigContext, useUserContext } from "../../contextProviders";
 import { PrimeUserNotification } from "../../models";
 import {
   loadNotifications,
-  paginateNotifications,
-  prependNotifications
+  paginateNotifications
 } from "../../store/actions/notification/action";
 import { State } from "../../store/state";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
