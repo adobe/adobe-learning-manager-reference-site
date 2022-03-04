@@ -24,6 +24,57 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+    <script>
+            const primeConfig = {
+              "jcr:primaryType": "cq:PageContent",
+              "jcr:createdBy": "admin",
+              "jcr:title": "ALM",
+              "accountId": "1",
+              "magentoRootCategoryId": "1",
+              "clientSecret": "8ca8ded0-9ead-44c3-bc6d-96af99b213d8",
+              "cq:template": "/apps/aem-learn-components/configuration/page/template",
+              "primeUrl": "https://captivateprimelms.adobe.com",
+              "magentoGraphqlEndpoint": "/magento/graphql",
+              "locale": "en-US",
+              "primeRegisterUrl": "1",
+              "jcr:created": "2022-03-02T22:19:50.386+05:30",
+              "cq:lastModified": "2022-03-03T13:57:24.962+05:30",
+              "refreshToken": "1",
+              "usageType": "sites",
+              "clientId": "eb391052-1a8e-472a-a6c5-227156f37229",
+              "sling:resourceType": "aem-learn-components/configuration/page",
+              "primeBaseUrl": "1",
+              "sling:configPropertyInherit": "true",
+              "cq:lastModifiedBy": "admin",
+              "esBaseUrl": "1",
+              "siteMap": "siteMap",
+              "primeTileColors": {
+                  "0": "#00000",
+                  "1": "#FFFFFF",
+                  "2": "#445566"
+              },
+              "authorMode": true
+          }
+
+          export const isPrimeUserLoggedIn = () => {
+            return true;
+          }
+
+          export const getAccessToken = () => {
+            return "adbsdsakjf";
+          }
+
+
+          export const getPrimeConfig = () => {
+            return primeConfig;
+          }
+
+
+      <!--/*
+          window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
+          window.ALM.getAccessToken = getAccessToken;
+          window.ALM.getPrimeConfig = getPrimeConfig; */-->
+    </script>
     <title>React App</title>
   </head>
   <body>

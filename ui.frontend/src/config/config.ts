@@ -22,7 +22,7 @@ const ALMbaseUrl = "https://captivateprimestage1.adobe.com";
 export const primeConfig: PrimeConfig = {
   ALMbaseUrl,
   baseApiUrl: `${ALMbaseUrl}/primeapi/v2/`,
-  accessToken: "d7be46b37efac009868218a0d1e5fefa",
+  accessToken: "fb2d1fe7cb2cbf4d80e1dc2ccd86b7ea",
   cdnBaseUrl: "https://cpcontentsdev.adobe.com",
   locale: "en-US",
   pagePaths: {
