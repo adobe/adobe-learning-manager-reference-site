@@ -36,6 +36,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.aemlearncomponents.core.services.CPTokenService;
 import com.aemlearncomponents.core.services.GlobalConfigurationService;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
@@ -57,6 +58,9 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
 	@Reference
 	private transient GlobalConfigurationService configService;
 
+	@Reference
+	private transient CPTokenService tokenService;
+
 	@Override
 	protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response)
 	{
@@ -72,16 +76,20 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
 				return;
 			}
 			JsonObject jsonConfigs = configService.getAdminConfigs(currentPage);
+			
+			String primeUrl = jsonConfigs.get("primeUrl").getAsString(),
+					clientId = jsonConfigs.get("clientId").getAsString(),
+					clientSecret = jsonConfigs.get("clientSecret").getAsString();
 
-			String refreshToken = fetchRefreshToken(code, jsonConfigs);
-			if (StringUtils.isBlank(refreshToken))
+			Pair<String, Integer> refreshTokenResp = tokenService.getRefreshToken(primeUrl, clientId, clientSecret, code);
+			if (refreshTokenResp == null)
 			{
 				LOGGER.error("CPPrime:: Exception in fetching refresh_token");
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				return;
 			}
-
-			Pair<String, Integer> accessTokenResp = fetchAccessToken(refreshToken, jsonConfigs);
+			
+			Pair<String, Integer> accessTokenResp = tokenService.getAccessToken(primeUrl, clientId, clientSecret, refreshTokenResp.getLeft());
 			if (accessTokenResp == null)
 			{
 				LOGGER.error("CPPrime:: Exception in fetching access_token");
@@ -106,88 +114,6 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
 		response.addCookie(tokenCookie);
 	}
 
-	private Pair<String, Integer> fetchAccessToken(String refreshToken, JsonObject jsonConfigs)
-	{
-		String primeUrl = jsonConfigs.get("primeUrl").getAsString();
-		String clientId = jsonConfigs.get("clientId").getAsString();
-		String clientSecret = jsonConfigs.get("clientSecret").getAsString();
-
-		if (StringUtils.isAnyEmpty(primeUrl, clientId, clientSecret))
-		{
-			LOGGER.error("CPPrime FetchAccessToken:: Errors in admin configuration. PrimeUrl {}, ClientId {}, ClientSecret {}", primeUrl, clientId, clientSecret);
-			return null;
-		}
-
-		String url = primeUrl + "/oauth/token/refresh";
-
-		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-		nvps.add(new BasicNameValuePair("refresh_token", refreshToken));
-		nvps.add(new BasicNameValuePair("client_id", clientId));
-		nvps.add(new BasicNameValuePair("client_secret", clientSecret));
-
-		String responseStr = doCPPost(url, nvps);
-
-		if (StringUtils.isBlank(responseStr) || !responseStr.contains("access_token") || !responseStr.contains("expires_in"))
-		{
-			LOGGER.error("CPPrime FetchAccessToken:: Errors in fetching access token");
-			return null;
-		}
-		else
-		{
-			JsonObject jsonObject = new Gson().fromJson(responseStr, JsonObject.class);
-			String accessToken = jsonObject.get("access_token").getAsString();
-			Integer expirySecond = jsonObject.get("expires_in").getAsInt();
-			return new ImmutablePair<String, Integer>(accessToken, expirySecond);
-		}
-	}
-
-	private String fetchRefreshToken(String code, JsonObject jsonConfigs)
-	{
-		String primeUrl = jsonConfigs.get("primeUrl").getAsString();
-		String clientId = jsonConfigs.get("clientId").getAsString();
-		String clientSecret = jsonConfigs.get("clientSecret").getAsString();
-
-		if (StringUtils.isAnyEmpty(primeUrl, clientId, clientSecret))
-		{
-			LOGGER.error("CPPrime FetchRefreshToken:: Errors in admin configuration. PrimeUrl {}, ClientId {}, ClientSecret {}", primeUrl, clientId, clientSecret);
-			return null;
-		}
-
-		String url = primeUrl + "/oauth/token";
-
-		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-		nvps.add(new BasicNameValuePair("code", code));
-		nvps.add(new BasicNameValuePair("client_id", clientId));
-		nvps.add(new BasicNameValuePair("client_secret", clientSecret));
-
-		String responseStr = doCPPost(url, nvps);
-
-		if (StringUtils.isBlank(responseStr) || !responseStr.contains("refresh_token"))
-		{
-			LOGGER.error("CPPrime FetchRefreshToken:: Errors in admin configuration. PrimeUrl {}, ClientId {}, ClientSecret {}", primeUrl, clientId, clientSecret);
-			return null;
-		}
-		else
-		{
-			JsonObject jsonObject = new Gson().fromJson(responseStr, JsonObject.class);
-			return jsonObject.get("refresh_token").getAsString();
-		}
-	}
-
-	private String doCPPost(String url, List<NameValuePair> params)
-	{
-		HttpPost post = new HttpPost(url);
-		post.setEntity(new UrlEncodedFormEntity(params, StandardCharsets.UTF_8));
-		try (CloseableHttpClient httpClient = HttpClients.createDefault(); CloseableHttpResponse response = httpClient.execute(post))
-		{
-			return EntityUtils.toString(response.getEntity());
-		} catch (ParseException | IOException e)
-		{
-			LOGGER.error("CPPrime:: Exception in http call while fetching refresh-token", e);
-		}
-		return null;
-	}
-
 	private Page getCurrentPage(SlingHttpServletRequest request, String pagePath) {
 		Resource pageRsc = request.getResourceResolver().resolve(pagePath);
 		Page page = null;
@@ -196,10 +122,5 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
 			page = pageRsc.adaptTo(Page.class);
 		}
 		return page;
-		//		PageManager pageManager = request.getResourceResolver().adaptTo(PageManager.class);
-		//		if (pageManager != null)
-		//			return pageManager.getContainingPage(request.getResource());
-		//		else
-		//			return null;
 	}
 }

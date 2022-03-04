@@ -19,5 +19,11 @@ window.ALM.primeConfigs = window.ALM.primeConfigs || {};
     setPrimeConfigs();
   }
 
+  function getPrimeConfigs() {
+    return window.ALM.primeConfigs;
+  }
+
   init();
+
+  window.ALM.getPrimeConfigs = getPrimeConfigs;
 })(window, document, Granite, jQuery);
