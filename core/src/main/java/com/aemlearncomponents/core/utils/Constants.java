@@ -7,6 +7,7 @@ public final class Constants {
 		public static final String SITES_USAGE = "sites";
 		public static final String SITES_AUTHOR_REFRESH_TOKEN_NAME = "authorRefreshToken";
 		public static final String PRIME_URL = "primeUrl";
+		public static final String ALM_BASE_URL = "almBaseURL";
 		public static final String CLIENT_ID = "clientId";
 		public static final String CLIENT_SECRET = "clientSecret";
 	}
