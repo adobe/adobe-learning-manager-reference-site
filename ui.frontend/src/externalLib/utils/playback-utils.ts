@@ -1,4 +1,4 @@
-import { getALMConfig, getWindowObject } from "./global";
+import { getAccessToken, getALMConfig, getWindowObject } from "./global";
 // let currenttrainingId = "";
 
 export function LaunchPlayer(props: any) {
@@ -55,8 +55,8 @@ export function LaunchPlayer(props: any) {
 }
 
 function cleanUp() {
-  const overlay = <HTMLElement>document.getElementById("primePlayerOverlay");
-  const iframe = <HTMLIFrameElement>document.getElementById("pplayer_iframe");
+  const overlay = document.getElementById("primePlayerOverlay") as HTMLElement;
+  const iframe = document.getElementById("pplayer_iframe") as HTMLIFrameElement;
   if (iframe) {
     iframe.src = "about:blank";
     iframe.remove();
@@ -80,7 +80,7 @@ export function GetPlayerURl(trainingId = "", moduleId = ""): string {
   const hostName = primeConfig.almBaseURL;
   const playerEndPoint = "/app/player?";
   const key = `lo_id=${trainingId}`;
-  const accessToken = primeConfig.accessToken;
+  const accessToken = getAccessToken();
   const authKey = `access_token=${accessToken}`;
   //to-do handle preview/guest
   let url = `${hostName}${playerEndPoint}${key}&${authKey}&hostname=${hostName}&trapfocus=true`;

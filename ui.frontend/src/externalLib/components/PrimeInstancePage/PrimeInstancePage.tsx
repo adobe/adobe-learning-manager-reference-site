@@ -5,19 +5,20 @@ import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useInstancePage } from "../../hooks/instance/useInstancePage";
 import { PrimeLearningObjectResource } from "../../models/PrimeModels";
-import { getQueryParamsIObjectFromUrl } from "../../utils/catalog";
-import { getALMObject } from "../../utils/global";
+import { getALMConfig, getALMObject, getPathParams } from "../../utils/global";
 import { SORT_ORDER_SVG } from "../../utils/inline_svg";
 import { getResourceBasedOnLocale } from "../../utils/instance";
 import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 import { PrimeInstanceItem } from "../PrimeInstanceItem";
 import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
 import styles from "./PrimeInstancePage.module.css";
-
-const PrimeInstancePage = (props: any) => {
+//TO-DO move training id str to common
+const TRAINING_ID_STR = "trainingId";
+const PrimeInstancePage = () => {
   const [trainingId] = useState(() => {
-    const params = getQueryParamsIObjectFromUrl();
-    return params.trainingId;
+    let { instancePath } = getALMConfig();
+    let pathParams = getPathParams(instancePath, [TRAINING_ID_STR]);
+    return pathParams[TRAINING_ID_STR];
   });
 
   const { formatMessage } = useIntl();

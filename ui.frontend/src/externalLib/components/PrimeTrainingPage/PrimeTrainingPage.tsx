@@ -1,7 +1,7 @@
 import { lightTheme, Provider } from "@adobe/react-spectrum";
 import { useTrainingPage } from "../../hooks/catalog/useTrainingPage";
 import { convertSecondsToTimeText } from "../../utils/dateTime";
-import { getALMConfig } from "../../utils/global";
+import { getALMConfig, getPathParams } from "../../utils/global";
 import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 import { PrimeCourseOverview } from "../PrimeCourseOverview";
 import { PrimeTrainingOverview } from "../PrimeTrainingOverview";
@@ -14,20 +14,15 @@ const LEARNING_PROGRAM = "learningProgram";
 const CERTIFICATION = "certification";
 const TRAINING_ID_STR = "trainingId";
 const TRAINING_INSTANCE_ID_STR = "trainingInstanceId";
-const PrimeTrainingPage = (props: any) => {
-  const location = (window as any).location;
-  const queryParams = new URLSearchParams(decodeURI(location.search));
-  const trainingId = queryParams.get(TRAINING_ID_STR) || "";
-  const trainingInstanceId = queryParams.get(TRAINING_INSTANCE_ID_STR) || "";
+const PrimeTrainingPage = () => {
+  let { trainingOverviewPath } = getALMConfig();
+  let pathParams = getPathParams(trainingOverviewPath, [
+    TRAINING_ID_STR,
+    TRAINING_INSTANCE_ID_STR,
+  ]);
+  let trainingId = pathParams[TRAINING_ID_STR];
+  let trainingInstanceId = pathParams[TRAINING_INSTANCE_ID_STR];
 
-  // const location = getWindowObject().location;
-  // const queryParams = new URLSearchParams(decodeURI(location.search));
-  // const trainingId =
-  //   "learningProgram:79030" || queryParams.get(TRAINING_ID_STR) || "";
-  // const trainingInstanceId =
-  //   "learningProgram:79030_83137" ||
-  //   queryParams.get(TRAINING_INSTANCE_ID_STR) ||
-  //   "";
   const {
     name,
     description,

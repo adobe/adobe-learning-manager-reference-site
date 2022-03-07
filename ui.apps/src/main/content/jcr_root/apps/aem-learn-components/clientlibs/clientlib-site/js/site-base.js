@@ -31,6 +31,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     trainingInstanceId = ""
   ) => {
     let { trainingOverviewPath } = getALMConfig();
+
     trainingOverviewPath = getUrl(trainingOverviewPath, {
       trainingId: trainingId,
     });
@@ -45,18 +46,18 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   };
 
   const getUrl = (urlStr, params) => {
-    const url = new URL(urlStr);
     for (const param in params) {
-      url.searchParams.append(param, params[param].toString());
+      urlStr = `${urlStr}/${param}/${params[param]}`;
     }
-    return url.toString();
+    return urlStr;
   };
 
   init();
 
   let evaporateElement = document.createElement("script");
   evaporateElement.type = "application/javascript";
-  evaporateElement.src = "https://cdnjs.cloudflare.com/ajax/libs/evaporate/2.1.4/evaporate.min.js";
+  evaporateElement.src =
+    "https://cdnjs.cloudflare.com/ajax/libs/evaporate/2.1.4/evaporate.min.js";
   evaporateElement.async = true;
   let awsSdk = document.createElement("script");
   awsSdk.type = "application/javascript";
