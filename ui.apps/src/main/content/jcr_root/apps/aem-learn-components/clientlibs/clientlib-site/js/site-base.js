@@ -1,5 +1,5 @@
 window.ALM = window.ALM || {};
-window.ALM.primeConfigs = window.ALM.primeConfigs || {};
+window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
 (function (window, document, Granite, $) {
   "use strict";

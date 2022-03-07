@@ -1,5 +1,5 @@
 window.ALM = window.ALM || {};
-window.ALM.primeConfigs = window.ALM.primeConfigs || {};
+window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
 (function (window, document, Granite, $) {
   "use strict";
@@ -51,13 +51,13 @@ window.ALM.primeConfigs = window.ALM.primeConfigs || {};
   }
 
   function isAuthor() {
-    return window.ALM.primeConfigs.authorMode == true;
+    return window.ALM.ALMConfig.authorMode == true;
   }
 
   function getCpOauthUrl() {
-    const primeUrl = window.ALM.primeConfigs.primeUrl;
-    const clientId = window.ALM.primeConfigs.clientId;
-    const accountId = window.ALM.primeConfigs.accountId;
+    const primeUrl = window.ALM.ALMConfig.primeUrl;
+    const clientId = window.ALM.ALMConfig.clientId;
+    const accountId = window.ALM.ALMConfig.accountId;
     return CP_OAUTH_URL.replace("{primeUrl}", primeUrl)
       .replace("{accountId}", accountId)
       .replace("{clientId}", clientId)
@@ -75,11 +75,7 @@ window.ALM.primeConfigs = window.ALM.primeConfigs || {};
       url: ACCESS_TOKEN_URL,
       type: "POST",
       async: false,
-      data: {
-        _charset_: "UTF-8",
-        code: code,
-        pagePath: pathName,
-      },
+      data: data,
       success: () => {
         const currentUrl = new URL(window.location.href);
         currentUrl.searchParams.delete("PRIME_BASE");
