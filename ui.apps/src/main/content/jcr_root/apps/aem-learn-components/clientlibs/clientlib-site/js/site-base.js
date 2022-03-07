@@ -54,6 +54,13 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   init();
 
+  var jsElm = document.createElement("script");
+  jsElm.type = "application/javascript";
+  jsElm.src = "https://cdnjs.cloudflare.com/ajax/libs/evaporate/2.1.4/evaporate.min.js";
+  jsElm.async = true;
+  // finally insert the element to the body element in order to load the script
+  document.head.appendChild(jsElm);
+
   window.ALM.getALMConfig = getALMConfig;
   window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
   window.ALM.navigateToInstancePage = navigateToInstancePage;
