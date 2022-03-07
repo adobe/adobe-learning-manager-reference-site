@@ -13,8 +13,8 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import com.adobe.granite.ui.components.ds.DataSource;
 import com.adobe.granite.ui.components.ds.SimpleDataSource;
@@ -24,6 +24,7 @@ import com.aemlearncomponents.core.services.GlobalConfigurationService;
 import com.aemlearncomponents.core.utils.Constants;
 import com.aemlearncomponents.core.utils.EmbeddableLrngWidgetUtils;
 import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
 import com.google.gson.JsonObject;
 
 @Component(service = Servlet.class, property = {"sling.servlet.methods=GET", "sling.servlet.resourceTypes=" + EmbeddableLrngWidgetListDS.RESOURCE_TYPE})
@@ -33,7 +34,7 @@ public class EmbeddableLrngWidgetListDS extends SlingAllMethodsServlet {
 
 	final static String RESOURCE_TYPE = "cpPrime/widgets/datasource/widgetsSelectDatasource";
 
-	@OSGiService
+	@Reference
 	private transient GlobalConfigurationService configService;
 
 	@Override
@@ -50,20 +51,25 @@ public class EmbeddableLrngWidgetListDS extends SlingAllMethodsServlet {
 
 			if (resource != null)
 			{
-				Page currentPage = resource.adaptTo(Page.class);
-				JsonObject adminObj = configService.getAdminConfigs(currentPage);
-				String hostName = adminObj.get(Constants.Config.ALM_BASE_URL).getAsString();
-
-				List<EmbeddableLrngWidgetConfig> widgets = EmbeddableLrngWidgetUtils.getEmbeddableWidgetsConfig(hostName);
-				List<EmbeddableLrngWidgetConfig> availableWidgetsList = getAvailableWidgets(widgets);
-				
-				for (EmbeddableLrngWidgetConfig widgetConfig : availableWidgetsList)
+				PageManager pageManager = resource.getResourceResolver().adaptTo(PageManager.class);
+				if (pageManager != null)
 				{
-					ValueMap vm = new ValueMapDecorator(new HashMap<String, Object>());
-					String value = widgetConfig.getWidgetRef();
-					vm.put("value", value);
-					vm.put("text", widgetConfig.getName());
-					resourceList.add(new ValueMapResource(request.getResourceResolver(), "", "", vm));
+					Page currentPage = pageManager.getContainingPage(resource);
+
+					JsonObject adminObj = configService.getAdminConfigs(currentPage);
+					String hostName = adminObj.get(Constants.Config.ALM_BASE_URL).getAsString();
+
+					List<EmbeddableLrngWidgetConfig> widgets = EmbeddableLrngWidgetUtils.getEmbeddableWidgetsConfig(hostName);
+					List<EmbeddableLrngWidgetConfig> availableWidgetsList = getAvailableWidgets(widgets);
+
+					for (EmbeddableLrngWidgetConfig widgetConfig : availableWidgetsList)
+					{
+						ValueMap vm = new ValueMapDecorator(new HashMap<String, Object>());
+						String value = widgetConfig.getWidgetRef();
+						vm.put("value", value);
+						vm.put("text", widgetConfig.getName());
+						resourceList.add(new ValueMapResource(request.getResourceResolver(), "", "", vm));
+					}
 				}
 			}
 		}

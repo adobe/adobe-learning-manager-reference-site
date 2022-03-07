@@ -128,8 +128,9 @@
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                         fieldLabel="Prime API URL"
-                        fieldDescription="Prime API URL"
-                        name="./primeApiURL"
+                        fieldDescription="Prime API prefix that should be used. This will be useful in case API calls need to be directed to custom backend"
+                        name="./commonConfig.primeApiPrefix"
+                        value="/primeapi/v2"
                         cq:showOnCreate="{Boolean}true"/>
 
                     <primeCdnBaseUrl 
@@ -195,6 +196,98 @@
                         text="Site Map"
                         value="siteMap"
                         cq:showOnCreate="{Boolean}true"/>
+
+                    <higherOrderEnroll
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                        checked="false"
+                        name="./commonConfig.ignoreHigherOrderLOEnrollment"
+                        text="Ignore Higher Order LO Enrollment"
+                        value="false"
+                        cq:showOnCreate="{Boolean}true"/>
+                     <higherOrderEnrollType
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/foundation/form/hidden"
+                        name="./commonConfig.ignoreHigherOrderLOEnrollment@TypeHint"
+                        value="Boolean"
+                        cq:showOnCreate="{Boolean}true"/>
+
+                    <emitPageLinkEvents
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                        fieldDescription="This option tells whether to send the link click events to Adobe Captivate Prime application or to pass them to parent window. If enabled, clients can build custom redirects to other pages like Course page etc."
+                        fieldLabel="Emit Page Link Events"
+                        name="./commonConfig.emitPageLinkEvents"
+                        cq:showOnCreate="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <top
+                                jcr:primaryType="nt:unstructured"
+                                text="top"
+                                value="top"/>
+                            <true
+                                jcr:primaryType="nt:unstructured"
+                                text="true"
+                                value="true"/>
+                        </items>
+                    </emitPageLinkEvents>
+
+                    <customization 
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Customization"
+                        fieldDescription="customization"
+                        name="./theme.customization"
+                        cq:showOnCreate="{Boolean}true"/>
+
+                    <background
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/foundation/form/hidden"
+                        name="./theme.background"
+                        value="transparent"
+                        cq:showOnCreate="{Boolean}true"/>
+
+                    <primeTileColors
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Prime Tile Colors"
+                        fieldDescription="Prime Tile Colors"
+                        name="./primeTileColors"
+                        value="#00000,#ffffff,#445566"
+                        cq:showOnCreate="{Boolean}true"/>
+
+                    <disableLinks
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                        checked="true"
+                        name="./commonConfig.disableLinks"
+                        text="Disable/Hide Captivate Prime Links"
+                        value="true"
+                        cq:showOnCreate="{Boolean}true"/>
+                     <disableLinksType
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/foundation/form/hidden"
+                        name="./commonConfig.disableLinks@TypeHint"
+                        value="Boolean"
+                        cq:showOnCreate="{Boolean}true"/>
+
+                    <primaryColor 
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Primary Color"
+                        fieldDescription="Primary Color"
+                        name="./theme.primaryColor"
+                        value="rgb(38,118,255)"
+                        cq:showOnCreate="{Boolean}true"/>
+
+                    <secondaryColor 
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Seconday Color"
+                        fieldDescription="Seconday Color"
+                        name="./theme.secondaryColor"
+                        value="rgb(0,145,255)"
+                        cq:showOnCreate="{Boolean}true"/>
+
                 </items>
             </column>
         </items>

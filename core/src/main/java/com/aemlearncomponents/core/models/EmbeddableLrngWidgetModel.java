@@ -120,6 +120,11 @@ public class EmbeddableLrngWidgetModel {
 		}
 		widgetObject.put("widgetConfig.widgetRef", selectedWidgetRef);
 		widgetObject.put("type", "acapConfig");
+		widgetObject.put("auth.accessToken", "");
+		widgetObject.put(Constants.EmbeddableWidgetConfig.CP_HOST_NAME_PROP, adminConfigsObj.get(Constants.Config.ALM_BASE_URL).getAsString());
+		widgetObject.put(Constants.EmbeddableWidgetConfig.CP_EMIT_PLAYER_EVENT_PROP, Constants.EmbeddableWidgetConfig.CP_EMIT_PLAYER_EVENT_PROP_VALUE);
+		//widgetObject.put(Constants.EmbeddableWidgetConfig.CP_THEME_BACKGROUND_PROP, Constants.EmbeddableWidgetConfig.CP_THEME_BACKGROUND_PROP_VALUE);
+		
 
 //		widgetObject.remove(Constants.Config.CLIENT_ID);
 //		widgetObject.remove(Constants.Config.CLIENT_SECRET);

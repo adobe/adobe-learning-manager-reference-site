@@ -3,6 +3,7 @@ package com.aemlearncomponents.core.services;
 import java.util.Map;
 import java.util.stream.IntStream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -14,6 +15,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.aemlearncomponents.core.utils.Constants;
 import com.day.cq.wcm.api.Page;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
@@ -52,14 +54,11 @@ public class GlobalConfigurationServiceImpl implements GlobalConfigurationServic
 
 				if (adminConfigs != null) {
 					for (String key : adminConfigs.keySet()) {
-						globalConfig.addProperty(key, adminConfigs.get(key, ""));
+						if (!StringUtils.startsWithAny(key, Constants.AEM_NODE_PROP_PREFIXES))
+							globalConfig.addProperty(key, adminConfigs.get(key, ""));
 					}
 				}
 
-				JsonObject primeColors = new JsonObject();
-				IntStream.range(0, colors.length)
-						.forEach(index -> primeColors.addProperty(String.valueOf(index), colors[index]));
-				globalConfig.add("primeColors", primeColors);
 			}
 		} catch (LoginException le) {
 			LOGGER.error("Login Exception in initializing global config model", le);

@@ -16,8 +16,8 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import com.adobe.granite.ui.components.ValueMapResourceWrapper;
 import com.adobe.granite.ui.components.ds.DataSource;
@@ -30,6 +30,7 @@ import com.aemlearncomponents.core.utils.Constants;
 import com.aemlearncomponents.core.utils.EmbeddableLrngWidgetUtils;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -39,9 +40,9 @@ public class EmbeddableLrngWidgetDatasource extends SlingAllMethodsServlet
 
 	private static final long serialVersionUID = 6208450620001248037L;
 
-	@OSGiService
+	@Reference
 	private transient GlobalConfigurationService configService;
-	
+
 	final static String RESOURCE_TYPE = "cpPrime/widgets/datasource/widgetsdatasource";
 
 	@Override
@@ -58,33 +59,39 @@ public class EmbeddableLrngWidgetDatasource extends SlingAllMethodsServlet
 
 			if (resource != null)
 			{
-				Page currentPage = resource.adaptTo(Page.class);
-				ValueMap valueMap = resource.getValueMap();
-				JsonObject adminObj = configService.getAdminConfigs(currentPage);
 
-				Map<String, Object> adminConfigs = new HashMap<String, Object>();
-
-				for(Entry<String, JsonElement> entry : adminObj.entrySet())
+				PageManager pageManager = resource.getResourceResolver().adaptTo(PageManager.class);
+				if (pageManager != null)
 				{
-					adminConfigs.put(entry.getKey(), entry.getValue().getAsString());
-				}
+					Page currentPage = pageManager.getContainingPage(resource);
 
-				String hostName = adminObj.get(Constants.Config.ALM_BASE_URL).getAsString();
+					ValueMap valueMap = resource.getValueMap();
+					JsonObject adminObj = configService.getAdminConfigs(currentPage);
 
-				List<EmbeddableLrngWidgetConfig> widgets = EmbeddableLrngWidgetUtils.getEmbeddableWidgetsConfig(hostName);
-				List<EmbeddableLrngWidgetConfig> availableWidgetsList = getAvailableWidgets(widgets);
-				String selectedWidgetRef = valueMap.get(Constants.EmbeddableWidgetConfig.SELECTED_WIDGET_REF) != null ? valueMap.get(Constants.EmbeddableWidgetConfig.SELECTED_WIDGET_REF).toString() : null;
-				if (selectedWidgetRef == null)
-				{
-					selectedWidgetRef = availableWidgetsList.get(0).getWidgetRef();
-				}
+					Map<String, Object> adminConfigs = new HashMap<String, Object>();
 
-				Resource widgetSelectDropdown = request.getResource().getChild("widgetSelect");
-				resourceList.add(widgetSelectDropdown);
+					for(Entry<String, JsonElement> entry : adminObj.entrySet())
+					{
+						adminConfigs.put(entry.getKey(), entry.getValue().getAsString());
+					}
 
-				for (EmbeddableLrngWidgetConfig widgetConfig : availableWidgetsList)
-				{
-					createDataSourceForWidget(request, widgetConfig, selectedWidgetRef, resourceList, valueMap);
+					String hostName = adminObj.get(Constants.Config.ALM_BASE_URL).getAsString();
+
+					List<EmbeddableLrngWidgetConfig> widgets = EmbeddableLrngWidgetUtils.getEmbeddableWidgetsConfig(hostName);
+					List<EmbeddableLrngWidgetConfig> availableWidgetsList = getAvailableWidgets(widgets);
+					String selectedWidgetRef = valueMap.get(Constants.EmbeddableWidgetConfig.SELECTED_WIDGET_REF) != null ? valueMap.get(Constants.EmbeddableWidgetConfig.SELECTED_WIDGET_REF).toString() : null;
+					if (selectedWidgetRef == null)
+					{
+						selectedWidgetRef = availableWidgetsList.get(0).getWidgetRef();
+					}
+
+					Resource widgetSelectDropdown = request.getResource().getChild("widgetSelect");
+					resourceList.add(widgetSelectDropdown);
+
+					for (EmbeddableLrngWidgetConfig widgetConfig : availableWidgetsList)
+					{
+						createDataSourceForWidget(request, widgetConfig, selectedWidgetRef, resourceList, valueMap);
+					}
 				}
 			}
 		}
