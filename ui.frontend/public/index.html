@@ -25,61 +25,97 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <script>
-            const primeConfig = {
-              "jcr:primaryType": "cq:PageContent",
-              "jcr:createdBy": "admin",
-              "jcr:title": "ALM",
-              "accountId": "1",
-              "magentoRootCategoryId": "1",
-              "clientSecret": "8ca8ded0-9ead-44c3-bc6d-96af99b213d8",
-              "cq:template": "/apps/aem-learn-components/configuration/page/template",
-              "primeUrl": "https://captivateprimelms.adobe.com",
-              "magentoGraphqlEndpoint": "/magento/graphql",
-              "locale": "en-US",
-              "primeRegisterUrl": "1",
-              "jcr:created": "2022-03-02T22:19:50.386+05:30",
-              "cq:lastModified": "2022-03-03T13:57:24.962+05:30",
-              "refreshToken": "1",
-              "usageType": "sites",
-              "clientId": "eb391052-1a8e-472a-a6c5-227156f37229",
-              "sling:resourceType": "aem-learn-components/configuration/page",
-              "primeBaseUrl": "1",
-              "sling:configPropertyInherit": "true",
-              "cq:lastModifiedBy": "admin",
-              "esBaseUrl": "1",
-              "siteMap": "siteMap",
-              "primeTileColors": {
-                  "0": "#00000",
-                  "1": "#FFFFFF",
-                  "2": "#445566"
-              },
-              "authorMode": true
-          }
+      const primeConfig = {
+        "jcr:primaryType": "cq:PageContent",
+        "jcr:createdBy": "admin",
+        "jcr:title": "ALM",
+        accountId: "1",
+        magentoRootCategoryId: "1",
+        clientSecret: "8ca8ded0-9ead-44c3-bc6d-96af99b213d8",
+        "cq:template": "/apps/aem-learn-components/configuration/page/template",
+        primeUrl: "https://captivateprimestage1.adobe.com",
+        primeApiURL: "https://captivateprimestage1.adobe.com/primeapi/v2/",
+        magentoGraphqlEndpoint: "/magento/graphql",
+        locale: "en-US",
+        primeRegisterUrl: "1",
+        cdnBaseUrl: "https://cpcontentsdev.adobe.com",
+        "jcr:created": "2022-03-02T22:19:50.386+05:30",
+        "cq:lastModified": "2022-03-03T13:57:24.962+05:30",
+        refreshToken: "1",
+        usageType: "sites",
+        clientId: "eb391052-1a8e-472a-a6c5-227156f37229",
+        "sling:resourceType": "aem-learn-components/configuration/page",
+        primeBaseUrl: "1",
+        "sling:configPropertyInherit": "true",
+        "cq:lastModifiedBy": "admin",
+        esBaseUrl: "1",
+        siteMap: "siteMap",
+        instancePath: "http://localhost:3000/instance.html",
+        catalogPath: "http://localhost:3000/catalog.html",
+        trainingOverviewPath: "http://localhost:3000/trainingOverview.html",
+        communityPath: "http://localhost:3000/community.html",
+        primeTileColors: {
+          0: "#00000",
+          1: "#FFFFFF",
+          2: "#445566",
+        },
+        authorMode: true,
+      };
 
-          export const isPrimeUserLoggedIn = () => {
-            return true;
-          }
+      const isPrimeUserLoggedIn = () => {
+        return true;
+      };
 
-          export const getAccessToken = () => {
-            return "adbsdsakjf";
-          }
+      const getAccessToken = () => {
+        return "69337f5b675f21d0e1b553e89fafed24";
+      };
 
+      const getALMConfig = () => {
+        return window.ALM.ALMConfig;
+      };
 
-          export const getPrimeConfig = () => {
-            return primeConfig;
-          }
+      const navigateToTrainingOverviewPage = (
+        trainingId,
+        trainingInstanceId = ""
+      ) => {
+        debugger;
+        let { trainingOverviewPath } = getALMConfig();
+        trainingOverviewPath = getUrl(trainingOverviewPath, {
+          trainingId: trainingId,
+        });
+        window.location = trainingInstanceId
+          ? getUrl(trainingOverviewPath, {
+              trainingInstanceId: trainingInstanceId,
+            })
+          : trainingOverviewPath;
+      };
 
+      const navigateToInstancePage = (trainingId) => {
+        let { instancePath } = getALMConfig();
+        window.location = getUrl(instancePath, { trainingId: trainingId });
+      };
 
-      <!--/*
-          window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
-          window.ALM.getAccessToken = getAccessToken;
-          window.ALM.getPrimeConfig = getPrimeConfig; */-->
+      const getUrl = (urlStr, params) => {
+        const url = new URL(urlStr);
+        for (const param in params) {
+          url.searchParams.append(param, params[param].toString());
+        }
+        return url.toString();
+      };
+
+      window.ALM = window.ALM || {};
+      window.ALM.ALMConfig = primeConfig; //window.ALM.ALMConfig || primeConfig;
+      window.ALM.getALMConfig = getALMConfig;
+      window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
+      window.ALM.navigateToInstancePage = navigateToInstancePage;
+      window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
+      window.ALM.getAccessToken = getAccessToken;
     </script>
     <title>React App</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div class="instance__container"></div>
+    <!--/* <div class="instance__container"></div> */-->
     <div
       class="catalog__container"
       data-show-filters="true"
@@ -95,8 +131,8 @@
       data-tag-name="false"
       data-skill-level="true"
     ></div>
-    <div class="notification__container"></div>
-    <div class="training__page__container"></div>
+    <!--/* <div class="notification__container"></div> */-->
+    <!--/* <div class="training__page__container"></div> */-->
 
     <!--/* <div id="root1"></div> */-->
     <!--

@@ -1,6 +1,5 @@
 import { useCallback, useMemo } from "react";
 import APIServiceInstance from "../../common/APIService";
-import { useConfigContext } from "../../contextProviders/configContextProvider";
 import {
   PrimeLearningObject,
   PrimeLocalizationMetadata,
@@ -12,14 +11,14 @@ import {
   isJobaid,
   isJobaidContentTypeUrl,
 } from "../../utils/catalog";
-import { getALMObject } from "../../utils/global";
+import { getALMConfig, getALMObject } from "../../utils/global";
 import { useCardBackgroundStyle, useCardIcon } from "../../utils/hooks";
 import { LaunchPlayer } from "../../utils/playback-utils";
 import { QueryParams } from "../../utils/restAdapter";
 import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 
 export const useTrainingCard = (training: PrimeLearningObject) => {
-  const { locale } = useConfigContext();
+  const { locale } = getALMConfig();
 
   const {
     loFormat: format,
@@ -34,16 +33,18 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     enrollment,
   } = training;
 
-  const { name, description, overview, richTextOverview } =
-    useMemo((): PrimeLocalizationMetadata => {
-      return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
-    }, [training.localizedMetadata, locale]);
-
   const {
-    cardIconUrl = "",
-    color = "",
-    bannerUrl = "",
-  } = useCardIcon(training);
+    name,
+    description,
+    overview,
+    richTextOverview,
+  } = useMemo((): PrimeLocalizationMetadata => {
+    return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
+  }, [training.localizedMetadata, locale]);
+
+  const { cardIconUrl = "", color = "", bannerUrl = "" } = useCardIcon(
+    training
+  );
 
   const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
 
@@ -75,7 +76,7 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     //TODO: if user Loggedin --
     let alm = getALMObject();
     if (training.enrollment) {
-      alm?.redirectToTrainingOverview(
+      alm.navigateToTrainingOverviewPage(
         training.id,
         training.enrollment.loInstance.id
       );
@@ -83,15 +84,15 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     }
     const activeInstances = getActiveInstances(training);
     if (activeInstances?.length === 1) {
-      alm?.redirectToTrainingOverview(training.id, activeInstances[0].id);
+      alm.navigateToTrainingOverviewPage(training.id, activeInstances[0].id);
       return;
     }
     if (activeInstances?.length === 0) {
       const defaultInstance = getDefaultIntsance(training);
-      alm?.redirectToTrainingOverview(training.id, defaultInstance[0]?.id);
+      alm.navigateToTrainingOverviewPage(training.id, defaultInstance[0]?.id);
       return;
     }
-    alm?.redirectToInstancePage(training.id);
+    alm.navigateToInstancePage(training.id);
   }, [training]);
 
   return {

@@ -1,14 +1,13 @@
-import { useConfigContext } from "../../contextProviders";
 import { modifyTime } from "../../utils/dateTime";
+import { getALMAttribute } from "../../utils/global";
 import { PrimeNotificationText } from "../PrimeNotificationText";
 import styles from "./PrimeNotificationItem.module.css";
-import { getALMKeyValue } from "../../utils/global";
 
 const PrimeNotificationItem = (props: any) => {
   const notification = props.notification;
   const messageTime = notification.dateCreated;
-  const config = getALMKeyValue("config");
-  
+  const config = getALMAttribute("config");
+
   return (
     <li className={styles.notificationItem}>
       <div>

@@ -1,22 +1,22 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { State } from "../../store/state";
 import APIServiceInstance from "../../common/APIService";
+import { PrimeLearningObject } from "../../models/PrimeModels";
 import {
   loadTrainings,
   paginateTrainings,
 } from "../../store/actions/catalog/action";
-import { PrimeLearningObject } from "../../models/PrimeModels";
-import { useSearch } from "./useSearch";
+import { State } from "../../store/state";
+import { getALMConfig, setALMAttribute } from "../../utils/global";
 import { useFilter } from "./useFilter";
-import { getALMKeyValue, setALMKeyValue } from "../../utils/global";
+import { useSearch } from "./useSearch";
 
 const setFiltersOptions = () => {
-  const config = getALMKeyValue("config");
+  const config = getALMConfig();
   if (config) {
-    let cssSelector = config.mountingPoints?.catalogContainer;
-    let value = document.querySelector(cssSelector)?.dataset;
-    setALMKeyValue("catalogAttributes", value);
+    let cssSelector = config.mountingPoints.catalogContainer;
+    let value = (document.querySelector(cssSelector) as any)?.dataset;
+    setALMAttribute("catalogAttributes", value);
     return value;
   }
 };

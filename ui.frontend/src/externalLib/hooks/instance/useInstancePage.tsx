@@ -5,12 +5,11 @@ import {
   PrimeLearningObjectInstance,
   PrimeLocalizationMetadata,
 } from "../../models/PrimeModels";
-import { QueryParams } from "../../utils/restAdapter";
-import { useCardIcon, useCardBackgroundStyle } from "../../utils/hooks";
+import { getALMConfig, getWindowObject } from "../../utils/global";
+import { useCardBackgroundStyle, useCardIcon } from "../../utils/hooks";
 import { checkIfEnrollmentDeadlineNotPassed } from "../../utils/instance";
+import { QueryParams } from "../../utils/restAdapter";
 import { getPreferredLocalizedMetadata } from "../../utils/translationService";
-import { useConfigContext } from "../../contextProviders/configContextProvider";
-import { getWindowObject } from "../../utils/global";
 
 const DEFAULT_INCLUDE_LO_OVERVIEW =
   "enrollment,instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
@@ -19,7 +18,7 @@ export const useInstancePage = (
   trainingId: string,
   params: QueryParams = {}
 ) => {
-  const { locale } = useConfigContext();
+  const { locale } = getALMConfig();
 
   const [currentState, setCurrentState] = useState({
     training: {} as PrimeLearningObject,

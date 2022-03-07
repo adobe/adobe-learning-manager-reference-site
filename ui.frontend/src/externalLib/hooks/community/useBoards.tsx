@@ -1,54 +1,52 @@
 import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import APIServiceInstance from "../../common/APIService";
-import { State } from "../../store/state";
-import {
-  loadBoards,
-  paginateBoards,
-} from "../../store/actions/social/action";
 import { PrimeBoard } from "../../models/PrimeModels";
+import { loadBoards, paginateBoards } from "../../store/actions/social/action";
+import { State } from "../../store/state";
+import { getALMConfig } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
-import { getALMConfig } from "../../utils/global";
 
 export const useBoards = () => {
   const DEFAULT_SORT_VALUE = "dateUpdated";
-  const { items, next } = useSelector(
-    (state: State) => state.social.boards
-  );
+  const { items, next } = useSelector((state: State) => state.social.boards);
   const dispatch = useDispatch();
   //Fort any page load or filterchanges
-  const fetchBoards = useCallback(async (sortFilter: any, skill: any) => {
-    try {
-      const baseApiUrl =  getALMConfig().baseApiUrl;
-      const params: QueryParams = {};
-      params["sort"] = sortFilter ? sortFilter : DEFAULT_SORT_VALUE;
-      //To-do add for skill
-      params["filter.state"]= "ACTIVE";
-      params["page[offset]"]= "0";
-      params["page[limit]"]= "10";
+  const fetchBoards = useCallback(
+    async (sortFilter: any, skill: any) => {
+      try {
+        const baseApiUrl = getALMConfig().primeApiURL;
+        const params: QueryParams = {};
+        params["sort"] = sortFilter ? sortFilter : DEFAULT_SORT_VALUE;
+        //To-do add for skill
+        params["filter.state"] = "ACTIVE";
+        params["page[offset]"] = "0";
+        params["page[limit]"] = "10";
 
-      params["include"] = "createdBy,skills";
-      const response = await RestAdapter.get({
-        url: `${baseApiUrl}/boards?`,
-        params: params,
-      });
-      const parsedResponse = JsonApiParse(response);
-      const data = {
-        items: parsedResponse.boardList,
-        next: parsedResponse.links?.next || "",
-      };
+        params["include"] = "createdBy,skills";
+        const response = await RestAdapter.get({
+          url: `${baseApiUrl}/boards?`,
+          params: params,
+        });
+        const parsedResponse = JsonApiParse(response);
+        const data = {
+          items: parsedResponse.boardList,
+          next: parsedResponse.links?.next || "",
+        };
 
-      dispatch(loadBoards(data));
-    } catch (e) {
-      dispatch(loadBoards([] as PrimeBoard[]));
-      console.log("Error while loading boards " + e);
-    }
-  }, [dispatch]);
+        dispatch(loadBoards(data));
+      } catch (e) {
+        dispatch(loadBoards([] as PrimeBoard[]));
+        console.log("Error while loading boards " + e);
+      }
+    },
+    [dispatch]
+  );
 
   // const fetchBoard = useCallback(async (boardId: any) => {
   //   try {
-  //     const baseApiUrl =  (window as any).primeConfig.baseApiUrl;
+  //     const baseApiUrl =  (window as any).primeConfig.primeApiURL;
   //     const params: QueryParams = {};
   //     params["filter.state"]= "ACTIVE";
   //     params["include"] = "createdBy,skills";
@@ -67,7 +65,7 @@ export const useBoards = () => {
   //     console.log("Error while loading boards " + e);
   //   }
   // }, [dispatch]);
-  
+
   useEffect(() => {
     fetchBoards(DEFAULT_SORT_VALUE, null);
   }, [fetchBoards]);
