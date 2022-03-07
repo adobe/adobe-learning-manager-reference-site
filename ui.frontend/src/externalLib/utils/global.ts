@@ -1,6 +1,6 @@
 //import { PrimeConfig } from "../contextProviders";
 export interface PrimeConfig {
-  ALMbaseUrl: string;
+  almBaseURL: string;
   primeApiURL: string;
   accessToken: string;
   //pagePaths: {

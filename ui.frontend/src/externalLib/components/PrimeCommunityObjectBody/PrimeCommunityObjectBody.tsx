@@ -5,7 +5,7 @@ const PrimeCommunityObjectBody = (props: any) => {
   const primeConfig = getALMConfig();
   const object = props.object;
   const entityType = props.type;
-  const iframeSrc = `${primeConfig.ALMbaseUrl}/app/player?entity_type=${entityType}&entity_id=${object.id}&access_token=${primeConfig.accessToken}&player_type=inline`;
+  const iframeSrc = `${primeConfig.almBaseURL}/app/player?entity_type=${entityType}&entity_id=${object.id}&access_token=${primeConfig.accessToken}&player_type=inline`;
 
   return (
     <>

@@ -5,7 +5,9 @@ export function LaunchPlayer(props: any) {
   const ClosePlayer = (event: MessageEvent) => {
     if (event.data === "status:close") {
       handlePlayerClose(props.trainingId);
-      props.callBackFn && typeof (props.callBackFn) == "function" && props.callBackFn();
+      props.callBackFn &&
+        typeof props.callBackFn == "function" &&
+        props.callBackFn();
     }
   };
   getWindowObject().addEventListener("message", ClosePlayer, false);
@@ -75,7 +77,7 @@ function handlePlayerClose(trainingId: string) {
 
 export function GetPlayerURl(trainingId = "", moduleId = ""): string {
   const primeConfig = getALMConfig();
-  const hostName = primeConfig.ALMbaseUrl;
+  const hostName = primeConfig.almBaseURL;
   const playerEndPoint = "/app/player?";
   const key = `lo_id=${trainingId}`;
   const accessToken = primeConfig.accessToken;
@@ -83,7 +85,7 @@ export function GetPlayerURl(trainingId = "", moduleId = ""): string {
   //to-do handle preview/guest
   let url = `${hostName}${playerEndPoint}${key}&${authKey}&hostname=${hostName}&trapfocus=true`;
   if (moduleId) {
-    url += `&module_id=${moduleId}`
+    url += `&module_id=${moduleId}`;
   }
   return url;
 }
