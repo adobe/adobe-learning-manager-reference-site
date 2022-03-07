@@ -54,12 +54,16 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   init();
 
-  var jsElm = document.createElement("script");
-  jsElm.type = "application/javascript";
-  jsElm.src = "https://cdnjs.cloudflare.com/ajax/libs/evaporate/2.1.4/evaporate.min.js";
-  jsElm.async = true;
-  // finally insert the element to the body element in order to load the script
-  document.head.appendChild(jsElm);
+  let evaporateElement = document.createElement("script");
+  evaporateElement.type = "application/javascript";
+  evaporateElement.src = "https://cdnjs.cloudflare.com/ajax/libs/evaporate/2.1.4/evaporate.min.js";
+  evaporateElement.async = true;
+  let awsSdk = document.createElement("script");
+  awsSdk.type = "application/javascript";
+  awsSdk.src = "https://sdk.amazonaws.com/js/aws-sdk-2.875.0.min.js";
+  awsSdk.async = true;
+  document.head.appendChild(evaporateElement);
+  document.head.appendChild(awsSdk);
 
   window.ALM.getALMConfig = getALMConfig;
   window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
