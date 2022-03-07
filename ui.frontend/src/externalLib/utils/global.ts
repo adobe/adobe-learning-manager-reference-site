@@ -1,15 +1,12 @@
-//import { PrimeConfig } from "../contextProviders";
 export interface PrimeConfig {
   almBaseURL: string;
   primeApiURL: string;
   accessToken: string;
-  //pagePaths: {
   baseUrl: string;
   instancePath: string;
   catalogPath: string;
   trainingOverviewPath: string;
   communityPath: string;
-  //};
   locale: string;
   cdnBaseUrl: string;
   mountingPoints: {
@@ -32,37 +29,13 @@ export const getALMAttribute = (key: string) => {
   return getWindowObject().ALM[key];
 };
 
-// export const getALMConfig = (): PrimeConfig => {
-//   return getALMAttribute("config");
-// };
-
 export function getALMConfig(): PrimeConfig {
-  const alm = getALMObject();
-  return alm.getALMConfig();
-  //return getALMObject().getALMConfig();
+  return getALMObject().getALMConfig();
 }
 
-// function redirectToTrainingOverview(
-//   trainingId: string,
-//   trainingInstanceId: string
-// ) {
-//   let { pagePaths } = getALMConfig();
-//   getWindowObject().location = `${pagePaths.trainingOverviewPath}?trainingId=${trainingId}&trainingInstanceId=${trainingInstanceId}`;
-// }
-
-// function redirectToInstancePage(trainingId: string) {
-//   let { pagePaths } = getALMConfig();
-//   getWindowObject().location = `${pagePaths.instancePath}?trainingId=${trainingId}`;
-// }
-
-// function initGLobalALMObject() {
-//   getWindowObject().ALM = {
-//     config: {},
-//     catalogAttributes: {},
-//     redirectToTrainingOverview,
-//     redirectToInstancePage,
-//   };
-// }
+export function getAccessToken(): string {
+  return getALMObject().getAccessToken();
+}
 
 export interface ALM {
   getALMConfig: Function;
@@ -73,3 +46,20 @@ export interface ALM {
   setALMAttribute: Function;
   getALMAttribute: Function;
 }
+
+export const getPathParams = (pagePath: string, pathParams: string[] = []) => {
+  let paramsMap: {
+    [key: string]: string;
+  } = {};
+  const location = getWindowObject().location;
+  let params: string[] = location.href.split(pagePath)[1].split("/");
+  for (let i = 0; i < pathParams.length; i++) {
+    const pathParam = pathParams[i];
+    const paramIdx = params.findIndex((element) => element === pathParam);
+    if (paramIdx !== -1) {
+      const paramValueIdx = paramIdx + 1;
+      paramsMap[pathParam] = params[paramValueIdx];
+    }
+  }
+  return paramsMap;
+};

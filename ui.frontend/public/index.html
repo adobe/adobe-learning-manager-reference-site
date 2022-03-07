@@ -33,7 +33,7 @@
         magentoRootCategoryId: "1",
         clientSecret: "8ca8ded0-9ead-44c3-bc6d-96af99b213d8",
         "cq:template": "/apps/aem-learn-components/configuration/page/template",
-        primeUrl: "https://captivateprimestage1.adobe.com",
+        almBaseURL: "https://captivateprimestage1.adobe.com",
         primeApiURL: "https://captivateprimestage1.adobe.com/primeapi/v2/",
         magentoGraphqlEndpoint: "/magento/graphql",
         locale: "en-US",
@@ -50,6 +50,7 @@
         "cq:lastModifiedBy": "admin",
         esBaseUrl: "1",
         siteMap: "siteMap",
+
         instancePath: "http://localhost:3000/instance.html",
         catalogPath: "http://localhost:3000/catalog.html",
         trainingOverviewPath: "http://localhost:3000/trainingOverview.html",
@@ -67,7 +68,7 @@
       };
 
       const getAccessToken = () => {
-        return "69337f5b675f21d0e1b553e89fafed24";
+        return "5080cbef88cb786b3074e18f074e5b6b";
       };
 
       const getALMConfig = () => {
@@ -116,7 +117,7 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <!--/* <div class="instance__container"></div> */-->
-    <div
+    <!--/* <div
       class="catalog__container"
       data-show-filters="true"
       data-show-search="true"
@@ -130,9 +131,9 @@
       data-learner-state="true"
       data-tag-name="false"
       data-skill-level="true"
-    ></div>
+    ></div> */-->
     <!--/* <div class="notification__container"></div> */-->
-    <!--/* <div class="training__page__container"></div> */-->
+    <div class="training__page__container"></div>
 
     <!--/* <div id="root1"></div> */-->
     <!--

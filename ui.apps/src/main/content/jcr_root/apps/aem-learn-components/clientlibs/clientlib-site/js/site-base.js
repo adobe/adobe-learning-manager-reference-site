@@ -15,6 +15,9 @@ window.ALM.primeConfigs = window.ALM.primeConfigs || {};
       const primeBaseURL = window.ALM.ALMConfig["primeBaseURL"];
       const primeApiURL = `${primeBaseURL}/primeapi/v2/`;
       window.ALM.ALMConfig["primeApiURL"] = primeApiURL;
+      let { trainingOverviewPath } = window.ALM.ALMConfig;
+
+      window.location;
     }
   };
 
@@ -31,6 +34,7 @@ window.ALM.primeConfigs = window.ALM.primeConfigs || {};
     trainingInstanceId = ""
   ) => {
     let { trainingOverviewPath } = getALMConfig();
+
     trainingOverviewPath = getUrl(trainingOverviewPath, {
       trainingId: trainingId,
     });
@@ -45,11 +49,16 @@ window.ALM.primeConfigs = window.ALM.primeConfigs || {};
   };
 
   const getUrl = (urlStr, params) => {
-    const url = new URL(urlStr);
+    // const url = new URL(urlStr);
+    // for (const param in params) {
+    //   url.searchParams.append(param, params[param].toString());
+    // }
+    // return url.toString();
+
     for (const param in params) {
-      url.searchParams.append(param, params[param].toString());
+      urlStr = `${urlStr}/${param}/${params[param]}`;
     }
-    return url.toString();
+    return urlStr;
   };
 
   init();

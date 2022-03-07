@@ -1,7 +1,7 @@
 import { Button } from "@adobe/react-spectrum";
 import Send from "@spectrum-icons/workflow/Send";
 import UserGroup from "@spectrum-icons/workflow/UserGroup";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { InstanceBadge, Skill } from "../../models/common";
 import {
   PrimeLearningObject,
@@ -28,25 +28,37 @@ const PrimeTrainingPageExtraDetails: React.FC<{
   enrollmentHandler,
   launchPlayerHandler,
 }) => {
+  let [actionText, setActionText] = useState("");
+
+  let translatedText = "";
   const action: string = useMemo(() => {
     // if(trainingInstance.seatLimit)
 
     if (trainingInstance.learningObject.enrollment) {
       const { enrollment } = trainingInstance.learningObject;
       if (enrollment.progressPercent === 0) {
-        return "start";
+        translatedText = "Start";
+        return "Start";
       }
       if (enrollment.progressPercent === 100) {
-        return "revisit";
+        translatedText = "Revisit";
+        return "Revisit";
       }
-      return "continue";
+      translatedText = "Continue";
+      return "Continue";
     } else if (trainingInstance.state === "Retired") {
-      return "registerInterest";
+      translatedText = "RegisterInterest";
+      return "RegisterInterest";
     } else {
-      return "enroll";
+      translatedText = "Enroll";
+      return "Enroll";
     }
     // return "preview";
   }, [trainingInstance.state, trainingInstance.learningObject]);
+
+  useEffect(() => {
+    setActionText(translatedText);
+  }, [action]);
 
   const filteredSkills: Skill[] = useMemo(() => {
     let map: any = {};
@@ -83,7 +95,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
             Preview
           </Button>
         )} */}
-        {action === "registerInterest" && (
+        {action === "RegisterInterest" && (
           <Button
             variant="primary"
             UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
@@ -91,15 +103,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
             Register interest
           </Button>
         )}
-        {action === "start" && (
-          <Button
-            variant="primary"
-            UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
-          >
-            Start
-          </Button>
-        )}
-        {action === "enroll" && (
+        {action === "Enroll" && (
           <Button
             variant="primary"
             UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
@@ -108,26 +112,18 @@ const PrimeTrainingPageExtraDetails: React.FC<{
             Enroll
           </Button>
         )}
-        {action === "revisit" && (
+        {(action === "Start" ||
+          action === "Continue" ||
+          action === "Revisit") && (
           <Button
             variant="primary"
             UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
             onPress={launchPlayerHandler}
           >
-            Revisit
+            {actionText}
           </Button>
         )}
-        {action === "continue" && (
-          <Button
-            variant="primary"
-            UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
-            onPress={launchPlayerHandler}
-          >
-            Continue
-          </Button>
-        )}
-
-        {action === "pendingApproval" && (
+        {action === "PendingApproval" && (
           <Button
             variant="primary"
             UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
@@ -219,8 +215,8 @@ const PrimeTrainingPageExtraDetails: React.FC<{
         <div className={styles.authorContainer}>
           {training.authors?.map((author) => {
             return (
-              <>
-                <div className={styles.authors} key={author.id}>
+              <div key={author.id}>
+                <div className={styles.authors}>
                   <span aria-hidden="true">
                     <img src={author.avatarUrl} aria-hidden="true" alt="" />
                   </span>
@@ -230,7 +226,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
                   </div>
                 </div>
                 <p className={styles.authorName}>{author.bio}</p>
-              </>
+              </div>
             );
           })}
         </div>
