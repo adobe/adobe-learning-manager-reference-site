@@ -1,5 +1,5 @@
 window.ALM = window.ALM || {};
-window.ALM.primeConfigs = window.ALM.primeConfigs || {};
+window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
 (function (window, document, Granite, $) {
   "use strict";
@@ -12,7 +12,7 @@ window.ALM.primeConfigs = window.ALM.primeConfigs || {};
     );
     if (cpConfigElmt) {
       window.ALM.ALMConfig = JSON.parse(cpConfigElmt.content);
-      const primeBaseURL = window.ALM.ALMConfig["primeBaseURL"];
+      const primeBaseURL = window.ALM.ALMConfig["almBaseURL"];
       const primeApiURL = `${primeBaseURL}/primeapi/v2/`;
       window.ALM.ALMConfig["primeApiURL"] = primeApiURL;
       let { trainingOverviewPath } = window.ALM.ALMConfig;
@@ -62,6 +62,17 @@ window.ALM.primeConfigs = window.ALM.primeConfigs || {};
   };
 
   init();
+
+  let evaporateElement = document.createElement("script");
+  evaporateElement.type = "application/javascript";
+  evaporateElement.src = "https://cdnjs.cloudflare.com/ajax/libs/evaporate/2.1.4/evaporate.min.js";
+  evaporateElement.async = true;
+  let awsSdk = document.createElement("script");
+  awsSdk.type = "application/javascript";
+  awsSdk.src = "https://sdk.amazonaws.com/js/aws-sdk-2.875.0.min.js";
+  awsSdk.async = true;
+  document.head.appendChild(evaporateElement);
+  document.head.appendChild(awsSdk);
 
   window.ALM.getALMConfig = getALMConfig;
   window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;

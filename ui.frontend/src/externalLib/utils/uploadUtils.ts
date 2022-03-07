@@ -1,4 +1,4 @@
-import Evaporate from "evaporate";
+// import Evaporate from "evaporate";
 // import { State } from "../store/state";
 // import { Screen } from "../store/state";
 import store from "../../store/APIStore";
@@ -12,8 +12,11 @@ import {
 import { getALMConfig } from "../utils/global";
 import { RestAdapter } from "./restAdapter";
 
+declare let AWS: any;
 let evaporateInstance: any;
-var AWS = require("aws-sdk/dist/aws-sdk-react-native");
+// // eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare let Evaporate: any;
+// var AWS = require("aws-sdk/dist/aws-sdk-react-native");
 
 let awsCredJsonObj: PrimeUploadInfo = {
   awsKey: "",

@@ -26,6 +26,7 @@ import com.aemlearncomponents.core.utils.EmbeddableLrngWidgetUtils;
 import com.day.cq.wcm.api.Page;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
@@ -61,8 +62,7 @@ public class EmbeddableLrngWidgetModel {
 		properties = resource.getValueMap();
 		JsonObject adminConfigsObj = configService.getAdminConfigs(currentPage);
 
-		String hostName = adminConfigsObj.get(Constants.Config.PRIME_URL).getAsString();
-
+		String hostName = adminConfigsObj.get(Constants.Config.ALM_BASE_URL).getAsString();
 
 		LOGGER.debug("EmbeddableLrngWidgetModel Init:: currentPage {} hostName {}", currentPage.getPath(), hostName);
 		ValueMap map = resource.getValueMap();
@@ -92,49 +92,48 @@ public class EmbeddableLrngWidgetModel {
 			widgetCommunicatorUrl = Constants.CPUrl.WIDGET_COMMUNICATOR_URL.replace("{hostName}", hostName);
 		}
 
-		//this.widgetConfigs = getWidgetConfig(map, selectedWidgetRef);
+		this.widgetConfigs = getWidgetConfig(map, selectedWidgetRef, adminConfigsObj);
 	}
 
-//	private String getWidgetConfig(Map<String, Object> valueMap, String selectedWidgetRef)
-//	{
-//		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-//		Map<String, Object> widgetObject = new HashMap<>();
-//		for (Entry<String, Object> e : valueMap.entrySet())
-//		{
-//			String key = e.getKey();
-//			if (key.startsWith(Constants.EmbeddableWidgetConfig.CP_NODE_PROPERTY_PREFIX))
-//			{
-//				Object value = e.getValue();
-//				key = key.replace(Constants.EmbeddableWidgetConfig.CP_NODE_PROPERTY_PREFIX, "");
-//				if (value instanceof String)
-//				{
-//					widgetObject.put(key, value.toString());
-//				} else if (value instanceof Integer)
-//				{
-//					widgetObject.put(key, (Integer) value);
-//				} else if (value instanceof Boolean)
-//				{
-//					widgetObject.put(key, (Boolean) value);
-//				} else
-//				{
-//					widgetObject.put(key, gson.toJson(value));
-//				}
-//			}
-//		}
-//		widgetObject.put("widgetConfig.widgetRef", selectedWidgetRef);
-//		widgetObject.put("type", "acapConfig");
-//
-//		Resource currentRsrc = request.getResourceResolver().getResource(currentPage.getPath());
-////		Map<String, Object> generalSettingConfig = widgetConfigService.getGeneralConfigs(currentRsrc);
-////		widgetObject.putAll(generalSettingConfig);
-//
+	private String getWidgetConfig(Map<String, Object> valueMap, String selectedWidgetRef, JsonObject adminConfigsObj)
+	{
+		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+		Map<String, Object> widgetObject = new HashMap<>();
+		for (Entry<String, Object> e : valueMap.entrySet())
+		{
+			String key = e.getKey();
+
+			Object value = e.getValue();
+			if (value instanceof String)
+			{
+				widgetObject.put(key, value.toString());
+			} else if (value instanceof Integer)
+			{
+				widgetObject.put(key, (Integer) value);
+			} else if (value instanceof Boolean)
+			{
+				widgetObject.put(key, (Boolean) value);
+			} else
+			{
+				widgetObject.put(key, gson.toJson(value));
+			}
+		}
+		widgetObject.put("widgetConfig.widgetRef", selectedWidgetRef);
+		widgetObject.put("type", "acapConfig");
+
 //		widgetObject.remove(Constants.Config.CLIENT_ID);
 //		widgetObject.remove(Constants.Config.CLIENT_SECRET);
 //		widgetObject.remove(Constants.Config.SITES_AUTHOR_REFRESH_TOKEN_NAME);
-//
-////		JsonObject obj = EmbeddableWidgetConfigUtils.getWidgetConfig(widgetObject);
-////		return gson.toJson(obj);
-//	}
+		
+		for (Entry<String, JsonElement> e : adminConfigsObj.entrySet())
+		{
+			widgetObject.put(e.getKey(), e.getValue().getAsString());
+		}
+
+		JsonObject obj = EmbeddableLrngWidgetUtils.getWidgetConfig(widgetObject);
+		
+		return gson.toJson(obj);
+	}
 
 	public String getWidgetConfigs()
 	{

@@ -5,6 +5,8 @@ import static java.lang.System.currentTimeMillis;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.http.ParseException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -17,6 +19,8 @@ import org.slf4j.LoggerFactory;
 
 import com.aemlearncomponents.core.entity.EmbeddableLrngWidgetConfig;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 public final class EmbeddableLrngWidgetUtils {
 	private static Logger LOGGER = LoggerFactory.getLogger(EmbeddableLrngWidgetUtils.class);
@@ -62,6 +66,68 @@ public final class EmbeddableLrngWidgetUtils {
 			}
 		}
 		return widgetsConfigResponse;
+	}
+
+	public static JsonObject getWidgetConfig(final Map<String, Object> configMap)
+	{
+		JsonObject widgetConfigObject = new JsonObject();
+
+		for (Entry<String, Object> e : configMap.entrySet())
+		{
+			String[] keys = e.getKey().split("\\.");
+
+			if (keys.length == 1)
+			{
+				addPropertyWithType(widgetConfigObject, keys[0], e.getValue());
+
+			} else
+			{
+				JsonObject parentObject = widgetConfigObject;
+				for (int i = 0; i < keys.length; i++)
+				{
+					String key = keys[i];
+					JsonElement element = parentObject.get(key);
+					if (element == null)
+					{
+						if (i == keys.length - 1)
+						{
+							addPropertyWithType(parentObject, key, e.getValue());
+
+						} else
+						{
+							JsonObject jObject = new JsonObject();
+							parentObject.add(key, jObject);
+							parentObject = parentObject.get(key).getAsJsonObject();
+						}
+					} else
+					{
+						JsonObject obj = element.getAsJsonObject();
+						if (i == keys.length - 1)
+						{
+							addPropertyWithType(obj, key, e.getValue());
+
+						} else
+						{
+							parentObject = obj;
+						}
+					}
+				}
+			}
+		}
+
+		return widgetConfigObject;
+	}
+
+	private static void addPropertyWithType(JsonObject obj, String key, Object value)
+	{
+		String objectType = value.getClass().getSimpleName();
+		if ("Boolean".equalsIgnoreCase(objectType))
+		{
+			obj.addProperty(key, (Boolean) value);
+		} else
+		{
+			obj.addProperty(key, value.toString());
+		}
 	}
 
 	private static void setLastUpdated(long timestamp)
