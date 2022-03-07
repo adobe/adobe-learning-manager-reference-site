@@ -2,6 +2,8 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
+        cq:lastModified="{Date}2022-03-07T17:00:09.899+05:30"
+        cq:lastModifiedBy="admin"
         cq:tags="[]"
         cq:template="/conf/aem-learn-components/settings/wcm/templates/xf-web-variation"
         cq:xfMasterVariation="{Boolean}true"
@@ -14,9 +16,11 @@
             sling:resourceType="aem-learn-components/components/container"
             layout="responsiveGrid">
             <text
+                jcr:lastModified="{Date}2022-03-07T17:00:09.768+05:30"
+                jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="aem-learn-components/components/text"
-                text="&lt;p>&lt;a href=&quot;/content/aem-learn-components/language-masters/en/terms.html&quot;>Terms of Use&lt;/a>&lt;span class=&quot;footer-separator&quot;> | &lt;/span>&lt;a href=&quot;/content/aem-learn-components/language-masters/en/privacy.html&quot;>Privacy Policy&lt;/a>&lt;span class=&quot;footer-separator&quot;> | &lt;/span>&lt;a href=&quot;/content/aem-learn-components/language-masters/en/cookie.html&quot;>Cookie Policy&lt;/a>&lt;span class=&quot;footer-separator&quot;> | &lt;/span>&lt;a href=&quot;/content/aem-learn-components/language-masters/en/about.html&quot;>About Adobe&lt;/a>&lt;/p>"
+                text="&lt;p>&lt;a href=&quot;https://www.adobe.com/in/legal/terms.html&quot; target=&quot;_blank&quot; title=&quot;Terms of Use&quot;>Terms of Use&lt;/a>&lt;span class=&quot;footer-separator&quot;> | &lt;/span>&lt;a href=&quot;https://www.adobe.com/privacy.html&quot; target=&quot;_blank&quot; title=&quot;Privacy&quot;>Privacy Policy&lt;/a>&lt;span class=&quot;footer-separator&quot;> | &lt;/span>&lt;a href=&quot;https://www.adobe.com/in/privacy/cookies.html&quot; target=&quot;_blank&quot; title=&quot;Cookie Policy&quot;>Cookie Policy&lt;/a>&lt;span class=&quot;footer-separator&quot;> | &lt;/span>&lt;a href=&quot;https://www.adobe.com/in/products/captivateprime.html&quot; target=&quot;_blank&quot; title=&quot;About&quot;>About Adobe&lt;/a>&lt;/p>&#xd;&#xa;"
                 textIsRich="true"/>
         </root>
     </jcr:content>
