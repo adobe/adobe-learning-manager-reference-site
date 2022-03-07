@@ -15,9 +15,6 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
       const primeBaseURL = window.ALM.ALMConfig["almBaseURL"];
       const primeApiURL = `${primeBaseURL}/primeapi/v2/`;
       window.ALM.ALMConfig["primeApiURL"] = primeApiURL;
-      let { trainingOverviewPath } = window.ALM.ALMConfig;
-
-      window.location;
     }
   };
 
@@ -49,12 +46,6 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   };
 
   const getUrl = (urlStr, params) => {
-    // const url = new URL(urlStr);
-    // for (const param in params) {
-    //   url.searchParams.append(param, params[param].toString());
-    // }
-    // return url.toString();
-
     for (const param in params) {
       urlStr = `${urlStr}/${param}/${params[param]}`;
     }
@@ -65,7 +56,8 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   let evaporateElement = document.createElement("script");
   evaporateElement.type = "application/javascript";
-  evaporateElement.src = "https://cdnjs.cloudflare.com/ajax/libs/evaporate/2.1.4/evaporate.min.js";
+  evaporateElement.src =
+    "https://cdnjs.cloudflare.com/ajax/libs/evaporate/2.1.4/evaporate.min.js";
   evaporateElement.async = true;
   let awsSdk = document.createElement("script");
   awsSdk.type = "application/javascript";
