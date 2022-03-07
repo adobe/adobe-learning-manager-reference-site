@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import APIServiceInstance from "../../common/APIService";
-import { useConfigContext } from "../../contextProviders/configContextProvider";
 import {
   PrimeLearningObjectInstance,
   PrimeLoInstanceSummary,
 } from "../../models/PrimeModels";
+import { getALMConfig } from "../../utils/global";
 import {
   filterTrainingInstance,
   useBadge,
@@ -34,7 +34,7 @@ export const useTrainingPage = (
   instanceId: string = "",
   params: QueryParams = {}
 ) => {
-  const { locale } = useConfigContext();
+  const { locale } = getALMConfig();
   const [currentState, setCurrentState] = useState({
     trainingInstance: {} as PrimeLearningObjectInstance,
     isLoading: true,

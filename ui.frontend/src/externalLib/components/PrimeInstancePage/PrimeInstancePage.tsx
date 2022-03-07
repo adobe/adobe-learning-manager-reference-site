@@ -1,18 +1,17 @@
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import { lightTheme, Provider } from "@adobe/react-spectrum";
 import { useEffect, useState } from "react";
-import { useConfigContext } from "../../contextProviders/configContextProvider";
+import { useIntl } from "react-intl";
 import { useInstancePage } from "../../hooks/instance/useInstancePage";
 import { PrimeLearningObjectResource } from "../../models/PrimeModels";
+import { getQueryParamsIObjectFromUrl } from "../../utils/catalog";
+import { getALMObject } from "../../utils/global";
 import { SORT_ORDER_SVG } from "../../utils/inline_svg";
 import { getResourceBasedOnLocale } from "../../utils/instance";
 import { getPreferredLocalizedMetadata } from "../../utils/translationService";
-import { useIntl } from "react-intl";
-import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
-import { Provider, lightTheme } from "@adobe/react-spectrum";
 import { PrimeInstanceItem } from "../PrimeInstanceItem";
-import { getQueryParamsIObjectFromUrl } from "../../utils/catalog";
-
+import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
 import styles from "./PrimeInstancePage.module.css";
 
 const PrimeInstancePage = (props: any) => {
@@ -24,7 +23,7 @@ const PrimeInstancePage = (props: any) => {
   const { formatMessage } = useIntl();
   const [list, setList] = useState([] as any[]);
   const [isAscendingOrder, setIsAscendingOrder] = useState(true);
-  const { locale } = useConfigContext();
+  const { locale } = getALMObject().getALMConfig().locale;
   const {
     isLoading,
     training,
@@ -59,8 +58,8 @@ const PrimeInstancePage = (props: any) => {
       });
       setList(list);
     }
-    
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeInstances.length, locale, training.loFormat]);
 
   const applySort = (sortParam: string) => {
@@ -105,9 +104,7 @@ const PrimeInstancePage = (props: any) => {
 
         {/* Shown only in Mobile */}
         <div className={styles.selectInstanceContainer}>
-          <h3 className={styles.selectInstance}>
-            Select An Instance
-          </h3>
+          <h3 className={styles.selectInstance}>Select An Instance</h3>
         </div>
 
         {list!?.length > 0 && (

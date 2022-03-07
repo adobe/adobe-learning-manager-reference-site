@@ -1,8 +1,7 @@
 import { lightTheme, Provider } from "@adobe/react-spectrum";
-import { useConfigContext } from "../../contextProviders/configContextProvider";
 import { useTrainingPage } from "../../hooks/catalog/useTrainingPage";
 import { convertSecondsToTimeText } from "../../utils/dateTime";
-import { getWindowObject } from "../../utils/global";
+import { getALMConfig } from "../../utils/global";
 import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 import { PrimeCourseOverview } from "../PrimeCourseOverview";
 import { PrimeTrainingOverview } from "../PrimeTrainingOverview";
@@ -16,19 +15,19 @@ const CERTIFICATION = "certification";
 const TRAINING_ID_STR = "trainingId";
 const TRAINING_INSTANCE_ID_STR = "trainingInstanceId";
 const PrimeTrainingPage = (props: any) => {
-  // const location = (window as any).location;
-  // const queryParams = new URLSearchParams(decodeURI(location.search));
-  // const trainingId = queryParams.get(TRAINING_ID_STR) || "";
-  // const trainingInstanceId = queryParams.get(TRAINING_INSTANCE_ID_STR) || "";
-
-  const location = getWindowObject().location;
+  const location = (window as any).location;
   const queryParams = new URLSearchParams(decodeURI(location.search));
-  const trainingId =
-    "learningProgram:79030" || queryParams.get(TRAINING_ID_STR) || "";
-  const trainingInstanceId =
-    "learningProgram:79030_83137" ||
-    queryParams.get(TRAINING_INSTANCE_ID_STR) ||
-    "";
+  const trainingId = queryParams.get(TRAINING_ID_STR) || "";
+  const trainingInstanceId = queryParams.get(TRAINING_INSTANCE_ID_STR) || "";
+
+  // const location = getWindowObject().location;
+  // const queryParams = new URLSearchParams(decodeURI(location.search));
+  // const trainingId =
+  //   "learningProgram:79030" || queryParams.get(TRAINING_ID_STR) || "";
+  // const trainingInstanceId =
+  //   "learningProgram:79030_83137" ||
+  //   queryParams.get(TRAINING_INSTANCE_ID_STR) ||
+  //   "";
   const {
     name,
     description,
@@ -45,7 +44,7 @@ const PrimeTrainingPage = (props: any) => {
     enrollmentHandler,
     launchPlayerHandler,
   } = useTrainingPage(trainingId, trainingInstanceId);
-  const config = useConfigContext();
+  const config = getALMConfig();
   const locale = config.locale;
 
   if (isLoading || !training) {
@@ -89,7 +88,7 @@ const PrimeTrainingPage = (props: any) => {
             />
           )}
           {loType === LEARNING_PROGRAM &&
-            sections.map((section) => {
+            sections.map((section, index) => {
               const trainingIds = section.loIds;
               //const name = section.localizedMetadata;
               const { name } = getPreferredLocalizedMetadata(
@@ -104,8 +103,12 @@ const PrimeTrainingPage = (props: any) => {
                   trainingIds.indexOf(trainingId1.id) -
                   trainingIds.indexOf(trainingId2.id)
               );
+
               return (
-                <section className={styles.trainingOverviewContainer}>
+                <section
+                  className={styles.trainingOverviewContainer}
+                  key={index}
+                >
                   <h3 className={styles.sectionName}>{name}</h3>
                   <PrimeTrainingOverview
                     trainings={subLOs}

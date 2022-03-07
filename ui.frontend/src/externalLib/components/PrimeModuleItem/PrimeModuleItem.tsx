@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
-import { useConfigContext } from "../../contextProviders";
 import {
   PrimeLearningObjectResource,
   PrimeResource,
 } from "../../models/PrimeModels";
 import { convertSecondsToTimeText } from "../../utils/dateTime";
+import { getALMConfig } from "../../utils/global";
 import {
   ACTIVITY_SVG,
   AUDIO_SVG,
@@ -42,7 +42,7 @@ const PrimeModuleItem = (props: any) => {
   // loResource.learningObject.
 
   const launchPlayerHandler = props.launchPlayerHandler;
-  const config = useConfigContext();
+  const config = getALMConfig();
   const locale = config.locale;
   const trainingId = props.trainingId;
 

@@ -1,7 +1,7 @@
 import { PrimeLearningObject } from "..";
 import { CatalogFilterState } from "../store/reducers/catalog";
 import { getParamsForCatalogApi } from "../utils/catalog";
-import { getALMKeyValue } from "../utils/global";
+import { getALMAttribute, getALMConfig } from "../utils/global";
 import { JsonApiParse } from "../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
 import ICustomHooks from "./ICustomHooks";
@@ -13,21 +13,21 @@ const DEFAULT_SEARCH_SNIPPETTYPE =
 const DEFAULT_SEARCH_INCLUDE =
   "model.instances.loResources.resources,model.instances.badge,model.supplementaryResources,model.enrollment.loResourceGrades,model.skills.skillLevel.skill";
 export default class LoggedInCustomHooks implements ICustomHooks {
-  baseApiUrl = getALMKeyValue("config")?.baseApiUrl;
+  primeApiURL = getALMConfig().primeApiURL;
   async getTrainings(
     filterState: CatalogFilterState,
     sort: string,
     searchText: string
   ) {
-    const catalogAttributes = getALMKeyValue("catalogAttributes");
+    const catalogAttributes = getALMAttribute("catalogAttributes");
     const params: QueryParams = getParamsForCatalogApi(filterState);
     params["sort"] = sort;
     params["page[limit]"] = 10;
     params["include"] = DEFUALT_LO_INCLUDE;
 
-    let url = `${this.baseApiUrl}/learningObjects`;
+    let url = `${this.primeApiURL}/learningObjects`;
     if (searchText && catalogAttributes?.showSearch === "true") {
-      url = `${this.baseApiUrl}/search`;
+      url = `${this.primeApiURL}/search`;
       params["query"] = searchText;
       //TO DO check the include if needed
       params["snippetType"] = DEFAULT_SEARCH_SNIPPETTYPE;
@@ -61,7 +61,7 @@ export default class LoggedInCustomHooks implements ICustomHooks {
     //   "authors,enrollment,subLOs.instances,instances.badge, skills.skillLevel.badge";
     // params["include"] params.include || INCLUDES_FOR_COURSE;
     const response = await RestAdapter.get({
-      url: `${this.baseApiUrl}learningObjects/${id}`,
+      url: `${this.primeApiURL}learningObjects/${id}`,
       params: params,
     });
     return JsonApiParse(response).learningObject;
@@ -69,13 +69,13 @@ export default class LoggedInCustomHooks implements ICustomHooks {
 
   async getTrainingInstanceSummary(trainingId: string, instanceId: string) {
     const response = await RestAdapter.get({
-      url: `${this.baseApiUrl}learningObjects/${trainingId}/instances/${instanceId}/summary`,
+      url: `${this.primeApiURL}learningObjects/${trainingId}/instances/${instanceId}/summary`,
     });
     return JsonApiParse(response);
   }
   async enrollToTraining(params: QueryParams = {}) {
     const response = await RestAdapter.post({
-      url: `${this.baseApiUrl}enrollments`,
+      url: `${this.primeApiURL}enrollments`,
       method: "POST",
       params,
     });

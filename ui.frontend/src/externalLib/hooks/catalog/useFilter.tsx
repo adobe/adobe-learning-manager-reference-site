@@ -1,7 +1,6 @@
-import { useState, useEffect, useMemo } from "react";
-
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useConfigContext } from "../../contextProviders";
+//import { useConfigContext } from "../../contextProviders";
 import {
   updateCatalogsFilter,
   updateDurationFilter,
@@ -13,13 +12,14 @@ import {
   updateSkillNameFilter,
   updateTagsFilter,
 } from "../../store/actions/catalog/action";
-import { JsonApiParse } from "../../utils/jsonAPIAdapter";
-import { RestAdapter } from "../../utils/restAdapter";
+import { State } from "../../store/state";
 import {
   getQueryParamsIObjectFromUrl,
   locationUpdate,
 } from "../../utils/catalog";
-import { State } from "../../store/state";
+import { getALMConfig } from "../../utils/global";
+import { JsonApiParse } from "../../utils/jsonAPIAdapter";
+import { RestAdapter } from "../../utils/restAdapter";
 
 export interface FilterListObject {
   value: string;
@@ -187,7 +187,7 @@ export const useFilter = () => {
   );
   const [isLoading, setIsLoading] = useState(true);
 
-  const config = useConfigContext();
+  const config = getALMConfig();
   const dispatch = useDispatch();
 
   const updateFilters = (data: UpdateFiltersEvent) => {
@@ -216,13 +216,13 @@ export const useFilter = () => {
       try {
         const [skillsPromise, tagsPromise, catalogPromise] = await Promise.all([
           RestAdapter.get({
-            url: `${config.baseApiUrl}data?filter.skillName=true`,
+            url: `${config.primeApiURL}data?filter.skillName=true`,
           }),
           RestAdapter.get({
-            url: `${config.baseApiUrl}data?filter.tagName=true`,
+            url: `${config.primeApiURL}data?filter.tagName=true`,
           }),
           RestAdapter.get({
-            url: `${config.baseApiUrl}catalogs`,
+            url: `${config.primeApiURL}catalogs`,
           }),
         ]);
         const skills = JsonApiParse(skillsPromise)?.data?.names;
@@ -291,7 +291,7 @@ export const useFilter = () => {
 };
 
 // let tagPromise = RestAdapter.get({
-//   url: `${config.baseApiUrl}data?filter.tagName=true`,
+//   url: `${config.primeApiURL}data?filter.tagName=true`,
 // });
 
 // let [skillsResponse, tagResponse] = await Promise.all([

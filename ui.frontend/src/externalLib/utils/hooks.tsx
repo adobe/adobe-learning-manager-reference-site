@@ -1,16 +1,16 @@
 import { useMemo } from "react";
 import { cardColors } from "../common/Theme";
-import { useConfigContext } from "../contextProviders/configContextProvider";
 import { CardBgStyle, InstanceBadge, Skill } from "../models/common";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
   PrimeLocalizationMetadata,
 } from "../models/PrimeModels";
+import { getALMConfig } from "./global";
 import { getPreferredLocalizedMetadata } from "./translationService";
 
 const useCardIcon = (training: PrimeLearningObject) => {
-  const { cdnBaseUrl } = useConfigContext();
+  const { cdnBaseUrl } = getALMConfig();
   const cardIconDetials: { [key: string]: string } = useMemo(() => {
     if (!training) {
       return {

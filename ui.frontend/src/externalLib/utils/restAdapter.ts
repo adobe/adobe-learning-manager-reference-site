@@ -1,4 +1,4 @@
-import { getALMKeyValue } from "../utils/global";
+import { getALMObject } from "../utils/global";
 export type QueryParams = Record<
   string,
   string | number | boolean | Array<any>
@@ -53,7 +53,7 @@ export class RestAdapter {
         options.withCredentials === undefined ? true : options.withCredentials;
       xhr.setRequestHeader(
         "Authorization",
-        `oauth ${getALMKeyValue("config").accessToken}`
+        `oauth ${getALMObject().getAccessToken()}`
       );
       for (const header in options.headers) {
         xhr.setRequestHeader(header, options.headers[header]);

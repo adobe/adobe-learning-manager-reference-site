@@ -1,5 +1,4 @@
-import { PrimeConfig } from "../externalLib";
-
+//import { PrimeConfig } from "../externalLib";
 // eslint-disable-next-line import/no-anonymous-default-export
 const mountingPoints = {
   navContainer: ".navigation__container",
@@ -11,26 +10,29 @@ const mountingPoints = {
   instanceContainer: ".instance__container",
 };
 
+(window as any).ALM = (window as any).ALM || {};
+(window as any).ALM.ALMConfig["mountingPoints"] = mountingPoints;
+
 export { mountingPoints };
 
-// TODO: These will come from prime
-const baseUrl =
-  "http://localhost:4502/content/aem-learn-components/language-masters/en/non-log";
+// // TODO: These will come from prime
+// const baseUrl =
+//   "http://localhost:4502/content/aem-learn-components/language-masters/en/non-log";
 
-const ALMbaseUrl = "https://captivateprimestage1.adobe.com";
+// const ALMbaseUrl = "https://captivateprimestage1.adobe.com";
 
-export const primeConfig: PrimeConfig = {
-  ALMbaseUrl,
-  baseApiUrl: `${ALMbaseUrl}/primeapi/v2/`,
-  accessToken: "fb2d1fe7cb2cbf4d80e1dc2ccd86b7ea",
-  cdnBaseUrl: "https://cpcontentsdev.adobe.com",
-  locale: "en-US",
-  pagePaths: {
-    baseUrl,
-    instance: `${baseUrl}/instance.html`,
-    catalog: `${baseUrl}/catalog.html`,
-    trainingOverview: `${baseUrl}/trainingOverview.html`,
-    community: `${baseUrl}/community.html`,
-  },
-  mountingPoints,
-};
+// export const primeConfig: PrimeConfig = {
+//   ALMbaseUrl,
+//   primeApiURL: `${ALMbaseUrl}/primeapi/v2/`,
+//   accessToken: "69337f5b675f21d0e1b553e89fafed24",
+//   cdnBaseUrl: "https://cpcontentsdev.adobe.com",
+//   locale: "en-US",
+//   //pagePaths: {
+//   baseUrl,
+//   instancePath: `${baseUrl}/instance.html`,
+//   catalogPath: `${baseUrl}/catalog.html`,
+//   trainingOverviewPath: `${baseUrl}/trainingOverview.html`,
+//   communityPath: `${baseUrl}/community.html`,
+//   // },
+//   //mountingPoints,
+// };

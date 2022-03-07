@@ -1,73 +1,76 @@
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import APIServiceInstance from "../../common/APIService";
-import { State } from "../../store/state";
-import {
-    loadReplies,
-    paginateReplies,
-} from "../../store/actions/social/action";
 import { PrimeReply } from "../../models/PrimeModels";
+import {
+  loadReplies,
+  paginateReplies,
+} from "../../store/actions/social/action";
+import { State } from "../../store/state";
+import { getALMConfig } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
-import { getALMConfig } from  "../../utils/global";
 
-
-export const useReplies = (commentId:  any) => {
-  const { items, next } = useSelector(
-    (state: State) => state.social.replies
-  );
+export const useReplies = (commentId: any) => {
+  const { items, next } = useSelector((state: State) => state.social.replies);
   const dispatch = useDispatch();
   //Fort any page load or filterchanges
-  const fetchReplies = useCallback(async (commentId: any) => {
-    try {
-        const baseApiUrl = getALMConfig().baseApiUrl;
+  const fetchReplies = useCallback(
+    async (commentId: any) => {
+      try {
+        const baseApiUrl = getALMConfig().primeApiURL;
         const params: QueryParams = {};
         //To-do add for skill
-        params["sort"] = "-dateCreated"
-        params["filter.state"]= "ACTIVE";
-        params["page[offset]"]= "0";
-        params["page[limit]"]= "10";
+        params["sort"] = "-dateCreated";
+        params["filter.state"] = "ACTIVE";
+        params["page[offset]"] = "0";
+        params["page[limit]"] = "10";
         params["include"] = "createdBy";
         const response = await RestAdapter.get({
-            url: `${baseApiUrl}/comments/${commentId}/replies?`,
-            params: params,
+          url: `${baseApiUrl}/comments/${commentId}/replies?`,
+          params: params,
         });
         const parsedResponse = JsonApiParse(response);
         const data = {
-            selectedCommentId: commentId,
-            items: parsedResponse.replyList,
-            next: parsedResponse.links?.next || "",
+          selectedCommentId: commentId,
+          items: parsedResponse.replyList,
+          next: parsedResponse.links?.next || "",
         };
 
         dispatch(loadReplies(data));
-    } catch (e) {
+      } catch (e) {
         dispatch(loadReplies([] as PrimeReply[]));
         console.log("Error while loading boards " + e);
-    }
-  }, [dispatch]);
+      }
+    },
+    [dispatch]
+  );
 
-  const addReply = useCallback(async (commentId: any, input: any) => {
-    // try {
-      const baseApiUrl = getALMConfig().baseApiUrl;
+  const addReply = useCallback(
+    async (commentId: any, input: any) => {
+      // try {
+      const baseApiUrl = getALMConfig().primeApiURL;
       const postBody = {
         data: {
-          type: "reply", 
+          type: "reply",
           attributes: {
-            state: "ACTIVE", 
-            text: input
-          }
-        }
-      }
+            state: "ACTIVE",
+            text: input,
+          },
+        },
+      };
       const headers = { "content-type": "application/json" };
       await RestAdapter.ajax({
-          url: `${baseApiUrl}/comments/${commentId}/replies`,
-          method:"POST",
-          body: JSON.stringify(postBody),
-          headers: headers
+        url: `${baseApiUrl}/comments/${commentId}/replies`,
+        method: "POST",
+        body: JSON.stringify(postBody),
+        headers: headers,
       });
-    //   const parsedResponse = JsonApiParse(response);
-  }, [dispatch]);
-  
+      //   const parsedResponse = JsonApiParse(response);
+    },
+    [dispatch]
+  );
+
   // useEffect(() => {
   //   fetchReplies(commentId);
   // }, [fetchReplies]);
@@ -88,6 +91,6 @@ export const useReplies = (commentId:  any) => {
     items,
     fetchReplies,
     loadMoreReplies,
-    addReply
+    addReply,
   };
 };

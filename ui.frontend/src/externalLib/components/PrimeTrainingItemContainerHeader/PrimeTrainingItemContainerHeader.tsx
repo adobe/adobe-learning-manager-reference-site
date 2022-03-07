@@ -4,7 +4,7 @@ import {
   PrimeLearningObjectInstance,
 } from "../../models/PrimeModels";
 import { convertSecondsToTimeText } from "../../utils/dateTime";
-import { getALMKeyValue } from "../../utils/global";
+import { getALMObject } from "../../utils/global";
 import styles from "./PrimeTrainingItemContainerHeader.module.css";
 
 const PrimeTrainingItemContainerHeader: React.FC<{
@@ -28,8 +28,8 @@ const PrimeTrainingItemContainerHeader: React.FC<{
   } = props;
   //const { formatMessage } = useIntl();
 
-  let { pagePaths } = getALMKeyValue("config");
-  const trainingLink = `${pagePaths.trainingOverview}?trainingId=${training.id}&trainingInstanceId=${trainingInstance.id}`;
+  //let { pagePaths } = getALMAttribute("config");
+  //const trainingLink = `${pagePaths.trainingOverview}?trainingId=${training.id}&trainingInstanceId=${trainingInstance.id}`;
   const authorNames = training.authorNames?.length
     ? training.authorNames.join(", ")
     : "";
@@ -40,6 +40,11 @@ const PrimeTrainingItemContainerHeader: React.FC<{
     //NOTE: Don't open player in case training name is clicked
     if (event.target?.tagName !== "A") {
       launchPlayerHandler({ id: training.id });
+    } else {
+      getALMObject().navigateToTrainingOverviewPage(
+        training.id,
+        trainingInstance.id
+      );
     }
   };
 
@@ -76,7 +81,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
       <div className={styles.trainingDetailsContainer}>
         <div className={styles.card} style={{ ...cardBgStyle }}></div>
         <div className={styles.trainingDetials}>
-          <a aria-label={name} className={styles.title} href={trainingLink}>
+          <a aria-label={name} className={styles.title} href={"#"}>
             {name}
           </a>
           {/* <p

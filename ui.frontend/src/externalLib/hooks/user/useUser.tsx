@@ -1,18 +1,19 @@
 import { useCallback, useEffect } from "react";
-import { RestAdapter } from "../../utils/restAdapter";
-import { useConfigContext, useUserContext } from "../../contextProviders";
+import { useUserContext } from "../../contextProviders";
+import { getALMConfig } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
+import { RestAdapter } from "../../utils/restAdapter";
 
 export const useUser = () => {
   const { user, initAccountUser } = useUserContext();
-  const config = useConfigContext();
+  const config = getALMConfig();
   const initUser = useCallback(async () => {
     try {
       const params = {
         include: "account",
       };
       const response = await RestAdapter.get({
-        url: `${config.baseApiUrl}user`,
+        url: `${config.primeApiURL}user`,
         params: params,
       });
       const userData = JsonApiParse(response).user;
@@ -25,7 +26,7 @@ export const useUser = () => {
 
     //const data = await result.json();
     //before dispacthing convert it to required format
-  }, [config.baseApiUrl, initAccountUser]);
+  }, [config.primeApiURL, initAccountUser]);
   useEffect(() => {
     initUser();
   }, [initUser]);
