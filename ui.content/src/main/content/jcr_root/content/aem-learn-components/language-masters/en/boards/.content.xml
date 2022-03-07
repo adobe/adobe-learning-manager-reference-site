@@ -2,11 +2,11 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2022-02-19T22:30:28.349+05:30"
+        cq:lastModified="{Date}2022-03-07T16:39:57.842+05:30"
         cq:lastModifiedBy="admin"
         cq:template="/conf/aem-learn-components/settings/wcm/templates/page-content"
         jcr:primaryType="cq:PageContent"
-        jcr:title="Privacy"
+        jcr:title="Community Boards"
         sling:resourceType="aem-learn-components/components/page">
         <root
             jcr:primaryType="nt:unstructured"
@@ -22,17 +22,7 @@
                 <container
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="aem-learn-components/components/container"
-                    layout="responsiveGrid">
-                    <text
-                        jcr:created="{Date}2022-02-19T22:30:19.943+05:30"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2022-02-19T22:30:28.348+05:30"
-                        jcr:lastModifiedBy="admin"
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="aem-learn-components/components/text"
-                        text="&lt;h1 style=&quot;text-align: center;&quot;>We value your privacy and trust.&lt;br>&#xa;&lt;/h1>&#xa;&lt;p style=&quot;text-align: center;&quot;>The Adobe Privacy Centre makes it easy to find&lt;br>&#xa;information on privacy topics, including your choices about how we&lt;br>&#xa;collect and use your information.&lt;/p>&#xa;"
-                        textIsRich="true"/>
-                </container>
+                    layout="responsiveGrid"/>
             </container>
         </root>
     </jcr:content>
