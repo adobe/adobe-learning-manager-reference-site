@@ -19,11 +19,11 @@ export { mountingPoints };
 // const baseUrl =
 //   "http://localhost:4502/content/aem-learn-components/language-masters/en/non-log";
 
-// const ALMbaseUrl = "https://captivateprimestage1.adobe.com";
+// const almBaseURL = "https://captivateprimestage1.adobe.com";
 
 // export const primeConfig: PrimeConfig = {
-//   ALMbaseUrl,
-//   primeApiURL: `${ALMbaseUrl}/primeapi/v2/`,
+//   almBaseURL,
+//   primeApiURL: `${almBaseURL}/primeapi/v2/`,
 //   accessToken: "69337f5b675f21d0e1b553e89fafed24",
 //   cdnBaseUrl: "https://cpcontentsdev.adobe.com",
 //   locale: "en-US",
