@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:lastModified="{Date}2022-03-07T12:55:59.528+05:30"
+        cq:lastModifiedBy="admin"
+        cq:template="/apps/aem-learn-components/configuration/page/template"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="ALM"
+        sling:configPropertyInherit="true"
+        sling:resourceType="aem-learn-components/configuration/page"
+        accountId="66"
+        almBaseURL="https://captivateprimeapac.adobe.com"
+        authorRefreshToken="cf7bc08cdaa8139405c51f7da8d4355a"
+        clientId="5497bcc6-668d-47c2-8881-d855b63b8a85"
+        clientSecret="391c2e4a-fa30-4ff8-af09-fb1e85fd64c8"
+        locale="en-US"
+        primeUrl="https://captivateprimeapac.adobe.com"
+        refreshToken="cf7bc08cdaa8139405c51f7da8d4355a"
+        siteMap="siteMap"
+        trainingOverviewPath="http://localhost:4502/content/aem-learn-components/language-masters/en/non-log/trainingOverview.html"
+        usageType="sites"/>
+</jcr:root>
