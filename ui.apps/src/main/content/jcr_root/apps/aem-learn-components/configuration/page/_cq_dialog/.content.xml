@@ -108,12 +108,12 @@
                         name="./authorRefreshToken"
                         cq:showOnCreate="{Boolean}true"/>
 
-                    <primeBaseUrl 
+                    <almBaseURL 
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="Prime Base Url"
-                        fieldDescription="Prime Base Url"
-                        name="./primeBaseUrl"
+                        fieldLabel="Prime ALM URL"
+                        fieldDescription="Prime ALM URL"
+                        name="./almBaseURL"
                         cq:showOnCreate="{Boolean}true"/>
 
                     <primeJsonUrl 
@@ -124,12 +124,12 @@
                         name="./primeJsonUrl"
                         cq:showOnCreate="{Boolean}true"/>
 
-                    <primeBaseApiUrl 
+                    <primeApiURL 
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="Prime Base API Url"
-                        fieldDescription="Prime Base API Url"
-                        name="./primeBaseApiUrl"
+                        fieldLabel="Prime API URL"
+                        fieldDescription="Prime API URL"
+                        name="./primeApiURL"
                         cq:showOnCreate="{Boolean}true"/>
 
                     <primeCdnBaseUrl 

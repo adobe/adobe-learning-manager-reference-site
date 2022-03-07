@@ -12,7 +12,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     );
     if (cpConfigElmt) {
       window.ALM.ALMConfig = JSON.parse(cpConfigElmt.content);
-      const primeBaseURL = window.ALM.ALMConfig["primeBaseURL"];
+      const primeBaseURL = window.ALM.ALMConfig["almBaseURL"];
       const primeApiURL = `${primeBaseURL}/primeapi/v2/`;
       window.ALM.ALMConfig["primeApiURL"] = primeApiURL;
     }
