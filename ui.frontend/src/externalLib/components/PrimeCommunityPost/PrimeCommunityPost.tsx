@@ -3,6 +3,7 @@
   import { PrimeCommunityObjectActions } from "../PrimeCommunityObjectActions";
   import { PrimeCommunityObjectInput } from "../PrimeCommunityObjectInput";
   import { PrimeCommunityComments } from "../PrimeCommunityComments";
+  import { PrimeAlertDialog } from "../PrimeAlertDialog";
   import { useIntl } from "react-intl";
   import { useComments, usePost } from "../../hooks/community";
   import { useRef, useEffect, useState } from "react";
@@ -12,8 +13,8 @@
     const { formatMessage } = useIntl();
     const ref = useRef<any>();
     const post = props.post;
-    const { addComment, votePost, deletePostVote } = usePost();
-    const { fetchComments } = useComments(post.id);
+    const { addComment, votePost, deletePostVote, updatePost } = usePost();
+    const { fetchComments } = useComments();
     const myVoteStatus = post.myVoteStatus ? post.myVoteStatus : "";
     const [myUpVoteStatus, setMyUpVoteStatus] = useState(myVoteStatus === "UPVOTE");
     const [upVoteCount, setUpVoteCount] = useState(post.upVote);
@@ -26,6 +27,8 @@
     const hideCommentsLabel = formatMessage({id: "prime.community.post.hideComments", defaultMessage: "Hide Comments",});
     const [buttonLabel, setButtonLabel] = useState(showCommentsLabel);
     const [commentCount, setCommentCount] = useState(post.commentCount);
+    const [ showSuccessConfirmation, setShowSucessConfirmation ] = useState(false);
+    const hideModalTimeInMillis = 10000;
 
     const viewButtonClickHandler = () => {
       if(!showComments) {
@@ -89,13 +92,12 @@
       setMyDownVoteStatus((myDownVoteStatus) => !myDownVoteStatus);
     }
 
-    const saveHandler = async (value: any) => {
+    const saveCommentHandler = async (value: any) => {
       try {
         await addComment(post.id,value);
         setCommentCount(commentCount + 1);
-        if(showComments) {
-          fetchComments(post.id);
-        }
+        fetchComments(post.id);
+        showCommentsSection();
       } catch(exception) {
         console.log("not updating comment count");
       }
@@ -105,10 +107,34 @@
       setCommentCount(commentCount - 1);      
     }
 
+    const updatePostHandler = async(input: any, postingType: any, resource: any) => {
+      try {
+        await updatePost(post.id, input, postingType, resource);
+        showConfirmationDialog();
+        setTimeout(() => {
+          //auto close alert
+          if(showSuccessConfirmation) {
+              hideConfirmationDialog();
+          }
+        }, hideModalTimeInMillis)
+      } catch(exception) {
+        console.log(exception);
+        console.log("Error in creating Post")
+      }
+    }
+
+    const hideConfirmationDialog  = () => {
+      setShowSucessConfirmation(false)
+    }
+
+    const showConfirmationDialog  = () => {
+        setShowSucessConfirmation(true)
+    }
+
     return (
       <>
       <div className={styles.primePostWrapper}>
-        <PrimeCommunityObjectHeader object={post} type="post"></PrimeCommunityObjectHeader>
+        <PrimeCommunityObjectHeader object={post} type="post" updateObjectHandler={(input: any, postingType: any, resource: any) => {updatePostHandler(input, postingType, resource)}}></PrimeCommunityObjectHeader>
         <PrimeCommunityObjectBody object={post} type="post"></PrimeCommunityObjectBody>
         <PrimeCommunityObjectActions
           buttonLabel={buttonLabel}
@@ -121,15 +147,26 @@
           downVoteCount={downVoteCount}
           downVoteButtonClickHandler={downVoteButtonClickHandler}
         ></PrimeCommunityObjectActions>
-        <PrimeCommunityObjectInput 
-          ref={ref}
-          object={post} 
-          inputPlaceholder={formatMessage({id: "prime.community.post.commentHere", defaultMessage: "Comment here"})}
-          saveHandler={(value: any) => saveHandler(value)}
-        ></PrimeCommunityObjectInput>
+        <div className={styles.primeCommentInputWrapper}>
+          <PrimeCommunityObjectInput 
+            ref={ref}
+            object={post} 
+            inputPlaceholder={formatMessage({id: "prime.community.post.commentHere", defaultMessage: "Comment here"})}
+            primaryActionHandler={(value: any) => saveCommentHandler(value)}
+          ></PrimeCommunityObjectInput>
+        </div>
         {
           showComments && 
-            <PrimeCommunityComments object={post} type="comment" deleteCommentHandler={deleteCommentHandler}></PrimeCommunityComments>
+            <PrimeCommunityComments object={post} deleteCommentHandler={deleteCommentHandler}></PrimeCommunityComments>
+        }
+        {showSuccessConfirmation && 
+          <PrimeAlertDialog
+              variant="confirmation"
+              title={formatMessage({id: "prime.community.postPublished.label",defaultMessage: "Post Published"})}
+              primaryActionLabel={formatMessage({id: "prime.community.ok.label",defaultMessage: "Ok"})}
+              body={formatMessage({id: "prime.community.postPublished.successMessage", defaultMessage: "Your post has been published. It may take some time to appear on the board."})}
+              onPrimaryAction={hideConfirmationDialog}
+          ></PrimeAlertDialog>
         }
       </div>
       </>

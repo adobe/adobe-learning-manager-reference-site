@@ -5,6 +5,7 @@ import { PrimeReply } from "../../models/PrimeModels";
 import {
   loadReplies,
   paginateReplies,
+  updateReply
 } from "../../store/actions/social/action";
 import { State } from "../../store/state";
 import { getALMConfig } from "../../utils/global";
@@ -45,6 +46,33 @@ export const useReplies = (commentId: any) => {
     },
     [dispatch]
   );
+
+  const patchReply = useCallback(async (replyId: any, input: any) => {
+    const baseApiUrl = getALMConfig().primeApiURL;
+    const body = {
+      data: {
+        type: "reply",
+        id: replyId,
+        attributes: {
+          state: "ACTIVE",
+          text: input,
+        },
+      },
+    };
+    const headers = { "content-type": "application/json" };
+    const result = await RestAdapter.ajax({
+      url: `${baseApiUrl}/replies/${replyId}`,
+      method: "PATCH",
+      body: JSON.stringify(body),
+      headers: headers,
+    });
+
+    const parsedResponse = JsonApiParse(result);
+    const data = {
+      item: parsedResponse.reply,
+    };
+    dispatch(updateReply(data));
+  },[dispatch]);
 
   const addReply = useCallback(
     async (commentId: any, input: any) => {
@@ -92,5 +120,6 @@ export const useReplies = (commentId: any) => {
     fetchReplies,
     loadMoreReplies,
     addReply,
+    patchReply
   };
 };

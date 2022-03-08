@@ -4,20 +4,21 @@ import APIServiceInstance from "../../common/APIService";
 import { PrimeComment } from "../../models/PrimeModels";
 import {
   loadComments,
-  loadCommentsForPost,
   paginateComments,
+  updateComment
 } from "../../store/actions/social/action";
 import { State } from "../../store/state";
 import { getALMConfig } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
 
-export const useComments = (postId: any) => {
+export const useComments = () => {
   const { items, next } = useSelector((state: State) => state.social.comments);
   const dispatch = useDispatch();
+
   //Fort any page load or filterchanges
   const fetchComments = useCallback(
-    async (postId: any) => {
+    async (postId?: any) => {
       try {
         const baseApiUrl = getALMConfig().primeApiURL;
         const params: QueryParams = {};
@@ -37,13 +38,7 @@ export const useComments = (postId: any) => {
           items: parsedResponse.commentList,
           next: parsedResponse.links?.next || "",
         };
-
-        const postData = {
-          selectedPostId: postId,
-        };
-
         dispatch(loadComments(data));
-        dispatch(loadCommentsForPost(postData));
       } catch (e) {
         dispatch(loadComments([] as PrimeComment[]));
         console.log("Error while loading boards " + e);
@@ -56,7 +51,33 @@ export const useComments = (postId: any) => {
   //   fetchComments(postId);
   // }, [fetchComments]);
 
-  // for pagination
+  const patchComment = useCallback(async (commentId: any, input: any) => {
+    const baseApiUrl = getALMConfig().primeApiURL;
+    const body = {
+      data: {
+        type: "comment",
+        id: commentId,
+        attributes: {
+          state: "ACTIVE",
+          text: input,
+        },
+      },
+    };
+    const headers = { "content-type": "application/json" };
+    const result = await RestAdapter.ajax({
+      url: `${baseApiUrl}/comments/${commentId}`,
+      method: "PATCH",
+      body: JSON.stringify(body),
+      headers: headers,
+    });
+
+    const parsedResponse = JsonApiParse(result);
+    const data = {
+      item: parsedResponse.comment,
+    };
+    dispatch(updateComment(data));
+  },[dispatch]);
+
   const loadMoreComments = useCallback(async () => {
     if (!next) return;
     const parsedResponse = await APIServiceInstance.loadMore(next);
@@ -71,6 +92,7 @@ export const useComments = (postId: any) => {
   return {
     // item,
     items,
+    patchComment,
     fetchComments,
     loadMoreComments,
     // fetchBoard

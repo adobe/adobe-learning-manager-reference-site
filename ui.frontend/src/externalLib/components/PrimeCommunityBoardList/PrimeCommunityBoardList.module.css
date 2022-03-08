@@ -1,0 +1,59 @@
+.primeCommunityHeaderRow {
+    display: flex;
+    max-width: 716px;
+    margin-bottom: 30px;
+    margin-left: 25px;
+    margin-right: 25px;
+    font-weight: 500;
+
+}
+
+@media (max-width: 414px) {
+    .primeCommunityHeaderRow {
+        display: block;
+        margin-bottom: 30px;
+        margin-left: 25px;
+        margin-right: 25px;
+        font-weight: 500;
+    }
+}
+
+.primeCommunitySearchContainer {
+    display: flex;
+    margin-left: auto;
+    margin-right: 25px;
+    margin-top: 45px;
+    margin-bottom: 10px;
+    height: 30px;
+}
+
+@media (max-width: 414px) {
+    .primeCommunitySearchContainer {
+      width:100%;
+      margin-top: 30px;
+    }
+}
+
+.primeLoaderWrapper {
+    margin-bottom: 20px;
+    height:20px;
+    justify-content: center;
+    max-width: 716px;
+    display: flex;
+}
+
+.primeCommunitySearchStatus {
+    display: flex;
+    font-size: 14px;
+    margin: 25px;
+}
+
+.primeCommunitySearchClear {
+    border: none;
+    background-color: transparent;
+    color: #306EB5;
+}
+
+.primeCommunitySearchClear:hover {
+    cursor: pointer;
+}

@@ -1,11 +1,15 @@
 import { PrimeCommunityObjectHeader } from "../PrimeCommunityObjectHeader";
 import { PrimeCommunityObjectBody } from "../PrimeCommunityObjectBody";
 import { PrimeCommunityObjectActions } from "../PrimeCommunityObjectActions";
+import { PrimeCommunityObjectInput } from "../PrimeCommunityObjectInput";
 import { useReply } from "../../hooks/community";
 import { useRef, useEffect, useState } from "react";
 import styles from "./PrimeCommunityReply.module.css";
+import { useIntl } from "react-intl";
 
 const PrimeCommunityReply  = (props: any) => {
+  const { formatMessage } = useIntl();
+  const ref = useRef<any>();
   const reply = props.reply;
   const { voteReply, deleteReplyVote } = useReply();
   const myVoteStatus = reply.myVoteStatus ? reply.myVoteStatus : "";
@@ -15,6 +19,7 @@ const PrimeCommunityReply  = (props: any) => {
   const [downVoteCount, setDownVoteCount] = useState(reply.downVote);
   const firstRunForUpvote = useRef(true);
   const firstRunForDownvote = useRef(true);
+  const [ showEditReplyView, setShowEditReplyView ] = useState(false);
 
   useEffect(() => {
     if (firstRunForUpvote.current) {
@@ -57,21 +62,44 @@ const PrimeCommunityReply  = (props: any) => {
     }
   }
 
+  const updateReply = (value: any) => {
+    if(typeof props.updateReply === "function") {
+      props.updateReply(reply.id, value)
+      setShowEditReplyView(false);  
+    }
+  }
+
+  const updateReplyHandler = () => {
+    setShowEditReplyView(true);
+  }
+
   return (
     <>
-    <div className={styles.primeReplyWrapper}>
-      <PrimeCommunityObjectHeader object={reply} type="reply" deleteReplyHandler={deleteReplyHandler}></PrimeCommunityObjectHeader>
-      <PrimeCommunityObjectBody object={reply} type="reply"></PrimeCommunityObjectBody>
-      <PrimeCommunityObjectActions
-        type="reply"
-        myUpVoteStatus={myUpVoteStatus}
-        upVoteCount={upVoteCount}
-        upVoteButtonClickHandler={upVoteButtonClickHandler}
-        myDownVoteStatus={myDownVoteStatus}
-        downVoteCount={downVoteCount}
-        downVoteButtonClickHandler={downVoteButtonClickHandler}
-      ></PrimeCommunityObjectActions>
-    </div>
+    {!showEditReplyView &&
+      <div className={styles.primeReplyWrapper}>
+        <PrimeCommunityObjectHeader object={reply} type="reply" updateObjectHandler={updateReplyHandler} deleteReplyHandler={deleteReplyHandler}></PrimeCommunityObjectHeader>
+        <PrimeCommunityObjectBody object={reply} type="reply"></PrimeCommunityObjectBody>
+        <PrimeCommunityObjectActions
+          type="reply"
+          myUpVoteStatus={myUpVoteStatus}
+          upVoteCount={upVoteCount}
+          upVoteButtonClickHandler={upVoteButtonClickHandler}
+          myDownVoteStatus={myDownVoteStatus}
+          downVoteCount={downVoteCount}
+          downVoteButtonClickHandler={downVoteButtonClickHandler}
+          ></PrimeCommunityObjectActions>
+      </div>
+    }
+    {showEditReplyView &&
+      <PrimeCommunityObjectInput 
+        ref={ref}
+        object={reply}
+        inputPlaceholder={formatMessage({id: "prime.community.comment.replyHere", defaultMessage: "Reply here"})}
+        defaultValue={reply.richText}
+        primaryActionHandler={(value: any) => updateReply(value)}
+        secondaryActionHandler={() => setShowEditReplyView(false)}
+      ></PrimeCommunityObjectInput>
+    }
     </>
   );
 };

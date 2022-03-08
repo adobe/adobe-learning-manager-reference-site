@@ -44,7 +44,6 @@ import {
     SOCIAL_BOARD_DELETE_SUCCESS,
     SOCIAL_POST_DELETE_SUCCESS,
     DISMISS_PANEL,
-    GET_COMMENTS_FOR_POST,
     LOAD_COMMENTS,
     LOAD_REPLIES,
     PAGINATE_REPLIES,
@@ -694,7 +693,7 @@ const commentsItems: Reducer<PrimeComment[], AnyAction> = (
                 return [];
             }
             // eslint-disable-next-line no-case-declarations
-            const index = state?.findIndex((item) => item.id === action.cmt.id);
+            const index = state?.findIndex((item) => item.id === action.payload.item.id);
             if (index < 0) return state;
             //uncomment below if else
             // if (state[index].previewData) {
@@ -703,7 +702,7 @@ const commentsItems: Reducer<PrimeComment[], AnyAction> = (
             //         attributes: {...state[index], previewData: {...state[index].attributes.previewData, ...action.cmt.attributes.previewData,},},
             //     };
             // } else {
-            //     state[index] = action.cmt;
+            state[index] = action.payload.item;
             // }
 
             return state;
@@ -806,7 +805,7 @@ const replyItems: Reducer<PrimeReply[], AnyAction> = (
             }
             // eslint-disable-next-line no-case-declarations
             const index = state?.findIndex(
-                (item) => item.id === action.reply.id
+                (item) => item.id === action.payload.item.id
             );
             if (index < 0) return state;
             //uncomment below if else
@@ -816,7 +815,7 @@ const replyItems: Reducer<PrimeReply[], AnyAction> = (
             //         attributes: {...state[index], previewData: {...state[index].previewData, ...action.reply.previewData,},},
             //     };
             // } else {
-            //     state[index] = action.reply;
+            state[index] = action.payload.item;
             // }
 
             return state;

@@ -25,6 +25,10 @@ export class Store {
     }
 }
 
+function filterResponse(data: any, type: string) {
+    return data.included?.filter((item: { type: any }) => item.type === type);
+}
+
 export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
     const storeToUse: Store = GetStore();
     if (typeof jsonApiResponse === "string") jsonApiResponse = JSON.parse(jsonApiResponse);
@@ -41,7 +45,10 @@ export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
     let data = jsonApiResponse["data"];
     if (Array.isArray(data)) {
         if (data.length && data[0]["type"] === "searchResult") {
-            data = jsonApiResponse.included.filter((item: { type: any }) => item.type === "learningObject");
+            data = filterResponse(jsonApiResponse, "learningObject");
+            if(data?.length === 0) {
+                data = filterResponse(jsonApiResponse, "post");
+            }
         }
         result = [];
         let oneObj;

@@ -8,7 +8,7 @@
     z-index: 1;
 }
 
-.primeObjectOption, .primeObjectCriticalOption {
+.primeObjectOption, .primeObjectCriticalOption, .primeObjectRegularOption {
     text-align: left;
     font-size: 12px;
     font-family: Source Sans Pro;
@@ -19,7 +19,7 @@
 .primeObjectCriticalOption {
     color: #e61414;
 }
-.primeObjectOption:hover, .primeObjectCriticalOption:hover {
+.primeObjectOption:hover, .primeObjectCriticalOption:hover, .primeObjectRegularOption:hover{
     background-color: #dedede;
     cursor: pointer;
 }

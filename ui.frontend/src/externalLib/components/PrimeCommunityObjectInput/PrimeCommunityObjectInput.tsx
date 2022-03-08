@@ -1,43 +1,55 @@
 import styles from "./PrimeCommunityObjectInput.module.css";
 import { useIntl } from "react-intl";
-import {
-    SAVE_COMMENT_SVG,
-  } from "../../utils/inline_svg"
+import Send from '@spectrum-icons/workflow/Send'
+import Cancel from '@spectrum-icons/workflow/Cancel'
 import React, { useState } from "react";
 
 const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
     const { formatMessage } = useIntl();
-    const commentTextLimit = props.characterLimit ? props.characterLimit : 1000;
+    const objectTextLimit = props.characterLimit ? props.characterLimit : 1000;
     const emptyString = "";
-    const [charactersRemaining, setCharactersRemaining] = useState(commentTextLimit);
+    const [charactersRemaining, setCharactersRemaining] = useState(objectTextLimit);
 
     const clearTextArea = () => {
         ref.current.value = emptyString;
-        setCharactersRemaining(commentTextLimit);
+        setCharactersRemaining(objectTextLimit);
     }
 
-    const saveCommentHandler = () => {
-        if(typeof props.saveHandler === 'function') {
-            if(ref && ref.current.value.length > 0) {
-                props.saveHandler(ref.current.value);
-                clearTextArea();
-            }
+    const primaryActionHandler = () => {
+        if(ref && ref.current.value.length <= 0) {
+            return;
+        }
+        if(typeof props.primaryActionHandler === 'function') {
+            props.primaryActionHandler(ref.current.value);
+            clearTextArea();
+        }
+    }
+
+    const secondaryActionHandler = () => {
+        if(typeof props.secondaryActionHandler === 'function') {
+            props.secondaryActionHandler(ref.current.value);
+            clearTextArea();
         }
     }
 
     const checkTextCount = () => {
         const currentInputLength = ref && ref.current ? ref.current.value.length : 0;
-        setCharactersRemaining(commentTextLimit < currentInputLength ? 0 : (commentTextLimit - currentInputLength));
+        setCharactersRemaining(objectTextLimit < currentInputLength ? 0 : (objectTextLimit - currentInputLength));
     }
 
     return (
         <>
-        <div className={styles.primePostCommentWrapper}>
-            <textarea ref={ref} onKeyUp={checkTextCount} className={styles.primePostCommentInput} placeholder={props.inputPlaceholder} maxLength={charactersRemaining}>
+        <div className={styles.primePostObjectWrapper}>
+            <textarea ref={ref} onKeyUp={checkTextCount} className={styles.primePostObjectInput} defaultValue={props.defaultValue?props.defaultValue : ""} placeholder={props.inputPlaceholder} maxLength={objectTextLimit}>
             </textarea>
-            {props.saveHandler &&
-                <button className={styles.primeSaveCommentButton} onClick={saveCommentHandler}>
-                    {SAVE_COMMENT_SVG()}
+            {props.primaryActionHandler &&
+                <button className={styles.primeSaveObjectButton} onClick={primaryActionHandler}>
+                    <Send/>
+                </button>
+            }
+            {props.secondaryActionHandler &&
+                <button className={styles.primeSaveObjectButton} onClick={secondaryActionHandler}>
+                    <Cancel/>
                 </button>
             }
             <div className={styles.primeTextAreaCountRemaining}>
