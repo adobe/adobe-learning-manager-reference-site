@@ -3,7 +3,7 @@
 .container {
   /* max-width: 50%; */
   /* margin: 0 auto; */
-  border: 1px solid #c9c9c9;
+  border-top: 1px solid var(--prime-color-nc13);
   clear: both;
   text-align: left !important;
   list-style: none;
@@ -14,20 +14,33 @@
 
 .moduleDescription {
   font-size: var(--prime-font-size-small);
-  padding: 20px;
+  padding: 15px;
 }
 
 .headerContainer {
   background-color: var(--prime-color-white);
   display: flex;
+  margin-bottom: 1px;
 }
-
+.title {
+  width: 80%;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.cursor {
+  cursor: pointer;
+}
 .headerWrapper {
-  width: 90%;
-  padding: 10px 0;
+  /* width: 90%; */
+  width: 100%;
+  padding: 10px 10px 10px 0;
   line-height: 1.25rem;
 }
-
+.resourceType {
+  text-transform: uppercase;
+}
 .headerIcon {
   display: flex;
   padding: 10px;
@@ -37,6 +50,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color:var(--prime-color-nc3)
+}
+a.details {
+  color: var(--prime-color-primary);
+  text-decoration: none;
 }
 
 .icon {
@@ -54,9 +72,15 @@
   width: 36px;
   height: 36px;
 }
+.spectrumIcon {
+  padding: 10px 15px;
+}
+.spectrumIcon svg {
+  fill: var(--prime-icon-color);
+}
 
 .wrapperContainer {
-  background-color: var(--prime-color-nc1);
+  background-color: var(--prime-color-nc9);
   border-color: #ececec;
   /* border: 1px solid #c9c9c9; */
 }
@@ -64,7 +88,7 @@
 .metaDataContainer {
   display: flex;
   flex-wrap: wrap;
-  background-color: var(--prime-color-nc1);
+  background-color: var(--prime-color-nc9);
 }
 
 .metadata {
@@ -76,6 +100,8 @@
 .resourceAndDuration {
   display: flex;
   justify-content: space-between;
+  color: var(--prime-color-nc3);
+  font-size: var(--prime-font-size-12);
 }
 
 @media screen and (max-width: 414px) {

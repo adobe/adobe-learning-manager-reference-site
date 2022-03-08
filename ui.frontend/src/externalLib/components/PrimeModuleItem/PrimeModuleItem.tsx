@@ -8,22 +8,25 @@ import { getALMConfig } from "../../utils/global";
 import {
   ACTIVITY_SVG,
   AUDIO_SVG,
-  CALENDAR_SVG,
   CLASSROOM_SVG,
-  CLOCK_SVG,
   DOC_SVG,
   PDF_SVG,
   PPT_SVG,
   SCORM_SVG,
-  SEATS_SVG,
-  USER_SVG,
-  VENUE_SVG,
   VIDEO_SVG,
   VIRTUAL_CLASSROOM_SVG,
   XLS_SVG,
 } from "../../utils/inline_svg";
 import { getPreferredLocalizedMetadata } from "../../utils/translationService";
+import Link from "@spectrum-icons/workflow/Link";
+import Seat from "@spectrum-icons/workflow/Seat";
+import Location from "@spectrum-icons/workflow/Location";
+import Clock from "@spectrum-icons/workflow/Clock";
+import User from "@spectrum-icons/workflow/User";
+import Calendar from "@spectrum-icons/workflow/Calendar";
+
 import styles from "./PrimeModuleItem.module.css";
+import { useIntl } from "react-intl";
 
 const CLASSROOM = "Classroom";
 const VIRTUAL_CLASSROOM = "Virtual Classroom";
@@ -36,8 +39,26 @@ const PDF = "PDF";
 const XLS = "XLS";
 const AUDIO = "AUDIO";
 
+interface ActionMap {
+  Classroom: string;
+}
+const moduleIconMap = {
+  Classroom: CLASSROOM_SVG(),
+  "Virtual Classroom": VIRTUAL_CLASSROOM_SVG(),
+  Elearning: SCORM_SVG(),
+  ACTIVITY: ACTIVITY_SVG(),
+  VIDEO: VIDEO_SVG(),
+  PPTX: PPT_SVG(),
+  DOC: DOC_SVG(),
+  PDF: PDF_SVG(),
+  XLS: XLS_SVG(),
+  AUDIO: AUDIO_SVG(),
+};
+
 const PrimeModuleItem = (props: any) => {
   const loResource: PrimeLearningObjectResource = props.loResource;
+  const isPartOfLP = props.isPartOfLP;
+  const { formatMessage } = useIntl();
 
   // loResource.learningObject.
 
@@ -63,6 +84,8 @@ const PrimeModuleItem = (props: any) => {
     loResource.resourceType === CLASSROOM ||
     loResource.resourceType === VIRTUAL_CLASSROOM;
 
+  const isVC = loResource.resourceType === VIRTUAL_CLASSROOM;
+
   const isElearning = loResource.resourceType === ELEARNING;
 
   const hasSessionDetails =
@@ -72,14 +95,17 @@ const PrimeModuleItem = (props: any) => {
     resource.authorDesiredDuration || resource.desiredDuration
   );
 
-  const moduleIcon = getModuleIcon(resource.contentType);
+  const moduleIcon =
+    moduleIconMap[resource.contentType as keyof ActionMap] || SCORM_SVG();
 
   const sessionsTemplate = getSessionsTemplate(
     styles,
     resource,
     isClassroomOrVC,
     hasSessionDetails,
-    durationText
+    durationText,
+    isVC,
+    formatMessage
   );
 
   let descriptionTextHTML = getDescriptionTemplate(
@@ -91,21 +117,30 @@ const PrimeModuleItem = (props: any) => {
     hasSessionDetails
   );
 
+  const itemClickHandler = () => {
+    if (loResource.learningObject.enrollment && !isClassroomOrVC)
+      launchPlayerHandler({ id: trainingId, moduleId: loResource.id });
+  };
   return (
     <li className={styles.container}>
       <div
-        className={styles.headerContainer}
+        className={`${styles.headerContainer} ${
+          !isClassroomOrVC ? styles.cursor : ""
+        }`}
         tabIndex={0}
         data-test={loResource.id}
-        onClick={() =>
-          launchPlayerHandler({ id: trainingId, moduleId: loResource.id })
-        }
+        onClick={itemClickHandler}
       >
-        <div className={styles.icon}> {moduleIcon}</div>
+        <div className={styles.icon} aria-hidden="true">
+          {moduleIcon}
+        </div>
         <div className={styles.headerWrapper}>
-          <div>{name}</div>
+          <div className={styles.title}>{name}</div>
           <div className={styles.resourceAndDuration}>
-            <span>{loResource.resourceType}</span>
+            <span className={styles.resourceType}>
+              {loResource.resourceType}
+              {/* {console.log(loResource.multipleAttempt)} */}
+            </span>
             <span>{durationText}</span>
           </div>
         </div>
@@ -116,31 +151,6 @@ const PrimeModuleItem = (props: any) => {
       </div>
     </li>
   );
-};
-
-const getModuleIcon = (contentType: string) => {
-  switch (contentType) {
-    case CLASSROOM:
-      return CLASSROOM_SVG();
-    case VIRTUAL_CLASSROOM:
-      return VIRTUAL_CLASSROOM_SVG();
-    case ACTIVITY:
-      return ACTIVITY_SVG();
-    case VIDEO:
-      return VIDEO_SVG();
-    case AUDIO:
-      return AUDIO_SVG();
-    case PPTX:
-      return PPT_SVG();
-    case DOC:
-      return DOC_SVG();
-    case PDF:
-      return PDF_SVG();
-    case XLS:
-      return XLS_SVG();
-    default:
-      return SCORM_SVG();
-  }
 };
 
 const getDescriptionTemplate = (
@@ -163,11 +173,14 @@ const getDescriptionTemplate = (
       </div>
     );
   }
-  return (
-    description ||
-    (overview && (
-      <div className={styles.moduleDescription}>{description || overview}</div>
-    ))
+  return description ? (
+    <div className={styles.moduleDescription}>{description}</div>
+  ) : (
+    overview && (
+      <div className={styles.moduleDescription}>
+        hi {description || overview}
+      </div>
+    )
   );
 };
 
@@ -178,7 +191,9 @@ const getSessionsTemplate = (
   resource: PrimeResource,
   isClassroomOrVC: boolean,
   hasSessionDetails: boolean,
-  durationText: string
+  durationText: string,
+  isVC: boolean = false,
+  formatMessage: Function
 ) => {
   if (!isClassroomOrVC || (isClassroomOrVC && !hasSessionDetails)) {
     return "";
@@ -189,7 +204,9 @@ const getSessionsTemplate = (
   return (
     <div className={styles.metaDataContainer}>
       <div className={styles.metadata}>
-        <div className={styles.icon}>{CALENDAR_SVG()}</div>
+        <div className={styles.spectrumIcon}>
+          <Calendar aria-hidden="true" />
+        </div>
         <div className={styles.details}>
           {resource.dateStart} - {resource.completionDeadline}
         </div>
@@ -197,26 +214,60 @@ const getSessionsTemplate = (
 
       {resource.seatLimit && (
         <div className={styles.metadata}>
-          <div className={styles.icon}>{SEATS_SVG()}</div>
-          <div className={styles.details}>{resource.seatLimit}</div>
+          <div className={styles.spectrumIcon}>
+            <Seat aria-hidden="true" />
+          </div>
+          <div className={styles.details}>
+            {formatMessage(
+              { id: "alm.overview.seat.limit" },
+              { 0: resource.seatLimit }
+            )}
+          </div>
         </div>
       )}
 
-      {resource.location && (
+      {resource.location && !isVC && (
         <div className={styles.metadata}>
-          <div className={styles.icon}>{VENUE_SVG()}</div>
+          <div className={styles.spectrumIcon}>
+            <Location aria-hidden="true" />
+          </div>
           <div className={styles.details}>{resource.location}</div>
         </div>
       )}
 
       <div className={styles.metadata}>
-        <div className={styles.icon}>{USER_SVG()}</div>
+        <div className={styles.spectrumIcon}>
+          <User aria-hidden="true" />
+        </div>
         <div className={styles.details}>{instructorNames}</div>
       </div>
       <div className={styles.metadata}>
-        <div className={styles.icon}>{CLOCK_SVG()}</div>
-        <div className={styles.details}>{durationText}</div>
+        <div className={styles.spectrumIcon}>
+          <Clock aria-hidden="true" />
+        </div>
+        <div className={styles.details}>
+          {formatMessage({ id: "alm.overview.duration" }, { 0: durationText })}
+        </div>
       </div>
+
+      {isVC && (
+        <div className={styles.metadata}>
+          <div className={styles.spectrumIcon}>
+            <Link aria-hidden="true" />
+          </div>
+          <a
+            className={styles.details}
+            href={resource.location}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {formatMessage({
+              id: "alm.overview.vc.url",
+              default: "Virtual Classroom URL",
+            })}
+          </a>
+        </div>
+      )}
     </div>
   );
 };

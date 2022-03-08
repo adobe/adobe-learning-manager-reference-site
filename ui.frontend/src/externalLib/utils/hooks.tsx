@@ -4,6 +4,7 @@ import { CardBgStyle, InstanceBadge, Skill } from "../models/common";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
+  PrimeLearningObjectResource,
   PrimeLocalizationMetadata,
 } from "../models/PrimeModels";
 import { getALMConfig } from "./global";
@@ -125,7 +126,15 @@ const filterTrainingInstance = (
     ? trainingInstances[0]
     : ({} as PrimeLearningObjectInstance);
 };
-
+const filterLoReourcesBasedOnResourceType = (
+  trainingInstance: PrimeLearningObjectInstance,
+  loResourceType: string
+): PrimeLearningObjectResource[] => {
+  return trainingInstance.loResources.filter(
+    (loResource: PrimeLearningObjectResource) =>
+      loResource.loResourceType === loResourceType
+  );
+};
 export {
   useCardIcon,
   useCardBackgroundStyle,
@@ -133,4 +142,5 @@ export {
   useBadge,
   useLocalizedMetaData,
   filterTrainingInstance,
+  filterLoReourcesBasedOnResourceType,
 };

@@ -104,6 +104,12 @@
   color: var(--prime-icon-color);
 }
 
+/* override css for LP */
+/* .isPartOfLP.headerContainer {
+  border: 1px solid var(--prime-color-nc13);
+  border-bottom: none;
+} */
+
 @media screen and (max-width: 414px) {
   .title {
     display: -webkit-box;

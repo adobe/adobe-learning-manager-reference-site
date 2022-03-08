@@ -70,5 +70,8 @@
   "alm.overview.enrollment.count": "{0} enrollment(s)",
   "alm.overview.enrollment.deadline": "Enrollment Deadline",
   "alm.overview.completion.deadline": "Completion Deadline",
-  "alm.jobaid": "Job Aid"
+  "alm.jobaid": "Job Aid",
+  "alm.overview.vc.url": "Virtual Classroom URL",
+  "alm.overview.seat.limit": "{0} Seat Limit",
+  "alm.overview.duration": "{0} Duration"
 }

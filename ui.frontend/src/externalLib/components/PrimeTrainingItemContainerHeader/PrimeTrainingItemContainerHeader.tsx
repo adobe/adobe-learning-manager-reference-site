@@ -16,6 +16,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
   training: PrimeLearningObject;
   trainingInstance: PrimeLearningObjectInstance;
   launchPlayerHandler: Function;
+  isPartOfLP?: boolean;
 }> = (props) => {
   const {
     name,
@@ -25,6 +26,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
     training,
     trainingInstance,
     launchPlayerHandler,
+    isPartOfLP = false,
   } = props;
   //const { formatMessage } = useIntl();
 
@@ -58,7 +60,12 @@ const PrimeTrainingItemContainerHeader: React.FC<{
     }
   }
   return (
-    <div className={styles.headerContainer} onClick={onClickHandler}>
+    <div
+      className={`${styles.headerContainer} ${
+        isPartOfLP ? styles.isPartOfLP : ""
+      }`}
+      onClick={onClickHandler}
+    >
       {/* <h2 className={styles.courseInfoHeader}>{name} </h2> */}
       <div className={styles.metadata}>
         <div className={styles.metadataContents}>

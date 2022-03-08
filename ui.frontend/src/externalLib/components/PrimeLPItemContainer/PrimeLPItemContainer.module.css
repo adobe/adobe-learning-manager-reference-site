@@ -3,7 +3,7 @@
 .container {
   max-width: 100%;
   /* margin: 0 auto; */
-  border: 1px solid #c9c9c9;
+  border: 1px solid var(--prime-color-nc13);
   clear: both;
   text-align: left !important;
   list-style: none;
@@ -77,6 +77,17 @@
 .resourceAndDuration {
   display: flex;
   justify-content: space-between;
+}
+/* Overrride css for LP */
+
+.isPartOfLP .lpListItemContainer {
+  padding: 10px 10px 0 10px;
+  border: 1px solid var(--prime-color-nc13);
+  border-radius: 5px;
+  margin: 10px 10px 10px 0;
+}
+.isPartOfLP .headerContainer {
+  border: 1px solid var(--prime-color-nc13);
 }
 
 @media screen and (max-width: 414px) {

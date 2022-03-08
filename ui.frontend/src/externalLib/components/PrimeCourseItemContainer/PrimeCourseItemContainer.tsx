@@ -4,24 +4,24 @@ import ChevronUp from "@spectrum-icons/workflow/ChevronUp";
 import React, { useState } from "react";
 import { PrimeCourseOverview } from "..";
 import { useTrainingPage } from "../../hooks/catalog/useTrainingPage";
+import { filterLoReourcesBasedOnResourceType } from "../../utils/hooks";
 import { PrimeTrainingItemContainerHeader } from "../PrimeTrainingItemContainerHeader";
 import styles from "./PrimeCourseItemContainer.module.css";
 const PrimeCourseItemContainer: React.FC<{
   trainingId: string;
   launchPlayerHandler: Function;
+  isPartOfLP?: boolean;
 }> = (props) => {
-  const { trainingId, launchPlayerHandler } = props;
+  const { trainingId, launchPlayerHandler, isPartOfLP = false } = props;
   const {
     name,
     description,
     overview,
     richTextOverview,
-    skills,
     training,
     trainingInstance,
     isLoading,
     cardBgStyle,
-    instanceBadge,
   } = useTrainingPage(trainingId);
 
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -32,6 +32,11 @@ const PrimeCourseItemContainer: React.FC<{
   const clickHandler = () => {
     setIsCollapsed((prevState) => !prevState);
   };
+
+  const noOfModules = filterLoReourcesBasedOnResourceType(
+    trainingInstance,
+    "Content"
+  ).length;
 
   return (
     <li className={styles.container}>
@@ -44,27 +49,27 @@ const PrimeCourseItemContainer: React.FC<{
         training={training}
         trainingInstance={trainingInstance}
         launchPlayerHandler={launchPlayerHandler}
+        isPartOfLP={isPartOfLP}
       />
+      {!isCollapsed && (
+        <PrimeCourseOverview
+          training={training}
+          trainingInstance={trainingInstance}
+          showDuration={false}
+          showNotes={false}
+          launchPlayerHandler={launchPlayerHandler}
+          isPartOfLP={isPartOfLP}
+        />
+      )}
 
       <div className={styles.collapsibleContainer}>
         <Button variant="overBackground" isQuiet onPress={clickHandler}>
           {isCollapsed ? <ChevronDown /> : <ChevronUp />}
         </Button>
+        {noOfModules > 0 && (
+          <span className={styles.count}>{noOfModules} module(s)</span>
+        )}
       </div>
-      {!isCollapsed && (
-        <PrimeCourseOverview
-          description={description}
-          overview={overview}
-          richTextOverview={richTextOverview}
-          skills={skills}
-          training={training}
-          trainingInstance={trainingInstance}
-          instanceBadge={instanceBadge}
-          showDuration={false}
-          showNotes={false}
-          launchPlayerHandler={launchPlayerHandler}
-        />
-      )}
     </li>
   );
 };
