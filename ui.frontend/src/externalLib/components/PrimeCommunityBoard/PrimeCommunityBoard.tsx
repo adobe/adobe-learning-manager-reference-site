@@ -14,6 +14,12 @@ import {
 import { PrimeCommunityBoardOptions } from "../PrimeCommunityBoardOptions";
 import { PrimeAlertDialog } from "../PrimeAlertDialog";
 import { formatDate } from "../../utils/dateTime";
+// import GlobeOutline from "@spectrum-icons/workflow/GlobeOutline"
+// import FileTxt from "@spectrum-icons/workflow/FileTxt"
+// import UserGroup from "@spectrum-icons/workflow/UserGroup"
+// import Visibility from "@spectrum-icons/workflow/Visibility"
+// import Clock from "@spectrum-icons/workflow/Clock"
+// import Info from "@spectrum-icons/workflow/Info"
 
 import styles from "./PrimeCommunityBoard.module.css";
 import { useState } from "react";

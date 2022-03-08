@@ -8,6 +8,10 @@
     border: none;
 }
 
+.primeHiddenDialogLaunchButton {
+    display: none;
+}
+
 .primeDialogLaunchButton:hover {
     cursor: pointer;
     background: #4283d0;

@@ -1,4 +1,6 @@
-// import Evaporate from "evaporate";
+import Evaporate from "evaporate";
+import sparkMD5 from 'spark-md5';
+import sha256 from 'js-sha256';
 // import { State } from "../store/state";
 // import { Screen } from "../store/state";
 import store from "../../store/APIStore";
@@ -9,13 +11,13 @@ import {
   SET_UPLOAD_NAME,
   SET_UPLOAD_PROGRESS,
 } from "../store/actions/fileUpload/actionTypes";
-import { getALMConfig } from "../utils/global";
+import { getALMConfig, getALMObject } from "../utils/global";
 import { RestAdapter } from "./restAdapter";
 
-declare let AWS: any;
+// declare let AWS: any;
 let evaporateInstance: any;
 // // eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare let Evaporate: any;
+// declare let Evaporate: any;
 // var AWS = require("aws-sdk/dist/aws-sdk-react-native");
 
 let awsCredJsonObj: PrimeUploadInfo = {
@@ -61,7 +63,7 @@ export async function getUploadInfo() {
 function getEvaporateConfig(): any {
   const state = store.getState();
   const baseApiUrl = getALMConfig().primeApiURL;
-  const accessTokenString = "oauth " + getALMConfig().accessToken;
+  const accessTokenString = "oauth " + getALMObject().getAccessToken();
 
   return {
     aws_key: awsCredJsonObj.awsKey, // REQUIRED
@@ -79,10 +81,13 @@ function getEvaporateConfig(): any {
     aws_url: awsCredJsonObj.awsUrl,
 
     cryptoMd5Method: function (data: any) {
-      return AWS.util.crypto.md5(data, "base64");
+      return btoa(sparkMD5.ArrayBuffer.hash(data, true))
+
+      // return AWS.util.crypto.md5(data, "base64");
     },
     cryptoHexEncodedHash256: function (data: any) {
-      return AWS.util.crypto.sha256(data, "hex");
+      return sha256;
+      // return AWS.util.crypto.sha256(data, "hex");
     },
     logging: false,
   };

@@ -1,12 +1,14 @@
-import { getALMConfig } from "../../utils/global";
+import { getALMConfig, getALMObject } from "../../utils/global";
 import styles from "./PrimeCommunityObjectBody.module.css";
 
 const PrimeCommunityObjectBody = (props: any) => {
-  const primeConfig = getALMConfig();
   const object = props.object;
   const entityType = props.type;
-  const iframeSrc = `${primeConfig.almBaseURL}/app/player?entity_type=${entityType}&entity_id=${object.id}&access_token=${primeConfig.accessToken}&player_type=inline`;
-
+  const primeConfig = getALMConfig();
+  const hostName = primeConfig.almBaseURL;
+  //to-do set below host url
+  const iframeSrc = `https://captivateprimedev.adobe.com/app/player?entity_type=${entityType}&entity_id=${object.id}&access_token=${getALMObject().getAccessToken()}&player_type=inline`;
+  console.log(iframeSrc);
   return (
     <>
       <p
@@ -33,8 +35,8 @@ const PrimeCommunityObjectBody = (props: any) => {
         )}
 
         {object.resource && object.resource.contentType === "IMAGE" && (
-          <div className="image-box">
-            <div className="image-container">
+          <div className={styles.primeCommunityImageBox}>
+            <div className={styles.primeCommunityImageContainer}>
               <img
                 src={object.resource.data!}
                 loading="lazy"

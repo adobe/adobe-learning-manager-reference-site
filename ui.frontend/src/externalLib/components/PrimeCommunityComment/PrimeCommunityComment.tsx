@@ -27,6 +27,7 @@ const PrimeCommunityComment  = (props: any) => {
   const hideRepliesLabel = formatMessage({id: "prime.community.comment.hideReplies", defaultMessage: "Hide Replies",});
   const [buttonLabel, setButtonLabel] = useState(showRepliesLabel);
   const [replyCount, setReplyCount] = useState(comment.replyCount);
+  const [ showEditCommentView, setShowEditCommentView ] = useState(false);
 
   const viewButtonClickHandler = () => {
     if(!showReplies) {
@@ -93,16 +94,26 @@ const PrimeCommunityComment  = (props: any) => {
     setShowReplyInput(true);
   }
 
-  const saveHandler = async (value: any) => {
+  const saveReplyHandler = async (value: any) => {
     try {
       await addReply(comment.id,value);
       setReplyCount(replyCount + 1);
-      if(showReplies) {
-        fetchReplies(comment.id);
-      }
+      fetchReplies(comment.id);
+      showReplySection();
     } catch(exception) {
       console.log("not updating reply count");
     }
+  }
+
+  const updateComment = (value: any) => {
+    if(typeof props.updateComment === "function") {
+      props.updateComment(comment.id, value)
+      setShowEditCommentView(false);  
+    }
+  }
+
+  const updateCommentHandler = () => {
+    setShowEditCommentView(true);
   }
 
   const deleteCommentHandler = () => {
@@ -112,40 +123,51 @@ const PrimeCommunityComment  = (props: any) => {
   }
 
   const deleteReplyHandler = () => {
-    console.log("ccfc");
     setReplyCount(replyCount - 1);      
   }
 
   return (
     <>
-    <div className={styles.primeCommentWrapper}>
-      <PrimeCommunityObjectHeader object={comment} type="comment" deleteCommentHandler={deleteCommentHandler}></PrimeCommunityObjectHeader>
-      <PrimeCommunityObjectBody object={comment} type="comment"></PrimeCommunityObjectBody>
-      <PrimeCommunityObjectActions
-        type="comment"
-        actionLabel={formatMessage({id: "prime.community.reply.label", defaultMessage: "Reply",})} 
-        actionClickHandler={replyClickHandler}
-        buttonLabel={buttonLabel} 
-        buttonCount={replyCount} 
-        viewButtonClickHandler={viewButtonClickHandler}
-        myUpVoteStatus={myUpVoteStatus}
-        upVoteCount={upVoteCount}
-        upVoteButtonClickHandler={upVoteButtonClickHandler}
-        myDownVoteStatus={myDownVoteStatus}
-        downVoteCount={downVoteCount}
-        downVoteButtonClickHandler={downVoteButtonClickHandler} 
-      ></PrimeCommunityObjectActions>
-      {
-        showReplyInput &&
-          <PrimeCommunityObjectInput 
-            ref={ref}
-            object={comment} 
-            inputPlaceholder={formatMessage({id: "prime.community.comment.replyHere", defaultMessage: "Reply here"})}
-            saveHandler={(value: any) => saveHandler(value)}
-          ></PrimeCommunityObjectInput>
-      }
-      {showReplies && <PrimeCommunityReplies object={comment} type="reply" deleteReplyHandler={deleteReplyHandler}></PrimeCommunityReplies>}
-    </div>
+    {!showEditCommentView &&
+      <div className={styles.primeCommentWrapper}>
+        <PrimeCommunityObjectHeader object={comment} type="comment" updateObjectHandler={updateCommentHandler} deleteObjectHandler={deleteCommentHandler}></PrimeCommunityObjectHeader>
+        <PrimeCommunityObjectBody object={comment} type="comment"></PrimeCommunityObjectBody>
+        <PrimeCommunityObjectActions
+          type="comment"
+          actionLabel={formatMessage({id: "prime.community.reply.label", defaultMessage: "Reply",})} 
+          actionClickHandler={replyClickHandler}
+          buttonLabel={buttonLabel} 
+          buttonCount={replyCount} 
+          viewButtonClickHandler={viewButtonClickHandler}
+          myUpVoteStatus={myUpVoteStatus}
+          upVoteCount={upVoteCount}
+          upVoteButtonClickHandler={upVoteButtonClickHandler}
+          myDownVoteStatus={myDownVoteStatus}
+          downVoteCount={downVoteCount}
+          downVoteButtonClickHandler={downVoteButtonClickHandler} 
+        ></PrimeCommunityObjectActions>
+        {
+          showReplyInput &&
+            <PrimeCommunityObjectInput 
+              ref={ref}
+              object={comment} 
+              inputPlaceholder={formatMessage({id: "prime.community.comment.replyHere", defaultMessage: "Reply here"})}
+              primaryActionHandler={(value: any) => saveReplyHandler(value)}
+            ></PrimeCommunityObjectInput>
+        }
+        {showReplies && <PrimeCommunityReplies object={comment} type="reply" deleteReplyHandler={deleteReplyHandler}></PrimeCommunityReplies>}
+      </div>
+    }
+    {showEditCommentView &&
+      <PrimeCommunityObjectInput 
+        ref={ref}
+        object={comment}
+        inputPlaceholder={formatMessage({id: "prime.community.comment.commentHere", defaultMessage: "Comment here"})}
+        defaultValue={comment.richText}
+        primaryActionHandler={(value: any) => updateComment(value)}
+        secondaryActionHandler={() => setShowEditCommentView(false)}
+      ></PrimeCommunityObjectInput>
+    }
     </>
   );
 };

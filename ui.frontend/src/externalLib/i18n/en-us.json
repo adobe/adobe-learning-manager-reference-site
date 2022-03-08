@@ -70,5 +70,13 @@
   "alm.overview.enrollment.count": "{0} enrollment(s)",
   "alm.overview.enrollment.deadline": "Enrollment Deadline",
   "alm.overview.completion.deadline": "Completion Deadline",
-  "alm.jobaid": "Job Aid"
+  "alm.jobaid": "Job Aid",
+  "prime.community.search.noResults": "No Results found",
+  "prime.community.search.placeholder": "Search within community",
+  "prime.community.searchInBoard.placeholder": "Search within board",
+  "prime.community.search.no.label": "No",
+  "prime.community.search.resultFound": "result(s) found",
+  "prime.community.search.clear.label": "Clear",
+  "prime.community.postHere.label":"Write or paste something here...",
+  "prime.community.back.label": "Back"
 }
