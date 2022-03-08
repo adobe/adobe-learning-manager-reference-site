@@ -14,6 +14,18 @@
 
   const ALM = window.ALM || {};
 
+  const LEARNER_PREFIX =
+    "/app/learner?accountId=${accountId}&i_qp_user_id=${userId}";
+  const ALM_LINKS_MAP = new Map()
+    .set("coursePageLink", ["course", new RegExp(/course\/(\d+)\/overview/i), "overview"])
+    .set("certPageLink", ["certification", new RegExp(/certification\/(\d+)\/overview/i), "overview"])
+    .set("lpPageLink", ["learningProgram", new RegExp(/learningProgram\/(\d+)\/overview/i), "overview"])
+    .set("ciPageLink", ["course", new RegExp(/courseInstance\/(\d+)/i), "instance"])
+    .set("lpiPageLink", ["course", new RegExp(/lpInstance\/(\d+)/i), "instance"])
+    .set("catalogPageLink", LEARNER_PREFIX + "#/catalog/index?selectedSortOption=-date")
+    .set("catalogOverviewPageLink", LEARNER_PREFIX + "#/catalog/index?selectedSortOption=-date&selectedListableCatalogIds=${catalogId}")
+    .set("myLearningPageLink", LEARNER_PREFIX + "#/catalog/index?myLearning=true&selectedSortOption=dueDate");
+
   var WIDET_CONFIG_DATA = "data-cp-widget-configs",
     WIDGET_REF_DATA = "cp-widget-ref",
     DATA_RUN_MODE = "cp-runmode",
@@ -57,10 +69,25 @@
           initialHeight: 200,
           autoFitWidth: false,
           autoFitHeight: true,
+          sendPrimeLinksThroughCallback: true,
+          callbackFn: handleEvents,
         });
       });
     });
   });
+
+  function handleEvents(e) {
+    if (e.changeType === "primelink") {
+      var almLinksMapObj = ALM_LINKS_MAP.get(e.path);
+      var loType = almLinksMapObj[0];
+      var loId = e.route.match(almLinksMapObj[1])[1];
+
+      if ("overview" === almLinksMapObj[2])
+      {
+        window.ALM.navigateToTrainingOverviewPage(loType + ":" + loId);
+      }
+    }
+  }
 
   function loadWidgetCommunicatorScript() {
     if (!scriptLoaded) {
