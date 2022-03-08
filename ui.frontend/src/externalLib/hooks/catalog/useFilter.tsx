@@ -137,8 +137,12 @@ const filtersDefaultState: Filter1State = {
 };
 
 const updateFilterList = (list: any, filtersFromUrl: any, type: string) => {
+  let filtersFromUrlTypeSplitArray = filtersFromUrl[type]
+    ? filtersFromUrl[type].split(",")
+    : [];
+
   list?.forEach((item: any) => {
-    if (filtersFromUrl[type]?.includes(item.value)) {
+    if (filtersFromUrlTypeSplitArray?.includes(item.value)) {
       item.checked = true;
     }
   });
