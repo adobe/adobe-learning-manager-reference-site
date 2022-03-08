@@ -17,13 +17,13 @@
   const LEARNER_PREFIX =
     "/app/learner?accountId=${accountId}&i_qp_user_id=${userId}";
   const ALM_LINKS_MAP = new Map()
-    .set("coursePageLink", ["course", new RegExp(/course\/(\d+)\/overview/i), "overview"])
-    .set("certPageLink", ["certification", new RegExp(/certification\/(\d+)\/overview/i), "overview"])
-    .set("lpPageLink", ["learningProgram", new RegExp(/learningProgram\/(\d+)\/overview/i), "overview"])
+    .set("coursePageLink", ["loOverview", "course", new RegExp(/course\/(\d+)\/overview/i)])
+    .set("certPageLink", ["loOverview", "certification", new RegExp(/certification\/(\d+)\/overview/i)])
+    .set("lpPageLink", ["loOverview", "learningProgram", new RegExp(/learningProgram\/(\d+)\/overview/i)])
+    .set("catalogOverviewPageLink", ["catalogOverview", "catalog", new RegExp(/selectedListableCatalogIds=(\d+)/i)])
     .set("ciPageLink", ["course", new RegExp(/courseInstance\/(\d+)/i), "instance"])
     .set("lpiPageLink", ["course", new RegExp(/lpInstance\/(\d+)/i), "instance"])
     .set("catalogPageLink", LEARNER_PREFIX + "#/catalog/index?selectedSortOption=-date")
-    .set("catalogOverviewPageLink", LEARNER_PREFIX + "#/catalog/index?selectedSortOption=-date&selectedListableCatalogIds=${catalogId}")
     .set("myLearningPageLink", LEARNER_PREFIX + "#/catalog/index?myLearning=true&selectedSortOption=dueDate");
 
   var WIDET_CONFIG_DATA = "data-cp-widget-configs",
@@ -79,12 +79,18 @@
   function handleEvents(e) {
     if (e.changeType === "primelink") {
       var almLinksMapObj = ALM_LINKS_MAP.get(e.path);
-      var loType = almLinksMapObj[0];
-      var loId = e.route.match(almLinksMapObj[1])[1];
+      var pageType = almLinksMapObj[0];
 
-      if ("overview" === almLinksMapObj[2])
+      if (pageType === "loOverview")
       {
+        var loType = almLinksMapObj[1];
+        var loId = e.route.match(almLinksMapObj[2])[1];
         window.ALM.navigateToTrainingOverviewPage(loType + ":" + loId);
+      }
+      else if (pageType === "catalogOverview")
+      {
+        var catalogIds = e.route.match(almLinksMapObj[2])[1];
+        window.ALM.navigateToCatalogPage(catalogIds);
       }
     }
   }

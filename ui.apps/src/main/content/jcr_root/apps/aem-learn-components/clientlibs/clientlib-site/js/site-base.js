@@ -45,6 +45,13 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     window.location = getUrl(instancePath, { trainingId: trainingId });
   };
 
+  const navigateToCatalogPage = (catalogIds) => {
+    let { catalogPath } = getALMConfig();
+    let catalogUrl = new URL(catalogPath);
+    catalogUrl.searchParams.append("catalogs", catalogIds);
+    window.location = catalogUrl.href;
+  };
+
   const getUrl = (urlStr, params) => {
     for (const param in params) {
       urlStr = `${urlStr}/${param}/${params[param]}`;
@@ -69,4 +76,5 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.getALMConfig = getALMConfig;
   window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
   window.ALM.navigateToInstancePage = navigateToInstancePage;
+  window.ALM.navigateToCatalogPage = navigateToCatalogPage;
 })(window, document, Granite, jQuery);
