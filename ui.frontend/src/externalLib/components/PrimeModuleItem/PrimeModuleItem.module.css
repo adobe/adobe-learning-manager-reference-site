@@ -50,7 +50,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color:var(--prime-color-nc3)
+  color: var(--prime-color-nc3);
+  font-size: var(--prime-font-size-13);
+}
+.details span {
+  display: block;
 }
 a.details {
   color: var(--prime-color-primary);
@@ -77,6 +81,8 @@ a.details {
 }
 .spectrumIcon svg {
   fill: var(--prime-icon-color);
+  width: 24px;
+  height: 24px;
 }
 
 .wrapperContainer {

@@ -38,6 +38,7 @@
   }
   .contentContainer {
     flex-direction: column;
+    width: 100%;
   }
   .trainingOverviewContainer {
     border: none;

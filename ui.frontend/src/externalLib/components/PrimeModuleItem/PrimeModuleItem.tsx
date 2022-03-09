@@ -3,8 +3,11 @@ import {
   PrimeLearningObjectResource,
   PrimeResource,
 } from "../../models/PrimeModels";
-import { convertSecondsToTimeText } from "../../utils/dateTime";
-import { getALMConfig } from "../../utils/global";
+import {
+  convertSecondsToTimeText,
+  dateBasedOnLocale,
+} from "../../utils/dateTime";
+import { getALMConfig, getALMObject } from "../../utils/global";
 import {
   ACTIVITY_SVG,
   AUDIO_SVG,
@@ -201,6 +204,8 @@ const getSessionsTemplate = (
   const instructorNames = resource.instructorNames?.length
     ? resource.instructorNames.join(", ")
     : "Not Available";
+
+  const timeInfo = getTimeInfo(resource, formatMessage);
   return (
     <div className={styles.metaDataContainer}>
       <div className={styles.metadata}>
@@ -208,7 +213,8 @@ const getSessionsTemplate = (
           <Calendar aria-hidden="true" />
         </div>
         <div className={styles.details}>
-          {resource.dateStart} - {resource.completionDeadline}
+          <span>{timeInfo.dateText}</span>
+          <span>{timeInfo.timeText}</span>
         </div>
       </div>
 
@@ -270,6 +276,38 @@ const getSessionsTemplate = (
       )}
     </div>
   );
+};
+
+const getTimeInfo = (
+  resource: PrimeResource,
+  formatMessage: Function
+): { dateText: string; timeText: string } => {
+  const { dateStart, completionDeadline } = resource;
+  const { locale } = getALMObject().getALMConfig().locale;
+  let startDateObj = new Date(dateStart);
+  let completionDateObj = new Date(completionDeadline);
+  let dateText = "",
+    timeText = "";
+  if (
+    startDateObj.toLocaleDateString() === completionDateObj.toLocaleDateString()
+  ) {
+    dateText = dateBasedOnLocale(startDateObj.toLocaleDateString(), locale);
+  } else {
+    let startDate = dateBasedOnLocale(
+      startDateObj.toLocaleDateString(),
+      locale
+    );
+    let endDate = dateBasedOnLocale(
+      completionDateObj.toLocaleDateString(),
+      locale
+    );
+    dateText = formatMessage(
+      { id: "alm.overview.vc.date" },
+      { 0: startDate, 1: endDate }
+    );
+  }
+  timeText = `(${startDateObj.toLocaleTimeString()} - ${completionDateObj.toLocaleTimeString()})`;
+  return { dateText, timeText };
 };
 
 export default PrimeModuleItem;
