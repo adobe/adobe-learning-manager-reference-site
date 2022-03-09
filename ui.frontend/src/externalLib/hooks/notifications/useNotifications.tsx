@@ -163,18 +163,15 @@ export const useNotifications = () => {
     let trainingId = notif.modelIds[0];
     let isJobAid = false; 
     if (notif.modelTypes[0] == "learningObject") {
-      let isJobAid = false;
       notif.modelIds!.forEach((item: string) => {
         if (item.toLowerCase().includes("jobaid")) {
           LaunchPlayer({ trainingId: trainingId});
-          isJobAid = true;
-          return; 
+          isJobAid = true; 
         }
     });
     }
-
-    if (!isJobAid)
-      alm.navigateToTrainingOverviewPage(trainingId);
+    if (isJobAid) return;
+    alm.navigateToTrainingOverviewPage(trainingId);
     return;
   }, []);
 

@@ -9,7 +9,7 @@ import styles from "./PrimeNotificationContainer.module.css";
 import Bell from "@spectrum-icons/workflow/Bell";
 
 const PrimeNotificationContainer = () => {
-  const wrapperRef = useRef<HTMLInputElement>(null);
+  const wrapperRef = useRef<any>(null);
   const { formatMessage } = useIntl();
   const {
     notifications,
@@ -59,8 +59,7 @@ const PrimeNotificationContainer = () => {
 
 
   return (
-    <div className={styles.notificationDropdown}>
-      <div ref={wrapperRef}>
+    <div ref={wrapperRef} className={styles.notificationDropdown}>
       <button
         type="button"
         className={styles.notificationBellIcon}
@@ -86,7 +85,6 @@ const PrimeNotificationContainer = () => {
           redirectOverviewPage={redirectOverviewPage}
         />
       )}
-      </div>
     </div>
   );
 };
