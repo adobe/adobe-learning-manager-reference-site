@@ -2,11 +2,13 @@
 
 .contentContainer {
   display: flex;
+  width: 80%;
+  margin: 0 auto;
 }
 
 .left {
   width: calc(100% - 256px);
-  padding-right: 120px;
+  padding-right: 80px;
 }
 
 .right {
@@ -36,6 +38,7 @@
   }
   .contentContainer {
     flex-direction: column;
+    width: 100%;
   }
   .trainingOverviewContainer {
     border: none;

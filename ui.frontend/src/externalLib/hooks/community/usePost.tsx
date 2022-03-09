@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { getALMConfig } from "../../utils/global";
 import { RestAdapter } from "../../utils/restAdapter";
+import { getALMConfig } from "../../utils/global";
 
 export const usePost = () => {
   const dispatch = useDispatch();
@@ -42,10 +42,46 @@ export const usePost = () => {
     [dispatch]
   );
 
-  const addComment = useCallback(
-    async (postId: any, input: any) => {
-      // try {
-      const baseApiUrl = getALMConfig().primeApiURL;
+  //to-do, correct below after bug fix
+  const updatePost = useCallback(async (postId: any, input: any, postingType: any, resource: any) => {
+      const baseApiUrl =  getALMConfig().primeApiURL;
+      // resourceValue;
+      const resourceField = resource.id ? "resourceId" : "resource";
+      const resourceValue = resource.id ? resource.id : resource.url
+      // if (resource.url) {
+      //   resourceField = "resource";
+      //   resourceValue = {
+      //     "contentType":"FILE",
+      //     "data":resource.url
+      //   };
+      // } else if (resource.id) {
+      //   resourceField = "resourceId"
+      //   resourceValue = resource.id
+      // }
+      const postBody = {
+        "data":{
+          "type":"post",
+          "id": postId,
+          "attributes":{
+            "postingType":postingType,
+            resourceField:resourceValue,
+            "state":"ACTIVE",
+            "text":input,
+          }
+        }
+      }
+      console.log(postBody);
+      const headers = { "content-type": "application/json" };
+      const response = await RestAdapter.ajax({
+          url: `${baseApiUrl}/posts/${postId}`,
+          method:"PATCH",
+          body: JSON.stringify(postBody),
+          headers: headers
+      });
+  }, [dispatch]);
+
+  const addComment = useCallback(async (postId: any, input: any) => {
+      const baseApiUrl =  getALMConfig().primeApiURL;
       const postBody = {
         data: {
           type: "comment",
@@ -97,6 +133,7 @@ export const usePost = () => {
 
   return {
     addPost,
+    updatePost,
     addComment,
     votePost,
     deletePostVote,

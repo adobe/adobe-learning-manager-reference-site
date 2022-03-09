@@ -28,8 +28,8 @@ const PrimeCommunityBoardFilters  = (props: any) => {
 
     const skillClickHandler = (option: any) => {
         setSelectedSkillFilter(option);
-        if (typeof props.sortFilterChangeHandler === 'function') {
-            props.skillFilterChangeHandler(skillFilters[option]);
+        if (typeof props.skillFilterChangeHandler === 'function') {
+            props.skillFilterChangeHandler(option);
         }
     }
 
@@ -44,7 +44,7 @@ const PrimeCommunityBoardFilters  = (props: any) => {
         <>
         <div className={styles.primeBoardOptionsWrapper}>
             <div ref={ref} className={styles.primeBoardFilters}>
-                <PrimeDropdown label={skillFilterLabel} optionList={skillFilters} selectedOption={selectedSkillFilter} optionClickHandler={skillClickHandler}></PrimeDropdown>
+                <PrimeDropdown label={skillFilterLabel} optionList={Object.keys(skillFilters)} selectedOption={selectedSkillFilter} optionClickHandler={skillClickHandler}></PrimeDropdown>
                 <PrimeDropdown label={sortFilterLabel} optionList={Object.keys(sortFilters)} selectedOption={selectedSortFilter} optionClickHandler={sortClickHandler}></PrimeDropdown>
             </div>
         </div>

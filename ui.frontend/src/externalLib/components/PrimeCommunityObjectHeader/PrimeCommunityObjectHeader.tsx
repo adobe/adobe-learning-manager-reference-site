@@ -7,6 +7,7 @@ import { useState } from "react";
 import { PrimeAlertDialog } from "../PrimeAlertDialog";
 import { useCommunityObjectOptions } from "../../hooks/community"
 import { PrimeCommunityObjectOptions } from "../PrimeCommunityObjectOptions";
+import { PrimeCommunityAddPostDialogTrigger } from "../PrimeCommunityAddPostDialogTrigger"
 import { useIntl } from "react-intl";
 
 const PrimeCommunityObjectHeader = (props: any) => {
@@ -24,6 +25,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
     reportReplyAbuse
     } = useCommunityObjectOptions();
   const [ primaryAction, setPrimaryAction ] = useState("");
+  const [ showUpdatePostModal, setShowUpdatePostModal] = useState(false);
 
   const optionsClickHandler = () => {
     toggleOptions();
@@ -110,8 +112,8 @@ const PrimeCommunityObjectHeader = (props: any) => {
 
   const deleteComment = async() => {
     await deleteCommentFromServer(object.id);
-    if(typeof props.deleteCommentHandler === 'function') {
-      props.deleteCommentHandler();
+    if(typeof props.deleteObjectHandler === 'function') {
+      props.deleteObjectHandler();
     }
   }
 
@@ -122,8 +124,8 @@ const PrimeCommunityObjectHeader = (props: any) => {
 
   const deleteReply = async() => {
     await deleteReplyFromServer(object.id);
-    if(typeof props.deleteReplyHandler === 'function') {
-      props.deleteReplyHandler();
+    if(typeof props.deleteObjectHandler === 'function') {
+      props.deleteObjectHandler();
     }
   }
 
@@ -140,6 +142,28 @@ const PrimeCommunityObjectHeader = (props: any) => {
     setShowConfirmation(false);
   }
 
+  const editHandler = () => {
+    switch(props.type) {
+      case "post":
+        setShowUpdatePostModal(true);
+        break;
+      default:
+        props.updateObjectHandler();
+        break;
+    }
+  }
+
+  const updateObjectHandler = (input: any, postingType: any, resource: any) => {
+    if(typeof props.updateObjectHandler === 'function') {
+        props.updateObjectHandler(input, postingType, resource);
+    }
+    setShowUpdatePostModal(false);
+  }
+
+  const closeDialogHandler = () => {
+    setShowUpdatePostModal(false);
+  }
+
   return (
       <>
       <div className={styles.primePostHeader}>
@@ -150,7 +174,14 @@ const PrimeCommunityObjectHeader = (props: any) => {
         <button className={styles.primeCommunityOptionsIcon} onClick={optionsClickHandler}>
           {SOCIAL_MORE_OPTIONS_SVG()}
           {showOptions &&
-            <PrimeCommunityObjectOptions object={object} type={props.type} toggleOptions={toggleOptions} deleteHandler={deleteHandler} reportAbuseHandler={reportAbuseHandler}></PrimeCommunityObjectOptions>
+            <PrimeCommunityObjectOptions 
+              object={object} 
+              type={props.type} 
+              toggleOptions={toggleOptions} 
+              editHandler={editHandler} 
+              deleteHandler={deleteHandler} 
+              reportAbuseHandler={reportAbuseHandler}>
+            </PrimeCommunityObjectOptions>
           }
         </button>
         {showConfirmation &&
@@ -171,7 +202,17 @@ const PrimeCommunityObjectHeader = (props: any) => {
             onSecondaryAction={hideConfirmationDialog}
             body={confirmationMessage}
           ></PrimeAlertDialog>
-    }
+        }
+        {showUpdatePostModal &&
+          <PrimeCommunityAddPostDialogTrigger
+          className={styles.primeAddPostButton}
+          openDialog={true}
+          post={object}
+          mode="update"
+          savePostHandler={(input: any, postingType: any, resource: any) => {updateObjectHandler(input, postingType, resource)}}
+          closeDialogHandler={closeDialogHandler}
+      ></PrimeCommunityAddPostDialogTrigger>
+        }
       </div>
       </>
   );

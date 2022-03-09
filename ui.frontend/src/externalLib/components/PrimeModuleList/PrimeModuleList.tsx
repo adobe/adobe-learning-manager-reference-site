@@ -7,15 +7,21 @@ const PrimeModuleList = (props: any) => {
   const loResources: PrimeLearningObjectResource[] = props.loResources || [];
   const launchPlayerHandler = props.launchPlayerHandler;
   const trainingId = props.trainingId;
+  const isPartOfLP = props.isPartOfLP;
 
   return (
-    <ul className={styles.moduleListContainer}>
+    <ul
+      className={`${styles.moduleListContainer} ${
+        isPartOfLP ? styles.isPartOfLP : ""
+      }`}
+    >
       {loResources.map((loResource) => (
         <PrimeModuleItem
           loResource={loResource}
           key={loResource.id}
           launchPlayerHandler={launchPlayerHandler}
           trainingId={trainingId}
+          isPartOfLP={isPartOfLP}
         ></PrimeModuleItem>
       ))}
     </ul>

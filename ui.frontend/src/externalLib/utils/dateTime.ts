@@ -92,6 +92,6 @@ export function dateBasedOnLocale(
 //inputFormat => 2022-02-13T14:00:39.000Z, outputFormat => Feb 13, 2022
 export function formatDate(dateString: any) {
   const options = { year: "numeric", month: "short", day: "2-digit" } as const;
-  const value =  (new Date(dateString).toLocaleDateString(undefined, options)).split(" ");
+  const value = (new Date(dateString).toLocaleDateString(undefined, options)).split(" ");
   return value[1] + " " + value[0] + ", " + value[2]; // MMM DD, YYYY
 }

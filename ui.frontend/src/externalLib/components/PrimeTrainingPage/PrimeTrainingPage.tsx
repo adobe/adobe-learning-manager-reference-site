@@ -66,14 +66,9 @@ const PrimeTrainingPage = () => {
           Duration : {convertSecondsToTimeText(training.duration)}
           {loType === COURSE && (
             <PrimeCourseOverview
-              name={name}
-              description={description}
-              overview={overview}
-              richTextOverview={richTextOverview}
-              skills={skills}
               training={training}
+              launchPlayerHandler={launchPlayerHandler}
               trainingInstance={trainingInstance}
-              instanceBadge={instanceBadge}
             />
           )}
           {loType === CERTIFICATION && (
@@ -108,6 +103,7 @@ const PrimeTrainingPage = () => {
                   <PrimeTrainingOverview
                     trainings={subLOs}
                     launchPlayerHandler={launchPlayerHandler}
+                    isPartOfLP={loType === LEARNING_PROGRAM}
                   />
                 </section>
               );

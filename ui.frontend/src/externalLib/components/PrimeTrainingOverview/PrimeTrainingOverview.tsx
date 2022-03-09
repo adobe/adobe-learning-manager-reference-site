@@ -5,20 +5,11 @@ import { PrimeLPItemContainer } from "../PrimeLPItemContainer";
 const COURSE = "course";
 const LEARNING_PROGRAM = "learningProgram";
 const PrimeTrainingOverview: React.FC<{
-  // name: string;
-  // description: string;
-  // overview: string;
-  // richTextOverview: string;
-  // skills: Skill[];
   trainings: PrimeLearningObject[];
   launchPlayerHandler: Function;
-  // trainingInstance: PrimeLearningObjectInstance;
-  // instanceBadge: InstanceBadge;
+  isPartOfLP?: boolean;
 }> = (props) => {
-  const { trainings, launchPlayerHandler } = props;
-
-  //const subLos = training.subLOs;
-
+  const { trainings, launchPlayerHandler, isPartOfLP = false } = props;
   return (
     <>
       {trainings.map((trainings) => {
@@ -29,6 +20,7 @@ const PrimeTrainingOverview: React.FC<{
               key={trainings.id}
               trainingId={trainings.id}
               launchPlayerHandler={launchPlayerHandler}
+              isPartOfLP={isPartOfLP}
             ></PrimeCourseItemContainer>
           );
         } else if (loType === LEARNING_PROGRAM) {
@@ -37,6 +29,7 @@ const PrimeTrainingOverview: React.FC<{
               key={trainings.id}
               trainingId={trainings.id}
               launchPlayerHandler={launchPlayerHandler}
+              isPartOfLP={isPartOfLP}
             ></PrimeLPItemContainer>
           );
         }

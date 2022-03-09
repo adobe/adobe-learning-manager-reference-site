@@ -9,22 +9,18 @@ import styles from "./PrimeLPItemContainer.module.css";
 const PrimeLPItemContainer: React.FC<{
   trainingId: string;
   launchPlayerHandler: Function;
+  isPartOfLP: boolean;
 }> = (props) => {
-  const { trainingId, launchPlayerHandler } = props;
+  const { trainingId, launchPlayerHandler, isPartOfLP = false } = props;
   const {
     name,
     description,
     overview,
     richTextOverview,
-    cardIconUrl,
-    color,
-    bannerUrl,
-    skills,
     training,
     trainingInstance,
     isLoading,
     cardBgStyle,
-    instanceBadge,
   } = useTrainingPage(trainingId);
 
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -37,7 +33,9 @@ const PrimeLPItemContainer: React.FC<{
   };
   const subLos = training.subLOs;
   return (
-    <li className={styles.container}>
+    <li
+      className={`${styles.container} ${isPartOfLP ? styles.isPartOfLP : ""}`}
+    >
       <PrimeTrainingItemContainerHeader
         name={name}
         description={description}
@@ -47,6 +45,7 @@ const PrimeLPItemContainer: React.FC<{
         overview={overview}
         richTextOverview={richTextOverview}
         launchPlayerHandler={launchPlayerHandler}
+        isPartOfLP={isPartOfLP}
       />
       <div className={styles.collapsibleContainer}>
         <Button variant="overBackground" isQuiet onPress={clickHandler}>
@@ -54,15 +53,17 @@ const PrimeLPItemContainer: React.FC<{
         </Button>
       </div>
       {!isCollapsed && (
-        <ul>
+        <ul className={styles.lpList}>
           {subLos.map((subLo) => {
             // There will only be list of courses inside nested LP
             return (
-              <PrimeCourseItemContainer
-                key={subLo.id}
-                trainingId={subLo.id}
-                launchPlayerHandler={launchPlayerHandler}
-              ></PrimeCourseItemContainer>
+              <div key={subLo.id} className={styles.lpListItemContainer}>
+                <PrimeCourseItemContainer
+                  trainingId={subLo.id}
+                  launchPlayerHandler={launchPlayerHandler}
+                  isPartOfLP={isPartOfLP}
+                ></PrimeCourseItemContainer>
+              </div>
             );
           })}
         </ul>

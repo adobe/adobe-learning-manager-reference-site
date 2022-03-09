@@ -1,5 +1,5 @@
 import { AnyAction } from "redux";
-import { GET_COMMENTS_FOR_POST, LOAD_BOARD_DETAILS, LOAD_COMMENTS, LOAD_REPLIES, PAGINATE_REPLIES, PAGINATE_SOCIAL_BOARD_POSTS, SOCIAL_CMT_DELETE_SUCCESS, SOCIAL_POST_DELETE_SUCCESS, SOCIAL_REPLY_DELETE_SUCCESS } from ".";
+import { LOAD_BOARD_DETAILS, LOAD_COMMENTS, LOAD_REPLIES, PAGINATE_REPLIES, PAGINATE_SOCIAL_BOARD_POSTS, SOCIAL_CMT_DELETE_SUCCESS, SOCIAL_POST_DELETE_SUCCESS, SOCIAL_REPLY_DELETE_SUCCESS } from ".";
 import { PrimeBoard, PrimePost, PrimeComment, PrimeReply } from "../../../models/PrimeModels";
 import {
     LOAD_SOCIAL_BOARD,
@@ -9,7 +9,9 @@ import {
     SOCIAL_REMOVE_BOARD_FAVORITE_SUCCESS,
     SOCIAL_BOARD_DELETE_SUCCESS,
     SET_SELECTED_POST,
-    PAGINATE_COMMENTS
+    PAGINATE_COMMENTS,
+    UPDATE_COMMENT,
+    UPDATE_REPLY
 } from "./actionTypes";
 
 export const loadBoard = (payload: any): AnyAction => ({
@@ -69,11 +71,6 @@ export const loadComments = (payload: any): AnyAction => ({
   payload,
 });
 
-export const loadCommentsForPost = (payload: any): AnyAction => ({
-  type: GET_COMMENTS_FOR_POST,
-  payload,
-});
-
 export const paginateComments = (payload: {
   comments: PrimeComment[];
   next: string;
@@ -107,5 +104,15 @@ export const deleteComment = (payload: any): AnyAction => ({
 
 export const deleteReply = (payload: any): AnyAction => ({
   type: SOCIAL_REPLY_DELETE_SUCCESS,
+  payload,
+});
+
+export const updateComment = (payload: any): AnyAction => ({
+  type: UPDATE_COMMENT,
+  payload,
+});
+
+export const updateReply = (payload: any): AnyAction => ({
+  type: UPDATE_REPLY,
   payload,
 });

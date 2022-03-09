@@ -8,10 +8,11 @@ import { getALMConfig } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
 
-export const usePosts = (boardId: any) => {
+export const usePosts = (boardId?: any) => {
   const DEFAULT_SORT_VALUE = "-dateCreated";
   const { items, next } = useSelector((state: State) => state.social.posts);
   const dispatch = useDispatch();
+
   //Fort any page load or filterchanges
   const fetchPosts = useCallback(
     async (boardId: any, sortFilter?: any) => {
@@ -66,7 +67,9 @@ export const usePosts = (boardId: any) => {
   );
 
   useEffect(() => {
-    fetchPosts(boardId);
+    if(boardId) {
+      fetchPosts(boardId);
+    }
   }, [fetchPosts]);
 
   // for pagination
@@ -81,12 +84,44 @@ export const usePosts = (boardId: any) => {
     );
   }, [dispatch, next]);
 
+  const searchPostResult = useCallback(async (queryStr: any, object: any, type: any) => {
+      const baseApiUrl =  getALMConfig().primeApiURL;
+      const params: QueryParams = {};
+      params["query"] = queryStr;
+      params["filter.state"]= "ACTIVE";
+      params["page[limit]"]= "10";
+      params["autoCompleteMode"]= "true";
+      params["filter.socialTypes"]= "post";
+      params["sort"]= "relevance";
+      console.log(type);
+      console.log(object);
+      if (type === "board") {
+        params["boardId"] = object;
+      } else if (type === "skill") {
+        params["filter.skills"] = "General";
+      }
+      params["include"] = "model";
+
+      const response = await RestAdapter.get({
+          url: `${baseApiUrl}/social/search`,
+          params: params,
+      });
+      const parsedResponse = JsonApiParse(response);
+      const data = {
+          items: parsedResponse.postList,
+          next: parsedResponse.links?.next || "",
+      };
+      dispatch(loadPosts(data));
+      return parsedResponse.postList;
+  }, [dispatch]);
+
   return {
     // item,
-    items,
+    posts:items,
     loadMorePost,
     fetchPosts,
     votePost,
+    searchPostResult
     // fetchBoard
   };
 };
