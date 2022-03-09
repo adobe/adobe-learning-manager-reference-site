@@ -5,7 +5,7 @@ import { useLoadMore } from "../../hooks/loadMore";
 import styles from "./PrimeNotificationList.module.css";
 
 const PrimeNotificationsList = (props: any) => {
-    const { notifications, loadMoreNotifications , unreadCount, redirectLoPage} = props;
+    const { notifications, loadMoreNotifications , unreadCount, redirectOverviewPage} = props;
     const elementRef = useRef(null);
     useLoadMore({
       items: notifications,
@@ -29,7 +29,7 @@ const PrimeNotificationsList = (props: any) => {
             <PrimeNotificationItem
               notification={entry}
               key={entry.id}
-              redirectLoPage={redirectLoPage}
+              redirectOverviewPage={redirectOverviewPage}
             ></PrimeNotificationItem>
           ))}
         </ul>

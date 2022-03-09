@@ -8,9 +8,10 @@ import {
   paginateNotifications,
 } from "../../store/actions/notification/action";
 import { State } from "../../store/state";
-import { getALMAttribute, getALMObject } from "../../utils/global";
+import { getALMAttribute, getALMObject , getALMConfig} from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
+import { LaunchPlayer } from "../../utils/playback-utils";
 
 export const useNotifications = () => {
   const { notifications, next } = useSelector(
@@ -19,7 +20,7 @@ export const useNotifications = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
   const dispatch = useDispatch();
-  const config = getALMAttribute("config");
+  const config = getALMConfig();
   const { user } = useUserContext();
   const pageLimit = 6;
   const channels = [
@@ -157,9 +158,23 @@ export const useNotifications = () => {
     [dispatch, notifications]
   );
 
-  const redirectLoPage = useCallback((trainingId) => {
+  const redirectOverviewPage = useCallback((notif) => {
     let alm = getALMObject();
-    alm.navigateToTrainingOverviewPage(trainingId);
+    let trainingId = notif.modelIds[0];
+    let isJobAid = false; 
+    if (notif.modelTypes[0] == "learningObject") {
+      let isJobAid = false;
+      notif.modelIds!.forEach((item: string) => {
+        if (item.toLowerCase().includes("jobaid")) {
+          LaunchPlayer({ trainingId: trainingId});
+          isJobAid = true;
+          return; 
+        }
+    });
+    }
+
+    if (!isJobAid)
+      alm.navigateToTrainingOverviewPage(trainingId);
     return;
   }, []);
 
@@ -170,7 +185,7 @@ export const useNotifications = () => {
     fetchNotifications,
     loadMoreNotifications,
     markReadNotification,
-    redirectLoPage,
+    redirectOverviewPage,
     pollUnreadNotificationCount,
   };
 };
