@@ -1,4 +1,6 @@
+import { ProgressBar } from "@adobe/react-spectrum";
 import React from "react";
+import { PrimeLearningObjectInstanceEnrollment } from "../../models/PrimeModels";
 import styles from "./PrimeTrainingOverviewHeader.module.css";
 
 const PrimeTrainingOverviewHeader: React.FC<{
@@ -6,8 +8,11 @@ const PrimeTrainingOverviewHeader: React.FC<{
   title: string;
   color: string;
   bannerUrl: string;
+  showProgressBar?: boolean;
+  enrollment?: PrimeLearningObjectInstanceEnrollment;
 }> = (props) => {
-  const { format, title, color } = props;
+  const { format, title, color, showProgressBar = false, enrollment } = props;
+
   return (
     <div style={{ backgroundColor: color }} className={styles.header}>
       <div className={styles.headingContainer}>
@@ -21,6 +26,18 @@ const PrimeTrainingOverviewHeader: React.FC<{
         >
           {title}
         </h1>
+        {showProgressBar && enrollment && (
+          <div className={styles.progressContainer}>
+            <ProgressBar
+              showValueLabel={false}
+              value={enrollment.progressPercent}
+              UNSAFE_className={styles.progressBar}
+            />
+            <span className={styles.percent}>
+              {enrollment.progressPercent}%
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

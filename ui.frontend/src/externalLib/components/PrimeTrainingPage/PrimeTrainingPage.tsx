@@ -55,6 +55,8 @@ const PrimeTrainingPage = () => {
         color={color}
         title={name}
         bannerUrl={bannerUrl}
+        showProgressBar={true}
+        enrollment={training.enrollment}
       />
       <div className={styles.contentContainer}>
         <div className={styles.left}>

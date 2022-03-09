@@ -54,9 +54,33 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.progressContainer {
+  width: 65%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.progressBar {
+  width: 90%;
+}
+.percent {
+  position: relative;
+  bottom: 10px;
+  color: var(--prime-color-white);
+  text-shadow: var(--prime-text-shadow);
+}
+.progressBar div[class^="spectrum-BarLoader-fill"] {
+  background: linear-gradient(90deg, #55b36f, #0f870f);
+}
 
 @media screen and (max-width: 414px) {
   .header {
     padding: 0 20px;
+  }
+  .progressContainer {
+    width: 100%;
+  }
+  .progressBar {
+    width: 85%;
   }
 }
