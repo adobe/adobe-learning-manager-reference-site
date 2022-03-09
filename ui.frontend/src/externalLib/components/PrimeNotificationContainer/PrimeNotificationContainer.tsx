@@ -1,7 +1,7 @@
 import { useNotifications } from "../../hooks";
 import { PrimeNotificationList } from "../PrimeNotificationList";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useIntl } from "react-intl";
 
 import styles from "./PrimeNotificationContainer.module.css";
@@ -9,6 +9,7 @@ import styles from "./PrimeNotificationContainer.module.css";
 import Bell from "@spectrum-icons/workflow/Bell";
 
 const PrimeNotificationContainer = () => {
+  const wrapperRef = useRef<any>(null);
   const { formatMessage } = useIntl();
   const {
     notifications,
@@ -17,7 +18,7 @@ const PrimeNotificationContainer = () => {
     fetchNotifications,
     loadMoreNotifications,
     markReadNotification, 
-    redirectLoPage,
+    redirectOverviewPage,
     pollUnreadNotificationCount 
   } = useNotifications();
 
@@ -30,6 +31,7 @@ const PrimeNotificationContainer = () => {
   useEffect(() => {
     
     let timer: any ;
+    document.addEventListener("click", handleClickOutside, false);
 
     if (showNotifications) {
       fetchNotifications();  
@@ -37,7 +39,10 @@ const PrimeNotificationContainer = () => {
       markReadNotification(); 
       timer = setInterval(pollUnreadNotificationCount, 10*1000);
     }
-    return () => timer && clearInterval(timer);
+    return () => {
+      timer && clearInterval(timer);
+      document.removeEventListener("click", handleClickOutside, false);
+    }
     
   },[fetchNotifications, showNotifications]);
 
@@ -45,8 +50,16 @@ const PrimeNotificationContainer = () => {
     return <span>loading notifications...</span>;
   }
 
+  const handleClickOutside = (event: any) => {
+    let t = wrapperRef.current; 
+    if (t && !t.contains(event.target)) {
+      setShowNotifications(false);
+    }
+  };
+
+
   return (
-    <div className={styles.notificationDropdown}>
+    <div ref={wrapperRef} className={styles.notificationDropdown}>
       <button
         type="button"
         className={styles.notificationBellIcon}
@@ -69,7 +82,7 @@ const PrimeNotificationContainer = () => {
           notifications={notifications}
           unreadCount={unreadCount}
           loadMoreNotifications={loadMoreNotifications}
-          redirectLoPage={redirectLoPage}
+          redirectOverviewPage={redirectOverviewPage}
         />
       )}
     </div>

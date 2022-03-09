@@ -1,5 +1,5 @@
 import { modifyTime } from "../../utils/dateTime";
-import { getALMAttribute } from "../../utils/global";
+import { getALMConfig } from "../../utils/global";
 import styles from "./PrimeNotificationText.module.css";
 
 const feedbackChannels: Array<string> = [
@@ -8,15 +8,15 @@ const feedbackChannels: Array<string> = [
 ];
 
 const PrimeNotificationText = (props: any) => {
-  const config = getALMAttribute("config");
+  const config = getALMConfig();
 
   const notif = props.notification;
-  const redirectLoPage = props.redirectLoPage;
+  const redirectOverviewPage = props.redirectOverviewPage;
   let message = notif.message;
   let modelIds = notif.modelIds;
   let trainingId;
   if (modelIds && modelIds.length > 0) {
-    trainingId = modelIds[0].split(":")[1];
+    trainingId = modelIds[0];
   }
   let name1 = -1,
     name0 = -1,
@@ -60,8 +60,7 @@ const PrimeNotificationText = (props: any) => {
           <span
             className={styles.loLink}
             onClick={() => {
-              const id = notif.modelIds[0].split(":")[1];
-              redirectLoPage(id);
+              redirectOverviewPage(notif);
             }}
           >
             {notif.modelNames[0]}
@@ -75,8 +74,7 @@ const PrimeNotificationText = (props: any) => {
             <span
               className={styles.loLink}
               onClick={() => {
-                const id = notif.modelIds[0].split(":")[1];
-                redirectLoPage(id);
+                redirectOverviewPage(notif);
               }}
             >
               {notif.modelNames[1]}
@@ -100,8 +98,7 @@ const PrimeNotificationText = (props: any) => {
           <span
             className={styles.loLink}
             onClick={() => {
-              const id = notif.modelIds[0].split(":")[1];
-              redirectLoPage(id);
+              redirectOverviewPage(notif);
             }}
           >
             {notif.modelNames[1]}
@@ -115,8 +112,7 @@ const PrimeNotificationText = (props: any) => {
             <span
               className={styles.loLink}
               onClick={() => {
-                const id = notif.modelIds[0].split(":")[1];
-                redirectLoPage(id);
+                redirectOverviewPage(notif);
               }}
             >
               {" "}
