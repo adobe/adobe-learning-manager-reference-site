@@ -11,7 +11,7 @@ const PrimeCommunityObjectOptions  = (props: any) => {
     useEffect(() => {
         const handleClickOutside = (event: any) => {
             console.log(props.object.createdBy.id);
-            console.log(user.id);   //to-do user_id is empty
+            console.log("userid=" + user.id);   //to-do user_id is empty
             if (ref.current && !ref.current.contains(event.target)) {
                 props.toggleOptions && props.toggleOptions();
             }
@@ -35,9 +35,26 @@ const PrimeCommunityObjectOptions  = (props: any) => {
         }    
     }
 
+    const editObjectHandler = () => {
+        if(typeof props.editHandler === 'function') {
+            props.editHandler();
+        }    
+    }
+
     return (
         <>
         <div ref={ref} className={styles.primeObjectOptionsList}>
+            {props.object.createdBy.id === user.id &&
+                <div className={styles.primeObjectRegularOption} onClick={editObjectHandler}>
+                {
+                    formatMessage({
+                        id: "prime.community.board.edit",
+                        defaultMessage: "Edit",
+                    })
+                }
+                </div> 
+            }
+            <div className={styles.primeSeperator}></div>
             {props.object.createdBy.id === user.id &&
                 <div className={styles.primeObjectCriticalOption} onClick={deleteObjectHandler}>
                 {

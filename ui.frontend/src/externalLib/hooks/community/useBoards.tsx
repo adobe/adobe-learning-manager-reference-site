@@ -8,22 +8,22 @@ import { getALMConfig } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
 
-export const useBoards = () => {
-  const DEFAULT_SORT_VALUE = "dateUpdated";
+export const useBoards = (sortFilter: any, skillName: any) => {
   const { items, next } = useSelector((state: State) => state.social.boards);
   const dispatch = useDispatch();
+
   //Fort any page load or filterchanges
   const fetchBoards = useCallback(
-    async (sortFilter: any, skill: any) => {
+    async (sortFilter: any, skillName: any) => {
       try {
         const baseApiUrl = getALMConfig().primeApiURL;
         const params: QueryParams = {};
-        params["sort"] = sortFilter ? sortFilter : DEFAULT_SORT_VALUE;
+        params["sort"] = sortFilter
         //To-do add for skill
         params["filter.state"] = "ACTIVE";
         params["page[offset]"] = "0";
         params["page[limit]"] = "10";
-
+        params["filter.board.skill"] = skillName;
         params["include"] = "createdBy,skills";
         const response = await RestAdapter.get({
           url: `${baseApiUrl}/boards?`,
@@ -67,7 +67,7 @@ export const useBoards = () => {
   // }, [dispatch]);
 
   useEffect(() => {
-    fetchBoards(DEFAULT_SORT_VALUE, null);
+    fetchBoards(sortFilter, skillName);
   }, [fetchBoards]);
 
   // for pagination

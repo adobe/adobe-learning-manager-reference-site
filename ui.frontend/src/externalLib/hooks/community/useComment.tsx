@@ -1,18 +1,13 @@
 import { useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getALMConfig } from "../../utils/global";
-// import APIServiceInstance from "../../common/APIService";
-// import { State } from "../../store/state";
-// import {
-//     loadPost,
-//   paginatePosts,
-// } from "../../store/actions/social/action";
+import { State } from "../../store/state";
 // import { PrimePost } from "../../models/PrimeModels";
-// import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { RestAdapter } from "../../utils/restAdapter";
 
 export const useComment = () => {
   const dispatch = useDispatch();
+
   const voteComment = useCallback(
     async (postId: any, action: any) => {
       // try {

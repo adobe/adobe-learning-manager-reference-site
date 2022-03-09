@@ -38,7 +38,36 @@ const PrimeCommunityAddPostDialog = (props: any) => {
   const [ textMode, setTextMode ] = useState(true);
   const [ uploadedFileUrl, setUploadedFileUrl ] = useState("");
   const COMMENT_CHAR_LIMIT = 4000;
+  // let post = {
+  //   data: "",
+  //   postingType: "",
+  //   fileName: ""
+  // };
+  // const [ existingPost, setExistingPost ] = useState(post);
+  const [ resourceId, setResourceId ] = useState(null);
+
   
+  useEffect(() => {
+    if(props.mode === "update") {
+      setPostingType(props.post?.postingType);
+
+      //to-do correct below logic
+      //if file present
+      if(props.post?.resource?.sourceUrl) {
+        state.fileUpload.fileName = getFileNameFromSourceUrl(props.post?.resource?.sourceUrl);
+        console.log(props.post?.resource);
+        // setResourceId(getResourceIdFromSourceUrl(props.post?.resource?.data));
+        setUploadedFileUrl(props.post?.resource?.data.split("?")[0]);
+        setFileUploadProgress(100);
+        setTextMode(false);
+      }
+      else {
+        state.fileUpload.fileName = "";
+        setTextMode(true);
+      }
+    }
+  }, [props.mode, props.post]);
+
   useEffect(() => {
     if(questionTypeSelected) {
       setPostingType(questionPostingType);
@@ -65,7 +94,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
 
   const savePostHandler = (close: any) => {
     if(typeof props.saveHandler === 'function') {
-      props.saveHandler(close, ref.current.value, postingType, uploadedFileUrl);
+      props.saveHandler(close, ref.current.value, postingType, resourceId ? resourceId : uploadedFileUrl);
     }
   }
 
@@ -85,7 +114,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
   const upload = async () => {
     const progressCheck =  setInterval(() => {
       updateFileUpdateProgress();
-    }, 750);
+    }, 500);
     const inputElement = document.getElementById(inputField) as HTMLInputElement;
     const fileUrl = await uploadFile(inputElement!.files!.item(0)!.name, inputElement!.files!.item(0)!)
     setUploadedFileUrl(fileUrl);
@@ -106,6 +135,11 @@ const PrimeCommunityAddPostDialog = (props: any) => {
   const cancelClickHandler = () => {
     cancelUploadFile(store.getState().fileUpload.fileName);
     setTextMode(true);
+  }
+
+  const getFileNameFromSourceUrl = (url: any) => {
+    const urlParts = url?.split("/");
+    return urlParts[urlParts.length - 1].split("?")[0];
   }
 
   return (
@@ -132,8 +166,9 @@ const PrimeCommunityAddPostDialog = (props: any) => {
       <Content>
         <PrimeCommunityObjectInput
           ref={ref}
-          inputPlaceholder={formatMessage({id: "prime.community.commentHere.label",defaultMessage: "Comment here"})}
+          inputPlaceholder={formatMessage({id: "prime.community.postHere.label", defaultMessage: "Write or paste something here..."})}
           characterLimit={COMMENT_CHAR_LIMIT}
+          defaultValue={props.post?.richText}
         ></PrimeCommunityObjectInput>
         {textMode &&
           <div>

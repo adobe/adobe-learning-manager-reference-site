@@ -1,15 +1,14 @@
 .primeAddPostSectionWrapper {
     display:flex;
-    justify-content: center;
+    /* justify-content: center; */
     margin-bottom: 30px;
 }
 
 .primeAddPostSection {
     border-radius: 2px;
     opacity: 1;
-    padding: 10px 30px;
-    width: 75%;
-    max-width: 716px;
+    padding: 10px 25px;
+    width: 100%;
     border: 1px solid #D5D5D5;
     border-radius: 2px;
     max-width: 716px;
@@ -17,10 +16,7 @@
     position: relative;
     font-size: 12px;
     color: #999999;
-    padding-top: 20px;
-    padding-bottom: 20px;
     display: flex;
-    height: 30px;
 }
 
 .primeAddPostMessage {

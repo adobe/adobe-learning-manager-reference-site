@@ -74,5 +74,13 @@
   "alm.overview.vc.url": "Virtual Classroom URL",
   "alm.overview.seat.limit": "{0} Seat Limit",
   "alm.overview.duration": "{0} Duration",
-  "alm.overview.vc.date": "{0} to {1}"
+  "alm.overview.vc.date": "{0} to {1}",
+  "prime.community.search.noResults": "No Results found",
+  "prime.community.search.placeholder": "Search within community",
+  "prime.community.searchInBoard.placeholder": "Search within board",
+  "prime.community.search.no.label": "No",
+  "prime.community.search.resultFound": "result(s) found",
+  "prime.community.search.clear.label": "Clear",
+  "prime.community.postHere.label":"Write or paste something here...",
+  "prime.community.back.label": "Back"
 }
