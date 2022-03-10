@@ -1,3 +1,4 @@
+import { JsonApiParse } from "../utils/jsonAPIAdapter";
 export interface PrimeConfig {
   almBaseURL: string;
   primeApiURL: string;
@@ -13,6 +14,18 @@ export interface PrimeConfig {
     [key: string]: string;
   };
 }
+
+export interface ALM {
+  getALMConfig: Function;
+  navigateToTrainingOverviewPage: Function;
+  navigateToInstancePage: Function;
+  isPrimeUserLoggedIn: Function;
+  getALMUser: Function;
+  getAccessToken: Function;
+  setALMAttribute: Function;
+  getALMAttribute: Function;
+}
+
 export function getWindowObject() {
   return window as any;
 }
@@ -37,16 +50,6 @@ export function getAccessToken(): string {
   return getALMObject().getAccessToken();
 }
 
-export interface ALM {
-  getALMConfig: Function;
-  navigateToTrainingOverviewPage: Function;
-  navigateToInstancePage: Function;
-  isPrimeUserLoggedIn: Function;
-  getAccessToken: Function;
-  setALMAttribute: Function;
-  getALMAttribute: Function;
-}
-
 export const getPathParams = (pagePath: string, pathParams: string[] = []) => {
   let paramsMap: {
     [key: string]: string;
@@ -62,4 +65,8 @@ export const getPathParams = (pagePath: string, pathParams: string[] = []) => {
     }
   }
   return paramsMap;
+};
+
+export const getALMUser = async () => {
+  return JsonApiParse(await getALMObject().getALMUser());
 };
