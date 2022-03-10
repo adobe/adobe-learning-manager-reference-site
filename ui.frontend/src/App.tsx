@@ -27,6 +27,9 @@ const App = (props: any) => {
         <Portal selector={mountingPoints.trainingOverviewPage}>
           <PrimeTrainingPage />
         </Portal>
+        <Portal selector={mountingPoints.boardsContainer}>
+          <PrimeCommunityBoardPage />
+        </Portal>
       </AppContextProvider>
       {/* </ConfigContextProvider> */}
     </IntlProvider>

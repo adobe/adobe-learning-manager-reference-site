@@ -1,0 +1,25 @@
+.topic, .topic.aem-Grid, .topic .cmp-image .cmp-image__image, .aem-Grid.aem-Grid--7 > .aem-GridColumn.aem-GridColumn--default--7, 
+.aem-Grid.aem-Grid--9 > .aem-GridColumn.aem-GridColumn--default--9   {
+    width: 256px;
+    height: 186px;
+    margin-left: 20px;
+	margin-top: 20px;
+}
+
+.aem-Grid-newComponent {
+        width: 100%;
+    }
+
+.skillscontainer .aem-Grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 1%;
+}
+
+.cmp-image .cmp-image__title {
+    position: relative;
+    margin-top: -100px;
+    margin-left: 100px;
+    font-size: 18px;
+    color: white;
+} 
