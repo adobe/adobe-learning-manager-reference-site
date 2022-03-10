@@ -13,16 +13,11 @@ const PrimeNotificationText = (props: any) => {
   const notif = props.notification;
   const redirectOverviewPage = props.redirectOverviewPage;
   let message = notif.message;
-  let modelIds = notif.modelIds;
-  let trainingId;
-  if (modelIds && modelIds.length > 0) {
-    trainingId = modelIds[0];
-  }
+
   let name1 = -1,
     name0 = -1,
     endname0 = -1,
     endname1 = -1;
-  // let msg = "";
   let x;
   let y;
   let z;

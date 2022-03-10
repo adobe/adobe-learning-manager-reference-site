@@ -1,13 +1,20 @@
+import Calendar from "@spectrum-icons/workflow/Calendar";
+import Clock from "@spectrum-icons/workflow/Clock";
+import Link from "@spectrum-icons/workflow/Link";
+import Location from "@spectrum-icons/workflow/Location";
+import Seat from "@spectrum-icons/workflow/Seat";
+import User from "@spectrum-icons/workflow/User";
 import React, { useMemo } from "react";
+import { useIntl } from "react-intl";
 import {
   PrimeLearningObjectResource,
   PrimeResource,
 } from "../../models/PrimeModels";
 import {
   convertSecondsToTimeText,
-  dateBasedOnLocale,
+  GetFormattedDate,
 } from "../../utils/dateTime";
-import { getALMConfig, getALMObject } from "../../utils/global";
+import { getALMConfig } from "../../utils/global";
 import {
   ACTIVITY_SVG,
   AUDIO_SVG,
@@ -21,26 +28,11 @@ import {
   XLS_SVG,
 } from "../../utils/inline_svg";
 import { getPreferredLocalizedMetadata } from "../../utils/translationService";
-import Link from "@spectrum-icons/workflow/Link";
-import Seat from "@spectrum-icons/workflow/Seat";
-import Location from "@spectrum-icons/workflow/Location";
-import Clock from "@spectrum-icons/workflow/Clock";
-import User from "@spectrum-icons/workflow/User";
-import Calendar from "@spectrum-icons/workflow/Calendar";
-
 import styles from "./PrimeModuleItem.module.css";
-import { useIntl } from "react-intl";
 
 const CLASSROOM = "Classroom";
 const VIRTUAL_CLASSROOM = "Virtual Classroom";
 const ELEARNING = "Elearning";
-const ACTIVITY = "Activity";
-const VIDEO = "VIDEO";
-const PPTX = "PPTX";
-const DOC = "DOC";
-const PDF = "PDF";
-const XLS = "XLS";
-const AUDIO = "AUDIO";
 
 interface ActionMap {
   Classroom: string;
@@ -60,7 +52,7 @@ const moduleIconMap = {
 
 const PrimeModuleItem = (props: any) => {
   const loResource: PrimeLearningObjectResource = props.loResource;
-  const isPartOfLP = props.isPartOfLP;
+  //const isPartOfLP = props.isPartOfLP;
   const { formatMessage } = useIntl();
 
   // loResource.learningObject.
@@ -283,7 +275,7 @@ const getTimeInfo = (
   formatMessage: Function
 ): { dateText: string; timeText: string } => {
   const { dateStart, completionDeadline } = resource;
-  const { locale } = getALMObject().getALMConfig().locale;
+  const { locale } = getALMConfig();
   let startDateObj = new Date(dateStart);
   let completionDateObj = new Date(completionDeadline);
   let dateText = "",
@@ -291,22 +283,24 @@ const getTimeInfo = (
   if (
     startDateObj.toLocaleDateString() === completionDateObj.toLocaleDateString()
   ) {
-    dateText = dateBasedOnLocale(startDateObj.toLocaleDateString(), locale);
+    dateText = GetFormattedDate(dateStart, locale);
   } else {
-    let startDate = dateBasedOnLocale(
-      startDateObj.toLocaleDateString(),
-      locale
-    );
-    let endDate = dateBasedOnLocale(
-      completionDateObj.toLocaleDateString(),
-      locale
-    );
+    let startDate = GetFormattedDate(dateStart, locale);
+    let endDate = GetFormattedDate(completionDeadline, locale);
     dateText = formatMessage(
       { id: "alm.overview.vc.date" },
       { 0: startDate, 1: endDate }
     );
   }
-  timeText = `(${startDateObj.toLocaleTimeString()} - ${completionDateObj.toLocaleTimeString()})`;
+  const options: Intl.DateTimeFormatOptions = {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  };
+  timeText = `(${startDateObj.toLocaleTimeString(
+    locale,
+    options
+  )} - ${completionDateObj.toLocaleTimeString(locale, options)})`;
   return { dateText, timeText };
 };
 
