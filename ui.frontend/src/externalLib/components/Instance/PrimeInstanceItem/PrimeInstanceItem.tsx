@@ -1,12 +1,11 @@
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { dateBasedOnLocale } from "../../../utils/dateTime";
-import { useIntl } from "react-intl";
-import Location from "@spectrum-icons/workflow/Location";
-import Calendar from "@spectrum-icons/workflow/Calendar";
-import User from "@spectrum-icons/workflow/User";
-
 import { Button } from "@adobe/react-spectrum";
+import Calendar from "@spectrum-icons/workflow/Calendar";
+import Location from "@spectrum-icons/workflow/Location";
+import User from "@spectrum-icons/workflow/User";
+import { useIntl } from "react-intl";
+import { GetFormattedDate } from "../../../utils/dateTime";
 import styles from "./PrimeInstanceItem.module.css";
 
 const PrimeInstanceItem = (props: any) => {
@@ -25,7 +24,7 @@ const PrimeInstanceItem = (props: any) => {
   const selectHandler = () => {
     selectInstanceHandler(id);
   };
-  const dateValue = dateBasedOnLocale(date, locale);
+  const dateValue = GetFormattedDate(date, locale);
 
   return (
     <li className={styles.instanceListItem}>
@@ -43,7 +42,10 @@ const PrimeInstanceItem = (props: any) => {
               })}
               {" : "}
             </span>
-            <span className={`${styles.mobileOnly} ${styles.icon}`} aria-hidden="true">
+            <span
+              className={`${styles.mobileOnly} ${styles.icon}`}
+              aria-hidden="true"
+            >
               <User />
             </span>
             {instructorsName}
@@ -53,7 +55,10 @@ const PrimeInstanceItem = (props: any) => {
       <div className={styles.dateWrapper}>
         {dateValue && (
           <p className={styles.startDate}>
-            <span className={`${styles.mobileOnly} ${styles.icon}`} aria-hidden="true">
+            <span
+              className={`${styles.mobileOnly} ${styles.icon}`}
+              aria-hidden="true"
+            >
               <Calendar />
             </span>
             {dateValue}
@@ -64,7 +69,10 @@ const PrimeInstanceItem = (props: any) => {
       <div className={styles.locationWrapper}>
         {location && (
           <p className={styles.startDate}>
-            <span className={`${styles.mobileOnly} ${styles.icon}`} aria-hidden="true">
+            <span
+              className={`${styles.mobileOnly} ${styles.icon}`}
+              aria-hidden="true"
+            >
               <Location />
             </span>
             {location}
