@@ -2,7 +2,7 @@ import { Button } from "@adobe/react-spectrum";
 import ChevronDown from "@spectrum-icons/workflow/ChevronDown";
 import ChevronUp from "@spectrum-icons/workflow/ChevronUp";
 import React, { useMemo, useState } from "react";
-import { PrimeCourseOverview } from "..";
+import { PrimeCourseOverview } from "../PrimeCourseOverview";
 import { PrimeLearningObject, PrimeLocalizationMetadata } from "../../models";
 import { getALMConfig } from "../../utils/global";
 import {
@@ -30,16 +30,12 @@ const PrimeCourseItemContainer: React.FC<{
   const { locale } = getALMConfig();
 
   const trainingInstance = filterTrainingInstance(training);
-  const {
-    name,
-    description,
-    overview,
-    richTextOverview,
-  } = useMemo((): PrimeLocalizationMetadata => {
-    return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
-  }, [training.localizedMetadata, locale]);
+  const { name, description, overview, richTextOverview } =
+    useMemo((): PrimeLocalizationMetadata => {
+      return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
+    }, [training.localizedMetadata, locale]);
 
-  const { cardIconUrl, color, bannerUrl } = useCardIcon(training);
+  const { cardIconUrl, color } = useCardIcon(training);
   const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
 
   const noOfModules = filterLoReourcesBasedOnResourceType(

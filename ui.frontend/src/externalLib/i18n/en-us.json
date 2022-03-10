@@ -81,6 +81,7 @@
   "prime.community.search.no.label": "No",
   "prime.community.search.resultFound": "result(s) found",
   "prime.community.search.clear.label": "Clear",
-  "prime.community.postHere.label":"Write or paste something here...",
-  "prime.community.back.label": "Back"
+  "prime.community.postHere.label": "Write or paste something here...",
+  "prime.community.back.label": "Back",
+  "prime.profile.change.image": "Change image"
 }

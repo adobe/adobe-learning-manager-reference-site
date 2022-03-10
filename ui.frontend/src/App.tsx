@@ -9,6 +9,7 @@ import {
   PrimeNotificationContainer,
   PrimeTrainingPage,
 } from "./externalLib";
+import { ALMProfilePage } from "./externalLib/components/Profile/ALMProfilePage";
 
 const App = (props: any) => {
   // const { mountingPoints } = config;
@@ -17,12 +18,12 @@ const App = (props: any) => {
     <IntlProvider locale={props.locale} messages={props.messages}>
       {/* <ConfigContextProvider config={primeConfig}> */}
       <AppContextProvider>
-        <Portal selector={mountingPoints.notificationContainer}>
+        {/* <Portal selector={mountingPoints.notificationContainer}>
           <PrimeNotificationContainer />
         </Portal>
         <Portal selector={mountingPoints.catalogContainer}>
           <PrimeCatalogContainer />
-        </Portal>
+        </Portal> */}
         <Portal selector={mountingPoints.trainingOverviewPage}>
           <PrimeTrainingPage />
         </Portal>
