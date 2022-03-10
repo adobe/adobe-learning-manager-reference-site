@@ -68,7 +68,7 @@
       };
 
       const getAccessToken = () => {
-        return "5080cbef88cb786b3074e18f074e5b6b";
+        return "399945ccf974f0eaea31c6b22e7ad90a";
       };
 
       const getALMConfig = () => {
@@ -97,21 +97,54 @@
       };
 
       const getUrl = (urlStr, params) => {
-        const url = new URL(urlStr);
+        /* const url = new URL(urlStr);
         for (const param in params) {
           url.searchParams.append(param, params[param].toString());
         }
-        return url.toString();
+        return url.toString(); */
+        for (const param in params) {
+          urlStr = `${urlStr}/${param}/${params[param]}`;
+        }
+        return urlStr;
       };
 
+      const getALMUser = async () => {
+        let user = window.sessionStorage.getItem("user");
+        if (user) {
+          return user;
+        }
+        const primeApiURL = primeConfig.primeApiURL;
+        const userUrl = `${primeApiURL}user?include=account`;
+        const headers = {
+          Accept: "application/vnd.api+json",
+          Authorization: `oauth ${getAccessToken()}`,
+        };
+        try {
+          const userResponse = await fetch(`${userUrl}`, {
+            credentials: "include",
+            headers,
+            method: "GET",
+          });
+          if (userResponse) {
+            user = await userResponse.json();
+            const userStr = JSON.stringify(user);
+            window.sessionStorage.setItem("user", userStr);
+            return userStr;
+          }
+        } catch (e) {
+          throw e;
+        }
+      };
+
+      getALMUser();
       window.ALM = window.ALM || {};
       window.ALM.ALMConfig = primeConfig; //window.ALM.ALMConfig || primeConfig;
       window.ALM.getALMConfig = getALMConfig;
-      window.ALM.navigateToTrainingOverviewPage =
-        navigateToTrainingOverviewPage;
+      window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
       window.ALM.navigateToInstancePage = navigateToInstancePage;
       window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
       window.ALM.getAccessToken = getAccessToken;
+      window.ALM.getALMUser = getALMUser;
     </script>
     <title>React App</title>
   </head>
@@ -133,8 +166,8 @@
       data-tag-name="false"
       data-skill-level="true"
     ></div> */-->
-    <!--/* <div class="notification__container"></div> */-->
-    <div class="training__page__container"></div>
+    <div class="notification__container"></div>
+    <!--/* <div class="training__page__container"></div> */-->
 
     <!--/* <div id="root1"></div> */-->
     <!--

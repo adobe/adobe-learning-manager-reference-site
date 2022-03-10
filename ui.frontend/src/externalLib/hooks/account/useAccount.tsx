@@ -1,10 +1,11 @@
-import { useAccountContext } from "../../contextProviders";
+// import { useAccountContext } from "../../contextProviders";
 
-export const useAccount = () => {
-  const { account } = useAccountContext();
+// export const useAccount = () => {
+//   const { account } = useAccountContext();
 
-  return {
-    account
-  };
-};
+//   return {
+//     account
+//   };
+// };
 
+export {};

@@ -82,11 +82,40 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
         currentUrl.searchParams.delete("code");
         currentUrl.searchParams.delete("state");
         document.location.href = currentUrl.href;
+        getALMUser();
       },
       error: () => {
         alert("Failed to authenticate");
       },
     });
+  }
+
+  async function getALMUser() {
+    let user = window.sessionStorage.getItem("user");
+    if (user) {
+      return user;
+    }
+    const primeApiURL = window.ALM.ALMConfig.primeUrl;
+    const userUrl = `${primeApiURL}user?include=account`;
+    const headers = {
+      Accept: "application/vnd.api+json",
+      Authorization: `oauth ${getAccessToken()}`,
+    };
+    try {
+      const userResponse = await fetch(`${userUrl}`, {
+        credentials: "include",
+        headers,
+        method: "GET",
+      });
+      if (userResponse) {
+        user = await userResponse.json();
+        const userStr = JSON.stringify(user);
+        window.sessionStorage.setItem("user", userStr);
+        return userStr;
+      }
+    } catch (e) {
+      throw e;
+    }
   }
 
   function getAccessToken() {
@@ -105,4 +134,5 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
   window.ALM.getAccessToken = getAccessToken;
+  window.ALM.getALMUser = getALMUser;
 })(window, document, Granite, jQuery);

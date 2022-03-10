@@ -1,13 +1,11 @@
+import Bell from "@spectrum-icons/workflow/Bell";
+import { useEffect, useRef, useState } from "react";
+import { useIntl } from "react-intl";
 import { useNotifications } from "../../hooks";
 import { PrimeNotificationList } from "../PrimeNotificationList";
-
-import { useEffect, useState, useRef } from "react";
-import { useIntl } from "react-intl";
-
 import styles from "./PrimeNotificationContainer.module.css";
 
-import Bell from "@spectrum-icons/workflow/Bell";
-
+const POLLING_INTERVAL = 60000; //1 MIN
 const PrimeNotificationContainer = () => {
   const wrapperRef = useRef<any>(null);
   const { formatMessage } = useIntl();
@@ -17,9 +15,9 @@ const PrimeNotificationContainer = () => {
     unreadCount,
     fetchNotifications,
     loadMoreNotifications,
-    markReadNotification, 
+    markReadNotification,
     redirectOverviewPage,
-    pollUnreadNotificationCount 
+    pollUnreadNotificationCount,
   } = useNotifications();
 
   const [showNotifications, setShowNotifications] = useState(false);
@@ -27,36 +25,33 @@ const PrimeNotificationContainer = () => {
   const toggleShowNotifications = () => {
     setShowNotifications((prevState) => !prevState);
   };
-  
+
   useEffect(() => {
-    
-    let timer: any ;
+    let timer: any;
     document.addEventListener("click", handleClickOutside, false);
 
     if (showNotifications) {
-      fetchNotifications();  
+      fetchNotifications();
     } else {
-      markReadNotification(); 
-      timer = setInterval(pollUnreadNotificationCount, 10*1000);
+      markReadNotification();
+      timer = setInterval(pollUnreadNotificationCount, POLLING_INTERVAL);
     }
     return () => {
       timer && clearInterval(timer);
       document.removeEventListener("click", handleClickOutside, false);
-    }
-    
-  },[fetchNotifications, showNotifications]);
+    };
+  }, [fetchNotifications, showNotifications]);
 
   if (isLoading) {
     return <span>loading notifications...</span>;
   }
 
   const handleClickOutside = (event: any) => {
-    let t = wrapperRef.current; 
+    let t = wrapperRef.current;
     if (t && !t.contains(event.target)) {
       setShowNotifications(false);
     }
   };
-
 
   return (
     <div ref={wrapperRef} className={styles.notificationDropdown}>
@@ -71,11 +66,9 @@ const PrimeNotificationContainer = () => {
         onClick={toggleShowNotifications}
       >
         {<Bell />}
-            {unreadCount > 0 && 
-            <div className={styles.notificationCountStyle}>
-              {unreadCount}
-            </div>
-            } 
+        {unreadCount > 0 && (
+          <div className={styles.notificationCountStyle}>{unreadCount}</div>
+        )}
       </button>
       {showNotifications && (
         <PrimeNotificationList

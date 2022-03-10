@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import APIServiceInstance from "../../common/APIService";
-import { useUserContext } from "../../contextProviders";
 import { PrimeUserNotification } from "../../models";
 import {
   loadNotifications,
   paginateNotifications,
 } from "../../store/actions/notification/action";
 import { State } from "../../store/state";
-import { getALMAttribute, getALMObject , getALMConfig} from "../../utils/global";
+import { getALMConfig, getALMObject, getALMUser } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
-import { QueryParams, RestAdapter } from "../../utils/restAdapter";
 import { LaunchPlayer } from "../../utils/playback-utils";
+import { QueryParams, RestAdapter } from "../../utils/restAdapter";
 
 export const useNotifications = () => {
   const { notifications, next } = useSelector(
@@ -21,7 +20,11 @@ export const useNotifications = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const dispatch = useDispatch();
   const config = getALMConfig();
-  const { user } = useUserContext();
+  const getUserId = async () => {
+    const userResponse = await getALMUser();
+    return userResponse.user.id;
+  };
+
   const pageLimit = 6;
   const channels = [
     "jobAid::adminEnrollment",
@@ -66,15 +69,16 @@ export const useNotifications = () => {
     "author::added",
     "integrationAdmin::added",
   ];
-  console.log(user.id);
+  //console.log(user.id);
   const fetchNotifications = useCallback(async () => {
     try {
+      const userId = await getUserId();
       const params: QueryParams = {};
       params["page[limit]"] = pageLimit;
       params["announcementsOnly"] = false;
       params["userSelectedChannels"] = channels;
       const response = await RestAdapter.get({
-        url: `${config.primeApiURL}/users/13403718/userNotifications`,
+        url: `${config.primeApiURL}/users/${userId}/userNotifications`,
         params: params,
       });
       const parsedResponse = JsonApiParse(response);
@@ -94,13 +98,14 @@ export const useNotifications = () => {
 
   const pollUnreadNotificationCount = useCallback(async () => {
     try {
+      const userId = await getUserId();
       const params: QueryParams = {};
       params["page[limit]"] = pageLimit;
       params["announcementsOnly"] = false;
       params["userSelectedChannels"] = channels;
       params["read"] = false;
       const response = await RestAdapter.get({
-        url: `${config.primeApiURL}/users/13403718/userNotifications`,
+        url: `${config.primeApiURL}/users/${userId}/userNotifications`,
         params: params,
       });
       const parsedResponse = JsonApiParse(response);
@@ -134,6 +139,7 @@ export const useNotifications = () => {
 
   const markReadNotification = useCallback(
     async (data = []) => {
+      const userId = await getUserId();
       let notificationToRead = data?.length ? data : notifications;
       let unreadNotificationIds = [];
       if (notificationToRead) {
@@ -145,7 +151,7 @@ export const useNotifications = () => {
         }
         if (unreadNotificationIds.length > 0) {
           await RestAdapter.put({
-            url: `${config.primeApiURL}/users/13403718/userNotificationsMarkRead`,
+            url: `${config.primeApiURL}/users/${userId}/userNotificationsMarkRead`,
             method: "PUT",
             headers: {
               "content-type": "application/json;charset=UTF-8",
@@ -161,14 +167,14 @@ export const useNotifications = () => {
   const redirectOverviewPage = useCallback((notif) => {
     let alm = getALMObject();
     let trainingId = notif.modelIds[0];
-    let isJobAid = false; 
+    let isJobAid = false;
     if (notif.modelTypes[0] == "learningObject") {
       notif.modelIds!.forEach((item: string) => {
         if (item.toLowerCase().includes("jobaid")) {
-          LaunchPlayer({ trainingId: trainingId});
-          isJobAid = true; 
+          LaunchPlayer({ trainingId: trainingId });
+          isJobAid = true;
         }
-    });
+      });
     }
     if (isJobAid) return;
     alm.navigateToTrainingOverviewPage(trainingId);
