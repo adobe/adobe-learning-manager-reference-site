@@ -2,7 +2,7 @@ import { Button } from "@adobe/react-spectrum";
 import ChevronDown from "@spectrum-icons/workflow/ChevronDown";
 import ChevronUp from "@spectrum-icons/workflow/ChevronUp";
 import React, { useState } from "react";
-import { PrimeCourseOverview } from "..";
+import { PrimeCourseOverview } from "../PrimeCourseOverview";
 import { useTrainingPage } from "../../hooks/catalog/useTrainingPage";
 import { filterLoReourcesBasedOnResourceType } from "../../utils/hooks";
 import { PrimeTrainingItemContainerHeader } from "../PrimeTrainingItemContainerHeader";

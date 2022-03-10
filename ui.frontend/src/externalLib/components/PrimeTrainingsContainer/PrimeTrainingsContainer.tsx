@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useLoadMore } from "../../hooks/loadMore";
 import { PrimeLearningObject } from "../../models/PrimeModels";
-import { PrimeTrainingCard } from "../PrimeTrainingCard";
+import { PrimeTrainingCard } from "../Catalog/PrimeTrainingCard";
 import styles from "./PrimeTrainingsContainer.module.css";
 
 const PrimeTrainingsContainer: React.FC<{
@@ -24,7 +24,7 @@ const PrimeTrainingsContainer: React.FC<{
           ></PrimeTrainingCard>
         ))}
       </ul>
-      <div ref={elementRef}>TO DO add Loading more..</div>
+      <div ref={elementRef}></div>
     </div>
   );
 };
