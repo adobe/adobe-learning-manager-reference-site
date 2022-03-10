@@ -4,3 +4,4 @@ export * from "./catalog";
 export * from "./loadMore";
 export * from "./notifications";
 export * from "./instance"
+export * from "./profile"
