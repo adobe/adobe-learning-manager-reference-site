@@ -70,10 +70,10 @@
                                 droptarget="contentfragment"
                                 resourceType="aem-learn-components/components/contentfragment"/>
                             <mapping_1575030271082
-                                jcr:primaryType="nt:unstructured" 
-                                assetGroup="product" 
-                                droptarget="product-data-reference" 
-                                resourceType="aem-learn-components/components/commerce/productteaser" />
+                                jcr:primaryType="nt:unstructured"
+                                assetGroup="product"
+                                droptarget="product-data-reference"
+                                resourceType="aem-learn-components/components/commerce/productteaser"/>
                         </assetToComponentMapping>
                     </cq:authoring>
                 </policy_1574695586800>
@@ -798,28 +798,18 @@
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_1594170470008>
             </embed>
+            <skillscontainer jcr:primaryType="nt:unstructured">
+                <policy_1646843692619
+                    jcr:lastModified="{Date}2022-03-10T08:07:54.054+05:30"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="testPolicy"
+                    sling:resourceType="wcm/core/components/policy/policy"
+                    components="/apps/aem-learn-components/components/topic">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                </policy_1646843692619>
+            </skillscontainer>
         </components>
     </aem-learn-components>
-    <wcm jcr:primaryType="nt:unstructured">
-        <foundation jcr:primaryType="nt:unstructured">
-            <components jcr:primaryType="nt:unstructured">
-                <page jcr:primaryType="nt:unstructured">
-                    <policy_1645426828124
-                        jcr:lastModified="{Date}2022-02-21T13:03:09.189+05:30"
-                        jcr:lastModifiedBy="admin"
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="new react app"
-                        sling:resourceType="wcm/core/components/policy/policy"
-                        clientlibs="[aem-learn-components.dependencies,aem-learn-components.site,aem-learn-components.ui]">
-                        <jcr:content
-                            cq:lastReplicated="{Date}2022-02-21T13:03:16.078+05:30"
-                            cq:lastReplicatedBy="admin"
-                            cq:lastReplicationAction="Activate"
-                            jcr:mixinTypes="[cq:ReplicationStatus]"
-                            jcr:primaryType="nt:unstructured"/>
-                    </policy_1645426828124>
-                </page>
-            </components>
-        </foundation>
-    </wcm>
+    <wcm/>
 </jcr:root>
