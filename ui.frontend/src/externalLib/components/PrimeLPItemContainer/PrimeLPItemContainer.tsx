@@ -1,32 +1,41 @@
 import { Button } from "@adobe/react-spectrum";
 import ChevronDown from "@spectrum-icons/workflow/ChevronDown";
 import ChevronUp from "@spectrum-icons/workflow/ChevronUp";
-import React, { useState } from "react";
-import { useTrainingPage } from "../../hooks/catalog/useTrainingPage";
+import React, { useMemo, useState } from "react";
+import { PrimeLearningObject, PrimeLocalizationMetadata } from "../../models";
+import { getALMConfig } from "../../utils/global";
+import {
+  filterTrainingInstance,
+  useCardBackgroundStyle,
+  useCardIcon,
+} from "../../utils/hooks";
+import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 import { PrimeCourseItemContainer } from "../PrimeCourseItemContainer";
 import { PrimeTrainingItemContainerHeader } from "../PrimeTrainingItemContainerHeader";
 import styles from "./PrimeLPItemContainer.module.css";
 const PrimeLPItemContainer: React.FC<{
-  trainingId: string;
+  training: PrimeLearningObject;
   launchPlayerHandler: Function;
   isPartOfLP: boolean;
 }> = (props) => {
-  const { trainingId, launchPlayerHandler, isPartOfLP = false } = props;
+  const { training, launchPlayerHandler, isPartOfLP = false } = props;
+
+  const [isCollapsed, setIsCollapsed] = useState(true);
+
+  const { locale } = getALMConfig();
+
+  const trainingInstance = filterTrainingInstance(training);
   const {
     name,
     description,
     overview,
     richTextOverview,
-    training,
-    trainingInstance,
-    isLoading,
-    cardBgStyle,
-  } = useTrainingPage(trainingId);
+  } = useMemo((): PrimeLocalizationMetadata => {
+    return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
+  }, [training.localizedMetadata, locale]);
 
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  if (isLoading) {
-    return <span></span>;
-  }
+  const { cardIconUrl, color, bannerUrl } = useCardIcon(training);
+  const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
 
   const clickHandler = () => {
     setIsCollapsed((prevState) => !prevState);
@@ -59,7 +68,7 @@ const PrimeLPItemContainer: React.FC<{
             return (
               <div key={subLo.id} className={styles.lpListItemContainer}>
                 <PrimeCourseItemContainer
-                  trainingId={subLo.id}
+                  training={subLo}
                   launchPlayerHandler={launchPlayerHandler}
                   isPartOfLP={isPartOfLP}
                 ></PrimeCourseItemContainer>

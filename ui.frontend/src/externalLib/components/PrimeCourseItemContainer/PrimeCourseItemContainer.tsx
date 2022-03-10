@@ -1,37 +1,46 @@
 import { Button } from "@adobe/react-spectrum";
 import ChevronDown from "@spectrum-icons/workflow/ChevronDown";
 import ChevronUp from "@spectrum-icons/workflow/ChevronUp";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { PrimeCourseOverview } from "..";
-import { useTrainingPage } from "../../hooks/catalog/useTrainingPage";
-import { filterLoReourcesBasedOnResourceType } from "../../utils/hooks";
+import { PrimeLearningObject, PrimeLocalizationMetadata } from "../../models";
+import { getALMConfig } from "../../utils/global";
+import {
+  filterLoReourcesBasedOnResourceType,
+  filterTrainingInstance,
+  useCardBackgroundStyle,
+  useCardIcon,
+} from "../../utils/hooks";
+import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 import { PrimeTrainingItemContainerHeader } from "../PrimeTrainingItemContainerHeader";
 import styles from "./PrimeCourseItemContainer.module.css";
 const PrimeCourseItemContainer: React.FC<{
-  trainingId: string;
+  training: PrimeLearningObject;
   launchPlayerHandler: Function;
   isPartOfLP?: boolean;
 }> = (props) => {
-  const { trainingId, launchPlayerHandler, isPartOfLP = false } = props;
+  const { training, launchPlayerHandler, isPartOfLP = false } = props;
+
+  const [isCollapsed, setIsCollapsed] = useState(true);
+
+  const clickHandler = () => {
+    setIsCollapsed((prevState) => !prevState);
+  };
+
+  const { locale } = getALMConfig();
+
+  const trainingInstance = filterTrainingInstance(training);
   const {
     name,
     description,
     overview,
     richTextOverview,
-    training,
-    trainingInstance,
-    isLoading,
-    cardBgStyle,
-  } = useTrainingPage(trainingId);
+  } = useMemo((): PrimeLocalizationMetadata => {
+    return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
+  }, [training.localizedMetadata, locale]);
 
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  if (isLoading) {
-    return <span></span>;
-  }
-
-  const clickHandler = () => {
-    setIsCollapsed((prevState) => !prevState);
-  };
+  const { cardIconUrl, color, bannerUrl } = useCardIcon(training);
+  const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
 
   const noOfModules = filterLoReourcesBasedOnResourceType(
     trainingInstance,

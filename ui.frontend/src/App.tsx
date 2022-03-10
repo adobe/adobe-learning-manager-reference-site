@@ -5,6 +5,7 @@ import { AppContextProvider } from "./contextProviders";
 import {
   Portal,
   PrimeCatalogContainer,
+  PrimeCommunityBoardPage,
   PrimeNotificationContainer,
   PrimeTrainingPage,
 } from "./externalLib";
@@ -24,6 +25,9 @@ const App = (props: any) => {
         </Portal>
         <Portal selector={mountingPoints.trainingOverviewPage}>
           <PrimeTrainingPage />
+        </Portal>
+        <Portal selector={mountingPoints.boardsContainer}>
+          <PrimeCommunityBoardPage />
         </Portal>
       </AppContextProvider>
       {/* </ConfigContextProvider> */}

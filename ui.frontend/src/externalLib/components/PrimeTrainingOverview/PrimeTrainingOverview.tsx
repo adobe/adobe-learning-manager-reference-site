@@ -12,13 +12,14 @@ const PrimeTrainingOverview: React.FC<{
   const { trainings, launchPlayerHandler, isPartOfLP = false } = props;
   return (
     <>
-      {trainings.map((trainings) => {
-        const loType = trainings.loType;
+      {trainings.map((training) => {
+        const loType = training.loType;
         if (loType === COURSE) {
           return (
             <PrimeCourseItemContainer
-              key={trainings.id}
-              trainingId={trainings.id}
+              key={training.id}
+              // trainingId={training.id}
+              training={training}
               launchPlayerHandler={launchPlayerHandler}
               isPartOfLP={isPartOfLP}
             ></PrimeCourseItemContainer>
@@ -26,8 +27,9 @@ const PrimeTrainingOverview: React.FC<{
         } else if (loType === LEARNING_PROGRAM) {
           return (
             <PrimeLPItemContainer
-              key={trainings.id}
-              trainingId={trainings.id}
+              key={training.id}
+              training={training}
+              // trainingId={trainings.id}
               launchPlayerHandler={launchPlayerHandler}
               isPartOfLP={isPartOfLP}
             ></PrimeLPItemContainer>
