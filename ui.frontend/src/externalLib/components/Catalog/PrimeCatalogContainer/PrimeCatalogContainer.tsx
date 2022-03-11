@@ -7,7 +7,7 @@ import { useCatalog } from "../../../hooks/catalog/useCatalog";
 import { CLOSE_SVG } from "../../../utils/inline_svg";
 import { PrimeCatalogFilters } from "../PrimeCatalogFilters";
 import PrimeCatalogSearch from "../PrimeCatalogSearch/PrimeCatalogSearch";
-import { PrimeTrainingsContainer } from "../../PrimeTrainingsContainer";
+import { PrimeTrainingsContainer } from "../PrimeTrainingsContainer";
 import styles from "./PrimeCatalogContainer.module.css";
 
 const PrimeCatalogContainer = () => {
