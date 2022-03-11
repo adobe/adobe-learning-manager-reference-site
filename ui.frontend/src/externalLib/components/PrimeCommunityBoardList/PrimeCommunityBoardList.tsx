@@ -1,6 +1,7 @@
 import { PrimeCommunityBoard } from "../PrimeCommunityBoard";
 import { PrimeCommunityBoardFilters } from "../PrimeCommunityBoardFilters";
-import { PrimeCommunityBackBanner } from "../PrimeCommunityBackBanner"
+import { PrimeCommunityMobileBackBanner } from "../PrimeCommunityMobileBackBanner"
+import { PrimeCommunityMobileScrollToTop } from "../PrimeCommunityMobileScrollToTop";
 import { useBoards, usePosts } from "../../hooks/community";
 import { useState } from "react";
 import { PrimeCommunitySearch } from "../PrimeCommunitySearch";
@@ -60,7 +61,10 @@ const PrimeCommunityBoardList  = () => {
     return (
         <>
         <div>
-            <PrimeCommunityBackBanner></PrimeCommunityBackBanner>
+            {/* Below 2 are seen only in mobile view */}
+            <PrimeCommunityMobileBackBanner></PrimeCommunityMobileBackBanner>
+            <PrimeCommunityMobileScrollToTop></PrimeCommunityMobileScrollToTop>
+
             <div className={styles.primeCommunityHeaderRow}>
                 <PrimeCommunityBoardFilters sortFilterChangeHandler={sortFilterChangeHandler} skillFilterChangeHandler={skillFilterChangeHandler}></PrimeCommunityBoardFilters>
                 <div className={styles.primeCommunitySearchContainer}>

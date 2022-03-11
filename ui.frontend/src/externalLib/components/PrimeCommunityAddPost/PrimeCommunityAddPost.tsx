@@ -4,6 +4,7 @@ import styles from "./PrimeCommunityAddPost.module.css";
 import { PrimeCommunityAddPostDialogTrigger } from "../PrimeCommunityAddPostDialogTrigger";
 import { usePost, } from "../../hooks/community";
 import { PrimeAlertDialog } from "../PrimeAlertDialog";
+import { PrimeCommunityAddPostButton } from "../PrimeCommunityAddPostButton";
 
 const PrimeCommunityAddPost = (props: any) => {
     const boardId = props.boardId;
@@ -12,9 +13,9 @@ const PrimeCommunityAddPost = (props: any) => {
     const [ showSuccessConfirmation, setShowSucessConfirmation ] = useState(false);
     const hideModalTimeInMillis = 10000;
     
-    const savePostHandler = async(input: any, postingType: any, uploadedFileUrl: any) => {
+    const savePostHandler = async(input: any, postingType: any, resource: any) => {
         try {
-            await addPost(boardId, input, postingType, uploadedFileUrl);
+            await addPost(boardId, input, postingType, resource);
             showConfirmationDialog();
             setTimeout(() => {
                 //auto close alert
@@ -46,23 +47,29 @@ const PrimeCommunityAddPost = (props: any) => {
                     })}
                 </div>
                 <div className={styles.primeAddPostButtonDiv}>
-                    <PrimeCommunityAddPostDialogTrigger
-                        className={styles.primeAddPostButton}
-                        buttonLabel={formatMessage({id: "prime.community.newPost.label",defaultMessage: "New Post",})}
-                        savePostHandler={(input: any, postingType: any, uploadedFileUrl: any) => {savePostHandler(input, postingType, uploadedFileUrl)}}
-                    ></PrimeCommunityAddPostDialogTrigger>
-                    {showSuccessConfirmation && 
-                        <PrimeAlertDialog
-                            variant="confirmation"
-                            title={formatMessage({id: "prime.community.postPublished.label",defaultMessage: "Post Published"})}
-                            primaryActionLabel={formatMessage({id: "prime.community.ok.label",defaultMessage: "Ok"})}
-                            body={formatMessage({id: "prime.community.postPublished.successMessage",defaultMessage: "Your post has been published. It may take some time to appear on the board."})}
-                            onPrimaryAction={hideConfirmationDialog}
-                        ></PrimeAlertDialog>
-                    }
+                    <PrimeCommunityAddPostButton 
+                        savePostHandler={(input: any, postingType: any, resource: any) => savePostHandler(input, postingType, resource)}
+                    ></PrimeCommunityAddPostButton>
                 </div>
             </div>
         </div>
+        {showSuccessConfirmation && 
+                <PrimeAlertDialog
+                    variant="confirmation"
+                    title={formatMessage({id: "prime.community.postPublished.label",defaultMessage: "Post Published"})}
+                    primaryActionLabel={formatMessage({id: "prime.community.ok.label",defaultMessage: "Ok"})}
+                    body={formatMessage({id: "prime.community.postPublished.successMessage",defaultMessage: "Your post has been published. It may take some time to appear on the board."})}
+                    onPrimaryAction={hideConfirmationDialog}
+                ></PrimeAlertDialog>
+        }
+
+        {/* below is for mobile only */}
+        <div className={styles.primeAddPostButtonMobile}>
+            <PrimeCommunityAddPostButton
+                savePostHandler={(input: any, postingType: any, resource: any) => savePostHandler(input, postingType, resource)}
+            ></PrimeCommunityAddPostButton>
+        </div>
+       
         </>
     );
 };

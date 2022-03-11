@@ -32,4 +32,6 @@ export * from "./PrimeCommunityPostFilters";
 export * from "./PrimeCommunityReplies";
 export * from "./PrimeCommunityReply";
 export * from "./PrimeDropdown";
-export * from "./PrimeCommunityBackBanner";
+export * from "./PrimeCommunityMobileBackBanner";
+export * from "./PrimeCommunityMobileScrollToTop";
+export * from "./PrimeCommunityAddPostButton"

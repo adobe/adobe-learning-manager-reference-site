@@ -1,9 +1,9 @@
-.primePostOptions {
+.primeObjectOptions {
     display: flex;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 
-.primePostCommentsCount {
+.primeObjectCommentsCount {
     font-size: 12px;
     color: #306EB5;
     background: none;
@@ -12,22 +12,22 @@
     margin-right: 40px;
 }
 
-.primePostCommentsCount:hover {
+.primeObjectCommentsCount:hover {
     cursor: pointer;
 }
 
-.primePostUpVoteIcon, .primePostDownVoteIcon {
+.primeObjectUpVoteIcon, .primeObjectDownVoteIcon {
     margin-right: 15px;
     font-size: 13px;
     border: none;
     background: none;
 }
 
-.primePostUpVoteIcon:hover, .primePostDownVoteIcon:hover {
+.primeObjectUpVoteIcon:hover, .primeObjectDownVoteIcon:hover {
     cursor: pointer;
 }
 
-.primePostUpVoteCount, .primePostDownVoteCount {
+.primeObjectUpVoteCount, .primeObjectDownVoteCount {
     vertical-align: top;
     margin-left: 5px;
 }

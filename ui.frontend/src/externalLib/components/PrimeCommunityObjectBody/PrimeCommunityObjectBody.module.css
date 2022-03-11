@@ -31,3 +31,13 @@
     align-items: center;
     display: flex;
 }
+
+.primeCommunityViewMoreButton {
+    border: none;
+    background: none;
+    color: #306EB5;
+}
+
+.primeCommunityViewMoreButton:hover {
+    cursor: pointer;
+}

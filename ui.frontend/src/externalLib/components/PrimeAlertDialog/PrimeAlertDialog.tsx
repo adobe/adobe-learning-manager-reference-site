@@ -17,7 +17,7 @@ const PrimeAlertDialog = (props: any) => {
             launchDialog.click();
             showDialog.current = true;
         }
-    });
+    }, [showDialog]);
 
     const hideDialog = () => {
         showDialog.current = false;
