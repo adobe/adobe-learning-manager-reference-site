@@ -12,7 +12,4 @@
     <sly data-sly-test="${!isAllowedApplicable && wcmmode.edit}"
          data-sly-resource="${resource.path @ resourceType='wcm/foundation/components/responsivegrid/new', appendPath='/*', decorationTagName='div', cssClassName='new section aem-Grid-newComponent'}"/>
 </div>
-  <sly
-    data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"
-    data-sly-call="${clientlib.all @ categories='aem-learn-components.site,apps.alm.components.skillscontainer'}"
-  />
+<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html" data-sly-call="${clientlib.all @ categories='aem-learn-components.site,apps.alm.components.skillscontainer'}"/>
