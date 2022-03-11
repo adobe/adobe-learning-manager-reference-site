@@ -1,7 +1,8 @@
 import { useIntl } from "react-intl";
 import { UpdateFiltersEvent } from "../../../hooks/catalog/useFilter";
-import PrimeCheckbox from "./PrimeCheckBox";
+import { GetTranslation } from "../../../utils/translationService";
 import styles from "./PrimeCatalogFilters.module.css";
+import PrimeCheckbox from "./PrimeCheckBox";
 
 const PrimeCatalogFilters = (props: any) => {
   const { formatMessage } = useIntl();
@@ -42,9 +43,7 @@ const PrimeCatalogFilters = (props: any) => {
     return catalogAttributes[filter.type] !== "false" ? (
       <div key={filter.type} className={styles.container}>
         <h3 className={styles.typeLabel}>
-          {formatMessage({
-            id: filter?.label,
-          })}
+          {GetTranslation(filter?.label, true)}
         </h3>
         <ul className={styles.listContainer}>
           {filter.list?.map((item: any) => (

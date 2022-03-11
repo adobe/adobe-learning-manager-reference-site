@@ -1,9 +1,10 @@
+import primeMessages from "../i18n/en-us.json";
 import { PrimeAccountTerminology } from "../models/PrimeModels";
 interface AccountTerminology {
   name_lxpv: string;
   pluralName_lxpv: string;
 }
-let _translations: Record<string, string>;
+let _translations: Record<string, string> = primeMessages;
 const pluralRegex = /\|\|\|\s*(.*?)\s*\|\|\|/g;
 const singularRegex = /\|\|\s*(.*?)\s*\|\|/g;
 const pluralPrefix = /\|\|\|/g;
