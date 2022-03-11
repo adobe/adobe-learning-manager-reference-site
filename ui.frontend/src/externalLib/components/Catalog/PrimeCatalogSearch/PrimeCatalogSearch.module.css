@@ -8,7 +8,7 @@
   border: 1px solid var(--prime-color-nc5);
   border-radius: 2px;
   opacity: 1;
-  font-size: var(--prime-font-size-small);
+  font-size: var(--prime-font-size-14);
   padding: 10px 12px;
   width: 100%;
   box-sizing: border-box;
@@ -26,7 +26,7 @@
 .customInput input {
   padding-right: 30px;
   height: 100%;
-  font-size: var(--prime-font-size-small);
+  font-size: var(--prime-font-size-14);
   border-color: var(--prime-color-nc3) !important;
 }
 

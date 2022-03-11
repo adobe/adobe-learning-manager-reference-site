@@ -19,7 +19,7 @@
   flex-direction: column;
   justify-content: center;
   font-style: normal;
-  font-weight: var(--prime-font-size-large) !important;
+  font-weight: var(--prime-font-size-24) !important;
 }
 @media screen and (min-width: 1024px) {
   .headingContainer {
@@ -37,7 +37,7 @@
   height: 30px;
   letter-spacing: 1px;
   text-shadow: var(--prime-text-shadow);
-  font-size: var(--prime-font-size-medium);
+  font-size: var(--prime-font-size-16);
   color: var(--prime-color-white);
   line-height: 1.42857;
 }
@@ -49,7 +49,7 @@
   line-height: 120%;
   vertical-align: bottom;
   text-shadow: var(--prime-text-shadow);
-  font-size: var(--prime-font-size-large);
+  font-size: var(--prime-font-size-24);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
