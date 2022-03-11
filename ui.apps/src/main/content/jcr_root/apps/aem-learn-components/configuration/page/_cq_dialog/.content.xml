@@ -173,6 +173,22 @@
                         name="./communityPath"
                         cq:showOnCreate="{Boolean}true"/>
 
+                    <communityBoardsPath 
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Community Boards Path"
+                        fieldDescription="Community Boards Path"
+                        name="./communityBoardsPath"
+                        cq:showOnCreate="{Boolean}true"/>
+
+                    <communityBoardPath 
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Community Board Path"
+                        fieldDescription="Community Board Path"
+                        name="./communityBoardPath"
+                        cq:showOnCreate="{Boolean}true"/>
+
                     <locale
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/select"
