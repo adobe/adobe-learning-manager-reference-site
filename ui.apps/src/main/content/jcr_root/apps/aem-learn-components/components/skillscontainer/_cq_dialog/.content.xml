@@ -16,7 +16,7 @@
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/radiogroup"
                         fieldLabel="Number of topics per row"
-                        name="./textingPraful">
+                        name="./topicRows">
                         <items jcr:primaryType="nt:unstructured">
                             <option1
                                 jcr:primaryType="nt:unstructured"

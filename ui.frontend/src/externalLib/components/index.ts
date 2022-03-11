@@ -3,7 +3,7 @@ export * from "./Catalog/PrimeCatalogContainer";
 export * from "./Instance/PrimeInstancePage"
 export * from "./Notifications/PrimeNotificationContainer";
 
-export * from "./PrimeTrainingPage";
+export * from "./TrainingOverview/PrimeTrainingPage";
 
 
 // from below list remove the ones which are not needed to export outside.

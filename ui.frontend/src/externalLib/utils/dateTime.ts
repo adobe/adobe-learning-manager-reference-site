@@ -90,6 +90,7 @@ export function modifyTime(dateToModify: string, locale: string) {
 // }
 
 export function GetFormattedDate(dateStr: string, getUserLocale: string) {
+  if (!dateStr) { return "" }
   const date = new Date(dateStr);
   const dateTimeFormat = new Intl.DateTimeFormat(getUserLocale, {
     month: "short",
