@@ -5,12 +5,16 @@ import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useInstancePage } from "../../../hooks/instance/useInstancePage";
 import { PrimeLearningObjectResource } from "../../../models/PrimeModels";
-import { getALMConfig, getALMObject, getPathParams } from "../../../utils/global";
+import {
+  getALMConfig,
+  getALMObject,
+  getPathParams,
+} from "../../../utils/global";
 import { SORT_ORDER_SVG } from "../../../utils/inline_svg";
 import { getResourceBasedOnLocale } from "../../../utils/instance";
 import { getPreferredLocalizedMetadata } from "../../../utils/translationService";
 import { PrimeInstanceItem } from "../PrimeInstanceItem";
-import { PrimeTrainingOverviewHeader } from "../../PrimeTrainingOverviewHeader";
+import { PrimeTrainingOverviewHeader } from "../../TrainingOverview/PrimeTrainingOverviewHeader";
 import styles from "./PrimeInstancePage.module.css";
 //TO-DO move training id str to common
 const TRAINING_ID_STR = "trainingId";
@@ -24,7 +28,7 @@ const PrimeInstancePage = () => {
   const { formatMessage } = useIntl();
   const [list, setList] = useState([] as any[]);
   const [isAscendingOrder, setIsAscendingOrder] = useState(true);
-  const { locale } = getALMObject().getALMConfig().locale;
+  const locale = getALMObject().getALMConfig().locale;
   const {
     isLoading,
     training,
@@ -189,7 +193,7 @@ const getStartDateforInstance = (
   locale: string
 ): Date => {
   let dateArray: any[] = [];
-  loResources.forEach((loResource) => {
+  loResources?.forEach((loResource) => {
     const resource = getResourceBasedOnLocale(loResource, locale);
     if (resource.dateStart) dateArray.push(new Date(resource.dateStart));
   });
@@ -202,7 +206,7 @@ const getInstanceLocationAndInstructorsName = (
 ): string[] => {
   let location: string[] = [];
   let instructorNames: string[] = [];
-  loResources.forEach((loResource) => {
+  loResources?.forEach((loResource) => {
     const resource = getResourceBasedOnLocale(loResource, locale);
 
     if (resource.location) location.push(resource.location);

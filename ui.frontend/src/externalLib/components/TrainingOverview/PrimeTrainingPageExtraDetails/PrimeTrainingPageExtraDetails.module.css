@@ -1,0 +1,114 @@
+@import "../../../styles/variables.css";
+
+.actionContainer {
+  margin-bottom: 20px;
+}
+.commonButton {
+  width: 100%;
+  cursor: pointer;
+  font-size: var(--prime-font-size-small);
+  min-height: 38px;
+  font-weight: 600;
+  padding: 5px 12px;
+  min-width: 70px;
+  display: block;
+}
+.actionButton {
+  border: 2px solid var(--prime-color-primary);
+  color: var(--prime-color-primary);
+  background-color: var(--prime-color-white);
+  border-radius: 2px;
+}
+.actionButton:hover,
+.actionButton:focus,
+.actionButton:focus-visible {
+  color: var(--prime-color-white);
+  background-color: var(--prime-color-primary);
+  border-color: var(--prime-color-primary);
+  outline: none;
+}
+.actionButton::after {
+  border-radius: 0;
+}
+
+.buyNowContainer {
+  background: var(--prime-color-nc10);
+  border-radius: 2px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.buyNowContainer .actionButton {
+  border-radius: 20px;
+}
+.buyNowButton {
+  background: #ffc80f;
+  border: 2px solid #ffc80f;
+  color: var(--prime-color-black);
+  border: none;
+  margin-bottom: 10px;
+}
+
+.buyNowButton:hover,
+.buyNowButton:focus,
+.buyNowButton:focus-visible {
+  color: #ffc80f;
+  background-color: var(--prime-color-black);
+  border-color: var(--prime-color-black);
+  outline: none;
+}
+
+.commonContainer {
+  margin-bottom: 20px;
+  display: flex;
+}
+.icon {
+  margin-right: 10px;
+}
+.icon svg {
+  fill: var(--prime-icon-color);
+  width: 25px;
+  height: 25px;
+}
+.innerContainer {
+  margin-left: 10px;
+}
+.label {
+  font-size: var(--prime-font-size-small);
+  color: var(--prime-color-nc3);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  padding-bottom: 5px;
+}
+.authorContainer {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+  border-top: 1px solid var(--prime-color-nc10);
+}
+.authors {
+  display: flex;
+}
+.authorName {
+  margin: 0;
+  margin-bottom: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.badge svg {
+  transform: scale(1.5);
+}
+.moduleCompleted {
+  font-size: 20px;
+  width: 25px;
+  margin-right: 10px;
+}
+.authors img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}

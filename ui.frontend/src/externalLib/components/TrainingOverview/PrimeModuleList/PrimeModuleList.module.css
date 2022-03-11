@@ -1,0 +1,13 @@
+@import "../../../styles/variables.css";
+
+.moduleListContainer {
+  padding: 0;
+  margin: 0;
+  border: 1px solid var(--prime-color-nc13);
+  border-top: 0;
+}
+
+/* CSS override for inside LP */
+.isPartOfLP {
+  border: none;
+}

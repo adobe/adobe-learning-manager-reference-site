@@ -1,0 +1,48 @@
+@import "../../../styles/variables.css";
+
+.contentContainer {
+  display: flex;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.left {
+  width: calc(100% - 256px);
+  padding-right: 80px;
+}
+
+.right {
+  width: 256px;
+  padding: 20px 0;
+}
+.trainingOverviewContainer {
+  border: 1px solid #cacaca;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+.sectionName {
+  margin: 0 0 20px 0;
+}
+
+@media screen and (max-width: 414px) {
+  .left {
+    order: 2;
+    width: 100%;
+    padding: 20px;
+  }
+  .right {
+    order: 1;
+    width: 100%;
+    padding: 20px;
+  }
+  .contentContainer {
+    flex-direction: column;
+    width: 100%;
+  }
+  .trainingOverviewContainer {
+    border: none;
+    margin-bottom: 20px;
+    padding: 0;
+  }
+}

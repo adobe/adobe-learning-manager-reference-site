@@ -1,0 +1,42 @@
+@import "../../../styles/variables.css";
+.overviewcontainer {
+  display: flex;
+  /* width: 50%; */
+  padding: 10px 0;
+}
+
+.header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.time {
+  padding-right: 10px;
+}
+
+.loResourceType {
+  font-weight: var(--prime-font-weight-600);
+}
+
+.tablist {
+  padding-bottom: 10px;
+}
+
+.hide {
+  display: none !important;
+}
+
+.tablist > div[role="tablist"] {
+  border-bottom-color: transparent;
+}
+
+.tablist div[role="presentation"] {
+  height: 4px;
+}
+/* CSS override for inside LP */
+.isPartOfLP .tablist {
+  padding-left: 10px;
+}
+.isPartOfLP .tabPanels {
+  border: none;
+}
