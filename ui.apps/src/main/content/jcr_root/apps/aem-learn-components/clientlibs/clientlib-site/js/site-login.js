@@ -117,6 +117,10 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
       throw e;
     }
   }
+  async function updateALMUser() {
+    window.sessionStorage.removeItem("user");
+    return getALMUser();
+  };
 
   function getAccessToken() {
     let cookieValues = document.cookie.match(
@@ -135,4 +139,5 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
   window.ALM.getAccessToken = getAccessToken;
   window.ALM.getALMUser = getALMUser;
+  window.ALM.updateALMUser = updateALMUser;
 })(window, document, Granite, jQuery);
