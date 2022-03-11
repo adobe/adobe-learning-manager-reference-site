@@ -5,15 +5,40 @@ import { useProfile } from "../../../hooks";
 
 import styles from "./ALMProfilePage.module.css";
 import ALMBackButton from "../../Common/ALMBackButton/ALMBackButton";
+import { useRef } from "react";
 
 const ALMProfilePage = () => {
   const { formatMessage } = useIntl();
-  const { user } = useProfile();
+  const { user, updateProfileImage } = useProfile();
+  const inputRef = useRef<null | HTMLInputElement>(null);
+  const imageUploaded = async (event: any) => {
+    let file: any;
+    const fileList = (event.target as HTMLInputElement).files;
+    for (let i = 0; i < fileList!.length; i++) {
+      if (fileList![i].type.match(/^image\//)) {
+        file = fileList![i];
+        break;
+      }
+    }
+    await updateProfileImage(file.name, file);
+  };
+
+  const startFileUpload = () => {
+    (inputRef?.current as HTMLInputElement)?.click();
+  };
+
   return (
     <Provider theme={lightTheme} colorScheme={"light"}>
       <div className={styles.pageContainer}>
         <div className={styles.upperSectionContainer}>
           <section className={styles.upperSection}>
+            <input
+              type="file"
+              id="uploadAvatar"
+              accept="image/*"
+              onChange={(event: any) => imageUploaded(event)}
+              ref={inputRef}
+            />
             <h1 className={styles.profileHeader}>Your Profile</h1>
             <ALMBackButton />
             <div className={styles.detailsContainer}>
@@ -27,6 +52,7 @@ const ALMProfilePage = () => {
                   variant="primary"
                   isQuiet
                   UNSAFE_className={styles.button}
+                  onPress={startFileUpload}
                 >
                   {formatMessage({
                     id: "prime.profile.change.image",
@@ -37,6 +63,7 @@ const ALMProfilePage = () => {
                   variant="cta"
                   isQuiet
                   UNSAFE_className={styles.editIcon}
+                  onPress={startFileUpload}
                 >
                   <Edit />
                 </Button>

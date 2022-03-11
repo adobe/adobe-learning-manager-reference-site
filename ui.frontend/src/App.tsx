@@ -5,7 +5,9 @@ import { AppContextProvider } from "./contextProviders";
 import {
   Portal,
   PrimeCatalogContainer,
+  PrimeCommunityBoardList,
   PrimeCommunityBoardPage,
+  PrimeInstancePage,
   PrimeNotificationContainer,
   PrimeTrainingPage,
 } from "./externalLib";
@@ -18,17 +20,29 @@ const App = (props: any) => {
     <IntlProvider locale={props.locale} messages={props.messages}>
       {/* <ConfigContextProvider config={primeConfig}> */}
       <AppContextProvider>
-        {/* <Portal selector={mountingPoints.notificationContainer}>
+        <Portal selector={mountingPoints.notificationContainer}>
           <PrimeNotificationContainer />
         </Portal>
+
         <Portal selector={mountingPoints.catalogContainer}>
           <PrimeCatalogContainer />
-        </Portal> */}
+        </Portal>
         <Portal selector={mountingPoints.trainingOverviewPage}>
           <PrimeTrainingPage />
         </Portal>
-        <Portal selector={mountingPoints.boardsContainer}>
+        <Portal selector={mountingPoints.instanceContainer}>
+          <PrimeInstancePage />
+        </Portal>
+
+        <Portal selector={mountingPoints.profilePageContainer}>
+          <ALMProfilePage />
+        </Portal>
+
+        <Portal selector={mountingPoints.boardContainer}>
           <PrimeCommunityBoardPage />
+        </Portal>
+        <Portal selector={mountingPoints.boardsContainer}>
+          <PrimeCommunityBoardList />
         </Portal>
       </AppContextProvider>
       {/* </ConfigContextProvider> */}

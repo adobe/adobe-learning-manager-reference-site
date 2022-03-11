@@ -21,6 +21,9 @@
   margin: 0 auto;
   padding: 40px 0;
 }
+.upperSection input{
+  display: none;
+}
 .detailsContainer {
   display: flex;
 }
@@ -149,6 +152,11 @@
     letter-spacing: 0px;
     color: var(--prime-color-nc3);
     opacity: 1;
+  }
+  .profileImage{
+    width: 54px;
+    height: 54px;
+    margin-bottom: 0;
   }
 }
 
