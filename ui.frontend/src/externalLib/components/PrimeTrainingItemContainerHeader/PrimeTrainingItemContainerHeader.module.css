@@ -19,7 +19,7 @@
   display: flex;
   margin-bottom: 10px;
   justify-content: space-between;
-  font-size: var(--prime-font-size-small);
+  font-size: var(--prime-font-size-14);
 }
 
 .metadataContents {
@@ -61,13 +61,13 @@
 .title {
   color: var(--prime-color-primary);
   cursor: pointer;
-  font-size: var(--prime-font-size-small);
+  font-size: var(--prime-font-size-14);
   text-decoration: none;
   font-weight: var(--prime-font-weight-600);
   line-height: 20px;
 }
 .type {
-  font-size: var(--prime-font-size-small);
+  font-size: var(--prime-font-size-14);
   line-height: 26px;
   letter-spacing: 0px;
   color: var(--prime-color-nc3);
@@ -80,7 +80,7 @@
   margin: 8px 0;
   letter-spacing: 0px;
   opacity: 1;
-  font-size: var(--prime-font-size-small);
+  font-size: var(--prime-font-size-14);
   line-height: 20px;
   display: -webkit-box;
   -webkit-line-clamp: 2;

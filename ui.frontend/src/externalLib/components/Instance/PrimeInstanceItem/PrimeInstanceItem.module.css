@@ -22,7 +22,7 @@
   border-bottom: 1px solid var(--prime-color-nc8);
 }
 .instanceName {
-  font-size: var(--prime-font-size-small);
+  font-size: var(--prime-font-size-14);
   line-height: 18px;
   letter-spacing: 0px;
   color: var(--prime-color-primary);
@@ -33,7 +33,7 @@
   cursor: pointer;
 }
 .instanceLoFormat {
-  font-size: var(--prime-font-size-small);
+  font-size: var(--prime-font-size-14);
   line-height: 19px;
   letter-spacing: 0px;
   color: var(--prime-color-nc4);
@@ -41,7 +41,7 @@
   margin: 0 0 20px 0;
 }
 .startDate {
-  font-size: var(--prime-font-size-small);
+  font-size: var(--prime-font-size-14);
   line-height: 15px;
   letter-spacing: 0px;
   color: var(--prime-color-nc4);
@@ -49,7 +49,7 @@
   margin: 0;
 }
 .location {
-  font-size: var(--prime-font-size-small);
+  font-size: var(--prime-font-size-14);
   line-height: 15px;
   letter-spacing: 0px;
   color: var(--prime-color-nc4);
@@ -62,7 +62,7 @@
   border: 2px solid var(--prime-color-primary);
   color: var(--prime-color-primary);
   background-color: var(--prime-color-white);
-  font-size: var(--prime-font-size-small);
+  font-size: var(--prime-font-size-14);
 }
 .button:hover,
 .button:focus,
@@ -73,7 +73,7 @@
   outline: none;
 }
 .instructorsName {
-  font-size: var(--prime-font-size-small);
+  font-size: var(--prime-font-size-14);
   line-height: 19px;
   letter-spacing: 0px;
   color: var(--prime-color-nc2);
@@ -113,7 +113,7 @@
   }
   .instanceName {
     margin: 0 0 8px 0;
-    font-size: var(--prime-font-size-medium);
+    font-size: var(--prime-font-size-16);
     line-height: 22px;
     letter-spacing: 0px;
     color: var(--prime-color-primary);

@@ -65,7 +65,7 @@
 .image .button {
   cursor: pointer;
   color: var(--prime-color-primary);
-  font-size: var(--prime-font-size-small);
+  font-size: var(--prime-font-size-14);
   font-weight: normal;
 }
 .image .button:hover,
@@ -151,4 +151,3 @@
     opacity: 1;
   }
 }
-

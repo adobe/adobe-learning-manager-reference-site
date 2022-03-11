@@ -25,7 +25,7 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <script>
-      const primeConfig = {
+      const ALMConfig = {
         "jcr:primaryType": "cq:PageContent",
         "jcr:createdBy": "admin",
         "jcr:title": "ALM",
@@ -97,13 +97,8 @@
       };
 
       const getUrl = (urlStr, params) => {
-        /* const url = new URL(urlStr);
         for (const param in params) {
-          url.searchParams.append(param, params[param].toString());
-        }
-        return url.toString(); */
-        for (const param in params) {
-          urlStr = `${urlStr}/${param}/${params[param]}`;
+          urlStr = urlStr + "/" + param + "/" + params[param];
         }
         return urlStr;
       };
@@ -113,14 +108,14 @@
         if (user) {
           return user;
         }
-        const primeApiURL = primeConfig.primeApiURL;
-        const userUrl = `${primeApiURL}user?include=account`;
+        const primeApiURL = getALMConfig().primeApiURL;
+        const userUrl = primeApiURL + "user?include=account";
         const headers = {
           Accept: "application/vnd.api+json",
           Authorization: `oauth ${getAccessToken()}`,
         };
         try {
-          const userResponse = await fetch(`${userUrl}`, {
+          const userResponse = await fetch(userUrl, {
             credentials: "include",
             headers,
             method: "GET",
@@ -138,7 +133,7 @@
 
       getALMUser();
       window.ALM = window.ALM || {};
-      window.ALM.ALMConfig = primeConfig; //window.ALM.ALMConfig || primeConfig;
+      window.ALM.ALMConfig = almConfig; //window.ALM.ALMConfig || primeConfig;
       window.ALM.getALMConfig = getALMConfig;
       window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
       window.ALM.navigateToInstancePage = navigateToInstancePage;
