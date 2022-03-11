@@ -27,7 +27,10 @@ import {
   VIRTUAL_CLASSROOM_SVG,
   XLS_SVG,
 } from "../../../utils/inline_svg";
-import { getPreferredLocalizedMetadata } from "../../../utils/translationService";
+import {
+  getPreferredLocalizedMetadata,
+  GetTranslation,
+} from "../../../utils/translationService";
 import styles from "./PrimeModuleItem.module.css";
 
 const CLASSROOM = "Classroom";
@@ -259,10 +262,7 @@ const getSessionsTemplate = (
             target="_blank"
             rel="noreferrer"
           >
-            {formatMessage({
-              id: "alm.overview.vc.url",
-              default: "Virtual Classroom URL",
-            })}
+            {GetTranslation("alm.overview.vc.url", true)}
           </a>
         </div>
       )}

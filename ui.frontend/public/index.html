@@ -68,7 +68,7 @@
       };
 
       const getAccessToken = () => {
-        return "d476bb6914d1ef3b0f14082ec38a83d0";
+        return "8a3098eca365c88928d1da8405ffe490";
       };
 
       const getALMConfig = () => {
@@ -136,10 +136,9 @@
 
       getALMUser();
       window.ALM = window.ALM || {};
-      window.ALM.ALMConfig = almConfig; //window.ALM.ALMConfig || primeConfig;
+      window.ALM.ALMConfig = ALMConfig; //window.ALM.ALMConfig || primeConfig;
       window.ALM.getALMConfig = getALMConfig;
-      window.ALM.navigateToTrainingOverviewPage =
-        navigateToTrainingOverviewPage;
+      window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
       window.ALM.navigateToInstancePage = navigateToInstancePage;
       window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
       window.ALM.getAccessToken = getAccessToken;
@@ -150,8 +149,8 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div class="instance__container"></div>
-    <!--/* <div
+    <!--/* <div class="instance__container"></div> */-->
+    <div
       class="catalog__container"
       data-show-filters="true"
       data-show-search="true"
@@ -166,9 +165,7 @@
       data-tag-name="false"
       data-skill-level="true"
     ></div>
-    <div class="notification__container"></div>
-  
-   */-->
+
     <!-- <div class="training__page__container"></div> -->
     <!--/* <div class="notification__container"></div> */-->
     <!--/* <div class="boards__container"></div> */-->
