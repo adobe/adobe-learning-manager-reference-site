@@ -45,6 +45,11 @@ export class RestAdapter {
     return this.ajax(options as IRestAdapterAjaxOptions);
   }
 
+  public static delete(options: IRestAdapterAjaxOptions): Promise<unknown> {
+    (options as IRestAdapterAjaxOptions).method = "DELETE";
+    return this.ajax(options as IRestAdapterAjaxOptions);
+  }
+
   public static ajax(options: IRestAdapterAjaxOptions): Promise<unknown> {
     return new Promise(function (resolve, reject) {
       const xhr = new XMLHttpRequest();

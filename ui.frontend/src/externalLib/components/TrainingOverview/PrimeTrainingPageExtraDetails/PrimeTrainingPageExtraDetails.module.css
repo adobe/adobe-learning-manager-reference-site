@@ -60,6 +60,7 @@
 .commonContainer {
   margin-bottom: 20px;
   display: flex;
+  width: 100%;
 }
 .icon {
   margin-right: 10px;
@@ -71,6 +72,7 @@
 }
 .innerContainer {
   margin-left: 10px;
+  width: calc(100% - 50px);
 }
 .label {
   font-size: var(--prime-font-size-14);
@@ -111,4 +113,28 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
+}
+
+
+/* changes for Job Aid */
+.jobAid {
+  margin-bottom: 10px;
+  display: flex;
+}
+.name {
+  display: inline-block;
+  width: 90%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.jobAidIcon {
+  display: inline-block;
+  width: 10%;
+  cursor: pointer;
+}
+.jobAidIcon svg {
+  width: 16px;
+  height: 16px;
+  fill: var(--prime-color-nc3);
 }

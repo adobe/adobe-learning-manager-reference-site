@@ -55,13 +55,6 @@ export const useTrainingPage = (
     const getTrainingInstance = async () => {
       try {
         let queryParam: QueryParams = {};
-        // let loType = trainingId.split(":")[0];
-        // if (loType === COURSE) {
-        //   queryParam["include"] = params.include || INCLUDES_FOR_COURSE;
-        // } else if (loType === CERTIFICATION || loType === LEARING_PROGRAM) {
-        //   queryParam["include"] = params.include || INCLUDES_FOR_LP_CERT;
-        // }
-
         queryParam["include"] = params.include || DEFAULT_INCLUDE_LO_OVERVIEW;
         queryParam["useCache"] = true;
         queryParam["filter.ignoreEnhancedLP"] = false;
@@ -69,19 +62,12 @@ export const useTrainingPage = (
           trainingId,
           queryParam
         );
-
-        // const response = await getApiServiceInstance().getTraining(
-        //   trainingId,
-        //   queryParam
-        // );
-
         if (response) {
           const trainingInstance = filterTrainingInstance(response, instanceId);
           setCurrentState({ trainingInstance, isLoading: false });
         }
       } catch (e) {
         console.log("Error while loading training " + e);
-        //setError(e);
         setCurrentState({
           trainingInstance: {} as PrimeLearningObjectInstance,
           isLoading: false,
@@ -110,18 +96,39 @@ export const useTrainingPage = (
     }
   }, [trainingInstance]);
 
-  const enrollmentHandler = useCallback(async () => {
-    let queryParam: QueryParams = {
-      loId: trainingId,
-      loInstanceId: trainingInstance.id,
-    };
-    try {
-      await APIServiceInstance.enrollToTraining(queryParam);
-      setRefreshTraining((prevState) => !prevState);
-    } catch (error) {
-      //TODO : handle error
-    }
-  }, [trainingId, trainingInstance.id]);
+  const enrollmentHandler = useCallback(
+    async ({ id, instanceId, isSupplementaryLO = false } = {}) => {
+      let queryParam: QueryParams = {
+        loId: id || trainingId,
+        loInstanceId: instanceId || trainingInstance.id,
+      };
+      try {
+        await APIServiceInstance.enrollToTraining(queryParam);
+        if (!isSupplementaryLO) {
+          //just to refresh the training data
+          setRefreshTraining((prevState) => !prevState);
+        }
+      } catch (error) {
+        //TODO : handle error
+      }
+    },
+    [trainingId, trainingInstance.id]
+  );
+
+  const unEnrollmentHandler = useCallback(
+    async ({ enrollmentId, isSupplementaryLO = false } = {}) => {
+      try {
+        await APIServiceInstance.unenrollFromTraining(enrollmentId);
+        if (!isSupplementaryLO) {
+          //just to refresh the training data
+          setRefreshTraining((prevState) => !prevState);
+        }
+      } catch (error) {
+        //TODO : handle error
+      }
+    },
+    []
+  );
 
   const launchPlayerHandler = useCallback(
     async ({ id, moduleId } = {}) => {
@@ -165,6 +172,7 @@ export const useTrainingPage = (
     instanceSummary,
     enrollmentHandler,
     launchPlayerHandler,
+    unEnrollmentHandler,
   };
   //date create, published, duration
 };

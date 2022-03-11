@@ -87,6 +87,11 @@ class APIService {
       return new LoggedInCustomHooks().enrollToTraining(params);
     }
   }
+  public async unenrollFromTraining(enrollmentId: string = "") {
+    if (this.isUserLoggedIn()) {
+      return new LoggedInCustomHooks().unenrollFromTraining(enrollmentId);
+    }
+  }
 }
 
 const APIServiceInstance = new APIService();

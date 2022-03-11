@@ -1,3 +1,4 @@
+/* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { CardBgStyle } from "../../../models/common";
 import {
@@ -42,7 +43,9 @@ const PrimeTrainingItemContainerHeader: React.FC<{
   const onClickHandler = (event: any) => {
     //NOTE: Don't open player in case training name is clicked
     if (event.target?.tagName !== "A") {
-      launchPlayerHandler({ id: training.id });
+      if (training.enrollment) {
+        launchPlayerHandler({ id: training.id });
+      }
     } else {
       getALMObject().navigateToTrainingOverviewPage(
         training.id,
@@ -89,7 +92,8 @@ const PrimeTrainingItemContainerHeader: React.FC<{
       <div className={styles.trainingDetailsContainer}>
         <div className={styles.card} style={{ ...cardBgStyle }}></div>
         <div className={styles.trainingDetials}>
-          <a aria-label={name} className={styles.title} href={""}>
+          {/* Change it to button and role="link" */}
+          <a aria-label={name} className={styles.title} href={"javascript:void(0)"}>
             {name}
           </a>
           {/* <p
