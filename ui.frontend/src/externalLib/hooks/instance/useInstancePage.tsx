@@ -83,7 +83,6 @@ export const useInstancePage = (
   const selectInstanceHandler = useCallback(
     (instanceId: string) => {
       getALMObject().navigateToTrainingOverviewPage(training.id, instanceId);
-      // getWindowObject().alm.redirectToTrainingOverview(training.id, instanceId);
     },
     [training.id]
   );

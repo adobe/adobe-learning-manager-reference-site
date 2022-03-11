@@ -2,7 +2,10 @@ import { Button } from "@adobe/react-spectrum";
 import Send from "@spectrum-icons/workflow/Send";
 import UserGroup from "@spectrum-icons/workflow/UserGroup";
 import Calendar from "@spectrum-icons/workflow/Calendar";
-import { useMemo } from "react";
+import RemoveCircle from "@spectrum-icons/workflow/RemoveCircle";
+import AddCircle from "@spectrum-icons/workflow/AddCircle";
+import PinOff from "@spectrum-icons/workflow/PinOff";
+import { useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 
 import { InstanceBadge, Skill } from "../../../models/common";
@@ -10,6 +13,7 @@ import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
   PrimeLoInstanceSummary,
+  PrimeResource,
 } from "../../../models/PrimeModels";
 import { LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
 import styles from "./PrimeTrainingPageExtraDetails.module.css";
@@ -24,6 +28,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
   instanceSummary: PrimeLoInstanceSummary;
   enrollmentHandler: () => void;
   launchPlayerHandler: () => void;
+  unEnrollmentHandler: Function;
 }> = ({
   trainingInstance,
   skills,
@@ -32,6 +37,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
   instanceSummary,
   enrollmentHandler,
   launchPlayerHandler,
+  unEnrollmentHandler,
 }) => {
   const { formatMessage } = useIntl();
   const { locale } = getALMObject().getALMConfig().locale;
@@ -90,7 +96,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
   const showEnrollmentDeadline =
     !training.enrollment && trainingInstance.enrollmentDeadline;
 
-  // const showJobAids = training.enrollment && training.supplementaryLOs?.length;
+  const showJobAids = training.enrollment && training.supplementaryLOs?.length;
 
   return (
     <>
@@ -285,7 +291,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
       )}
 
       {/* JOB Aid container */}
-      {/* {showJobAids && (
+      {showJobAids && (
         <div className={styles.commonContainer}>
           <span aria-hidden="true" className={styles.icon}>
             <PinOff />
@@ -301,15 +307,68 @@ const PrimeTrainingPageExtraDetails: React.FC<{
               {training.supplementaryLOs.map((item) => {
                 return item.instances[0].loResources.map((loResource) => {
                   return loResource.resources.map((resource) => (
-                    <div style={{ marginBottom: "10px" }}>{resource.name}</div>
+                    <PrimeTrainingPageExtraJobAid
+                      resource={resource}
+                      training={item}
+                      enrollmentHandler={enrollmentHandler}
+                      key={item.id}
+                      unEnrollmentHandler={unEnrollmentHandler}
+                    />
                   ));
                 });
               })}
             </div>
           </div>
         </div>
-      )} */}
+      )}
     </>
   );
 };
 export default PrimeTrainingPageExtraDetails;
+
+const PrimeTrainingPageExtraJobAid: React.FC<{
+  resource: PrimeResource;
+  training: PrimeLearningObject;
+  enrollmentHandler: Function;
+  unEnrollmentHandler: Function;
+}> = ({ resource, training, enrollmentHandler, unEnrollmentHandler }) => {
+  //on clikc, if not enrolled show popup alert
+  const [isEnrolled, setIsEnrolled] = useState(() => {
+    return training.enrollment ? true : false;
+  });
+
+  const unenroll = () => {
+    unEnrollmentHandler({
+      enrollmentId: training.enrollment.id,
+      isSupplementaryLO: true,
+    });
+    setIsEnrolled(false);
+  };
+
+  const enroll = () => {
+    enrollmentHandler({
+      id: training.id,
+      instanceId: training.instances[0].id,
+      isSupplementaryLO: true,
+    });
+    setIsEnrolled(true);
+  };
+
+  return (
+    <div className={styles.jobAid}>
+      {training.id}
+      <span className={styles.name}>{resource.name}</span>
+      <span className={styles.jobAidIcon}>
+        {isEnrolled ? (
+          <span onClick={unenroll}>
+            <RemoveCircle />
+          </span>
+        ) : (
+          <span onClick={enroll}>
+            <AddCircle />
+          </span>
+        )}
+      </span>
+    </div>
+  );
+};

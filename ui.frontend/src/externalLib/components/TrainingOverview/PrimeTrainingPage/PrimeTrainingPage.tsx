@@ -38,6 +38,7 @@ const PrimeTrainingPage = () => {
     instanceSummary,
     enrollmentHandler,
     launchPlayerHandler,
+    unEnrollmentHandler,
   } = useTrainingPage(trainingId, trainingInstanceId);
   const config = getALMConfig();
   const locale = config.locale;
@@ -120,6 +121,7 @@ const PrimeTrainingPage = () => {
             instanceSummary={instanceSummary}
             enrollmentHandler={enrollmentHandler}
             launchPlayerHandler={launchPlayerHandler}
+            unEnrollmentHandler={unEnrollmentHandler}
           />
         </div>
       </div>

@@ -113,7 +113,7 @@ export function GetFormattedDate(dateStr: string, getUserLocale: string) {
   } else if (getUserLocale === "ja-JP") {
     return `${year}年${month}月${day}日`;
   }
-  return `${day} ${month}, ${year}`;
+  return `${month} ${day}, ${year}`;
 }
 
 //inputFormat => 2022-02-13T14:00:39.000Z, outputFormat => Feb 13, 2022
