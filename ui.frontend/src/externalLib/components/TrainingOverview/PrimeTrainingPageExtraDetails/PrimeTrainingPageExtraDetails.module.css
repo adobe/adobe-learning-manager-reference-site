@@ -6,7 +6,7 @@
 .commonButton {
   width: 100%;
   cursor: pointer;
-  font-size: var(--prime-font-size-small);
+  font-size: var(--prime-font-size-14);
   min-height: 38px;
   font-weight: 600;
   padding: 5px 12px;
@@ -73,7 +73,7 @@
   margin-left: 10px;
 }
 .label {
-  font-size: var(--prime-font-size-small);
+  font-size: var(--prime-font-size-14);
   color: var(--prime-color-nc3);
   display: -webkit-box;
   -webkit-line-clamp: 2;
