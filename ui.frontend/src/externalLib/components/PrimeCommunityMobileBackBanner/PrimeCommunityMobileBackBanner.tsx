@@ -1,8 +1,8 @@
 import { useIntl } from "react-intl";
-import styles from "./PrimeCommunityBackBanner.module.css";
+import styles from "./PrimeCommunityMobileBackBanner.module.css";
 import ChevronLeft from "@spectrum-icons/workflow/ChevronLeft";
 
-const PrimeCommunityBackBanner = (props: any) => {
+const PrimeCommunityMobileBackBanner = (props: any) => {
     const { formatMessage } = useIntl();
     return (
         <>
@@ -19,4 +19,4 @@ const PrimeCommunityBackBanner = (props: any) => {
         </>
     );
 };
-export default PrimeCommunityBackBanner;
+export default PrimeCommunityMobileBackBanner;

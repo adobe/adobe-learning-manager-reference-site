@@ -5,6 +5,7 @@
   "prime.community.board.skill": "Skills",
   "prime.community.board.public": "Public Board",
   "prime.community.board.private": "Private Board",
+  "prime.community.board.restricted": "Restricted Board",
   "prime.community.board.activityCalc": "Calculated daily based on the number of new posts, comments, participants, views, likes and dislikes",
   "prime.community.board.post.label": "Post(s)",
   "prime.community.board.view.label": "View(s)",
@@ -83,5 +84,6 @@
   "prime.community.search.clear.label": "Clear",
   "prime.community.postHere.label": "Write or paste something here...",
   "prime.community.back.label": "Back",
-  "prime.profile.change.image": "Change image"
+  "prime.profile.change.image": "Change image",
+  "prime.community.viewMore": "View more"
 }

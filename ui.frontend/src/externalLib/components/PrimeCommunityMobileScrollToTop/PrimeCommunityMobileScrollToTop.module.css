@@ -1,0 +1,19 @@
+.primeCommunityScrollToTopButton {
+    display: none;
+}
+
+@media (max-width: 414px) {
+    .primeCommunityScrollToTopButton {
+        position: fixed;
+        background-color: #306EB5;
+        border: none;
+        display: block;
+        z-index: 1000;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        top: 85%;
+        left: 85%;
+        color: #FFFFFF;
+    }
+}

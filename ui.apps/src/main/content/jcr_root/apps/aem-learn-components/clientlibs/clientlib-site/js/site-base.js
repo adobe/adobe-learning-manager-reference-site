@@ -45,6 +45,12 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     window.location = getUrl(instancePath, { trainingId: trainingId });
   };
 
+
+  const navigateToBoardPage = (boardId) => {
+    let { communityBoardsPath } = getALMConfig();
+    window.location = getUrl(communityBoardsPath, { boardId: boardId });
+  };
+
   const navigateToCatalogPage = (catalogIds) => {
     let { catalogPath } = getALMConfig();
     let catalogUrl = new URL(catalogPath);
@@ -65,4 +71,5 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
   window.ALM.navigateToInstancePage = navigateToInstancePage;
   window.ALM.navigateToCatalogPage = navigateToCatalogPage;
+  window.ALM.navigateToBoardPage = navigateToBoardPage;
 })(window, document, Granite, jQuery);

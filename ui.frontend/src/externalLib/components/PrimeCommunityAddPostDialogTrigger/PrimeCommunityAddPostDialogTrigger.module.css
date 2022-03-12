@@ -17,3 +17,19 @@
     background: #4283d0;
     color: #FFFFFF;
 }
+
+@media (max-width: 414px) {
+    .primeDialogLaunchButton {
+        position: fixed;
+        background-color: #306EB5;
+        border: none;
+        display: block;
+        z-index: 2000;
+        border-radius:20px;
+        width: auto;
+        height: 40px;
+        top: 85%;
+        left: 35%;
+        color: #FFFFFF;
+    }
+}

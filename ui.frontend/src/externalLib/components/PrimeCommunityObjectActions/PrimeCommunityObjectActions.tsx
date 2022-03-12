@@ -34,26 +34,26 @@ const PrimeCommunityObjectActions  = (props: any) => {
 
     return (
         <>
-        <div className={styles.primePostOptions}>
+        <div className={styles.primeObjectOptions}>
             {props.type === "comment" &&
-                <button className={styles.primePostCommentsCount} onClick={actionClickHandler}>
+                <button className={styles.primeObjectCommentsCount} onClick={actionClickHandler}>
                     {props.actionLabel}
                 </button>
             }
             {props.type !== "reply" &&
-                <button className={styles.primePostCommentsCount} onClick={viewButtonClickHandler}>
+                <button className={styles.primeObjectCommentsCount} onClick={viewButtonClickHandler}>
                 {props.buttonLabel} ({props.buttonCount})
                 </button>
             }
-            <button className={styles.primePostUpVoteIcon} onClick={upVoteButtonClickHandler}>
+            <button className={styles.primeObjectUpVoteIcon} onClick={upVoteButtonClickHandler}>
                 {props.myUpVoteStatus === true ? 
                     SOCIAL_LIKE_FILLED_SVG() : SOCIAL_LIKE_SVG()} 
-                <span className={styles.primePostUpVoteCount}>{props.upVoteCount}</span>
+                <span className={styles.primeObjectUpVoteCount}>{props.upVoteCount}</span>
             </button>
-            <button className={styles.primePostDownVoteIcon} onClick={downVoteButtonClickHandler}>
+            <button className={styles.primeObjectDownVoteIcon} onClick={downVoteButtonClickHandler}>
                 {props.myDownVoteStatus ?
                     SOCIAL_DISLIKE_FILLED_SVG() : SOCIAL_DISLIKE_SVG()
-                } <span className={styles.primePostDownVoteCount}>{props.downVoteCount}</span>
+                } <span className={styles.primeObjectDownVoteCount}>{props.downVoteCount}</span>
             </button>
         </div>
         </>

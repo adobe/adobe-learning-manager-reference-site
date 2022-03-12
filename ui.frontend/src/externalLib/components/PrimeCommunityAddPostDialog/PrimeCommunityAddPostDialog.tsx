@@ -36,7 +36,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
   const [ saveEnabled, setSaveEnabled ] = useState(true);
   const [ fileUploadProgress, setFileUploadProgress ] = useState(state.fileUpload.uploadProgress);
   const [ textMode, setTextMode ] = useState(true);
-  const [ uploadedFileUrl, setUploadedFileUrl ] = useState("");
+  // const [ uploadedFileUrl, setUploadedFileUrl ] = useState("");
   const COMMENT_CHAR_LIMIT = 4000;
   // let post = {
   //   data: "",
@@ -44,7 +44,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
   //   fileName: ""
   // };
   // const [ existingPost, setExistingPost ] = useState(post);
-  const [ resourceId, setResourceId ] = useState(null);
+  const [ resource, setResource ] = useState({});
 
   
   useEffect(() => {
@@ -57,7 +57,8 @@ const PrimeCommunityAddPostDialog = (props: any) => {
         state.fileUpload.fileName = getFileNameFromSourceUrl(props.post?.resource?.sourceUrl);
         console.log(props.post?.resource);
         // setResourceId(getResourceIdFromSourceUrl(props.post?.resource?.data));
-        setUploadedFileUrl(props.post?.resource?.data.split("?")[0]);
+        // setUploadedFileUrl(props.post?.resource?.data.split("?")[0]);
+        setResource(props.post?.resource);
         setFileUploadProgress(100);
         setTextMode(false);
       }
@@ -94,7 +95,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
 
   const savePostHandler = (close: any) => {
     if(typeof props.saveHandler === 'function') {
-      props.saveHandler(close, ref.current.value, postingType, resourceId ? resourceId : uploadedFileUrl);
+      props.saveHandler(close, ref.current.value, postingType, resource);
     }
   }
 
@@ -117,7 +118,11 @@ const PrimeCommunityAddPostDialog = (props: any) => {
     }, 500);
     const inputElement = document.getElementById(inputField) as HTMLInputElement;
     const fileUrl = await uploadFile(inputElement!.files!.item(0)!.name, inputElement!.files!.item(0)!)
-    setUploadedFileUrl(fileUrl);
+    const resource = {
+      contentType: "FILE",
+      data: fileUrl,
+    }
+    setResource(resource);
     clearInterval(progressCheck);
   }
 

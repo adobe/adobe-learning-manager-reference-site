@@ -9,6 +9,8 @@ export interface PrimeConfig {
   catalogPath: string;
   trainingOverviewPath: string;
   communityPath: string;
+  communityBoardsPath: string;
+  communityBoardPath: string
   locale: string;
   cdnBaseUrl: string;
   mountingPoints: {
@@ -20,6 +22,7 @@ export interface ALM {
   getALMConfig: Function;
   navigateToTrainingOverviewPage: Function;
   navigateToInstancePage: Function;
+  navigateToBoardPage: Function;
   isPrimeUserLoggedIn: Function;
   getALMUser: Function;
   getAccessToken: Function;

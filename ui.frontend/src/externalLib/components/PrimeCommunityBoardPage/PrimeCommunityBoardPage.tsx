@@ -5,13 +5,22 @@ import styles from "./PrimeCommunityBoardPage.module.css";
 import { PrimeCommunityAddPost } from "../PrimeCommunityAddPost";
 import { PrimeCommunityPosts } from "../PrimeCommunityPosts";
 import { PrimeCommunitySearch } from "../PrimeCommunitySearch";
+import { PrimeCommunityMobileBackBanner } from "../PrimeCommunityMobileBackBanner";
+import { PrimeCommunityMobileScrollToTop } from "../PrimeCommunityMobileScrollToTop";
+// import { PrimeCommunitySearch } from "../PrimeCommunitySearch";
+
 import { useState } from "react";
 import { useIntl } from "react-intl";
 import loadingImage from "../../assets/images/LoadingButton.gif";
+import { getALMConfig, getPathParams } from "../../utils/global";
+const BOARD_ID_STR = "boardId";
 
 const PrimeCommunityBoardPage = () => {
-  // const boardId = "10285";
-  const boardId = "9709"; //to-do remove hardcoded value
+  const [boardId] = useState(() => {
+    let { communityBoardsPath } = getALMConfig();
+    let pathParams = getPathParams(communityBoardsPath, [BOARD_ID_STR]);
+    return pathParams[BOARD_ID_STR];
+  });
   const { item } = useBoard(boardId);
   const { formatMessage } = useIntl();
   const { fetchPosts } = usePosts();
@@ -48,6 +57,10 @@ const PrimeCommunityBoardPage = () => {
 
   return (
     <>
+      {/* Below 2 are seen only in mobile view */}
+      <PrimeCommunityMobileBackBanner></PrimeCommunityMobileBackBanner>
+      <PrimeCommunityMobileScrollToTop></PrimeCommunityMobileScrollToTop>
+
       <div className={styles.primeCommunitySearchContainer}>
         {item && (
           <PrimeCommunitySearch

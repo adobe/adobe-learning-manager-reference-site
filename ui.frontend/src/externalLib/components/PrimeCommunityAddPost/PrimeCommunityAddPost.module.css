@@ -19,6 +19,19 @@
     display: flex;
 }
 
+.primeAddPostButtonMobile {
+    display: none;
+}
+
+@media (max-width: 414px) {
+    .primeAddPostSectionWrapper {
+        display:none;
+    }
+    .primeAddPostButtonMobile {
+        display: block;
+    }
+}
+
 .primeAddPostMessage {
     line-height: 30px;
 }

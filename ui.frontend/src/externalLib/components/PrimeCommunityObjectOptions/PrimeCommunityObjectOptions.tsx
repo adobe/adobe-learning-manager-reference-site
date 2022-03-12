@@ -52,37 +52,34 @@ const PrimeCommunityObjectOptions = (props: any) => {
   return (
     <>
       <div ref={ref} className={styles.primeObjectOptionsList}>
-        {props.object.createdBy.id === user.id && (
-          <div
-            className={styles.primeObjectRegularOption}
-            onClick={editObjectHandler}
-          >
-            {formatMessage({
-              id: "prime.community.board.edit",
-              defaultMessage: "Edit",
-            })}
-          </div>
-        )}
+        {props.object.createdBy.id === user.id &&
+          <div className={styles.primeObjectRegularOption} onClick={editObjectHandler}>
+            {
+              formatMessage({
+                id: "prime.community.board.edit",
+                defaultMessage: "Edit",
+              })
+            }
+          </div> 
+        }
         <div className={styles.primeSeperator}></div>
-        {props.object.createdBy.id === user.id && (
-          <div
-            className={styles.primeObjectCriticalOption}
-            onClick={deleteObjectHandler}
-          >
-            {formatMessage({
-              id: "prime.community.board.delete",
-              defaultMessage: "Delete",
-            })}
-          </div>
-        )}
-        <div
-          className={styles.primeObjectCriticalOption}
-          onClick={reportObjectHandler}
-        >
-          {formatMessage({
-            id: "prime.community.board.report",
-            defaultMessage: "Report",
-          })}
+        {props.object.createdBy.id === user.id &&
+          <div className={styles.primeObjectCriticalOption} onClick={deleteObjectHandler}>
+            {
+              formatMessage({
+                id: "prime.community.board.delete",
+                defaultMessage: "Delete",
+              })
+            }
+          </div> 
+        }
+        <div className={styles.primeObjectCriticalOption} onClick={reportObjectHandler}>
+          {
+            formatMessage({
+              id: "prime.community.board.report",
+              defaultMessage: "Report",
+            })
+          }
         </div>
       </div>
     </>
