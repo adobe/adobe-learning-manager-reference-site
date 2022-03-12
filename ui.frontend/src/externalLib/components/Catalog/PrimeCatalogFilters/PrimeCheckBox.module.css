@@ -1,0 +1,38 @@
+@import "../../../styles/variables.css";
+
+.primeCheckBoxLabel {
+  letter-spacing: 0px;
+  color: var(--prime-color-nc7);
+  font-size: var(--prime-font-size-14);
+  line-height: 19px;
+  text-transform: capitalize;
+  cursor: pointer;
+  width: auto;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.primeCheckBoxSVG {
+  margin-right: 15px;
+  top: 5px;
+  position: relative;
+}
+
+.primeChechbox {
+  min-height: 25px !important;
+}
+.primeChechbox span[class^="spectrum-Checkbox-label"] {
+  margin-top: 3px;
+  text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: var(--prime-font-size-14);
+}
+
+.primeChechbox span:first-of-type {
+  margin: 0;
+  margin-top: 5px;
+}

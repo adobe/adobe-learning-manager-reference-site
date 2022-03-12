@@ -11,7 +11,11 @@ const PrimeCommunityObjectBody = (props: any) => {
   const primeConfig = getALMConfig();
   const hostName = primeConfig.almBaseURL;
   //to-do set below host url
-  const iframeSrc = `https://captivateprimedev.adobe.com/app/player?entity_type=${entityType}&entity_id=${object.id}&access_token=${getALMObject().getAccessToken()}&player_type=inline`;
+  const iframeSrc = `${
+    primeConfig.almBaseURL
+  }/app/player?entity_type=${entityType}&entity_id=${
+    object.id
+  }&access_token=${getALMObject().getAccessToken()}&player_type=inline`;
   console.log(iframeSrc);
 
   const MAX_CHAR_SHOWN = 450;

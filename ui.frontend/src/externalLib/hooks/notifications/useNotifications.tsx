@@ -11,7 +11,49 @@ import { getALMConfig, getALMObject, getALMUser } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { LaunchPlayer } from "../../utils/playback-utils";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
-
+const channels = [
+  "jobAid::adminEnrollment",
+  "certification::adminEnrollment",
+  "certification::autoEnrollment",
+  "certification::completed",
+  "certification::badgeIssued",
+  "certification::completionReminder",
+  "certification::expired",
+  "certification::recurrenceEnrollment",
+  "certification::republished",
+  "certification::learnerCertificationApprovalRequestApproved",
+  "certification::learnerCertificationApprovalRequestDenied",
+  "certification::deadlineMissed",
+  "course::adminEnrollment",
+  "course::autoEnrollment",
+  "course::badgeIssued",
+  "course::l1FeedbackPrompt",
+  "course::deadlineMissed",
+  "course::completed",
+  "course::completionReminder",
+  "course::sessionReminder",
+  "course::republished",
+  "course::courseOpenForEnrollment",
+  "course::learnerEnrollmentRequestApproved",
+  "course::learnerEnrollmentRequestDenied",
+  "course::waitListCleared",
+  "course::learnerNominationRequest",
+  "learningProgram::adminEnrollment",
+  "learningProgram::autoEnrollment",
+  "learningProgram::badgeIssued",
+  "learningProgram::republished",
+  "learningProgram::deadlineMissed",
+  "learningProgram::completionReminder",
+  "learningProgram::completed",
+  "learningProgram::l1Feedback",
+  "competency::assigned",
+  "competency::badgeIssued",
+  "competency::achieved",
+  "manager::added",
+  "admin::added",
+  "author::added",
+  "integrationAdmin::added",
+];
 export const useNotifications = () => {
   const { notifications, next } = useSelector(
     (state: State) => state.notification
@@ -26,49 +68,7 @@ export const useNotifications = () => {
   };
 
   const pageLimit = 6;
-  const channels = [
-    "jobAid::adminEnrollment",
-    "certification::adminEnrollment",
-    "certification::autoEnrollment",
-    "certification::completed",
-    "certification::badgeIssued",
-    "certification::completionReminder",
-    "certification::expired",
-    "certification::recurrenceEnrollment",
-    "certification::republished",
-    "certification::learnerCertificationApprovalRequestApproved",
-    "certification::learnerCertificationApprovalRequestDenied",
-    "certification::deadlineMissed",
-    "course::adminEnrollment",
-    "course::autoEnrollment",
-    "course::badgeIssued",
-    "course::l1FeedbackPrompt",
-    "course::deadlineMissed",
-    "course::completed",
-    "course::completionReminder",
-    "course::sessionReminder",
-    "course::republished",
-    "course::courseOpenForEnrollment",
-    "course::learnerEnrollmentRequestApproved",
-    "course::learnerEnrollmentRequestDenied",
-    "course::waitListCleared",
-    "course::learnerNominationRequest",
-    "learningProgram::adminEnrollment",
-    "learningProgram::autoEnrollment",
-    "learningProgram::badgeIssued",
-    "learningProgram::republished",
-    "learningProgram::deadlineMissed",
-    "learningProgram::completionReminder",
-    "learningProgram::completed",
-    "learningProgram::l1Feedback",
-    "competency::assigned",
-    "competency::badgeIssued",
-    "competency::achieved",
-    "manager::added",
-    "admin::added",
-    "author::added",
-    "integrationAdmin::added",
-  ];
+
   //console.log(user.id);
   const fetchNotifications = useCallback(async () => {
     try {
@@ -94,7 +94,7 @@ export const useNotifications = () => {
       console.log("Error while loading notifications " + e);
       setIsLoading(false);
     }
-  }, [dispatch]);
+  }, [config.primeApiURL, dispatch]);
 
   const pollUnreadNotificationCount = useCallback(async () => {
     try {
@@ -119,7 +119,7 @@ export const useNotifications = () => {
       console.log("Error while loading notifications " + e);
       setIsLoading(false);
     }
-  }, [dispatch]);
+  }, [config.primeApiURL]);
 
   useEffect(() => {
     pollUnreadNotificationCount();
@@ -161,14 +161,14 @@ export const useNotifications = () => {
         }
       }
     },
-    [dispatch, notifications]
+    [config.primeApiURL, notifications]
   );
 
   const redirectOverviewPage = useCallback((notif) => {
     let alm = getALMObject();
     let trainingId = notif.modelIds[0];
     let isJobAid = false;
-    if (notif.modelTypes[0] == "learningObject") {
+    if (notif.modelTypes[0] === "learningObject") {
       notif.modelIds!.forEach((item: string) => {
         if (item.toLowerCase().includes("jobaid")) {
           LaunchPlayer({ trainingId: trainingId });

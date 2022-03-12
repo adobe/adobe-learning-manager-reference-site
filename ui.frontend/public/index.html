@@ -25,7 +25,7 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <script>
-      const primeConfig = {
+      const ALMConfig = {
         "jcr:primaryType": "cq:PageContent",
         "jcr:createdBy": "admin",
         "jcr:title": "ALM",
@@ -33,8 +33,8 @@
         magentoRootCategoryId: "1",
         clientSecret: "8ca8ded0-9ead-44c3-bc6d-96af99b213d8",
         "cq:template": "/apps/aem-learn-components/configuration/page/template",
-        almBaseURL: "https://captivateprimestage1.adobe.com",
-        primeApiURL: "https://captivateprimestage1.adobe.com/primeapi/v2/",
+        almBaseURL: "https://captivateprimeqe.adobe.com",
+        primeApiURL: "https://captivateprimeqe.adobe.com/primeapi/v2/",
         magentoGraphqlEndpoint: "/magento/graphql",
         locale: "en-US",
         primeRegisterUrl: "1",
@@ -70,7 +70,7 @@
       };
 
       const getAccessToken = () => {
-        return "399945ccf974f0eaea31c6b22e7ad90a";
+        return "8a3098eca365c88928d1da8405ffe490";
       };
 
       const getALMConfig = () => {
@@ -81,7 +81,6 @@
         trainingId,
         trainingInstanceId = ""
       ) => {
-        debugger;
         let { trainingOverviewPath } = getALMConfig();
         trainingOverviewPath = getUrl(trainingOverviewPath, {
           trainingId: trainingId,
@@ -113,7 +112,7 @@
 
       const getUrl = (urlStr, params) => {
         for (const param in params) {
-          urlStr = `${urlStr}/${param}/${params[param]}`;
+          urlStr = urlStr + "/" + param + "/" + params[param];
         }
         return urlStr;
       };
@@ -123,14 +122,14 @@
         if (user) {
           return user;
         }
-        const primeApiURL = primeConfig.primeApiURL;
-        const userUrl = `${primeApiURL}user?include=account`;
+        const primeApiURL = getALMConfig().primeApiURL;
+        const userUrl = primeApiURL + "user?include=account";
         const headers = {
           Accept: "application/vnd.api+json",
           Authorization: `oauth ${getAccessToken()}`,
         };
         try {
-          const userResponse = await fetch(`${userUrl}`, {
+          const userResponse = await fetch(userUrl, {
             credentials: "include",
             headers,
             method: "GET",
@@ -145,10 +144,14 @@
           throw e;
         }
       };
+      const updateALMUser = async () => {
+        window.sessionStorage.removeItem("user");
+        return getALMUser();
+      };
 
       getALMUser();
       window.ALM = window.ALM || {};
-      window.ALM.ALMConfig = primeConfig; //window.ALM.ALMConfig || primeConfig;
+      window.ALM.ALMConfig = ALMConfig; //window.ALM.ALMConfig || primeConfig;
       window.ALM.getALMConfig = getALMConfig;
       window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
       window.ALM.navigateToInstancePage = navigateToInstancePage;
@@ -156,13 +159,14 @@
       window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
       window.ALM.getAccessToken = getAccessToken;
       window.ALM.getALMUser = getALMUser;
+      window.ALM.updateALMUser = updateALMUser;
     </script>
     <title>React App</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <!--/* <div class="instance__container"></div> */-->
-    <!--/* <div
+    <div
       class="catalog__container"
       data-show-filters="true"
       data-show-search="true"
@@ -176,9 +180,11 @@
       data-learner-state="true"
       data-tag-name="false"
       data-skill-level="true"
-    ></div> */-->
-    <div class="notification__container"></div>
-    <!--/* <div class="training__page__container"></div> */-->
+    ></div>
+
+    <!-- <div class="training__page__container"></div> -->
+    <!--/* <div class="notification__container"></div> */-->
+    <!--/* <div class="boards__container"></div> */-->
 
     <!--/* <div id="root1"></div> */-->
     <!--

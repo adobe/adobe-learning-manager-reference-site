@@ -24,4 +24,7 @@ export default class NonLoggedInCustomHooks implements ICustomHooks {
   async enrollToTraining(params: QueryParams = {}) {
     return null;
   }
+  async unenrollFromTraining(params: QueryParams = {}) {
+    return null;
+  }
 }

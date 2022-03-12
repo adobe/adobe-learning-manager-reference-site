@@ -45,6 +45,11 @@ export class RestAdapter {
     return this.ajax(options as IRestAdapterAjaxOptions);
   }
 
+  public static delete(options: IRestAdapterAjaxOptions): Promise<unknown> {
+    (options as IRestAdapterAjaxOptions).method = "DELETE";
+    return this.ajax(options as IRestAdapterAjaxOptions);
+  }
+
   public static ajax(options: IRestAdapterAjaxOptions): Promise<unknown> {
     return new Promise(function (resolve, reject) {
       const xhr = new XMLHttpRequest();
@@ -59,7 +64,7 @@ export class RestAdapter {
         xhr.setRequestHeader(header, options.headers[header]);
       }
       xhr.onload = function () {
-        if ((this.status >= 200 && this.status < 300) || this.status == 304) {
+        if ((this.status >= 200 && this.status < 300) || this.status === 304) {
           resolve(xhr.response);
         } else {
           reject({
@@ -80,4 +85,4 @@ export class RestAdapter {
     });
   }
 }
-export {};
+

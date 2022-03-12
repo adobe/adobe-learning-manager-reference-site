@@ -1,21 +1,21 @@
 export * from "./Portal";
-export * from "./PrimeCatalogFilters";
-export * from "./PrimeCatalogContainer";
-export * from "./PrimeCommunityBoardList";
-export * from "./PrimeCommunityBoard";
-export * from "./PrimeCommunityBoardPage";
-export * from "./PrimeCommunityPost";
-export * from "./PrimeCommunityPosts";
-export * from "./PrimeCommunityComment";
-export * from "./PrimeTrainingsContainer";
-export * from "./PrimeTrainingCard";
-export * from "./PrimeNotificationContainer";
-export * from "./PrimeTrainingPage";
-export * from "./PrimeTrainingOverviewHeader"
-export * from "./PrimeCourseOverview"
-export * from "./PrimeCatalogSearch"
-export * from "./PrimeInstancePage"
-//export * from "./PrimeCourseItemContainer"
+export * from "./Catalog/PrimeCatalogContainer";
+export * from "./Instance/PrimeInstancePage"
+export * from "./Notifications/PrimeNotificationContainer";
+
+export * from "./TrainingOverview/PrimeTrainingPage";
+
+
+// from below list remove the ones which are not needed to export outside.
+
+// export * from "./Catalog/PrimeCatalogFilters";
+// export * from "./Catalog/PrimeCatalogSearch"
+// export * from "./Catalog/PrimeTrainingCard";
+
+// export * from "./PrimeTrainingsContainer";
+// export * from "./PrimeTrainingOverviewHeader"
+// export * from "./PrimeCourseOverview"
+
 export * from "./PrimeCommunityObjectInput";
 export * from "./PrimeCommunityObjectActions";
 export * from "./PrimeCommunityObjectHeader";
@@ -35,3 +35,10 @@ export * from "./PrimeDropdown";
 export * from "./PrimeCommunityMobileBackBanner";
 export * from "./PrimeCommunityMobileScrollToTop";
 export * from "./PrimeCommunityAddPostButton"
+export * from "./PrimeCommunityBoardList";
+export * from "./PrimeCommunityBoard";
+export * from "./PrimeCommunityBoardPage";
+export * from "./PrimeCommunityBoardFilters";
+export * from "./PrimeCommunityPost";
+export * from "./PrimeCommunityPosts";
+export * from "./PrimeCommunityComment";
