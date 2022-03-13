@@ -24,7 +24,7 @@ const PrimeCommunityBoardPage = () => {
   const { item } = useBoard(boardId);
   const { formatMessage } = useIntl();
   const { fetchPosts } = usePosts();
-  const [showLoader, setShowLoader] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [searchResult, setSearchResult] = useState(0);
 
@@ -114,7 +114,12 @@ const PrimeCommunityBoardPage = () => {
           </button>
         </div>
       )}
-      {item && <PrimeCommunityPosts boardId={item.id}></PrimeCommunityPosts>}
+      {item && 
+        <PrimeCommunityPosts 
+        boardId={item.id}
+        showLoader={(value: boolean) => setShowLoader(value)}
+        isSearchMode={isSearchMode}>
+        </PrimeCommunityPosts>}
     </>
   );
 };

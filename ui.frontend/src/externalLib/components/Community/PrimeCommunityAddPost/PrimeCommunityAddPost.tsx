@@ -62,14 +62,12 @@ const PrimeCommunityAddPost = (props: any) => {
                     onPrimaryAction={hideConfirmationDialog}
                 ></PrimeAlertDialog>
         }
-
         {/* below is for mobile only */}
-        <div className={styles.primeAddPostButtonMobile}>
+            <div className={styles.primeAddPostButtonMobile}>
             <PrimeCommunityAddPostButton
                 savePostHandler={(input: any, postingType: any, resource: any) => savePostHandler(input, postingType, resource)}
             ></PrimeCommunityAddPostButton>
         </div>
-       
         </>
     );
 };

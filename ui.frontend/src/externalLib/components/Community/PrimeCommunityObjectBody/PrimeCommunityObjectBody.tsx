@@ -2,10 +2,12 @@ import { getALMConfig, getALMObject } from "../../../utils/global";
 import styles from "./PrimeCommunityObjectBody.module.css";
 import { useState } from "react";
 import { useIntl } from "react-intl";
+import Question from "@spectrum-icons/workflow/Question";
 
 const PrimeCommunityObjectBody = (props: any) => {
   const { formatMessage } = useIntl();
   const object = props.object;
+  const isQuestionType = object.postingType === "QUESTION";
   const entityType = props.type;
   const description = entityType === "board" ? object.richTextdescription : object.richText;
   const primeConfig = getALMConfig();
@@ -23,6 +25,7 @@ const PrimeCommunityObjectBody = (props: any) => {
   const [ viewIndex, setViewIndex ] = useState(DEFAULT_INDEX_VALUE);
   const [ viewMore, setViewMore ] = useState(description.length > MAX_CHAR_SHOWN);
   const [ currentDescription, setCurrentDescription ] = useState(description.length > MAX_CHAR_SHOWN ? description.substring(0, MAX_CHAR_SHOWN) : description);
+  
   const getTruncatedDescription = () => {
     const supportedCharacterLength = MAX_CHAR_SHOWN * viewIndex;
     if(description.length <= supportedCharacterLength) {
@@ -37,10 +40,14 @@ const PrimeCommunityObjectBody = (props: any) => {
 
   return (
     <>
-      <p
-        className={styles.primePostDescription}
-        dangerouslySetInnerHTML={{ __html: currentDescription }}
-      ></p>
+      <div className={isQuestionType ? styles.primeQuestionPostDescription : styles.primePostDescription}>
+        {isQuestionType && 
+          <div className={styles.primeCommunityQuestionIcon}>
+            <Question/>
+          </div>
+        }
+        <div dangerouslySetInnerHTML={{ __html: currentDescription }}></div>
+      </div>
       {viewMore &&
         <button className={styles.primeCommunityViewMoreButton} onClick={getTruncatedDescription}>
           {formatMessage({

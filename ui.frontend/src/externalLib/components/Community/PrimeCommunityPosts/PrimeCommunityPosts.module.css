@@ -1,6 +1,6 @@
 .primePostSectionWrapper {
     display:flex;
-    max-width: 716px;
+    justify-content: center;
 }
 
 .primePostSection {
@@ -18,4 +18,8 @@
 .primeNoResultMessage {
     text-align: center;
     font-size: 14px;
+}
+
+.primeCommunityNoPostFound {
+    font-size:14px;
 }

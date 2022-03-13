@@ -202,7 +202,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
                 </div>
               </Text>
             </div>
-            <div>
+            {/* <div>
               <Text>
                 <div className={styles.primeOptionContainer}>
                   {pollTypeSelected ?
@@ -226,7 +226,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
                   }
                 </div>
               </Text>
-            </div>
+            </div> */}
           </div>
         }
         {!textMode && fileUploadProgress !== 100 &&

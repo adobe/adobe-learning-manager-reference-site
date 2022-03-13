@@ -1,6 +1,6 @@
 .primeAddPostSectionWrapper {
     display:flex;
-    /* justify-content: center; */
+    justify-content: center;
     margin-bottom: 30px;
 }
 
@@ -28,7 +28,9 @@
         display:none;
     }
     .primeAddPostButtonMobile {
-        display: block;
+        display: flex;
+        z-index: 50;
+        position: relative;
     }
 }
 

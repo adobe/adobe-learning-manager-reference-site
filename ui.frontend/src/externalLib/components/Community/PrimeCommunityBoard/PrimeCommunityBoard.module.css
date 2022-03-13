@@ -1,7 +1,9 @@
 .primeBoardWrapper{
     display:flex;
     max-width: 716px;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .primeBoardItem {
