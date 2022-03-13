@@ -3,7 +3,7 @@ import { PrimeCommunityBoardFilters } from "../PrimeCommunityBoardFilters";
 import { PrimeCommunityMobileBackBanner } from "../PrimeCommunityMobileBackBanner";
 import { PrimeCommunityMobileScrollToTop } from "../PrimeCommunityMobileScrollToTop";
 import { useBoards, usePosts } from "../../../hooks/community";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PrimeCommunitySearch } from "../PrimeCommunitySearch";
 import { PrimeCommunityPost } from "../PrimeCommunityPost";
 import { useIntl } from "react-intl";
@@ -19,9 +19,15 @@ const PrimeCommunityBoardList = () => {
   const [selectedSortFilter, setSelectedSortFilter] =
     useState(DEFAULT_SORT_VALUE);
   const [selectedSkill, setSelectedSkill] = useState(DEFAULT_SKILL);
-  const [showLoader, setShowLoader] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [searchResult, setSearchResult] = useState(0);
+
+  useEffect(() => {
+    if(items) {
+      setShowLoader(false);
+    }
+  }, [items])
 
   const showLoaderHandler = (value: any) => {
     setShowLoader(value);
@@ -125,13 +131,22 @@ const PrimeCommunityBoardList = () => {
           posts.map((post) => (
             <PrimeCommunityPost post={post} key={post.id}></PrimeCommunityPost>
           ))}
-        {!isSearchMode &&
+        {!isSearchMode && items?.length > 0 &&
           items?.map((board) => (
             <PrimeCommunityBoard
               board={board}
               key={board.id}
             ></PrimeCommunityBoard>
-          ))}
+          ))
+        }
+        {!isSearchMode && items?.length === 0 &&
+          <div className={styles.primeCommunityNoBoardFound}>
+            {formatMessage({
+                id: "prime.community.noBoardMessage",
+                defaultMessage: "No boards found",
+            })}
+          </div>
+        }
       </div>
     </>
   );

@@ -85,5 +85,7 @@
   "prime.community.postHere.label": "Write or paste something here...",
   "prime.community.back.label": "Back",
   "prime.profile.change.image": "Change image",
-  "prime.community.viewMore": "View more"
+  "prime.community.viewMore": "View more",
+  "prime.community.noPostMessage": "No post found",
+  "prime.community.noBoardMessage": "No boards found"
 }

@@ -2,10 +2,10 @@
     display: flex;
     max-width: 716px;
     margin-bottom: 30px;
-    margin-left: 25px;
-    margin-right: 25px;
     font-weight: 500;
-
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 25px;
 }
 
 @media (max-width: 414px) {
@@ -15,6 +15,7 @@
         margin-left: 25px;
         margin-right: 25px;
         font-weight: 500;
+        padding-left: 0px;
     }
 }
 
@@ -37,15 +38,17 @@
 .primeLoaderWrapper {
     margin-bottom: 20px;
     height:20px;
-    justify-content: center;
-    max-width: 716px;
     display: flex;
+    justify-content: center;
 }
 
 .primeCommunitySearchStatus {
     display: flex;
     font-size: 14px;
-    margin: 25px;
+    margin: auto;
+    width: 716px;
+    margin-bottom: 25px;
+    padding-left: 25px;
 }
 
 .primeCommunitySearchClear {
@@ -56,4 +59,9 @@
 
 .primeCommunitySearchClear:hover {
     cursor: pointer;
+}
+
+.primeCommunityNoBoardFound {
+    font-size: 14px;
+    margin-left: 25px;
 }
