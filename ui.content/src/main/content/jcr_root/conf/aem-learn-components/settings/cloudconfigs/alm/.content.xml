@@ -18,6 +18,13 @@
         primeUrl="https://captivateprimeapac.adobe.com"
         refreshToken="cf7bc08cdaa8139405c51f7da8d4355a"
         siteMap="siteMap"
-        trainingOverviewPath="http://localhost:4502/content/aem-learn-components/language-masters/en/non-log/trainingOverview.html"
-        usageType="sites"/>
+        trainingOverviewPath="http://localhost:4502/content/aem-learn-components/language-masters/en/overview.html"
+        catalogPath="http://localhost:4502/content/aem-learn-components/language-masters/en/explore.html"
+        communityPath="http://localhost:4502/content/aem-learn-components/language-masters/en/explore.html"
+        communityBoardsPath="http://localhost:4502/content/aem-learn-components/language-masters/en/boards.html"
+        communityBoardDetailsPath="http://localhost:4502/content/aem-learn-components/language-masters/en/board.html"
+        instancePath="http://localhost:4502/content/aem-learn-components/language-masters/en/instance.html"
+        usageType="sites"
+        theme.background="transparent"
+        commonConfig.emitPageLinkEvents="true"/>
 </jcr:root>

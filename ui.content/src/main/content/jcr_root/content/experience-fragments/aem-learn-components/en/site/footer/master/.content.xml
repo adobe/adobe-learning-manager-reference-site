@@ -22,6 +22,11 @@
                 sling:resourceType="aem-learn-components/components/text"
                 text="&lt;p>&lt;a href=&quot;https://www.adobe.com/in/legal/terms.html&quot; target=&quot;_blank&quot; title=&quot;Terms of Use&quot;>Terms of Use&lt;/a>&lt;span class=&quot;footer-separator&quot;> | &lt;/span>&lt;a href=&quot;https://www.adobe.com/privacy.html&quot; target=&quot;_blank&quot; title=&quot;Privacy&quot;>Privacy Policy&lt;/a>&lt;span class=&quot;footer-separator&quot;> | &lt;/span>&lt;a href=&quot;https://www.adobe.com/in/privacy/cookies.html&quot; target=&quot;_blank&quot; title=&quot;Cookie Policy&quot;>Cookie Policy&lt;/a>&lt;span class=&quot;footer-separator&quot;> | &lt;/span>&lt;a href=&quot;https://www.adobe.com/in/products/captivateprime.html&quot; target=&quot;_blank&quot; title=&quot;About&quot;>About Adobe&lt;/a>&lt;/p>&#xd;&#xa;"
                 textIsRich="true"/>
+            <footer 
+                jcr:lastModified="{Date}2022-03-07T17:00:09.768+05:30"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="aem-learn-components/components/footer"/>
         </root>
     </jcr:content>
 </jcr:root>

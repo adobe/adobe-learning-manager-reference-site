@@ -56,7 +56,7 @@
         trainingOverviewPath: "http://localhost:3000/trainingOverview.html",
         communityPath: "http://localhost:3000/community.html",
         communityBoardsPath: "http://localhost:3000/community.html",
-        communityBoardPath: "http://localhost:3000/community.html",
+        communityBoardDetailsPath: "http://localhost:3000/community.html",
         primeTileColors: {
           0: "#00000",
           1: "#FFFFFF",
@@ -97,9 +97,9 @@
         window.location = getUrl(instancePath, { trainingId: trainingId });
       };
 
-      const navigateToBoardPage = (boardId) => {
-        let { communityBoardsPath } = getALMConfig();
-        window.location = getUrl(communityBoardsPath, { boardId: boardId });
+      const navigateToBoardDetailsPage = (boardId) => {
+        let { communityBoardDetailsPath } = getALMConfig();
+        window.location = getUrl(communityBoardDetailsPath, { boardId: boardId });
       };
 
       const getUrlWithQueryParams = (urlStr, params) => {
@@ -155,7 +155,7 @@
       window.ALM.getALMConfig = getALMConfig;
       window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
       window.ALM.navigateToInstancePage = navigateToInstancePage;
-      window.ALM.navigateToBoardPage = navigateToBoardPage;
+      window.ALM.navigateToBoardDetailsPage = navigateToBoardDetailsPage;
       window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
       window.ALM.getAccessToken = getAccessToken;
       window.ALM.getALMUser = getALMUser;
