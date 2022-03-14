@@ -3,28 +3,15 @@
   --prime-color-white: #fff;
   --prime-icon-color: #eb5e00;
 
-  --prime-color-nc2: #292929;
-
-  /* --prime-color-nc5: #bcbcbc; */
-  --prime-color-nc8: #cccccc;
-
+  --prime-color-nc1: #292929;
+  --prime-color-nc2: #cccccc;
   --prime-color-nc3: #717171;
-
-  /* --prime-color-nc4: #565656; */
-  --prime-color-nc7: #5d5d5d;
-
-  /* --prime-color-nc6: #d1d1d1;
-  --prime-color-nc1: #f1f1f1; */
-  --prime-color-nc9: #f7f7f7;
-  /* --prime-color-nc10`: #f5f5f5;
-  --prime-color-nc14: #f8f8f8; */
-
-  /* --prime-color-nc11: #dcdddd; */
-  --prime-color-nc12: #e8e8e8;
-  /* --prime-color-nc13: #c9c9c9; */
-
+  --prime-color-nc4: #5d5d5d;
+  --prime-color-nc5: #f7f7f7;
+  --prime-color-nc6: #e8e8e8;
+  
   --prime-text-shadow: 0.2rem 0.2rem 0.2rem #565656;
-
+  
   --prime-font-size-10: 10px;
   --prime-font-size-12: 12px;
   --prime-font-size-14: 14px;
@@ -33,10 +20,20 @@
   --prime-font-size-20: 20px;
   --prime-font-size-24: 24px;
   --prime-font-size-28: 28px;
-
+  
   --prime-font-weight-400: 400;
-
+  
   --prime-color-primary: #4283d0;
   /* #306eb5; */
   --prime-font-weight-600: 600;
 }
+
+/* --prime-color-nc5: #bcbcbc; */
+/* --prime-color-nc4: #565656; */
+/* --prime-color-nc6: #d1d1d1;
+--prime-color-nc1: #f1f1f1; */
+/* --prime-color-nc10`: #f5f5f5;
+--prime-color-nc14: #f8f8f8; */
+
+/* --prime-color-nc11: #dcdddd; */
+/* --prime-color-nc13: #c9c9c9; */
