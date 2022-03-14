@@ -8,14 +8,14 @@
   text-align: left;
   font: normal normal bold 24px/17px Source Sans Pro;
   letter-spacing: 0.54px;
-  color: var(--prime-color-nc2);
+  color: var(--prime-color-nc1);
   opacity: 1;
   padding: 0;
   margin: 0;
   margin-bottom: 40px;
 }
 .upperSectionContainer {
-  background: var(--prime-color-nc9);
+  background: var(--prime-color-nc5);
 }
 .upperSection {
   margin: 0 auto;
@@ -52,7 +52,7 @@
   font-weight: bold;
   line-height: 17px;
   letter-spacing: 0.54px;
-  color: var(--prime-color-nc2);
+  color: var(--prime-color-nc1);
   opacity: 1;
   margin: 0 0 15px 0;
 }
@@ -61,7 +61,7 @@
   font-weight: normal;
   line-height: 27px;
   letter-spacing: 0px;
-  color: var(--prime-color-nc2);
+  color: var(--prime-color-nc1);
   opacity: 1;
   margin: 0 0 10px 0;
 }
@@ -108,8 +108,8 @@
   }
   .detailsContainer {
     padding: 20px;
-    border-top: 2px solid var(--prime-color-nc12);
-    border-bottom: 2px solid var(--prime-color-nc12);
+    border-top: 2px solid var(--prime-color-nc6);
+    border-bottom: 2px solid var(--prime-color-nc6);
   }
   .image {
     width: 54px;
@@ -141,7 +141,7 @@
   .name {
     font-size: var(--prime-font-size-20);
     line-height: 25px;
-    color: var(--prime-color-nc2);
+    color: var(--prime-color-nc1);
     opacity: 1;
     font-weight: normal;
     margin-bottom: 5px;

@@ -6,9 +6,9 @@
   justify-content: space-between;
   font-weight: 600;
   font-size: var(--prime-font-size-14);
-  border: 1px solid var(--prime-color-nc9);
+  border: 1px solid var(--prime-color-nc5);
   opacity: 1;
-  color: var(--prime-color-nc2);
+  color: var(--prime-color-nc1);
   list-style-type: none;
   line-height: 22px;
 }
@@ -25,7 +25,7 @@
 .notificationTime {
   margin-top: 8px;
   border: 0;
-  color: var(--prime-color-nc9);
+  color: var(--prime-color-nc5);
   height: 20px;
   font-size: var(--prime-font-size-12);
 }
