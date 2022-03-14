@@ -58,9 +58,11 @@
 }
 
 .commonContainer {
+  padding-bottom: 20px;
   margin-bottom: 20px;
   display: flex;
   width: 100%;
+  border-bottom: 1px solid var(--prime-color-nc6);
 }
 .icon {
   margin-right: 10px;
@@ -87,8 +89,8 @@
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
-  padding-top: 20px;
-  border-top: 1px solid var(--prime-color-nc10);
+  /* padding-top: 20px; */
+  border-bottom: 1px solid var(--prime-color-nc6);
 }
 .authors {
   display: flex;
@@ -114,27 +116,14 @@
   height: 36px;
   border-radius: 50%;
 }
-
-
-/* changes for Job Aid */
-.jobAid {
-  margin-bottom: 10px;
-  display: flex;
-}
-.name {
+.supplymentaryLoName {
   display: inline-block;
-  width: 90%;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  max-width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
+  color: var(--prime-color-primary);
+  text-decoration: none;
 }
-.jobAidIcon {
-  display: inline-block;
-  width: 10%;
-  cursor: pointer;
-}
-.jobAidIcon svg {
-  width: 16px;
-  height: 16px;
-  fill: var(--prime-color-nc3);
-}
+

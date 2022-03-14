@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import APIServiceInstance from "../../common/APIService";
 import {
+  PrimeLearningObject,
   PrimeLearningObjectInstance,
   PrimeLoInstanceSummary,
 } from "../../models/PrimeModels";
+import { getJobaidUrl, isJobaidContentTypeUrl } from "../../utils/catalog";
 import { getALMConfig } from "../../utils/global";
 import {
   filterTrainingInstance,
@@ -109,6 +111,7 @@ export const useTrainingPage = (
           setRefreshTraining((prevState) => !prevState);
         }
       } catch (error) {
+        
         //TODO : handle error
       }
     },
@@ -124,7 +127,18 @@ export const useTrainingPage = (
           setRefreshTraining((prevState) => !prevState);
         }
       } catch (error) {
+        console.log(error);
         //TODO : handle error
+      }
+    },
+    []
+  );
+  const jobAidClickHandler = useCallback(
+    (supplymentaryLo: PrimeLearningObject) => {
+      if (isJobaidContentTypeUrl(supplymentaryLo)) {
+        window.open(getJobaidUrl(supplymentaryLo), "_blank");
+      } else {
+        LaunchPlayer({ trainingId: supplymentaryLo.id });
       }
     },
     []
@@ -173,6 +187,7 @@ export const useTrainingPage = (
     enrollmentHandler,
     launchPlayerHandler,
     unEnrollmentHandler,
+    jobAidClickHandler,
   };
   //date create, published, duration
 };

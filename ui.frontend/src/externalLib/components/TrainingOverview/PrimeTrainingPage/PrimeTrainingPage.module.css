@@ -16,7 +16,7 @@
   padding: 20px 0;
 }
 .trainingOverviewContainer {
-  border: 1px solid #cacaca;
+  border: 1px solid var(--prime-color-nc6);
   border-radius: 6px;
   padding: 10px;
   margin-bottom: 20px;

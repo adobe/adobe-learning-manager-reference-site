@@ -86,7 +86,7 @@ export default class LoggedInCustomHooks implements ICustomHooks {
       url: `${this.primeApiURL}enrollments/${enrollmentId}`,
       method: "DELETE",
     });
-    return JsonApiParse(response);
+    return response;
   }
 }
 
