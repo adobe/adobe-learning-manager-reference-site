@@ -70,7 +70,7 @@
       };
 
       const getAccessToken = () => {
-        return "8a3098eca365c88928d1da8405ffe490";
+        return "529cc734242d24fe721e8bb80e4e93df";
       };
 
       const getALMConfig = () => {
@@ -99,7 +99,9 @@
 
       const navigateToBoardDetailsPage = (boardId) => {
         let { communityBoardDetailsPath } = getALMConfig();
-        window.location = getUrl(communityBoardDetailsPath, { boardId: boardId });
+        window.location = getUrl(communityBoardDetailsPath, {
+          boardId: boardId,
+        });
       };
 
       const getUrlWithQueryParams = (urlStr, params) => {
@@ -153,7 +155,8 @@
       window.ALM = window.ALM || {};
       window.ALM.ALMConfig = ALMConfig; //window.ALM.ALMConfig || primeConfig;
       window.ALM.getALMConfig = getALMConfig;
-      window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
+      window.ALM.navigateToTrainingOverviewPage =
+        navigateToTrainingOverviewPage;
       window.ALM.navigateToInstancePage = navigateToInstancePage;
       window.ALM.navigateToBoardDetailsPage = navigateToBoardDetailsPage;
       window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;

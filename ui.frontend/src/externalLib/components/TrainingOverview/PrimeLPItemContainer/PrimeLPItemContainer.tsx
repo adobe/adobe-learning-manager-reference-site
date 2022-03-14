@@ -20,8 +20,14 @@ const PrimeLPItemContainer: React.FC<{
   training: PrimeLearningObject;
   launchPlayerHandler: Function;
   isPartOfLP: boolean;
+  showMandatoryLabel?: boolean;
 }> = (props) => {
-  const { training, launchPlayerHandler, isPartOfLP = false } = props;
+  const {
+    training,
+    launchPlayerHandler,
+    isPartOfLP = false,
+    showMandatoryLabel = false,
+  } = props;
 
   const [isCollapsed, setIsCollapsed] = useState(true);
 
@@ -54,6 +60,7 @@ const PrimeLPItemContainer: React.FC<{
         richTextOverview={richTextOverview}
         launchPlayerHandler={launchPlayerHandler}
         isPartOfLP={isPartOfLP}
+        showMandatoryLabel={showMandatoryLabel}
       />
       <div className={styles.collapsibleContainer}>
         <Button variant="overBackground" isQuiet onPress={clickHandler}>
