@@ -111,6 +111,7 @@ export const useTrainingPage = (
           setRefreshTraining((prevState) => !prevState);
         }
       } catch (error) {
+        
         //TODO : handle error
       }
     },
@@ -120,19 +121,19 @@ export const useTrainingPage = (
   const unEnrollmentHandler = useCallback(
     async ({ enrollmentId, isSupplementaryLO = false } = {}) => {
       try {
-        debugger;
         await APIServiceInstance.unenrollFromTraining(enrollmentId);
         if (!isSupplementaryLO) {
           //just to refresh the training data
           setRefreshTraining((prevState) => !prevState);
         }
       } catch (error) {
+        console.log(error);
         //TODO : handle error
       }
     },
     []
   );
-  const supplementaryLOsJobAidClickHandler = useCallback(
+  const jobAidClickHandler = useCallback(
     (supplymentaryLo: PrimeLearningObject) => {
       if (isJobaidContentTypeUrl(supplymentaryLo)) {
         window.open(getJobaidUrl(supplymentaryLo), "_blank");
@@ -186,7 +187,7 @@ export const useTrainingPage = (
     enrollmentHandler,
     launchPlayerHandler,
     unEnrollmentHandler,
-    supplementaryLOsJobAidClickHandler,
+    jobAidClickHandler,
   };
   //date create, published, duration
 };

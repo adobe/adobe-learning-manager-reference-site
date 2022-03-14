@@ -15,13 +15,13 @@ const PrimeTrainingPageExtraJobAid: React.FC<{
   training: PrimeLearningObject;
   enrollmentHandler: Function;
   unEnrollmentHandler: Function;
-  supplementaryLOsJobAidClickHandler: Function;
+  jobAidClickHandler: Function;
 }> = ({
   resource,
   training,
   enrollmentHandler,
   unEnrollmentHandler,
-  supplementaryLOsJobAidClickHandler,
+  jobAidClickHandler,
 }) => {
   //on clikc, if not enrolled show popup alert
   const [isEnrolled, setIsEnrolled] = useState(() => {
@@ -47,7 +47,7 @@ const PrimeTrainingPageExtraJobAid: React.FC<{
 
   const nameClickHandler = () => {
     if (isEnrolled) {
-      supplementaryLOsJobAidClickHandler(training);
+      jobAidClickHandler(training);
       return;
     } else {
       //need to show dialog

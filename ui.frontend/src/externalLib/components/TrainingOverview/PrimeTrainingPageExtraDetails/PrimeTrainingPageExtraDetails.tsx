@@ -30,7 +30,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
   enrollmentHandler: () => void;
   launchPlayerHandler: () => void;
   unEnrollmentHandler: Function;
-  supplementaryLOsJobAidClickHandler: Function;
+  jobAidClickHandler: Function;
 }> = ({
   trainingInstance,
   skills,
@@ -40,7 +40,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
   enrollmentHandler,
   launchPlayerHandler,
   unEnrollmentHandler,
-  supplementaryLOsJobAidClickHandler,
+  jobAidClickHandler,
 }) => {
   const { formatMessage } = useIntl();
   const { locale } = getALMObject().getALMConfig().locale;
@@ -324,8 +324,8 @@ const PrimeTrainingPageExtraDetails: React.FC<{
                       enrollmentHandler={enrollmentHandler}
                       key={item.id}
                       unEnrollmentHandler={unEnrollmentHandler}
-                      supplementaryLOsJobAidClickHandler={
-                        supplementaryLOsJobAidClickHandler
+                      jobAidClickHandler={
+                        jobAidClickHandler
                       }
                     />
                   ));
