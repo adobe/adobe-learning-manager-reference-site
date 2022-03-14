@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import APIServiceInstance from "../../common/APIService";
 import {
+  PrimeLearningObject,
   PrimeLearningObjectInstance,
   PrimeLoInstanceSummary,
 } from "../../models/PrimeModels";
+import { getJobaidUrl, isJobaidContentTypeUrl } from "../../utils/catalog";
 import { getALMConfig } from "../../utils/global";
 import {
   filterTrainingInstance,
@@ -118,6 +120,7 @@ export const useTrainingPage = (
   const unEnrollmentHandler = useCallback(
     async ({ enrollmentId, isSupplementaryLO = false } = {}) => {
       try {
+        debugger;
         await APIServiceInstance.unenrollFromTraining(enrollmentId);
         if (!isSupplementaryLO) {
           //just to refresh the training data
@@ -125,6 +128,16 @@ export const useTrainingPage = (
         }
       } catch (error) {
         //TODO : handle error
+      }
+    },
+    []
+  );
+  const supplementaryLOsJobAidClickHandler = useCallback(
+    (supplymentaryLo: PrimeLearningObject) => {
+      if (isJobaidContentTypeUrl(supplymentaryLo)) {
+        window.open(getJobaidUrl(supplymentaryLo), "_blank");
+      } else {
+        LaunchPlayer({ trainingId: supplymentaryLo.id });
       }
     },
     []
@@ -173,6 +186,7 @@ export const useTrainingPage = (
     enrollmentHandler,
     launchPlayerHandler,
     unEnrollmentHandler,
+    supplementaryLOsJobAidClickHandler,
   };
   //date create, published, duration
 };
