@@ -6,6 +6,14 @@
   width: 100px;
 }
 
+.carousel {
+  height: 400px;
+}
+
+.cmp-teaser__image, .cmp-teaser__image .cmp-image, .cmp-teaser__image .cmp-image .cmp-image__image {
+  height: 300px;
+}
+
 .cmp-teaser .cmp-teaser__content {
   float: left;
   position: relative;
@@ -13,10 +21,7 @@
 }
 
 .cmp-carousel .cmp-carousel__indicators {
-  margin-top: 0.5em;
-  cursor: pointer;
-  position: absolute;
-  left: 50%;
+  display: none;
 }
 
 .experiencefragment.cmp-experiencefragment--header {
@@ -99,7 +104,6 @@
   border: 1px solid #707070;
   height: 70px;
   color: #ebebeb;
-  padding-left: 30%;
 }
 
 .experiencefragment.cmp-experiencefragment--footer a {
@@ -211,136 +215,6 @@
   to {
     opacity: 1;
   }
-}
-
-@font-face {
-  font-family: wknd-icon-font;
-  src: url(../resources/fonts/wknd-icon-font.ttf) format("truetype"),
-    url(../resources/fonts/wknd-icon-font.woff) format("woff"),
-    url(../resources/fonts/wknd-icon-font.svg#wknd-icon-font) format("svg");
-  font-weight: 400;
-  font-style: normal;
-  font-display: block;
-}
-
-[class$="-icon"],
-[class$="__icon"],
-[class*="-icon"],
-[class*="__icon"] {
-  font-family: wknd-icon-font !important;
-  speak: none;
-  font-style: normal;
-  font-weight: 400;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  font-size: 1.25rem;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.wkndicon-google:before {
-  content: "";
-}
-
-.wkndicon-twitter:before {
-  content: "";
-}
-
-.wkndicon-facebook:before {
-  content: "";
-}
-
-.wkndicon-instagram:before {
-  content: "";
-}
-
-.wkndicon-social-share:before {
-  content: "";
-}
-
-.wkndicon-map:before {
-  content: "";
-}
-
-.wkndicon-alert:before {
-  content: "";
-}
-
-.wkndicon-download:before {
-  content: "";
-}
-
-.wkndicon-info:before {
-  content: "";
-}
-
-.wkndicon-email:before {
-  content: "";
-}
-
-.wkndicon-comment:before {
-  content: "";
-}
-
-.wkndicon-share:before {
-  content: "";
-}
-
-.wkndicon-user:before {
-  content: "";
-}
-
-.wkndicon-home:before {
-  content: "";
-}
-
-.wkndicon-right-arrow:before {
-  content: "";
-}
-
-.wkndicon-left-arrow:before {
-  content: "";
-}
-
-.wkndicon-minus:before {
-  content: "";
-}
-
-.wkndicon-plus:before {
-  content: "";
-}
-
-.wkndicon-location:before {
-  content: "";
-}
-
-.wkndicon-search:before {
-  content: "";
-}
-
-.wkndicon-delete:before {
-  content: "";
-}
-
-.wkndicon-cart:before {
-  content: "";
-}
-
-.wkndicon-menu:before {
-  content: "";
-}
-
-.wkndicon-lock:before {
-  content: "";
-}
-
-.wkndicon-unlocked:before {
-  content: "";
-}
-
-.wkndicon-play3:before {
-  content: "";
 }
 
 .chevron:before {
@@ -682,7 +556,6 @@ h3 a {
 h1 a:after,
 h2 a:after,
 h3 a:after {
-  font-family: wknd-icon-font !important;
   speak: none;
   font-style: normal;
   font-weight: 400;
@@ -794,7 +667,6 @@ p {
 }
 
 .cmp-breadcrumb .cmp-breadcrumb__item:before {
-  font-family: wknd-icon-font !important;
   speak: none;
   font-style: normal;
   font-weight: 400;
@@ -968,11 +840,11 @@ p {
 .cmp-carousel
   .cmp-carousel__action--previous
   .cmp-carousel__action-icon:before {
-  content: "";
+  content: " \02C2";
 }
 
 .cmp-carousel .cmp-carousel__action--next .cmp-carousel__action-icon:before {
-  content: "";
+  content: ' \02C3';
 }
 
 .cmp-carousel--hero {
@@ -1139,7 +1011,6 @@ p {
 }
 
 .cmp-download .cmp-download__action-text:before {
-  font-family: wknd-icon-font !important;
   speak: none;
   font-style: normal;
   font-weight: 400;
@@ -1484,17 +1355,6 @@ p {
   .cmp-layout-container--modal {
     padding: 1rem 0.5rem;
   }
-}
-
-#wknd-modal {
-  display: none;
-  position: fixed;
-  width: 450px;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  z-index: 999999;
 }
 
 .cmp-languagenavigation--default .cmp-languagenavigation {
@@ -2510,7 +2370,6 @@ p {
 }
 
 body.anonymous .cmp-teaser--secure:before {
-  font-family: wknd-icon-font !important;
   speak: none;
   font-style: normal;
   font-weight: 400;
@@ -2581,7 +2440,6 @@ body.anonymous .cmp-teaser--secure .cmp-teaser__action-container {
 .cmp-contentfragment ul li:before,
 .cmp-text ul li:before {
   content: "";
-  font-family: wknd-icon-font !important;
   speak: none;
   font-style: normal;
   font-weight: 400;

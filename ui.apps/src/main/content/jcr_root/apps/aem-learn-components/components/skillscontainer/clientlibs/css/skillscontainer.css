@@ -6,20 +6,20 @@
 	margin-top: 20px;
 } */
 
-.alm-skills-container {
+.skillscontainer {
     padding-left: 418px;
     padding-right: 418px;
 }
 
 @media screen and (max-width: 1366px) {
-    .alm-skills-container {
+    .skillscontainer  {
       padding-left: 141px;
       padding-right: 141px;
     }
   }
 
 @media screen and (max-width: 1024px) {
-    .alm-skills-container {
+    .skillscontainer {
         padding-left: 47px;
         padding-right: 47px;
       }
@@ -41,7 +41,7 @@
 }
 
  @media screen and (max-width: 414px) {
-    .alm-skills-container {
+    .skillscontainer {
         padding-left: 20px;
         padding-right: 20px;
       }

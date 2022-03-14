@@ -12,6 +12,7 @@
         jcr:isCheckedOut="{Boolean}true"
         jcr:mixinTypes="[mix:versionable]"
         jcr:primaryType="cq:PageContent"
+        jcr:uuid="0e82672e-d25d-45b1-8e39-b2c2e21577ec"
         sling:resourceType="aem-learn-components/components/page">
         <root
             jcr:primaryType="nt:unstructured"
@@ -22,12 +23,14 @@
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="aem-learn-components/components/experiencefragment"
                 fragmentVariationPath="/content/experience-fragments/aem-learn-components/en/site/header/master"/>
-            <container jcr:primaryType="nt:unstructured" 
-                sling:resourceType="aem-learn-components/components/container" 
+            <container
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="aem-learn-components/components/container"
                 layout="responsiveGrid">
-                <container jcr:primaryType="nt:unstructured" 
-                    sling:resourceType="aem-learn-components/components/container" 
-                    editable="{Boolean}true" />
+                <container
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="aem-learn-components/components/container"
+                    editable="{Boolean}true"/>
             </container>
             <experiencefragment-footer
                 cq:styleIds="[1568592503946]"

@@ -2,12 +2,12 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2022-02-21T13:03:09.199+05:30"
+        cq:lastModified="{Date}2022-03-13T21:50:40.153+05:30"
         cq:lastModifiedBy="admin"
         cq:lastReplicated="{Date}2022-02-21T13:03:16.078+05:30"
         cq:lastReplicatedBy="admin"
         cq:lastReplicationAction="Activate"
-        cq:policy="wcm/foundation/components/page/policy_1645426828124"
+        cq:policy="aem-learn-components/components/page/policy"
         jcr:isCheckedOut="{Boolean}true"
         jcr:mixinTypes="[cq:ReplicationStatus,mix:versionable]"
         jcr:primaryType="nt:unstructured"

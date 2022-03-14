@@ -47,7 +47,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
 
   const navigateToBoardDetailsPage = (boardId) => {
-    let { communityBoardsPath } = getALMConfig();
+    let { communityBoardDetailsPath } = getALMConfig();
     window.location = getUrl(communityBoardDetailsPath, { boardId: boardId });
   };
 
