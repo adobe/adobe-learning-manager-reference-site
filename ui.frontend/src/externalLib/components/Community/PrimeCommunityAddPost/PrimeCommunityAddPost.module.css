@@ -1,6 +1,6 @@
 .primeAddPostSectionWrapper {
     display:flex;
-    /* justify-content: center; */
+    justify-content: center;
     margin-bottom: 30px;
 }
 
@@ -17,6 +17,21 @@
     font-size: 12px;
     color: #999999;
     display: flex;
+}
+
+.primeAddPostButtonMobile {
+    display: none;
+}
+
+@media (max-width: 414px) {
+    .primeAddPostSectionWrapper {
+        display:none;
+    }
+    .primeAddPostButtonMobile {
+        display: flex;
+        z-index: 50;
+        position: relative;
+    }
 }
 
 .primeAddPostMessage {

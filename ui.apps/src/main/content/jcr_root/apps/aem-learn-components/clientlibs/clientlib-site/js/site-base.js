@@ -45,12 +45,25 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     window.location = getUrl(instancePath, { trainingId: trainingId });
   };
 
+
+  const navigateToBoardDetailsPage = (boardId) => {
+    let { communityBoardsPath } = getALMConfig();
+    window.location = getUrl(communityBoardDetailsPath, { boardId: boardId });
+  };
+
   const navigateToCatalogPage = (catalogIds) => {
     let { catalogPath } = getALMConfig();
     let catalogUrl = new URL(catalogPath);
     catalogUrl.searchParams.append("catalogs", catalogIds);
     window.location = catalogUrl.href;
   };
+
+  const navigateToBoardsPage = (skillNames) => {
+    let {communityBoardsPath} = getALMConfig();
+    let boardsUrl = new URL(communityBoardsPath);
+    boardsUrl.searchParams.append("skill", skillNames);
+    window.location = boardsUrl.href;
+  }
 
   const getUrl = (urlStr, params) => {
     for (const param in params) {
@@ -65,4 +78,6 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
   window.ALM.navigateToInstancePage = navigateToInstancePage;
   window.ALM.navigateToCatalogPage = navigateToCatalogPage;
+  window.ALM.navigateToBoardDetailsPage = navigateToBoardDetailsPage;
+  window.ALM.navigateToBoardsPage = navigateToBoardsPage;
 })(window, document, Granite, jQuery);

@@ -32,10 +32,13 @@ export * from "./Community/PrimeCommunityPostFilters";
 export * from "./Community/PrimeCommunityReplies";
 export * from "./Community/PrimeCommunityReply";
 export * from "./Community/PrimeDropdown";
-export * from "./Community/PrimeCommunityBackBanner";
+export * from "./Community/PrimeCommunityMobileBackBanner";
+export * from "./Community/PrimeCommunityMobileScrollToTop";
+export * from "./Community/PrimeCommunityAddPostButton"
 export * from "./Community/PrimeCommunityBoardList";
 export * from "./Community/PrimeCommunityBoard";
 export * from "./Community/PrimeCommunityBoardPage";
+export * from "./Community/PrimeCommunityBoardFilters";
 export * from "./Community/PrimeCommunityPost";
 export * from "./Community/PrimeCommunityPosts";
 export * from "./Community/PrimeCommunityComment";

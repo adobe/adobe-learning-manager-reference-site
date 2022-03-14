@@ -6,10 +6,6 @@
   width: 100px;
 }
 
-.cmp-teaser__image .cmp-image .cmp-image__image {
-  height: 200px;
-}
-
 .cmp-teaser .cmp-teaser__content {
   float: left;
   position: relative;
@@ -33,9 +29,38 @@
   padding-right: 0;
 }
 
-@media (max-width: 415px) {
+/* css for rest screen size */
+.cmp-experiencefragment--header .aem-Grid.aem-Grid--default--12 .image.cmp-image--logo {
+  margin-left: 418px;
+  margin-right: 120px;
+  height: 70px;
+}
+
+.cmp-experiencefragment--header .title {
+  margin-right: 60px;
+}
+
+@media screen and (max-width: 414px) {
   .experiencefragment.cmp-experiencefragment--header {
     height: 56px;
+  }
+
+  .cmp-experiencefragment--header .title {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .cmp-experiencefragment--header .aem-Grid.aem-Grid--default--12 .image.cmp-image--logo {
+    margin-left: 47px;
+    margin-right: 80px;
+  }
+}
+
+@media (max-width: 1366px) {
+  .cmp-experiencefragment--header .aem-Grid.aem-Grid--default--12 .image.cmp-image--logo {
+    margin-left: 141px;
+    margin-right: 120px;
   }
 }
 
@@ -91,6 +116,64 @@
   }
 }
 
+
+#carousel-container .carousel, #carousel-container .cmp-carousel {
+    height: 300px;
+}
+
+#carousel-container .cmp-teaser__image .cmp-image .cmp-image__image {
+  height: 300px;
+}
+
+#learning-button-cont {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+}
+
+#learning-button-cont .cmp-button {
+  margin-right: 10px;
+  border-radius: 15px;
+}
+
+#learning-parent-container {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+#news-catalog-container {
+  margin-top: 60px;
+}
+
+#home-catalog-container {
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
+.alm-skills-container {
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* custom end */
 .scrolly .cmp-layoutcontainer--header {
   -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.26);
   box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.26);

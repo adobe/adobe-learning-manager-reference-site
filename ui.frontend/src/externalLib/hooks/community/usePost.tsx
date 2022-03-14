@@ -11,7 +11,7 @@ export const usePost = () => {
       boardId: any,
       input: any,
       postingType: any,
-      uploadedFileUrl: any
+      resource: any
     ) => {
       // try {
       const baseApiUrl = getALMConfig().primeApiURL;
@@ -20,10 +20,7 @@ export const usePost = () => {
           type: "post",
           attributes: {
             postingType: postingType,
-            resource: {
-              contentType: "FILE",
-              data: uploadedFileUrl,
-            },
+            "resource": resource,
             state: "ACTIVE",
             text: input,
           },
@@ -45,28 +42,15 @@ export const usePost = () => {
   //to-do, correct below after bug fix
   const updatePost = useCallback(async (postId: any, input: any, postingType: any, resource: any) => {
       const baseApiUrl =  getALMConfig().primeApiURL;
-      // resourceValue;
-      const resourceField = resource.id ? "resourceId" : "resource";
-      const resourceValue = resource.id ? resource.id : resource.url
-      // if (resource.url) {
-      //   resourceField = "resource";
-      //   resourceValue = {
-      //     "contentType":"FILE",
-      //     "data":resource.url
-      //   };
-      // } else if (resource.id) {
-      //   resourceField = "resourceId"
-      //   resourceValue = resource.id
-      // }
       const postBody = {
         "data":{
           "type":"post",
           "id": postId,
-          "attributes":{
-            "postingType":postingType,
-            resourceField:resourceValue,
-            "state":"ACTIVE",
-            "text":input,
+          "attributes": {
+            "postingType": postingType,
+            "resource": resource,
+            "state": "ACTIVE",
+            "text": input,
           }
         }
       }

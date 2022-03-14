@@ -16,7 +16,6 @@ export const usePosts = (boardId?: any) => {
   //Fort any page load or filterchanges
   const fetchPosts = useCallback(
     async (boardId: any, sortFilter?: any) => {
-      try {
         const baseApiUrl = getALMConfig().primeApiURL;
         const params: QueryParams = {};
         params["sort"] = sortFilter ? sortFilter : DEFAULT_SORT_VALUE;
@@ -36,10 +35,6 @@ export const usePosts = (boardId?: any) => {
         };
 
         dispatch(loadPosts(data));
-      } catch (e) {
-        dispatch(loadPosts([] as PrimePost[]));
-        console.log("Error while loading boards " + e);
-      }
     },
     [dispatch]
   );

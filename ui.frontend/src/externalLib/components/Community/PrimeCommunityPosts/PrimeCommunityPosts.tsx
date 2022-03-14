@@ -1,12 +1,25 @@
 import { PrimeCommunityPost } from "../PrimeCommunityPost";
 import { PrimeCommunityPostFilters } from "../PrimeCommunityPostFilters";
 import { usePosts } from "../../../hooks/community";
+import { useEffect, useRef } from "react";
+import { useIntl } from "react-intl";
 import styles from "./PrimeCommunityPosts.module.css";
 
 const PrimeCommunityPosts = (props: any) => {
     const boardId = props.boardId;
     const { posts, fetchPosts } = usePosts(boardId);
+    const { formatMessage } = useIntl();
+    const firstRun = useRef(true);
 
+    useEffect(() => {
+        //below needed as first update sets posts as []
+        if(firstRun.current) {
+            firstRun.current = false;
+            return;
+        }
+        posts ? props.showLoader(false) : props.showLoader(true);
+    }, [posts])
+    
     const sortFilterChangeHandler = (sortValue: any) => {
         fetchPosts(boardId, sortValue);
     }
@@ -25,6 +38,14 @@ const PrimeCommunityPosts = (props: any) => {
                     posts.map((post) => (
                     <PrimeCommunityPost post={post} key={post.id} reloadPosts={reloadPosts}></PrimeCommunityPost>
                     ))
+                }
+                {posts.length === 0 && !props.isSearchMode &&
+                    <div className={styles.primeCommunityNoPostFound}>
+                        {formatMessage({
+                            id: "prime.community.noPostMessage",
+                            defaultMessage: "No post found",
+                        })}
+                    </div>
                 }
             </div>
         </div>

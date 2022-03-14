@@ -1,9 +1,15 @@
 import { getALMConfig, getALMObject } from "../../../utils/global";
 import styles from "./PrimeCommunityObjectBody.module.css";
+import { useState } from "react";
+import { useIntl } from "react-intl";
+import Question from "@spectrum-icons/workflow/Question";
 
 const PrimeCommunityObjectBody = (props: any) => {
+  const { formatMessage } = useIntl();
   const object = props.object;
+  const isQuestionType = object.postingType === "QUESTION";
   const entityType = props.type;
+  const description = entityType === "board" ? object.richTextdescription : object.richText;
   const primeConfig = getALMConfig();
   const hostName = primeConfig.almBaseURL;
   //to-do set below host url
@@ -13,12 +19,43 @@ const PrimeCommunityObjectBody = (props: any) => {
     object.id
   }&access_token=${getALMObject().getAccessToken()}&player_type=inline`;
   console.log(iframeSrc);
+
+  const MAX_CHAR_SHOWN = 450;
+  const DEFAULT_INDEX_VALUE = 2;
+  const [ viewIndex, setViewIndex ] = useState(DEFAULT_INDEX_VALUE);
+  const [ viewMore, setViewMore ] = useState(description.length > MAX_CHAR_SHOWN);
+  const [ currentDescription, setCurrentDescription ] = useState(description.length > MAX_CHAR_SHOWN ? description.substring(0, MAX_CHAR_SHOWN) : description);
+  
+  const getTruncatedDescription = () => {
+    const supportedCharacterLength = MAX_CHAR_SHOWN * viewIndex;
+    if(description.length <= supportedCharacterLength) {
+      setViewMore(false);
+      setCurrentDescription(description);
+      setViewIndex(DEFAULT_INDEX_VALUE);
+    }
+    else
+      setCurrentDescription(description.substring(0, supportedCharacterLength));
+      setViewIndex(viewIndex + 1);
+  }
+
   return (
     <>
-      <p
-        className={styles.primePostDescription}
-        dangerouslySetInnerHTML={{ __html: object.richText }}
-      ></p>
+      <div className={isQuestionType ? styles.primeQuestionPostDescription : styles.primePostDescription}>
+        {isQuestionType && 
+          <div className={styles.primeCommunityQuestionIcon}>
+            <Question/>
+          </div>
+        }
+        <div dangerouslySetInnerHTML={{ __html: currentDescription }}></div>
+      </div>
+      {viewMore &&
+        <button className={styles.primeCommunityViewMoreButton} onClick={getTruncatedDescription}>
+          {formatMessage({
+            id: "prime.community.viewMore",
+            defaultMessage: "View more",
+          })}
+        </button>
+      }
       <div className={styles.primePostPreview}>
         {object.resource && object.resource.contentType === "VIDEO" && (
           <div className="image-box">
