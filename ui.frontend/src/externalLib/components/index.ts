@@ -1,9 +1,5 @@
 export * from "./Portal";
-export * from "./Catalog/PrimeCatalogContainer";
-export * from "./Instance/PrimeInstancePage"
-export * from "./Notifications/PrimeNotificationContainer";
 
-export * from "./TrainingOverview/PrimeTrainingPage";
 
 
 // from below list remove the ones which are not needed to export outside.
@@ -42,3 +38,7 @@ export * from "./Community/PrimeCommunityBoardFilters";
 export * from "./Community/PrimeCommunityPost";
 export * from "./Community/PrimeCommunityPosts";
 export * from "./Community/PrimeCommunityComment";
+export * from "./Catalog/PrimeCatalogContainer";
+export * from "./Instance/PrimeInstancePage"
+export * from "./Notifications/PrimeNotificationContainer";
+export * from "./TrainingOverview/PrimeTrainingPage";

@@ -40,7 +40,10 @@ const PrimeCatalogFilters = (props: any) => {
     skillLevel,
     duration,
   ].map((filter) => {
-    return catalogAttributes[filter.type] !== "false" ? (
+    if (!filter.list || filter.list?.length === 0) {
+      return "";
+    }
+    return catalogAttributes[filter.type] === "true" ? (
       <div key={filter.type} className={styles.container}>
         <h3 className={styles.typeLabel}>
           {GetTranslation(filter?.label, true)}
