@@ -97,8 +97,8 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     if (user) {
       return user;
     }
-    const primeApiURL = window.ALM.ALMConfig.primeUrl;
-    const userUrl = `${primeApiURL}user?include=account`;
+    const primeApiURL = window.ALM.ALMConfig.primeApiURL;
+    const userUrl = `${primeApiURL}/user?include=account`;
     const headers = {
       Accept: "application/vnd.api+json",
       Authorization: `oauth ${getAccessToken()}`,
