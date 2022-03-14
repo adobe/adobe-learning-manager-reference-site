@@ -82,13 +82,13 @@
                                 textIsRich="true"
                                 titleFromPage="false"/>
                         </carousel>
-                        <Copy_x0020_of_x0020_catalog
+                        <newssection
                             jcr:created="{Date}2022-03-13T14:04:27.590+05:30"
                             jcr:createdBy="admin"
                             jcr:lastModified="{Date}2022-03-13T14:04:27.590+05:30"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="aem-learn-components/components/footer"/>
+                            sling:resourceType="aem-learn-components/components/newssection"/>
                         <catalog
                             jcr:created="{Date}2022-03-13T14:04:27.590+05:30"
                             jcr:createdBy="admin"
