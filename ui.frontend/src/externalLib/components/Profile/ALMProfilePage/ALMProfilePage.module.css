@@ -21,7 +21,7 @@
   margin: 0 auto;
   padding: 40px 0;
 }
-.upperSection input{
+.upperSection input {
   display: none;
 }
 .detailsContainer {
@@ -48,7 +48,7 @@
   display: flex;
 }
 .name {
-  font-size: 27px;
+  font-size: var(--prime-font-size-28);
   font-weight: bold;
   line-height: 17px;
   letter-spacing: 0.54px;
@@ -57,7 +57,7 @@
   margin: 0 0 15px 0;
 }
 .email {
-  font-size: 21px;
+  font-size: var(--prime-font-size-20);
   font-weight: normal;
   line-height: 27px;
   letter-spacing: 0px;
@@ -108,8 +108,8 @@
   }
   .detailsContainer {
     padding: 20px;
-    border-top: 2px solid var(--prime-color-nc13);
-    border-bottom: 2px solid var(--prime-color-nc13);
+    border-top: 2px solid var(--prime-color-nc12);
+    border-bottom: 2px solid var(--prime-color-nc12);
   }
   .image {
     width: 54px;
@@ -139,7 +139,7 @@
     height: auto;
   }
   .name {
-    font-size: 20px;
+    font-size: var(--prime-font-size-20);
     line-height: 25px;
     color: var(--prime-color-nc2);
     opacity: 1;
@@ -147,13 +147,13 @@
     margin-bottom: 5px;
   }
   .email {
-    font-size: 14px;
+    font-size: var(--prime-font-size-14);
     line-height: 18px;
     letter-spacing: 0px;
     color: var(--prime-color-nc3);
     opacity: 1;
   }
-  .profileImage{
+  .profileImage {
     width: 54px;
     height: 54px;
     margin-bottom: 0;

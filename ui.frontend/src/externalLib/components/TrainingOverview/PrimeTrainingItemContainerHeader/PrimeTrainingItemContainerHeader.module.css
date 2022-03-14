@@ -8,7 +8,7 @@
   cursor: pointer;
 }
 .headerContainer:hover {
-  background-color: var(--prime-color-nc11);
+  background-color: var(--prime-color-nc12);
 }
 
 .metadata {
@@ -96,13 +96,13 @@
 }
 
 .status {
-  font-size: 13px;
+  font-size: var(--prime-font-size-14);
   color: var(--prime-icon-color);
 }
 
 /* override css for LP */
 /* .isPartOfLP.headerContainer {
-  border: 1px solid var(--prime-color-nc13);
+  border: 1px solid var(--prime-color-nc12);
   border-bottom: none;
 } */
 

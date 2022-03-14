@@ -1,42 +1,43 @@
+@import "../../../styles/variables.css";
 .primeAddPostSectionWrapper {
-    display:flex;
-    justify-content: center;
-    margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
 }
 
 .primeAddPostSection {
-    border-radius: 2px;
-    opacity: 1;
-    padding: 10px 25px;
-    width: 100%;
-    border: 1px solid #D5D5D5;
-    border-radius: 2px;
-    max-width: 716px;
-    opacity: 1;
-    position: relative;
-    font-size: 12px;
-    color: #999999;
-    display: flex;
+  border-radius: 2px;
+  opacity: 1;
+  padding: 10px 25px;
+  width: 100%;
+  border: 1px solid #d5d5d5;
+  border-radius: 2px;
+  max-width: 716px;
+  opacity: 1;
+  position: relative;
+  font-size: var(--prime-font-size-12);
+  color: #999999;
+  display: flex;
 }
 
 .primeAddPostButtonMobile {
-    display: none;
+  display: none;
 }
 
 @media (max-width: 414px) {
-    .primeAddPostSectionWrapper {
-        display:none;
-    }
-    .primeAddPostButtonMobile {
-        display: flex;
-        z-index: 50;
-        position: relative;
-    }
+  .primeAddPostSectionWrapper {
+    display: none;
+  }
+  .primeAddPostButtonMobile {
+    display: flex;
+    z-index: 50;
+    position: relative;
+  }
 }
 
 .primeAddPostMessage {
-    line-height: 30px;
+  line-height: 30px;
 }
 .primeAddPostButtonDiv {
-    margin-left: auto;
+  margin-left: auto;
 }

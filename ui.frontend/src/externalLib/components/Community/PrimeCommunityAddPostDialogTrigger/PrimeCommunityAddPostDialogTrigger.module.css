@@ -1,35 +1,36 @@
+@import "../../../styles/variables.css";
 .primeDialogLaunchButton {
-    background: #306EB5;
-    border-radius: 22px;
-    opacity: 1;
-    color: #FFFFFF;
-    padding:8px 22px;
-    font-size: 13px;
-    border: none;
+  background: #306eb5;
+  border-radius: 22px;
+  opacity: 1;
+  color: #ffffff;
+  padding: 8px 22px;
+  font-size: var(--prime-font-size-12);
+  border: none;
 }
 
 .primeHiddenDialogLaunchButton {
-    display: none;
+  display: none;
 }
 
 .primeDialogLaunchButton:hover {
-    cursor: pointer;
-    background: #4283d0;
-    color: #FFFFFF;
+  cursor: pointer;
+  background: #4283d0;
+  color: #ffffff;
 }
 
 @media (max-width: 414px) {
-    .primeDialogLaunchButton {
-        position: fixed;
-        background-color: #306EB5;
-        border: none;
-        display: block;
-        z-index: 2000;
-        border-radius:20px;
-        width: auto;
-        height: 40px;
-        top: 85%;
-        left: 35%;
-        color: #FFFFFF;
-    }
+  .primeDialogLaunchButton {
+    position: fixed;
+    background-color: #306eb5;
+    border: none;
+    display: block;
+    z-index: 2000;
+    border-radius: 20px;
+    width: auto;
+    height: 40px;
+    top: 85%;
+    left: 35%;
+    color: #ffffff;
+  }
 }
