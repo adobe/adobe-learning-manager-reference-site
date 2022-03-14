@@ -1,5 +1,6 @@
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import { useIntl } from "react-intl";
 import { CardBgStyle } from "../../../models/common";
 import {
   PrimeLearningObject,
@@ -19,6 +20,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
   trainingInstance: PrimeLearningObjectInstance;
   launchPlayerHandler: Function;
   isPartOfLP?: boolean;
+  showMandatoryLabel?: boolean;
 }> = (props) => {
   const {
     name,
@@ -29,11 +31,9 @@ const PrimeTrainingItemContainerHeader: React.FC<{
     trainingInstance,
     launchPlayerHandler,
     isPartOfLP = false,
+    showMandatoryLabel = false,
   } = props;
-  //const { formatMessage } = useIntl();
-
-  //let { pagePaths } = getALMAttribute("config");
-  //const trainingLink = `${pagePaths.trainingOverview}?trainingId=${training.id}&trainingInstanceId=${trainingInstance.id}`;
+  const { formatMessage } = useIntl();
   const authorNames = training.authorNames?.length
     ? training.authorNames.join(", ")
     : "";
@@ -86,6 +86,16 @@ const PrimeTrainingItemContainerHeader: React.FC<{
               <div>{convertSecondsToTimeText(training.duration)}</div>
             </>
           )}
+          {showMandatoryLabel && (
+            <>
+              <span className={styles.mandatory}>
+                {formatMessage({
+                  id: "alm.overview.section.mandatory",
+                  defaultMessage: "Mandatory",
+                })}
+              </span>
+            </>
+          )}
         </div>
         {statusText && <div className={styles.status}>{statusText}</div>}
       </div>
@@ -93,7 +103,11 @@ const PrimeTrainingItemContainerHeader: React.FC<{
         <div className={styles.card} style={{ ...cardBgStyle }}></div>
         <div className={styles.trainingDetials}>
           {/* Change it to button and role="link" */}
-          <a aria-label={name} className={styles.title} href={"javascript:void(0)"}>
+          <a
+            aria-label={name}
+            className={styles.title}
+            href={"javascript:void(0)"}
+          >
             {name}
           </a>
           {/* <p

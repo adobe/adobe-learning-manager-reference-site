@@ -21,8 +21,14 @@ const PrimeCourseItemContainer: React.FC<{
   training: PrimeLearningObject;
   launchPlayerHandler: Function;
   isPartOfLP?: boolean;
+  showMandatoryLabel?: boolean;
 }> = (props) => {
-  const { training, launchPlayerHandler, isPartOfLP = false } = props;
+  const {
+    training,
+    launchPlayerHandler,
+    isPartOfLP = false,
+    showMandatoryLabel = false,
+  } = props;
 
   const [isCollapsed, setIsCollapsed] = useState(true);
 
@@ -58,6 +64,7 @@ const PrimeCourseItemContainer: React.FC<{
         trainingInstance={trainingInstance}
         launchPlayerHandler={launchPlayerHandler}
         isPartOfLP={isPartOfLP}
+        showMandatoryLabel={showMandatoryLabel}
       />
       {!isCollapsed && (
         <PrimeCourseOverview
