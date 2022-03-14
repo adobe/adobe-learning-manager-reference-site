@@ -1,4 +1,4 @@
-
+@import "../../../styles/variables.css";
 .primePostHeader {
     vertical-align: middle;
     display: flex;
@@ -13,7 +13,7 @@
 
 .primePostOwnerName {
     padding-top: 12px;
-    font-size: 14px;
+    font-size: var(--prime-font-size-14);
     font-weight: 600;
 }
 
@@ -30,8 +30,8 @@
 .primePostDateCreated  {
     padding-top: 14px;
     padding-left:10px;
-    font-size: 11px;
-    color: #717171;
+    font-size: var(--prime-font-size-12);
+    color: var(--prime-color-nc3);
 }
 
 .primeCommunityOptionsIcon {

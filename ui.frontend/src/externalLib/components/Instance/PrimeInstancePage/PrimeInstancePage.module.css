@@ -126,7 +126,7 @@
   .selectInstance {
     color: var(--prime-color-black);
     opacity: 1;
-    font-size: 20px;
+    font-size: var(--prime-font-size-20);
     line-height: 25px;
     font-weight: normal;
     margin: 0;

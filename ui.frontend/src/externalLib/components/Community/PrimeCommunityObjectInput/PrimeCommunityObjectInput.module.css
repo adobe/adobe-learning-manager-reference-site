@@ -1,3 +1,5 @@
+
+@import "../../../styles/variables.css";
 .primePostObjectWrapper {
     margin-bottom: 30px;
     display: flex;
@@ -26,7 +28,7 @@ textarea:placeholder-shown {
 }
 
 .primeTextAreaCountRemaining {
-    font-size:10px;
+    font-size:var(--prime-font-size-10);
     padding:5px;
     margin-left: auto;
 }

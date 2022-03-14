@@ -1,36 +1,31 @@
+@import "../../../styles/variables.css";
 .notificationItem {
-    list-style: none;
-    padding: 18px 20px 20px 20px;
-    display: flex;
-    justify-content: space-between;
-    font-weight: 600;
-    font-size: 14px;
-    border: 1px solid #F8F8F8;
-    opacity: 1;
-    color: #292929;
-    list-style-type: none;
-    line-height:22px; 
-  }
+  list-style: none;
+  padding: 18px 20px 20px 20px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: var(--prime-font-size-14);
+  border: 1px solid var(--prime-color-nc9);
+  opacity: 1;
+  color: var(--prime-color-nc2);
+  list-style-type: none;
+  line-height: 22px;
+}
 
-  .notificationIcon {
-    background-repeat: no-repeat;
-    width: 21px;
-    height: 21px;
-    display: flex;
-    vertical-align: top;
-    fill: #7f7f7f !important;
+.notificationIcon {
+  background-repeat: no-repeat;
+  width: 21px;
+  height: 21px;
+  display: flex;
+  vertical-align: top;
+  fill: var(--prime-color-nc3) !important;
+}
 
-  }
-
-  .notificationTime {
-    margin-top: 8px;
-    border: 0;
-    color: #8F8F8F;
-    height: 20px;
-    font-size: 12px;
-  }
-
-
-
-
- 
+.notificationTime {
+  margin-top: 8px;
+  border: 0;
+  color: var(--prime-color-nc9);
+  height: 20px;
+  font-size: var(--prime-font-size-12);
+}

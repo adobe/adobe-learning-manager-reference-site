@@ -1,3 +1,4 @@
+@import "../../../styles/variables.css";
 .notificationDropdown{
   list-style:none;
   position:absolute; 
@@ -20,7 +21,7 @@
 
 .notificationCountStyle {
   font-weight: 700;
-  font-size: 10px;
+  font-size: var(--prime-font-size-10);
   color: #fff;
   text-align: center;
   background-color: #e61414;

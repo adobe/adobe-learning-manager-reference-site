@@ -32,7 +32,7 @@
 }
 
 .buyNowContainer {
-  background: var(--prime-color-nc10);
+  background: var(--prime-color-nc9);
   border-radius: 2px;
   padding: 20px;
   margin-bottom: 20px;
@@ -62,7 +62,7 @@
   margin-bottom: 20px;
   display: flex;
   width: 100%;
-  border-bottom: 1px solid var(--prime-color-nc6);
+  border-bottom: 1px solid var(--prime-color-nc9);
 }
 .icon {
   margin-right: 10px;
@@ -90,7 +90,7 @@
   display: flex;
   flex-direction: column;
   /* padding-top: 20px; */
-  border-bottom: 1px solid var(--prime-color-nc6);
+  border-bottom: 1px solid var(--prime-color-nc9);
 }
 .authors {
   display: flex;
@@ -107,7 +107,7 @@
   transform: scale(1.5);
 }
 .moduleCompleted {
-  font-size: 20px;
+  font-size: var(--prime-font-size-20);
   width: 25px;
   margin-right: 10px;
 }
@@ -126,4 +126,3 @@
   color: var(--prime-color-primary);
   text-decoration: none;
 }
-
