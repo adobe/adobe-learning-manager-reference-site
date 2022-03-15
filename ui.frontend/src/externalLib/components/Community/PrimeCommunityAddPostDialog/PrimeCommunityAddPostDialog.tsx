@@ -66,6 +66,12 @@ const PrimeCommunityAddPostDialog = (props: any) => {
         state.fileUpload.fileName = "";
         setTextMode(true);
       }
+      if (props.post.postingType === "QUESTION") {
+        setQuestionTypeSelected(true);
+      }
+      else if (props.post.postingType === "POLL") {
+        setPollTypeSelected(true);
+      }
     }
   }, [props.mode, props.post]);
 
