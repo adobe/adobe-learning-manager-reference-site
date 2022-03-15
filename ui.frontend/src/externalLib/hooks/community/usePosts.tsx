@@ -92,8 +92,8 @@ export const usePosts = (boardId?: any) => {
       console.log(object);
       if (type === "board") {
         params["boardId"] = object;
-      } else if (type === "skill") {
-        params["filter.skills"] = "General";
+      } else if (type === "skill" && object && object !== "") {
+        params["filter.skills"] = object;
       }
       params["include"] = "model";
 
