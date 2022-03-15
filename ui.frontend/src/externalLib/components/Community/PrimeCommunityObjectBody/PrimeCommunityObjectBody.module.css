@@ -1,0 +1,58 @@
+.primePostDescription, .primePostPreview, .primeQuestionPostDescription {
+    margin-top: 20px;
+}
+
+.primeQuestionPostDescription {
+    border: 1px solid #dedede;
+    border-radius: 3px;
+    box-shadow: 0 0 3px 0 rgb(0 0 0 / 10%);
+    padding: 15px;
+    display: flex;
+}
+
+.primePostPreview {
+    margin-bottom: 20px;
+}
+
+.primePostVideoIframe {
+    height: 17rem;
+    width: 92%
+}
+
+.primePostImage {
+    width:100%;
+}
+
+.primeCommunityImageBox {
+    width: 100%;
+    height: 35rem;
+    margin-bottom: 1rem;
+    background-color: #000;
+}
+
+.primeCommunityImageContainer {
+    padding: 0 4rem;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.primeCommunityViewMoreButton {
+    border: none;
+    background: none;
+    color: #306EB5;
+}
+
+.primeCommunityViewMoreButton:hover {
+    cursor: pointer;
+}
+
+.primeCommunityQuestionIcon {
+    width:20px;
+    height: 20px;
+    margin-right: 15px;
+    color: #0f870f;
+}

@@ -5,7 +5,11 @@ import {
   PrimeLearningObjectInstance,
   PrimeLocalizationMetadata,
 } from "../../models/PrimeModels";
-import { getALMConfig, getWindowObject } from "../../utils/global";
+import {
+  getALMConfig,
+  getALMObject,
+  getWindowObject,
+} from "../../utils/global";
 import { useCardBackgroundStyle, useCardIcon } from "../../utils/hooks";
 import { checkIfEnrollmentDeadlineNotPassed } from "../../utils/instance";
 import { QueryParams } from "../../utils/restAdapter";
@@ -78,7 +82,7 @@ export const useInstancePage = (
 
   const selectInstanceHandler = useCallback(
     (instanceId: string) => {
-      getWindowObject().alm.redirectToTrainingOverview(training.id, instanceId);
+      getALMObject().navigateToTrainingOverviewPage(training.id, instanceId);
     },
     [training.id]
   );

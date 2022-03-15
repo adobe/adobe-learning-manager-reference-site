@@ -230,7 +230,7 @@ export const useFilter = () => {
           }),
         ]);
         const skills = JsonApiParse(skillsPromise)?.data?.names;
-        let skillsList = skills.map((item: string) => ({
+        let skillsList = skills?.map((item: string) => ({
           value: item,
           label: item,
           checked: false,
@@ -238,15 +238,15 @@ export const useFilter = () => {
         skillsList = updateFilterList(skillsList, queryParams, "skillName");
 
         const tags = JsonApiParse(tagsPromise)?.data?.names;
-        let tagsList = tags.map((item: string) => ({
+        let tagsList = tags?.map((item: string) => ({
           value: item,
           label: item,
           checked: false,
         }));
         tagsList = updateFilterList(tagsList, queryParams, "tagName");
 
-        const catalog = JsonApiParse(catalogPromise)?.catalogList;
-        let catalogList = catalog.map((item: any) => ({
+        const catalogs = JsonApiParse(catalogPromise)?.catalogList;
+        let catalogList = catalogs?.map((item: any) => ({
           value: item.id,
           label: item.name,
           checked: false,

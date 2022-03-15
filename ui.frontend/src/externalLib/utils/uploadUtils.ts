@@ -48,7 +48,7 @@ export async function getUploadInfo() {
         ? ".s3.amazonaws.com/"
         : `.s3.${awsCredJsonObj.region}.amazonaws.com/`;
     awsCredJsonObj.awsUrl = `https://${awsCredJsonObj.bucket}${awsRegionUrl}${awsCredJsonObj.key}`;
-    initEvaporate(getEvaporateConfig());
+    await initEvaporate(getEvaporateConfig());
   }
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

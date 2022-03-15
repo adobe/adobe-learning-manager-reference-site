@@ -47,7 +47,7 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Home"
                     sling:resourceType="aem-learn-components/components/title"
-                    linkURL="/content/aem-learn-components/language-masters/en/non-log/home"
+                    linkURL="/content/aem-learn-components/language-masters/en/home"
                     type="h4">
                     <cq:responsive jcr:primaryType="nt:unstructured">
                         <default
@@ -61,7 +61,7 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Learning"
                     sling:resourceType="aem-learn-components/components/title"
-                    linkURL="/content/aem-learn-components/language-masters/en/non-log/catalog"
+                    linkURL="/content/aem-learn-components/language-masters/en/learning"
                     type="h4">
                     <cq:responsive jcr:primaryType="nt:unstructured">
                         <default
@@ -75,6 +75,7 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Community"
                     sling:resourceType="aem-learn-components/components/title"
+                    linkURL="/content/aem-learn-components/language-masters/en/skills"
                     type="h4">
                     <cq:responsive jcr:primaryType="nt:unstructured">
                         <default
@@ -88,6 +89,7 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Support"
                     sling:resourceType="aem-learn-components/components/title"
+                    linkURL="/content/aem-learn-components/language-masters/en/support"
                     type="h4">
                     <cq:responsive jcr:primaryType="nt:unstructured">
                         <default

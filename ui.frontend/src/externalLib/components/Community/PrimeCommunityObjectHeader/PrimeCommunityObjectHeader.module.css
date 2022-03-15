@@ -1,0 +1,41 @@
+@import "../../../styles/variables.css";
+.primePostHeader {
+    vertical-align: middle;
+    display: flex;
+}
+.primePostOwnerImage{
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    border: 1px solid transparent;
+    border-radius: 50%;
+}
+
+.primePostOwnerName {
+    padding-top: 12px;
+    font-size: var(--prime-font-size-14);
+    font-weight: 600;
+}
+
+.primePostDateSeperator {
+    height: 3px;
+    width: 3px;
+    background-color: black;
+    border-radius: 50%;
+    display: inline-block;
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+.primePostDateCreated  {
+    padding-top: 14px;
+    padding-left:10px;
+    font-size: var(--prime-font-size-12);
+    color: var(--prime-color-nc3);
+}
+
+.primeCommunityOptionsIcon {
+    margin-left: auto;
+    background: none;
+    border: none;
+}

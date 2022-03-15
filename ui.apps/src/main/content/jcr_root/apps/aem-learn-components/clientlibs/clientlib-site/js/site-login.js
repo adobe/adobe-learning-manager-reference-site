@@ -28,24 +28,26 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
         };
         fetchAccessToken(data);
       }
+      else {
 
-      var oauthState = currentUrl.searchParams.get("state");
-      var code = currentUrl.searchParams.get("code");
-      if (CP_OAUTH_STATE == oauthState && code) {
-        // learner got here from cp oauth with code and state.
-        // make call to backend AEM to fetch access_token. On getting refresh the page.
-        var data = {
-          _charset_: "UTF-8",
-          mode: WCM_NON_AUTHOR_MODE,
-          code: code,
-          pagePath: pathName,
-        };
-        fetchAccessToken(data);
-        //document.location.reload();
-      } else {
-        // redirect learner to cp oauth
-        const cpOauth = getCpOauthUrl();
-        document.location.href = cpOauth;
+        var oauthState = currentUrl.searchParams.get("state");
+        var code = currentUrl.searchParams.get("code");
+        if (CP_OAUTH_STATE == oauthState && code) {
+          // learner got here from cp oauth with code and state.
+          // make call to backend AEM to fetch access_token. On getting refresh the page.
+          var data = {
+            _charset_: "UTF-8",
+            mode: WCM_NON_AUTHOR_MODE,
+            code: code,
+            pagePath: pathName,
+          };
+          fetchAccessToken(data);
+          //document.location.reload();
+        } else {
+          // redirect learner to cp oauth
+          const cpOauth = getCpOauthUrl();
+          document.location.href = cpOauth;
+        }
       }
     }
   }
@@ -95,8 +97,8 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     if (user) {
       return user;
     }
-    const primeApiURL = window.ALM.ALMConfig.primeUrl;
-    const userUrl = `${primeApiURL}user?include=account`;
+    const primeApiURL = window.ALM.ALMConfig.primeApiURL;
+    const userUrl = `${primeApiURL}/user?include=account`;
     const headers = {
       Accept: "application/vnd.api+json",
       Authorization: `oauth ${getAccessToken()}`,
@@ -117,6 +119,10 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
       throw e;
     }
   }
+  async function updateALMUser() {
+    window.sessionStorage.removeItem("user");
+    return getALMUser();
+  };
 
   function getAccessToken() {
     let cookieValues = document.cookie.match(
@@ -135,4 +141,5 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
   window.ALM.getAccessToken = getAccessToken;
   window.ALM.getALMUser = getALMUser;
+  window.ALM.updateALMUser = updateALMUser;
 })(window, document, Granite, jQuery);

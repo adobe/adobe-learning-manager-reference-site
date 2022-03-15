@@ -1,0 +1,47 @@
+@import "../../../styles/variables.css";
+.primeBoardParent {
+    display: flex;
+    justify-content: center;
+    margin-bottom:20px;
+}
+
+.primeCommunitySearchContainer {
+    display: flex;
+    width: 100%;
+    max-width: 716px;
+    margin-bottom:20px;
+    margin-top: 15px;
+    margin-left: auto;
+}
+
+@media (max-width: 414px) {
+    .primeCommunitySearchContainer {
+        padding: 5px 25px;
+    }
+}
+
+.primeLoaderWrapper {
+    margin-bottom: 20px;
+    height:20px;
+    display: flex;
+    justify-content: center;
+}
+
+.primeCommunitySearchStatus {
+    display: flex;
+    font-size: var(--prime-font-size-14);
+    width: 716px;
+    margin: auto;
+    margin-bottom: 25px;
+    padding-left: 25px;
+}
+
+.primeCommunitySearchClear {
+    border: none;
+    background-color: transparent;
+    color: #306EB5;
+}
+
+.primeCommunitySearchClear:hover {
+    cursor: pointer;
+}

@@ -74,24 +74,53 @@ export function modifyTime(dateToModify: string, locale: string) {
 
   return local;
 }
-const DEFAULT_DATE_OPTIONS: any = {
-  year: "numeric",
-  month: "short",
-  day: "numeric",
-};
-export function dateBasedOnLocale(
-  date: string,
-  locale: string,
-  options: any = {}
-) {
-  if (!date) return "";
-  const dateOptions = { ...DEFAULT_DATE_OPTIONS, options };
-  return new Date(date).toLocaleDateString(locale, dateOptions);
+// const DEFAULT_DATE_OPTIONS: any = {
+//   year: "numeric",
+//   month: "short",
+//   day: "numeric",
+// };
+// export function dateBasedOnLocale(
+//   date: string,
+//   locale: string,
+//   options: any = {}
+// ) {
+//   if (!date) return "";
+//   const dateOptions = { ...DEFAULT_DATE_OPTIONS, options };
+//   return new Date(date).toLocaleDateString(locale, dateOptions);
+// }
+
+export function GetFormattedDate(dateStr: string, getUserLocale: string) {
+  if (!dateStr) { return "" }
+  const date = new Date(dateStr);
+  const dateTimeFormat = new Intl.DateTimeFormat(getUserLocale, {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  });
+  let month, day, year;
+  dateTimeFormat.formatToParts(date).forEach((elem) => {
+    if (elem.type === "month") {
+      month = elem.value;
+    } else if (elem.type === "day") {
+      day = elem.value;
+    } else if (elem.type === "year") {
+      year = elem.value;
+    }
+  });
+  //chinese needs space in between the characters
+  if (getUserLocale === "zh-CN") {
+    return `${year} 年 ${month} 月 ${day} 日`;
+  } else if (getUserLocale === "ja-JP") {
+    return `${year}年${month}月${day}日`;
+  }
+  return `${month} ${day}, ${year}`;
 }
 
 //inputFormat => 2022-02-13T14:00:39.000Z, outputFormat => Feb 13, 2022
 export function formatDate(dateString: any) {
   const options = { year: "numeric", month: "short", day: "2-digit" } as const;
-  const value = (new Date(dateString).toLocaleDateString(undefined, options)).split(" ");
+  const value = new Date(dateString)
+    .toLocaleDateString(undefined, options)
+    .split(" ");
   return value[1] + " " + value[0] + ", " + value[2]; // MMM DD, YYYY
 }

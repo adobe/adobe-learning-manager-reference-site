@@ -81,6 +81,13 @@ export default class LoggedInCustomHooks implements ICustomHooks {
     });
     return JsonApiParse(response);
   }
+  async unenrollFromTraining(enrollmentId = "") {
+    const response = await RestAdapter.delete({
+      url: `${this.primeApiURL}enrollments/${enrollmentId}`,
+      method: "DELETE",
+    });
+    return response;
+  }
 }
 
 // APIServiceInstance.registerServiceInstance(

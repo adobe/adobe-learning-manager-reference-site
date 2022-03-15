@@ -1,0 +1,5 @@
+@import "../../../styles/variables.css";
+.loLink{
+    color:var(--prime-color-primary);
+    cursor:pointer;
+  }

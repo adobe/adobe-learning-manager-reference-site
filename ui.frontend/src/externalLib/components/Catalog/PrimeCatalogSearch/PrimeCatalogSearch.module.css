@@ -1,0 +1,38 @@
+@import "../../../styles/variables.css";
+.container {
+  position: relative;
+}
+
+.input {
+  background: var(--prime-color-white) 0% 0% no-repeat padding-box;
+  border: 1px solid var(--prime-color-nc2);
+  border-radius: 2px;
+  opacity: 1;
+  font-size: var(--prime-font-size-14);
+  padding: 10px 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.searchIcon {
+  fill: var(--prime-color-nc3);
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+.customInput input {
+  padding-right: 30px;
+  height: 100%;
+  font-size: var(--prime-font-size-14);
+  border-color: var(--prime-color-nc3) !important;
+}
+
+@media screen and (max-width: 414px) {
+  .container {
+    margin-left: auto;
+    width: 70%;
+  }
+}

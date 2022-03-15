@@ -1,0 +1,60 @@
+/* .topic, .topic.aem-Grid, .topic .cmp-image .cmp-image__image, .aem-Grid.aem-Grid--7 > .aem-GridColumn.aem-GridColumn--default--7, 
+.aem-Grid.aem-Grid--9 > .aem-GridColumn.aem-GridColumn--default--9   {
+    width: 256px;
+    height: 186px;
+    margin-left: 20px;
+	margin-top: 20px;
+} */
+
+.skillscontainer {
+    padding-left: 418px;
+    padding-right: 418px;
+}
+
+@media screen and (max-width: 1366px) {
+    .skillscontainer  {
+      padding-left: 141px;
+      padding-right: 141px;
+    }
+  }
+
+@media screen and (max-width: 1024px) {
+    .skillscontainer {
+        padding-left: 47px;
+        padding-right: 47px;
+      }
+  }
+
+.alm-skills-container.alm-skills-rows--4 .topic.image.aem-GridColumn.aem-GridColumn--default--12 {
+    display: inline-block;
+    width: 25%;
+}
+
+.alm-skills-container.alm-skills-rows--3 .topic.image.aem-GridColumn.aem-GridColumn--default--12 {
+    display: inline-block;
+    width: 33%;
+}
+
+.alm-skills-container.alm-skills-rows--2 .topic.image.aem-GridColumn.aem-GridColumn--default--12 {
+    display: inline-block;
+    width: 50%;
+}
+
+ @media screen and (max-width: 414px) {
+    .skillscontainer {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+  }
+
+.aem-Grid-newComponent {
+        width: 100%;
+    }
+
+.cmp-image .cmp-image__title {
+    position: relative;
+    margin-top: -100px;
+    margin-left: 100px;
+    font-size: 18px;
+    color: white;
+} 

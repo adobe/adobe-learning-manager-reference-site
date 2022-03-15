@@ -1,4 +1,5 @@
 import { JsonApiParse } from "../utils/jsonAPIAdapter";
+import { SetupAccountTerminologies } from "./translationService";
 export interface PrimeConfig {
   almBaseURL: string;
   primeApiURL: string;
@@ -8,6 +9,8 @@ export interface PrimeConfig {
   catalogPath: string;
   trainingOverviewPath: string;
   communityPath: string;
+  communityBoardsPath: string;
+  communityBoardDetailsPath: string;
   locale: string;
   cdnBaseUrl: string;
   mountingPoints: {
@@ -19,11 +22,14 @@ export interface ALM {
   getALMConfig: Function;
   navigateToTrainingOverviewPage: Function;
   navigateToInstancePage: Function;
+  navigateToBoardDetailsPage: Function;
+  navigateToBoardsPage: Function;
   isPrimeUserLoggedIn: Function;
   getALMUser: Function;
   getAccessToken: Function;
   setALMAttribute: Function;
   getALMAttribute: Function;
+  updateALMUser: Function;
 }
 
 export function getWindowObject() {
@@ -70,3 +76,15 @@ export const getPathParams = (pagePath: string, pathParams: string[] = []) => {
 export const getALMUser = async () => {
   return JsonApiParse(await getALMObject().getALMUser());
 };
+
+export const updateALMUser = async () => {
+  return JsonApiParse(await getALMObject().updateALMUser());
+};
+
+const init = async () => {
+  let response = await getALMUser();
+  const account = response.user.account;
+  SetupAccountTerminologies(account.accountTerminologies);
+};
+
+init();

@@ -22,7 +22,15 @@
                 <container
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="aem-learn-components/components/container"
-                    layout="responsiveGrid"/>
+                    layout="responsiveGrid">
+                    <board
+                        jcr:created="{Date}2022-03-07T17:05:44.833+05:30"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2022-03-07T17:05:44.833+05:30"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="aem-learn-components/components/boards"/>
+                </container>
             </container>
         </root>
     </jcr:content>

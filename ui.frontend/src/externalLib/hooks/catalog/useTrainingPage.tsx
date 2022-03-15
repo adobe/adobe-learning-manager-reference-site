@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import APIServiceInstance from "../../common/APIService";
 import {
+  PrimeLearningObject,
   PrimeLearningObjectInstance,
   PrimeLoInstanceSummary,
 } from "../../models/PrimeModels";
+import { getJobaidUrl, isJobaidContentTypeUrl } from "../../utils/catalog";
 import { getALMConfig } from "../../utils/global";
 import {
   filterTrainingInstance,
@@ -16,15 +18,18 @@ import {
 import { LaunchPlayer } from "../../utils/playback-utils";
 import { QueryParams } from "../../utils/restAdapter";
 
-const COURSE = "course";
-const LEARING_PROGRAM = "learningProgram";
-const CERTIFICATION = "certification";
+// const COURSE = "course";
+// const LEARING_PROGRAM = "learningProgram";
+// const CERTIFICATION = "certification";
 
-const INCLUDES_FOR_COURSE =
-  "authors,enrollment,supplementaryLOs.instances.loResources.resources,supplementaryResources,instances.loResources.resources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
+// const INCLUDES_FOR_COURSE =
+//   "authors,enrollment,supplementaryLOs.instances.loResources.resources,supplementaryResources,instances.loResources.resources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
 
-const INCLUDESL_FOR_LP_CERT =
-  "authors,enrollment,subLOs.instances,supplementaryLOs.instances.loResources.resources,supplementaryResources,subLOs.enrollment,instances.badge, skills.skillLevel.badge,skills.skillLevel.skill";
+// const INCLUDES_FOR_LP_CERT =
+//   "authors,enrollment,subLOs.instances,supplementaryLOs.instances.loResources.resources,supplementaryResources,subLOs.enrollment,instances.badge, skills.skillLevel.badge,skills.skillLevel.skill";
+
+const DEFAULT_INCLUDE_LO_OVERVIEW =
+  "authors,enrollment,subLOs.enrollment, subLOs.subLOs.enrollment, subLOs.subLOs.instances.loResources.resources, subLOs.instances.loResources.resources,instances.loResources.resources,supplementaryLOs.instances.loResources.resources,supplementaryResources,subLOs.enrollment,instances.badge, skills.skillLevel.badge,skills.skillLevel.skill";
 // const DEFAULT_INCLUDE_LO_OVERVIEW =
 //   "enrollment,subLOs.instances.learningObject.enrollment,instances.loResources.resources,subLOs.instances.loResources.resources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
 //"enrollment,instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill";
@@ -52,31 +57,19 @@ export const useTrainingPage = (
     const getTrainingInstance = async () => {
       try {
         let queryParam: QueryParams = {};
-        let loType = trainingId.split(":")[0];
-        if (loType === COURSE) {
-          queryParam["include"] = params.include || INCLUDES_FOR_COURSE;
-        } else if (loType === CERTIFICATION || loType === LEARING_PROGRAM) {
-          queryParam["include"] = params.include || INCLUDESL_FOR_LP_CERT;
-        }
+        queryParam["include"] = params.include || DEFAULT_INCLUDE_LO_OVERVIEW;
         queryParam["useCache"] = true;
         queryParam["filter.ignoreEnhancedLP"] = false;
         const response = await APIServiceInstance.getTraining(
           trainingId,
           queryParam
         );
-
-        // const response = await getApiServiceInstance().getTraining(
-        //   trainingId,
-        //   queryParam
-        // );
-
         if (response) {
           const trainingInstance = filterTrainingInstance(response, instanceId);
           setCurrentState({ trainingInstance, isLoading: false });
         }
       } catch (e) {
         console.log("Error while loading training " + e);
-        //setError(e);
         setCurrentState({
           trainingInstance: {} as PrimeLearningObjectInstance,
           isLoading: false,
@@ -105,18 +98,51 @@ export const useTrainingPage = (
     }
   }, [trainingInstance]);
 
-  const enrollmentHandler = useCallback(async () => {
-    let queryParam: QueryParams = {
-      loId: trainingId,
-      loInstanceId: trainingInstance.id,
-    };
-    try {
-      await APIServiceInstance.enrollToTraining(queryParam);
-      setRefreshTraining((prevState) => !prevState);
-    } catch (error) {
-      //TODO : handle error
-    }
-  }, [trainingId, trainingInstance.id]);
+  const enrollmentHandler = useCallback(
+    async ({ id, instanceId, isSupplementaryLO = false } = {}) => {
+      let queryParam: QueryParams = {
+        loId: id || trainingId,
+        loInstanceId: instanceId || trainingInstance.id,
+      };
+      try {
+        await APIServiceInstance.enrollToTraining(queryParam);
+        if (!isSupplementaryLO) {
+          //just to refresh the training data
+          setRefreshTraining((prevState) => !prevState);
+        }
+      } catch (error) {
+        
+        //TODO : handle error
+      }
+    },
+    [trainingId, trainingInstance.id]
+  );
+
+  const unEnrollmentHandler = useCallback(
+    async ({ enrollmentId, isSupplementaryLO = false } = {}) => {
+      try {
+        await APIServiceInstance.unenrollFromTraining(enrollmentId);
+        if (!isSupplementaryLO) {
+          //just to refresh the training data
+          setRefreshTraining((prevState) => !prevState);
+        }
+      } catch (error) {
+        console.log(error);
+        //TODO : handle error
+      }
+    },
+    []
+  );
+  const jobAidClickHandler = useCallback(
+    (supplymentaryLo: PrimeLearningObject) => {
+      if (isJobaidContentTypeUrl(supplymentaryLo)) {
+        window.open(getJobaidUrl(supplymentaryLo), "_blank");
+      } else {
+        LaunchPlayer({ trainingId: supplymentaryLo.id });
+      }
+    },
+    []
+  );
 
   const launchPlayerHandler = useCallback(
     async ({ id, moduleId } = {}) => {
@@ -160,6 +186,8 @@ export const useTrainingPage = (
     instanceSummary,
     enrollmentHandler,
     launchPlayerHandler,
+    unEnrollmentHandler,
+    jobAidClickHandler,
   };
   //date create, published, duration
 };

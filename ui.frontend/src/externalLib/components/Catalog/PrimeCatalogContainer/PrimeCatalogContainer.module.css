@@ -1,0 +1,180 @@
+@import "../../../styles/variables.css";
+
+.pageContainer {
+  margin: 0 auto;
+}
+.headerContainer {
+  margin-bottom: 60px;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.label {
+  font-size: var(--prime-font-size-18);
+  letter-spacing: 0px;
+  color: var(--prime-color-black);
+  margin: 0;
+}
+.searchContainer {
+  width: 265px;
+}
+.filtersAndListConatiner {
+  display: flex;
+}
+.filtersContainer {
+  width: 256px;
+}
+.listContainer {
+  width: calc(100% - 256px);
+}
+.listContainer.full {
+  width: 100%;
+}
+
+.searchAppliedContainer {
+  display: flex;
+  align-items: center;
+}
+.searchAppliedContainer p {
+  display: flex;
+  align-items: center;
+}
+
+.searchAppliedLabel {
+  text-align: left;
+  font-size: var(--prime-font-size-14);
+  line-height: 20px;
+  letter-spacing: 0px;
+  color: var(--prime-color-nc1);
+  margin: 10px 0;
+  display: flex;
+}
+.searchTextContainer {
+  color: var(--prime-color-white);
+  margin-left: 10px;
+  background-color: var(--prime-color-nc3);
+  border-radius: 11px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 15px;
+  min-height: 22px;
+  border-radius: 25px;
+  min-width: 20px;
+}
+.searchText {
+  margin-right: 10px;
+}
+.searchReset {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+.button {
+  display: none;
+}
+.closeIcon {
+  display: none;
+}
+@media screen and (max-width: 414px) {
+  .headerContainer {
+    margin-bottom: 30px;
+  }
+  .header {
+    flex-direction: column;
+    padding: 20px;
+    align-items: flex-start;
+  }
+  .label {
+    margin-bottom: 20px;
+  }
+  .searchContainer {
+    display: flex;
+    width: 100%;
+    align-items: center;
+  }
+  .button {
+    cursor: pointer;
+    border: 2px solid var(--prime-color-primary);
+    color: var(--prime-color-primary);
+    background-color: var(--prime-color-white);
+    font-size: var(--prime-font-size-14);
+    min-height: 28px;
+    font-weight: normal;
+    padding: 5px 12px;
+    min-width: 70px;
+    display: block;
+  }
+  .button:hover,
+  .button:focus,
+  .button:focus-visible {
+    color: var(--prime-color-white);
+    background-color: var(--prime-color-primary);
+    border-color: var(--prime-color-primary);
+    outline: none;
+  }
+  .button svg {
+    width: 14px;
+    height: 14px;
+    padding-left: 2px;
+    top: 2px;
+    position: relative;
+  }
+  .searchAppliedLabel {
+    margin: 0;
+    padding: 0 20px;
+  }
+  .filtersContainer {
+    border: 1px solid var(--prime-color-white);
+    border-radius: 1rem 1rem 0 0;
+    background-color: var(--prime-color-white);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 5;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate(-100%, 0);
+    -webkit-transition: transform 250ms ease-in-out, visibility 0ms linear 130ms;
+    -moz-transition: transform 250ms ease-in-out, visibility 0ms linear 130ms;
+    -ms-transition: transform 250ms ease-in-out, visibility 0ms linear 130ms;
+    -o-transition: transform 250ms ease-in-out, visibility 0ms linear 130ms;
+    transition: transform 250ms ease-in-out, visibility 0ms linear 130ms;
+  }
+  .listContainer {
+    width: 100%;
+    padding: 0 20px;
+  }
+  .filtersContainer.onMobile {
+    position: fixed;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: var(--prime-color-white);
+    z-index: 1;
+    padding: 20px;
+    overflow: auto;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate(0, 0);
+    -webkit-transition: transform 250ms ease-in 0ms;
+    -moz-transition: transform 250ms ease-in 0ms;
+    -ms-transition: transform 250ms ease-in 0ms;
+    -o-transition: transform 250ms ease-in 0ms;
+    transition: transform 250ms ease-in 0ms;
+  }
+  .closeIcon {
+    display: flex;
+    margin-left: auto;
+    min-width: auto;
+    padding: 0;
+    min-height: 24px;
+  }
+  .closeIcon svg {
+    width: 20px;
+    height: 20px;
+  }
+}

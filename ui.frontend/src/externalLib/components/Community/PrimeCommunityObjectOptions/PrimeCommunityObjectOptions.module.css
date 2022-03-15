@@ -1,0 +1,31 @@
+@import "../../../styles/variables.css";
+.primeObjectOptionsList {
+    position: absolute;
+    border: 1px solid #dedede;
+    background-color: #fafafa;
+    min-width: 140px;
+    box-shadow: 0 0 3px 0 rgb(0 0 0 / 10%);
+    padding: 8px 0px;
+    z-index: 1;
+}
+
+.primeObjectOption, .primeObjectCriticalOption, .primeObjectRegularOption {
+    text-align: left;
+    font-size: var(--prime-font-size-12);
+    font-family: Source Sans Pro;
+    letter-spacing: 0px;
+    padding:0.5rem;
+}
+
+.primeObjectCriticalOption {
+    color: #e61414;
+}
+.primeObjectOption:hover, .primeObjectCriticalOption:hover, .primeObjectRegularOption:hover{
+    background-color: #dedede;
+    cursor: pointer;
+}
+
+.primeSeperator {
+    margin: 0.5rem 0.5rem;    
+    border-top: 1px solid rgba(0, 0, 0, 0.4)
+}

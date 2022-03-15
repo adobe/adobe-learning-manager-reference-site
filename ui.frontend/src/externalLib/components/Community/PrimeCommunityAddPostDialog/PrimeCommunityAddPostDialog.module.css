@@ -1,0 +1,95 @@
+.primeConfirmationDialog {
+    z-index: 1000;
+}
+
+@import "../../../styles/variables.css";
+.primeDialogHeaderContainer {
+    width: auto;
+    display: flex;
+    margin-bottom: 15px;
+    height: 15px;
+}
+
+.primeDialogHeader {
+    display: flex;
+    margin-right: 30px;
+    border: none;
+    background: none;
+    fill: #306EB5;
+    color: #306EB5;
+}
+
+.primeDialogHeader:hover {
+    cursor: pointer;
+}
+
+.primeDialogHeaderText {
+    margin-left: 5px;
+    color: currentColor;
+    font-size: var(--prime-font-size-12);
+    font-weight: 500;
+}
+
+.primeOptionContainer {
+    width: auto;
+    display: flex;
+    margin-bottom: 5px;
+    fill: #A9A9A9;
+    color: #A9A9A9;
+}
+
+.primeOption, .primeStatus{
+    display: flex;
+}
+
+.primeOption:hover {
+    fill: #000!important;
+    color: #000 !important;
+    cursor: pointer;
+}
+
+.primeDialogHeaderSvg, .primeOptionSvg {
+    width: 18px;
+    fill: currentColor;
+}
+
+.primeStatusSvg {
+    background: none;
+    border: none;
+    width: 30px;
+    fill: currentColor;
+}
+
+.primeOptionSvgFilled {
+    width: 18px;
+    fill: #306EB5!important;
+}
+
+.primeOptionText {
+    margin-left: 10px;
+    color: currentColor;
+    font-size: var(--prime-font-size-12);
+    font-weight: 500;
+}
+
+.primeStatusText {
+    color: currentColor;
+    font-size: var(--prime-font-size-12);
+    font-weight: 500;
+    margin-right:10px;
+}
+
+.primeOptionTextFilled {
+    margin-left: 10px;
+    color: #306EB5 !important;
+    font-size: var(--prime-font-size-12);
+    font-weight: 500;
+}
+
+.primeFileUploadInput {
+    display: none;
+}
+
+.primeStatusSvg:hover {
+    cursor: pointer;
+}
