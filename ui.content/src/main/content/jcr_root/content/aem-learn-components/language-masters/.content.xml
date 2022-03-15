@@ -4,7 +4,7 @@
     <jcr:content
         cq:lastModified="{Date}2022-02-19T19:21:07.746+05:30"
         cq:lastModifiedBy="admin"
-        cq:redirectTarget="/content/aem-learn-components"
+        cq:redirectTarget="/content/aem-learn-components/language-masters/en/home"
         cq:template="/conf/aem-learn-components/settings/wcm/templates/page-content"
         jcr:primaryType="cq:PageContent"
         jcr:title="Language Masters"
