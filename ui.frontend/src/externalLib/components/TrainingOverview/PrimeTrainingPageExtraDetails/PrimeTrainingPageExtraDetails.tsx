@@ -6,6 +6,8 @@ import UserGroup from "@spectrum-icons/workflow/UserGroup";
 import Calendar from "@spectrum-icons/workflow/Calendar";
 import PinOff from "@spectrum-icons/workflow/PinOff";
 import Download from "@spectrum-icons/workflow/Download";
+import { GetTranslation } from "../../../utils/translationService";
+
 import { useMemo } from "react";
 import { useIntl } from "react-intl";
 
@@ -105,12 +107,11 @@ const PrimeTrainingPageExtraDetails: React.FC<{
 
   const showJobAids = training.enrollment && training.supplementaryLOs?.length;
   const showResource = training.supplementaryResources?.length;
-
   const showUnenrollButton =
     training.enrollment && training.unenrollmentAllowed;
-
   return (
     <>
+      {/* buttons COnatiner */}
       <div className={styles.actionContainer}>
         {/* {action === "preview" && (
           <Button
@@ -235,7 +236,9 @@ const PrimeTrainingPageExtraDetails: React.FC<{
             {LEARNER_BADGE_SVG()}
           </span>
           <div className={styles.innerContainer}>
-            <label className={styles.label}>Badges</label>
+            <label className={styles.label}>
+              {GetTranslation("alm.overview.badge", true)}
+            </label>
             {
               <img
                 src={badge.badgeUrl}
@@ -265,9 +268,10 @@ const PrimeTrainingPageExtraDetails: React.FC<{
         </span>
         <div className={styles.innerContainer}>
           <label className={styles.label}>
-            {formatMessage({
-              id: "alm.overview.skills.achieve.level",
-            })}
+            {GetTranslation(
+              `alm.overview.skills.achieve.level.${training.loType}`,
+              true
+            )}
           </label>
           {filteredSkills.map((skill) => {
             return (
@@ -309,10 +313,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
           </span>
           <div className={styles.innerContainer}>
             <label className={styles.label}>
-              {formatMessage({
-                id: "alm.jobaid",
-                defaultMessage: "Job Aid",
-              })}
+              {GetTranslation("prime.catalog.card.jobAid", true)}
             </label>
             <div>
               {training.supplementaryLOs.map((item) => {
@@ -324,9 +325,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
                       enrollmentHandler={enrollmentHandler}
                       key={item.id}
                       unEnrollmentHandler={unEnrollmentHandler}
-                      jobAidClickHandler={
-                        jobAidClickHandler
-                      }
+                      jobAidClickHandler={jobAidClickHandler}
                     />
                   ));
                 });

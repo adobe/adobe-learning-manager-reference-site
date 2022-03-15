@@ -55,7 +55,7 @@ const PrimeTrainingPage = () => {
   return (
     <Provider theme={lightTheme} colorScheme={"light"}>
       <PrimeTrainingOverviewHeader
-        format={training.loFormat}
+        format={training.loType}
         color={color}
         title={name}
         bannerUrl={bannerUrl}

@@ -8,6 +8,7 @@ import {
 } from "../../../models/PrimeModels";
 import { convertSecondsToTimeText } from "../../../utils/dateTime";
 import { getALMObject } from "../../../utils/global";
+import { GetTranslation } from "../../../utils/translationService";
 import styles from "./PrimeTrainingItemContainerHeader.module.css";
 
 const PrimeTrainingItemContainerHeader: React.FC<{
@@ -73,18 +74,24 @@ const PrimeTrainingItemContainerHeader: React.FC<{
       {/* <h2 className={styles.courseInfoHeader}>{name} </h2> */}
       <div className={styles.metadata}>
         <div className={styles.metadataContents}>
-          <div>{loType}</div>
-          {authorNames && (
+          <div>
+            {GetTranslation(`prime.catalog.card.${loType}`, true)}
+          </div>
+          {authorNames.length ? (
             <>
               <div className={styles.metadata__separator}></div>
               <div className={styles.authorNames}>{authorNames}</div>
             </>
+          ) : (
+            ""
           )}
-          {training.duration && (
+          {training.duration ? (
             <>
               <div className={styles.metadata__separator}></div>
               <div>{convertSecondsToTimeText(training.duration)}</div>
             </>
+          ) : (
+            ""
           )}
           {showMandatoryLabel && (
             <>

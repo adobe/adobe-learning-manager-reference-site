@@ -55,7 +55,6 @@ const PrimeTrainingPageExtraJobAid: React.FC<{
     }
   };
 
-  console.log(training);
   return (
     <div className={styles.jobAid}>
       <a
