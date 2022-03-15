@@ -127,10 +127,7 @@ const PrimeModuleItem = (props: any) => {
   };
   const fomatLabel = useMemo(() => {
     return loResource.resourceType && formatMap[loResource.resourceType]
-      ? GetTranslation(
-          `prime.catalog.card.${formatMap[loResource.resourceType]}`,
-          true
-        )
+      ? GetTranslation(`${formatMap[loResource.resourceType]}`, true)
       : "";
   }, [loResource.resourceType]);
   return (

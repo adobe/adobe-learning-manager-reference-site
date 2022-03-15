@@ -11,11 +11,12 @@ import styles from "./PrimeTrainingCard.module.css";
 import { SEND_SVG, THREE_DOTS_MENU_SVG } from "../../../utils/inline_svg";
 
 export const formatMap: any = {
-  "Self Paced": "self.paced",
-  Activity: "activity",
-  Blended: "blended",
-  "Virtual Classroom": "virtual.classroom",
-  Elearning: "elearning",
+  "Self Paced": "prime.catalog.card.self.paced",
+  Activity: "prime.catalog.card.activity",
+  Blended: "prime.catalog.card.blended",
+  "Virtual Classroom": "prime.catalog.card.virtual.classroom",
+  Elearning: "prime.catalog.card.elearning",
+  Classroom : "prime.catalog.card.classroom"
 };
 const PrimeTrainingCard: React.FC<{
   training: PrimeLearningObject;
@@ -72,9 +73,7 @@ const PrimeTrainingCard: React.FC<{
 
   const cardClass = `${styles.card} ${isHovered ? styles.hover : ""}`;
   const fomatLabel = useMemo(() => {
-    return format
-      ? GetTranslation(`prime.catalog.card.${formatMap[format]}`, true)
-      : "";
+    return format ? GetTranslation(`${formatMap[format]}`, true) : "";
   }, [format]);
   const trainingTypeLabel = useMemo(() => {
     return type ? GetTranslation(`prime.catalog.card.${type}`, true) : "";
