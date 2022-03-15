@@ -7,8 +7,28 @@ import { State } from "../../store/state";
 import { getALMConfig } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
+import { useState } from "react";
+
+const setSkillValues = () => {
+  const config = getALMConfig();
+  if (config) {
+    let cssSelector = config.mountingPoints.boardsContainer;
+    return (document.querySelector(cssSelector) as any)?.dataset.topics;
+  }
+};
+
+const getSelectedSkill = (skillName: any, skills: any) => {
+  skills = skills?.split(",");
+  //if skill is not passed in query param or not in list, return first skill of list
+  if (skillName === "" || skills.indexOf(skillName) < 0) {
+    skillName = skills ? skills[0] : skillName;
+  }
+  return skillName;
+}
 
 export const useBoards = (sortFilter: any, skillName: any) => {
+  const [skills] = useState(() => setSkillValues());
+  const [currentSkill] = useState(() => getSelectedSkill(skillName, skills));
   const { items, next } = useSelector((state: State) => state.social.boards);
   const dispatch = useDispatch();
 
@@ -23,7 +43,8 @@ export const useBoards = (sortFilter: any, skillName: any) => {
         params["filter.state"] = "ACTIVE";
         params["page[offset]"] = "0";
         params["page[limit]"] = "10";
-        params["filter.board.skill"] = skillName;
+        if(currentSkill !== "")
+          params["filter.board.skill"] = currentSkill;
         params["include"] = "createdBy,skills";
         const response = await RestAdapter.get({
           url: `${baseApiUrl}/boards?`,
@@ -87,6 +108,7 @@ export const useBoards = (sortFilter: any, skillName: any) => {
     items,
     loadMoreBoard,
     fetchBoards,
-    // fetchBoard
+    skills,
+    currentSkill
   };
 };

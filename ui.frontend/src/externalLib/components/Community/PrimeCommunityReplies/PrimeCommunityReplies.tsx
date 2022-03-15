@@ -27,7 +27,7 @@ const PrimeCommunityReplies = (props: any) => {
         <div className={styles.primeReplySectionWrapper}>
             <div className={styles.primeReplySection}>
                 {
-                    items?.map((reply) => (
+                    items?.filter((reply) => reply.parent.id === commentId).map((reply) => (
                         <PrimeCommunityReply 
                             reply={reply} 
                             key={reply.id} 

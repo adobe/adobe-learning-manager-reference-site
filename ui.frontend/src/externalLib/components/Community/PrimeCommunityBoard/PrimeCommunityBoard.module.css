@@ -8,8 +8,7 @@
 }
 
 .primeBoardItem {
-  width: 100%;
-  min-height: 300px;
+  width: 716px;
   padding: 25px;
   background: #ffffff 0% 0% no-repeat padding-box;
   box-shadow: 0px 0px 3px #0000001a;
@@ -62,11 +61,11 @@
   margin-bottom: 20px;
 }
 
-@media (max-width: 414px) {
-  /* .primeBoardItem, .primeBoardDescription {
+@media (max-width:414px) {
+    .primeBoardItem, .primeBoardDescription {
         height: auto;
-        max-height: none;
-    } */
+        width: 100%;
+    }
 }
 
 .primeBoardIcon {
