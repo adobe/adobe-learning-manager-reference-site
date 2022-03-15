@@ -14,7 +14,7 @@ const PrimeCommunityBoardFilters = (props: any) => {
   }
 
   //populate skill list
-  let skills = props.skills.split(",");
+  let skills = props.skills?.split(",");
   const [skillList, setSkillList ] = useState({});
   const firstRun = useRef(true);
   
@@ -22,10 +22,10 @@ const PrimeCommunityBoardFilters = (props: any) => {
     if (firstRun.current) {
       let index = 1;
       const skillFilters: { [key: string]: number } = {};
-      if(skills?.length === 0) {
+      if(!skills || skills.length === 0) {
         setShowSkillFilter(false);
       } else {
-        skills.forEach((skill: any) => {
+        skills?.forEach((skill: any) => {
           if(!isSkillEmpty(skill))
           skillFilters[skill] = index++;
         });

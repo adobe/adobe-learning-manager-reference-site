@@ -20,18 +20,20 @@ const setSkillValues = () => {
 const getSelectedSkill = (skillName: any, skills: any) => {
   skills = skills?.split(",");
   //if skill is not passed in query param or not in list, return first skill of list
-  if (skillName === "" || skills.indexOf(skillName) < 0) {
-    skillName = skills ? skills[0] : skillName;
+  if (skillName === "" || skills?.indexOf(skillName) < 0) {
+    if(skills) {
+      skillName = skills[0];
+    }
   }
   return skillName;
 }
 
 export const useBoards = (sortFilter: any, skillName: any) => {
+  skillName = skillName ? skillName : "";
   const [skills] = useState(() => setSkillValues());
   const [currentSkill] = useState(() => getSelectedSkill(skillName, skills));
   const { items, next } = useSelector((state: State) => state.social.boards);
   const dispatch = useDispatch();
-
   //Fort any page load or filterchanges
   const fetchBoards = useCallback(
     async (sortFilter: any, skillName: any) => {
@@ -43,8 +45,8 @@ export const useBoards = (sortFilter: any, skillName: any) => {
         params["filter.state"] = "ACTIVE";
         params["page[offset]"] = "0";
         params["page[limit]"] = "10";
-        if(currentSkill !== "")
-          params["filter.board.skill"] = currentSkill;
+        if(skillName && skillName !== "")
+          params["filter.board.skill"] = skillName;
         params["include"] = "createdBy,skills";
         const response = await RestAdapter.get({
           url: `${baseApiUrl}/boards?`,
@@ -55,7 +57,6 @@ export const useBoards = (sortFilter: any, skillName: any) => {
           items: parsedResponse.boardList,
           next: parsedResponse.links?.next || "",
         };
-
         dispatch(loadBoards(data));
       } catch (e) {
         dispatch(loadBoards([] as PrimeBoard[]));
@@ -88,7 +89,7 @@ export const useBoards = (sortFilter: any, skillName: any) => {
   // }, [dispatch]);
 
   useEffect(() => {
-    fetchBoards(sortFilter, skillName);
+    fetchBoards(sortFilter, currentSkill);
   }, [fetchBoards]);
 
   // for pagination

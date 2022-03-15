@@ -83,20 +83,18 @@ const PrimeCommunityBoardList = () => {
             skillFilterChangeHandler={skillFilterChangeHandler}
           ></PrimeCommunityBoardFilters>
           <div className={styles.primeCommunitySearchContainer}>
-            {selectedSkill && (
-              <PrimeCommunitySearch
-                objectId={selectedSkill}
-                type="skill"
-                searchCountHandler={(value: any) => searchCountHandler(value)}
-                showLoaderHandler={showLoaderHandler}
-                searchModeHandler={searchModeHandler}
-                resetSearchHandler={resetSearchHandler}
-                placeHolderText={formatMessage({
-                  id: "prime.community.search.placeholder",
-                  defaultMessage: "Search within community",
-                })}
-              ></PrimeCommunitySearch>
-            )}
+            <PrimeCommunitySearch
+              objectId={selectedSkill}
+              type="skill"
+              searchCountHandler={(value: any) => searchCountHandler(value)}
+              showLoaderHandler={showLoaderHandler}
+              searchModeHandler={searchModeHandler}
+              resetSearchHandler={resetSearchHandler}
+              placeHolderText={formatMessage({
+                id: "prime.community.search.placeholder",
+                defaultMessage: "Search within community",
+              })}
+            ></PrimeCommunitySearch>
           </div>
         </div>
         {showLoader && (
