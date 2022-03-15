@@ -29,9 +29,7 @@ const PrimeInstanceItem = (props: any) => {
   };
   const dateValue = GetFormattedDate(date, locale);
   const fomatLabel = useMemo(() => {
-    return format
-      ? GetTranslation(`prime.catalog.card.${formatMap[format]}`, true)
-      : "";
+    return format ? GetTranslation(`${formatMap[format]}`, true) : "";
   }, [format]);
 
   return (

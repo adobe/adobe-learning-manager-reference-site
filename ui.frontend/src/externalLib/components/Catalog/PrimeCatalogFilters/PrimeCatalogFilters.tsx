@@ -33,12 +33,12 @@ const PrimeCatalogFilters = (props: any) => {
   const filterList = [
     catalogs,
     loTypes,
-    learnerState,
     loFormat,
-    skillName,
-    tagName,
-    skillLevel,
     duration,
+    skillName,
+    skillLevel,
+    tagName,
+    learnerState,
   ].map((filter) => {
     if (!filter.list || filter.list?.length === 0) {
       return "";
@@ -56,6 +56,7 @@ const PrimeCatalogFilters = (props: any) => {
                 label={item.label}
                 checked={item.checked}
                 changeHandler={onChangeHandler}
+                isListDynamic={filter.isListDynamic}
               />
             </li>
           ))}
