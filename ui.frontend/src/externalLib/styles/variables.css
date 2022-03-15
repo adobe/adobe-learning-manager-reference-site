@@ -30,6 +30,11 @@
   --prime-font-weight-600: 600;
 }
 
+body {
+  margin: 0;
+  font-family: "source-sans-pro" !important;
+}
+
 /* --prime-color-nc5: #bcbcbc; */
 /* --prime-color-nc4: #565656; */
 /* --prime-color-nc6: #d1d1d1;
