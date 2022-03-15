@@ -1,19 +1,40 @@
 import styles from "./PrimeCommunityBoardFilters.module.css";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PrimeDropdown } from "../PrimeDropdown";
 
 const PrimeCommunityBoardFilters = (props: any) => {
   const ref = useRef<any>();
 
-  let defaultSkillFilter = "Gamification";
-  const [selectedSkillFilter, setSelectedSkillFilter] =
-    useState(defaultSkillFilter);
+  let defaultSkillFilter = props.selectedSkill;
+  const [selectedSkillFilter, setSelectedSkillFilter] = useState(defaultSkillFilter);
+  const [showSkillFilter, setShowSkillFilter] = useState(false);
 
-  //To-do skill_id must be replaced in below object
-  const skillFilters: { [key: string]: number } = {
-    Gamification: 1,
-    General: 2,
-  };
+  const isSkillEmpty = (value: any) => {
+    return !value || value === "";
+  }
+
+  //populate skill list
+  let skills = props.skills.split(",");
+  const [skillList, setSkillList ] = useState({});
+  const firstRun = useRef(true);
+  
+  useEffect(() => {
+    if (firstRun.current) {
+      let index = 1;
+      const skillFilters: { [key: string]: number } = {};
+      if(skills?.length === 0) {
+        setShowSkillFilter(false);
+      } else {
+        skills.forEach((skill: any) => {
+          if(!isSkillEmpty(skill))
+          skillFilters[skill] = index++;
+        });
+        setSkillList(skillFilters);
+        setShowSkillFilter(true);
+      }
+      firstRun.current = false;
+    }
+  },[skills]);
 
   const skillFilterLabel = {
     id: "prime.community.board.skill",
@@ -52,12 +73,14 @@ const PrimeCommunityBoardFilters = (props: any) => {
     <>
       <div className={styles.primeBoardOptionsWrapper}>
         <div ref={ref} className={styles.primeBoardFilters}>
-          <PrimeDropdown
-            label={skillFilterLabel}
-            optionList={Object.keys(skillFilters)}
-            selectedOption={selectedSkillFilter}
-            optionClickHandler={skillClickHandler}
-          ></PrimeDropdown>
+          {showSkillFilter &&
+            <PrimeDropdown
+              label={skillFilterLabel}
+              optionList={Object.keys(skillList)}
+              selectedOption={selectedSkillFilter}
+              optionClickHandler={skillClickHandler}
+            ></PrimeDropdown>
+          }
           <PrimeDropdown
             label={sortFilterLabel}
             optionList={Object.keys(sortFilters)}

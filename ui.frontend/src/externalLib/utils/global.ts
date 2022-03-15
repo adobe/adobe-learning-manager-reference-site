@@ -72,6 +72,14 @@ export const getPathParams = (pagePath: string, pathParams: string[] = []) => {
   return paramsMap;
 };
 
+export function getQueryParamsIObjectFromUrl() {
+  const location = getWindowObject().location;
+  const params: URLSearchParams = new URLSearchParams(
+    decodeURI(location.search)
+  );
+  return Object.fromEntries(params.entries());
+}
+
 export const getALMUser = async () => {
   return JsonApiParse(await getALMObject().getALMUser());
 };

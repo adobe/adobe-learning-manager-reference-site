@@ -14,9 +14,11 @@ import {
 } from "../../store/actions/catalog/action";
 import { State } from "../../store/state";
 import {
-  getQueryParamsIObjectFromUrl,
   locationUpdate,
 } from "../../utils/catalog";
+import {
+  getQueryParamsIObjectFromUrl,
+} from "../../utils/global";
 import { getALMConfig } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { RestAdapter } from "../../utils/restAdapter";

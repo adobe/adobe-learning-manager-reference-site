@@ -7,9 +7,11 @@ import {
 } from "../../store/actions/catalog/action";
 import {
   debounce,
-  getQueryParamsIObjectFromUrl,
   locationUpdate,
 } from "../../utils/catalog";
+import {
+  getQueryParamsIObjectFromUrl,
+} from "../../utils/global";
 
 const DEFAULT_MIN_LENGTH = 1;
 
