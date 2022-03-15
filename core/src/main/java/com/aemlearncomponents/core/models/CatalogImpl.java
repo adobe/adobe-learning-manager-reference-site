@@ -20,10 +20,10 @@ public class CatalogImpl implements Catalog {
     }
 
     @ValueMapValue
-    Boolean showFilters;
+    String showFilters;
 
     @Override
-    public Boolean getShowFilters() {
+    public String getShowFilters() {
         return showFilters;
     }
 

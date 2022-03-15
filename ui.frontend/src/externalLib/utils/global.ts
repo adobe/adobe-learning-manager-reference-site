@@ -1,7 +1,7 @@
 import { JsonApiParse } from "../utils/jsonAPIAdapter";
 import { SetupAccountTerminologies } from "./translationService";
 const _fontLoading = require("./fontLoading");
-_fontLoading;
+//_fontLoading;
 
 export interface PrimeConfig {
   almBaseURL: string;

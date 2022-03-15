@@ -45,7 +45,7 @@
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
                 <executions>
-                    <execution>
+                    <!-- <execution>
                         <id>npm run test</id>
                         <phase>generate-resources</phase>
                         <goals>
@@ -57,7 +57,7 @@
                                 <CI>true</CI>
                             </environmentVariables>
                         </configuration>
-                    </execution>
+                    </execution> -->
                     <execution>
                         <id>npm run build</id>
                         <phase>generate-resources</phase>

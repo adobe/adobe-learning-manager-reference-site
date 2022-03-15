@@ -75,7 +75,7 @@ export function GetTranslationsReplaced(
 }
 
 export function ReplaceAccountTerminology(translation: string): string {
-  if (!accountTerminologyMap) {
+  if (!accountTerminologyMap || !translation) {
     return translation;
   }
   const pluralTokens = translation.match(pluralRegex);
