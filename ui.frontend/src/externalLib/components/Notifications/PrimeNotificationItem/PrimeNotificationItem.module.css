@@ -4,7 +4,7 @@
   padding: 18px 20px 20px 20px;
   display: flex;
   justify-content: space-between;
-  font-weight: 600;
+  font-weight: var(--prime-font-weight-600);
   font-size: var(--prime-font-size-14);
   border: 1px solid var(--prime-color-nc5);
   opacity: 1;
@@ -25,7 +25,7 @@
 .notificationTime {
   margin-top: 8px;
   border: 0;
-  color: var(--prime-color-nc5);
+  color: var(--prime-color-nc4);
   height: 20px;
   font-size: var(--prime-font-size-12);
 }

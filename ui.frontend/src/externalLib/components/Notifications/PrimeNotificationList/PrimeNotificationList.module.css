@@ -3,7 +3,7 @@
     width: 414px;
     font-size: var(--prime-font-size-16);
     list-style: none;
-    background-color: #ffffff;;
+    background-color: var(--prime-color-white);
     background-clip: padding-box;
     opacity: 1;
     max-height: 500px;
@@ -29,9 +29,9 @@
     border-radius: 166px;
     opacity: 1;
     font-size: var(--prime-font-size-14);
-    font-weight:600;
+    font-weight:var(--prime-font-weight-600); 
     letter-spacing: 0px;
-    color: #FFFFFF;
+    color: var(--prime-color-white);
     padding:6px 10px 5px 10px; 
     
   }
@@ -39,7 +39,7 @@
   .unreadCountNotificationText{
     height:20px; 
     font-size: var(--prime-font-size-14);
-    font-weight:600; 
+    font-weight: var(--prime-font-weight-600); 
     color: var(--prime-color-nc1);;
     opacity: 1;
     margin-left:8px; 

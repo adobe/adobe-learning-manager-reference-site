@@ -42,7 +42,7 @@ const PrimeNotificationContainer = () => {
     };
   }, [
     fetchNotifications,
-    markReadNotification,
+    // markReadNotification,
     pollUnreadNotificationCount,
     showNotifications,
   ]);

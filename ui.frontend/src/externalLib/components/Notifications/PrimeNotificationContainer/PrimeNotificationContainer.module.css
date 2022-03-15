@@ -2,7 +2,7 @@
 .notificationDropdown{
   list-style:none;
   position:absolute; 
-  padding-left:20px;
+  padding-left: 20px
 }
 .notificationBellIcon {
   padding: 0 !important;
@@ -20,11 +20,11 @@
 
 
 .notificationCountStyle {
-  font-weight: 700;
+  font-weight: var(--prime-font-weight-600);
   font-size: var(--prime-font-size-10);
-  color: #fff;
+  color: var(--prime-color-white);
   text-align: center;
-  background-color: #e61414;
+  background-color: var(--prime-icon-color);
   border-radius: 10px;
   display: inline-block;
   line-height: 1;
