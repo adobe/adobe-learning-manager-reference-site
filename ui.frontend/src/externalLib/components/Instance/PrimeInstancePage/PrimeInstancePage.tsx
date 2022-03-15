@@ -12,7 +12,10 @@ import {
 } from "../../../utils/global";
 import { SORT_ORDER_SVG } from "../../../utils/inline_svg";
 import { getResourceBasedOnLocale } from "../../../utils/instance";
-import { getPreferredLocalizedMetadata } from "../../../utils/translationService";
+import {
+  getPreferredLocalizedMetadata,
+  GetTranslation,
+} from "../../../utils/translationService";
 import { PrimeInstanceItem } from "../PrimeInstanceItem";
 import { PrimeTrainingOverviewHeader } from "../../TrainingOverview/PrimeTrainingOverviewHeader";
 import styles from "./PrimeInstancePage.module.css";
@@ -89,7 +92,7 @@ const PrimeInstancePage = () => {
   return (
     <Provider theme={lightTheme} colorScheme={"light"}>
       <PrimeTrainingOverviewHeader
-        format={training.loFormat}
+        format={training.loType}
         color={color}
         title={name}
         bannerUrl={bannerUrl}
@@ -103,13 +106,20 @@ const PrimeInstancePage = () => {
           </div>
           <div className={styles.courseDetials}>
             <h3 className={styles.title}>{name}</h3>
-            <p className={styles.type}>{training?.type}</p>
+            <p className={styles.type}>
+              {GetTranslation(`prime.catalog.card.${training.loType}`, true)}
+            </p>
           </div>
         </div>
 
         {/* Shown only in Mobile */}
         <div className={styles.selectInstanceContainer}>
-          <h3 className={styles.selectInstance}>Select An Instance</h3>
+          <h3 className={styles.selectInstance}>
+            {formatMessage({
+              id: "prime.instance.select.instance",
+              defaultMessage: "Select An Instance",
+            })}
+          </h3>
         </div>
 
         {list!?.length > 0 && (
