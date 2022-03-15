@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useIntl } from "react-intl";
 import { useCatalog } from "../../../hooks/catalog/useCatalog";
 import { CLOSE_SVG } from "../../../utils/inline_svg";
+import { GetTranslation } from "../../../utils/translationService";
 import { PrimeCatalogFilters } from "../PrimeCatalogFilters";
 import PrimeCatalogSearch from "../PrimeCatalogSearch/PrimeCatalogSearch";
 import { PrimeTrainingsContainer } from "../PrimeTrainingsContainer";
@@ -97,10 +98,7 @@ const PrimeCatalogContainer = () => {
         <div className={styles.headerContainer}>
           <div className={styles.header}>
             <h1 className={styles.label}>
-              {formatMessage({
-                id: "prime.catalog.header",
-                defaultMessage: "Collection of Courses, Certificates and More",
-              })}
+              {GetTranslation("prime.catalog.header", true)}
             </h1>
 
             {searchHtml}

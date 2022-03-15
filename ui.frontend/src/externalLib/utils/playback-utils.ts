@@ -4,6 +4,7 @@ import { getAccessToken, getALMConfig, getWindowObject } from "./global";
 export function LaunchPlayer(props: any) {
   const ClosePlayer = (event: MessageEvent) => {
     if (event.data === "status:close") {
+      getWindowObject().removeEventListener("message", ClosePlayer);
       handlePlayerClose(props.trainingId);
       props.callBackFn &&
         typeof props.callBackFn == "function" &&
@@ -42,16 +43,6 @@ export function LaunchPlayer(props: any) {
   iframe.style.margin = "auto";
   iframe.style.border = "none";
   overlay.appendChild(iframe);
-  //   const msg = {
-  //     type: "endpointmsg",
-  //     data: {
-  //       accessToken: getALMConfig().accessToken,
-  //     },
-  //   };
-  // iframe["contentWindow"]?.postMessage(JSON.stringify(msg), "*");
-
-  // currenttrainingId = trainingId;
-  //   GetPrimeObj()._playerLaunchTimeStamp = Date.now();
 }
 
 function cleanUp() {

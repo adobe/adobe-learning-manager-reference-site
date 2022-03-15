@@ -1,6 +1,7 @@
 import { ProgressBar } from "@adobe/react-spectrum";
 import React from "react";
 import { PrimeLearningObjectInstanceEnrollment } from "../../../models/PrimeModels";
+import { GetTranslation } from "../../../utils/translationService";
 import styles from "./PrimeTrainingOverviewHeader.module.css";
 
 const PrimeTrainingOverviewHeader: React.FC<{
@@ -16,7 +17,9 @@ const PrimeTrainingOverviewHeader: React.FC<{
   return (
     <div style={{ backgroundColor: color }} className={styles.header}>
       <div className={styles.headingContainer}>
-        <div className={styles.format}>{format}</div>
+        <div className={styles.format}>
+          {GetTranslation(`prime.catalog.card.${format}`, true)}
+        </div>
         <h1
           className={styles.title}
           id={title}

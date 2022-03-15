@@ -87,7 +87,6 @@ export const useTrainingPage = (
       );
       if (response) {
         setInstanceSummary(response.loInstanceSummary);
-        console.log(response.loInstanceSummary);
       }
 
       try {
