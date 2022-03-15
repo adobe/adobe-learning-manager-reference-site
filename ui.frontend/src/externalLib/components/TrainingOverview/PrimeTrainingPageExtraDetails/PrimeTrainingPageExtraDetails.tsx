@@ -1,11 +1,14 @@
+/* eslint-disable no-script-url */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { Button } from "@adobe/react-spectrum";
 import Send from "@spectrum-icons/workflow/Send";
 import UserGroup from "@spectrum-icons/workflow/UserGroup";
 import Calendar from "@spectrum-icons/workflow/Calendar";
-import RemoveCircle from "@spectrum-icons/workflow/RemoveCircle";
-import AddCircle from "@spectrum-icons/workflow/AddCircle";
 import PinOff from "@spectrum-icons/workflow/PinOff";
-import { useMemo, useState } from "react";
+import Download from "@spectrum-icons/workflow/Download";
+import { GetTranslation } from "../../../utils/translationService";
+
+import { useMemo } from "react";
 import { useIntl } from "react-intl";
 
 import { InstanceBadge, Skill } from "../../../models/common";
@@ -13,12 +16,12 @@ import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
   PrimeLoInstanceSummary,
-  PrimeResource,
 } from "../../../models/PrimeModels";
 import { LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
 import styles from "./PrimeTrainingPageExtraDetails.module.css";
 import { modifyTime } from "../../../utils/dateTime";
 import { getALMObject } from "../../../utils/global";
+import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJobAids";
 
 const PrimeTrainingPageExtraDetails: React.FC<{
   trainingInstance: PrimeLearningObjectInstance;
@@ -29,6 +32,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
   enrollmentHandler: () => void;
   launchPlayerHandler: () => void;
   unEnrollmentHandler: Function;
+  jobAidClickHandler: Function;
 }> = ({
   trainingInstance,
   skills,
@@ -38,6 +42,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
   enrollmentHandler,
   launchPlayerHandler,
   unEnrollmentHandler,
+  jobAidClickHandler,
 }) => {
   const { formatMessage } = useIntl();
   const { locale } = getALMObject().getALMConfig().locale;
@@ -78,6 +83,10 @@ const PrimeTrainingPageExtraDetails: React.FC<{
     });
     return filteredSkills;
   }, [skills]);
+
+  const unEnrollClickHandler = () => {
+    unEnrollmentHandler({ enrollmentId: training.enrollment.id });
+  };
   //show only if not enrolled
   const showEnrollmentCount =
     !trainingInstance.learningObject.enrollment &&
@@ -97,9 +106,12 @@ const PrimeTrainingPageExtraDetails: React.FC<{
     !training.enrollment && trainingInstance.enrollmentDeadline;
 
   const showJobAids = training.enrollment && training.supplementaryLOs?.length;
-
+  const showResource = training.supplementaryResources?.length;
+  const showUnenrollButton =
+    training.enrollment && training.unenrollmentAllowed;
   return (
     <>
+      {/* buttons COnatiner */}
       <div className={styles.actionContainer}>
         {/* {action === "preview" && (
           <Button
@@ -224,7 +236,9 @@ const PrimeTrainingPageExtraDetails: React.FC<{
             {LEARNER_BADGE_SVG()}
           </span>
           <div className={styles.innerContainer}>
-            <label className={styles.label}>Badges</label>
+            <label className={styles.label}>
+              {GetTranslation("alm.overview.badge", true)}
+            </label>
             {
               <img
                 src={badge.badgeUrl}
@@ -254,9 +268,10 @@ const PrimeTrainingPageExtraDetails: React.FC<{
         </span>
         <div className={styles.innerContainer}>
           <label className={styles.label}>
-            {formatMessage({
-              id: "alm.overview.skills.achieve.level",
-            })}
+            {GetTranslation(
+              `alm.overview.skills.achieve.level.${training.loType}`,
+              true
+            )}
           </label>
           {filteredSkills.map((skill) => {
             return (
@@ -298,10 +313,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
           </span>
           <div className={styles.innerContainer}>
             <label className={styles.label}>
-              {formatMessage({
-                id: "alm.jobaid",
-                defaultMessage: "Job Aid",
-              })}
+              {GetTranslation("prime.catalog.card.jobAid", true)}
             </label>
             <div>
               {training.supplementaryLOs.map((item) => {
@@ -313,6 +325,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
                       enrollmentHandler={enrollmentHandler}
                       key={item.id}
                       unEnrollmentHandler={unEnrollmentHandler}
+                      jobAidClickHandler={jobAidClickHandler}
                     />
                   ));
                 });
@@ -321,54 +334,63 @@ const PrimeTrainingPageExtraDetails: React.FC<{
           </div>
         </div>
       )}
+
+      {/* Resources container */}
+      {showResource && (
+        <div className={styles.commonContainer}>
+          <span aria-hidden="true" className={styles.icon}>
+            <Download />
+          </span>
+          <div className={styles.innerContainer}>
+            <label className={styles.label}>
+              {formatMessage({
+                id: "sfdsfs",
+                defaultMessage: "Resources",
+              })}
+            </label>
+            <div>
+              {training.supplementaryResources.map((item) => {
+                return training.enrollment ? (
+                  <a
+                    href={item.location}
+                    download
+                    className={styles.supplymentaryLoName}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {item.name}
+                  </a>
+                ) : (
+                  <span>{item.name}</span>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* UnEnroll button container */}
+      {showUnenrollButton && (
+        <div className={styles.commonContainer}>
+          <span
+            aria-hidden="true"
+            className={styles.icon}
+            style={{ visibility: "hidden" }}
+          >
+            <Download />
+          </span>
+          <div className={styles.innerContainer}>
+            <a
+              href="javascript:void(0)"
+              className={styles.supplymentaryLoName}
+              onClick={unEnrollClickHandler}
+            >
+              Unenroll from course
+            </a>
+          </div>
+        </div>
+      )}
     </>
   );
 };
 export default PrimeTrainingPageExtraDetails;
-
-const PrimeTrainingPageExtraJobAid: React.FC<{
-  resource: PrimeResource;
-  training: PrimeLearningObject;
-  enrollmentHandler: Function;
-  unEnrollmentHandler: Function;
-}> = ({ resource, training, enrollmentHandler, unEnrollmentHandler }) => {
-  //on clikc, if not enrolled show popup alert
-  const [isEnrolled, setIsEnrolled] = useState(() => {
-    return training.enrollment ? true : false;
-  });
-
-  const unenroll = () => {
-    unEnrollmentHandler({
-      enrollmentId: training.enrollment.id,
-      isSupplementaryLO: true,
-    });
-    setIsEnrolled(false);
-  };
-
-  const enroll = () => {
-    enrollmentHandler({
-      id: training.id,
-      instanceId: training.instances[0].id,
-      isSupplementaryLO: true,
-    });
-    setIsEnrolled(true);
-  };
-
-  return (
-    <div className={styles.jobAid}>
-      {training.id}
-      <span className={styles.name}>{resource.name}</span>
-      <span className={styles.jobAidIcon}>
-        {isEnrolled ? (
-          <span onClick={unenroll}>
-            <RemoveCircle />
-          </span>
-        ) : (
-          <span onClick={enroll}>
-            <AddCircle />
-          </span>
-        )}
-      </span>
-    </div>
-  );
-};

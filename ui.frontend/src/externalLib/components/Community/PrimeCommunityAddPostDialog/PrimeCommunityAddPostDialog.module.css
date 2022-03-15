@@ -2,6 +2,7 @@
     z-index: 1000;
 }
 
+@import "../../../styles/variables.css";
 .primeDialogHeaderContainer {
     width: auto;
     display: flex;
@@ -25,7 +26,7 @@
 .primeDialogHeaderText {
     margin-left: 5px;
     color: currentColor;
-    font-size: 12px;
+    font-size: var(--prime-font-size-12);
     font-weight: 500;
 }
 
@@ -67,13 +68,13 @@
 .primeOptionText {
     margin-left: 10px;
     color: currentColor;
-    font-size: 12px;
+    font-size: var(--prime-font-size-12);
     font-weight: 500;
 }
 
 .primeStatusText {
     color: currentColor;
-    font-size: 13px;
+    font-size: var(--prime-font-size-12);
     font-weight: 500;
     margin-right:10px;
 }
@@ -81,7 +82,7 @@
 .primeOptionTextFilled {
     margin-left: 10px;
     color: #306EB5 !important;
-    font-size: 12px;
+    font-size: var(--prime-font-size-12);
     font-weight: 500;
 }
 

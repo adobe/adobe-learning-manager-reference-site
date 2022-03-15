@@ -16,13 +16,25 @@
   padding: 20px 0;
 }
 .trainingOverviewContainer {
-  border: 1px solid #cacaca;
+  border: 1px solid var(--prime-color-nc6);
   border-radius: 6px;
   padding: 10px;
   margin-bottom: 20px;
 }
 .sectionName {
-  margin: 0 0 20px 0;
+  margin: 0 0 10px 0;
+}
+.sectionOptional {
+  display: inline-block;
+  margin-bottom: 20px;
+  background: var(--prime-success-color);
+  border-radius: 8px;
+  color: var(--prime-color-white);
+  font-weight: var(--prime-font-weight-600);
+  font-size: var(--prime-font-size-10);
+  padding: 1px 8px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
 }
 
 @media screen and (max-width: 414px) {

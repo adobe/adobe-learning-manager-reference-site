@@ -1,10 +1,11 @@
+@import "../../../styles/variables.css";
 .primeObjectOptions {
     display: flex;
     margin-bottom: 15px;
 }
 
 .primeObjectCommentsCount {
-    font-size: 12px;
+    font-size: var(--prime-font-size-12);
     color: #306EB5;
     background: none;
     border: none;
@@ -18,7 +19,7 @@
 
 .primeObjectUpVoteIcon, .primeObjectDownVoteIcon {
     margin-right: 15px;
-    font-size: 13px;
+    font-size: var(--prime-font-size-12);
     border: none;
     background: none;
 }

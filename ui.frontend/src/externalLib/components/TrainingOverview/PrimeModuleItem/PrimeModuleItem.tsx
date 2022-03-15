@@ -31,6 +31,7 @@ import {
   getPreferredLocalizedMetadata,
   GetTranslation,
 } from "../../../utils/translationService";
+import { formatMap } from "../../Catalog/PrimeTrainingCard/PrimeTrainingCard";
 import styles from "./PrimeModuleItem.module.css";
 
 const CLASSROOM = "Classroom";
@@ -119,6 +120,16 @@ const PrimeModuleItem = (props: any) => {
     if (loResource.learningObject.enrollment && !isClassroomOrVC)
       launchPlayerHandler({ id: trainingId, moduleId: loResource.id });
   };
+  const keyDownHandler = (event: any) => {
+    if (event.key === "Enter") {
+      itemClickHandler();
+    }
+  };
+  const fomatLabel = useMemo(() => {
+    return loResource.resourceType && formatMap[loResource.resourceType]
+      ? GetTranslation(`${formatMap[loResource.resourceType]}`, true)
+      : "";
+  }, [loResource.resourceType]);
   return (
     <li className={styles.container}>
       <div
@@ -128,6 +139,8 @@ const PrimeModuleItem = (props: any) => {
         tabIndex={0}
         data-test={loResource.id}
         onClick={itemClickHandler}
+        onKeyDown={keyDownHandler}
+        role="button"
       >
         <div className={styles.icon} aria-hidden="true">
           {moduleIcon}
@@ -135,10 +148,7 @@ const PrimeModuleItem = (props: any) => {
         <div className={styles.headerWrapper}>
           <div className={styles.title}>{name}</div>
           <div className={styles.resourceAndDuration}>
-            <span className={styles.resourceType}>
-              {loResource.resourceType}
-              {/* {console.log(loResource.multipleAttempt)} */}
-            </span>
+            <span className={styles.resourceType}>{fomatLabel}</span>
             <span>{durationText}</span>
           </div>
         </div>

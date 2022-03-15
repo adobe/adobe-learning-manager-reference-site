@@ -1,3 +1,4 @@
+@import "../../../styles/variables.css";
 .primeBoardParent {
     display: flex;
     justify-content: center;
@@ -28,7 +29,7 @@
 
 .primeCommunitySearchStatus {
     display: flex;
-    font-size: 14px;
+    font-size: var(--prime-font-size-14);
     width: 716px;
     margin: auto;
     margin-bottom: 25px;

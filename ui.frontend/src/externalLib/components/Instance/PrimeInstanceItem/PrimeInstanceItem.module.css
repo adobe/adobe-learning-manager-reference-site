@@ -19,7 +19,7 @@
 .instanceListItem {
   padding: 20px 0 12px 0;
   display: flex;
-  border-bottom: 1px solid var(--prime-color-nc8);
+  border-bottom: 1px solid var(--prime-color-nc2);
 }
 .instanceName {
   font-size: var(--prime-font-size-14);
@@ -76,7 +76,7 @@
   font-size: var(--prime-font-size-14);
   line-height: 19px;
   letter-spacing: 0px;
-  color: var(--prime-color-nc2);
+  color: var(--prime-color-nc1);
   opacity: 1;
   margin: 0;
 }
@@ -86,7 +86,7 @@
 
 @media screen and (max-width: 414px) {
   .instanceListItem {
-    background: var(--prime-color-nc9);
+    background: var(--prime-color-nc5);
     border: none;
     padding: 18px 20px;
     flex-direction: column;

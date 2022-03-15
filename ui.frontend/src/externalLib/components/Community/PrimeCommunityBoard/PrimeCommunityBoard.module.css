@@ -1,63 +1,64 @@
-.primeBoardWrapper{
-    display:flex;
-    max-width: 716px;
-    margin-bottom: 20px;
-    margin-left: auto;
-    margin-right: auto;
+@import "../../../styles/variables.css";
+.primeBoardWrapper {
+  display: flex;
+  max-width: 716px;
+  margin-bottom: 25px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .primeBoardItem {
-    width: 716px;
-    padding: 25px;
-    background: #FFFFFF 0% 0% no-repeat padding-box;
-    box-shadow: 0px 0px 3px #0000001A;
-    border: 1px solid #D5D5D5;
-    border-radius: 2px;
-    opacity: 1;
-    position: relative;
+  width: 716px;
+  padding: 25px;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 0px 3px #0000001a;
+  border: 1px solid #d5d5d5;
+  border-radius: 2px;
+  opacity: 1;
+  position: relative;
 }
 
 .primeBoardName {
-    font-size:19px;
-    margin-bottom: 12px;
-    text-align: left;
-    font-weight: 600;
-    font-family: Source Sans Pro;
-    letter-spacing: 0px;
-    color: #306EB5;
-    opacity: 1;
+  font-size: var(--prime-font-size-18);
+  margin-bottom: 12px;
+  text-align: left;
+  font-weight: 600;
+  font-family: Source Sans Pro;
+  letter-spacing: 0px;
+  color: #306eb5;
+  opacity: 1;
 }
-.primeBoardName:hover  {
-    cursor: pointer;
+.primeBoardName:hover {
+  cursor: pointer;
 }
 
 .primeBoardOptions {
-    border: none;
-    background: transparent;
-    width: 28px;
-    height: 28px;
-    margin-top: -10px;
-    float: right;
-    fill: #306EB5;
+  border: none;
+  background: transparent;
+  width: 28px;
+  height: 28px;
+  margin-top: -10px;
+  float: right;
+  fill: #306eb5;
 }
 
 .primeBoardSkill {
-    text-align: left;
-    font-size: 12px;
-    font-family: Source Sans Pro;
-    letter-spacing: 0px;
-    color: #717171;
-    opacity: 1;
-    display: inline-flex;
-    vertical-align: top;
-    margin-bottom: 2px;
+  text-align: left;
+  font-size: var(--prime-font-size-12);
+  font-family: Source Sans Pro;
+  letter-spacing: 0px;
+  color: var(--prime-color-nc3);
+  opacity: 1;
+  display: inline-flex;
+  vertical-align: top;
+  margin-bottom: 2px;
 }
 
 .primeBoardDescription {
-    /* height: 100px; */
-    border-bottom: 1px solid #ccc;
-    font-size: 14px;
-    margin-bottom: 20px;
+  /* height: 100px; */
+  border-bottom: 1px solid #ccc;
+  font-size: var(--prime-font-size-14);
+  margin-bottom: 20px;
 }
 
 @media (max-width:414px) {
@@ -68,60 +69,60 @@
 }
 
 .primeBoardIcon {
-    margin-left: 10px;
-    width: 15px;
+  margin-left: 10px;
+  width: 15px;
 }
 
 .primeBoardActivityPanel {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-.primeBoardActivityStats{
-    max-width: 300px;
-    display: flex;
+.primeBoardActivityStats {
+  max-width: 300px;
+  display: flex;
 }
 
 .primeActivityStatsText {
-    font-size: 10px;
-    padding-left: 2px;
-    vertical-align: text-top;
-    margin-right: 15px;
-    margin-top: 4px;
-    color: #717171;
+  font-size: var(--prime-font-size-10);
+  padding-left: 2px;
+  vertical-align: text-top;
+  margin-right: 15px;
+  margin-top: 4px;
+  color: var(--prime-color-nc3);
 }
 
 .primeActivityStatsIcon {
-    width: 20px;
-    color: #717171;
+  width: 20px;
+  color: var(--prime-color-nc3);
 }
 
 .primeActivityInfoIcon {
-    margin-left: -10px;
-    margin-right: 10px;
-    margin-top: 2px;
-    width: 15px;
-    color: #717171;
+  margin-left: -10px;
+  margin-right: 10px;
+  margin-top: 2px;
+  width: 15px;
+  color: var(--prime-color-nc3);
 }
 
 .primeVerticalSeperator {
-    border-left: 1px solid #ccc;
-    height: 2rem;
-    margin-right: 10px;
+  border-left: 1px solid #ccc;
+  height: 2rem;
+  margin-right: 10px;
 }
 
 @media (max-width: 414px) {
-    .primeVerticalSeperator {
-        display: none;
-    }
+  .primeVerticalSeperator {
+    display: none;
+  }
 
-    .primeActivityInfoIcon {
-        display: none;
-    }
+  .primeActivityInfoIcon {
+    display: none;
+  }
 
-    .primeBoardActivityPanel {
-        height: 70px;
-    }
+  .primeBoardActivityPanel {
+    height: 70px;
+  }
 }

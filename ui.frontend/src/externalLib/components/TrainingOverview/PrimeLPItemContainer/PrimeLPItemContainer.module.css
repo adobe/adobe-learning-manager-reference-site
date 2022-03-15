@@ -3,7 +3,7 @@
 .container {
   max-width: 100%;
   /* margin: 0 auto; */
-  border: 1px solid var(--prime-color-nc13);
+  border: 1px solid var(--prime-color-nc6);
   clear: both;
   text-align: left !important;
   list-style: none;
@@ -57,15 +57,15 @@
 }
 
 .wrapperContainer {
-  background-color: var(--prime-color-nc1);
-  border-color: #ececec;
+  background-color: var(--prime-color-nc5);
+  border-color: var(--prime-color-nc6);
   /* border: 1px solid #c9c9c9; */
 }
 
 .metaDataContainer {
   display: flex;
   flex-wrap: wrap;
-  background-color: var(--prime-color-nc1);
+  background-color: var(--prime-color-nc5);
 }
 
 .metadata {
@@ -82,12 +82,12 @@
 
 .isPartOfLP .lpListItemContainer {
   padding: 10px 10px 0 10px;
-  border: 1px solid var(--prime-color-nc13);
+  border: 1px solid var(--prime-color-nc6);
   border-radius: 5px;
   margin: 10px 10px 10px 0;
 }
 .isPartOfLP .headerContainer {
-  border: 1px solid var(--prime-color-nc13);
+  border: 1px solid var(--prime-color-nc6);
 }
 
 @media screen and (max-width: 414px) {
@@ -119,7 +119,7 @@ ul > li {
 }
 
 .collapsibleContainer {
-  background: no-repeat padding-box var(--prime-color-nc12);
+  background: no-repeat padding-box var(--prime-color-nc6);
   border: none;
   display: flex;
   justify-content: center;

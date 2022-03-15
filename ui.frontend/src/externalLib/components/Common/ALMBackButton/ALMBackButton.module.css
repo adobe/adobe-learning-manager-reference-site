@@ -13,11 +13,11 @@
     max-height: 47px;
   }
   .buttonLabel {
-    font-size: 14px;
+    font-size: var(--prime-font-size-14);
     line-height: 18px;
     font-weight: normal;
     letter-spacing: 0px;
-    color: #292929;
+    color: var(--prime-color-nc1);;
     opacity: 1;
   }
   .backButton::after {

@@ -7,7 +7,7 @@
   font-size: var(--prime-font-size-16);
   line-height: 26px;
   letter-spacing: 0px;
-  color: var(--prime-color-nc2);
+  color: var(--prime-color-nc1);
   margin: 40px 0;
   font-weight: normal;
 }
@@ -37,7 +37,7 @@
   font-size: var(--prime-font-size-16);
   line-height: 26px;
   letter-spacing: 0px;
-  color: var(--prime-color-nc2);
+  color: var(--prime-color-nc1);
   opacity: 1;
   margin: 0;
   text-transform: capitalize;
@@ -65,7 +65,7 @@
 }
 .commonHeader {
   font-size: var(--prime-font-size-14);
-  color: var(--prime-color-nc2);
+  color: var(--prime-color-nc1);
   line-height: 17px;
   letter-spacing: 0px;
   opacity: 1;
@@ -119,14 +119,14 @@
   .selectInstanceContainer {
     display: block;
     padding: 20px 20px 10px 20px;
-    background: var(--prime-color-nc9);
+    background: var(--prime-color-nc5);
     letter-spacing: 0px;
     margin-bottom: 3px;
   }
   .selectInstance {
     color: var(--prime-color-black);
     opacity: 1;
-    font-size: 20px;
+    font-size: var(--prime-font-size-20);
     line-height: 25px;
     font-weight: normal;
     margin: 0;

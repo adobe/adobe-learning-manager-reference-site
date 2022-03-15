@@ -1,3 +1,4 @@
+@import "../../../styles/variables.css";
 .primeBoardOptionsList {
     position: absolute;
     border: 1px solid #dedede;
@@ -18,7 +19,7 @@
 
 .primeBoardOption, .primeBoardCriticalOption {
     text-align: left;
-    font-size: 12px;
+    font-size: var(--prime-font-size-12);
     font-family: Source Sans Pro;
     letter-spacing: 0px;
     padding:0.5rem;

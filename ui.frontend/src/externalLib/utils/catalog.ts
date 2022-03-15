@@ -67,33 +67,33 @@ export function getParamsForCatalogApi(filterState: CatalogFilterState) {
   const params: QueryParams = {};
   const catalogAttributes = getALMAttribute("catalogAttributes");
 
-  if (catalogAttributes?.showFilters !== "false") {
-    if (catalogAttributes?.loTypes !== "false") {
+  if (catalogAttributes?.showFilters === "true") {
+    if (catalogAttributes?.loTypes === "true") {
       params["filter.loTypes"] = filterState.loTypes;
     }
 
-    if (filterState.skillName && catalogAttributes?.skillName !== "false") {
+    if (filterState.skillName && catalogAttributes?.skillName === "true") {
       params["filter.skillName"] = filterState.skillName;
     }
-    if (filterState.tagName && catalogAttributes?.tagName !== "false") {
+    if (filterState.tagName && catalogAttributes?.tagName === "true") {
       params["filter.tags"] = filterState.tagName;
     }
     if (
       filterState.learnerState &&
-      catalogAttributes?.learnerState !== "false"
+      catalogAttributes?.learnerState === "true"
     ) {
       params["filter.learnerState"] = filterState.learnerState;
     }
-    if (filterState.loFormat && catalogAttributes?.loFormat !== "false") {
+    if (filterState.loFormat && catalogAttributes?.loFormat === "true") {
       params["filter.loFormat"] = filterState.loFormat;
     }
-    if (filterState.duration && catalogAttributes?.duration !== "false") {
+    if (filterState.duration && catalogAttributes?.duration === "true") {
       params["filter.duration.range"] = filterState.duration;
     }
-    if (filterState.skillLevel && catalogAttributes?.skillLevel !== "false") {
+    if (filterState.skillLevel && catalogAttributes?.skillLevel === "true") {
       params["filter.skill.level"] = filterState.skillLevel;
     }
-    if (filterState.catalogs && catalogAttributes?.catalogs !== "false") {
+    if (filterState.catalogs && catalogAttributes?.catalogs === "true") {
       params["filter.catalogIds"] = filterState.catalogs;
     }
   }

@@ -17,8 +17,8 @@ const BOARD_ID_STR = "boardId";
 
 const PrimeCommunityBoardPage = () => {
   const [boardId] = useState(() => {
-    let { communityBoardsPath } = getALMConfig();
-    let pathParams = getPathParams(communityBoardsPath, [BOARD_ID_STR]);
+    let { communityBoardDetailsPath } = getALMConfig();
+    let pathParams = getPathParams(communityBoardDetailsPath, [BOARD_ID_STR]);
     return pathParams[BOARD_ID_STR];
   });
   const { item } = useBoard(boardId);

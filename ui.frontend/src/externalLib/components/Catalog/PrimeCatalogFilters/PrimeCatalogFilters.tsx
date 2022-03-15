@@ -33,14 +33,17 @@ const PrimeCatalogFilters = (props: any) => {
   const filterList = [
     catalogs,
     loTypes,
-    learnerState,
     loFormat,
-    skillName,
-    tagName,
-    skillLevel,
     duration,
+    skillName,
+    skillLevel,
+    tagName,
+    learnerState,
   ].map((filter) => {
-    return catalogAttributes[filter.type] !== "false" ? (
+    if (!filter.list || filter.list?.length === 0) {
+      return "";
+    }
+    return catalogAttributes[filter.type] === "true" ? (
       <div key={filter.type} className={styles.container}>
         <h3 className={styles.typeLabel}>
           {GetTranslation(filter?.label, true)}
@@ -53,6 +56,7 @@ const PrimeCatalogFilters = (props: any) => {
                 label={item.label}
                 checked={item.checked}
                 changeHandler={onChangeHandler}
+                isListDynamic={filter.isListDynamic}
               />
             </li>
           ))}

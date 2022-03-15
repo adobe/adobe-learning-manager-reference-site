@@ -3,7 +3,7 @@
 .container {
   /* max-width: 50%; */
   /* margin: 0 auto; */
-  border-top: 1px solid var(--prime-color-nc13);
+  border-top: 1px solid var(--prime-color-nc6);
   clear: both;
   text-align: left !important;
   list-style: none;
@@ -51,7 +51,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   color: var(--prime-color-nc3);
-  font-size: var(--prime-font-size-13);
+  font-size: var(--prime-font-size-12);
 }
 .details span {
   display: block;
@@ -86,15 +86,15 @@ a.details {
 }
 
 .wrapperContainer {
-  background-color: var(--prime-color-nc9);
-  border-color: #ececec;
+  background-color: var(--prime-color-nc5);
+  border-color: var(--prime-color-nc6);
   /* border: 1px solid #c9c9c9; */
 }
 
 .metaDataContainer {
   display: flex;
   flex-wrap: wrap;
-  background-color: var(--prime-color-nc9);
+  background-color: var(--prime-color-nc5);
 }
 
 .metadata {

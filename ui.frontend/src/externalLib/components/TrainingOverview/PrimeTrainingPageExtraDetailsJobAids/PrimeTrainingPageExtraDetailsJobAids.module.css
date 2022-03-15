@@ -1,0 +1,27 @@
+@import "../../../styles/variables.css";
+
+/* changes for Job Aid */
+.jobAid {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.name {
+  display: inline-block;
+  max-width: 90%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  color: var(--prime-color-primary);
+  text-decoration: none;
+}
+.jobAidIcon {
+  display: inline-block;
+  width: 10%;
+  cursor: pointer;
+}
+.jobAidIcon svg {
+  width: 16px;
+  height: 16px;
+  fill: var(--prime-color-nc3);
+}

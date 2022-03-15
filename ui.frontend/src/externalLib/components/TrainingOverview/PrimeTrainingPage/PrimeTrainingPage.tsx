@@ -1,4 +1,5 @@
 import { lightTheme, Provider } from "@adobe/react-spectrum";
+import { useIntl } from "react-intl";
 import { useTrainingPage } from "../../../hooks/catalog/useTrainingPage";
 import { convertSecondsToTimeText } from "../../../utils/dateTime";
 import { getALMConfig, getPathParams } from "../../../utils/global";
@@ -39,9 +40,11 @@ const PrimeTrainingPage = () => {
     enrollmentHandler,
     launchPlayerHandler,
     unEnrollmentHandler,
+    jobAidClickHandler,
   } = useTrainingPage(trainingId, trainingInstanceId);
   const config = getALMConfig();
   const locale = config.locale;
+  const { formatMessage } = useIntl();
 
   if (isLoading || !training) {
     return <div>Loading....</div>;
@@ -52,7 +55,7 @@ const PrimeTrainingPage = () => {
   return (
     <Provider theme={lightTheme} colorScheme={"light"}>
       <PrimeTrainingOverviewHeader
-        format={training.loFormat}
+        format={training.loType}
         color={color}
         title={name}
         bannerUrl={bannerUrl}
@@ -103,10 +106,43 @@ const PrimeTrainingPage = () => {
                   key={index}
                 >
                   <h3 className={styles.sectionName}>{name}</h3>
+                  {!section.mandatory ? (
+                    <div>
+                      <span className={styles.sectionOptional}>
+                        {formatMessage({
+                          id: "alm.overview.section.optional",
+                          defaultMessage: "Optional",
+                        })}
+                      </span>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                  {section.mandatory &&
+                  section.mandatoryLOCount !== section.loIds?.length ? (
+                    <div>
+                      <span className={styles.sectionOptional}>
+                        {formatMessage(
+                          { id: "alm.overview.section.xOutOfy" },
+                          {
+                            0: section.mandatoryLOCount,
+                            1: section.loIds?.length,
+                          }
+                        )}
+                      </span>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+
                   <PrimeTrainingOverview
                     trainings={subLOs}
                     launchPlayerHandler={launchPlayerHandler}
                     isPartOfLP={loType === LEARNING_PROGRAM}
+                    showMandatoryLabel={
+                      section.mandatory &&
+                      section.mandatoryLOCount === section.loIds?.length
+                    }
                   />
                 </section>
               );
@@ -122,6 +158,7 @@ const PrimeTrainingPage = () => {
             enrollmentHandler={enrollmentHandler}
             launchPlayerHandler={launchPlayerHandler}
             unEnrollmentHandler={unEnrollmentHandler}
+            jobAidClickHandler={jobAidClickHandler}
           />
         </div>
       </div>
