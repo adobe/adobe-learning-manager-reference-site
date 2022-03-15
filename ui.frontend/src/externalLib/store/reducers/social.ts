@@ -789,9 +789,8 @@ const replyItems: Reducer<PrimeReply[], AnyAction> = (
 ) => {
     switch (action.type) {
         case LOAD_REPLIES:
-            //to-do reply needs parent id
             //Keep only replies of other comments
-            //state = state?.filter((item: PrimeReply) => item.parent.id !== action.payload.selectedPostId).map((comment) => comment);
+            state = state?.filter((item: PrimeReply) => item.parent.id !== action.payload.selectedCommentId).map((comment) => comment);
             //if current comment has replies, merge it with state
             if(action.payload.items) {
                 return state ? state.concat(action.payload.items) : action.payload.items;

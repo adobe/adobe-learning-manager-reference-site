@@ -6,19 +6,21 @@ import { useBoards, usePosts } from "../../../hooks/community";
 import { useEffect, useState } from "react";
 import { PrimeCommunitySearch } from "../PrimeCommunitySearch";
 import { PrimeCommunityPost } from "../PrimeCommunityPost";
+import { getQueryParamsIObjectFromUrl } from "../../../utils/global"
 import { useIntl } from "react-intl";
 import styles from "./PrimeCommunityBoardList.module.css";
 import loadingImage from "../../../assets/images/LoadingButton.gif";
 
 const PrimeCommunityBoardList = () => {
+  const queryParams = getQueryParamsIObjectFromUrl();
   const DEFAULT_SORT_VALUE = "dateUpdated";
-  const DEFAULT_SKILL = "Gamification"; //to-do remove hardcoded
-  const { items, fetchBoards } = useBoards(DEFAULT_SORT_VALUE, DEFAULT_SKILL);
+  const DEFAULT_SKILL = queryParams ? queryParams.skill : "";
+  const { items, fetchBoards, skills, currentSkill } = useBoards(DEFAULT_SORT_VALUE, DEFAULT_SKILL);
   const { posts } = usePosts();
   const { formatMessage } = useIntl();
   const [selectedSortFilter, setSelectedSortFilter] =
     useState(DEFAULT_SORT_VALUE);
-  const [selectedSkill, setSelectedSkill] = useState(DEFAULT_SKILL);
+  const [selectedSkill, setSelectedSkill] = useState(currentSkill);
   const [showLoader, setShowLoader] = useState(true);
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [searchResult, setSearchResult] = useState(0);
@@ -75,6 +77,8 @@ const PrimeCommunityBoardList = () => {
 
         <div className={styles.primeCommunityHeaderRow}>
           <PrimeCommunityBoardFilters
+            skills={skills}
+            selectedSkill={currentSkill}
             sortFilterChangeHandler={sortFilterChangeHandler}
             skillFilterChangeHandler={skillFilterChangeHandler}
           ></PrimeCommunityBoardFilters>

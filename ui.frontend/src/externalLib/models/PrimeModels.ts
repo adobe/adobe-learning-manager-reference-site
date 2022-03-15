@@ -630,6 +630,7 @@ export interface PrimeReply {
 	upVote: number;
 	resource: object;
 	createdBy: PrimeUser;
+	parent: PrimeComment;
 	previewData: PrimeReplyMetaData;
 }
 

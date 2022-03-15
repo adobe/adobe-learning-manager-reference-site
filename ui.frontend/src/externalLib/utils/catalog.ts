@@ -55,14 +55,6 @@ export function locationUpdate(params: any) {
   window.history.replaceState({ path: newurl }, "", newurl);
 }
 
-export function getQueryParamsIObjectFromUrl() {
-  const location = getWindowObject().location;
-  const params: URLSearchParams = new URLSearchParams(
-    decodeURI(location.search)
-  );
-  return Object.fromEntries(params.entries());
-}
-
 export function debounce(fn: Function, time = 250) {
   let timeoutId: ReturnType<typeof setTimeout>;
   return function (this: any, ...args: any[]) {
