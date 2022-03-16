@@ -1,27 +1,25 @@
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Button } from "@adobe/react-spectrum";
+import Calendar from "@spectrum-icons/workflow/Calendar";
+import Download from "@spectrum-icons/workflow/Download";
+import PinOff from "@spectrum-icons/workflow/PinOff";
 import Send from "@spectrum-icons/workflow/Send";
 import UserGroup from "@spectrum-icons/workflow/UserGroup";
-import Calendar from "@spectrum-icons/workflow/Calendar";
-import PinOff from "@spectrum-icons/workflow/PinOff";
-import Download from "@spectrum-icons/workflow/Download";
-import { GetTranslation } from "../../../utils/translationService";
-
 import { useMemo } from "react";
 import { useIntl } from "react-intl";
-
 import { InstanceBadge, Skill } from "../../../models/common";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
   PrimeLoInstanceSummary,
 } from "../../../models/PrimeModels";
-import { LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
-import styles from "./PrimeTrainingPageExtraDetails.module.css";
 import { modifyTime } from "../../../utils/dateTime";
-import { getALMObject } from "../../../utils/global";
+import { getALMConfig } from "../../../utils/global";
+import { LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
+import { GetTranslation } from "../../../utils/translationService";
 import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJobAids";
+import styles from "./PrimeTrainingPageExtraDetails.module.css";
 
 const PrimeTrainingPageExtraDetails: React.FC<{
   trainingInstance: PrimeLearningObjectInstance;
@@ -29,6 +27,8 @@ const PrimeTrainingPageExtraDetails: React.FC<{
   training: PrimeLearningObject;
   badge: InstanceBadge;
   instanceSummary: PrimeLoInstanceSummary;
+  showAuthorInfo: string;
+  showEnrollDeadline: string;
   enrollmentHandler: () => void;
   launchPlayerHandler: () => void;
   unEnrollmentHandler: Function;
@@ -39,13 +39,16 @@ const PrimeTrainingPageExtraDetails: React.FC<{
   training,
   badge,
   instanceSummary,
+  showAuthorInfo,
+  showEnrollDeadline,
   enrollmentHandler,
   launchPlayerHandler,
   unEnrollmentHandler,
   jobAidClickHandler,
 }) => {
   const { formatMessage } = useIntl();
-  const { locale } = getALMObject().getALMConfig().locale;
+  const config = getALMConfig();
+  const locale = config.locale;
 
   const action: string = useMemo(() => {
     // if(trainingInstance.seatLimit)
@@ -99,9 +102,11 @@ const PrimeTrainingPageExtraDetails: React.FC<{
 
   // const showModulesCompleted = trainingInstance.learningObject.enrollment;
 
-  const showAuthors = training.authors?.length > 0;
+  const showAuthors = showAuthorInfo === "true" && training.authors?.length > 0;
   const showCompletionDeadline =
-    training.enrollment && trainingInstance.completionDeadline;
+    showEnrollDeadline === "true" &&
+    training.enrollment &&
+    trainingInstance.completionDeadline;
   const showEnrollmentDeadline =
     !training.enrollment && trainingInstance.enrollmentDeadline;
 

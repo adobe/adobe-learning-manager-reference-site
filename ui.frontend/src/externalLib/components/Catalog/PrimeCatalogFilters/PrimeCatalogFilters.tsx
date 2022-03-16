@@ -1,6 +1,7 @@
 import { useIntl } from "react-intl";
 import { UpdateFiltersEvent } from "../../../hooks/catalog/useFilter";
 import { GetTranslation } from "../../../utils/translationService";
+import { ALMLoader } from "../../Common/ALMLoader";
 import styles from "./PrimeCatalogFilters.module.css";
 import PrimeCheckbox from "./PrimeCheckBox";
 
@@ -24,7 +25,7 @@ const PrimeCatalogFilters = (props: any) => {
   };
 
   if (isLoading) {
-    return <span>loading filters...</span>;
+    return <ALMLoader />;
   }
 
   const filterList = [

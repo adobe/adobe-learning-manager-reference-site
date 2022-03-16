@@ -19,6 +19,7 @@ import {
 import { PrimeInstanceItem } from "../PrimeInstanceItem";
 import { PrimeTrainingOverviewHeader } from "../../TrainingOverview/PrimeTrainingOverviewHeader";
 import styles from "./PrimeInstancePage.module.css";
+import { ALMLoader } from "../../Common/ALMLoader";
 //TO-DO move training id str to common
 const TRAINING_ID_STR = "trainingId";
 const PrimeInstancePage = () => {
@@ -77,7 +78,7 @@ const PrimeInstancePage = () => {
   };
 
   if (isLoading) {
-    return <span>Getting data. Please wait...</span>;
+    return <ALMLoader classes={styles.loader} />;
   }
 
   const headerLabel = formatMessage(

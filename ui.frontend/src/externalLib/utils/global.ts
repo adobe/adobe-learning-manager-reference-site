@@ -92,6 +92,10 @@ export const updateALMUser = async () => {
   return JsonApiParse(await getALMObject().updateALMUser());
 };
 
+export const getConfigurableAttributes = (cssSelector: string) => {
+  return (document.querySelector(cssSelector) as any)?.dataset;
+};
+
 const init = async () => {
   let response = await getALMUser();
   const account = response.user.account;

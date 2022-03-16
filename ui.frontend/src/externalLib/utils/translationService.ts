@@ -11,7 +11,7 @@ const pluralPrefix = /\|\|\|/g;
 const singularPrefix = /\|\|/g;
 
 const ENGLISH_LOCALE = "en-US";
-let _userLocale: string | undefined = undefined;
+//let _userLocale: string | undefined = undefined;
 let accountTerminologyMap: { [key: string]: AccountTerminology };
 
 export function getPreferredLocalizedMetadata<T>(
@@ -19,7 +19,6 @@ export function getPreferredLocalizedMetadata<T>(
   locale: string
 ): T {
   if (!localizedMetadata) {
-    //TO DO: need to hanlde this
     return {} as T;
   }
   let data = localizedMetadata.find((item: any) => item.locale === locale);

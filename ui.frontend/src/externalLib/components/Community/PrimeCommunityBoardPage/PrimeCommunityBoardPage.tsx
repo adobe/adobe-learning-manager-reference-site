@@ -11,8 +11,8 @@ import { PrimeCommunityMobileScrollToTop } from "../PrimeCommunityMobileScrollTo
 
 import { useState } from "react";
 import { useIntl } from "react-intl";
-import loadingImage from "../../../assets/images/LoadingButton.gif";
 import { getALMConfig, getPathParams } from "../../../utils/global";
+import { ALMLoader } from "../../Common/ALMLoader";
 const BOARD_ID_STR = "boardId";
 
 const PrimeCommunityBoardPage = () => {
@@ -85,11 +85,7 @@ const PrimeCommunityBoardPage = () => {
       )}
       {showLoader && (
         <div className={styles.primeLoaderWrapper}>
-          <img
-            className={styles.primeLoader}
-            src={loadingImage}
-            alt="loading"
-          ></img>
+          <ALMLoader />
         </div>
       )}
       {isSearchMode && !showLoader && (
@@ -114,12 +110,13 @@ const PrimeCommunityBoardPage = () => {
           </button>
         </div>
       )}
-      {item && 
-        <PrimeCommunityPosts 
-        boardId={item.id}
-        showLoader={(value: boolean) => setShowLoader(value)}
-        isSearchMode={isSearchMode}>
-        </PrimeCommunityPosts>}
+      {item && (
+        <PrimeCommunityPosts
+          boardId={item.id}
+          showLoader={(value: boolean) => setShowLoader(value)}
+          isSearchMode={isSearchMode}
+        ></PrimeCommunityPosts>
+      )}
     </>
   );
 };
