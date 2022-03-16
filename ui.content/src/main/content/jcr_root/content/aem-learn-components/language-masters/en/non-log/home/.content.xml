@@ -39,7 +39,7 @@
                             sling:resourceType="aem-learn-components/components/image"
                             altValueFromDAM="true"
                             displayPopupTitle="true"
-                            fileReference="/content/dam/we-retail/en/activities/biking/cycling_1.jpg"
+                            fileReference="/content/dam/aem-learn-components/site/running_2.jpg"
                             isDecorative="false"
                             titleValueFromDAM="true"/>
                     </carousel>

@@ -16,12 +16,43 @@
 
 .cmp-teaser .cmp-teaser__content {
   float: left;
-  position: relative;
-  top: -150px;
+  position: absolute;
+  bottom: 50px;
+  color: white;
+  left: 40px;
 }
 
-.cmp-carousel .cmp-carousel__indicators {
-  display: none;
+.cmp-teaser .cmp-teaser__content h2,
+.cmp-teaser .cmp-teaser__content p
+{
+  background: #2929294D 0% 0% no-repeat padding-box;
+}
+
+.cmp-teaser .cmp-teaser__content a
+{
+  background: #2929294D 0% 0% no-repeat padding-box;
+  border: 2px solid #FFFFFF;
+  border-radius: 24px;
+  color: white;
+  text-decoration: none;
+  padding: 2px 10px 2px 10px;
+}
+
+.cmp-carousel__actions {
+  background: #F5F5F5 0% 0% no-repeat padding-box;
+  height: 36px;
+}
+
+.cmp-carousel button.cmp-carousel__action {
+  width: 36px;
+  margin: 0;
+  padding: 0;
+}
+
+.cmp-carousel .cmp-carousel__action .cmp-carousel__action-icon
+{
+  display: inline-block;
+  margin-top: 14px;
 }
 
 .experiencefragment.cmp-experiencefragment--header {
@@ -99,13 +130,6 @@
   float: unset !important;
 }
 
-.experiencefragment.cmp-experiencefragment--footer {
-  background: #292929 0% 0% no-repeat padding-box;
-  border: 1px solid #707070;
-  height: 70px;
-  color: #ebebeb;
-}
-
 .experiencefragment.cmp-experiencefragment--footer a {
   color: #ebebeb;
   font-size: 14px;
@@ -129,35 +153,312 @@
   height: 300px;
 }
 
+/* CSS for Home Catalog Page*/
+#home-catalog-container .cmp-text 
+{
+  font: normal normal bold 27px/42px Source Sans Pro;
+}
+
+#home-catalog-container .cmp-carousel__indicators {
+  margin-top: 15px;
+}
+
+.news-section
+{
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.news-section .news-section-newsItem
+{
+  position: relative; 
+  background-color: #f7f7f7;
+  width: 348px;
+  height: 240px; 
+  margin-bottom: 10px;
+  padding-left: 30px;
+  padding-top: 30px;
+  font-size: 16px;
+}
+
+.news-section .news-section-newsItem .title
+{
+  font: normal normal 600 18px/27px Source Sans Pro;
+  color: #292929;
+}
+
+.news-section .news-section-newsItem .link
+{
+  border: 2px solid #306EB5; 
+  border-radius: 16px; 
+  position: absolute; 
+  bottom: 30px; 
+  right: 30px;
+}
+
+.news-section .news-section-newsItem a 
+{
+  padding: 15px;
+  color: #306EB5;
+  text-decoration: none;
+}
+
+/* CSS for MyLearning Page*/
+
+#learning-parent-container,
+#home-catalog-container
+{
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+
 #learning-button-cont {
-  margin-top: 20px;
   display: flex;
   flex-direction: row;
+  margin-bottom: 10px;
 }
 
 #learning-button-cont .cmp-button {
-  margin-right: 10px;
-  border-radius: 15px;
+  width: 186px;
+  height: 60px;
+  text-transform: initial;
 }
 
-#learning-parent-container {
-  padding-left: 30px;
-  padding-right: 30px;
+#learning-button-cont button:first-child
+{
+  background: #292929 0% 0% no-repeat padding-box;
+  color: white;
+}
+
+#learning-button-cont a
+{
+  text-align: center;
+  text-decoration: none;
+}
+
+#learning-button-cont a span
+{
+  display: inline-block;
+  margin-top: 18px;
+}
+
+#learning-button-cont .cmp-button .cmp-button__text {
+  padding: 0;
+  float: initial;
 }
 
 #news-catalog-container {
   margin-top: 60px;
 }
 
+#learning-calendar-cont .mylearning {
+  width: 100%;
+}
+
+#learning-parent-container .cmp-teaser__image, 
+#learning-parent-container .cmp-teaser__image .cmp-image, 
+#learning-parent-container .cmp-teaser__image .cmp-image .cmp-image__image 
+{
+  height: 249px;
+}
+
+#learning-parent-container .carousel
+{
+  height: 279px;
+}
+
+#learning-parent-container .cmp-carousel__indicators {
+  margin-top: 15px;
+}
+
+/* CSS for Template carousel */
+
+#tmplt-carousel .cmp-teaser__image, 
+#tmplt-carousel .cmp-teaser__image .cmp-image, 
+#tmplt-carousel .cmp-teaser__image .cmp-image .cmp-image__image
+{
+  height: 200px;
+}
+
+#tmplt-carousel .carousel
+{
+  height: 200px;
+}
+
+#tmplt-carousel .cmp-carousel .cmp-carousel__actions
+{
+  position: absolute;
+  bottom: 0;
+  right: 50px;
+  z-index: 10;
+}
+
+#tmplt-carousel .cmp-carousel__indicators
+{
+  position: relative;
+  top: -10px;
+}
+
+/* CSS for ALM Footer */
+
+#alm-footer {
+  background: #292929 0% 0% no-repeat padding-box;
+  border: 1px solid #707070;
+  height: 70px;
+  color: #ebebeb;
+  display: none;
+}
+
+#alm-footer a {
+  color: #ebebeb;
+  font-size: 11px;
+  letter-spacing: 0px;
+  text-align: left;
+  text-decoration: none;
+}
+
+.alm-footer-scrollTop
+{
+  position: absolute; 
+  right: 0;
+  top: 5px;
+}
+
+.alm-footer-scrollTop a 
+{
+  display: flex;
+}
+
+.alm-footer-scrollTop a img
+{
+  border: 1px white solid;
+  border-radius: 50%;
+}
+
+.alm-footer-scrollTop div
+{
+  margin-right: 5px;
+}
+
+.alm-footer-container .footer-separator
+{
+  font-size: 11px;
+}
+
+
+@media screen and (min-width: 1024px) {
+  #learning-parent-container,
+  #home-catalog-container 
+  {
+    width: 930px;
+    margin: 0 auto;
+    margin-top: 30px;
+  }
+
+  #learning-button-cont {
+    margin-bottom: 40px;
+  }
+
+  #learning-button-cont .cmp-button {
+    width: 133px;
+    height: 33px;
+    font: normal normal normal 16px/20px Source Sans Pro;
+    text-transform: initial;
+    border-radius: 17px;
+    margin-right: 10px;
+    border: 1px solid #E4E4E4;
+  }
+
+  #learning-button-cont a span
+  {
+    display: inline-block;
+    margin-top: 5px;
+  }
+
+  #learning-calendar-cont .mylearning {
+    width: 50%;
+  }
+
+  #tmplt-carousel .cmp-teaser__image, 
+  #tmplt-carousel .cmp-teaser__image .cmp-image, 
+  #tmplt-carousel .cmp-teaser__image .cmp-image .cmp-image__image 
+  {
+    height: 350px;
+  }
+
+  #tmplt-carousel .carousel
+  {
+    height: 350px;
+  }
+
+  .news-section .news-section-newsItem
+  {
+    width: 290px;
+  }
+
+  #alm-footer
+  {
+    display: block;
+  }
+
+  #alm-footer .alm-footer-container
+  {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    width: 930px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+}
+
+@media screen and (min-width: 1366px) {
+  #learning-parent-container,
+  #home-catalog-container 
+  {
+    width: 1180px;
+    margin: 0 auto;
+    margin-top: 60px;
+  }
+
+  #tmplt-carousel .cmp-teaser__image, 
+  #tmplt-carousel .cmp-teaser__image .cmp-image, 
+  #tmplt-carousel .cmp-teaser__image .cmp-image .cmp-image__image 
+  {
+    height: 500px;
+  }
+
+  #tmplt-carousel .carousel
+  {
+    height: 500px;
+  }
+
+  .news-section .news-section-newsItem
+  {
+    width: 348px;
+  }
+
+  #alm-footer .alm-footer-container
+  {
+    width: 1180px;
+  }
+}
+/* 
+
 #home-catalog-container {
   margin-left: 30px;
   margin-right: 30px;
-}
+} */
 
-.alm-skills-container {
-  margin-left: 30px;
-  margin-right: 30px;
-}
+
+
+
 
 
 
@@ -840,11 +1141,11 @@ p {
 .cmp-carousel
   .cmp-carousel__action--previous
   .cmp-carousel__action-icon:before {
-  content: " \02C2";
+  content: url("/content/dam/aem-learn-components/site/Carousel-Left.svg");
 }
 
 .cmp-carousel .cmp-carousel__action--next .cmp-carousel__action-icon:before {
-  content: ' \02C3';
+  content: url("/content/dam/aem-learn-components/site/Carousel-Right.svg");
 }
 
 .cmp-carousel--hero {
