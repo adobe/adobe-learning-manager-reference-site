@@ -1,13 +1,15 @@
 import { useRef } from "react";
 import { useLoadMore } from "../../../hooks/loadMore";
 import { PrimeLearningObject } from "../../../models/PrimeModels";
+import { ALMLoader } from "../../Common/ALMLoader";
 import { PrimeTrainingCard } from "../PrimeTrainingCard";
 import styles from "./PrimeTrainingsContainer.module.css";
 
 const PrimeTrainingsContainer: React.FC<{
   trainings: PrimeLearningObject[] | null;
   loadMoreTraining: () => void;
-}> = ({ trainings, loadMoreTraining }) => {
+  hasMoreItems: boolean;
+}> = ({ trainings, loadMoreTraining, hasMoreItems }) => {
   const elementRef = useRef(null);
   useLoadMore({
     items: trainings,
@@ -24,7 +26,9 @@ const PrimeTrainingsContainer: React.FC<{
           ></PrimeTrainingCard>
         ))}
       </ul>
-      <div ref={elementRef}></div>
+      <div ref={elementRef} id="load-more-trainings">
+        {hasMoreItems ? <ALMLoader /> : ""}
+      </div>
     </div>
   );
 };

@@ -6,6 +6,7 @@ import { useIntl } from "react-intl";
 import { useCatalog } from "../../../hooks/catalog/useCatalog";
 import { CLOSE_SVG } from "../../../utils/inline_svg";
 import { GetTranslation } from "../../../utils/translationService";
+import { ALMLoader } from "../../Common/ALMLoader";
 import { PrimeCatalogFilters } from "../PrimeCatalogFilters";
 import PrimeCatalogSearch from "../PrimeCatalogSearch/PrimeCatalogSearch";
 import { PrimeTrainingsContainer } from "../PrimeTrainingsContainer";
@@ -21,6 +22,8 @@ const PrimeCatalogContainer = () => {
     filterState,
     updateFilters,
     catalogAttributes,
+    isLoading,
+    hasMoreItems,
   } = useCatalog();
   const { formatMessage } = useIntl();
   const [showFiltersOnMobile, setShowFiltersOnMobile] = useState(false);
@@ -111,10 +114,15 @@ const PrimeCatalogContainer = () => {
             className={listContainerCss}
             aria-hidden={showFiltersOnMobile ? "true" : "false"}
           >
-            <PrimeTrainingsContainer
-              trainings={trainings}
-              loadMoreTraining={loadMoreTraining}
-            ></PrimeTrainingsContainer>
+            {isLoading ? (
+              <ALMLoader />
+            ) : (
+              <PrimeTrainingsContainer
+                trainings={trainings}
+                loadMoreTraining={loadMoreTraining}
+                hasMoreItems={hasMoreItems}
+              ></PrimeTrainingsContainer>
+            )}
           </div>
         </div>
       </div>

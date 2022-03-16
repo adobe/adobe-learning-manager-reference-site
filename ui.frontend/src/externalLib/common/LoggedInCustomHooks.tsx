@@ -6,6 +6,7 @@ import { JsonApiParse } from "../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
 import ICustomHooks from "./ICustomHooks";
 
+const DEFAULT_PAGE_LIMIT = 10;
 const DEFUALT_LO_INCLUDE =
   "instances.loResources.resources,instances.badge,supplementaryResources,enrollment.loResourceGrades,skills.skillLevel.skill";
 const DEFAULT_SEARCH_SNIPPETTYPE =
@@ -22,7 +23,7 @@ export default class LoggedInCustomHooks implements ICustomHooks {
     const catalogAttributes = getALMAttribute("catalogAttributes");
     const params: QueryParams = getParamsForCatalogApi(filterState);
     params["sort"] = sort;
-    params["page[limit]"] = 10;
+    params["page[limit]"] = DEFAULT_PAGE_LIMIT;
     params["include"] = DEFUALT_LO_INCLUDE;
 
     let url = `${this.primeApiURL}/learningObjects`;
