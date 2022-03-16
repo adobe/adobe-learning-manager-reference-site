@@ -11,17 +11,13 @@
         sling:resourceType="aem-learn-components/components/xfpage">
         <root
             jcr:primaryType="nt:unstructured"
+            id="alm-header"
             sling:resourceType="aem-learn-components/components/container">
-            <container
-                cq:styleIds="[1554340406437]"
+            <header 
+                jcr:lastModified="{Date}2022-03-07T17:00:09.768+05:30"
+                jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
-                sling:resourceType="aem-learn-components/components/container"
-                layout="responsiveGrid">
-                <cq:responsive jcr:primaryType="nt:unstructured"/>
-                <header
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="aem-learn-components/components/header" />
-            </container>
+                sling:resourceType="aem-learn-components/components/header"/>
         </root>
     </jcr:content>
 </jcr:root>

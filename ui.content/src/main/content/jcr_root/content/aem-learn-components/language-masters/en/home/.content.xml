@@ -65,7 +65,7 @@
                                 sling:resourceType="aem-learn-components/components/teaser"
                                 actionsEnabled="false"
                                 descriptionFromPage="false"
-                                fileReference="/content/dam/aem-learn-components/site/running_2.jpg"
+                                fileReference="/content/dam/aem-learn-components/site/running_2.jpeg"
                                 textIsRich="true"
                                 titleFromPage="false"/>
                             <item_1647150560093
@@ -78,7 +78,7 @@
                                 sling:resourceType="aem-learn-components/components/teaser"
                                 actionsEnabled="true"
                                 descriptionFromPage="false"
-                                fileReference="/content/dam/aem-learn-components/site/forest-trail.jpg"
+                                fileReference="/content/dam/aem-learn-components/site/running.jpg"
                                 textIsRich="true"
                                 titleFromPage="false"/>
                         </carousel>

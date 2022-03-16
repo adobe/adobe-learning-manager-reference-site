@@ -55,16 +55,6 @@
   margin-top: 14px;
 }
 
-.experiencefragment.cmp-experiencefragment--header {
-  height: 70px;
-  z-index: 1030;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding-left: 0;
-  padding-right: 0;
-}
-
 /* css for rest screen size */
 .cmp-experiencefragment--header .aem-Grid.aem-Grid--default--12 .image.cmp-image--logo {
   margin-left: 418px;
@@ -349,6 +339,72 @@
   font-size: 11px;
 }
 
+/* CSS for Header */
+
+#alm-header .alm-header-cont
+{
+  width: 100%;
+  display: flex;
+}
+
+#alm-header .alm-header-cont .alm-header-logo
+{
+  width: 137px;
+  height: 33px;
+  margin-top: 18px;
+}
+
+#alm-header .alm-header-cont .alm-header-menu
+{
+  width: 22px;
+  height: 22px;
+  margin-top: 20px;
+  margin-left: 15px;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation,
+#alm-header .alm-header-cont .alm-header-icons
+{
+  display: none;
+  font: normal normal normal 14px/18px Source Sans Pro;
+}
+
+#alm-header .alm-header-cont .alm-header-icons .alm-header-profile
+{
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  margin-top: 15px;
+  margin-left: 35px;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation
+{
+  list-style-type: none;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation a
+{
+  text-decoration: none;
+  color: #292929;
+  margin: 20px 60px 20px 0px;
+  display: inline-block;
+}
+
+#alm-header .alm-header-cont .alm-header-icons .alm-header-notification
+{
+  width: 36px;
+  height: 36px;
+  margin-top: 14px;
+}
+
+#alm-header .alm-header-cont .alm-header-icons .alm-header-down
+{
+  width: 15px;
+  height: 15px;
+  margin-top: 30px;
+  margin-left: 5px;
+}
 
 @media screen and (min-width: 1024px) {
   #learning-parent-container,
@@ -357,6 +413,24 @@
     width: 930px;
     margin: 0 auto;
     margin-top: 30px;
+  }
+
+  #alm-header .alm-header-cont
+  {
+    width: 930px;
+    margin: 0 auto;
+    justify-content: space-between;
+  }
+
+  #alm-header .alm-header-cont .alm-header-menu 
+  {
+    display: none;
+  }
+
+  #alm-header .alm-header-cont .alm-header-navigation,
+  #alm-header .alm-header-cont .alm-header-icons
+  {
+    display: flex;
   }
 
   #learning-button-cont {
@@ -425,6 +499,12 @@
     width: 1180px;
     margin: 0 auto;
     margin-top: 60px;
+  }
+
+  #alm-header .alm-header-cont
+  {
+    width: 1180px;
+    margin: 0 auto;
   }
 
   #tmplt-carousel .cmp-teaser__image, 
