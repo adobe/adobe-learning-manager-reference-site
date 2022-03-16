@@ -18,9 +18,9 @@
                 sling:resourceType="aem-learn-components/components/container"
                 layout="responsiveGrid">
                 <cq:responsive jcr:primaryType="nt:unstructured"/>
-                <almHeader
+                <header
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="aem-learn-components/components/almHeader" />
+                    sling:resourceType="aem-learn-components/components/header" />
             </container>
         </root>
     </jcr:content>
