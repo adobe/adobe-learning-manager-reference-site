@@ -1,6 +1,7 @@
 import { useIntl } from "react-intl";
 import { UpdateFiltersEvent } from "../../../hooks/catalog/useFilter";
 import { GetTranslation } from "../../../utils/translationService";
+import { ALMLoader } from "../../Common/ALMLoader";
 import styles from "./PrimeCatalogFilters.module.css";
 import PrimeCheckbox from "./PrimeCheckBox";
 
@@ -23,12 +24,9 @@ const PrimeCatalogFilters = (props: any) => {
     updateFilters(data);
   };
 
-  if (isLoading)
-    return (
-      <>
-        <span>loading filters...</span>
-      </>
-    );
+  if (isLoading) {
+    return <ALMLoader />;
+  }
 
   const filterList = [
     catalogs,
@@ -40,7 +38,7 @@ const PrimeCatalogFilters = (props: any) => {
     tagName,
     learnerState,
   ].map((filter) => {
-    if (!filter.list || filter.list?.length === 0) {
+    if (!filter.list || filter.list?.length <= 1) {
       return "";
     }
     return catalogAttributes[filter.type] === "true" ? (

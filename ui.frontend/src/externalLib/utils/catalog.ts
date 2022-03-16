@@ -18,7 +18,6 @@ export function isJobaidContentTypeUrl(training: PrimeLearningObject): boolean {
 }
 
 export function getJobaidUrl(training: PrimeLearningObject): string {
-  //TO-DO : Check with Yogesh on this logic
   return training.instances[0]?.loResources[0]?.resources[0]?.location;
 }
 

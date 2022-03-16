@@ -2,7 +2,7 @@ package com.aemlearncomponents.core.models;
 
 public interface Catalog {
 
-    Boolean getShowFilters();
+    String getShowFilters();
 
     String getShowSearch();
 
