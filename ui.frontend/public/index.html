@@ -33,8 +33,8 @@
         magentoRootCategoryId: "1",
         clientSecret: "8ca8ded0-9ead-44c3-bc6d-96af99b213d8",
         "cq:template": "/apps/aem-learn-components/configuration/page/template",
-        almBaseURL: "https://captivateprimeqe.adobe.com",
-        primeApiURL: "https://captivateprimeqe.adobe.com/primeapi/v2/",
+        almBaseURL: "https://captivateprimeapac.adobe.com",
+        primeApiURL: "https://captivateprimeapac.adobe.com/primeapi/v2/",
         magentoGraphqlEndpoint: "/magento/graphql",
         locale: "en-US",
         primeRegisterUrl: "1",
@@ -70,7 +70,7 @@
       };
 
       const getAccessToken = () => {
-        return "529cc734242d24fe721e8bb80e4e93df";
+        return "6b41ebe3b7a78a07218299e435e0f4a8";
       };
 
       const getALMConfig = () => {
@@ -155,8 +155,7 @@
       window.ALM = window.ALM || {};
       window.ALM.ALMConfig = ALMConfig; //window.ALM.ALMConfig || primeConfig;
       window.ALM.getALMConfig = getALMConfig;
-      window.ALM.navigateToTrainingOverviewPage =
-        navigateToTrainingOverviewPage;
+      window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
       window.ALM.navigateToInstancePage = navigateToInstancePage;
       window.ALM.navigateToBoardDetailsPage = navigateToBoardDetailsPage;
       window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
@@ -169,7 +168,7 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <!--/* <div class="instance__container"></div> */-->
-    <div
+    <!--/* <div
       class="catalog__container"
       data-show-filters="true"
       data-show-search="true"
@@ -181,11 +180,17 @@
       data-price="true"
       data-skills-level="true"
       data-learner-state="true"
-      data-tag-name="false"
+      data-tag-name="true"
       data-skill-level="true"
+    ></div> */-->
+
+    <div
+      class="training__page__container"
+      data-show-description="true"
+      data-show-author-info="true"
+      data-show-enroll-deadline="true"
     ></div>
 
-    <!-- <div class="training__page__container"></div> -->
     <!--/* <div class="notification__container"></div> */-->
     <!--/* <div class="boards__container"></div> */-->
 

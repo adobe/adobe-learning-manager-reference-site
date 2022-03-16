@@ -99,8 +99,6 @@
     "@types/spark-md5": "^3.0.2",
     "aem-clientlib-generator": "^1.7.7",
     "aemsync": "^4.0.3",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.1",
     "sinon": "^7.5.0"
   },
   "proxy": "http://localhost:4502",

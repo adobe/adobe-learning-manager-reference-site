@@ -2,7 +2,13 @@ import { lightTheme, Provider } from "@adobe/react-spectrum";
 import { useIntl } from "react-intl";
 import { useTrainingPage } from "../../../hooks/catalog/useTrainingPage";
 import { convertSecondsToTimeText } from "../../../utils/dateTime";
-import { getALMConfig, getPathParams } from "../../../utils/global";
+import {
+  getALMConfig,
+  getConfigurableAttributes,
+  getPathParams,
+  PrimeConfig,
+  setALMAttribute,
+} from "../../../utils/global";
 import { getPreferredLocalizedMetadata } from "../../../utils/translationService";
 import { ALMLoader } from "../../Common/ALMLoader";
 import { PrimeCourseOverview } from "../PrimeCourseOverview";
@@ -16,8 +22,18 @@ const LEARNING_PROGRAM = "learningProgram";
 const CERTIFICATION = "certification";
 const TRAINING_ID_STR = "trainingId";
 const TRAINING_INSTANCE_ID_STR = "trainingInstanceId";
+
+const getTrainingOverviewAttributes = (config: PrimeConfig) => {
+  let cssSelector = config.mountingPoints.trainingOverviewPage;
+  let trainingOverviewAttributes = getConfigurableAttributes(cssSelector) || {};
+  setALMAttribute("trainingOverviewAttributes", trainingOverviewAttributes);
+  return trainingOverviewAttributes;
+};
+
 const PrimeTrainingPage = () => {
-  let { trainingOverviewPath } = getALMConfig();
+  let config = getALMConfig();
+  let trainingOverviewPath = config.trainingOverviewPath;
+
   let pathParams = getPathParams(trainingOverviewPath, [
     TRAINING_ID_STR,
     TRAINING_INSTANCE_ID_STR,
@@ -43,7 +59,6 @@ const PrimeTrainingPage = () => {
     unEnrollmentHandler,
     jobAidClickHandler,
   } = useTrainingPage(trainingId, trainingInstanceId);
-  const config = getALMConfig();
   const locale = config.locale;
   const { formatMessage } = useIntl();
 
@@ -52,6 +67,8 @@ const PrimeTrainingPage = () => {
   }
   const loType = training.loType;
   const sections = training.sections;
+  const { showAuthorInfo, showDescription, showEnrollDeadline } =
+    getTrainingOverviewAttributes(config);
 
   return (
     <Provider theme={lightTheme} colorScheme={"light"}>
@@ -65,12 +82,14 @@ const PrimeTrainingPage = () => {
       />
       <div className={styles.pageContainer}>
         <div className={styles.left}>
-          <p
-            dangerouslySetInnerHTML={{
-              __html: richTextOverview || overview || description,
-            }}
-            className={styles.overview}
-          ></p>
+          {showDescription === "true" && (
+            <p
+              dangerouslySetInnerHTML={{
+                __html: richTextOverview || overview || description,
+              }}
+              className={styles.overview}
+            ></p>
+          )}
           <span className={styles.duration}>
             {formatMessage(
               { id: "alm.overview.total.duration" },
@@ -162,6 +181,8 @@ const PrimeTrainingPage = () => {
             trainingInstance={trainingInstance}
             badge={instanceBadge}
             instanceSummary={instanceSummary}
+            showAuthorInfo={showAuthorInfo}
+            showEnrollDeadline={showEnrollDeadline}
             enrollmentHandler={enrollmentHandler}
             launchPlayerHandler={launchPlayerHandler}
             unEnrollmentHandler={unEnrollmentHandler}
