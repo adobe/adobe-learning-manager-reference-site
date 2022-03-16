@@ -406,6 +406,11 @@
   margin-left: 5px;
 }
 
+.alm-header-icons .notification__container
+{
+  display: none;
+}
+
 @media screen and (min-width: 1024px) {
   #learning-parent-container,
   #home-catalog-container 
@@ -488,6 +493,14 @@
     width: 930px;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .alm-header-icons .notification__container
+  {
+    display: block;
+    margin-right: 50px;
+    margin-top: 10px;
+    z-index: 99;
   }
 
 }

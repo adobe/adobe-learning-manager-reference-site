@@ -780,7 +780,8 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Experience Fragment Web"
                     sling:resourceType="wcm/core/components/policy/policy"
-                    clientlibs="[aem-learn-components.ui,aem-learn-components.site]">
+                    clientlibs="[aem-learn-components.dependencies,aem-learn-components.site, aem-learn-components.ui]"
+                    clientlibsJsHead="aem-learn-components.dependencies">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_1572461714642>
             </xfpage>
@@ -803,7 +804,7 @@
                     jcr:lastModified="{Date}2022-03-10T08:07:54.054+05:30"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="testPolicy"
+                    jcr:title="skill-cont-policy"
                     sling:resourceType="wcm/core/components/policy/policy"
                     components="/apps/aem-learn-components/components/topic">
                     <jcr:content jcr:primaryType="nt:unstructured"/>

@@ -8,16 +8,19 @@
 
     <!-- block for navigation -->
     <ul class="alm-header-navigation">
-        <li><a href="home.html">Home</a></li>
-        <li><a href="learning.html">Learning</a></li>
-        <li><a href="skills.html">Community</a></li>
-        <li><a href="support.html">Support</a></li>
-      </ul>
+        <li><a href="/content/aem-learn-components/language-masters/en/home.html">Home</a></li>
+        <li><a href="/content/aem-learn-components/language-masters/en/learning.html">Learning</a></li>
+        <li><a href="/content/aem-learn-components/language-masters/en/skills.html">Community</a></li>
+        <li><a href="/content/aem-learn-components/language-masters/en/support.html">Support</a></li>
+    </ul>
 
     <!-- block for icons right align -->
     <div class="alm-header-icons">
-        <img class="alm-header-notification" src="/content/dam/aem-learn-components/site/Smock_Bell.png" ></img>
-        <img class="alm-header-profile" src="https://cpcontents.adobe.com/apacprod/protected/account/66/accountassets/66/userassets/14853548/1647432540855_Fidget.png?cp_oauth_jwt=eyJhbGciOiJIUzI1NiJ9.eyJwIjoidXJsIiwicmFuZCI6IjUwYjE1YzRhLTJkYTQtNDlkOC05ZTgxLWQ1MGU0ZGY4ZDMxYiIsInYiOiIxIiwib3JpZ2luYWxVcmxIYXNoIjoiZDQ4NGJhZDFkYTFhNWEwMWI0NmJjZGEyZGI2ZDZlYTI0ZTM2ZDMwMiIsImV4cCI6MTY0ODAzNzQ5MiwicmlkIjoiNjQ4Mjc0NCIsImlhdCI6MTY0NzQzMjY5MiwiY2lkIjoiMTQ4MyJ9.7e4ztFPxL0EfY8BVq9n5sm7Y1A6SJ5Y-Vi0UefRuEWU" ></img>
+        <sly data-sly-resource="${resource.path @ resourceType='aem-learn-components/components/notification', appendPath='/*'}"/>
+        <!-- <img class="alm-header-notification" src="/content/dam/aem-learn-components/site/Smock_Bell.png" ></img> -->
+        <img class="alm-header-profile" src="" ></img>
         <img class="alm-header-down" src="/content/dam/aem-learn-components/site/ChevronUp.svg" ></img>
     </div>
 </div>
+
+<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html" data-sly-call="${clientlib.all @ categories='aem-learn-components.site,apps.alm.components.header'}"/>
