@@ -4,6 +4,7 @@ import { useTrainingPage } from "../../../hooks/catalog/useTrainingPage";
 import { convertSecondsToTimeText } from "../../../utils/dateTime";
 import { getALMConfig, getPathParams } from "../../../utils/global";
 import { getPreferredLocalizedMetadata } from "../../../utils/translationService";
+import { ALMLoader } from "../../Common/ALMLoader";
 import { PrimeCourseOverview } from "../PrimeCourseOverview";
 import { PrimeTrainingOverview } from "../PrimeTrainingOverview";
 import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
@@ -47,7 +48,7 @@ const PrimeTrainingPage = () => {
   const { formatMessage } = useIntl();
 
   if (isLoading || !training) {
-    return <div>Loading....</div>;
+    return <ALMLoader classes={styles.loader} />;
   }
   const loType = training.loType;
   const sections = training.sections;
