@@ -24,6 +24,7 @@ const setFiltersOptions = () => {
 export const useCatalog = () => {
   //To Do: need to check a better way of doping this
   const [catalogAttributes] = useState(() => setFiltersOptions());
+  const [isLoading, setIsLoading] = useState(true);
   const { trainings, sort, next } = useSelector(
     (state: State) => state.catalog
   );
@@ -33,14 +34,17 @@ export const useCatalog = () => {
 
   const fetchTrainings = useCallback(async () => {
     try {
+      setIsLoading(true);
       const response = await APIServiceInstance.getTrainings(
         filters,
         sort,
         query
       );
       dispatch(loadTrainings(response));
+      setIsLoading(false);
     } catch (e) {
       dispatch(loadTrainings([] as PrimeLearningObject[]));
+      setIsLoading(false);
 
       console.log("Error while loading trainings " + e);
     }
@@ -87,5 +91,7 @@ export const useCatalog = () => {
     updateFilters,
     sort,
     catalogAttributes,
+    isLoading,
+    hasMoreItems: Boolean(next),
   };
 };

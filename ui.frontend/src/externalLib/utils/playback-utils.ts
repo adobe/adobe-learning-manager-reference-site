@@ -38,8 +38,8 @@ export function LaunchPlayer(props: any) {
   iframe.setAttribute("mozallowfullscreen", "true");
   iframe.setAttribute("msallowfullscreen", "true");
   iframe.setAttribute("allowfullscreen", "true");
-  iframe.width = "70%";
-  iframe.height = "70%";
+  iframe.width = "100%";
+  iframe.height = "100%";
   iframe.style.margin = "auto";
   iframe.style.border = "none";
   overlay.appendChild(iframe);

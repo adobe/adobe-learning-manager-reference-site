@@ -6,16 +6,19 @@ import { useBoards, usePosts } from "../../../hooks/community";
 import { useEffect, useState } from "react";
 import { PrimeCommunitySearch } from "../PrimeCommunitySearch";
 import { PrimeCommunityPost } from "../PrimeCommunityPost";
-import { getQueryParamsIObjectFromUrl } from "../../../utils/global"
+import { getQueryParamsIObjectFromUrl } from "../../../utils/global";
 import { useIntl } from "react-intl";
 import styles from "./PrimeCommunityBoardList.module.css";
-import loadingImage from "../../../assets/images/LoadingButton.gif";
+import { ALMLoader } from "../../Common/ALMLoader";
 
 const PrimeCommunityBoardList = () => {
   const queryParams = getQueryParamsIObjectFromUrl();
   const DEFAULT_SORT_VALUE = "dateUpdated";
   const DEFAULT_SKILL = queryParams ? queryParams.skill : "";
-  const { items, fetchBoards, skills, currentSkill } = useBoards(DEFAULT_SORT_VALUE, DEFAULT_SKILL);
+  const { items, fetchBoards, skills, currentSkill } = useBoards(
+    DEFAULT_SORT_VALUE,
+    DEFAULT_SKILL
+  );
   const { posts } = usePosts();
   const { formatMessage } = useIntl();
   const [selectedSortFilter, setSelectedSortFilter] =
@@ -26,10 +29,10 @@ const PrimeCommunityBoardList = () => {
   const [searchResult, setSearchResult] = useState(0);
 
   useEffect(() => {
-    if(items) {
+    if (items) {
       setShowLoader(false);
     }
-  }, [items])
+  }, [items]);
 
   const showLoaderHandler = (value: any) => {
     setShowLoader(value);
@@ -99,11 +102,12 @@ const PrimeCommunityBoardList = () => {
         </div>
         {showLoader && (
           <div className={styles.primeLoaderWrapper}>
-            <img
+            {/* <img
               className={styles.primeLoader}
               src={loadingImage}
               alt="loading"
-            ></img>
+            ></img> */}
+            <ALMLoader />
           </div>
         )}
         {isSearchMode && !showLoader && (
@@ -133,22 +137,22 @@ const PrimeCommunityBoardList = () => {
           posts.map((post) => (
             <PrimeCommunityPost post={post} key={post.id}></PrimeCommunityPost>
           ))}
-        {!isSearchMode && items?.length > 0 &&
+        {!isSearchMode &&
+          items?.length > 0 &&
           items?.map((board) => (
             <PrimeCommunityBoard
               board={board}
               key={board.id}
             ></PrimeCommunityBoard>
-          ))
-        }
-        {!isSearchMode && items?.length === 0 &&
+          ))}
+        {!isSearchMode && items?.length === 0 && (
           <div className={styles.primeCommunityNoBoardFound}>
             {formatMessage({
-                id: "prime.community.noBoardMessage",
-                defaultMessage: "No boards found",
+              id: "prime.community.noBoardMessage",
+              defaultMessage: "No boards found",
             })}
           </div>
-        }
+        )}
       </div>
     </>
   );
