@@ -23,12 +23,9 @@ const PrimeCatalogFilters = (props: any) => {
     updateFilters(data);
   };
 
-  if (isLoading)
-    return (
-      <>
-        <span>loading filters...</span>
-      </>
-    );
+  if (isLoading) {
+    return <span>loading filters...</span>;
+  }
 
   const filterList = [
     catalogs,
@@ -40,7 +37,7 @@ const PrimeCatalogFilters = (props: any) => {
     tagName,
     learnerState,
   ].map((filter) => {
-    if (!filter.list || filter.list?.length === 0) {
+    if (!filter.list || filter.list?.length <= 1) {
       return "";
     }
     return catalogAttributes[filter.type] === "true" ? (
