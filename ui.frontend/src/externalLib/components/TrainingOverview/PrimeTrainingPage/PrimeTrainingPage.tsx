@@ -63,14 +63,20 @@ const PrimeTrainingPage = () => {
         showProgressBar={true}
         enrollment={training.enrollment}
       />
-      <div className={styles.contentContainer}>
+      <div className={styles.pageContainer}>
         <div className={styles.left}>
           <p
             dangerouslySetInnerHTML={{
               __html: richTextOverview || overview || description,
             }}
+            className={styles.overview}
           ></p>
-          Duration : {convertSecondsToTimeText(training.duration)}
+          <span className={styles.duration}>
+            {formatMessage(
+              { id: "alm.overview.total.duration" },
+              { 0: convertSecondsToTimeText(training.duration) }
+            )}
+          </span>
           {loType === COURSE && (
             <PrimeCourseOverview
               training={training}

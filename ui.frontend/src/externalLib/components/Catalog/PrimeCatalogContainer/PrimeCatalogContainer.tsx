@@ -43,7 +43,7 @@ const PrimeCatalogContainer = () => {
   );
 
   const listContainerCss = `${styles.listContainer} ${
-    catalogAttributes?.showFilters !== "false" && styles.full
+    catalogAttributes?.showFilters !== "true" && styles.full
   } `;
 
   const filtersCss = `${styles.filtersContainer} ${

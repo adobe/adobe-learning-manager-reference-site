@@ -1,11 +1,5 @@
 @import "../../../styles/variables.css";
 
-.contentContainer {
-  display: flex;
-  width: 80%;
-  margin: 0 auto;
-}
-
 .left {
   width: calc(100% - 256px);
   padding-right: 80px;
@@ -23,6 +17,9 @@
 }
 .sectionName {
   margin: 0 0 10px 0;
+  color: var(--prime-color-nc1);
+  font-size: var(--prime-font-size-16);
+
 }
 .sectionOptional {
   display: inline-block;
@@ -37,6 +34,28 @@
   text-transform: uppercase;
 }
 
+.overview {
+  font-size: var(--prime-font-size-16);
+  color: var(--prime-color-nc1);
+}
+.duration {
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-nc3);
+}
+.pageContainer {
+  display: flex;
+  max-width: var(--prime-container-max-width-desktop);
+  width: var(--prime-container-width);
+  margin: 0 auto;
+}
+@media screen and (max-width: 1024px) {
+  .headingContainer {
+    max-width: var(--prime-container-max-width-tablet);
+    width: var(--prime-container-width);
+    padding: 0;
+  }
+}
+
 @media screen and (max-width: 414px) {
   .left {
     order: 2;
@@ -48,9 +67,10 @@
     width: 100%;
     padding: 20px;
   }
-  .contentContainer {
+  .pageContainer {
     flex-direction: column;
     width: 100%;
+    max-width: var(--prime-container-max-width-mobile);
   }
   .trainingOverviewContainer {
     border: none;
@@ -58,6 +78,6 @@
     padding: 0;
   }
 }
-.loader{
+.loader {
   height: 200px;
 }
