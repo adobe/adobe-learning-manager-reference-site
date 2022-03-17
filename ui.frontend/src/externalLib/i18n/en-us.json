@@ -111,6 +111,7 @@
   "alm.overview.skills.achieve.level.jobAid": "What levels will I achieve after the ||JOB_AID|| ?",
   "alm.overview.skills.achieve.level.learningProgram": "What levels will I achieve after the ||LEARNING_PATH|| ?",
   "alm.overview.skills.achieve.level.certification": "What levels will I achieve after the ||CERTIFICATION|| ?",
+  "alm.overview.total.duration": "Duration : {0}",
   "prime.catalog.filter.enrolled": "Enrolled",
   "prime.catalog.filter.completed": "Completed",
   "prime.catalog.filter.started": "Started",

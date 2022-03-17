@@ -75,6 +75,7 @@
 .innerContainer {
   margin-left: 10px;
   width: calc(100% - 50px);
+  font-size: var(--prime-font-size-14);
 }
 .label {
   font-size: var(--prime-font-size-14);

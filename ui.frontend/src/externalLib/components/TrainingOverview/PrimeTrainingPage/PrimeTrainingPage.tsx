@@ -67,11 +67,8 @@ const PrimeTrainingPage = () => {
   }
   const loType = training.loType;
   const sections = training.sections;
-  const {
-    showAuthorInfo,
-    showDescription,
-    showEnrollDeadline,
-  } = getTrainingOverviewAttributes(config);
+  const { showAuthorInfo, showDescription, showEnrollDeadline } =
+    getTrainingOverviewAttributes(config);
 
   return (
     <Provider theme={lightTheme} colorScheme={"light"}>
@@ -83,16 +80,22 @@ const PrimeTrainingPage = () => {
         showProgressBar={true}
         enrollment={training.enrollment}
       />
-      <div className={styles.contentContainer}>
+      <div className={styles.pageContainer}>
         <div className={styles.left}>
-          {showDescription == "true" && (
+          {showDescription === "true" && (
             <p
               dangerouslySetInnerHTML={{
                 __html: richTextOverview || overview || description,
               }}
+              className={styles.overview}
             ></p>
           )}
-          <p>Duration : {convertSecondsToTimeText(training.duration)}</p>
+          <span className={styles.duration}>
+            {formatMessage(
+              { id: "alm.overview.total.duration" },
+              { 0: convertSecondsToTimeText(training.duration) }
+            )}
+          </span>
           {loType === COURSE && (
             <PrimeCourseOverview
               training={training}
