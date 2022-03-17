@@ -1,4 +1,5 @@
 import { lightTheme, Provider } from "@adobe/react-spectrum";
+import { useState } from "react";
 import { useIntl } from "react-intl";
 import { useTrainingPage } from "../../../hooks/catalog/useTrainingPage";
 import { convertSecondsToTimeText } from "../../../utils/dateTime";
@@ -61,17 +62,15 @@ const PrimeTrainingPage = () => {
   } = useTrainingPage(trainingId, trainingInstanceId);
   const locale = config.locale;
   const { formatMessage } = useIntl();
+  const [
+    { showAuthorInfo, showDescription, showEnrollDeadline },
+  ] = useState(() => getTrainingOverviewAttributes(config));
 
   if (isLoading || !training) {
     return <ALMLoader classes={styles.loader} />;
   }
   const loType = training.loType;
   const sections = training.sections;
-  const {
-    showAuthorInfo,
-    showDescription,
-    showEnrollDeadline,
-  } = getTrainingOverviewAttributes(config);
 
   return (
     <Provider theme={lightTheme} colorScheme={"light"}>
