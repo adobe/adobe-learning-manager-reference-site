@@ -7,7 +7,11 @@ import {
   paginateTrainings,
 } from "../../store/actions/catalog/action";
 import { State } from "../../store/state";
-import { getALMConfig, setALMAttribute } from "../../utils/global";
+import {
+  getALMConfig,
+  getConfigurableAttributes,
+  setALMAttribute,
+} from "../../utils/global";
 import { useFilter } from "./useFilter";
 import { useSearch } from "./useSearch";
 
@@ -15,7 +19,7 @@ const setFiltersOptions = () => {
   const config = getALMConfig();
   if (config) {
     let cssSelector = config.mountingPoints.catalogContainer;
-    let value = (document.querySelector(cssSelector) as any)?.dataset;
+    let value = getConfigurableAttributes(cssSelector) || {};
     setALMAttribute("catalogAttributes", value);
     return value;
   }
