@@ -1,10 +1,7 @@
 @import "../../../styles/variables.css";
-
-.pageContainer {
-  margin: 0 auto;
-}
 .headerContainer {
   margin-bottom: 60px;
+  padding-top: 20px;
 }
 .header {
   display: flex;
@@ -78,14 +75,27 @@
 .closeIcon {
   display: none;
 }
+
+.pageContainer {
+  max-width: var(--prime-container-max-width-desktop);
+  width: var(--prime-container-width);
+  margin: 0 auto;
+}
+@media screen and (max-width: 1024px) {
+  .pageContainer {
+    max-width: var(--prime-container-max-width-tablet);
+    width: var(--prime-container-width);
+    padding: 0;
+  }
+}
 @media screen and (max-width: 414px) {
   .headerContainer {
-    margin-bottom: 30px;
+    margin-bottom: 10px;
   }
   .header {
     flex-direction: column;
-    padding: 20px;
     align-items: flex-start;
+    /* padding: 20px; */
   }
   .label {
     margin-bottom: 20px;
@@ -124,9 +134,10 @@
   }
   .searchAppliedLabel {
     margin: 0;
-    padding: 0 20px;
+    padding: 15px 0 5px 0;
   }
   .filtersContainer {
+    left: 0;
     border: 1px solid var(--prime-color-white);
     border-radius: 1rem 1rem 0 0;
     background-color: var(--prime-color-white);
@@ -146,11 +157,12 @@
   }
   .listContainer {
     width: 100%;
-    padding: 0 20px;
+    /* padding: 0 20px; */
   }
   .filtersContainer.onMobile {
     position: fixed;
     top: 0;
+    left: 0;
     height: 100%;
     width: 100%;
     background: var(--prime-color-white);
@@ -176,5 +188,10 @@
   .closeIcon svg {
     width: 20px;
     height: 20px;
+  }
+  .pageContainer {
+    width: 100%;
+    max-width: var(--prime-container-max-width-mobile);
+    padding: 0 20px;
   }
 }

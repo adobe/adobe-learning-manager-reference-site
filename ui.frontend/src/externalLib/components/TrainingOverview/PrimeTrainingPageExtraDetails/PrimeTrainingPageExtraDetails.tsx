@@ -115,7 +115,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
   const showUnenrollButton =
     training.enrollment && training.unenrollmentAllowed;
   return (
-    <>
+    <section className={styles.container}>
       {/* buttons COnatiner */}
       <div className={styles.actionContainer}>
         {/* {action === "preview" && (
@@ -395,7 +395,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
           </div>
         </div>
       )}
-    </>
+    </section>
   );
 };
 export default PrimeTrainingPageExtraDetails;

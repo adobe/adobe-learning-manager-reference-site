@@ -108,6 +108,19 @@
   display: none;
 }
 
+.pageContainer {
+  max-width: var(--prime-container-max-width-desktop);
+  width: var(--prime-container-width);
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 1024px) {
+  .pageContainer {
+    max-width: var(--prime-container-max-width-tablet);
+    width: var(--prime-container-width);
+    padding: 0;
+  }
+}
 @media screen and (max-width: 414px) {
   .courseInfoHeader {
     margin: 30px 20px 20px 20px;
@@ -134,4 +147,12 @@
   .instancesContainer {
     display: none;
   }
+  .pageContainer {
+    width: 100%;
+    max-width: var(--prime-container-max-width-mobile);
+  }
+}
+
+.loader {
+  height: 200px;
 }

@@ -11,27 +11,6 @@
   background-repeat: repeat-x;
 }
 
-.headingContainer {
-  /* TO DO */
-  /* width: 1084px; */
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  font-style: normal;
-  font-weight: var(--prime-font-size-24) !important;
-}
-@media screen and (min-width: 1024px) {
-  .headingContainer {
-    width: 930px;
-  }
-}
-@media screen and (min-width: 1366px) {
-  .headingContainer {
-    width: 1084px;
-  }
-}
-
 .format {
   margin-top: 20px;
   height: 30px;
@@ -73,6 +52,27 @@
   background: linear-gradient(90deg, #55b36f, #0f870f);
 }
 
+.headingContainer {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-style: normal;
+  /* font-weight: var(--prime-font-size-24) !important; */
+  max-width: var(--prime-container-max-width-desktop);
+  width: var(--prime-container-width);
+}
+@media screen and (max-width: 1024px) {
+  .headingContainer {
+    max-width: var(--prime-container-max-width-tablet);
+    width: var(--prime-container-width);
+    padding: 0;
+  }
+  .title {
+    font-size: var(--prime-font-size-20);
+  }
+}
+
 @media screen and (max-width: 414px) {
   .header {
     padding: 0 20px;
@@ -82,5 +82,9 @@
   }
   .progressBar {
     width: 85%;
+  }
+  .headingContainer {
+    width: 100%;
+    max-width: var(--prime-container-max-width-mobile);
   }
 }

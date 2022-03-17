@@ -2,7 +2,7 @@
 .notificationDropdown{
   list-style:none;
   position:absolute; 
-  padding-left: 20px
+  padding-left: 20px;
 }
 .notificationBellIcon {
   padding: 0 !important;
@@ -12,10 +12,15 @@
   width: 36px;
   vertical-align: middle;
   display: inline-block;
-  fill: rgba(0, 0, 0, 0.5);
   cursor: pointer;
   background: transparent;
-  border:none
+  border:none;
+}
+
+.notificationBellIcon svg {
+  fill: var(--prime-color-nc1);
+  height: 20px;
+  width: 20px;
 }
 
 
