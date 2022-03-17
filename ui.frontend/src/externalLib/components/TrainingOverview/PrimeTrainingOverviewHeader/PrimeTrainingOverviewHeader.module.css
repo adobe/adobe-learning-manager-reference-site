@@ -68,9 +68,10 @@
     width: var(--prime-container-width);
     padding: 0;
   }
-  .title{
+  .title {
     font-size: var(--prime-font-size-20);
   }
+}
 
 @media screen and (max-width: 414px) {
   .header {
