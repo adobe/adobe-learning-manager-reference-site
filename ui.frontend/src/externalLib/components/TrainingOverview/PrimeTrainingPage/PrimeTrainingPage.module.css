@@ -65,7 +65,7 @@
   .right {
     order: 1;
     width: 100%;
-    padding: 20px;
+    padding: 20px 20px 0 20px;
   }
   .pageContainer {
     flex-direction: column;
@@ -76,6 +76,9 @@
     border: none;
     margin-bottom: 20px;
     padding: 0;
+  }
+  .overview {
+    margin-top: 0;
   }
 }
 .loader {

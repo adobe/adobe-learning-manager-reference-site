@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useIntl } from "react-intl";
 import { useLoadMore } from "../../../hooks/loadMore";
 import { PrimeLearningObject } from "../../../models/PrimeModels";
 import { ALMLoader } from "../../Common/ALMLoader";
@@ -11,21 +12,29 @@ const PrimeTrainingsContainer: React.FC<{
   hasMoreItems: boolean;
 }> = ({ trainings, loadMoreTraining, hasMoreItems }) => {
   const elementRef = useRef(null);
+  const { formatMessage } = useIntl();
   useLoadMore({
     items: trainings,
     callback: loadMoreTraining,
     elementRef,
   });
+  const listHtml = trainings?.length ? (
+    <ul className={styles.primeTrainingsList}>
+      {trainings?.map((training) => (
+        <PrimeTrainingCard
+          training={training}
+          key={training.id}
+        ></PrimeTrainingCard>
+      ))}
+    </ul>
+  ) : (
+    <p className={styles.noResults}>
+      {formatMessage({ id: "prime.catalog.no.result" })}
+    </p>
+  );
   return (
     <div className={styles.primeTrainingsContainer}>
-      <ul className={styles.primeTrainingsList}>
-        {trainings?.map((training) => (
-          <PrimeTrainingCard
-            training={training}
-            key={training.id}
-          ></PrimeTrainingCard>
-        ))}
-      </ul>
+      {listHtml}
       <div ref={elementRef} id="load-more-trainings">
         {hasMoreItems ? <ALMLoader /> : ""}
       </div>
