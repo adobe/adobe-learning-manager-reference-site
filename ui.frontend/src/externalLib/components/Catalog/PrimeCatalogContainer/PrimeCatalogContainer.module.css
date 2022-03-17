@@ -1,6 +1,7 @@
 @import "../../../styles/variables.css";
 .headerContainer {
   margin-bottom: 60px;
+  padding-top: 20px;
 }
 .header {
   display: flex;
