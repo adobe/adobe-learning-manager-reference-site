@@ -9,6 +9,7 @@
     box-shadow: 3px 3px 6px #00000029;
     font: normal normal normal 20px/25px Source Sans Pro;
     width: 320px;
+    overflow: auto;
 }
 
 .alm-header-vertical-nav ul

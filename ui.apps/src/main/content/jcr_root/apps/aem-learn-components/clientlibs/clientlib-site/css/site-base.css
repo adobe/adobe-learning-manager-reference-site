@@ -259,6 +259,7 @@
 #learning-parent-container .carousel
 {
   height: 279px;
+  margin-bottom: 20px;
 }
 
 #learning-parent-container .cmp-carousel__indicators {
