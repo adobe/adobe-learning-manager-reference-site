@@ -291,7 +291,7 @@
 
 #tmplt-carousel .cmp-carousel .cmp-carousel__actions {
   position: absolute;
-  bottom: 0;
+  bottom: 10px;
   right: 50px;
   z-index: 2;
 }
