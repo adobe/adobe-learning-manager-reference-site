@@ -1,7 +1,7 @@
 @import "../../../styles/variables.css";
 .notificationItem {
   list-style: none;
-  padding: 18px 20px 20px 20px;
+  padding: 9px 10px 10px 10px;
   display: flex;
   justify-content: space-between;
   font-weight: var(--prime-font-weight-600);
