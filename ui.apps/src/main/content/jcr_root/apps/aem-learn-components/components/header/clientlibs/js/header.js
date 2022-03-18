@@ -10,23 +10,21 @@
 
     $(document).ready(function () {
         window.ALM.getALMUser().then(function (user) {
-            try 
-            {
+            try {
                 const userAttrs = JSON.parse(user).data.attributes;
                 $(HEADER_PROFILE_PIC_SEL).attr("src", userAttrs.avatarUrl);
                 $(VERT_NAV_PROFILE_NAME_SEL).text(userAttrs.name);
-            } catch (e)
-            {
+            } catch (e) {
                 console.error("Unable to fetch user avatar.");
             }
         });
 
-        $(document).on("click", VERT_NAV_CLOSE_BUTTON_SEL, function(e) {
-            $(VERT_NAV_CONTAINER_SEL).toggle();
+        $(document).on("click", VERT_NAV_CLOSE_BUTTON_SEL, function (e) {
+            $(VERT_NAV_CONTAINER_SEL).toggleClass('open');
         });
 
-        $(document).on("click", HEADER_SHOW_MENU_SEL, function(e) {
-            $(VERT_NAV_CONTAINER_SEL).toggle();
+        $(document).on("click", HEADER_SHOW_MENU_SEL, function (e) {
+            $(VERT_NAV_CONTAINER_SEL).toggleClass('open');
         });
     });
 

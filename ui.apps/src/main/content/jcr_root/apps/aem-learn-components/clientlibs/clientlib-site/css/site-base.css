@@ -10,7 +10,9 @@
   height: 400px;
 }
 
-.cmp-teaser__image, .cmp-teaser__image .cmp-image, .cmp-teaser__image .cmp-image .cmp-image__image {
+.cmp-teaser__image,
+.cmp-teaser__image .cmp-image,
+.cmp-teaser__image .cmp-image .cmp-image__image {
   height: 300px;
 }
 
@@ -23,15 +25,13 @@
 }
 
 .cmp-teaser .cmp-teaser__content h2,
-.cmp-teaser .cmp-teaser__content p
-{
-  background: #2929294D 0% 0% no-repeat padding-box;
+.cmp-teaser .cmp-teaser__content p {
+  background: #2929294d 0% 0% no-repeat padding-box;
 }
 
-.cmp-teaser .cmp-teaser__content a
-{
-  background: #2929294D 0% 0% no-repeat padding-box;
-  border: 2px solid #FFFFFF;
+.cmp-teaser .cmp-teaser__content a {
+  background: #2929294d 0% 0% no-repeat padding-box;
+  border: 2px solid #ffffff;
   border-radius: 24px;
   color: white;
   text-decoration: none;
@@ -39,7 +39,7 @@
 }
 
 .cmp-carousel__actions {
-  background: #F5F5F5 0% 0% no-repeat padding-box;
+  background: #f5f5f5 0% 0% no-repeat padding-box;
   height: 36px;
 }
 
@@ -49,14 +49,15 @@
   padding: 0;
 }
 
-.cmp-carousel .cmp-carousel__action .cmp-carousel__action-icon
-{
+.cmp-carousel .cmp-carousel__action .cmp-carousel__action-icon {
   display: inline-block;
   margin-top: 14px;
 }
 
 /* css for rest screen size */
-.cmp-experiencefragment--header .aem-Grid.aem-Grid--default--12 .image.cmp-image--logo {
+.cmp-experiencefragment--header
+  .aem-Grid.aem-Grid--default--12
+  .image.cmp-image--logo {
   margin-left: 418px;
   margin-right: 120px;
   height: 70px;
@@ -77,14 +78,18 @@
 }
 
 @media screen and (max-width: 1024px) {
-  .cmp-experiencefragment--header .aem-Grid.aem-Grid--default--12 .image.cmp-image--logo {
+  .cmp-experiencefragment--header
+    .aem-Grid.aem-Grid--default--12
+    .image.cmp-image--logo {
     margin-left: 47px;
     margin-right: 80px;
   }
 }
 
 @media (max-width: 1366px) {
-  .cmp-experiencefragment--header .aem-Grid.aem-Grid--default--12 .image.cmp-image--logo {
+  .cmp-experiencefragment--header
+    .aem-Grid.aem-Grid--default--12
+    .image.cmp-image--logo {
     margin-left: 141px;
     margin-right: 120px;
   }
@@ -134,9 +139,9 @@
   }
 }
 
-
-#carousel-container .carousel, #carousel-container .cmp-carousel {
-    height: 300px;
+#carousel-container .carousel,
+#carousel-container .cmp-carousel {
+  height: 300px;
 }
 
 #carousel-container .cmp-teaser__image .cmp-image .cmp-image__image {
@@ -144,8 +149,7 @@
 }
 
 /* CSS for Home Catalog Page*/
-#home-catalog-container .cmp-text 
-{
+#home-catalog-container .cmp-text {
   font: normal normal bold 27px/42px Source Sans Pro;
 }
 
@@ -153,54 +157,56 @@
   margin-top: 15px;
 }
 
-.news-section
-{
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
+.news-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
-.news-section .news-section-newsItem
-{
-  position: relative; 
+.news-section .news-section-newsItem {
+  position: relative;
   background-color: #f7f7f7;
-  width: 348px;
-  height: 240px; 
-  margin-bottom: 10px;
+  /* width: 348px; */
+  height: 240px;
+  /* margin-bottom: 10px;
   padding-left: 30px;
-  padding-top: 30px;
+  padding-top: 30px; */
   font-size: 16px;
+  padding:30px;
+  width: 32%;
 }
 
-.news-section .news-section-newsItem .title
-{
+.news-section .news-section-newsItem .title {
   font: normal normal 600 18px/27px Source Sans Pro;
   color: #292929;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  overflow: hidden;
+  padding:0;
+  margin: 0 0 10px 0;
 }
 
-.news-section .news-section-newsItem .link
-{
-  border: 2px solid #306EB5; 
-  border-radius: 16px; 
-  position: absolute; 
-  bottom: 30px; 
+.news-section .news-section-newsItem .link {
+  border: 2px solid #306eb5;
+  border-radius: 16px;
+  position: absolute;
+  bottom: 30px;
   right: 30px;
 }
 
-.news-section .news-section-newsItem a 
-{
+.news-section .news-section-newsItem a {
   padding: 15px;
-  color: #306EB5;
+  color: #306eb5;
   text-decoration: none;
 }
 
 /* CSS for MyLearning Page*/
 
 #learning-parent-container,
-#home-catalog-container
-{
+#home-catalog-container {
   width: 100%;
   margin: 0 auto;
   margin-top: 5px;
@@ -218,20 +224,17 @@
   text-transform: initial;
 }
 
-#learning-button-cont button:first-child
-{
+#learning-button-cont button:first-child {
   background: #292929 0% 0% no-repeat padding-box;
   color: white;
 }
 
-#learning-button-cont a
-{
+#learning-button-cont a {
   text-align: center;
   text-decoration: none;
 }
 
-#learning-button-cont a span
-{
+#learning-button-cont a span {
   display: inline-block;
   margin-top: 18px;
 }
@@ -249,15 +252,13 @@
   width: 100%;
 }
 
-#learning-parent-container .cmp-teaser__image, 
-#learning-parent-container .cmp-teaser__image .cmp-image, 
-#learning-parent-container .cmp-teaser__image .cmp-image .cmp-image__image 
-{
+#learning-parent-container .cmp-teaser__image,
+#learning-parent-container .cmp-teaser__image .cmp-image,
+#learning-parent-container .cmp-teaser__image .cmp-image .cmp-image__image {
   height: 249px;
 }
 
-#learning-parent-container .carousel
-{
+#learning-parent-container .carousel {
   height: 279px;
 }
 
@@ -267,28 +268,24 @@
 
 /* CSS for Template carousel */
 
-#tmplt-carousel .cmp-teaser__image, 
-#tmplt-carousel .cmp-teaser__image .cmp-image, 
-#tmplt-carousel .cmp-teaser__image .cmp-image .cmp-image__image
-{
+#tmplt-carousel .cmp-teaser__image,
+#tmplt-carousel .cmp-teaser__image .cmp-image,
+#tmplt-carousel .cmp-teaser__image .cmp-image .cmp-image__image {
   height: 200px;
 }
 
-#tmplt-carousel .carousel
-{
+#tmplt-carousel .carousel {
   height: 200px;
 }
 
-#tmplt-carousel .cmp-carousel .cmp-carousel__actions
-{
+#tmplt-carousel .cmp-carousel .cmp-carousel__actions {
   position: absolute;
   bottom: 0;
   right: 50px;
   z-index: 10;
 }
 
-#tmplt-carousel .cmp-carousel__indicators
-{
+#tmplt-carousel .cmp-carousel__indicators {
   position: relative;
   top: -10px;
 }
@@ -311,132 +308,53 @@
   text-decoration: none;
 }
 
-.alm-footer-scrollTop
-{
-  position: absolute; 
+.alm-footer-scrollTop {
+  position: absolute;
   right: 0;
   top: 5px;
 }
 
-.alm-footer-scrollTop a 
-{
+.alm-footer-scrollTop a {
   display: flex;
 }
 
-.alm-footer-scrollTop a img
-{
+.alm-footer-scrollTop a img {
   border: 1px white solid;
   border-radius: 50%;
 }
 
-.alm-footer-scrollTop div
-{
+.alm-footer-scrollTop div {
   margin-right: 5px;
 }
 
-.alm-footer-container .footer-separator
-{
+.alm-footer-container .footer-separator {
   font-size: 11px;
 }
 
 /* CSS for Header */
 
-#alm-header .alm-header-cont
-{
-  width: 100%;
-  display: flex;
-}
-
-#alm-header .alm-header-cont .alm-header-logo
-{
-  width: 137px;
-  height: 33px;
-  margin-top: 18px;
-}
-
-#alm-header .alm-header-cont .alm-header-menu
-{
-  width: 22px;
-  height: 22px;
-  margin-top: 20px;
-  margin-left: 15px;
-}
-
-#alm-header .alm-header-cont .alm-header-navigation,
-#alm-header .alm-header-cont .alm-header-icons
-{
-  display: none;
-  font: normal normal normal 14px/18px Source Sans Pro;
-}
-
-#alm-header .alm-header-cont .alm-header-icons .alm-header-profile
-{
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  margin-top: 15px;
-  margin-left: 35px;
-}
-
-#alm-header .alm-header-cont .alm-header-navigation
-{
-  list-style-type: none;
-}
-
-#alm-header .alm-header-cont .alm-header-navigation a
-{
-  text-decoration: none;
-  color: #292929;
-  margin: 20px 60px 20px 0px;
-  display: inline-block;
-}
-
-#alm-header .alm-header-cont .alm-header-icons .alm-header-notification
-{
-  width: 36px;
-  height: 36px;
-  margin-top: 14px;
-}
-
-#alm-header .alm-header-cont .alm-header-icons .alm-header-down
-{
-  width: 15px;
-  height: 15px;
-  margin-top: 30px;
-  margin-left: 5px;
-}
-
-.alm-header-icons .notification__container
-{
-  display: none;
-}
-
 @media screen and (min-width: 1024px) {
   #learning-parent-container,
-  #home-catalog-container 
-  {
-    width: 930px;
+  #home-catalog-container {
+    /* width: 930px; */
     margin: 0 auto;
     margin-top: 30px;
   }
 
-  #alm-header .alm-header-cont
-  {
+  /* #alm-header .alm-header-cont {
     width: 930px;
     margin: 0 auto;
     justify-content: space-between;
   }
 
-  #alm-header .alm-header-cont .alm-header-menu 
-  {
+  #alm-header .alm-header-cont .alm-header-menu {
     display: none;
   }
 
   #alm-header .alm-header-cont .alm-header-navigation,
-  #alm-header .alm-header-cont .alm-header-icons
-  {
+  #alm-header .alm-header-cont .alm-header-icons {
     display: flex;
-  }
+  } */
 
   #learning-button-cont {
     margin-bottom: 40px;
@@ -449,11 +367,10 @@
     text-transform: initial;
     border-radius: 17px;
     margin-right: 10px;
-    border: 1px solid #E4E4E4;
+    border: 1px solid #e4e4e4;
   }
 
-  #learning-button-cont a span
-  {
+  #learning-button-cont a span {
     display: inline-block;
     margin-top: 5px;
   }
@@ -462,30 +379,25 @@
     width: 50%;
   }
 
-  #tmplt-carousel .cmp-teaser__image, 
-  #tmplt-carousel .cmp-teaser__image .cmp-image, 
-  #tmplt-carousel .cmp-teaser__image .cmp-image .cmp-image__image 
-  {
+  #tmplt-carousel .cmp-teaser__image,
+  #tmplt-carousel .cmp-teaser__image .cmp-image,
+  #tmplt-carousel .cmp-teaser__image .cmp-image .cmp-image__image {
     height: 350px;
   }
 
-  #tmplt-carousel .carousel
-  {
+  #tmplt-carousel .carousel {
     height: 350px;
   }
 
-  .news-section .news-section-newsItem
-  {
-    width: 290px;
+  .news-section .news-section-newsItem {
+    /* width: 290px; */
   }
 
-  #alm-footer
-  {
+  #alm-footer {
     display: block;
   }
 
-  #alm-footer .alm-footer-container
-  {
+  #alm-footer .alm-footer-container {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -495,50 +407,46 @@
     margin-right: auto;
   }
 
-  .alm-header-icons .notification__container
-  {
+  .alm-header-icons .notification__container {
     display: block;
     margin-right: 50px;
     margin-top: 10px;
     z-index: 99;
   }
-
 }
 
 @media screen and (min-width: 1366px) {
-  #learning-parent-container,
-  #home-catalog-container 
-  {
+  #learning-parent-container {
     width: 1180px;
     margin: 0 auto;
     margin-top: 60px;
   }
+  #home-catalog-container {
+    /* width: 1180px; */
+    margin: 0 auto;
+    margin-top: 60px;
+  }
 
-  #alm-header .alm-header-cont
-  {
+  /* #alm-header .alm-header-cont {
     width: 1180px;
     margin: 0 auto;
-  }
+  } */
 
-  #tmplt-carousel .cmp-teaser__image, 
-  #tmplt-carousel .cmp-teaser__image .cmp-image, 
-  #tmplt-carousel .cmp-teaser__image .cmp-image .cmp-image__image 
-  {
+  #tmplt-carousel .cmp-teaser__image,
+  #tmplt-carousel .cmp-teaser__image .cmp-image,
+  #tmplt-carousel .cmp-teaser__image .cmp-image .cmp-image__image {
     height: 500px;
   }
 
-  #tmplt-carousel .carousel
-  {
+  #tmplt-carousel .carousel {
     height: 500px;
   }
 
-  .news-section .news-section-newsItem
-  {
-    width: 348px;
+  .news-section .news-section-newsItem {
+    /* width: 348px; */
   }
 
-  #alm-footer .alm-footer-container
-  {
+  #alm-footer .alm-footer-container {
     width: 1180px;
   }
 }
@@ -548,28 +456,6 @@
   margin-left: 30px;
   margin-right: 30px;
 } */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* custom end */
 .scrolly .cmp-layoutcontainer--header {
@@ -856,10 +742,10 @@ body {
   line-height: 1.5;
 }
 
-body .root {
+/* body .root {
   max-width: 105pc;
   margin: 0 auto;
-}
+} */
 /* 
 @media (max-width: 1024px) {
   body .root {
@@ -3019,4 +2905,30 @@ body.anonymous .cmp-teaser--secure .cmp-teaser__action-container {
 
 .cmp-form-button:hover {
   cursor: pointer;
+}
+
+#home-catalog-container {
+  max-width: var(--prime-container-max-width-desktop);
+  width: var(--prime-container-width);
+  margin: 0 auto;
+}
+@media screen and (max-width: 1024px) {
+  #home-catalog-container  {
+    max-width: var(--prime-container-max-width-tablet);
+    width: var(--prime-container-width);
+    padding: 0;
+  }
+}
+@media screen and (max-width: 414px) {
+  #home-catalog-container  {
+    width: 100%;
+    max-width: 100%;
+  }
+  .news-section{
+    padding:20px;
+  }
+  .news-section .news-section-newsItem {
+    width: 100%;
+    margin: 5px 0;
+  }
 }
