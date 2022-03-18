@@ -48,7 +48,7 @@ const PrimeNotificationContainer = () => {
   ]);
 
   if (isLoading) {
-    return <span>loading notifications...</span>;
+    return <span></span>;
   }
 
   const handleClickOutside = (event: any) => {

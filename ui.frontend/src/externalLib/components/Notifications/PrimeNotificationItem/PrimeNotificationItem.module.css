@@ -23,7 +23,7 @@
 }
 
 .notificationTime {
-  margin-top: 8px;
+  /* margin-top: 8px; */
   border: 0;
   color: var(--prime-color-nc4);
   height: 20px;

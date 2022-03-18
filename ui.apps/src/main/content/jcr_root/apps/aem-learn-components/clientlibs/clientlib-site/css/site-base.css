@@ -407,8 +407,8 @@
 
   .alm-header-icons .notification__container {
     display: block;
-    margin-right: 50px;
-    margin-top: 10px;
+    /* margin-right: 50px; */
+    /* margin-top: 10px; */
     z-index: 99;
   }
 }

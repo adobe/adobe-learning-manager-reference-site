@@ -96,6 +96,7 @@
 
 .alm-header-icons .notification__container {
   display: flex !important;
+  margin-top: 10px;
 }
 #alm-header .alm-header-cont {
   width: 100%;
@@ -176,6 +177,7 @@
 
   .alm-header-icons .notification__container {
     display: flex;
+    margin-top: 10px;
   }
   #alm-header .alm-header-cont .alm-header-menu {
     display: flex;

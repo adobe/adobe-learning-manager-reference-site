@@ -1,20 +1,20 @@
 @import "../../../styles/variables.css";
-.notificationDropdown{
-  list-style:none;
-  position:absolute; 
+.notificationDropdown {
+  list-style: none;
+  position: relative;
   padding-left: 20px;
 }
 .notificationBellIcon {
   padding: 0 !important;
   margin-top: 6px;
-  margin-left: 100px;
+  /* margin-left: 100px; */
   height: 36px;
   width: 36px;
   vertical-align: middle;
   display: inline-block;
   cursor: pointer;
   background: transparent;
-  border:none;
+  border: none;
 }
 
 .notificationBellIcon svg {
@@ -22,7 +22,6 @@
   height: 20px;
   width: 20px;
 }
-
 
 .notificationCountStyle {
   font-weight: var(--prime-font-weight-600);
@@ -37,5 +36,5 @@
   border: 2px solid #fff;
   position: absolute;
   margin-left: -8px;
-  margin-top:-4px;
+  margin-top: -4px;
 }
