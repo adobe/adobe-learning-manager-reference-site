@@ -346,6 +346,31 @@
   margin-bottom: 10px;
 }
 
+/* css for support page */
+#alm-support-container
+{
+  width: 715px;
+  margin: 0 auto;
+  min-height: 500px;
+  font: normal normal normal 19px/32px Source Sans Pro;
+  color: #000000;
+}
+
+#alm-support-container textarea
+{
+  width:100%;
+  margin-top: 15px;
+}
+
+#alm-support-header
+{
+  background: #306EB5 0% 0% no-repeat padding-box;
+  height: 150px;
+  color: #FFFFFF;
+  font: normal normal normal 16px/26px Source Sans Pro;
+  margin-bottom: 40px;
+}
+
 @media screen and (min-width: 1024px) {
   #learning-parent-container,
   #home-catalog-container {
@@ -411,11 +436,17 @@
     /* margin-top: 10px; */
     z-index: 99;
   }
+
+  #alm-support-header .text
+  {
+      width: 930px;
+      margin: 0 auto;
+  }
 }
 
 @media screen and (min-width: 1366px) {
   #learning-parent-container {
-    width: 1180px;
+    /* width: 1180px; */
     margin: 0 auto;
     margin-top: 60px;
   }
@@ -442,6 +473,12 @@
   #alm-footer .alm-footer-container {
     /* width: 1180px; */
   }
+
+  #alm-support-header .text
+  {
+      width: 1084px;
+      margin: 0 auto;
+  }
 }
 /* 
 
@@ -449,6 +486,99 @@
   margin-left: 30px;
   margin-right: 30px;
 } */
+
+
+
+
+#home-catalog-container,
+#learning-parent-container {
+  max-width: var(--prime-container-max-width-desktop);
+  width: var(--prime-container-width);
+  margin: 0 auto;
+}
+
+#alm-footer .alm-footer-container {
+  max-width: var(--prime-container-max-width-desktop);
+  width: var(--prime-container-width);
+}
+
+#alm-support-header .text
+{
+  max-width: var(--prime-container-max-width-desktop);
+  width: var(--prime-container-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 10px;
+}
+
+@media screen and (max-width: 1024px) {
+  #home-catalog-container,
+  #learning-parent-container {
+    max-width: var(--prime-container-max-width-tablet);
+    width: var(--prime-container-width);
+    padding: 0;
+  }
+  #alm-footer .alm-footer-container {
+    max-width: var(--prime-container-max-width-tablet);
+    width: var(--prime-container-width);
+    padding: 0;
+  }
+
+  #alm-support-header .text
+  {
+    max-width: var(--prime-container-max-width-tablet);
+    width: var(--prime-container-width);
+  }
+}
+
+@media screen and (max-width: 414px) {
+  #home-catalog-container,
+  #learning-parent-container {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  #alm-support-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 10px 0 10px;
+  }
+
+  #alm-footer .alm-footer-container {
+    max-width: var(--prime-container-max-width-tablet);
+    width: var(--prime-container-width);
+    padding: 0;
+  }
+
+  .news-section {
+    padding: 20px;
+  }
+
+  .news-section .news-section-newsItem {
+    width: 100%;
+    margin: 5px 0;
+  }
+
+  #alm-support-header .text
+  {
+    max-width: 100%;
+    width: 100%;
+    padding: 0;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* custom end */
 .scrolly .cmp-layoutcontainer--header {
@@ -2898,44 +3028,4 @@ body.anonymous .cmp-teaser--secure .cmp-teaser__action-container {
 
 .cmp-form-button:hover {
   cursor: pointer;
-}
-
-#home-catalog-container {
-  max-width: var(--prime-container-max-width-desktop);
-  width: var(--prime-container-width);
-  margin: 0 auto;
-}
-#alm-footer .alm-footer-container {
-  max-width: var(--prime-container-max-width-desktop);
-  width: var(--prime-container-width);
-}
-@media screen and (max-width: 1024px) {
-  #home-catalog-container {
-    max-width: var(--prime-container-max-width-tablet);
-    width: var(--prime-container-width);
-    padding: 0;
-  }
-  #alm-footer .alm-footer-container {
-    max-width: var(--prime-container-max-width-tablet);
-    width: var(--prime-container-width);
-    padding: 0;
-  }
-}
-@media screen and (max-width: 414px) {
-  #home-catalog-container {
-    width: 100%;
-    max-width: 100%;
-  }
-  #alm-footer .alm-footer-container {
-    max-width: var(--prime-container-max-width-tablet);
-    width: var(--prime-container-width);
-    padding: 0;
-  }
-  .news-section {
-    padding: 20px;
-  }
-  .news-section .news-section-newsItem {
-    width: 100%;
-    margin: 5px 0;
-  }
 }

@@ -13,7 +13,7 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="LRNG Site Default"
                     sling:resourceType="wcm/core/components/policy/policy"
-                    components="[/libs/aem-learn-components/components/container,group:AemLearnComponents - Content,/apps/aem-learn-components/components/form/container,group:AemLearnComponents - Structure]"
+                    components="[/libs/aem-learn-components/components/container,group:AemLearnComponents - Content,group:AemLearnComponents - Form,group:AemLearnComponents - Structure]"
                     policyResourceType="aem-learn-components/components/container">
                     <cq:authoring jcr:primaryType="nt:unstructured">
                         <assetToComponentMapping jcr:primaryType="nt:unstructured">
@@ -47,7 +47,7 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Page Content"
                     sling:resourceType="wcm/core/components/policy/policy"
-                    components="[group:AemLearnComponents - Content,group:AemLearnComponents - Structure,/apps/aem-learn-components/components/form/container]">
+                    components="[group:AemLearnComponents - Content,group:AemLearnComponents - Structure,group:AemLearnComponents - Form]">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                     <cq:authoring jcr:primaryType="nt:unstructured">
                         <assetToComponentMapping jcr:primaryType="nt:unstructured">

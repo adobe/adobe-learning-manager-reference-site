@@ -92,6 +92,7 @@
 
 #alm-header .alm-header-cont .alm-header-icons {
   display: flex !important;
+  position: relative;
 }
 
 .alm-header-icons .notification__container {
@@ -207,6 +208,8 @@
   font: normal normal normal 14px/35px Source Sans Pro;
   box-shadow: 0px 3px 9px #00000029;
   color: #000000;
+  right: 0;
+  top: 100%;
 }
 
 .alm-header-profile-options ul {
@@ -244,13 +247,13 @@
     display: flex;
   }
 
-  .alm-header-profile-options {
+  /* .alm-header-profile-options {
     right: calc((100% - var(--alm-tablet-width)) / 2);
-  }
+  } */
 }
 
 @media screen and (min-width: 1366px) {
-  .alm-header-profile-options {
+  /* .alm-header-profile-options {
     right: calc((100% - var(--alm-desktop-width)) / 2);
-  }
+  } */
 }
