@@ -25,7 +25,7 @@
 .cmp-teaser .cmp-teaser__content {
   float: left;
   position: absolute;
-  bottom: 50px;
+  bottom: 15%;
   color: white;
   left: 40px;
 }
