@@ -22,14 +22,14 @@
             }
         });
 
-        $(VERT_NAV_CLOSE_BUTTON_SEL + "," + HEADER_SHOW_MENU_SEL).on("click", function(e) {
+        $(VERT_NAV_CLOSE_BUTTON_SEL + "," + HEADER_SHOW_MENU_SEL).on("click", function (e) {
             $(VERT_NAV_CONTAINER_SEL).toggleClass('open');
         });
 
-        $(HEADER_PROFILE_OPTIONS_SEL).on("click", function(e) {
-            $(HEADER_PROFILE_OPTIONS_CONT_SEL).toggleClass('open');
+        $(HEADER_PROFILE_OPTIONS_SEL).on("click", function (e) {
+            $(HEADER_PROFILE_OPTIONS_CONT_SEL).toggle();
         });
-        
+
     });
 
 })(document, window, jQuery);
