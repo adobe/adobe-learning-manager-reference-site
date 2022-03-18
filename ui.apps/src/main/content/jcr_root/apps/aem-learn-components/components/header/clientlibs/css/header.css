@@ -1,4 +1,13 @@
 .alm-header-vertical-nav {
+  /* display: none;
+    position: fixed;
+    top: 0;
+    height: 100%;
+    z-index: 199;
+    background: #232323 0% 0% no-repeat padding-box;
+    box-shadow: 3px 3px 6px #00000029;
+    font: normal normal normal 20px/25px Source Sans Pro;
+    width: 320px; */
   box-shadow: 3px 3px 6px #00000029;
   -webkit-transition: all ease-in-out 0.2s;
   -moz-transition: all ease-in-out 0.2s;

@@ -1,3 +1,9 @@
+:root {
+  --alm-desktop-width: 1180px;
+  --alm-tablet-width: 930px;
+  --alm-mobile-width: 100%;
+}
+
 .cmp-title--right {
   align-content: center;
 }
@@ -260,6 +266,7 @@
 
 #learning-parent-container .carousel {
   height: 279px;
+  margin-bottom: 20px;
 }
 
 #learning-parent-container .cmp-carousel__indicators {
@@ -274,7 +281,13 @@
   height: 200px;
 }
 
-#tmplt-carousel .carousel {
+#tmplt-carousel .cmp-teaser__image img
+{
+  margin-top: 0;
+}
+
+#tmplt-carousel .carousel
+{
   height: 200px;
 }
 
@@ -331,7 +344,12 @@
   font-size: 11px;
 }
 
-/* CSS for Header */
+
+
+#tmplt-carousel
+{
+  margin-bottom: 10px;
+}
 
 @media screen and (min-width: 1024px) {
   #learning-parent-container,
@@ -340,21 +358,6 @@
     margin: 0 auto;
     margin-top: 30px;
   }
-
-  /* #alm-header .alm-header-cont {
-    width: 930px;
-    margin: 0 auto;
-    justify-content: space-between;
-  }
-
-  #alm-header .alm-header-cont .alm-header-menu {
-    display: none;
-  }
-
-  #alm-header .alm-header-cont .alm-header-navigation,
-  #alm-header .alm-header-cont .alm-header-icons {
-    display: flex;
-  } */
 
   #learning-button-cont {
     margin-bottom: 40px;
@@ -427,14 +430,10 @@
     margin-top: 60px;
   }
 
-  /* #alm-header .alm-header-cont {
-    width: 1180px;
-    margin: 0 auto;
-  } */
-
-  #tmplt-carousel .cmp-teaser__image,
-  #tmplt-carousel .cmp-teaser__image .cmp-image,
-  #tmplt-carousel .cmp-teaser__image .cmp-image .cmp-image__image {
+  #tmplt-carousel .cmp-teaser__image, 
+  #tmplt-carousel .cmp-teaser__image .cmp-image, 
+  #tmplt-carousel .cmp-teaser__image .cmp-image .cmp-image__image 
+  {
     height: 500px;
   }
 

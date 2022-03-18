@@ -27,7 +27,7 @@
     </div>
 </nav>
 
-<div class="alm-header-cont">
+<div class="alm-header-cont" data-path="${resource.path}">
 
     <!-- Block for mobile immersive bar -->
     <img class="alm-header-menu" src="/content/dam/aem-learn-components/site/ShowMenu.svg" ></img>
@@ -50,6 +50,13 @@
         <img class="alm-header-profile" src="" ></img>
         <img class="alm-header-down" src="/content/dam/aem-learn-components/site/ChevronUp.svg" ></img>
     </div>
+</div>
+
+<div class="alm-header-profile-options">
+    <ul>
+        <li><span><a href="/content/aem-learn-components/language-masters/en/profile.html">Your Profile</a></span></li>
+        <li><span>Log Out</span></li>
+    </ul>
 </div>
 
 <sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html" data-sly-call="${clientlib.all @ categories='aem-learn-components.site,apps.alm.components.header'}"/>
