@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.aemlearncomponents.core.services.CPTokenService;
 import com.aemlearncomponents.core.services.GlobalConfigurationService;
+import com.aemlearncomponents.core.utils.Constants;
 import com.day.cq.wcm.api.Page;
 import com.google.gson.JsonObject;
 
@@ -57,7 +58,7 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
 
 			JsonObject jsonConfigs = configService.getAdminConfigs(currentPage);
 
-			String primeUrl = jsonConfigs.get("primeUrl").getAsString(),
+			String almURL = jsonConfigs.get(Constants.Config.ALM_BASE_URL).getAsString(),
 					clientId = jsonConfigs.get("clientId").getAsString(),
 					clientSecret = jsonConfigs.get("clientSecret").getAsString();
 
@@ -66,7 +67,7 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
 			if(AUTHOR_MODE.equals(mode))
 			{
 				String authorRefreshToken = jsonConfigs.get("authorRefreshToken").getAsString();
-				Pair<String, Integer> accessTokenResp = tokenService.getAccessToken(primeUrl, clientId, clientSecret, authorRefreshToken);
+				Pair<String, Integer> accessTokenResp = tokenService.getAccessToken(almURL, clientId, clientSecret, authorRefreshToken);
 				if (accessTokenResp == null)
 				{
 					LOGGER.error("CPPrime:: Exception in fetching access_token");
@@ -79,7 +80,7 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
 			{
 				String code = request.getParameter("code");
 
-				Pair<String, Integer> refreshTokenResp = tokenService.getRefreshToken(primeUrl, clientId, clientSecret, code);
+				Pair<String, Integer> refreshTokenResp = tokenService.getRefreshToken(almURL, clientId, clientSecret, code);
 				if (refreshTokenResp == null)
 				{
 					LOGGER.error("CPPrime:: Exception in fetching refresh_token");
@@ -87,7 +88,7 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
 					return;
 				}
 
-				Pair<String, Integer> accessTokenResp = tokenService.getAccessToken(primeUrl, clientId, clientSecret, refreshTokenResp.getLeft());
+				Pair<String, Integer> accessTokenResp = tokenService.getAccessToken(almURL, clientId, clientSecret, refreshTokenResp.getLeft());
 				if (accessTokenResp == null)
 				{
 					LOGGER.error("CPPrime:: Exception in fetching access_token");

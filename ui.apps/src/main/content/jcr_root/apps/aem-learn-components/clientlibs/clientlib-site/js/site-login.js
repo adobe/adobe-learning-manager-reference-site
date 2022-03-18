@@ -6,7 +6,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   const ACCESS_TOKEN_COOKIE_NAME = "alm-cp-token";
   const CP_OAUTH_URL =
-    "{primeUrl}/oauth/o/authorize?account={accountId}&client_id={clientId}&redirect_uri={redirectUri}&state={state}&scope={scope}&response_type={responseType}";
+    "{almBaseURL}/oauth/o/authorize?account={accountId}&client_id={clientId}&redirect_uri={redirectUri}&state={state}&scope={scope}&response_type={responseType}";
   const CP_OAUTH_SCOPE = "learner:read,learner:write";
   const CP_OAUTH_STATE = "cpState";
   const CP_OAUTH_RESPONSE_TYPE = "CODE";
@@ -57,10 +57,10 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   }
 
   function getCpOauthUrl() {
-    const primeUrl = window.ALM.ALMConfig.primeUrl;
+    const almBaseURL = window.ALM.ALMConfig.almBaseURL;
     const clientId = window.ALM.ALMConfig.clientId;
     const accountId = window.ALM.ALMConfig.accountId;
-    return CP_OAUTH_URL.replace("{primeUrl}", primeUrl)
+    return CP_OAUTH_URL.replace("{almBaseURL}", almBaseURL)
       .replace("{accountId}", accountId)
       .replace("{clientId}", clientId)
       .replace("{redirectUri}", window.location.href)

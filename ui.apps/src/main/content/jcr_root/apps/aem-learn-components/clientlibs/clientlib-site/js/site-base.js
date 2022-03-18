@@ -53,16 +53,14 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   const navigateToCatalogPage = (catalogIds) => {
     let { catalogPath } = getALMConfig();
-    let catalogUrl = new URL(catalogPath);
-    catalogUrl.searchParams.append("catalogs", catalogIds);
-    window.location = catalogUrl.href;
+    let catalogUrl = catalogPath + "?catalogs=" + catalogIds;
+    window.location = catalogUrl;
   };
 
   const navigateToBoardsPage = (skillNames) => {
     let {communityBoardsPath} = getALMConfig();
-    let boardsUrl = new URL(communityBoardsPath);
-    boardsUrl.searchParams.append("skill", skillNames);
-    window.location = boardsUrl.href;
+    let boardsUrl = communityBoardsPath + "?skill=" + skillNames;
+    window.location = boardsUrl;
   }
 
   const getUrl = (urlStr, params) => {

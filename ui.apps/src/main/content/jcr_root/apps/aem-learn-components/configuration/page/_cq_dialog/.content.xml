@@ -32,24 +32,24 @@
                             <sites
                                 jcr:primaryType="nt:unstructured"
                                 text="AEM+Sites"
-                                value="sites"/>
+                                value="aem-sites"/>
                             <es
                                 jcr:primaryType="nt:unstructured"
                                 text="AEM+ES+Prime"
-                                value="es"/>
+                                value="aem-es"/>
                             <magento
                                 jcr:primaryType="nt:unstructured"
                                 text="AEM+Magento+Prime"
-                                value="magento"/>
+                                value="aem-magento"/>
                         </items>
                     </usage>
 
-                    <primeUrl 
+                    <almBaseURL 
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="Prime Url"
-                        fieldDescription="Prime Url."
-                        name="./primeUrl"
+                        fieldLabel="Prime ALM URL"
+                        fieldDescription="Prime ALM URL"
+                        name="./almBaseURL"
                         cq:showOnCreate="{Boolean}true"/>
 
                     <accountId 
@@ -84,36 +84,12 @@
                         name="./primeRegisterUrl"
                         cq:showOnCreate="{Boolean}true"/>
 
-                    <esBase 
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="ES Base URL"
-                        fieldDescription="ES Base URL"
-                        name="./esBaseUrl"
-                        cq:showOnCreate="{Boolean}true"/>
-                    
-                    <refreshToken 
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="Admin Refresh Token"
-                        fieldDescription="Admin Refresh Token"
-                        name="./refreshToken"
-                        cq:showOnCreate="{Boolean}true"/>
-
                     <authorRefreshToken 
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                         fieldLabel="Author Refresh Token"
                         fieldDescription="Author Refresh Token"
                         name="./authorRefreshToken"
-                        cq:showOnCreate="{Boolean}true"/>
-
-                    <almBaseURL 
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="Prime ALM URL"
-                        fieldDescription="Prime ALM URL"
-                        name="./almBaseURL"
                         cq:showOnCreate="{Boolean}true"/>
 
                     <primeJsonUrl 
@@ -141,54 +117,6 @@
                         name="./primeCdnBaseUrl"
                         cq:showOnCreate="{Boolean}true"/>
 
-                    <instancePath 
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="Instance Path"
-                        fieldDescription="Instance Path"
-                        name="./instancePath"
-                        cq:showOnCreate="{Boolean}true"/>
-
-                    <catalogPath 
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="Catalog Path"
-                        fieldDescription="Catalog Path"
-                        name="./catalogPath"
-                        cq:showOnCreate="{Boolean}true"/>
-
-                    <trainingOverviewPath 
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="Training Overview Path"
-                        fieldDescription="Training Overview Path"
-                        name="./trainingOverviewPath"
-                        cq:showOnCreate="{Boolean}true"/>
-
-                    <communityPath 
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="Community Path"
-                        fieldDescription="CommunityPath"
-                        name="./communityPath"
-                        cq:showOnCreate="{Boolean}true"/>
-
-                    <communityBoardsPath 
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="Community Boards Path"
-                        fieldDescription="Community Boards Path"
-                        name="./communityBoardsPath"
-                        cq:showOnCreate="{Boolean}true"/>
-
-                    <communityBoardDetailsPath 
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="Community Board Details Path"
-                        fieldDescription="Community Board Details Path"
-                        name="./communityBoardDetailsPath"
-                        cq:showOnCreate="{Boolean}true"/>
-
                     <locale
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/select"
@@ -212,6 +140,28 @@
                         text="Site Map"
                         value="siteMap"
                         cq:showOnCreate="{Boolean}true"/>
+
+                    <refreshToken 
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Admin Refresh Token"
+                        fieldDescription="Admin Refresh Token"
+                        name="./refreshToken"
+                        granite:rel="aem-magento"
+                        cq:showOnCreate="{Boolean}true"/>
+
+                    <esBase 
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="ES Base URL"
+                        fieldDescription="ES Base URL"
+                        name="./esBaseUrl"
+                        granite:rel="aem-es"
+                        cq:showOnCreate="{Boolean}true"/>
+
+
+
+
 
                     <higherOrderEnroll
                         jcr:primaryType="nt:unstructured"
@@ -253,7 +203,6 @@
                         name="./theme.secondaryColor"
                         value="rgb(0,145,255)"
                         cq:showOnCreate="{Boolean}true"/>
-
 
 
 

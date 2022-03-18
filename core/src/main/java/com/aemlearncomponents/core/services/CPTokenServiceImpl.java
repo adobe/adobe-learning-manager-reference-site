@@ -30,15 +30,15 @@ public class CPTokenServiceImpl implements CPTokenService {
 	private final static Logger LOGGER = LoggerFactory.getLogger(CPTokenServiceImpl.class);
 
 	@Override
-	public Pair<String, Integer> getRefreshToken(String primeUrl, String clientId, String clientSecret, String code)
+	public Pair<String, Integer> getRefreshToken(String almURL, String clientId, String clientSecret, String code)
 	{
-		if (StringUtils.isAnyEmpty(primeUrl, clientId, clientSecret, code))
+		if (StringUtils.isAnyEmpty(almURL, clientId, clientSecret, code))
 		{
-			LOGGER.error("CPPrime FetchRefreshToken:: Errors in admin configuration. PrimeUrl {}, ClientId {}, ClientSecret {}, code {}", primeUrl, clientId, clientSecret);
+			LOGGER.error("CPPrime FetchRefreshToken:: Errors in admin configuration. almURL {}, ClientId {}, ClientSecret {}, code {}", almURL, clientId, clientSecret);
 			return null;
 		}
 
-		String url = primeUrl + "/oauth/token";
+		String url = almURL + "/oauth/token";
 
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("code", code));
@@ -62,15 +62,15 @@ public class CPTokenServiceImpl implements CPTokenService {
 	}
 
 	@Override
-	public Pair<String, Integer> getAccessToken(String primeUrl, String clientId, String clientSecret, String refreshToken)
+	public Pair<String, Integer> getAccessToken(String almURL, String clientId, String clientSecret, String refreshToken)
 	{
-		if (StringUtils.isAnyEmpty(primeUrl, clientId, clientSecret, refreshToken))
+		if (StringUtils.isAnyEmpty(almURL, clientId, clientSecret, refreshToken))
 		{
-			LOGGER.error("CPPrime FetchAccessToken:: Errors in admin configuration. PrimeUrl {}, ClientId {}, ClientSecret {}, RefreshToken {}", primeUrl, clientId, clientSecret, refreshToken);
+			LOGGER.error("CPPrime FetchAccessToken:: Errors in admin configuration. almURL {}, ClientId {}, ClientSecret {}, RefreshToken {}", almURL, clientId, clientSecret, refreshToken);
 			return null;
 		}
 
-		String url = primeUrl + "/oauth/token/refresh";
+		String url = almURL + "/oauth/token/refresh";
 
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("refresh_token", refreshToken));

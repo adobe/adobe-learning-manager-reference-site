@@ -20,7 +20,7 @@ import com.aemlearncomponents.core.utils.Constants;
 import com.day.cq.wcm.api.Page;
 import com.google.gson.JsonObject;
 
-@Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
+@Model(adaptables = {SlingHttpServletRequest.class, Resource.class}, cache=true)
 public class GlobalConfigurationModel {
 
 	private static final Logger LOG = LoggerFactory.getLogger(GlobalConfigurationModel.class);
@@ -51,21 +51,9 @@ public class GlobalConfigurationModel {
 		if (Constants.Config.SITES_USAGE.equals(usageType) && isAuthorMode())
 		{
 			jsonConfigs.addProperty("authorMode", true);
-//			String authorRefreshToken = jsonConfigs.get(Constants.Config.SITES_AUTHOR_REFRESH_TOKEN_NAME).getAsString(),
-//					clientId = jsonConfigs.get(Constants.Config.CLIENT_ID).getAsString(),
-//					clientSecret = jsonConfigs.get(Constants.Config.CLIENT_SECRET).getAsString(),
-//					primeUrl = jsonConfigs.get(Constants.Config.PRIME_URL).getAsString(),
-//			if (StringUtils.isNotBlank(authorRefreshToken))
-//			{
-//				
-//			}
 		}
+		addNavigationPaths(jsonConfigs);
 		configs = jsonConfigs.toString();
-		//		PageManager pageManager = request.getResourceResolver().adaptTo(PageManager.class);
-		//		currentPagePath = Optional.ofNullable(pageManager)
-		//				.map(pm -> pm.getContainingPage(request.getResource()))
-		//				.map(Page::getPath).orElse("");
-
 	}
 
 	public String getConfig() {
@@ -75,6 +63,13 @@ public class GlobalConfigurationModel {
 	private boolean isAuthorMode()
 	{
 		return (wcmMode != null && !wcmMode.isDisabled());
+	}
+	
+	private void addNavigationPaths(JsonObject jsonConfigs)
+	{
+		String parentPagePath = (currentPage.getParent() != null) ? currentPage.getParent().getPath() : "";
+		String navigationPath = parentPagePath + "/";
+		Constants.NAVIGATION_PATHS.forEach((key, value) -> jsonConfigs.addProperty(key, navigationPath + value));
 	}
 
 }

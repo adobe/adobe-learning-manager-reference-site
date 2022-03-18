@@ -28,6 +28,16 @@
                         jcr:createdBy="admin"
                         jcr:lastModified="{Date}2022-03-07T17:05:44.833+05:30"
                         jcr:lastModifiedBy="admin"
+                        skillsFilter="true"
+                        showCatalogFilter="true"
+                        durationFilter="true"
+                        showFilters="true"
+                        showSearch="true"
+                        priceFilter="false"
+                        formatFilter="true"
+                        statusFilter="false"
+                        skillsLevelFilter="true"
+                        typeFilter="true"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="aem-learn-components/components/catalog"/>
                 </container>
