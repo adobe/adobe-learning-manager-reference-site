@@ -9,7 +9,7 @@ public class Constants {
 
 	public final class Config {
 		public static final String USAGE_TYPE_NAME = "usageType";
-		public static final String SITES_USAGE = "sites";
+		public static final String SITES_USAGE = "aem-sites";
 		public static final String SITES_AUTHOR_REFRESH_TOKEN_NAME = "authorRefreshToken";
 		public static final String ALM_BASE_URL = "almBaseURL";
 		public static final String CLIENT_ID = "clientId";

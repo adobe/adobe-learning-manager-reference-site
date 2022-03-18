@@ -293,7 +293,7 @@
   position: absolute;
   bottom: 0;
   right: 50px;
-  z-index: 10;
+  z-index: 2;
 }
 
 #tmplt-carousel .cmp-carousel__indicators {

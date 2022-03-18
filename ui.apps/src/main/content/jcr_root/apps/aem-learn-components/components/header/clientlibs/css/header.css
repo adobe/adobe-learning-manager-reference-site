@@ -185,6 +185,16 @@
   #alm-header .alm-header-cont .alm-header-navigation {
     display: none;
   }
+
+  #alm-header .alm-header-cont .alm-header-icons .alm-header-profile
+  {
+    display: none;
+  }
+
+  #alm-header .alm-header-cont .alm-header-icons .alm-header-down
+  {
+    display: none;
+  }
 }
 
 .alm-header-profile-options {
