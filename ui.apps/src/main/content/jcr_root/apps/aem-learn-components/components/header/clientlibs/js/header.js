@@ -9,6 +9,7 @@
     const VERT_NAV_PROFILE_NAME_SEL = ".vert-nav-profile-name";
 
     const VERT_NAV_CONTAINER_SEL = ".alm-header-vertical-nav";
+    const VERT_NAV_PROFILE_PIC_SEL = ".vert-nav-profile-image";
     const HEADER_PROFILE_OPTIONS_CONT_SEL = ".alm-header-profile-options";
 
     $(document).ready(function () {
@@ -17,6 +18,8 @@
                 const userAttrs = JSON.parse(user).data.attributes;
                 $(HEADER_PROFILE_PIC_SEL).attr("src", userAttrs.avatarUrl);
                 $(VERT_NAV_PROFILE_NAME_SEL).text(userAttrs.name);
+
+                $(VERT_NAV_PROFILE_PIC_SEL).attr("src", userAttrs.avatarUrl);
             } catch (e) {
                 console.error("Unable to fetch user avatar.");
             }
