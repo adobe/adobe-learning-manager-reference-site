@@ -180,7 +180,7 @@
   padding-left: 30px;
   padding-top: 30px; */
   font-size: 16px;
-  padding:30px;
+  padding: 30px;
   width: 32%;
 }
 
@@ -191,7 +191,7 @@
   -webkit-box-orient: vertical;
   display: -webkit-box;
   overflow: hidden;
-  padding:0;
+  padding: 0;
   margin: 0 0 10px 0;
 }
 
@@ -281,13 +281,11 @@
   height: 200px;
 }
 
-#tmplt-carousel .cmp-teaser__image img
-{
+#tmplt-carousel .cmp-teaser__image img {
   margin-top: 0;
 }
 
-#tmplt-carousel .carousel
-{
+#tmplt-carousel .carousel {
   height: 200px;
 }
 
@@ -344,10 +342,7 @@
   font-size: 11px;
 }
 
-
-
-#tmplt-carousel
-{
+#tmplt-carousel {
   margin-bottom: 10px;
 }
 
@@ -405,7 +400,7 @@
     display: flex;
     flex-direction: column;
     margin-top: 20px;
-    width: 930px;
+    /* width: 930px; */
     margin-left: auto;
     margin-right: auto;
   }
@@ -430,10 +425,9 @@
     margin-top: 60px;
   }
 
-  #tmplt-carousel .cmp-teaser__image, 
-  #tmplt-carousel .cmp-teaser__image .cmp-image, 
-  #tmplt-carousel .cmp-teaser__image .cmp-image .cmp-image__image 
-  {
+  #tmplt-carousel .cmp-teaser__image,
+  #tmplt-carousel .cmp-teaser__image .cmp-image,
+  #tmplt-carousel .cmp-teaser__image .cmp-image .cmp-image__image {
     height: 500px;
   }
 
@@ -446,7 +440,7 @@
   }
 
   #alm-footer .alm-footer-container {
-    width: 1180px;
+    /* width: 1180px; */
   }
 }
 /* 
@@ -2911,20 +2905,34 @@ body.anonymous .cmp-teaser--secure .cmp-teaser__action-container {
   width: var(--prime-container-width);
   margin: 0 auto;
 }
+#alm-footer .alm-footer-container {
+  max-width: var(--prime-container-max-width-desktop);
+  width: var(--prime-container-width);
+}
 @media screen and (max-width: 1024px) {
-  #home-catalog-container  {
+  #home-catalog-container {
+    max-width: var(--prime-container-max-width-tablet);
+    width: var(--prime-container-width);
+    padding: 0;
+  }
+  #alm-footer .alm-footer-container {
     max-width: var(--prime-container-max-width-tablet);
     width: var(--prime-container-width);
     padding: 0;
   }
 }
 @media screen and (max-width: 414px) {
-  #home-catalog-container  {
+  #home-catalog-container {
     width: 100%;
     max-width: 100%;
   }
-  .news-section{
-    padding:20px;
+  #alm-footer .alm-footer-container {
+    max-width: var(--prime-container-max-width-tablet);
+    width: var(--prime-container-width);
+    padding: 0;
+  }
+  .news-section {
+    padding: 20px;
   }
   .news-section .news-section-newsItem {
     width: 100%;

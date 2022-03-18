@@ -225,16 +225,6 @@
 }
 
 @media screen and (min-width: 1024px) {
-  #alm-header .alm-header-cont {
-    width: var(--alm-tablet-width);
-    margin: 0 auto;
-    justify-content: space-between;
-  }
-
-  #alm-header .alm-header-cont .alm-header-menu {
-    display: none;
-  }
-
   .alm-header-cont .alm-header-icons,
   .alm-header-cont .alm-header-navigation,
   .alm-header-cont .alm-header-profile,
@@ -248,11 +238,6 @@
 }
 
 @media screen and (min-width: 1366px) {
-  #alm-header .alm-header-cont {
-    width: var(--alm-desktop-width);
-    margin: 0 auto;
-  }
-
   .alm-header-profile-options {
     right: calc((100% - var(--alm-desktop-width)) / 2);
   }
