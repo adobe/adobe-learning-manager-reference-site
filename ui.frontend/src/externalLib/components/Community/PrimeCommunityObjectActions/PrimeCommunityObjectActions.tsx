@@ -4,10 +4,11 @@ import {
   SOCIAL_DISLIKE_SVG,
   SOCIAL_DISLIKE_FILLED_SVG
 } from "../../../utils/inline_svg"
+import { useIntl } from "react-intl";
 import styles from "./PrimeCommunityObjectActions.module.css";
 
 const PrimeCommunityObjectActions  = (props: any) => {
-
+    const { formatMessage } = useIntl();
     const viewButtonClickHandler = () => {
         if (typeof props.viewButtonClickHandler === 'function') {
             props.viewButtonClickHandler();
@@ -55,6 +56,10 @@ const PrimeCommunityObjectActions  = (props: any) => {
                     SOCIAL_DISLIKE_FILLED_SVG() : SOCIAL_DISLIKE_SVG()
                 } <span className={styles.primeObjectDownVoteCount}>{props.downVoteCount}</span>
             </button>
+            {props.object && props.object.id === props.answerCommentId &&
+                <div className={styles.primeObjectRightAnswer}>
+                    {formatMessage({id: "prime.community.comment.rightAnswer", defaultMessage: "RIGHT ANSWER",})}
+                </div>}
         </div>
         </>
     );

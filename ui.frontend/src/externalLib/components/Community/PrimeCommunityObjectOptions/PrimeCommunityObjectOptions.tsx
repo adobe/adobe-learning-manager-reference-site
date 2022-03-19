@@ -18,8 +18,6 @@ const PrimeCommunityObjectOptions = (props: any) => {
 
   useEffect(() => {
     const handleClickOutside = (event: any) => {
-      console.log(props.object.createdBy.id);
-
       //console.log("userid=" + user.id);   //to-do user_id is empty
       if (ref.current && !ref.current.contains(event.target)) {
         props.toggleOptions && props.toggleOptions();
@@ -49,6 +47,12 @@ const PrimeCommunityObjectOptions = (props: any) => {
     }
   };
 
+  const updateRightAnswerHandler = (value: any) => {
+    if (typeof props.updateRightAnswerHandler === "function") {
+      props.updateRightAnswerHandler(value);
+    }
+  };
+
   return (
     <>
       <div ref={ref} className={styles.primeObjectOptionsList}>
@@ -58,6 +62,27 @@ const PrimeCommunityObjectOptions = (props: any) => {
               formatMessage({
                 id: "prime.community.board.edit",
                 defaultMessage: "Edit",
+              })
+            }
+          </div> 
+        }
+        {props.parentPost && props.parentPost.createdBy.id === user.id && props.parentPost.postingType === "QUESTION" && props.object.id !== props.answerCommentId &&
+          <div className={styles.primeObjectRegularOption} onClick={() => {updateRightAnswerHandler(true)}}>
+            {
+              formatMessage({
+                id: "prime.community.board.markAsRightAnswer",
+                defaultMessage: "Mark as Right answer",
+              })
+            }
+          </div> 
+        }
+
+        {props.parentPost && props.parentPost.createdBy.id === user.id && props.parentPost.postingType === "QUESTION" && props.object.id === props.answerCommentId &&
+          <div className={styles.primeObjectRegularOption} onClick={() => {updateRightAnswerHandler(false)}}>
+            {
+              formatMessage({
+                id: "prime.community.board.unmarkAsRightAnswer",
+                defaultMessage: "Unmark as Right answer",
               })
             }
           </div> 

@@ -16,7 +16,6 @@ const PrimeDropdown  = (props: any) => {
     useEffect(() => {
         if(isExpandDropdown) {
             const handleClickOutside = (event: any) => {
-                console.log(event.target);
                 if (ref.current && !ref.current.contains(event.target)) {
                     toggleDropdownExpand && toggleDropdownExpand();
                 }

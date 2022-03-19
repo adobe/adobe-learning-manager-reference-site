@@ -78,6 +78,33 @@ export const useComments = () => {
     dispatch(updateComment(data));
   },[dispatch]);
 
+  const markCommentAsRightAnswer = useCallback(async (commentId: any, value: any) => {
+    const baseApiUrl = getALMConfig().primeApiURL;
+    const body = {
+      data: {
+        type: "comment",
+        id: commentId,
+        attributes: {
+          state: "ACTIVE",
+          isCorrectAnswer: value,
+        },
+      },
+    };
+    const headers = { "content-type": "application/json" };
+    const result = await RestAdapter.ajax({
+      url: `${baseApiUrl}/comments/${commentId}`,
+      method: "PATCH",
+      body: JSON.stringify(body),
+      headers: headers,
+    });
+
+    const parsedResponse = JsonApiParse(result);
+    const data = {
+      item: parsedResponse.comment,
+    };
+    dispatch(updateComment(data));
+  },[dispatch]);
+
   const loadMoreComments = useCallback(async () => {
     if (!next) return;
     const parsedResponse = await APIServiceInstance.loadMore(next);
@@ -93,6 +120,7 @@ export const useComments = () => {
     // item,
     items,
     patchComment,
+    markCommentAsRightAnswer,
     fetchComments,
     loadMoreComments,
     // fetchBoard

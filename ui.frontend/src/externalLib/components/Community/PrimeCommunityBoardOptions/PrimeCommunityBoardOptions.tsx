@@ -14,7 +14,6 @@ const PrimeCommunityBoardOptions = (props: any) => {
 
   useEffect(() => {
     const handleClickOutside = (event: any) => {
-      console.log(event.target);
       if (ref.current && !ref.current.contains(event.target)) {
         props.boardOptionsHandler && props.boardOptionsHandler();
       }

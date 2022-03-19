@@ -4,8 +4,7 @@ import styles from "./PrimeCommunityReplies.module.css";
 
 const PrimeCommunityReplies = (props: any) => {
     const commentId = props.object.id;
-    console.log(commentId)
-    const { items, fetchReplies, patchReply } = useReplies(commentId);
+    const { items, patchReply } = useReplies(commentId);
 
     const deleteReplyHandler = async() => {
         if(typeof props.deleteReplyHandler === 'function') {
@@ -16,7 +15,6 @@ const PrimeCommunityReplies = (props: any) => {
     const updateReply = async (replyId: any, value: any) => {
         try {
           await patchReply(replyId, value); 
-          await fetchReplies(replyId);  //to-do state was not updating second time in above line...need to check why   
         } catch(exception) {
           console.log("error while updating reply");
         }
