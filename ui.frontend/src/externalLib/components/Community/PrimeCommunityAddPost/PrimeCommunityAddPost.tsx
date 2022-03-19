@@ -16,13 +16,17 @@ const PrimeCommunityAddPost = (props: any) => {
     const savePostHandler = async(input: any, postingType: any, resource: any) => {
         try {
             await addPost(boardId, input, postingType, resource);
-            showConfirmationDialog();
+            //below setTimeout is needed to fix spetrum dialog breaking scroll issue
             setTimeout(() => {
-                //auto close alert
-                if(showSuccessConfirmation) {
-                    hideConfirmationDialog();
-                }
-            }, hideModalTimeInMillis)
+                showConfirmationDialog();
+                setTimeout(() => {
+                    //auto close alert
+                    if(showSuccessConfirmation) {
+                        hideConfirmationDialog();
+                    }
+                }, hideModalTimeInMillis)
+            }, 1000);
+
         } catch(exception) {
             console.log("Error in creating Post")
         }

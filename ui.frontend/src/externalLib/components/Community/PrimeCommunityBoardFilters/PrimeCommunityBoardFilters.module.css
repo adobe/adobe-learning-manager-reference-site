@@ -3,15 +3,17 @@
 }
 
 .primeBoardFilters {
-    margin-top: 50px;
+    margin-top: 55px;
     border-radius: 2px;
     opacity: 1;
-    max-width: 716px;
+    width: 400px;
     display:flex;
 }
 
 @media (max-width: 414px) {
     .primeBoardFilters {
+        margin-top: 25px;
         padding: 0px;
+        width: 100%;
     }
 }

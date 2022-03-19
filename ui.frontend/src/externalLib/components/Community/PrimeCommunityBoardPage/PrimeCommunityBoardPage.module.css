@@ -2,21 +2,21 @@
 .primeBoardParent {
     display: flex;
     justify-content: center;
-    margin-bottom:20px;
+    margin-bottom: 15px;
 }
 
 .primeCommunitySearchContainer {
     display: flex;
-    width: 100%;
-    max-width: 716px;
     margin-bottom:20px;
-    margin-top: 15px;
+    margin-top: 25px;
     margin-left: auto;
+    justify-content: center;
 }
 
 @media (max-width: 414px) {
     .primeCommunitySearchContainer {
-        padding: 5px 25px;
+        padding: 5px 20px;
+        width: 100%
     }
 }
 
@@ -33,7 +33,7 @@
     width: 716px;
     margin: auto;
     margin-bottom: 25px;
-    padding-left: 25px;
+    padding-left: 20px;
 }
 
 .primeCommunitySearchClear {
@@ -44,4 +44,17 @@
 
 .primeCommunitySearchClear:hover {
     cursor: pointer;
+}
+
+.primeCommunitySearchWrapper {
+    width: 716px;
+    display: flex;
+    justify-content: right;
+}
+  
+@media (max-width: 414px) {
+    .primeCommunitySearchWrapper {
+        width: 100%;
+        height: 40px;
+    }
 }

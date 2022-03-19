@@ -3,6 +3,9 @@
   padding: 10px;
   min-width: 200px;
   font-size: var(--prime-font-size-14);
+  border: none;
+  outline: none;
+  margin-left: 3px;
 }
 
 input:placeholder-shown {
@@ -11,7 +14,7 @@ input:placeholder-shown {
 
 @media (max-width: 414px) {
   .primeCommunitySearchInput {
-    height: 40px;
+    height: 35px;
     padding: 10px;
     width: inherit;
   }
@@ -20,11 +23,42 @@ input:placeholder-shown {
 .primeSearchButton {
   height: 100%;
   width: 35px;
+  background: none;
+  border: none;
+  fill: var(--prime-color-nc3);
+}
+
+.primeSearchButton:hover {
+  cursor: pointer;
 }
 
 @media (max-width: 414px) {
   .primeSearchButton {
     height: 40px;
     width: 40px;
+  }
+}
+
+.primeCommunitySearchWrapper {
+  width: 316px;
+  display: flex;
+  justify-content: right;
+}
+
+.primeCommunitySearchParent {
+  display: flex;
+  border: 1px solid var(--prime-color-nc3);
+  border-radius: 2px;
+  box-shadow: 1px var(--prime-color-nc1);
+}
+
+@media (max-width: 414px) {
+  .primeCommunitySearchWrapper {
+    width: 100%;
+    height: 40px;
+  }
+
+  .primeCommunitySearchParent {
+    width:100%;
   }
 }

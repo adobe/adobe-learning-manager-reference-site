@@ -62,20 +62,22 @@ const PrimeCommunityBoardPage = () => {
       <PrimeCommunityMobileScrollToTop></PrimeCommunityMobileScrollToTop>
 
       <div className={styles.primeCommunitySearchContainer}>
-        {item && (
-          <PrimeCommunitySearch
-            objectId={item.id}
-            type="board"
-            searchCountHandler={(value: any) => searchCountHandler(value)}
-            showLoaderHandler={showLoaderHandler}
-            searchModeHandler={searchModeHandler}
-            resetSearchHandler={resetSearchHandler}
-            placeHolderText={formatMessage({
-              id: "prime.community.searchInBoard.placeholder",
-              defaultMessage: "Search within board",
-            })}
-          ></PrimeCommunitySearch>
-        )}
+        <div className={styles.primeCommunitySearchWrapper}>
+          {item && (
+            <PrimeCommunitySearch
+              objectId={item.id}
+              type="board"
+              searchCountHandler={(value: any) => searchCountHandler(value)}
+              showLoaderHandler={showLoaderHandler}
+              searchModeHandler={searchModeHandler}
+              resetSearchHandler={resetSearchHandler}
+              placeHolderText={formatMessage({
+                id: "prime.community.searchInBoard.placeholder",
+                defaultMessage: "Search within board",
+              })}
+            ></PrimeCommunitySearch>
+          )}
+        </div>
       </div>
       <div className={styles.primeBoardParent}>
         {item && <PrimeCommunityBoard board={item}></PrimeCommunityBoard>}
