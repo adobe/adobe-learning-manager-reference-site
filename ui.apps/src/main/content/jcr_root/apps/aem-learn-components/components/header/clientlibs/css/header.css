@@ -136,6 +136,7 @@
   color: #292929;
   margin: 20px 60px 20px 0px;
   display: inline-block;
+  cursor: pointer;
 }
 
 #alm-header .alm-header-cont .alm-header-icons .alm-header-notification {
@@ -247,13 +248,4 @@
     display: flex;
   }
 
-  /* .alm-header-profile-options {
-    right: calc((100% - var(--alm-tablet-width)) / 2);
-  } */
-}
-
-@media screen and (min-width: 1366px) {
-  /* .alm-header-profile-options {
-    right: calc((100% - var(--alm-desktop-width)) / 2);
-  } */
 }

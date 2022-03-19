@@ -63,6 +63,26 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     window.location = boardsUrl;
   }
 
+  const navigateToHomePage = () => {
+    let {homePath} = getALMConfig();
+    window.location = homePath;
+  }
+
+  const navigateToLearningPage = () => {
+    let {learningPath} = getALMConfig();
+    window.location = learningPath;
+  }
+
+  const navigateToCommunityPage = () => {
+    let {communityPath} = getALMConfig();
+    window.location = communityPath;
+  }
+
+  const navigateToSupportPage = () => {
+    let {supportPath} = getALMConfig();
+    window.location = supportPath;
+  }
+
   const getUrl = (urlStr, params) => {
     for (const param in params) {
       urlStr = `${urlStr}/${param}/${params[param]}`;
@@ -78,4 +98,8 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.navigateToCatalogPage = navigateToCatalogPage;
   window.ALM.navigateToBoardDetailsPage = navigateToBoardDetailsPage;
   window.ALM.navigateToBoardsPage = navigateToBoardsPage;
+  window.ALM.navigateToHomePage = navigateToHomePage;
+  window.ALM.navigateToLearningPage = navigateToLearningPage;
+  window.ALM.navigateToCommunityPage = navigateToCommunityPage;
+  window.ALM.navigateToSupportPage = navigateToSupportPage;
 })(window, document, Granite, jQuery);

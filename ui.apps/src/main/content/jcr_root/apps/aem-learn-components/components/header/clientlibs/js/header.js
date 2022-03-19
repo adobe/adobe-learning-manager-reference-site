@@ -12,6 +12,11 @@
     const VERT_NAV_PROFILE_PIC_SEL = ".vert-nav-profile-image";
     const HEADER_PROFILE_OPTIONS_CONT_SEL = ".alm-header-profile-options";
 
+    const HOME_NAVIGATE_SEL = ".alm-home-navigate";
+    const LEARNING_NAVIGATE_SEL = ".alm-learning-navigate";
+    const COMMUNITY_NAVIGATE_SEL = ".alm-community-navigate";
+    const SUPPORT_NAVIGATE_SEL = ".alm-support-navigate";
+
     $(document).ready(function () {
         window.ALM.getALMUser().then(function (user) {
             try {
@@ -25,11 +30,16 @@
             }
         });
 
-        $(VERT_NAV_CLOSE_BUTTON_SEL + "," + HEADER_SHOW_MENU_SEL).on("click", function (e) {
+        $(HOME_NAVIGATE_SEL).on("click", () => window.ALM.navigateToHomePage());
+        $(LEARNING_NAVIGATE_SEL).on("click", () => window.ALM.navigateToLearningPage());
+        $(COMMUNITY_NAVIGATE_SEL).on("click", () => window.ALM.navigateToCommunityPage());
+        $(SUPPORT_NAVIGATE_SEL).on("click", () => window.ALM.navigateToSupportPage());
+
+        $(VERT_NAV_CLOSE_BUTTON_SEL + "," + HEADER_SHOW_MENU_SEL).on("click", () => {
             $(VERT_NAV_CONTAINER_SEL).toggleClass('open');
         });
 
-        $(HEADER_PROFILE_OPTIONS_SEL).on("click", function (e) {
+        $(HEADER_PROFILE_OPTIONS_SEL).on("click", () => {
             $(HEADER_PROFILE_OPTIONS_CONT_SEL).toggle();
         });
 

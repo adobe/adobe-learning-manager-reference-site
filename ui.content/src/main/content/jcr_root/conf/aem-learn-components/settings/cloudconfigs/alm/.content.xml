@@ -9,15 +9,16 @@
         jcr:title="ALM"
         sling:configPropertyInherit="true"
         sling:resourceType="aem-learn-components/configuration/page"
-        accountId="66"
-        authorRefreshToken="7db78067aa6a8018f6b66c9f6cac70be"
-        clientId="5497bcc6-668d-47c2-8881-d855b63b8a85"
-        clientSecret="391c2e4a-fa30-4ff8-af09-fb1e85fd64c8"
+        accountId="7110"
+        authorRefreshToken="7bfa45919983af02d36908bc23b06da5"
+        clientId="4c0e8131-8ef0-44f2-b17b-96265ec6ddf9"
+        clientSecret="a8221fe8-e961-4d74-b65c-10e1ee0c62be"
         locale="en-US"
-        almBaseURL="https://captivateprimeapac.adobe.com"
-        refreshToken="7db78067aa6a8018f6b66c9f6cac70be"
+        almBaseURL="https://captivateprimeqe.adobe.com"
+        refreshToken="7bfa45919983af02d36908bc23b06da5"
         siteMap="siteMap"
         usageType="aem-sites"
         theme.background="transparent"
-        commonConfig.emitPageLinkEvents="true"/>
+        commonConfig.emitPageLinkEvents="true"
+        commonConfig.disableLinks="true"/>
 </jcr:root>
