@@ -26,7 +26,6 @@ export const usePost = () => {
           },
         },
       };
-      console.log(postBody);
       const headers = { "content-type": "application/json" };
       await RestAdapter.ajax({
         url: `${baseApiUrl}/boards/${boardId}/posts`,
@@ -54,9 +53,8 @@ export const usePost = () => {
           }
         }
       }
-      console.log(postBody);
       const headers = { "content-type": "application/json" };
-      const response = await RestAdapter.ajax({
+      await RestAdapter.ajax({
           url: `${baseApiUrl}/posts/${postId}`,
           method:"PATCH",
           body: JSON.stringify(postBody),

@@ -122,5 +122,7 @@
   "prime.catalog.filter.lessThan30Minutes": "30 mins or less",
   "prime.catalog.filter.31minutesTo2Hours": "31 mins to 2 hours",
   "prime.catalog.filter.moreThan2Hours": "2 hours+",
-  "prime.catalog.no.result": "No results found"
+  "prime.catalog.no.result": "No results found",
+  "prime.community.board.markAsRightAnswer": "Mark as Right answer",
+  "prime.community.comment.rightAnswer": "RIGHT ANSWER"
 }

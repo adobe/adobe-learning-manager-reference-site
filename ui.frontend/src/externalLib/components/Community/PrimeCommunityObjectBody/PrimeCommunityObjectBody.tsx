@@ -9,7 +9,19 @@ const PrimeCommunityObjectBody = (props: any) => {
   const object = props.object;
   const isQuestionType = object.postingType === "QUESTION";
   const entityType = props.type;
-  const description = entityType === "board" ? object.richTextdescription : object.richText;
+  const getDescription = () => {
+    switch(entityType) {
+      case "board":
+        return object.richTextdescription;
+      case "post": 
+        return object.richText;
+      case "comment":
+        return props.text;
+      case "reply":
+        return props.text;
+    }
+  }
+  const description = getDescription();
   const primeConfig = getALMConfig();
   const hostName = primeConfig.almBaseURL;
   //to-do set below host url
@@ -18,7 +30,6 @@ const PrimeCommunityObjectBody = (props: any) => {
   }/app/player?entity_type=${entityType}&entity_id=${
     object.id
   }&access_token=${getALMObject().getAccessToken()}&player_type=inline`;
-  console.log(iframeSrc);
 
   const MAX_CHAR_SHOWN = 450;
   const DEFAULT_INDEX_VALUE = 2;

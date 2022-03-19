@@ -13,6 +13,7 @@ import { useIntl } from "react-intl";
 const PrimeCommunityObjectHeader = (props: any) => {
   const { formatMessage } = useIntl();
   const object = props.object;
+  const parentPost = props.parentPost;
   const [ showOptions, setShowOptions ] = useState(false);
   const [ showConfirmation, setShowConfirmation ] = useState(false);
   const [ confirmationMessage, setConfirmationMessage] = useState("");
@@ -160,6 +161,12 @@ const PrimeCommunityObjectHeader = (props: any) => {
     setShowUpdatePostModal(false);
   }
 
+  const updateRightAnswerHandler = (value: any) => {
+    if(typeof props.updateRightAnswerHandler === 'function') {
+        props.updateRightAnswerHandler(value);
+    }
+  }
+
   const closeDialogHandler = () => {
     setShowUpdatePostModal(false);
   }
@@ -176,9 +183,12 @@ const PrimeCommunityObjectHeader = (props: any) => {
           {showOptions &&
             <PrimeCommunityObjectOptions 
               object={object} 
-              type={props.type} 
+              type={props.type}
+              parentPost={parentPost}
               toggleOptions={toggleOptions} 
               editHandler={editHandler} 
+              updateRightAnswerHandler={updateRightAnswerHandler}
+              answerCommentId={props.answerCommentId}
               deleteHandler={deleteHandler} 
               reportAbuseHandler={reportAbuseHandler}>
             </PrimeCommunityObjectOptions>

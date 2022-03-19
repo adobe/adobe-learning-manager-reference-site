@@ -12,6 +12,7 @@ const PrimeCommunityComment  = (props: any) => {
   const { formatMessage } = useIntl();
   const ref = useRef<any>();
   const comment = props.comment;
+  const parentPost = props.parentPost;
   const { voteComment, deleteCommentVote } = useComment();
   const { addReply, fetchReplies} = useReplies(comment.id);
   const myVoteStatus = comment.myVoteStatus ? comment.myVoteStatus : "";
@@ -28,6 +29,7 @@ const PrimeCommunityComment  = (props: any) => {
   const [buttonLabel, setButtonLabel] = useState(showRepliesLabel);
   const [replyCount, setReplyCount] = useState(comment.replyCount);
   const [ showEditCommentView, setShowEditCommentView ] = useState(false);
+  const [ commentText, setCommentText ] = useState(comment.richText);
 
   const viewButtonClickHandler = () => {
     if(!showReplies) {
@@ -108,6 +110,7 @@ const PrimeCommunityComment  = (props: any) => {
   const updateComment = (value: any) => {
     if(typeof props.updateComment === "function") {
       props.updateComment(comment.id, value)
+      setCommentText(value);
       setShowEditCommentView(false);  
     }
   }
@@ -126,13 +129,28 @@ const PrimeCommunityComment  = (props: any) => {
     setReplyCount(replyCount - 1);      
   }
 
+  const updateRightAnswerHandler = (value: any) => {
+    if(typeof props.updateRightAnswerHandler === "function") {
+      props.updateRightAnswerHandler(comment.id, value)
+    }  
+  }
+
   return (
     <>
     {!showEditCommentView &&
       <div className={styles.primeCommentWrapper}>
-        <PrimeCommunityObjectHeader object={comment} type="comment" updateObjectHandler={updateCommentHandler} deleteObjectHandler={deleteCommentHandler}></PrimeCommunityObjectHeader>
-        <PrimeCommunityObjectBody object={comment} type="comment"></PrimeCommunityObjectBody>
+        <PrimeCommunityObjectHeader 
+          object={comment} 
+          parentPost={parentPost} 
+          type="comment" 
+          updateObjectHandler={updateCommentHandler} 
+          updateRightAnswerHandler={updateRightAnswerHandler}
+          answerCommentId={props.answerCommentId}
+          deleteObjectHandler={deleteCommentHandler}>
+        </PrimeCommunityObjectHeader>
+        <PrimeCommunityObjectBody object={comment} text={commentText} type="comment"></PrimeCommunityObjectBody>
         <PrimeCommunityObjectActions
+          object={comment} 
           type="comment"
           actionLabel={formatMessage({id: "prime.community.reply.label", defaultMessage: "Reply",})} 
           actionClickHandler={replyClickHandler}
@@ -145,6 +163,7 @@ const PrimeCommunityComment  = (props: any) => {
           myDownVoteStatus={myDownVoteStatus}
           downVoteCount={downVoteCount}
           downVoteButtonClickHandler={downVoteButtonClickHandler} 
+          answerCommentId={props.answerCommentId}
         ></PrimeCommunityObjectActions>
         {
           showReplyInput &&

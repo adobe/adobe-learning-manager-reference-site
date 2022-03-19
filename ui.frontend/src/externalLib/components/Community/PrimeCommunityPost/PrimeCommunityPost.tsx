@@ -118,7 +118,6 @@
           }
         }, hideModalTimeInMillis)
       } catch(exception) {
-        console.log(exception);
         console.log("Error in creating Post")
       }
     }

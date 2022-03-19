@@ -20,6 +20,7 @@ const PrimeCommunityReply  = (props: any) => {
   const firstRunForUpvote = useRef(true);
   const firstRunForDownvote = useRef(true);
   const [ showEditReplyView, setShowEditReplyView ] = useState(false);
+  const [ replyText, setReplyText ] = useState(reply.richText);
 
   useEffect(() => {
     if (firstRunForUpvote.current) {
@@ -65,6 +66,7 @@ const PrimeCommunityReply  = (props: any) => {
   const updateReply = (value: any) => {
     if(typeof props.updateReply === "function") {
       props.updateReply(reply.id, value)
+      setReplyText(value);
       setShowEditReplyView(false);  
     }
   }
@@ -78,7 +80,7 @@ const PrimeCommunityReply  = (props: any) => {
     {!showEditReplyView &&
       <div className={styles.primeReplyWrapper}>
         <PrimeCommunityObjectHeader object={reply} type="reply" updateObjectHandler={updateReplyHandler} deleteReplyHandler={deleteReplyHandler}></PrimeCommunityObjectHeader>
-        <PrimeCommunityObjectBody object={reply} type="reply"></PrimeCommunityObjectBody>
+        <PrimeCommunityObjectBody object={reply} type="reply" text={replyText}></PrimeCommunityObjectBody>
         <PrimeCommunityObjectActions
           type="reply"
           myUpVoteStatus={myUpVoteStatus}

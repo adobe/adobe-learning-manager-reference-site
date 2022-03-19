@@ -39,7 +39,6 @@ const PrimeCommunityBoard  = (props: any) => {
   };
 
   const boardNameClickHandler = () => {
-    console.log(board.id);
     getALMObject().navigateToBoardDetailsPage(board.id);
   }
 

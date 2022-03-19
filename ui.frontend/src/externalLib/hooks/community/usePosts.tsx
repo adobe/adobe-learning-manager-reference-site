@@ -88,8 +88,6 @@ export const usePosts = (boardId?: any) => {
       params["autoCompleteMode"]= "true";
       params["filter.socialTypes"]= "post";
       params["sort"]= "relevance";
-      console.log(type);
-      console.log(object);
       if (type === "board") {
         params["boardId"] = object;
       } else if (type === "skill" && object && object !== "") {
