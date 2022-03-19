@@ -30,7 +30,7 @@ const PrimeCommunityBoard  = (props: any) => {
   const { reportBoard } = useBoardOptions();
   const [ showConfirmation, setShowConfirmation ] = useState(false);
   
-  const boardSkills = board.skills.map((skill: any, index: any) => {
+  const boardSkills = board.skills?.map((skill: any, index: any) => {
     return (index ? ', ': '') + skill.name;
   });
 
@@ -83,10 +83,11 @@ const PrimeCommunityBoard  = (props: any) => {
           }
           <div className={styles.primeBoardName} role="link" tabIndex={0} onClick={boardNameClickHandler}>{board.name}</div>
           <div className={styles.primeBoardSkill}>
-            {formatMessage({
-              id: "prime.community.board.skills",
-              defaultMessage: "Skills",
-            })}: {boardSkills}
+            {boardSkills && 
+              <span>
+                {formatMessage({id: "prime.community.board.skills", defaultMessage: "Skills"})}: {boardSkills}
+              </span>
+            }
             <div className={styles.primeBoardIcon} title={
               board.visibility === "PUBLIC" ? 
                 formatMessage({
