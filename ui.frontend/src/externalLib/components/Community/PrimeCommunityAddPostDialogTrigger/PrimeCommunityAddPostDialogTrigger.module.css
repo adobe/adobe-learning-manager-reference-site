@@ -10,7 +10,7 @@
 }
 
 .primeHiddenDialogLaunchButton {
-  display: none;
+  display: none !important;
 }
 
 .primeDialogLaunchButton:hover {

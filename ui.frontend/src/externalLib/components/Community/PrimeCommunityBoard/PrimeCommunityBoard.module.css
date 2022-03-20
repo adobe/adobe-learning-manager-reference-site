@@ -28,7 +28,8 @@
   color: #306eb5;
   opacity: 1;
 }
-.primeBoardName:hover {
+
+.primeBoardNameSpan:hover {
   cursor: pointer;
 }
 
