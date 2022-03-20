@@ -186,7 +186,7 @@ const items: Reducer<PrimeBoard[], AnyAction> = (
 ) => {
   switch (action.type) {
     case LOAD_SOCIAL_BOARDS:
-      return action.payload.items;
+      return action.payload.items ? action.payload.items : [];
     case CHANGE_SOCIAL_TAB:
       return null;
     case PAGINATE_SOCIAL_BOARDS:
