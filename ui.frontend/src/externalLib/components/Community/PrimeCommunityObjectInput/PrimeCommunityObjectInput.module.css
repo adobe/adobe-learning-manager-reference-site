@@ -32,3 +32,9 @@ textarea:placeholder-shown {
     padding:5px;
     margin-left: auto;
 }
+
+@media (max-width: 414px) {
+    .primePostObjectWrapper {
+        margin-bottom: 20px;
+    }
+}

@@ -1,5 +1,5 @@
 .primeConfirmationDialog {
-    z-index: 1000;
+    z-index: 2;
 }
 
 @import "../../../styles/variables.css";

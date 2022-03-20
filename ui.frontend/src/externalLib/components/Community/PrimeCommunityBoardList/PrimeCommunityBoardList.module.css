@@ -46,7 +46,6 @@
     margin: auto;
     width: 716px;
     margin-bottom: 25px;
-    padding-left: 20px;
 }
 
 .primeCommunitySearchClear {
@@ -76,4 +75,12 @@
         height: 40px;
         margin-right: 20px;
     }
+
+    .primeCommunitySearchStatus {
+        padding-left: 20px;
+    }
+}
+
+.primeCommunitySearchResultContainer {
+    padding: 0px 20px;
 }

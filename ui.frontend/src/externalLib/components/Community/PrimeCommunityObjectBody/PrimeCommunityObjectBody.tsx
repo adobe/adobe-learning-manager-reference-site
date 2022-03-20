@@ -23,8 +23,6 @@ const PrimeCommunityObjectBody = (props: any) => {
   }
   const description = getDescription();
   const primeConfig = getALMConfig();
-  const hostName = primeConfig.almBaseURL;
-  //to-do set below host url
   const iframeSrc = `${
     primeConfig.almBaseURL
   }/app/player?entity_type=${entityType}&entity_id=${
@@ -74,9 +72,7 @@ const PrimeCommunityObjectBody = (props: any) => {
               <iframe
                 className={styles.primePostVideoIframe}
                 src={iframeSrc}
-                // webkitAllowFullScreen="true"
-                // mozallowfullscreen="true"
-                // msallowfullscreen="true"
+                allowFullScreen={true}
                 allow="autoplay"
                 frameBorder="0"
                 loading="lazy"
@@ -105,13 +101,7 @@ const PrimeCommunityObjectBody = (props: any) => {
               <iframe
                 className={styles.primePostVideoIframe}
                 src={iframeSrc}
-                // allowFullScreen={true}
-                // webkitAllowFullScreen={true}
-                // mozAllowFullScreen={true}
-                // webkitallowfullscreen="true"
-                // mozallowfullscreen="true"
-                // msallowfullscreen="true"
-                allowFullScreen
+                allowFullScreen={true}
                 allow="autoplay"
                 loading="lazy"
                 title="primePostAudio"
@@ -130,9 +120,7 @@ const PrimeCommunityObjectBody = (props: any) => {
                   className={styles.primePostVideoIframe}
                   src={iframeSrc}
                   allow="autoplay"
-                  // webkitallowfullscreen="true"
-                  // mozallowfullscreen="true"
-                  // msallowfullscreen="true"
+                  allowFullScreen={true}
                   loading="lazy"
                   title="primePostStatic"
                 ></iframe>

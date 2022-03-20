@@ -12,8 +12,7 @@
 
 @media (max-width: 414px) {
     .primeBoardOptionsList {
-        margin-left: -70px;
-        min-width: 0px;
+        min-width: 110px;
     }
 }
 

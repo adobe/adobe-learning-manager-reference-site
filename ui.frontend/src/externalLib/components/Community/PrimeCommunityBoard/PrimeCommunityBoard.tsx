@@ -83,7 +83,7 @@ const PrimeCommunityBoard  = (props: any) => {
           <div className={styles.primeBoardName} role="link" tabIndex={0} onClick={boardNameClickHandler}>{board.name}</div>
           <div className={styles.primeBoardSkill}>
             {boardSkills && 
-              <span>
+              <span className={styles.primeBoardSkillNames}>
                 {formatMessage({id: "prime.community.board.skills", defaultMessage: "Skills"})}: {boardSkills}
               </span>
             }

@@ -5,8 +5,8 @@ const PrimeCommunityPostFilters  = (props: any) => {
     let defaultSortFilter = "Date Created";
     const [selectedSortFilter, setSelectedSortFilter] = useState(defaultSortFilter);
     const sortFilters:{[key: string]: string} = {
-        "Date Created": "dateCreated", 
-        "Date Updated": "dateUpdated", 
+        "Date Created": "-dateCreated", 
+        "Date Updated": "-dateUpdated", 
     };
     const sortFilterLabel = {id: "prime.community.board.sortBy", defaultMessage: "Sort by"}
 

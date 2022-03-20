@@ -25,12 +25,12 @@
     background-color: #306eb5;
     border: none;
     display: block;
-    z-index: 2000;
+    z-index: 2;
     border-radius: 20px;
     width: auto;
     height: 40px;
-    top: 85%;
-    left: 35%;
+    bottom: 5%;
+    right: 35%;
     color: #ffffff;
   }
 }

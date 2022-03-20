@@ -2,15 +2,15 @@ import { useBoardOptions } from "../../../hooks/community";
 import { useIntl } from "react-intl";
 import styles from "./PrimeCommunityBoardOptions.module.css";
 import { useRef, useEffect } from "react";
-// import { PrimeAlertDialog } from "../PrimeAlertDialog";
+import { getALMConfig, getALMObject } from "../../../utils/global";
 
 const PrimeCommunityBoardOptions = (props: any) => {
   const ref = useRef<any>();
   const { formatMessage } = useIntl();
-  const { addBoardToFavourite, removeBoardFromFavourite } = useBoardOptions();
   const boardId = props.board.id;
+  // const { addBoardToFavourite, removeBoardFromFavourite } = useBoardOptions();
   // const accountId = props.board.createdBy.account.id;
-  const isFavourite = props.board.isFavorite;
+  // const isFavourite = props.board.isFavorite;
 
   useEffect(() => {
     const handleClickOutside = (event: any) => {
@@ -24,12 +24,12 @@ const PrimeCommunityBoardOptions = (props: any) => {
     };
   });
 
-  const addFavouriteHandler = () => {
-    addBoardToFavourite(boardId);
-  };
-  const removeFavouriteHandler = () => {
-    removeBoardFromFavourite(boardId);
-  };
+  // const addFavouriteHandler = () => {
+  //   addBoardToFavourite(boardId);
+  // };
+  // const removeFavouriteHandler = () => {
+  //   removeBoardFromFavourite(boardId);
+  // };
 
   // const deleteBoardHandler = () => {
   //     deleteBoardFromServer(boardId, accountId);
@@ -40,7 +40,8 @@ const PrimeCommunityBoardOptions = (props: any) => {
   };
 
   const copyUrlHandler = () => {
-    const hostUrl = "https://captivateprimestage1.adobe.com"; //to-do get from server injections
+    const primeConfig = getALMConfig();
+    const hostUrl = primeConfig.almBaseURL;
     const boardUrl = hostUrl + "/app/learner/#/social/board/" + boardId;
     copyUrl(boardUrl);
   };
@@ -54,7 +55,7 @@ const PrimeCommunityBoardOptions = (props: any) => {
   return (
     <>
       <div ref={ref} className={styles.primeBoardOptionsList}>
-        {isFavourite ? (
+        {/* {isFavourite ? (
           <div
             className={styles.primeBoardOption}
             onClick={removeFavouriteHandler}
@@ -74,7 +75,7 @@ const PrimeCommunityBoardOptions = (props: any) => {
               defaultMessage: "Add to Favourites",
             })}
           </div>
-        )}
+        )} */}
         <div className={styles.primeBoardOption} onClick={copyUrlHandler}>
           {formatMessage({
             id: "prime.community.board.copyUrl",

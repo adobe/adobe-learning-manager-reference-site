@@ -137,7 +137,9 @@ const PrimeCommunityBoardList = () => {
         {isSearchMode &&
           posts?.length > 0 &&
           posts.map((post) => (
-            <PrimeCommunityPost post={post} key={post.id}></PrimeCommunityPost>
+            <div className={styles.primeCommunitySearchResultContainer}>
+              <PrimeCommunityPost post={post} key={post.id}></PrimeCommunityPost>
+            </div>
           ))}
         {!isSearchMode &&
           items?.length > 0 &&

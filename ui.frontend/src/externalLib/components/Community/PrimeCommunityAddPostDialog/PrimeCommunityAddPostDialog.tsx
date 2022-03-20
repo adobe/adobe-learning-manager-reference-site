@@ -268,7 +268,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
             </div> */}
           </div>
         )}
-        {!textMode && fileUploadProgress !== 100 && (
+        {!textMode && !saveEnabled && (
           <div>
             <ProgressBar
               label={formatMessage({
@@ -279,7 +279,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
             />
           </div>
         )}
-        {!textMode && fileUploadProgress === 100 && (
+        {!textMode && saveEnabled && (
           <div className={styles.primeStatus}>
             <div className={styles.primeStatusText}>
               Uploaded: {state.fileUpload.fileName}

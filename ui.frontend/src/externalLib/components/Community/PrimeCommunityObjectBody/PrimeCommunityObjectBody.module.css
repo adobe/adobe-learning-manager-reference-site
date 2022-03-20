@@ -1,5 +1,6 @@
 .primePostDescription, .primePostPreview, .primeQuestionPostDescription {
-    margin-top: 20px;
+    margin-top: 15px;
+    overflow-wrap: anywhere;
 }
 
 .primeQuestionPostDescription {
@@ -15,8 +16,8 @@
 }
 
 .primePostVideoIframe {
-    height: 17rem;
-    width: 92%
+    min-height: 20rem;
+    width: 100%
 }
 
 .primePostImage {
@@ -44,6 +45,7 @@
     border: none;
     background: none;
     color: #306EB5;
+    margin-left: -5px;
 }
 
 .primeCommunityViewMoreButton:hover {
