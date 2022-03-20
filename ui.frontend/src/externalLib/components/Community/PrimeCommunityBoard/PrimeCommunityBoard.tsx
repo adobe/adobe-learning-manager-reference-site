@@ -80,7 +80,7 @@ const PrimeCommunityBoard  = (props: any) => {
             body="Are you sure you want to report this board? A notification will be sent to the board administrator and moderators."
             ></PrimeAlertDialog>
           }
-          <div className={styles.primeBoardName} role="link" tabIndex={0} onClick={boardNameClickHandler}>
+          <div className={styles.primeBoardName} role="link" tabIndex={0}>
             <span className={styles.primeBoardNameSpan} onClick={boardNameClickHandler}>{board.name}</span>
           </div>
           <div className={styles.primeBoardSkill}>
