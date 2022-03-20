@@ -46,7 +46,7 @@ export const useBoards = (sortFilter: any, skillName: any) => {
         params["page[offset]"] = "0";
         params["page[limit]"] = "10";
         if(skillName && skillName !== "")
-          params["filter.board.skill"] = skillName;
+          params["filter.board.skills"] = skillName;
         params["include"] = "createdBy,skills";
         const response = await RestAdapter.get({
           url: `${baseApiUrl}/boards?`,
@@ -93,12 +93,12 @@ export const useBoards = (sortFilter: any, skillName: any) => {
   }, [fetchBoards]);
 
   // for pagination
-  const loadMoreBoard = useCallback(async () => {
+  const loadMoreBoards = useCallback(async () => {
     if (!next) return;
     const parsedResponse = await APIServiceInstance.loadMore(next);
     dispatch(
       paginateBoards({
-        boards: parsedResponse!.boardList,
+        items: parsedResponse!.boardList,
         next: parsedResponse!.links?.next || "",
       })
     );
@@ -107,9 +107,10 @@ export const useBoards = (sortFilter: any, skillName: any) => {
   return {
     // item,
     items,
-    loadMoreBoard,
+    loadMoreBoards,
     fetchBoards,
     skills,
-    currentSkill
+    currentSkill,
+    hasMoreItems: Boolean(next),
   };
 };

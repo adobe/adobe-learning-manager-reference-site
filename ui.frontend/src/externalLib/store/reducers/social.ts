@@ -190,7 +190,7 @@ const items: Reducer<PrimeBoard[], AnyAction> = (
     case CHANGE_SOCIAL_TAB:
       return null;
     case PAGINATE_SOCIAL_BOARDS:
-      return [...state!, ...action.payload.items];
+      return action.payload.items ? [...state!, ...action.payload.items] : state;
     case SOCIAL_ADD_BOARD_FAVORITE_SUCCESS: {
       if (state === null || state!.length === 0) {
         return [];
@@ -322,7 +322,7 @@ const postsItems: Reducer<PrimePost[], AnyAction> = (
     case LOAD_BOARD_DETAILS:
       return action.payload.items || [];
     case PAGINATE_SOCIAL_BOARD_POSTS:
-      return [...state!, ...action.payload.items];
+      return action.payload.items ? [...state!, ...action.payload.items] : state;
     case LOAD_COMMENTS:
       if (!action.payload.selectedPostId) {
         return state;
@@ -403,7 +403,7 @@ const postsNext: Reducer<string, AnyAction> = (
   switch (action.type) {
     case LOAD_BOARD_DETAILS:
     case PAGINATE_SOCIAL_BOARD_POSTS:
-      return action.next || null;
+      return action.payload.next || null;
     default:
       return state || null;
   }

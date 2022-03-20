@@ -1,4 +1,3 @@
-import { PrimeCommunityBoard } from "../PrimeCommunityBoard";
 import { PrimeCommunityBoardFilters } from "../PrimeCommunityBoardFilters";
 import { PrimeCommunityMobileBackBanner } from "../PrimeCommunityMobileBackBanner";
 import { PrimeCommunityMobileScrollToTop } from "../PrimeCommunityMobileScrollToTop";
@@ -10,12 +9,13 @@ import { getQueryParamsIObjectFromUrl } from "../../../utils/global";
 import { useIntl } from "react-intl";
 import styles from "./PrimeCommunityBoardList.module.css";
 import { ALMLoader } from "../../Common/ALMLoader";
+import { PrimeCommunityBoardsContainer } from "../PrimeCommunityBoardsContainer";
 
 const PrimeCommunityBoardList = () => {
   const queryParams = getQueryParamsIObjectFromUrl();
   const DEFAULT_SORT_VALUE = "dateUpdated";
   const DEFAULT_SKILL = queryParams ? queryParams.skill : "";
-  const { items, fetchBoards, skills, currentSkill } = useBoards(
+  const { items, fetchBoards, loadMoreBoards, hasMoreItems, skills, currentSkill } = useBoards(
     DEFAULT_SORT_VALUE,
     DEFAULT_SKILL
   );
@@ -104,11 +104,6 @@ const PrimeCommunityBoardList = () => {
         </div>
         {showLoader && (
           <div className={styles.primeLoaderWrapper}>
-            {/* <img
-              className={styles.primeLoader}
-              src={loadingImage}
-              alt="loading"
-            ></img> */}
             <ALMLoader />
           </div>
         )}
@@ -143,12 +138,12 @@ const PrimeCommunityBoardList = () => {
           ))}
         {!isSearchMode &&
           items?.length > 0 &&
-          items?.map((board) => (
-            <PrimeCommunityBoard
-              board={board}
-              key={board.id}
-            ></PrimeCommunityBoard>
-          ))}
+          <PrimeCommunityBoardsContainer
+            boards={items}
+            loadMoreBoards={loadMoreBoards}
+            hasMoreItems={hasMoreItems}>
+          </PrimeCommunityBoardsContainer>
+        }
         {!isSearchMode && items?.length === 0 && (
           <div className={styles.primeCommunityNoBoardFound}>
             {formatMessage({

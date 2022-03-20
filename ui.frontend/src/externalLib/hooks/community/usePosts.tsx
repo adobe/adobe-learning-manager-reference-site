@@ -1,7 +1,6 @@
 import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import APIServiceInstance from "../../common/APIService";
-import { PrimePost } from "../../models/PrimeModels";
 import { loadPosts, paginatePosts } from "../../store/actions/social/action";
 import { State } from "../../store/state";
 import { getALMConfig } from "../../utils/global";
@@ -68,12 +67,12 @@ export const usePosts = (boardId?: any) => {
   }, [fetchPosts]);
 
   // for pagination
-  const loadMorePost = useCallback(async () => {
+  const loadMorePosts = useCallback(async () => {
     if (!next) return;
     const parsedResponse = await APIServiceInstance.loadMore(next);
     dispatch(
       paginatePosts({
-        posts: parsedResponse!.postList,
+        items: parsedResponse!.postList,
         next: parsedResponse!.links?.next || "",
       })
     );
@@ -109,12 +108,11 @@ export const usePosts = (boardId?: any) => {
   }, [dispatch]);
 
   return {
-    // item,
     posts:items,
-    loadMorePost,
+    loadMorePosts,
     fetchPosts,
     votePost,
-    searchPostResult
-    // fetchBoard
+    searchPostResult,
+    hasMoreItems: Boolean(next),
   };
 };

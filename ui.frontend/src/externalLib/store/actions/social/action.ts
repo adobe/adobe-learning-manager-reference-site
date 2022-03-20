@@ -40,7 +40,7 @@ export const deleteBoard = (payload: any): AnyAction => ({
 });
 
 export const paginateBoards = (payload: {
-  boards: PrimeBoard[];
+  items: PrimeBoard[];
   next: string;
 }): AnyAction => ({
   type: PAGINATE_SOCIAL_BOARDS,
@@ -54,7 +54,7 @@ export const loadPosts = (payload: any): AnyAction => ({
 });
 
 export const paginatePosts = (payload: {
-  posts: PrimePost[];
+  items: PrimePost[];
   next: string;
 }): AnyAction => ({
   type: PAGINATE_SOCIAL_BOARD_POSTS,
