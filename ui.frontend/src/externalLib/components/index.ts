@@ -38,6 +38,8 @@ export * from "./Community/PrimeCommunityBoardFilters";
 export * from "./Community/PrimeCommunityPost";
 export * from "./Community/PrimeCommunityPosts";
 export * from "./Community/PrimeCommunityComment";
+export * from "./Community/PrimeCommunityBoardsContainer";
+export * from "./Community/PrimeCommunityPostsContainer";
 export * from "./Catalog/PrimeCatalogContainer";
 export * from "./Instance/PrimeInstancePage"
 export * from "./Notifications/PrimeNotificationContainer";

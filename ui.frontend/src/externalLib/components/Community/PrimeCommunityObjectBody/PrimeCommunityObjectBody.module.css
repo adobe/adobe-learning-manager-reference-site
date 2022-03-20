@@ -1,6 +1,7 @@
 .primePostDescription, .primePostPreview, .primeQuestionPostDescription {
     margin-top: 15px;
     overflow-wrap: anywhere;
+    font-size: 15px;
 }
 
 .primeQuestionPostDescription {
