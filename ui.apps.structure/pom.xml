@@ -28,12 +28,15 @@
             <plugin>
                 <groupId>org.apache.jackrabbit</groupId>
                 <artifactId>filevault-package-maven-plugin</artifactId>
-                <extensions>true</extensions>
                 <configuration>
+                    <properties>
+                        <cloudManagerTarget>none</cloudManagerTarget>
+                    </properties>
                     <filters>
 
                         <!-- /apps root -->
                         <filter><root>/apps</root></filter>
+                        <filter><root>/apps/learning</root></filter>
 
                         <!-- Common overlay roots -->
                         <filter><root>/apps/sling</root></filter>
@@ -54,6 +57,8 @@
                         <filter><root>/libs/cq/core/content/nav/tools/cloudservices</root></filter>
                         <filter><root>/libs/cq/core/content/nav/tools/cloudservices/almconfig</root></filter>
 
+                        <!-- DAM folder root, will be created via repoinit -->
+                        <filter><root>/content/dam/learning</root></filter>
                     </filters>
                 </configuration>
             </plugin>

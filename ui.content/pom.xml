@@ -46,15 +46,28 @@
             <plugin>
                 <groupId>org.apache.jackrabbit</groupId>
                 <artifactId>filevault-package-maven-plugin</artifactId>
-                <extensions>true</extensions>
                 <configuration>
+                    <properties>
+                        <cloudManagerTarget>none</cloudManagerTarget>
+                    </properties>
                     <group>com.adobe.learning</group>
                     <name>aem-learning.ui.content</name>
                     <packageType>content</packageType>
                     <accessControlHandling>merge</accessControlHandling>
-                    <properties>
-                        <cloudManagerTarget>none</cloudManagerTarget>
-                    </properties>
+                    <validatorsSettings>
+                        <jackrabbit-filter>
+                            <options>
+                                <validRoots>/conf,/content,/content/experience-fragments,/content/dam</validRoots>
+                            </options>
+                        </jackrabbit-filter>
+                    </validatorsSettings>
+                    <showImportPackageReport>false</showImportPackageReport>
+                    <repositoryStructurePackages>
+                        <repositoryStructurePackage>
+                            <groupId>com.adobe.learning</groupId>
+                            <artifactId>aem-learning.ui.apps.structure</artifactId>
+                        </repositoryStructurePackage>
+                    </repositoryStructurePackages>
                     <dependencies>
                         <dependency>
                             <groupId>com.adobe.learning</groupId>
@@ -82,6 +95,12 @@
     <dependencies>
         <dependency>
             <groupId>com.adobe.learning</groupId>
+            <artifactId>aem-learning.ui.apps.structure</artifactId>
+            <version>${project.version}</version>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.learning</groupId>
             <artifactId>aem-learning-core</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -90,11 +109,6 @@
             <artifactId>aem-learning.ui.apps</artifactId>
             <version>${project.version}</version>
             <type>zip</type>
-        </dependency>
-        <dependency>
-            <groupId>com.adobe.aem</groupId>
-            <artifactId>uber-jar</artifactId>
-            <classifier>apis</classifier>
         </dependency>
     </dependencies>
 </project>
