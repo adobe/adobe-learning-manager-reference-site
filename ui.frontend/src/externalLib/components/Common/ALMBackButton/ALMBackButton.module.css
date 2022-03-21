@@ -9,7 +9,7 @@
   .backContainer {
     display: flex;
     align-items: center;
-    padding: 15px;
+    padding: 12px;
     max-height: 47px;
   }
   .buttonLabel {

@@ -1,7 +1,7 @@
 @import "../../../styles/variables.css";
 .listItem {
-  margin-bottom: 40px;
-  padding-left: 20px;
+  /* margin-bottom: 40px;
+  padding-left: 20px; */
 }
 .listItem * {
   box-sizing: border-box;
@@ -286,7 +286,7 @@
   .listItem {
     width: 100%;
     padding: 0;
-    margin-bottom: 30px;
+    /* margin-bottom: 30px; */
   }
   .card {
     width: 100%;

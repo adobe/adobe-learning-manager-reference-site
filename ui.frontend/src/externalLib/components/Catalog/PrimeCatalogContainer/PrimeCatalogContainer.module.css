@@ -25,9 +25,11 @@
 }
 .listContainer {
   width: calc(100% - 256px);
+  padding-left: 20px;
 }
 .listContainer.full {
   width: 100%;
+  padding-left: 0;
 }
 
 .searchAppliedContainer {
@@ -74,6 +76,9 @@
 }
 .closeIcon {
   display: none;
+}
+.loader{
+  margin: 20px 0;
 }
 
 .pageContainer {
@@ -157,7 +162,7 @@
   }
   .listContainer {
     width: 100%;
-    /* padding: 0 20px; */
+    padding-left: 0;
   }
   .filtersContainer.onMobile {
     position: fixed;

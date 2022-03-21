@@ -2,6 +2,7 @@ import Bell from "@spectrum-icons/workflow/Bell";
 import { useEffect, useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import { useNotifications } from "../../../hooks";
+import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 import { PrimeNotificationList } from "../PrimeNotificationList";
 import styles from "./PrimeNotificationContainer.module.css";
 
@@ -40,6 +41,7 @@ const PrimeNotificationContainer = () => {
       timer && clearInterval(timer);
       document.removeEventListener("click", handleClickOutside, false);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     fetchNotifications,
     // markReadNotification,
@@ -59,31 +61,33 @@ const PrimeNotificationContainer = () => {
   };
 
   return (
-    <div ref={wrapperRef} className={styles.notificationDropdown}>
-      <button
-        type="button"
-        className={styles.notificationBellIcon}
-        title={formatMessage({
-          id: "prime.notifications.icon",
-          defaultMessage: "User Notifications",
-        })}
-        id="userNotificationIcon"
-        onClick={toggleShowNotifications}
-      >
-        {<Bell />}
-        {unreadCount > 0 && (
-          <div className={styles.notificationCountStyle}>{unreadCount}</div>
+    <ALMErrorBoundary>
+      <div ref={wrapperRef} className={styles.notificationDropdown}>
+        <button
+          type="button"
+          className={styles.notificationBellIcon}
+          title={formatMessage({
+            id: "prime.notifications.icon",
+            defaultMessage: "User Notifications",
+          })}
+          id="userNotificationIcon"
+          onClick={toggleShowNotifications}
+        >
+          {<Bell />}
+          {unreadCount > 0 && (
+            <div className={styles.notificationCountStyle}>{unreadCount}</div>
+          )}
+        </button>
+        {showNotifications && (
+          <PrimeNotificationList
+            notifications={notifications}
+            unreadCount={unreadCount}
+            loadMoreNotifications={loadMoreNotifications}
+            redirectOverviewPage={redirectOverviewPage}
+          />
         )}
-      </button>
-      {showNotifications && (
-        <PrimeNotificationList
-          notifications={notifications}
-          unreadCount={unreadCount}
-          loadMoreNotifications={loadMoreNotifications}
-          redirectOverviewPage={redirectOverviewPage}
-        />
-      )}
-    </div>
+      </div>
+    </ALMErrorBoundary>
   );
 };
 

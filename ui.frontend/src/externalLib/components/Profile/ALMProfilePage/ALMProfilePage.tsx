@@ -6,6 +6,7 @@ import { useProfile } from "../../../hooks";
 import styles from "./ALMProfilePage.module.css";
 import ALMBackButton from "../../Common/ALMBackButton/ALMBackButton";
 import { useRef } from "react";
+import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 
 const ALMProfilePage = () => {
   const { formatMessage } = useIntl();
@@ -28,55 +29,57 @@ const ALMProfilePage = () => {
   };
 
   return (
-    <Provider theme={lightTheme} colorScheme={"light"}>
-      <div className={styles.pageContainer}>
-        <div className={styles.upperSectionContainer}>
-          <section className={styles.upperSection}>
-            <input
-              type="file"
-              id="uploadAvatar"
-              accept="image/*"
-              onChange={(event: any) => imageUploaded(event)}
-              ref={inputRef}
-            />
-            <h1 className={styles.profileHeader}>Your Profile</h1>
-            <ALMBackButton />
-            <div className={styles.detailsContainer}>
-              <div className={styles.image}>
-                <img
-                  className={styles.profileImage}
-                  src={user.avatarUrl}
-                  alt="profile"
-                />
-                <Button
-                  variant="primary"
-                  isQuiet
-                  UNSAFE_className={styles.button}
-                  onPress={startFileUpload}
-                >
-                  {formatMessage({
-                    id: "prime.profile.change.image",
-                    defaultMessage: "Change image",
-                  })}
-                </Button>
-                <Button
-                  variant="cta"
-                  isQuiet
-                  UNSAFE_className={styles.editIcon}
-                  onPress={startFileUpload}
-                >
-                  <Edit />
-                </Button>
+    <ALMErrorBoundary>
+      <Provider theme={lightTheme} colorScheme={"light"}>
+        <div className={styles.pageContainer}>
+          <div className={styles.upperSectionContainer}>
+            <section className={styles.upperSection}>
+              <input
+                type="file"
+                id="uploadAvatar"
+                accept="image/*"
+                onChange={(event: any) => imageUploaded(event)}
+                ref={inputRef}
+              />
+              <h1 className={styles.profileHeader}>Your Profile</h1>
+              <ALMBackButton />
+              <div className={styles.detailsContainer}>
+                <div className={styles.image}>
+                  <img
+                    className={styles.profileImage}
+                    src={user.avatarUrl}
+                    alt="profile"
+                  />
+                  <Button
+                    variant="primary"
+                    isQuiet
+                    UNSAFE_className={styles.button}
+                    onPress={startFileUpload}
+                  >
+                    {formatMessage({
+                      id: "prime.profile.change.image",
+                      defaultMessage: "Change image",
+                    })}
+                  </Button>
+                  <Button
+                    variant="cta"
+                    isQuiet
+                    UNSAFE_className={styles.editIcon}
+                    onPress={startFileUpload}
+                  >
+                    <Edit />
+                  </Button>
+                </div>
+                <div className={styles.details}>
+                  <h2 className={styles.name}>{user.name}</h2>
+                  <h3 className={styles.email}>{user.email}</h3>
+                </div>
               </div>
-              <div className={styles.details}>
-                <h2 className={styles.name}>{user.name}</h2>
-                <h3 className={styles.email}>{user.email}</h3>
-              </div>
-            </div>
-          </section>
+            </section>
+          </div>
         </div>
-      </div>
-    </Provider>
+      </Provider>
+    </ALMErrorBoundary>
   );
 };
 
