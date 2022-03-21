@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workspaceFilter version="1.0">
-    <filter root="/apps/aem-learn-components"/>
-    <filter root="/apps/aem-learn-components/components"/>
-    <filter root="/apps/aem-learn-components/content"/>
-    <filter root="/apps/aem-learn-components/install"/>
-    <filter root="/apps/aem-learn-components/configuration"/>
+    <filter root="/apps/learning"/>
+    <filter root="/apps/learning/components"/>
+    <filter root="/apps/learning/content"/>
+    <filter root="/apps/learning/install"/>
+    <filter root="/apps/learning/configuration"/>
     <filter root="/apps/msm/lrng_blueprint" mode="merge"/>
 
     <filter root="/libs/cq/core/content/nav/tools/cloudservices">

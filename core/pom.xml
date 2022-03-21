@@ -18,14 +18,14 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.aemlearncomponents</groupId>
-        <artifactId>aem-learn-components</artifactId>
+        <groupId>com.adobe.learning</groupId>
+        <artifactId>aem-learning</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>aem-learn-components-core</artifactId>
-    <name>AemLearnComponents - Core</name>
-    <description>Core bundle for AemLearnComponents</description>
+    <artifactId>aem-learning-core</artifactId>
+    <name>Learning - Core</name>
+    <description>Core bundle for Learning</description>
     <build>
         <plugins>
             <plugin>
