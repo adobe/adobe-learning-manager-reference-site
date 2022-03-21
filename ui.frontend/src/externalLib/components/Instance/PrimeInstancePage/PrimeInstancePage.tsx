@@ -20,6 +20,8 @@ import { PrimeInstanceItem } from "../PrimeInstanceItem";
 import { PrimeTrainingOverviewHeader } from "../../TrainingOverview/PrimeTrainingOverviewHeader";
 import styles from "./PrimeInstancePage.module.css";
 import { ALMLoader } from "../../Common/ALMLoader";
+import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
+import { ALMBackButton } from "../../Common/ALMBackButton";
 //TO-DO move training id str to common
 const TRAINING_ID_STR = "trainingId";
 const PrimeInstancePage = () => {
@@ -91,110 +93,113 @@ const PrimeInstancePage = () => {
   );
 
   return (
-    <Provider theme={lightTheme} colorScheme={"light"}>
-      <PrimeTrainingOverviewHeader
-        format={training.loType}
-        color={color}
-        title={name}
-        bannerUrl={bannerUrl}
-      />
-      <section className={styles.pageContainer}>
-        <h2 className={styles.courseInfoHeader}>{headerLabel}</h2>
-        {/* Hidden in mobile */}
-        <div className={styles.courseDetailsContainer}>
-          <div className={styles.card} style={{ ...cardBgStyle }}>
-            <div className={styles.band}></div>
-          </div>
-          <div className={styles.courseDetials}>
-            <h3 className={styles.title}>{name}</h3>
-            <p className={styles.type}>
-              {GetTranslation(`prime.catalog.card.${training.loType}`, true)}
-            </p>
-          </div>
-        </div>
-
-        {/* Shown only in Mobile */}
-        <div className={styles.selectInstanceContainer}>
-          <h3 className={styles.selectInstance}>
-            {formatMessage({
-              id: "prime.instance.select.instance",
-              defaultMessage: "Select An Instance",
-            })}
-          </h3>
-        </div>
-
-        {list!?.length > 0 && (
-          <>
-            <div className={styles.instancesContainer}>
-              <div className={styles.instancesHeaderSection}>
-                <div
-                  className={`${styles.instanceNameWrapper} ${styles.commonHeader}`}
-                >
-                  {formatMessage({
-                    id: "prime.instance.name",
-                    defaultMessage: "Instance Name",
-                  })}
-                  <span
-                    onClick={() => applySort("name")}
-                    className={styles.sortIcon}
-                  >
-                    {SORT_ORDER_SVG()}
-                  </span>
-                </div>
-                <div
-                  className={`${styles.dateWrapper} ${styles.commonHeader} `}
-                >
-                  {formatMessage({
-                    id: "prime.instance.start.date",
-                    defaultMessage: "Start Date",
-                  })}
-
-                  <span
-                    onClick={() => applySort("date")}
-                    className={styles.sortIcon}
-                  >
-                    {SORT_ORDER_SVG()}
-                  </span>
-                </div>
-                <div
-                  className={`${styles.locationWrapper} ${styles.commonHeader}`}
-                >
-                  {formatMessage({
-                    id: "prime.instance.location",
-                    defaultMessage: "Location",
-                  })}
-
-                  <span
-                    onClick={() => applySort("location")}
-                    className={styles.sortIcon}
-                  >
-                    {SORT_ORDER_SVG()}
-                  </span>
-                </div>
-                <div
-                  className={`${styles.action} ${styles.commonHeader}`}
-                ></div>
-              </div>
+    <ALMErrorBoundary>
+      <Provider theme={lightTheme} colorScheme={"light"}>
+        <ALMBackButton />
+        <PrimeTrainingOverviewHeader
+          format={training.loType}
+          color={color}
+          title={name}
+          bannerUrl={bannerUrl}
+        />
+        <section className={styles.pageContainer}>
+          <h2 className={styles.courseInfoHeader}>{headerLabel}</h2>
+          {/* Hidden in mobile */}
+          <div className={styles.courseDetailsContainer}>
+            <div className={styles.card} style={{ ...cardBgStyle }}>
+              <div className={styles.band}></div>
             </div>
-            <ul className={styles.instanceList}>
-              {list!.map((item: any) => (
-                <PrimeInstanceItem
-                  key={item.id}
-                  name={item.name}
-                  format={item.format}
-                  date={item.date}
-                  location={item.location}
-                  instructorsName={item.instructorsName}
-                  id={item.id}
-                  selectInstanceHandler={selectInstanceHandler}
-                  locale={locale}
-                />
-              ))}
-            </ul>
-          </>
-        )}
-      </section>
-    </Provider>
+            <div className={styles.courseDetials}>
+              <h3 className={styles.title}>{name}</h3>
+              <p className={styles.type}>
+                {GetTranslation(`prime.catalog.card.${training.loType}`, true)}
+              </p>
+            </div>
+          </div>
+
+          {/* Shown only in Mobile */}
+          <div className={styles.selectInstanceContainer}>
+            <h3 className={styles.selectInstance}>
+              {formatMessage({
+                id: "prime.instance.select.instance",
+                defaultMessage: "Select An Instance",
+              })}
+            </h3>
+          </div>
+
+          {list!?.length > 0 && (
+            <>
+              <div className={styles.instancesContainer}>
+                <div className={styles.instancesHeaderSection}>
+                  <div
+                    className={`${styles.instanceNameWrapper} ${styles.commonHeader}`}
+                  >
+                    {formatMessage({
+                      id: "prime.instance.name",
+                      defaultMessage: "Instance Name",
+                    })}
+                    <span
+                      onClick={() => applySort("name")}
+                      className={styles.sortIcon}
+                    >
+                      {SORT_ORDER_SVG()}
+                    </span>
+                  </div>
+                  <div
+                    className={`${styles.dateWrapper} ${styles.commonHeader} `}
+                  >
+                    {formatMessage({
+                      id: "prime.instance.start.date",
+                      defaultMessage: "Start Date",
+                    })}
+
+                    <span
+                      onClick={() => applySort("date")}
+                      className={styles.sortIcon}
+                    >
+                      {SORT_ORDER_SVG()}
+                    </span>
+                  </div>
+                  <div
+                    className={`${styles.locationWrapper} ${styles.commonHeader}`}
+                  >
+                    {formatMessage({
+                      id: "prime.instance.location",
+                      defaultMessage: "Location",
+                    })}
+
+                    <span
+                      onClick={() => applySort("location")}
+                      className={styles.sortIcon}
+                    >
+                      {SORT_ORDER_SVG()}
+                    </span>
+                  </div>
+                  <div
+                    className={`${styles.action} ${styles.commonHeader}`}
+                  ></div>
+                </div>
+              </div>
+              <ul className={styles.instanceList}>
+                {list!.map((item: any) => (
+                  <PrimeInstanceItem
+                    key={item.id}
+                    name={item.name}
+                    format={item.format}
+                    date={item.date}
+                    location={item.location}
+                    instructorsName={item.instructorsName}
+                    id={item.id}
+                    selectInstanceHandler={selectInstanceHandler}
+                    locale={locale}
+                  />
+                ))}
+              </ul>
+            </>
+          )}
+        </section>
+      </Provider>
+    </ALMErrorBoundary>
   );
 };
 export default PrimeInstancePage;
