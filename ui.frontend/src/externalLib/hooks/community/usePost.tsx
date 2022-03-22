@@ -39,15 +39,28 @@ export const usePost = () => {
   );
 
   //to-do, correct below after bug fix
-  const updatePost = useCallback(async (postId: any, input: any, postingType: any, resource: any) => {
+  const updatePost = useCallback(async (postId: any, input: any, postingType: any, resource: any, isResourceModified: any) => {
       const baseApiUrl =  getALMConfig().primeApiURL;
-      const postBody = {
+      const postBody = isResourceModified ? 
+      {
         "data":{
           "type":"post",
           "id": postId,
           "attributes": {
             "postingType": postingType,
-            "resource": resource,
+            "state": "ACTIVE",
+            "text": input,
+            "resource": resource
+          }
+        }
+      }
+      :
+      {
+        "data":{
+          "type":"post",
+          "id": postId,
+          "attributes": {
+            "postingType": postingType,
             "state": "ACTIVE",
             "text": input,
           }

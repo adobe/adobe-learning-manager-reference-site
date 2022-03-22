@@ -110,7 +110,7 @@ export const useComments = () => {
     const parsedResponse = await APIServiceInstance.loadMore(next);
     dispatch(
       paginateComments({
-        comments: parsedResponse!.commentList,
+        items: parsedResponse!.commentList,
         next: parsedResponse!.links?.next || "",
       })
     );
@@ -123,6 +123,7 @@ export const useComments = () => {
     markCommentAsRightAnswer,
     fetchComments,
     loadMoreComments,
+    hasMoreItems: Boolean(next),
     // fetchBoard
   };
 };

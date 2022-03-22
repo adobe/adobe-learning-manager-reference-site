@@ -26,9 +26,9 @@ const PrimeCommunityAddPostDialogTrigger = (props: any) => {
         close();
     }
 
-    const savePostHandler = (event: any, input: any, postingType: any, resource: any, close: any) => {
+    const savePostHandler = (event: any, input: any, postingType: any, resource: any, isResourceModified: any,  close: any) => {
         if(typeof props.savePostHandler === 'function') {
-            props.savePostHandler(input, postingType, resource);
+            props.savePostHandler(input, postingType, resource, isResourceModified);
         }
         close();
     }
@@ -50,8 +50,8 @@ const PrimeCommunityAddPostDialogTrigger = (props: any) => {
                     <PrimeCommunityAddPostDialog 
                         post={props.post}
                         mode={props.mode}
-                        saveHandler={(event:any, input: any, postingType: any, resource: any) => {
-                            savePostHandler(event, input, postingType, resource, close)}
+                        saveHandler={(event:any, input: any, postingType: any, resource: any, isResourceModified: any) => {
+                            savePostHandler(event, input, postingType, resource, isResourceModified, close)}
                         } 
                         closeHandler={() => {closeDialogHandler(close)}}
                     ></PrimeCommunityAddPostDialog>

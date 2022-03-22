@@ -4,7 +4,7 @@ import { PrimeBoard } from "../../../models/PrimeModels";
 import { ALMLoader } from "../../Common/ALMLoader";
 import { PrimeCommunityBoard } from "../PrimeCommunityBoard";
 
-const PrimeBoardsContainer: React.FC<{
+const PrimeCommunityBoardsContainer: React.FC<{
     boards: PrimeBoard[] | null;
     loadMoreBoards: () => void;
     hasMoreItems: boolean;
@@ -32,4 +32,4 @@ const PrimeBoardsContainer: React.FC<{
     );
 };
 
-export default PrimeBoardsContainer;
+export default PrimeCommunityBoardsContainer;

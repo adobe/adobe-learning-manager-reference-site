@@ -109,7 +109,7 @@ export const useReplies = (commentId: any) => {
     const parsedResponse = await APIServiceInstance.loadMore(next);
     dispatch(
       paginateReplies({
-        replies: parsedResponse!.replyList,
+        items: parsedResponse!.replyList,
         next: parsedResponse!.links?.next || "",
       })
     );
@@ -118,8 +118,9 @@ export const useReplies = (commentId: any) => {
   return {
     items,
     fetchReplies,
-    loadMoreReplies,
     addReply,
-    patchReply
+    patchReply,
+    loadMoreReplies,
+    hasMoreItems: Boolean(next)
   };
 };

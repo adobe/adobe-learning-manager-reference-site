@@ -72,7 +72,7 @@ export const loadComments = (payload: any): AnyAction => ({
 });
 
 export const paginateComments = (payload: {
-  comments: PrimeComment[];
+  items: PrimeComment[];
   next: string;
 }): AnyAction => ({
   type: PAGINATE_COMMENTS,
@@ -85,7 +85,7 @@ export const loadReplies = (payload: any): AnyAction => ({
 });
 
 export const paginateReplies = (payload: {
-  replies: PrimeReply[];
+  items: PrimeReply[];
   next: string;
 }): AnyAction => ({
   type: PAGINATE_REPLIES,
