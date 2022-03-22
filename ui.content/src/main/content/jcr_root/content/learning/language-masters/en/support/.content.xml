@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:lastModified="{Date}2022-03-18T19:48:44.260+05:30"
+        cq:lastModifiedBy="admin"
+        cq:template="/conf/learning/settings/wcm/templates/page-content"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Support"
+        sling:resourceType="learning/components/page">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="learning/components/container"
+            layout="responsiveGrid">
+            <container
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="learning/components/container"
+                layout="responsiveGrid">
+                <title
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="learning/components/title"/>
+                <container
+                    jcr:lastModified="{Date}2022-03-18T19:39:22.205+05:30"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="learning/components/container"
+                    layout="responsiveGrid">
+                    <container
+                        jcr:created="{Date}2022-03-17T15:20:12.091+05:30"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2022-03-17T15:20:29.730+05:30"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="learning/components/container"
+                        id="alm-support-header"
+                        layout="simple">
+                        <text
+                            jcr:created="{Date}2022-03-17T15:25:02.596+05:30"
+                            jcr:createdBy="admin"
+                            jcr:lastModified="{Date}2022-03-17T15:25:37.939+05:30"
+                            jcr:lastModifiedBy="admin"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="learning/components/text"
+                            text="&lt;p>If you need support, we are here for you.&lt;br>&#xa;Advice can come from many different places and the guidance provided can have a tremendous impact on your life, especially if you have an open mind. Join our community and connect with instructors and peers.&lt;/p>"
+                            textIsRich="true"/>
+                    </container>
+                    <support-container
+                        jcr:created="{Date}2022-03-17T15:20:12.091+05:30"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2022-03-17T15:20:29.730+05:30"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="learning/components/container"
+                        id="alm-support-container"
+                        layout="simple">
+                        <text
+                            jcr:created="{Date}2022-03-18T19:41:26.261+05:30"
+                            jcr:createdBy="admin"
+                            jcr:lastModified="{Date}2022-03-18T19:45:30.543+05:30"
+                            jcr:lastModifiedBy="admin"
+                            jcr:primaryType="nt:unstructured"
+                            jcr:title="Select Product"
+                            sling:resourceType="learning/components/form/text"
+                            helpMessage="Turbo Tax"
+                            name="product"
+                            rows="2"
+                            type="textarea"
+                            usePlaceholder="true"/>
+                        <text_1812514109
+                            jcr:created="{Date}2022-03-18T19:47:13.305+05:30"
+                            jcr:createdBy="admin"
+                            jcr:lastModified="{Date}2022-03-18T19:48:44.258+05:30"
+                            jcr:lastModifiedBy="admin"
+                            jcr:primaryType="nt:unstructured"
+                            jcr:title="Hello, please provide your problems in detail. Our executive will contact you shortly."
+                            sling:resourceType="learning/components/form/text"
+                            helpMessage="Hello, I need help with purchasing the training…"
+                            name="description"
+                            rows="6"
+                            type="textarea"
+                            usePlaceholder="true"/>
+                    </support-container>
+                </container>
+            </container>
+        </root>
+    </jcr:content>
+</jcr:root>

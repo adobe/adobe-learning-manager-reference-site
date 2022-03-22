@@ -7,16 +7,16 @@
   <!-- P A R E N T  P R O J E C T  D E S C R I P T I O N                      -->
   <!-- ====================================================================== -->
   <parent>
-    <groupId>com.aemlearncomponents</groupId>
-    <artifactId>aem-learn-components</artifactId>
+    <groupId>com.adobe.learning</groupId>
+    <artifactId>aem-learning</artifactId>
     <version>1.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>aem-learn-components.dispatcher.ams</artifactId>
-  <name>AemLearnComponents - Dispatcher</name>
+  <artifactId>aem-learning.dispatcher.ams</artifactId>
+  <name>Learning - Dispatcher</name>
   <packaging>pom</packaging>
-  <description>HTTP &amp; Dispatcher configurations for AemLearnComponents</description>
+  <description>HTTP &amp; Dispatcher configurations for Learning</description>
 
 
   <build>

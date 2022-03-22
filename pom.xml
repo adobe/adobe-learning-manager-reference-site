@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- |  Copyright 2015 Adobe Systems Incorporated
+ |  Copyright 2022 Adobe Systems Incorporated
  |
  |  Licensed under the Apache License, Version 2.0 (the "License");
  |  you may not use this file except in compliance with the License.
@@ -18,11 +18,11 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
                     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.aemlearncomponents</groupId>
-    <artifactId>aem-learn-components</artifactId>
+    <groupId>com.adobe.learning</groupId>
+    <artifactId>aem-learning</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
-    <description>AemLearnComponents</description>
+    <description>Learning Site</description>
 
     <modules>
         <module>all</module>

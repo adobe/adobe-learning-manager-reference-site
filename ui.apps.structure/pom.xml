@@ -6,8 +6,8 @@
     <!-- P A R E N T  P R O J E C T  D E S C R I P T I O N                      -->
     <!-- ====================================================================== -->
     <parent>
-        <groupId>com.aemlearncomponents</groupId>
-        <artifactId>aem-learn-components</artifactId>
+        <groupId>com.adobe.learning</groupId>
+        <artifactId>aem-learning</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -15,9 +15,9 @@
     <!-- ====================================================================== -->
     <!-- P R O J E C T  D E S C R I P T I O N                                   -->
     <!-- ====================================================================== -->
-    <artifactId>aem-learn-components.ui.apps.structure</artifactId>
+    <artifactId>aem-learning.ui.apps.structure</artifactId>
     <packaging>content-package</packaging>
-    <name>AemLearnComponents - Repository Structure Package</name>
+    <name>Learning - Repository Structure Package</name>
     <description>
         Empty package that defines the structure of the Adobe Experience Manager repository the Code packages in this project deploy into.
         Any roots in the Code packages of this project should have their parent enumerated in the Filters list below.
