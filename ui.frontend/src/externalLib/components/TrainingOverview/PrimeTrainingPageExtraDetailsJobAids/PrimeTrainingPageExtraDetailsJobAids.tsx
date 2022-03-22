@@ -9,6 +9,9 @@ import {
   PrimeResource,
 } from "../../../models/PrimeModels";
 import { useState } from "react";
+import { isJobaidContentTypeUrl } from "../../../utils/catalog";
+import { PrimeAlertDialog } from "../../Community/PrimeAlertDialog";
+import { GetTranslation } from "../../../utils/translationService";
 
 const PrimeTrainingPageExtraJobAid: React.FC<{
   resource: PrimeResource;
@@ -27,6 +30,7 @@ const PrimeTrainingPageExtraJobAid: React.FC<{
   const [isEnrolled, setIsEnrolled] = useState(() => {
     return training.enrollment ? true : false;
   });
+  const [showAlert, setShowAlert] = useState(false);
 
   const unenroll = () => {
     unEnrollmentHandler({
@@ -40,18 +44,25 @@ const PrimeTrainingPageExtraJobAid: React.FC<{
     enrollmentHandler({
       id: training.id,
       instanceId: training.instances[0].id,
-      isSupplementaryLO: true,
+      isSupplementaryLO: false,
     });
     setIsEnrolled(true);
   };
 
   const nameClickHandler = () => {
+    if (isJobaidContentTypeUrl(training)) {
+      jobAidClickHandler(training);
+      return;
+    }
+
     if (isEnrolled) {
       jobAidClickHandler(training);
       return;
     } else {
+      // alert("not in your list");
+      setShowAlert(true);
+      setTimeout(() => setShowAlert(false), 3000);
       //need to show dialog
-      alert("not in your list");
     }
   };
 
@@ -77,6 +88,15 @@ const PrimeTrainingPageExtraJobAid: React.FC<{
           </span>
         )}
       </span>
+
+      {showAlert && (
+        <PrimeAlertDialog
+          variant="warning"
+          title={GetTranslation("alm.overview.job.aid.not.in.list", true)}
+          primaryActionLabel="Ok"
+          classes={styles.warningDialog}
+        ></PrimeAlertDialog>
+      )}
     </div>
   );
 };

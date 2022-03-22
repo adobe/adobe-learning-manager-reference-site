@@ -36,7 +36,7 @@ const PrimeTrainingsContainer: React.FC<{
     <div className={styles.primeTrainingsContainer}>
       {listHtml}
       <div ref={elementRef} id="load-more-trainings">
-        {hasMoreItems ? <ALMLoader /> : ""}
+        {hasMoreItems ? <ALMLoader classes={styles.loader} /> : ""}
       </div>
     </div>
   );

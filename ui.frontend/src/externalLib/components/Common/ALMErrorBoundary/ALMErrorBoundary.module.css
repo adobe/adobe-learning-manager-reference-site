@@ -1,0 +1,8 @@
+@import "../../../styles/variables.css";
+
+.errorMessage {
+  margin: 0;
+  padding: 10px;
+  font-size: var(--prime-font-size-16);
+  color: var(--prime-color-nc1);
+}

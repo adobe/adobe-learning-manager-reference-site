@@ -12,9 +12,14 @@
   margin: 0;
   padding: 0;
   width: 100%;
+
+  gap: 20px;
 }
 
 .noResults {
   text-align: center;
   font-size: var(--prime-font-size-24);
+}
+.loader{
+  margin: 20px 0;
 }

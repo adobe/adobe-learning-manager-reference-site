@@ -6,6 +6,7 @@ import { useIntl } from "react-intl";
 import { useCatalog } from "../../../hooks/catalog/useCatalog";
 import { CLOSE_SVG } from "../../../utils/inline_svg";
 import { GetTranslation } from "../../../utils/translationService";
+import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 import { ALMLoader } from "../../Common/ALMLoader";
 import { PrimeCatalogFilters } from "../PrimeCatalogFilters";
 import PrimeCatalogSearch from "../PrimeCatalogSearch/PrimeCatalogSearch";
@@ -96,37 +97,39 @@ const PrimeCatalogContainer = () => {
     );
 
   return (
-    <Provider theme={lightTheme} colorScheme={"light"}>
-      <div className={styles.pageContainer}>
-        <div className={styles.headerContainer}>
-          <div className={styles.header}>
-            <h1 className={styles.label}>
-              {GetTranslation("prime.catalog.header", true)}
-            </h1>
+    <ALMErrorBoundary>
+      <Provider theme={lightTheme} colorScheme={"light"}>
+        <div className={styles.pageContainer}>
+          <div className={styles.headerContainer}>
+            <div className={styles.header}>
+              <h1 className={styles.label}>
+                {GetTranslation("prime.catalog.header", true)}
+              </h1>
 
-            {searchHtml}
+              {searchHtml}
+            </div>
+            {catalogAttributes?.showSearch === "true" && showingSearchHtml}
           </div>
-          {catalogAttributes?.showSearch === "true" && showingSearchHtml}
-        </div>
-        <div className={styles.filtersAndListConatiner}>
-          {filtersHtml}
-          <div
-            className={listContainerCss}
-            aria-hidden={showFiltersOnMobile ? "true" : "false"}
-          >
-            {isLoading ? (
-              <ALMLoader />
-            ) : (
-              <PrimeTrainingsContainer
-                trainings={trainings}
-                loadMoreTraining={loadMoreTraining}
-                hasMoreItems={hasMoreItems}
-              ></PrimeTrainingsContainer>
-            )}
+          <div className={styles.filtersAndListConatiner}>
+            {filtersHtml}
+            <div
+              className={listContainerCss}
+              aria-hidden={showFiltersOnMobile ? "true" : "false"}
+            >
+              {isLoading ? (
+                <ALMLoader classes={styles.loader} />
+              ) : (
+                <PrimeTrainingsContainer
+                  trainings={trainings}
+                  loadMoreTraining={loadMoreTraining}
+                  hasMoreItems={hasMoreItems}
+                ></PrimeTrainingsContainer>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </Provider>
+      </Provider>
+    </ALMErrorBoundary>
   );
 };
 

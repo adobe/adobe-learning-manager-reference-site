@@ -4,10 +4,10 @@
     <jcr:content
         cq:template="/libs/wcm/msm/templates/blueprint"
         jcr:primaryType="nt:unstructured"
-        jcr:title="LRNG Site Blueprint"
-        jcr:description="Creates blueprint config for LRNG Site"
+        jcr:title="Learning Site Blueprint"
+        jcr:description="Creates blueprint config for Learning Site"
         sling:resourceType="wcm/msm/components/blueprint"
-        sitePath="/content/aem-learn-components">
+        sitePath="/content/learning">
         <dialog/>
     </jcr:content>
 </jcr:root>

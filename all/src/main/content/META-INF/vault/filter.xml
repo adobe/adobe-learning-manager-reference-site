@@ -15,6 +15,6 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <workspaceFilter version="1.0">
-    <filter root="/apps/aem-learn-components-packages"/>
-    <filter root="/apps/aem-learn-components-vendor-packages"/>
+    <filter root="/apps/learning-packages"/>
+    <filter root="/apps/learning-vendor-packages"/>
 </workspaceFilter>

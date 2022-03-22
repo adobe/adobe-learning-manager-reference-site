@@ -22,6 +22,7 @@
 
 .primeChechbox {
   min-height: 25px !important;
+  cursor: pointer;
 }
 .primeChechbox span[class^="spectrum-Checkbox-label"] {
   margin-top: 3px;
