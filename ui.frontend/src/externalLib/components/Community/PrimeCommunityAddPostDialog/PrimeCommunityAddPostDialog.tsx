@@ -47,20 +47,16 @@ const PrimeCommunityAddPostDialog = (props: any) => {
   // };
   // const [ existingPost, setExistingPost ] = useState(post);
   const [resource, setResource] = useState({});
+  const [isResourceModified, setIsResourceModified] = useState(false);
 
   useEffect(() => {
     if (props.mode === "update") {
       setPostingType(props.post?.postingType);
-
-      //to-do correct below logic
-      //if file present
       if (props.post?.resource?.sourceUrl) {
         state.fileUpload.fileName = getFileNameFromSourceUrl(
           props.post?.resource?.sourceUrl
         );
-        console.log(props.post?.resource);
-        // setResourceId(getResourceIdFromSourceUrl(props.post?.resource?.data));
-        // setUploadedFileUrl(props.post?.resource?.data.split("?")[0]);
+
         setResource(props.post?.resource);
         setFileUploadProgress(100);
         setTextMode(false);
@@ -102,7 +98,8 @@ const PrimeCommunityAddPostDialog = (props: any) => {
 
   const savePostHandler = (close: any) => {
     if (typeof props.saveHandler === "function") {
-      props.saveHandler(close, ref.current.value, postingType, resource);
+      props.saveHandler(close, ref.current.value, postingType, resource, isResourceModified);
+      onExitActions();
     }
   };
 
@@ -135,6 +132,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
       data: fileUrl,
     };
     setResource(resource);
+    setIsResourceModified(true);
     clearInterval(progressCheck);
   };
 
@@ -151,9 +149,14 @@ const PrimeCommunityAddPostDialog = (props: any) => {
 
   const cancelClickHandler = () => {
     cancelUploadFile(store.getState().fileUpload.fileName);
-    setTextMode(true);
+    setIsResourceModified(true);
+    onExitActions();
   };
 
+  const onExitActions = () => {
+    setResource({});
+    setTextMode(true);
+  }
   const getFileNameFromSourceUrl = (url: any) => {
     const urlParts = url?.split("/");
     return urlParts[urlParts.length - 1].split("?")[0];

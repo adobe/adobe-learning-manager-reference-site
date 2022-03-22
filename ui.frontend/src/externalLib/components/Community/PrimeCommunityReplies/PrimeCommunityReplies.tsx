@@ -1,10 +1,12 @@
 import { useReplies } from "../../../hooks/community";
 import { PrimeCommunityReply } from "../PrimeCommunityReply";
 import styles from "./PrimeCommunityReplies.module.css";
+import { useIntl } from "react-intl";
 
 const PrimeCommunityReplies = (props: any) => {
+    const { formatMessage } = useIntl();
     const commentId = props.object.id;
-    const { items, patchReply } = useReplies(commentId);
+    const { items, patchReply, loadMoreReplies, hasMoreItems } = useReplies(commentId);
 
     const deleteReplyHandler = async() => {
         if(typeof props.deleteReplyHandler === 'function') {
@@ -33,6 +35,14 @@ const PrimeCommunityReplies = (props: any) => {
                             updateReply={updateReply}
                         ></PrimeCommunityReply>
                     ))
+                }
+                {hasMoreItems &&
+                    <button className={styles.showMoreRepliesButton} onClick={loadMoreReplies}>
+                        {formatMessage({
+                            id: "prime.community.showMoreReplies",
+                            defaultMessage: "Show more replies",
+                        })}
+                    </button>
                 }
             </div>
         </div>

@@ -670,7 +670,7 @@ const commentsItems: Reducer<PrimeComment[], AnyAction> = (
       }
       return [];
     case PAGINATE_COMMENTS:
-      return [...state!, ...action.payload.items];
+      return action.payload.items ? [...state!, ...action.payload.items] : state;
     case LOAD_REPLIES:
       if (!action.payload.selectedCommentId) {
         return state;
@@ -808,7 +808,7 @@ const replyItems: Reducer<PrimeReply[], AnyAction> = (
       }
       return [];
     case PAGINATE_REPLIES:
-      return [...state!, ...action.payload.items];
+      return action.payload.items ? [...state!, ...action.payload.items] : state;
     case UPDATE_REPLY: {
       if (!state) {
         return [];

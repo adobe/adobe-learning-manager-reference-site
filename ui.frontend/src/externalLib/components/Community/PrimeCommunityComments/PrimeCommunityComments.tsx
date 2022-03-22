@@ -2,11 +2,12 @@ import { useComments } from "../../../hooks/community";
 import { PrimeCommunityComment } from "../PrimeCommunityComment";
 import styles from "./PrimeCommunityComments.module.css";
 import { useEffect, useState } from "react";
-import comment from "../../../store/reducers/comment";
+import { useIntl } from "react-intl";
 
 const PrimeCommunityComments = (props: any) => {
+    const { formatMessage } = useIntl();
     const postId = props.object.id;
-    const { items, patchComment, markCommentAsRightAnswer } = useComments();
+    const { items, loadMoreComments, hasMoreItems, patchComment, markCommentAsRightAnswer } = useComments();
     const [ answerCommentId, setAnswerCommentId ] = useState("");
 
     useEffect(() => {
@@ -56,6 +57,14 @@ const PrimeCommunityComments = (props: any) => {
                             answerCommentId={answerCommentId}>
                         </PrimeCommunityComment>
                     ))
+                }
+                {hasMoreItems &&
+                    <button className={styles.showMoreCommentsButton} onClick={loadMoreComments}>
+                        {formatMessage({
+                            id: "prime.community.showMoreComments",
+                            defaultMessage: "Show more comments",
+                        })}
+                    </button>
                 }
             </div>
         </div>
