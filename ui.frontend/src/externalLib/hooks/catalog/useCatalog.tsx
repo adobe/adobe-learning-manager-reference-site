@@ -28,7 +28,11 @@ const setFiltersOptions = () => {
 export const useCatalog = () => {
   //To Do: need to check a better way of doping this
   const [catalogAttributes] = useState(() => setFiltersOptions());
-  const [isLoading, setIsLoading] = useState(true);
+  const [state, setState] = useState<{
+    isLoading: boolean;
+    errorCode: string;
+  }>({ isLoading: false, errorCode: "" });
+  const { isLoading, errorCode } = state;
   const { trainings, sort, next } = useSelector(
     (state: State) => state.catalog
   );
@@ -38,19 +42,17 @@ export const useCatalog = () => {
 
   const fetchTrainings = useCallback(async () => {
     try {
-      setIsLoading(true);
+      setState({ isLoading: true, errorCode: "" });
       const response = await APIServiceInstance.getTrainings(
         filters,
         sort,
         query
       );
       dispatch(loadTrainings(response));
-      setIsLoading(false);
-    } catch (e) {
+      setState({ isLoading: false, errorCode: "" });
+    } catch (error: any) {
       dispatch(loadTrainings([] as PrimeLearningObject[]));
-      setIsLoading(false);
-
-      console.log("Error while loading trainings " + e);
+      setState({ isLoading: false, errorCode: error.status });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -75,13 +77,17 @@ export const useCatalog = () => {
   //for pagination
   const loadMoreTraining = useCallback(async () => {
     if (!next) return;
-    const parsedResponse = await APIServiceInstance.loadMore(next);
-    dispatch(
-      paginateTrainings({
-        trainings: parsedResponse!.learningObjectList,
-        next: parsedResponse!.links?.next || "",
-      })
-    );
+    try {
+      const parsedResponse = await APIServiceInstance.loadMore(next);
+      dispatch(
+        paginateTrainings({
+          trainings: parsedResponse!.learningObjectList,
+          next: parsedResponse!.links?.next || "",
+        })
+      );
+    } catch (error: any) {
+      setState({ isLoading: false, errorCode: error.status });
+    }
   }, [dispatch, next]);
 
   return {
@@ -96,6 +102,7 @@ export const useCatalog = () => {
     sort,
     catalogAttributes,
     isLoading,
+    errorCode,
     hasMoreItems: Boolean(next),
   };
 };

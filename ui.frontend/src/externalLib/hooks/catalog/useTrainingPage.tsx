@@ -18,22 +18,8 @@ import {
 import { LaunchPlayer } from "../../utils/playback-utils";
 import { QueryParams } from "../../utils/restAdapter";
 
-// const COURSE = "course";
-// const LEARING_PROGRAM = "learningProgram";
-// const CERTIFICATION = "certification";
-
-// const INCLUDES_FOR_COURSE =
-//   "authors,enrollment,supplementaryLOs.instances.loResources.resources,supplementaryResources,instances.loResources.resources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
-
-// const INCLUDES_FOR_LP_CERT =
-//   "authors,enrollment,subLOs.instances,supplementaryLOs.instances.loResources.resources,supplementaryResources,subLOs.enrollment,instances.badge, skills.skillLevel.badge,skills.skillLevel.skill";
-
 const DEFAULT_INCLUDE_LO_OVERVIEW =
   "authors,enrollment,subLOs.enrollment, subLOs.subLOs.enrollment, subLOs.subLOs.instances.loResources.resources, subLOs.instances.loResources.resources,instances.loResources.resources,supplementaryLOs.instances.loResources.resources,supplementaryResources,subLOs.enrollment,instances.badge, skills.skillLevel.badge,skills.skillLevel.skill";
-// const DEFAULT_INCLUDE_LO_OVERVIEW =
-//   "enrollment,subLOs.instances.learningObject.enrollment,instances.loResources.resources,subLOs.instances.loResources.resources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
-//"enrollment,instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill";
-//subLOs.instances.learningObject
 export const useTrainingPage = (
   trainingId: string,
   instanceId: string = "",
@@ -43,10 +29,11 @@ export const useTrainingPage = (
   const [currentState, setCurrentState] = useState({
     trainingInstance: {} as PrimeLearningObjectInstance,
     isLoading: true,
+    errorCode: "",
   });
 
   //const [error, setError] = useState(null);
-  const { trainingInstance, isLoading } = currentState;
+  const { trainingInstance, isLoading, errorCode } = currentState;
   const [instanceSummary, setInstanceSummary] = useState(
     {} as PrimeLoInstanceSummary
   );
@@ -66,13 +53,18 @@ export const useTrainingPage = (
         );
         if (response) {
           const trainingInstance = filterTrainingInstance(response, instanceId);
-          setCurrentState({ trainingInstance, isLoading: false });
+          setCurrentState({
+            trainingInstance,
+            isLoading: false,
+            errorCode: "",
+          });
         }
-      } catch (e) {
-        console.log("Error while loading training " + e);
+      } catch (error: any) {
+        console.log("Error while loading training " + error);
         setCurrentState({
           trainingInstance: {} as PrimeLearningObjectInstance,
           isLoading: false,
+          errorCode: error.status,
         });
       }
     };
@@ -174,9 +166,7 @@ export const useTrainingPage = (
     color,
     bannerUrl,
     cardBgStyle,
-    //rating,
     skills,
-    //enrollment,
     training,
     trainingInstance,
     isLoading,
@@ -186,6 +176,7 @@ export const useTrainingPage = (
     launchPlayerHandler,
     unEnrollmentHandler,
     jobAidClickHandler,
+    errorCode,
   };
   //date create, published, duration
 };

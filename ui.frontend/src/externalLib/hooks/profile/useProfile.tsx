@@ -40,7 +40,7 @@ export const useProfile = () => {
       setUser(response.user);
     } catch (error: any) {
       setErrorMessage("Error while uploading the image");
-      console.error("Error while uploading the image : ", error);
+      console.error("Error while uploading the image : ", error.status);
     }
   }, []);
   return { user, updateProfileImage, errorMessage };
