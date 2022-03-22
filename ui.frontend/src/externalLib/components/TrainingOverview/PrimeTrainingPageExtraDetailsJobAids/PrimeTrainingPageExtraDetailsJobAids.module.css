@@ -25,3 +25,22 @@
   height: 16px;
   fill: var(--prime-color-nc3);
 }
+
+.warningDialog [class^="spectrum-ButtonGroup"] {
+  display: none !important;
+}
+
+.warningDialog [class^="spectrum-Dialog-heading"] {
+  padding-right: 15px !important;
+}
+
+.warningDialog svg[class^="spectrum-Dialog-typeIcon"] {
+  transform: scale(1.4);
+}
+.warningDialog [class^="spectrum-Dialog-content"] {
+  display: none ;
+}
+
+.warningDialog hr {
+  display: none;
+}
