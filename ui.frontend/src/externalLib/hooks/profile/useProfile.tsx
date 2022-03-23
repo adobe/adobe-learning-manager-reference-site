@@ -5,16 +5,18 @@ import { RestAdapter } from "../../utils/restAdapter";
 import { getUploadInfo, uploadFile } from "../../utils/uploadUtils";
 
 export const useProfile = () => {
-  const [user, setUser] = useState<PrimeUser>({} as PrimeUser);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [state, setState] = useState<{ user: PrimeUser; errorCode: string }>({
+    user: {} as PrimeUser,
+    errorCode: "",
+  });
+  const { user, errorCode } = state;
 
   const getUser = useCallback(async () => {
     try {
       const response = await getALMUser();
-      setUser(response.user);
-    } catch (error) {
-      setErrorMessage("Error getting the user details");
-      console.error("Error getting the user details : ", error);
+      setState({ user: response.user, errorCode: "" });
+    } catch (error: any) {
+      setState({ user: {} as PrimeUser, errorCode: error.status });
     }
   }, []);
   useEffect(() => {
@@ -37,11 +39,10 @@ export const useProfile = () => {
         },
       });
       const response = await updateALMUser();
-      setUser(response.user);
+      setState({ user: response.user, errorCode: "123" });
     } catch (error: any) {
-      setErrorMessage("Error while uploading the image");
-      console.error("Error while uploading the image : ", error);
+      setState({ user: {} as PrimeUser, errorCode: error.status });
     }
   }, []);
-  return { user, updateProfileImage, errorMessage };
+  return { user, updateProfileImage, errorCode };
 };

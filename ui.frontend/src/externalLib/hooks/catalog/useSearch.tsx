@@ -5,13 +5,8 @@ import {
   resetSearchText,
   updateSearchText,
 } from "../../store/actions/catalog/action";
-import {
-  debounce,
-  locationUpdate,
-} from "../../utils/catalog";
-import {
-  getQueryParamsIObjectFromUrl,
-} from "../../utils/global";
+import { debounce, locationUpdate } from "../../utils/catalog";
+import { getQueryParamsIObjectFromUrl } from "../../utils/global";
 
 const DEFAULT_MIN_LENGTH = 1;
 
@@ -23,7 +18,7 @@ export const useSearch = () => {
   const handleSearch = useCallback(
     debounce((text: string) => {
       let trimmedText = text.trim();
-      
+
       if (trimmedText.length === 0) return;
 
       locationUpdate({ searchText: trimmedText });
