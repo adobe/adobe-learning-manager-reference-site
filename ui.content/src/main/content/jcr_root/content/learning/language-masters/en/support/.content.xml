@@ -41,7 +41,7 @@
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="learning/components/text"
-                            text="&lt;p>If you need support, we are here for you.&lt;br>&#xa;Advice can come from many different places and the guidance provided can have a tremendous impact on your life, especially if you have an open mind. Join our community and connect with instructors and peers.&lt;/p>"
+                            text="&lt;p>&lt;span class=&quot;heading&quot;>If you need support, we are here for you.&lt;/span>&lt;br>&#xa;Advice can come from many different places and the guidance provided can have a tremendous impact on your life, especially if you have an open mind. Join our community.&lt;/p>"
                             textIsRich="true"/>
                     </container>
                     <support-container
