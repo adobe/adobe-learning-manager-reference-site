@@ -7,7 +7,7 @@
         jcr:title="Learning Site Blueprint"
         jcr:description="Creates blueprint config for Learning Site"
         sling:resourceType="wcm/msm/components/blueprint"
-        sitePath="/content/learning">
+        sitePath="/content/learning/language-masters">
         <dialog/>
     </jcr:content>
 </jcr:root>

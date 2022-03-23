@@ -6,9 +6,12 @@
     <filter root="/apps/learning/install"/>
     <filter root="/apps/learning/configuration"/>
     <filter root="/apps/msm/lrng_blueprint" mode="merge"/>
-
-    <filter root="/libs/cq/core/content/nav/tools/cloudservices">
+    <filter root="/apps/cq/core/content/nav/tools/cloudservices/almconfig"/>
+    <!-- <filter root="/apps/cq" mode="merge"/>
+    <filter root="/apps/cq/core/content/nav/tools/cloudservices/almconfig" mode="merge"/>
         <exclude pattern="/libs/cq/core/content/nav/tools/cloudservices(/.*)?"/>
         <include pattern="/libs/cq/core/content/nav/tools/cloudservices/almconfig" mode="merge"/>
-    </filter>
+    </filter> -->
+
+    
 </workspaceFilter>

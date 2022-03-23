@@ -19,7 +19,6 @@ import com.adobe.granite.ui.components.Config;
 import com.adobe.granite.ui.components.ExpressionHelper;
 import com.adobe.granite.ui.components.ExpressionResolver;
 import com.day.cq.commons.jcr.JcrConstants;
-import com.day.cq.replication.ReplicationStatus;
 
 @Model(
     adaptables = SlingHttpServletRequest.class,
@@ -68,13 +67,13 @@ public class ConfigurationColumnPreview {
             properties = jcrContent != null ? jcrContent.getValueMap() : itemResource.getValueMap();
         }
 
-        modifiedTime = properties.get("cq:lastModified", Calendar.class);
-        ReplicationStatus replicationStatus = itemResource.adaptTo(ReplicationStatus.class);
-        if (replicationStatus != null && !replicationStatus.isDeactivated()) {
-            publishedTime = replicationStatus.getLastPublished();
-        } else {
-            publishedTime = null;
-        }
+        // modifiedTime = properties.get("cq:lastModified", Calendar.class);
+        // ReplicationStatus replicationStatus = itemResource.adaptTo(ReplicationStatus.class);
+        // if (replicationStatus != null && !replicationStatus.isDeactivated()) {
+        //     publishedTime = replicationStatus.getLastPublished();
+        // } else {
+        //     publishedTime = null;
+        // }
     }
 
     public String getTitle() {

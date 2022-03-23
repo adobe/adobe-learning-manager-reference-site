@@ -47,53 +47,23 @@
             <plugin>
                 <groupId>org.apache.jackrabbit</groupId>
                 <artifactId>filevault-package-maven-plugin</artifactId>
-                <extensions>true</extensions>
                 <configuration>
                     <group>com.adobe.learning</group>
                     <name>aem-learning.ui.apps</name>
                     <packageType>application</packageType>
                     <accessControlHandling>merge</accessControlHandling>
-                    <properties>
-                        <cloudManagerTarget>none</cloudManagerTarget>
-                    </properties>
+                    <validatorsSettings>
+                        <jackrabbit-nodetypes>
+                            <isDisabled>true</isDisabled>
+                        </jackrabbit-nodetypes>
+                    </validatorsSettings>
                     <repositoryStructurePackages>
                         <repositoryStructurePackage>
                             <groupId>com.adobe.learning</groupId>
                             <artifactId>aem-learning.ui.apps.structure</artifactId>
                         </repositoryStructurePackage>
                     </repositoryStructurePackages>
-                    <embeddeds>
-                        <embedded>
-                            <groupId>com.adobe.cq</groupId>
-                            <artifactId>core.wcm.components.core</artifactId>
-                            <target>/apps/learning/install</target>
-                        </embedded>
-                        <embedded>
-                            <groupId>com.adobe.learning</groupId>
-                            <artifactId>aem-learning-core</artifactId>
-                            <target>/apps/learning/install</target>
-                        </embedded>
-                        <embedded>
-                            <groupId>com.adobe.aem</groupId>
-                            <artifactId>spa.project.core.core</artifactId>
-                            <target>/apps/learning/install</target>
-                        </embedded>
-                    </embeddeds>
-                    <subPackages>
-                        <subPackage>
-                            <groupId>com.adobe.aem</groupId>
-                            <artifactId>spa.project.core.all</artifactId>
-                        </subPackage>
-                    </subPackages>
                     <dependencies>
-                        <dependency>
-                            <groupId>com.adobe.cq</groupId>
-                            <artifactId>core.wcm.components.content</artifactId>
-                        </dependency>
-                        <dependency>
-                            <groupId>com.adobe.cq</groupId>
-                            <artifactId>core.wcm.components.config</artifactId>
-                        </dependency>
                     </dependencies>
                 </configuration>
             </plugin>
@@ -102,15 +72,8 @@
                 <artifactId>content-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <filterSource>${basedir}/META-INF/vault/filter.xml</filterSource>
-                    <skipCheckSignature>true</skipCheckSignature>
-                    <allowIndexDefinitions>true</allowIndexDefinitions>
                     <verbose>true</verbose>
                     <failOnError>true</failOnError>
-                    <properties>
-                        <acHandling>merge_preserve</acHandling>
-                    </properties>
-                    <failOnMissingEmbed>true</failOnMissingEmbed>
                 </configuration>
             </plugin>
 
@@ -157,22 +120,6 @@
             <type>zip</type>
         </dependency>
 
-        <!-- SPA Project Core (includes hierarchy page) -->
-        <dependency>
-            <groupId>com.adobe.aem</groupId>
-            <artifactId>spa.project.core.all</artifactId>
-            <type>zip</type>
-        </dependency>
-        <dependency>
-            <groupId>com.adobe.aem</groupId>
-            <artifactId>spa.project.core.core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.adobe.cq</groupId>
-            <artifactId>core.wcm.components.core</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>com.adobe.learning</groupId>
             <artifactId>aem-learning.ui.apps.structure</artifactId>
@@ -180,37 +127,6 @@
             <type>zip</type>
         </dependency>
 
-        <dependency>
-            <groupId>com.adobe.cq</groupId>
-            <artifactId>core.wcm.components.content</artifactId>
-            <type>zip</type>
-        </dependency>
-
-        <dependency>
-            <groupId>com.adobe.cq</groupId>
-            <artifactId>core.wcm.components.config</artifactId>
-            <type>zip</type>
-        </dependency>
-        <dependency>
-            <groupId>com.adobe.aem</groupId>
-            <artifactId>uber-jar</artifactId>
-            <classifier>apis</classifier>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.jcr</groupId>
-            <artifactId>jcr</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.day.cq.wcm</groupId>
-            <artifactId>cq-wcm-taglib</artifactId>
-        </dependency>
         <!-- HTL dependencies needed for the HTL Maven Plugin source code generation -->
         <dependency>
             <groupId>org.apache.sling</groupId>
@@ -223,6 +139,17 @@
             <artifactId>org.apache.sling.scripting.sightly.runtime</artifactId>
             <version>1.2.0-1.4.0</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.adobe.aem</groupId>
+            <artifactId>aem-sdk-api</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -46,15 +46,22 @@
             <plugin>
                 <groupId>org.apache.jackrabbit</groupId>
                 <artifactId>filevault-package-maven-plugin</artifactId>
-                <extensions>true</extensions>
                 <configuration>
                     <group>com.adobe.learning</group>
                     <name>aem-learning.ui.content</name>
                     <packageType>content</packageType>
                     <accessControlHandling>merge</accessControlHandling>
-                    <properties>
-                        <cloudManagerTarget>none</cloudManagerTarget>
-                    </properties>
+                    <validatorsSettings>
+                        <!-- disable nodetype validation as workaround until JCRVLT-463 got fixed -->
+                        <jackrabbit-nodetypes>
+                            <isDisabled>true</isDisabled>
+                        </jackrabbit-nodetypes>
+                        <jackrabbit-filter>
+                            <options>
+                                <validRoots>/conf,/content,/content/experience-fragments,/content/dam</validRoots>
+                            </options>
+                        </jackrabbit-filter>
+                    </validatorsSettings>
                     <dependencies>
                         <dependency>
                             <groupId>com.adobe.learning</groupId>
@@ -82,6 +89,12 @@
     <dependencies>
         <dependency>
             <groupId>com.adobe.learning</groupId>
+            <artifactId>aem-learning.ui.apps.structure</artifactId>
+            <version>${project.version}</version>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.learning</groupId>
             <artifactId>aem-learning-core</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -93,8 +106,7 @@
         </dependency>
         <dependency>
             <groupId>com.adobe.aem</groupId>
-            <artifactId>uber-jar</artifactId>
-            <classifier>apis</classifier>
+            <artifactId>aem-sdk-api</artifactId>
         </dependency>
     </dependencies>
 </project>
