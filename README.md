@@ -18,6 +18,10 @@ The main parts of the template are:
 To build all the modules run in the project root directory the following command with Maven 3:
 
     mvn clean install
+    
+This will build only the artefacts for an AEM as a Cloud Service target. To build the artefacts for AEM on-premise as target use the -Pclassic profile:
+
+    mvn clean install -Pclassic
 
 If you have a running AEM instance you can build and package the whole project and deploy into AEM with
 
