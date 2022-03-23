@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkaem_learn_components=self.webpackChunkaem_learn_components||[]).push([[970],{8970:function(e,n,t){t.r(n),t.d(n,{locale:function(){return s},messages:function(){return l}});var r=t(1413),a=t(397),o=JSON.parse('{"prime.text.noDescription":"No description available","prime.text.coreContent":"Core Content","prime.text.seatsAvailable":"Seats Available","prime.text.enroll":"Enroll"}'),l=(0,r.Z)((0,r.Z)({},a),o),s="en"}}]);
-//# sourceMappingURL=970.27feaff4.chunk.js.map
