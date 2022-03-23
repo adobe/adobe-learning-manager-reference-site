@@ -96,7 +96,7 @@ export const useReplies = (commentId: any) => {
       });
       //   const parsedResponse = JsonApiParse(response);
     },
-    [dispatch]
+    []
   );
 
   // useEffect(() => {

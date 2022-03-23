@@ -1,8 +1,8 @@
-import { useBoardOptions } from "../../../hooks/community";
+// import { useBoardOptions } from "../../../hooks/community";
 import { useIntl } from "react-intl";
 import styles from "./PrimeCommunityBoardOptions.module.css";
 import { useRef, useEffect } from "react";
-import { getALMConfig, getALMObject } from "../../../utils/global";
+import { getALMConfig } from "../../../utils/global";
 
 const PrimeCommunityBoardOptions = (props: any) => {
   const ref = useRef<any>();

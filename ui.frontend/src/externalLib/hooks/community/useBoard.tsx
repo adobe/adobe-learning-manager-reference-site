@@ -30,7 +30,7 @@ export const useBoard = (boardId: any) => {
       dispatch(loadBoard({} as PrimeBoard));
       console.log("Error while loading boards " + e);
     }
-  }, [dispatch]);
+  }, [dispatch, boardId]);
 
   useEffect(() => {
     fetchBoard();

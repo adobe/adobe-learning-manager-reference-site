@@ -70,7 +70,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
         setPollTypeSelected(true);
       }
     }
-  }, [props.mode, props.post]);
+  }, [props.mode, props.post, state.fileUpload]);
 
   useEffect(() => {
     if (questionTypeSelected) {
@@ -86,9 +86,9 @@ const PrimeCommunityAddPostDialog = (props: any) => {
     setQuestionTypeSelected((questionTypeSelected) => !questionTypeSelected);
   };
 
-  const pollButtonClickHandler = () => {
-    setPollTypeSelected((pollTypeSelected) => !pollTypeSelected);
-  };
+  // const pollButtonClickHandler = () => {
+  //   setPollTypeSelected((pollTypeSelected) => !pollTypeSelected);
+  // };
 
   const closeDialogHandler = (close: any) => {
     if (typeof props.closeHandler === "function") {
@@ -97,6 +97,9 @@ const PrimeCommunityAddPostDialog = (props: any) => {
   };
 
   const savePostHandler = (close: any) => {
+    if(ref.current.value === "") {
+      return;
+    }
     if (typeof props.saveHandler === "function") {
       props.saveHandler(close, ref.current.value, postingType, resource, isResourceModified);
       onExitActions();
@@ -142,6 +145,13 @@ const PrimeCommunityAddPostDialog = (props: any) => {
   };
 
   const fileUploadHandler = async () => {
+    //if file empty
+    const inputElement = document.getElementById(
+      inputField
+    ) as HTMLInputElement;
+    if(!inputElement!.files!.item(0) && !inputElement!.files!.item(0)!.name) {
+      return;
+    }
     preUploadChecks();
     await upload();
     postUploadChecks();
