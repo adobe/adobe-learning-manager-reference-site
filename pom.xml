@@ -30,6 +30,7 @@
         <module>ui.frontend</module>
         <module>ui.apps</module>
         <module>ui.apps.structure</module>
+        <module>ui.config</module>
         <module>ui.content</module>
         <module>dispatcher</module>
     </modules>
@@ -43,12 +44,13 @@
         <sling.password>admin</sling.password>
         <vault.user>admin</vault.user>
         <vault.password>admin</vault.password>
-        <core.wcm.components.version>2.17.12</core.wcm.components.version>
-        <bnd.version>5.0.0</bnd.version>
+        <bnd.version>5.1.2</bnd.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <core.wcm.components.version>2.17.12</core.wcm.components.version>
         <aem.sdk.api>2022.3.6582.20220307T234020Z-220100</aem.sdk.api>
         <aemanalyser.version>1.3.0</aemanalyser.version>
+        <frontend-maven-plugin.version>1.12.0</frontend-maven-plugin.version>
         <componentGroupName>Learning Site</componentGroupName>
     </properties>
 
@@ -121,7 +123,7 @@
                 <plugin>
                     <groupId>com.github.eirslett</groupId>
                     <artifactId>frontend-maven-plugin</artifactId>
-                    <version>1.12.0</version>
+                    <version>${frontend-maven-plugin.version}</version>
                     <configuration>
                         <nodeVersion>v14.18.2</nodeVersion>
                         <npmVersion>6.14.15</npmVersion>
@@ -263,18 +265,37 @@ Bundle-DocURL:
                     <groupId>org.apache.jackrabbit</groupId>
                     <artifactId>filevault-package-maven-plugin</artifactId>
                     <extensions>true</extensions>
-                    <version>1.1.6</version>
+                    <version>1.1.4</version>
                     <configuration>
                         <filterSource>src/main/content/META-INF/vault/filter.xml</filterSource>
+                        <properties>
+                            <cloudManagerTarget>none</cloudManagerTarget>
+                        </properties>
+                        <validatorsSettings>
+                            <jackrabbit-nodetypes>
+                                <options>
+                                    <!-- use the nodetypes and namespaces from the aem-nodetypes.jar provided in the plugin dependencies -->
+                                    <cnds>tccl:aem.cnd</cnds>
+                                </options>
+                            </jackrabbit-nodetypes>
+                        </validatorsSettings>
                     </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>biz.netcentric.aem</groupId>
+                            <artifactId>aem-nodetypes</artifactId>
+                            <version>6.5.5.0</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
+
                 <!-- AEM Analyser Plugin -->
-                <!-- <plugin>
+                <plugin>
                     <groupId>com.adobe.aem</groupId>
                     <artifactId>aemanalyser-maven-plugin</artifactId>
                     <version>${aemanalyser.version}</version>
                     <extensions>true</extensions>
-                </plugin> -->
+                </plugin>
                 <!-- Content Package Plugin -->
                 <plugin>
                     <groupId>com.day.jcr.vault</groupId>
@@ -558,6 +579,12 @@ Bundle-DocURL:
     <!-- ====================================================================== -->
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.adobe.aem</groupId>
+                <artifactId>aem-sdk-api</artifactId>
+                <version>${aem.sdk.api}</version>
+                <scope>provided</scope>
+            </dependency>
             <!-- OSGi Dependencies -->
             <dependency>
                 <groupId>org.osgi</groupId>
@@ -654,7 +681,7 @@ Bundle-DocURL:
             <dependency>
                 <groupId>com.adobe.aem</groupId>
                 <artifactId>uber-jar</artifactId>
-                <version>6.4.0</version>
+                <version>6.5.10</version>
                 <classifier>apis</classifier>
                 <scope>provided</scope>
             </dependency>

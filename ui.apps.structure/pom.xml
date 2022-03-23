@@ -29,9 +29,6 @@
                 <groupId>org.apache.jackrabbit</groupId>
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <configuration>
-                    <properties>
-                        <cloudManagerTarget>none</cloudManagerTarget>
-                    </properties>
                     <filters>
 
                         <!-- /apps root -->
@@ -48,14 +45,23 @@
                         <!-- Immutable context-aware configurations -->
                         <filter><root>/apps/settings</root></filter>
 
-                        <filter><root>/libs</root></filter>
+                        <!-- <filter><root>/libs</root></filter>
                         <filter><root>/libs/cq</root></filter>
                         <filter><root>/libs/cq/core</root></filter>
                         <filter><root>/libs/cq/core/content</root></filter>
                         <filter><root>/libs/cq/core/content/nav</root></filter>
                         <filter><root>/libs/cq/core/content/nav/tools</root></filter>
-                        <filter><root>/libs/cq/core/content/nav/tools/cloudservices</root></filter>
-                        <filter><root>/libs/cq/core/content/nav/tools/cloudservices/almconfig</root></filter>
+                        <filter><root>/libs/cq/core/content/nav/tools/cloudservices</root></filter> -->
+
+                        <!-- Custom Nav Tool -->
+                        <filter><root>/apps/cq/core</root></filter>
+                        <filter><root>/apps/cq/core/content</root></filter>
+                        <filter><root>/apps/cq/core/content/nav</root></filter>
+                        <filter><root>/apps/cq/core/content/nav/tools</root></filter>
+                        <filter><root>/apps/cq/core/content/nav/tools/cloudservices</root></filter>
+                        <filter><root>/apps/cq/core/content/nav/tools/cloudservices/almconfig</root></filter>
+
+
 
                         <!-- DAM folder root, will be created via repoinit -->
                         <filter><root>/content/dam/learning</root></filter>

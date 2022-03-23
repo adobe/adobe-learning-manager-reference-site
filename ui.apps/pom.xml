@@ -47,33 +47,24 @@
             <plugin>
                 <groupId>org.apache.jackrabbit</groupId>
                 <artifactId>filevault-package-maven-plugin</artifactId>
-                <extensions>true</extensions>
                 <configuration>
                     <group>com.adobe.learning</group>
                     <name>aem-learning.ui.apps</name>
                     <packageType>application</packageType>
                     <accessControlHandling>merge</accessControlHandling>
-                    <properties>
-                        <cloudManagerTarget>none</cloudManagerTarget>
-                    </properties>
+                    <validatorsSettings>
+                        <jackrabbit-nodetypes>
+                            <isDisabled>true</isDisabled>
+                        </jackrabbit-nodetypes>
+                    </validatorsSettings>
                     <repositoryStructurePackages>
                         <repositoryStructurePackage>
                             <groupId>com.adobe.learning</groupId>
                             <artifactId>aem-learning.ui.apps.structure</artifactId>
                         </repositoryStructurePackage>
                     </repositoryStructurePackages>
-                    <embeddeds>
-                        <embedded>
-                            <groupId>com.adobe.cq</groupId>
-                            <artifactId>core.wcm.components.core</artifactId>
-                            <target>/apps/learning/install</target>
-                        </embedded>
-                        <embedded>
-                            <groupId>com.adobe.learning</groupId>
-                            <artifactId>aem-learning-core</artifactId>
-                            <target>/apps/learning/install</target>
-                        </embedded>
-                    </embeddeds>
+                    <dependencies>
+                    </dependencies>
                 </configuration>
             </plugin>
             <plugin>
@@ -81,15 +72,8 @@
                 <artifactId>content-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <filterSource>${basedir}/META-INF/vault/filter.xml</filterSource>
-                    <skipCheckSignature>true</skipCheckSignature>
-                    <allowIndexDefinitions>true</allowIndexDefinitions>
                     <verbose>true</verbose>
                     <failOnError>true</failOnError>
-                    <properties>
-                        <acHandling>merge_preserve</acHandling>
-                    </properties>
-                    <failOnMissingEmbed>true</failOnMissingEmbed>
                 </configuration>
             </plugin>
 
@@ -161,6 +145,11 @@
             <groupId>com.adobe.cq</groupId>
             <artifactId>core.wcm.components.core</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.adobe.aem</groupId>
+            <artifactId>aem-sdk-api</artifactId>
         </dependency>
     </dependencies>
 </project>
