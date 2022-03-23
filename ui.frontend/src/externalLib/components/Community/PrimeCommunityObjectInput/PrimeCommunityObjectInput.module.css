@@ -38,24 +38,3 @@ textarea:placeholder-shown {
         margin-bottom: 20px;
     }
 }
-
-.primeCommunityThumbnailPreview{
-    min-height: 140px;
-    margin-bottom: 15px;
-    background-size: 100% 100% !important;
-    text-align: center;
-}
-
-.primeCommunityThumbnailDescription {
-    display: inline-block;
-    vertical-align: middle;
-    line-height: normal;
-    padding: 20px;
-    font-weight: 600;
-    min-height: 140px;
-    padding: 30px;
-}
-
-.primeCommunityThumbnailNoPreview {
-    position: relative!important;
-}
