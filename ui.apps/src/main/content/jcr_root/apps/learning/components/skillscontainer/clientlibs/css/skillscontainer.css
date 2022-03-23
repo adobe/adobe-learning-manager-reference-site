@@ -28,6 +28,13 @@
     padding-top: 10px;
 }
 
+#alm-skills-header .heading
+{
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+
 @media screen and (min-width: 1024px) {
     .alm-skills-container {
         width: 930px;
