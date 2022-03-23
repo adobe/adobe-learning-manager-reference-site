@@ -3,6 +3,7 @@ import styles from "./PrimeCommunityObjectBody.module.css";
 import { useState } from "react";
 import { useIntl } from "react-intl";
 import Question from "@spectrum-icons/workflow/Question";
+import { PrimeCommunityLinkPreview } from "../PrimeCommunityLinkPreview";
 
 const PrimeCommunityObjectBody = (props: any) => {
   const { formatMessage } = useIntl();
@@ -65,6 +66,7 @@ const PrimeCommunityObjectBody = (props: any) => {
           })}
         </button>
       }
+      <PrimeCommunityLinkPreview currentInput={currentDescription} showLinkPreview={true}></PrimeCommunityLinkPreview>
       <div className={styles.primePostPreview}>
         {object.resource && object.resource.contentType === "VIDEO" && (
           <div className="image-box">
