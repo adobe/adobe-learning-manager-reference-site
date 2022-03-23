@@ -15,7 +15,7 @@
 #alm-skills-header
 {
   background: #306EB5 0% 0% no-repeat padding-box;
-  height: 150px;
+  height: 222px;
   color: #FFFFFF;
   font: normal normal normal 16px/26px Source Sans Pro;
   margin-bottom: 40px;
@@ -42,6 +42,11 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
+    }
+
+    #alm-skills-header
+    {
+        height: 150px;
     }
 
     #alm-skills-header .text

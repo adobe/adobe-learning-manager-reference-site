@@ -365,7 +365,7 @@
 #alm-support-header
 {
   background: #306EB5 0% 0% no-repeat padding-box;
-  height: 150px;
+  height: 222px;
   color: #FFFFFF;
   font: normal normal normal 16px/26px Source Sans Pro;
   margin-bottom: 40px;
@@ -435,6 +435,11 @@
     /* width: 930px; */
     margin-left: auto;
     margin-right: auto;
+  }
+
+  #alm-support-header
+  {
+    height: 150px;
   }
 
   .alm-header-icons .notification__container {
