@@ -69,9 +69,10 @@
 
     useEffect(() => {
       if(commentCount === 0) {
-        hideCommentsSection();
+        setShowComments(false);
+        setButtonLabel(showCommentsLabel);
       }
-    }, [commentCount]);
+    }, [commentCount, showCommentsLabel]);
     
 
     const upVoteButtonClickHandler = () => {

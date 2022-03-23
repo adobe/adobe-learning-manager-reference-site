@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useIntl } from "react-intl";
 import styles from "./PrimeCommunityAddPost.module.css";
-import { PrimeCommunityAddPostDialogTrigger } from "../PrimeCommunityAddPostDialogTrigger";
 import { usePost, } from "../../../hooks/community";
 import { PrimeAlertDialog } from "../PrimeAlertDialog";
 import { PrimeCommunityAddPostButton } from "../PrimeCommunityAddPostButton";
@@ -33,7 +32,10 @@ const PrimeCommunityAddPost = (props: any) => {
     }
 
     const hideConfirmationDialog  = () => {
-        setShowSucessConfirmation(false)
+        //below timeout needed as else it takes click on background link preview
+        setTimeout(() => {
+            setShowSucessConfirmation(false)
+        }, 500);
     }
 
     const showConfirmationDialog  = () => {

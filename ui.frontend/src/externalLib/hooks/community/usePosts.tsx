@@ -57,14 +57,14 @@ export const usePosts = (boardId?: any) => {
       //     console.log("Error while loading boards " + e);
       // }
     },
-    [dispatch]
+    []
   );
 
   useEffect(() => {
     if(boardId) {
       fetchPosts(boardId);
     }
-  }, [fetchPosts]);
+  }, [fetchPosts, boardId]);
 
   // for pagination
   const loadMorePosts = useCallback(async () => {

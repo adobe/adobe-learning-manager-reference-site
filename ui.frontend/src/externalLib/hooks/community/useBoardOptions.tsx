@@ -55,9 +55,8 @@ export const useBoardOptions = () => {
         url: `${baseApiUrl}/boards/${boardId}/reportAbuse`,
         method: "POST",
       });
-      // dispatch(removeBoardFromFavourites({id:boardId}));
     },
-    [dispatch]
+    []
   );
 
   return {

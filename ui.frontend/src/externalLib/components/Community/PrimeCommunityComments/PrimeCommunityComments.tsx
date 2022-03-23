@@ -14,9 +14,11 @@ const PrimeCommunityComments = (props: any) => {
         items?.filter((comment) => comment.parent.id === postId).map((comment) => {
             if(comment.isCorrectAnswer) {
                 setAnswerCommentId(comment.id);
+                return comment.id;
             }
+            return null;
         })
-    }, [items]);
+    }, [items, postId]);
 
     const deleteCommentHandler = () => {
         if(typeof props.deleteCommentHandler === 'function') {

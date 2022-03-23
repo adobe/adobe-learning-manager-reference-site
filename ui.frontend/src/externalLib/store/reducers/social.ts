@@ -40,7 +40,6 @@ import {
   PAGINATE_SOCIAL_BOARD_POSTS,
   PAGINATION_START_COMMENTS,
   PAGINATION_START_REPLIES,
-  PAGINATION_START_SOCIAL_BOARDS,
   PAGINATION_START_SOCIAL_BOARD_POSTS,
   SET_SELECTED_BOARD,
   SET_SELECTED_COMMENT,
@@ -241,19 +240,19 @@ const next: Reducer<string, AnyAction> = (
   }
 };
 
-const paginating: Reducer<boolean, AnyAction> = (
-  state: boolean | undefined,
-  action: AnyAction
-) => {
-  switch (action.type) {
-    case PAGINATION_START_SOCIAL_BOARDS:
-      return true;
-    case PAGINATE_SOCIAL_BOARDS:
-      return false;
-    default:
-      return state || false;
-  }
-};
+// const paginating: Reducer<boolean, AnyAction> = (
+//   state: boolean | undefined,
+//   action: AnyAction
+// ) => {
+//   switch (action.type) {
+//     case PAGINATION_START_SOCIAL_BOARDS:
+//       return true;
+//     case PAGINATE_SOCIAL_BOARDS:
+//       return false;
+//     default:
+//       return state || false;
+//   }
+// };
 const open: Reducer<boolean, AnyAction> = (
   state: boolean | undefined,
   action: AnyAction
@@ -597,7 +596,7 @@ const selectedPost: Reducer<PrimePost, AnyAction> = (
         return null;
       }
 
-      if (state.id == action.payload.id) {
+      if (state.id === action.payload.id) {
         state.previewData = action.data;
       }
       return state;
@@ -619,7 +618,7 @@ const selectedComment: Reducer<PrimeComment, AnyAction> = (
         return null;
       }
 
-      if (state.id == action.payload.id) {
+      if (state.id === action.payload.id) {
         state.previewData = action.data;
       }
       return state;

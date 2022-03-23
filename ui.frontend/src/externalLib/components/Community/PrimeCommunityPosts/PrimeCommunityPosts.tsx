@@ -18,7 +18,7 @@ const PrimeCommunityPosts = (props: any) => {
             return;
         }
         posts ? props.showLoader(false) : props.showLoader(true);
-    }, [posts])
+    }, [posts, props])
     
     const sortFilterChangeHandler = (sortValue: any) => {
         fetchPosts(boardId, sortValue);

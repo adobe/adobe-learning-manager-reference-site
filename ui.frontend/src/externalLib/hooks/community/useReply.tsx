@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-import { useDispatch } from "react-redux";
 import { getALMConfig } from "../../utils/global";
 // import APIServiceInstance from "../../common/APIService";
 // import { State } from "../../store/state";
@@ -12,8 +11,6 @@ import { getALMConfig } from "../../utils/global";
 import { RestAdapter } from "../../utils/restAdapter";
 
 export const useReply = () => {
-  const dispatch = useDispatch();
-
   const voteReply = useCallback(
     async (postId: any, action: any) => {
       // try {
@@ -25,7 +22,7 @@ export const useReply = () => {
       });
       //   const parsedResponse = JsonApiParse(response);
     },
-    [dispatch]
+    []
   );
 
   const deleteReplyVote = useCallback(
@@ -39,7 +36,7 @@ export const useReply = () => {
       });
       //   const parsedResponse = JsonApiParse(response);
     },
-    [dispatch]
+    []
   );
 
   return {

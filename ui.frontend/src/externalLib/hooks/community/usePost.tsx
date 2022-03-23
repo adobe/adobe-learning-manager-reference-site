@@ -1,11 +1,8 @@
 import { useCallback } from "react";
-import { useDispatch } from "react-redux";
 import { RestAdapter } from "../../utils/restAdapter";
 import { getALMConfig } from "../../utils/global";
 
 export const usePost = () => {
-  const dispatch = useDispatch();
-
   const addPost = useCallback(
     async (
       boardId: any,
@@ -35,7 +32,7 @@ export const usePost = () => {
       });
       //   const parsedResponse = JsonApiParse(response);
     },
-    [dispatch]
+    []
   );
 
   //to-do, correct below after bug fix
@@ -73,7 +70,7 @@ export const usePost = () => {
           body: JSON.stringify(postBody),
           headers: headers
       });
-  }, [dispatch]);
+  }, []);
 
   const addComment = useCallback(async (postId: any, input: any) => {
       const baseApiUrl =  getALMConfig().primeApiURL;
@@ -95,7 +92,7 @@ export const usePost = () => {
       });
       //   const parsedResponse = JsonApiParse(response);
     },
-    [dispatch]
+    []
   );
 
   const votePost = useCallback(
@@ -109,7 +106,7 @@ export const usePost = () => {
       });
       //   const parsedResponse = JsonApiParse(response);
     },
-    [dispatch]
+    []
   );
 
   const deletePostVote = useCallback(
@@ -123,7 +120,7 @@ export const usePost = () => {
       });
       //   const parsedResponse = JsonApiParse(response);
     },
-    [dispatch]
+    []
   );
 
   return {
