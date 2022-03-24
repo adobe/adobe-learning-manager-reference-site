@@ -13,12 +13,8 @@ import {
   updateTagsFilter,
 } from "../../store/actions/catalog/action";
 import { State } from "../../store/state";
-import {
-  locationUpdate,
-} from "../../utils/catalog";
-import {
-  getQueryParamsIObjectFromUrl,
-} from "../../utils/global";
+import { locationUpdate } from "../../utils/catalog";
+import { getQueryParamsIObjectFromUrl } from "../../utils/global";
 import { getALMConfig } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { RestAdapter } from "../../utils/restAdapter";
@@ -361,40 +357,3 @@ export const useFilter = () => {
     filters: computedFilters,
   };
 };
-
-// let tagPromise = RestAdapter.get({
-//   url: `${config.primeApiURL}data?filter.tagName=true`,
-// });
-
-// let [skillsResponse, tagResponse] = await Promise.all([
-//   skillsPromise,
-//   tagPromise,
-// ]);
-// const tags = JsonApiParse(tagResponse)?.data?.names;
-
-// let tagsList = tags.map((item: string) => ({
-//   value: item,
-//   label: item,
-//   checked: false,
-// }));
-// tagsList = updateFilterList(tagsList, filtersFromUrl, "skillName");
-
-// tagName: { ...prevState.tagName, list: tagsList },
-
-/**
- * for (let i = 0; i < filters.list!?.length; i++) {
-      let item = filters.list![i];
-
-      if (item.label === data.label) {
-        item.checked = !item.checked;
-        if (item.checked) {
-          let previousValue =
-            filtersFromState[data.filterType as keyof Filter1State];
-          payload = previousValue
-            ? `${previousValue},${item.value}`
-            : `${item.value}`;
-        }
-        break;
-      }
-    }
- */

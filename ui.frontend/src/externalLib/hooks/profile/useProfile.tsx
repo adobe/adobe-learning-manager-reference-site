@@ -20,7 +20,9 @@ export const useProfile = () => {
     { user: {}, accountActiveFields: {} } as ProfileAttributes
   );
 
-  const [errorMessage, setErrorMessage] = useState("");
+  // const [errorMessage, setErrorMessage] = useState("");
+
+  const [errorCode, setErrorCode] = useState("");
 
   useEffect(() => {
     const setupProfile = async () => {
@@ -33,8 +35,10 @@ export const useProfile = () => {
           user: userResponse.user,
           accountActiveFields: response,
         });
-      } catch (error) {
-        setErrorMessage("Error fetching profile details");
+        setErrorCode("");
+      } catch (error: any) {
+        // setErrorMessage("Error fetching profile details");
+        setErrorCode(error.status);
         console.error("Error etching profile details : ", error);
       }
     };
@@ -62,10 +66,10 @@ export const useProfile = () => {
         accountActiveFields: prevState.accountActiveFields,
         user: response.user,
       }));
+      setErrorCode("");
     } catch (error: any) {
-      setErrorMessage("Error while uploading the image");
-      console.error("Error while uploading the image : ", error);
+      setErrorCode(error.status);
     }
   }, []);
-  return { profileAttributes, updateProfileImage, errorMessage };
+  return { profileAttributes, updateProfileImage, errorCode };
 };

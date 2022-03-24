@@ -3,16 +3,19 @@ import { useIntl } from "react-intl";
 import Send from '@spectrum-icons/workflow/Send'
 import Cancel from '@spectrum-icons/workflow/Cancel'
 import React, { useState } from "react";
+import { PrimeCommunityLinkPreview } from "../PrimeCommunityLinkPreview";
 
 const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
     const { formatMessage } = useIntl();
     const objectTextLimit = props.characterLimit ? props.characterLimit : 1000;
     const emptyString = "";
     const [charactersRemaining, setCharactersRemaining] = useState(objectTextLimit);
+    const [ showLinkPreview, setShowLinkPreview ] = useState(false);
 
-    const clearTextArea = () => {
+    const exitActions = () => {
         ref.current.value = emptyString;
         setCharactersRemaining(objectTextLimit);
+        setShowLinkPreview(false);
     }
 
     const primaryActionHandler = () => {
@@ -21,14 +24,23 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
         }
         if(typeof props.primaryActionHandler === 'function') {
             props.primaryActionHandler(ref.current.value);
-            clearTextArea();
+            exitActions();
         }
     }
 
     const secondaryActionHandler = () => {
         if(typeof props.secondaryActionHandler === 'function') {
             props.secondaryActionHandler(ref.current.value);
-            clearTextArea();
+            exitActions();
+        }
+    }
+
+    const processInput = async() => {
+        checkTextCount();
+        if (!showLinkPreview) {
+            setShowLinkPreview(true);
+        } else if(ref.current.value === emptyString) {
+            setShowLinkPreview(false);
         }
     }
 
@@ -39,22 +51,25 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
 
     return (
         <>
-        <div className={styles.primePostObjectWrapper}>
-            <textarea ref={ref} onKeyUp={checkTextCount} className={styles.primePostObjectInput} defaultValue={props.defaultValue?props.defaultValue : ""} placeholder={props.inputPlaceholder} maxLength={objectTextLimit}>
-            </textarea>
-            {props.primaryActionHandler &&
-                <button className={styles.primeSaveObjectButton} onClick={primaryActionHandler}>
-                    <Send/>
-                </button>
-            }
-            {props.secondaryActionHandler &&
-                <button className={styles.primeSaveObjectButton} onClick={secondaryActionHandler}>
-                    <Cancel/>
-                </button>
-            }
-            <div className={styles.primeTextAreaCountRemaining}>
-                {charactersRemaining} {formatMessage({id: "prime.community.post.charactersLeft", defaultMessage: "characters left"})}
+        <div>
+            <div className={styles.primePostObjectWrapper}>
+                <textarea ref={ref} onKeyUp={processInput} className={styles.primePostObjectInput} defaultValue={props.defaultValue?props.defaultValue : ""} placeholder={props.inputPlaceholder} maxLength={objectTextLimit}>
+                </textarea>
+                {props.primaryActionHandler &&
+                    <button className={styles.primeSaveObjectButton} onClick={primaryActionHandler}>
+                        <Send/>
+                    </button>
+                }
+                {props.secondaryActionHandler &&
+                    <button className={styles.primeSaveObjectButton} onClick={secondaryActionHandler}>
+                        <Cancel/>
+                    </button>
+                }
+                <div className={styles.primeTextAreaCountRemaining}>
+                    {charactersRemaining} {formatMessage({id: "prime.community.post.charactersLeft", defaultMessage: "characters left"})}
+                </div>
             </div>
+            <PrimeCommunityLinkPreview currentInput={ref?.current?.value} showLinkPreview={showLinkPreview}></PrimeCommunityLinkPreview>
         </div>
         </>
     );

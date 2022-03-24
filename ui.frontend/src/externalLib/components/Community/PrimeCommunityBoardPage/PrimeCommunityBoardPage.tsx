@@ -13,6 +13,7 @@ import { useState } from "react";
 import { useIntl } from "react-intl";
 import { getALMConfig, getPathParams } from "../../../utils/global";
 import { ALMLoader } from "../../Common/ALMLoader";
+import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 const BOARD_ID_STR = "boardId";
 
 const PrimeCommunityBoardPage = () => {
@@ -56,7 +57,7 @@ const PrimeCommunityBoardPage = () => {
   };
 
   return (
-    <>
+    <ALMErrorBoundary>
       {/* Below 2 are seen only in mobile view */}
       <PrimeCommunityMobileBackBanner></PrimeCommunityMobileBackBanner>
       <PrimeCommunityMobileScrollToTop></PrimeCommunityMobileScrollToTop>
@@ -119,7 +120,7 @@ const PrimeCommunityBoardPage = () => {
           isSearchMode={isSearchMode}
         ></PrimeCommunityPosts>
       )}
-    </>
+    </ALMErrorBoundary>
   );
 };
 

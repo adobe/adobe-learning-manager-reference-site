@@ -10,15 +10,20 @@ import { useIntl } from "react-intl";
 import styles from "./PrimeCommunityBoardList.module.css";
 import { ALMLoader } from "../../Common/ALMLoader";
 import { PrimeCommunityBoardsContainer } from "../PrimeCommunityBoardsContainer";
+import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 
 const PrimeCommunityBoardList = () => {
   const queryParams = getQueryParamsIObjectFromUrl();
   const DEFAULT_SORT_VALUE = "dateUpdated";
   const DEFAULT_SKILL = queryParams ? queryParams.skill : "";
-  const { items, fetchBoards, loadMoreBoards, hasMoreItems, skills, currentSkill } = useBoards(
-    DEFAULT_SORT_VALUE,
-    DEFAULT_SKILL
-  );
+  const {
+    items,
+    fetchBoards,
+    loadMoreBoards,
+    hasMoreItems,
+    skills,
+    currentSkill,
+  } = useBoards(DEFAULT_SORT_VALUE, DEFAULT_SKILL);
   const { posts } = usePosts();
   const { formatMessage } = useIntl();
   const [selectedSortFilter, setSelectedSortFilter] =
@@ -72,7 +77,7 @@ const PrimeCommunityBoardList = () => {
   };
 
   return (
-    <>
+    <ALMErrorBoundary>
       <div>
         {/* Below 2 are seen only in mobile view */}
         <PrimeCommunityMobileBackBanner></PrimeCommunityMobileBackBanner>
@@ -133,17 +138,19 @@ const PrimeCommunityBoardList = () => {
           posts?.length > 0 &&
           posts.map((post) => (
             <div className={styles.primeCommunitySearchResultContainer}>
-              <PrimeCommunityPost post={post} key={post.id}></PrimeCommunityPost>
+              <PrimeCommunityPost
+                post={post}
+                key={post.id}
+              ></PrimeCommunityPost>
             </div>
           ))}
-        {!isSearchMode &&
-          items?.length > 0 &&
+        {!isSearchMode && items?.length > 0 && (
           <PrimeCommunityBoardsContainer
             boards={items}
             loadMoreBoards={loadMoreBoards}
-            hasMoreItems={hasMoreItems}>
-          </PrimeCommunityBoardsContainer>
-        }
+            hasMoreItems={hasMoreItems}
+          ></PrimeCommunityBoardsContainer>
+        )}
         {!isSearchMode && items?.length === 0 && (
           <div className={styles.primeCommunityNoBoardFound}>
             {formatMessage({
@@ -153,7 +160,7 @@ const PrimeCommunityBoardList = () => {
           </div>
         )}
       </div>
-    </>
+    </ALMErrorBoundary>
   );
 };
 

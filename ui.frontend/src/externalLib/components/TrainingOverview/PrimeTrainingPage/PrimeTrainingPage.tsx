@@ -11,6 +11,8 @@ import {
   setALMAttribute,
 } from "../../../utils/global";
 import { getPreferredLocalizedMetadata } from "../../../utils/translationService";
+import { ALMBackButton } from "../../Common/ALMBackButton";
+import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 import { ALMLoader } from "../../Common/ALMLoader";
 import { PrimeCourseOverview } from "../PrimeCourseOverview";
 import { PrimeTrainingOverview } from "../PrimeTrainingOverview";
@@ -62,9 +64,9 @@ const PrimeTrainingPage = () => {
   } = useTrainingPage(trainingId, trainingInstanceId);
   const locale = config.locale;
   const { formatMessage } = useIntl();
-  const [
-    { showAuthorInfo, showDescription, showEnrollDeadline },
-  ] = useState(() => getTrainingOverviewAttributes(config));
+  const [{ showAuthorInfo, showDescription, showEnrollDeadline }] = useState(
+    () => getTrainingOverviewAttributes(config)
+  );
 
   if (isLoading || !training) {
     return <ALMLoader classes={styles.loader} />;
@@ -73,126 +75,129 @@ const PrimeTrainingPage = () => {
   const sections = training.sections;
 
   return (
-    <Provider theme={lightTheme} colorScheme={"light"}>
-      <PrimeTrainingOverviewHeader
-        format={training.loType}
-        color={color}
-        title={name}
-        bannerUrl={bannerUrl}
-        showProgressBar={true}
-        enrollment={training.enrollment}
-      />
-      <div className={styles.pageContainer}>
-        <div className={styles.left}>
-          {showDescription === "true" && (
-            <p
-              dangerouslySetInnerHTML={{
-                __html: richTextOverview || overview || description,
-              }}
-              className={styles.overview}
-            ></p>
-          )}
-          <span className={styles.duration}>
-            {formatMessage(
-              { id: "alm.overview.total.duration" },
-              { 0: convertSecondsToTimeText(training.duration) }
+    <ALMErrorBoundary>
+      <Provider theme={lightTheme} colorScheme={"light"}>
+        <ALMBackButton />
+        <PrimeTrainingOverviewHeader
+          format={training.loType}
+          color={color}
+          title={name}
+          bannerUrl={bannerUrl}
+          showProgressBar={true}
+          enrollment={training.enrollment}
+        />
+        <div className={styles.pageContainer}>
+          <div className={styles.left}>
+            {showDescription === "true" && (
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: richTextOverview || overview || description,
+                }}
+                className={styles.overview}
+              ></p>
             )}
-          </span>
-          {loType === COURSE && (
-            <PrimeCourseOverview
+            <span className={styles.duration}>
+              {formatMessage(
+                { id: "alm.overview.total.duration" },
+                { 0: convertSecondsToTimeText(training.duration) }
+              )}
+            </span>
+            {loType === COURSE && (
+              <PrimeCourseOverview
+                training={training}
+                launchPlayerHandler={launchPlayerHandler}
+                trainingInstance={trainingInstance}
+              />
+            )}
+            {loType === CERTIFICATION && (
+              <PrimeTrainingOverview
+                trainings={training.subLOs}
+                launchPlayerHandler={launchPlayerHandler}
+              />
+            )}
+            {loType === LEARNING_PROGRAM &&
+              sections.map((section, index) => {
+                const trainingIds = section.loIds;
+                //const name = section.localizedMetadata;
+                const { name } = getPreferredLocalizedMetadata(
+                  section.localizedMetadata,
+                  locale
+                );
+                const subLOs = training.subLOs.filter(
+                  (subLO) => trainingIds.indexOf(subLO.id) !== -1
+                );
+                subLOs.sort(
+                  (trainingId1, trainingId2) =>
+                    trainingIds.indexOf(trainingId1.id) -
+                    trainingIds.indexOf(trainingId2.id)
+                );
+
+                return (
+                  <section
+                    className={styles.trainingOverviewContainer}
+                    key={index}
+                  >
+                    <h3 className={styles.sectionName}>{name}</h3>
+                    {!section.mandatory ? (
+                      <div>
+                        <span className={styles.sectionOptional}>
+                          {formatMessage({
+                            id: "alm.overview.section.optional",
+                            defaultMessage: "Optional",
+                          })}
+                        </span>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                    {section.mandatory &&
+                    section.mandatoryLOCount !== section.loIds?.length ? (
+                      <div>
+                        <span className={styles.sectionOptional}>
+                          {formatMessage(
+                            { id: "alm.overview.section.xOutOfy" },
+                            {
+                              0: section.mandatoryLOCount,
+                              1: section.loIds?.length,
+                            }
+                          )}
+                        </span>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+
+                    <PrimeTrainingOverview
+                      trainings={subLOs}
+                      launchPlayerHandler={launchPlayerHandler}
+                      isPartOfLP={loType === LEARNING_PROGRAM}
+                      showMandatoryLabel={
+                        section.mandatory &&
+                        section.mandatoryLOCount === section.loIds?.length
+                      }
+                    />
+                  </section>
+                );
+              })}
+          </div>
+          <div className={styles.right}>
+            <PrimeTrainingPageExtraDetails
+              skills={skills}
               training={training}
-              launchPlayerHandler={launchPlayerHandler}
               trainingInstance={trainingInstance}
-            />
-          )}
-          {loType === CERTIFICATION && (
-            <PrimeTrainingOverview
-              trainings={training.subLOs}
+              badge={instanceBadge}
+              instanceSummary={instanceSummary}
+              showAuthorInfo={showAuthorInfo}
+              showEnrollDeadline={showEnrollDeadline}
+              enrollmentHandler={enrollmentHandler}
               launchPlayerHandler={launchPlayerHandler}
+              unEnrollmentHandler={unEnrollmentHandler}
+              jobAidClickHandler={jobAidClickHandler}
             />
-          )}
-          {loType === LEARNING_PROGRAM &&
-            sections.map((section, index) => {
-              const trainingIds = section.loIds;
-              //const name = section.localizedMetadata;
-              const { name } = getPreferredLocalizedMetadata(
-                section.localizedMetadata,
-                locale
-              );
-              const subLOs = training.subLOs.filter(
-                (subLO) => trainingIds.indexOf(subLO.id) !== -1
-              );
-              subLOs.sort(
-                (trainingId1, trainingId2) =>
-                  trainingIds.indexOf(trainingId1.id) -
-                  trainingIds.indexOf(trainingId2.id)
-              );
-
-              return (
-                <section
-                  className={styles.trainingOverviewContainer}
-                  key={index}
-                >
-                  <h3 className={styles.sectionName}>{name}</h3>
-                  {!section.mandatory ? (
-                    <div>
-                      <span className={styles.sectionOptional}>
-                        {formatMessage({
-                          id: "alm.overview.section.optional",
-                          defaultMessage: "Optional",
-                        })}
-                      </span>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                  {section.mandatory &&
-                  section.mandatoryLOCount !== section.loIds?.length ? (
-                    <div>
-                      <span className={styles.sectionOptional}>
-                        {formatMessage(
-                          { id: "alm.overview.section.xOutOfy" },
-                          {
-                            0: section.mandatoryLOCount,
-                            1: section.loIds?.length,
-                          }
-                        )}
-                      </span>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-
-                  <PrimeTrainingOverview
-                    trainings={subLOs}
-                    launchPlayerHandler={launchPlayerHandler}
-                    isPartOfLP={loType === LEARNING_PROGRAM}
-                    showMandatoryLabel={
-                      section.mandatory &&
-                      section.mandatoryLOCount === section.loIds?.length
-                    }
-                  />
-                </section>
-              );
-            })}
+          </div>
         </div>
-        <div className={styles.right}>
-          <PrimeTrainingPageExtraDetails
-            skills={skills}
-            training={training}
-            trainingInstance={trainingInstance}
-            badge={instanceBadge}
-            instanceSummary={instanceSummary}
-            showAuthorInfo={showAuthorInfo}
-            showEnrollDeadline={showEnrollDeadline}
-            enrollmentHandler={enrollmentHandler}
-            launchPlayerHandler={launchPlayerHandler}
-            unEnrollmentHandler={unEnrollmentHandler}
-            jobAidClickHandler={jobAidClickHandler}
-          />
-        </div>
-      </div>
-    </Provider>
+      </Provider>
+    </ALMErrorBoundary>
   );
 };
 

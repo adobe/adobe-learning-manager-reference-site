@@ -40,7 +40,7 @@ export const useCommunityObjectOptions = () => {
         headers: headers,
       });
     },
-    [dispatch]
+    []
   );
 
   const deleteCommentFromServer = useCallback(
@@ -72,7 +72,7 @@ export const useCommunityObjectOptions = () => {
         headers: headers,
       });
     },
-    [dispatch]
+    []
   );
 
   const deleteReplyFromServer = useCallback(
@@ -104,7 +104,7 @@ export const useCommunityObjectOptions = () => {
         headers: headers,
       });
     },
-    [dispatch]
+    []
   );
 
   return {

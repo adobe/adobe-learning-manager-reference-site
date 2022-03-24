@@ -154,9 +154,9 @@ const PrimeCommunityObjectHeader = (props: any) => {
     }
   }
 
-  const updateObjectHandler = (input: any, postingType: any, resource: any) => {
+  const updateObjectHandler = (input: any, postingType: any, resource: any, isResourceModified: any) => {
     if(typeof props.updateObjectHandler === 'function') {
-        props.updateObjectHandler(input, postingType, resource);
+        props.updateObjectHandler(input, postingType, resource, isResourceModified);
     }
     setShowUpdatePostModal(false);
   }
@@ -219,7 +219,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
           openDialog={true}
           post={object}
           mode="update"
-          savePostHandler={(input: any, postingType: any, resource: any) => {updateObjectHandler(input, postingType, resource)}}
+          savePostHandler={(input: any, postingType: any, resource: any, isResourceModified: any) => {updateObjectHandler(input, postingType, resource, isResourceModified)}}
           closeDialogHandler={closeDialogHandler}
       ></PrimeCommunityAddPostDialogTrigger>
         }

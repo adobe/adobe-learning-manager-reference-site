@@ -5,11 +5,7 @@ import {
   PrimeLearningObjectInstance,
   PrimeLocalizationMetadata,
 } from "../../models/PrimeModels";
-import {
-  getALMConfig,
-  getALMObject,
-  getWindowObject,
-} from "../../utils/global";
+import { getALMConfig, getALMObject } from "../../utils/global";
 import { useCardBackgroundStyle, useCardIcon } from "../../utils/hooks";
 import { checkIfEnrollmentDeadlineNotPassed } from "../../utils/instance";
 import { QueryParams } from "../../utils/restAdapter";
@@ -27,8 +23,9 @@ export const useInstancePage = (
   const [currentState, setCurrentState] = useState({
     training: {} as PrimeLearningObject,
     isLoading: true,
+    errorCode: "",
   });
-  const { isLoading, training } = currentState;
+  const { isLoading, training, errorCode } = currentState;
   useEffect(() => {
     const getTrainingInstance = async () => {
       try {
@@ -41,13 +38,17 @@ export const useInstancePage = (
           queryParam
         );
         if (response) {
-          setCurrentState({ training: response, isLoading: false });
+          setCurrentState({
+            training: response,
+            isLoading: false,
+            errorCode: "",
+          });
         }
-      } catch (e) {
-        console.log("Error while loading training " + e);
+      } catch (error: any) {
         setCurrentState({
           training: {} as PrimeLearningObject,
           isLoading: false,
+          errorCode: error.status,
         });
       }
     };
@@ -100,5 +101,6 @@ export const useInstancePage = (
     cardBgStyle,
     activeInstances,
     selectInstanceHandler,
+    errorCode,
   };
 };

@@ -1,0 +1,65 @@
+<nav class="alm-header-vertical-nav">
+    <div class="vertical-nav-cont">
+        <ul class="vert-nav-profile-cont">
+            <li>
+                <button class="vert-nav-close-button">
+                    <span class="vert-nav-close-icon">
+                        <img src="/content/dam/learning/site/Smock_Close.png" />
+                    </span>
+                </button>
+            </li>
+            <li><img class="vert-nav-profile-image" src="" /></li>
+            <li><span class="vert-nav-profile-name"></span></li>
+            <li><a href="/content/learning/language-masters/en/profile.html">Your Profile</a></li> 
+        </ul>
+
+        <ul>
+            <li class="vert-nav-separator"></li>
+            <li><a class="alm-home-navigate">Home</a></li>
+
+            <li class="vert-nav-separator"></li>
+            <li><a class="alm-learning-navigate">Learning</a></li>
+
+            <li class="vert-nav-separator"></li>
+            <li><a class="alm-community-navigate">Community</a></li>
+            
+            <li class="vert-nav-separator"></li>
+            <li><a class="alm-support-navigate">Support</a></li>
+            <li class="vert-nav-separator"></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="alm-header-cont">
+
+    <!-- Block for mobile immersive bar -->
+    <img class="alm-header-menu" src="/content/dam/learning/site/ShowMenu.svg" ></img>
+
+    <!-- block for image left align -->
+    <img class="alm-header-logo" src="/content/dam/learning/site/lrng-logo.png" ></img>
+
+    <!-- block for navigation -->
+    <ul class="alm-header-navigation">
+        <li><a class="alm-home-navigate">Home</a></li>
+        <li><a class="alm-learning-navigate">Learning</a></li>
+        <li><a class="alm-community-navigate">Community</a></li>
+        <li><a class="alm-support-navigate">Support</a></li>
+    </ul>
+
+    <!-- block for icons right align -->
+    <div class="alm-header-icons">
+        <sly data-sly-resource="${resource.path @ resourceType='learning/components/notification', appendPath='/*'}"/>
+        <!-- <img class="alm-header-notification" src="/content/dam/learning/site/Smock_Bell.png" ></img> -->
+        <img class="alm-header-profile" src="" ></img>
+        <img class="alm-header-down" src="/content/dam/learning/site/ChevronDown.svg" ></img>
+        <div class="alm-header-profile-options">
+            <ul>
+                <li><span><a href="/content/learning/language-masters/en/profile.html">Your Profile</a></span></li>
+                <li><span>Log Out</span></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html" data-sly-call="${clientlib.all @ categories='learning.site,apps.alm.components.header'}"/>

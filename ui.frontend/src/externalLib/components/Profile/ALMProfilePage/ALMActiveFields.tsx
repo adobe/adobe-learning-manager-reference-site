@@ -1,6 +1,5 @@
-import { useIntl } from "react-intl";
+import React from "react";
 import { AccountActiveFields, PrimeUser } from "../../../models";
-import { getALMConfig } from "../../../utils/global";
 import styles from "./ALMActiveFields.module.css";
 
 const ALMActiveFields: React.FC<{
@@ -10,8 +9,8 @@ const ALMActiveFields: React.FC<{
   user: PrimeUser;
   accountActiveFields: AccountActiveFields;
 }> = (props) => {
-  const { formatMessage } = useIntl();
-  const config = getALMConfig();
+  // const { formatMessage } = useIntl();
+  // const config = getALMConfig();
 
   const { activeFields, description, title, user, accountActiveFields } = props;
 
@@ -40,17 +39,17 @@ const ALMActiveFields: React.FC<{
               isMultiValue && allowedValuesPresent;
 
             return (
-              <>
+              <React.Fragment key={activeField.name}>
                 <div className={styles.activeFieldName}>{activeField.name}</div>
                 {showTextField && !isMultiValue && (
-                  <input type="text" value=""></input>
+                  <input type="text" defaultValue=""></input>
                 )}
                 {showDropdown && "Show dropdown"}
 
                 {isMultiValuedTextField && "Show multi value text field"}
                 {hasPredefinedMultiValues &&
                   "Show multi value with radio buttons"}
-              </>
+              </React.Fragment>
             );
           })}
         </section>

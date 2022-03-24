@@ -69,9 +69,10 @@
 
     useEffect(() => {
       if(commentCount === 0) {
-        hideCommentsSection();
+        setShowComments(false);
+        setButtonLabel(showCommentsLabel);
       }
-    }, [commentCount]);
+    }, [commentCount, showCommentsLabel]);
     
 
     const upVoteButtonClickHandler = () => {
@@ -107,9 +108,9 @@
       setCommentCount(commentCount - 1);      
     }
 
-    const updatePostHandler = async(input: any, postingType: any, resource: any) => {
+    const updatePostHandler = async(input: any, postingType: any, resource: any, isResourceModified: any) => {
       try {
-        await updatePost(post.id, input, postingType, resource);
+        await updatePost(post.id, input, postingType, resource, isResourceModified);
         showConfirmationDialog();
         setTimeout(() => {
           //auto close alert
@@ -133,7 +134,7 @@
     return (
       <>
       <div className={styles.primePostWrapper}>
-        <PrimeCommunityObjectHeader object={post} type="post" updateObjectHandler={(input: any, postingType: any, resource: any) => {updatePostHandler(input, postingType, resource)}}></PrimeCommunityObjectHeader>
+        <PrimeCommunityObjectHeader object={post} type="post" updateObjectHandler={(input: any, postingType: any, resource: any, isResourceModified: any) => {updatePostHandler(input, postingType, resource, isResourceModified)}}></PrimeCommunityObjectHeader>
         <PrimeCommunityObjectBody object={post} type="post"></PrimeCommunityObjectBody>
         <PrimeCommunityObjectActions
           buttonLabel={buttonLabel}

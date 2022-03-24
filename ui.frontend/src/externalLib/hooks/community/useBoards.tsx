@@ -90,7 +90,7 @@ export const useBoards = (sortFilter: any, skillName: any) => {
 
   useEffect(() => {
     fetchBoards(sortFilter, currentSkill);
-  }, [fetchBoards]);
+  }, [fetchBoards, sortFilter, currentSkill]);
 
   // for pagination
   const loadMoreBoards = useCallback(async () => {
