@@ -33,12 +33,12 @@
         magentoRootCategoryId: "1",
         clientSecret: "8ca8ded0-9ead-44c3-bc6d-96af99b213d8",
         "cq:template": "/apps/aem-learn-components/configuration/page/template",
-        almBaseURL: "https://captivateprimeapac.adobe.com",
-        primeApiURL: "https://captivateprimeapac.adobe.com/primeapi/v2/",
+        almBaseURL: "https://captivateprimeqe.adobe.com",
+        primeApiURL: "https://captivateprimeqe.adobe.com/primeapi/v2/",
         magentoGraphqlEndpoint: "/magento/graphql",
         locale: "en-US",
         primeRegisterUrl: "1",
-        cdnBaseUrl: "https://cpcontentsdev.adobe.com",
+        cdnBaseUrl: "https://cpcontentsqe.adobe.com",
         "jcr:created": "2022-03-02T22:19:50.386+05:30",
         "cq:lastModified": "2022-03-03T13:57:24.962+05:30",
         refreshToken: "1",
@@ -70,7 +70,7 @@
       };
 
       const getAccessToken = () => {
-        return "6b41ebe3b7a78a07218299e435e0f4a8";
+        return "cdd64d27797e95a6ec6df52458327acc";
       };
 
       const getALMConfig = () => {
@@ -146,12 +146,35 @@
           throw e;
         }
       };
+
       const updateALMUser = async () => {
         window.sessionStorage.removeItem("user");
         return getALMUser();
       };
 
-      getALMUser();
+      const getAccountActiveFields = async () => {
+        const primeApiURL = getALMConfig().primeApiURL;
+        const accountActiveFieldsUrl = primeApiURL + "account/fields";
+        const headers = {
+          Accept: "application/vnd.api+json",
+          Authorization: `oauth ${getAccessToken()}`,
+        };
+        try {
+          const response = await fetch(accountActiveFieldsUrl, {
+            credentials: "include",
+            headers,
+            method: "GET",
+          });
+          if (response) {
+            const activeFields = await response.json();
+            console.log(activeFields);
+            return activeFields;
+          }
+        } catch (e) {
+          throw e;
+        }
+      };
+
       window.ALM = window.ALM || {};
       window.ALM.ALMConfig = ALMConfig; //window.ALM.ALMConfig || primeConfig;
       window.ALM.getALMConfig = getALMConfig;
@@ -161,7 +184,9 @@
       window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
       window.ALM.getAccessToken = getAccessToken;
       window.ALM.getALMUser = getALMUser;
+      window.ALM.getAccountActiveFields = getAccountActiveFields;
       window.ALM.updateALMUser = updateALMUser;
+      getALMUser();
     </script>
     <title>React App</title>
   </head>
@@ -185,11 +210,20 @@
     ></div> */-->
 
     <div
+      class="profile__container"
+      data-section1-title="Organization"
+      data-section1-description="Section 1 description"
+      data-section1-active-fields="Location,Department"
+      data-section2-title="Role"
+      data-section2-description="Section 2 description"
+      data-section2-active-fields="hobby, new location"
+    ></div>
+    <!--/* <div
       class="training__page__container"
       data-show-description="true"
       data-show-author-info="true"
       data-show-enroll-deadline="true"
-    ></div>
+    ></div> */-->
 
     <!--/* <div class="notification__container"></div> */-->
     <!--/* <div class="boards__container"></div> */-->

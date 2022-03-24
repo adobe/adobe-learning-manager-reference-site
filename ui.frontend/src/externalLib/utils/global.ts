@@ -32,6 +32,7 @@ export interface ALM {
   setALMAttribute: Function;
   getALMAttribute: Function;
   updateALMUser: Function;
+  getAccountActiveFields: Function;
 }
 
 export function getWindowObject() {
@@ -85,6 +86,10 @@ export function getQueryParamsIObjectFromUrl() {
 
 export const getALMUser = async () => {
   return JsonApiParse(await getALMObject().getALMUser());
+};
+
+export const getAccountActiveFields = async () => {
+  return await getALMObject().getAccountActiveFields();
 };
 
 export const updateALMUser = async () => {

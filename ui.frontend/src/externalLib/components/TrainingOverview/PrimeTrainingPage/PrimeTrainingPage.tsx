@@ -32,7 +32,7 @@ const getTrainingOverviewAttributes = (config: PrimeConfig) => {
 };
 
 const PrimeTrainingPage = () => {
-  let config = getALMConfig();
+  const config = getALMConfig();
   let trainingOverviewPath = config.trainingOverviewPath;
 
   let pathParams = getPathParams(trainingOverviewPath, [

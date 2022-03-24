@@ -1,25 +1,46 @@
 import { useCallback, useEffect, useState } from "react";
+import { AccountActiveFields } from "../../models/custom";
 import { PrimeUser } from "../../models/PrimeModels";
-import { getALMConfig, getALMUser, updateALMUser } from "../../utils/global";
+import {
+  getAccountActiveFields,
+  getALMConfig,
+  getALMUser,
+  updateALMUser,
+} from "../../utils/global";
 import { RestAdapter } from "../../utils/restAdapter";
 import { getUploadInfo, uploadFile } from "../../utils/uploadUtils";
 
+interface ProfileAttributes {
+  user: PrimeUser;
+  accountActiveFields: AccountActiveFields;
+}
+
 export const useProfile = () => {
-  const [user, setUser] = useState<PrimeUser>({} as PrimeUser);
+  const [profileAttributes, setProfileAttributes] = useState<ProfileAttributes>(
+    { user: {}, accountActiveFields: {} } as ProfileAttributes
+  );
+
   const [errorMessage, setErrorMessage] = useState("");
 
-  const getUser = useCallback(async () => {
-    try {
-      const response = await getALMUser();
-      setUser(response.user);
-    } catch (error) {
-      setErrorMessage("Error getting the user details");
-      console.error("Error getting the user details : ", error);
-    }
-  }, []);
   useEffect(() => {
-    getUser();
-  }, [getUser]);
+    const setupProfile = async () => {
+      try {
+        const [userResponse, response] = await Promise.all([
+          getALMUser(),
+          getAccountActiveFields(),
+        ]);
+        setProfileAttributes({
+          user: userResponse.user,
+          accountActiveFields: response,
+        });
+      } catch (error) {
+        setErrorMessage("Error fetching profile details");
+        console.error("Error etching profile details : ", error);
+      }
+    };
+
+    setupProfile();
+  }, []);
 
   const updateProfileImage = useCallback(async (name: string, file: File) => {
     try {
@@ -37,11 +58,14 @@ export const useProfile = () => {
         },
       });
       const response = await updateALMUser();
-      setUser(response.user);
+      setProfileAttributes((prevState) => ({
+        accountActiveFields: prevState.accountActiveFields,
+        user: response.user,
+      }));
     } catch (error: any) {
       setErrorMessage("Error while uploading the image");
       console.error("Error while uploading the image : ", error);
     }
   }, []);
-  return { user, updateProfileImage, errorMessage };
+  return { profileAttributes, updateProfileImage, errorMessage };
 };

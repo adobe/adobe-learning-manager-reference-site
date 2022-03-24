@@ -1,15 +1,45 @@
 import { Button, lightTheme, Provider } from "@adobe/react-spectrum";
-import { useIntl } from "react-intl";
 import Edit from "@spectrum-icons/workflow/Edit";
-import { useProfile } from "../../../hooks";
-
-import styles from "./ALMProfilePage.module.css";
-import ALMBackButton from "../../Common/ALMBackButton/ALMBackButton";
 import { useRef } from "react";
+import { useIntl } from "react-intl";
+import { useProfile } from "../../../hooks";
+import {
+  getALMConfig,
+  getConfigurableAttributes,
+  PrimeConfig,
+} from "../../../utils/global";
+import ALMBackButton from "../../Common/ALMBackButton/ALMBackButton";
+import ALMActiveFields from "./ALMActiveFields";
+import styles from "./ALMProfilePage.module.css";
+
+const getActiveFieldAttributes = (config: PrimeConfig) => {
+  let cssSelector = config.mountingPoints.profilePageContainer;
+  const activeFieldAttributes = getConfigurableAttributes(cssSelector) || {};
+  return activeFieldAttributes;
+};
 
 const ALMProfilePage = () => {
   const { formatMessage } = useIntl();
-  const { user, updateProfileImage } = useProfile();
+  const config = getALMConfig();
+  const { profileAttributes, updateProfileImage } = useProfile();
+  const { user, accountActiveFields } = profileAttributes;
+
+  console.log("Active fields :: " + accountActiveFields);
+  const activeFieldAttributes = getActiveFieldAttributes(config);
+
+  const {
+    section1ActiveFields,
+    section1Description,
+    section1Title,
+    section2ActiveFields,
+    section2Description,
+    section2Title,
+  } = activeFieldAttributes;
+
+  const userActiveFields = user.fields;
+  console.log("Active field user :: " + userActiveFields);
+
+  console.log("Active field attr :: " + activeFieldAttributes);
   const inputRef = useRef<null | HTMLInputElement>(null);
   const imageUploaded = async (event: any) => {
     let file: any;
@@ -30,8 +60,8 @@ const ALMProfilePage = () => {
   return (
     <Provider theme={lightTheme} colorScheme={"light"}>
       <div className={styles.pageContainer}>
-        <div className={styles.upperSectionContainer}>
-          <section className={styles.upperSection}>
+        <div className={styles.userProfileContainer}>
+          <section className={styles.userProfile}>
             <input
               type="file"
               id="uploadAvatar"
@@ -75,6 +105,20 @@ const ALMProfilePage = () => {
             </div>
           </section>
         </div>
+        <ALMActiveFields
+          title={section1Title}
+          description={section1Description}
+          activeFields={section1ActiveFields}
+          user={user}
+          accountActiveFields={accountActiveFields}
+        />
+        <ALMActiveFields
+          title={section2Title}
+          description={section2Description}
+          activeFields={section2ActiveFields}
+          user={user}
+          accountActiveFields={accountActiveFields}
+        />
       </div>
     </Provider>
   );

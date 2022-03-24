@@ -18,22 +18,9 @@ import {
 import { LaunchPlayer } from "../../utils/playback-utils";
 import { QueryParams } from "../../utils/restAdapter";
 
-// const COURSE = "course";
-// const LEARING_PROGRAM = "learningProgram";
-// const CERTIFICATION = "certification";
-
-// const INCLUDES_FOR_COURSE =
-//   "authors,enrollment,supplementaryLOs.instances.loResources.resources,supplementaryResources,instances.loResources.resources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
-
-// const INCLUDES_FOR_LP_CERT =
-//   "authors,enrollment,subLOs.instances,supplementaryLOs.instances.loResources.resources,supplementaryResources,subLOs.enrollment,instances.badge, skills.skillLevel.badge,skills.skillLevel.skill";
-
 const DEFAULT_INCLUDE_LO_OVERVIEW =
   "authors,enrollment,subLOs.enrollment, subLOs.subLOs.enrollment, subLOs.subLOs.instances.loResources.resources, subLOs.instances.loResources.resources,instances.loResources.resources,supplementaryLOs.instances.loResources.resources,supplementaryResources,subLOs.enrollment,instances.badge, skills.skillLevel.badge,skills.skillLevel.skill";
-// const DEFAULT_INCLUDE_LO_OVERVIEW =
-//   "enrollment,subLOs.instances.learningObject.enrollment,instances.loResources.resources,subLOs.instances.loResources.resources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
-//"enrollment,instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill";
-//subLOs.instances.learningObject
+
 export const useTrainingPage = (
   trainingId: string,
   instanceId: string = "",
