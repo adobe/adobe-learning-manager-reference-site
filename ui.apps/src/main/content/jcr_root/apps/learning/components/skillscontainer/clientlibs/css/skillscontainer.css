@@ -8,6 +8,12 @@
     height: 153px;
 }
 
+.alm-skills-container .topic 
+{
+    min-height: 100px;
+    min-width: 100px;
+}
+
 .alm-skills-container .topic img {
     cursor: pointer;
 }
