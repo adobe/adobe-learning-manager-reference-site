@@ -81,6 +81,10 @@
   .cmp-experiencefragment--header .title {
     display: none;
   }
+
+  .cmp-teaser .cmp-teaser__content {
+    left: 0;
+  }
 }
 
 @media screen and (max-width: 1024px) {
@@ -218,6 +222,26 @@
   margin-top: 5px;
 }
 
+#learning-parent-container .cmp-teaser .cmp-teaser__title
+,#home-catalog-container .cmp-teaser .cmp-teaser__title
+{
+  font: normal normal bold 18px/23px Source Sans Pro;
+  letter-spacing: -0.47px;
+  color: #FFFFFF; 
+  display: inline;
+  padding: 0 5px 0 5px;
+}
+
+#learning-parent-container .cmp-teaser .cmp-teaser__description
+,#home-catalog-container .cmp-teaser .cmp-teaser__description
+{
+  font: normal normal 600 16px/22px Source Sans Pro;
+  letter-spacing: -0.42px;
+  color: #FFFFFF; 
+  display: inline;
+  padding: 0 5px 0 5px;
+}
+
 #learning-button-cont {
   display: flex;
   flex-direction: row;
@@ -274,6 +298,22 @@
 }
 
 /* CSS for Template carousel */
+
+#tmplt-carousel .cmp-teaser .cmp-teaser__title
+{
+  font: normal normal bold 18px/23px Source Sans Pro;
+  letter-spacing: -0.47px;
+  color: #FFFFFF;
+  display: inline;
+  padding: 0 5px 0 5px;
+}
+
+#tmplt-carousel .cmp-teaser .cmp-teaser__description
+{
+  font: normal normal 600 16px/22px Source Sans Pro;
+  letter-spacing: -0.42px;
+  color: #FFFFFF;
+}
 
 #tmplt-carousel .cmp-teaser__image,
 #tmplt-carousel .cmp-teaser__image .cmp-image,
@@ -407,6 +447,32 @@
 
   #learning-calendar-cont .mylearning {
     width: 50%;
+  }
+
+  #tmplt-carousel .cmp-teaser .cmp-teaser__title
+  {
+    font: normal normal bold 31px/39px Source Sans Pro;
+    letter-spacing: -0.81px;
+  }
+
+  #tmplt-carousel .cmp-teaser .cmp-teaser__description
+  {
+    font: normal normal 600 18px/25px Source Sans Pro;
+    letter-spacing: -0.47px;
+  }
+
+  #learning-parent-container .cmp-teaser .cmp-teaser__title
+  ,#home-catalog-container .cmp-teaser .cmp-teaser__title
+  {
+    font: normal normal bold 30px/38px Source Sans Pro;
+    letter-spacing: -0.78px;
+  }
+
+  #learning-parent-container .cmp-teaser .cmp-teaser__description
+  ,#home-catalog-container .cmp-teaser .cmp-teaser__description
+  {
+    font: normal normal 600 18px/25px Source Sans Pro;
+    letter-spacing: -0.47px;
   }
 
   #tmplt-carousel .cmp-teaser__image,
