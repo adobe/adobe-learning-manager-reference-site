@@ -1,19 +1,20 @@
 import { CatalogFilterState } from "../store/reducers/catalog";
+import { getALMObject } from "../utils/global";
 import { QueryParams } from "../utils/restAdapter";
 import LoggedInCustomHooks from "./LoggedInCustomHooks";
 import NonLoggedInCustomHooks from "./NonLoggedInCustomHooks";
 class APIService {
   //customHooks: ICustomHooks;
   //services: {key: value[ICustomHooks]};
-  constructor() {
-    // this.customHooks = this.isUserLoggedIn()
-    //   ? new LoggedInCustomHooks()
-    //   : new NonLoggedInCustomHooks();
-  }
+  // constructor() {
+  //   // this.customHooks = this.isUserLoggedIn()
+  //   //   ? new LoggedInCustomHooks()
+  //   //   : new NonLoggedInCustomHooks();
+  // }
 
   isUserLoggedIn() {
     // add logic to check is logged in user
-    return false;
+    return getALMObject().isPrimeUserLoggedIn();
   }
 
   public async getTrainings(
@@ -52,7 +53,6 @@ class APIService {
     if (this.isUserLoggedIn()) {
       return new LoggedInCustomHooks().getTraining(id, params);
     } else {
-      debugger;
       return new NonLoggedInCustomHooks().getTraining(id);
     }
   }

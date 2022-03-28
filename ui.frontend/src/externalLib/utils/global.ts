@@ -103,9 +103,10 @@ export const getConfigurableAttributes = (cssSelector: string) => {
 
 const init = async () => {
   if (!getALMObject().isPrimeUserLoggedIn()) {
-    return null;
+    SetupAccountTerminologies();
+    return;
   }
-  let response = await getALMUser();
+  const response = await getALMUser();
   const account = response.user.account;
   SetupAccountTerminologies(account.accountTerminologies);
 };
