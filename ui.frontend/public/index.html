@@ -57,6 +57,8 @@
         communityPath: "http://localhost:3000/community.html",
         communityBoardsPath: "http://localhost:3000/community.html",
         communityBoardDetailsPath: "http://localhost:3000/community.html",
+        primeCdnTrainingBaseEndpoint:
+          "https://cpcontentsqe.adobe.com/public/guest/qe/api/eee97c00-e2ec-48ba-b7c4-7fb29ded8809/8669",
         primeTileColors: {
           0: "#00000",
           1: "#FFFFFF",
@@ -66,7 +68,7 @@
       };
 
       const isPrimeUserLoggedIn = () => {
-        return true;
+        return false;
       };
 
       const getAccessToken = () => {
@@ -186,13 +188,15 @@
       window.ALM.getALMUser = getALMUser;
       window.ALM.getAccountActiveFields = getAccountActiveFields;
       window.ALM.updateALMUser = updateALMUser;
-      getALMUser();
+      if (isPrimeUserLoggedIn()) {
+        getALMUser();
+      }
     </script>
     <title>React App</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <!--/* <div class="instance__container"></div> */-->
+    <div class="instance__container"></div>
     <!--/* <div
       class="catalog__container"
       data-show-filters="true"
@@ -209,7 +213,7 @@
       data-skill-level="true"
     ></div> */-->
 
-    <div
+    <!--/* <div
       class="profile__container"
       data-section1-title="Organization"
       data-section1-description="Section 1 description"
@@ -217,7 +221,7 @@
       data-section2-title="Role"
       data-section2-description="Section 2 description"
       data-section2-active-fields="hobby, new location"
-    ></div>
+    ></div> */-->
     <!--/* <div
       class="training__page__container"
       data-show-description="true"

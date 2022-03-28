@@ -5,6 +5,7 @@ const _fontLoading = require("./fontLoading");
 export interface PrimeConfig {
   almBaseURL: string;
   primeApiURL: string;
+  primeCdnTrainingBaseEndpoint: string;
   accessToken: string;
   baseUrl: string;
   instancePath: string;
@@ -101,6 +102,9 @@ export const getConfigurableAttributes = (cssSelector: string) => {
 };
 
 const init = async () => {
+  if (!getALMObject().isPrimeUserLoggedIn()) {
+    return null;
+  }
   let response = await getALMUser();
   const account = response.user.account;
   SetupAccountTerminologies(account.accountTerminologies);
