@@ -1,19 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="nt:unstructured"
-    jcr:title="Profile"
+    jcr:title="Properties"
     sling:resourceType="cq/gui/components/authoring/dialog"
     trackingFeature="learning:profile">
     <content
         jcr:primaryType="nt:unstructured"
-        sling:resourceType="granite/ui/components/coral/foundation/container">
+        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
         <items jcr:primaryType="nt:unstructured">
-            <tabs
+            <column
                 jcr:primaryType="nt:unstructured"
-                sling:resourceType="granite/ui/components/coral/foundation/tabs"
-                maximized="{Boolean}false">
-                <items jcr:primaryType="nt:unstructured"/>
-            </tabs>
+                sling:resourceType="granite/ui/components/coral/foundation/container">
+                <items jcr:primaryType="nt:unstructured">
+                    <section1
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/text"
+                        text="Configure Section 1"/>
+                    <sec1Title
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        emptyText="Your Organisation"
+                        fieldDescription="Keep title empty to hide this section completely"
+                        fieldLabel="Title"
+                        name="./section1Title"/>
+                    <sec1Description
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        emptyText="Select which organisation you are in"
+                        fieldLabel="Description"
+                        name="./section1Description"/>
+                    <sec1ActiveFields
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldDescription="Enter multiple active fields separated by commas"
+                        fieldLabel="Active Field(s)"
+                        name="./section1ActiveFields"/>
+                    <section2
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/text"
+                        text="Configure Section 2"/>
+                    <sec2Title
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        emptyText="Your Role"
+                        fieldDescription="Keep title empty to hide this section completely"
+                        fieldLabel="Title"
+                        name="./section2Title"/>
+                    <sec2Description
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        emptyText="Which role best suits you or interests you."
+                        fieldLabel="Description"
+                        name="./section2Description"/>
+                    <sec2ActiveFields
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldDescription="Enter multiple active fields separated by commas"
+                        fieldLabel="Active Field(s)"
+                        name="./section2ActiveFields"/>
+                </items>
+            </column>
         </items>
     </content>
 </jcr:root>

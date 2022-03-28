@@ -4,13 +4,15 @@
     jcr:primaryType="dam:Asset"
     jcr:uuid="40d104be-d263-4dbf-b704-db86b76366e0">
     <jcr:content
+        cq:name="running.jpg"
+        cq:parentPath="/content/dam/learning/site"
         dam:assetState="processed"
-        jcr:lastModified="{Date}2022-03-16T18:47:51.589+05:30"
+        jcr:lastModified="{Date}2022-03-24T10:17:24.068+05:30"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
             dam:Bitsperpixel="{Long}24"
-            dam:extracted="{Date}2022-03-16T18:47:50.911+05:30"
+            dam:extracted="{Date}2022-03-24T10:17:11.654+05:30"
             dam:Fileformat="JPEG"
             dam:MIMEtype="image/jpeg"
             dam:Numberofimages="{Long}1"
@@ -20,7 +22,7 @@
             dam:Physicalwidthindpi="{Long}300"
             dam:Physicalwidthininches="{Decimal}6.400000095367432"
             dam:Progressive="no"
-            dam:sha1="8782ff67552b204e525d3786a1a61cb7aba92a03"
+            dam:sha1="d5ce6e08a42bdfc2e56f831cbb3819b3e78f65ed"
             dam:size="{Long}255932"
             dc:format="image/jpeg"
             dc:modified="{Date}2016-01-14T14:22:19.376-08:00"
@@ -28,6 +30,8 @@
             exif:ExifVersion="0221"
             exif:PixelXDimension="{Long}1920"
             exif:PixelYDimension="{Long}1080"
+            jcr:lastModified="{Date}2022-03-24T10:17:22.219+05:30"
+            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"
             photoshop:ColorMode="{Long}3"

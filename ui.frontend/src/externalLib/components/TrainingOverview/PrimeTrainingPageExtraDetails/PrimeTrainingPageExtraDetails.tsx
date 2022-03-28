@@ -8,7 +8,7 @@ import Send from "@spectrum-icons/workflow/Send";
 import UserGroup from "@spectrum-icons/workflow/UserGroup";
 import { useMemo } from "react";
 import { useIntl } from "react-intl";
-import { InstanceBadge, Skill } from "../../../models/common";
+import { InstanceBadge, Skill } from "../../../models/custom";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,

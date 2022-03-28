@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { cardColors } from "../common/Theme";
-import { CardBgStyle, InstanceBadge, Skill } from "../models/common";
+import { CardBgStyle, InstanceBadge, Skill } from "../models/custom";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
