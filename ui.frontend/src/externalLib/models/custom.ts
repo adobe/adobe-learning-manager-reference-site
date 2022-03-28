@@ -23,3 +23,13 @@ export interface CardBgStyle {
   backgroundPosition?: string;
   background?: string;
 }
+
+export interface AccountActiveFields {
+  fields: Field[];
+}
+
+interface Field {
+  name: string;
+  allowedValues: string[];
+  isMultiValue: boolean;
+}

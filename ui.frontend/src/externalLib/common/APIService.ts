@@ -13,7 +13,7 @@ class APIService {
 
   isUserLoggedIn() {
     // add logic to check is logged in user
-    return true;
+    return false;
   }
 
   public async getTrainings(
@@ -51,6 +51,9 @@ class APIService {
   public async getTraining(id: string, params: QueryParams) {
     if (this.isUserLoggedIn()) {
       return new LoggedInCustomHooks().getTraining(id, params);
+    } else {
+      debugger;
+      return new NonLoggedInCustomHooks().getTraining(id);
     }
   }
 

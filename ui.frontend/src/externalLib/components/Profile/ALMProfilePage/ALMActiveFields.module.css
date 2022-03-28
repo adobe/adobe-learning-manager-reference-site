@@ -1,0 +1,37 @@
+@import "../../../styles/variables.css";
+
+.activeFields {
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+.title {
+  font-size: var(--prime-font-size-28);
+  font-weight: bold;
+  line-height: 17px;
+  letter-spacing: 0.54px;
+  color: var(--prime-color-nc1);
+  opacity: 1;
+  margin: 0 0 15px 0;
+}
+
+.activeFieldName {
+  font-weight: var(--prime-font-weight-600);
+}
+
+.description,
+.activeFieldName {
+  font-size: var(--prime-font-size-18);
+  color: var(--prime-color-nc1);
+}
+
+@media screen and (min-width: 1024px) {
+  .activeFields {
+    width: 930px;
+  }
+}
+@media screen and (min-width: 1366px) {
+  .activeFields {
+    width: 1084px;
+  }
+}

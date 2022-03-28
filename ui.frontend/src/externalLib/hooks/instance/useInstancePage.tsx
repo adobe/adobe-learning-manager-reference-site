@@ -5,11 +5,7 @@ import {
   PrimeLearningObjectInstance,
   PrimeLocalizationMetadata,
 } from "../../models/PrimeModels";
-import {
-  getALMConfig,
-  getALMObject,
-  getWindowObject,
-} from "../../utils/global";
+import { getALMConfig, getALMObject } from "../../utils/global";
 import { useCardBackgroundStyle, useCardIcon } from "../../utils/hooks";
 import { checkIfEnrollmentDeadlineNotPassed } from "../../utils/instance";
 import { QueryParams } from "../../utils/restAdapter";

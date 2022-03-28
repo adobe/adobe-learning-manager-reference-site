@@ -5,6 +5,7 @@ const _fontLoading = require("./fontLoading");
 export interface PrimeConfig {
   almBaseURL: string;
   primeApiURL: string;
+  primeCdnTrainingBaseEndpoint: string;
   accessToken: string;
   baseUrl: string;
   instancePath: string;
@@ -32,6 +33,7 @@ export interface ALM {
   setALMAttribute: Function;
   getALMAttribute: Function;
   updateALMUser: Function;
+  getAccountActiveFields: Function;
 }
 
 export function getWindowObject() {
@@ -87,6 +89,10 @@ export const getALMUser = async () => {
   return JsonApiParse(await getALMObject().getALMUser());
 };
 
+export const getAccountActiveFields = async () => {
+  return await getALMObject().getAccountActiveFields();
+};
+
 export const updateALMUser = async () => {
   return JsonApiParse(await getALMObject().updateALMUser());
 };
@@ -96,6 +102,9 @@ export const getConfigurableAttributes = (cssSelector: string) => {
 };
 
 const init = async () => {
+  if (!getALMObject().isPrimeUserLoggedIn()) {
+    return null;
+  }
   let response = await getALMUser();
   const account = response.user.account;
   SetupAccountTerminologies(account.accountTerminologies);

@@ -54,12 +54,17 @@ export class RestAdapter {
     return new Promise(function (resolve, reject) {
       const xhr = new XMLHttpRequest();
       xhr.open(options.method, getUrl(options.url, options.params));
-      xhr.withCredentials =
-        options.withCredentials === undefined ? true : options.withCredentials;
-      xhr.setRequestHeader(
-        "Authorization",
-        `oauth ${getALMObject().getAccessToken()}`
-      );
+      if (getALMObject().isPrimeUserLoggedIn) {
+        xhr.withCredentials =
+          options.withCredentials === undefined
+            ? true
+            : options.withCredentials;
+        xhr.setRequestHeader(
+          "Authorization",
+          `oauth ${getALMObject().getAccessToken()}`
+        );
+      }
+
       for (const header in options.headers) {
         xhr.setRequestHeader(header, options.headers[header]);
       }
@@ -85,4 +90,3 @@ export class RestAdapter {
     });
   }
 }
-

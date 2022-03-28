@@ -1,7 +1,7 @@
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useIntl } from "react-intl";
-import { CardBgStyle } from "../../../models/common";
+import { CardBgStyle } from "../../../models/custom";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
@@ -74,9 +74,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
       {/* <h2 className={styles.courseInfoHeader}>{name} </h2> */}
       <div className={styles.metadata}>
         <div className={styles.metadataContents}>
-          <div>
-            {GetTranslation(`prime.catalog.card.${loType}`, true)}
-          </div>
+          <div>{GetTranslation(`prime.catalog.card.${loType}`, true)}</div>
           {authorNames.length ? (
             <>
               <div className={styles.metadata__separator}></div>
