@@ -76,26 +76,35 @@ const PrimeCatalogContainer = () => {
       ""
     );
 
+  const filtersButtonForMobileHTML =
+    catalogAttributes?.showFilters === "true" ? (
+      <Button
+        variant="primary"
+        UNSAFE_className={styles.button}
+        onPress={toggleFiltersonMobile}
+      >
+        {formatMessage({
+          id: "prime.catalog.filter",
+          defaultMessage: "Filters",
+        })}
+        <Filter />
+      </Button>
+    ) : (
+      ""
+    );
   const searchHtml =
     catalogAttributes?.showSearch === "true" ? (
-      <div className={styles.searchContainer}>
-        <Button
-          variant="primary"
-          UNSAFE_className={styles.button}
-          onPress={toggleFiltersonMobile}
-        >
-          {formatMessage({
-            id: "prime.catalog.filter",
-            defaultMessage: "Filters",
-          })}
-          <Filter />
-        </Button>
-        <PrimeCatalogSearch query={query} handleSearch={handleSearch} />
-      </div>
+      <PrimeCatalogSearch query={query} handleSearch={handleSearch} />
     ) : (
       ""
     );
 
+  const searchContainerHTML = (
+    <div className={styles.searchContainer}>
+      {filtersButtonForMobileHTML}
+      {searchHtml}
+    </div>
+  );
   return (
     <ALMErrorBoundary>
       <Provider theme={lightTheme} colorScheme={"light"}>
@@ -106,7 +115,7 @@ const PrimeCatalogContainer = () => {
                 {GetTranslation("prime.catalog.header", true)}
               </h1>
 
-              {searchHtml}
+              {searchContainerHTML}
             </div>
             {catalogAttributes?.showSearch === "true" && showingSearchHtml}
           </div>

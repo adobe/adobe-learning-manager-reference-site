@@ -21,9 +21,9 @@
     .set("certPageLink", ["loOverview", "certification", new RegExp(/certification\/(\d+)\/overview/i)])
     .set("lpPageLink", ["loOverview", "learningProgram", new RegExp(/learningProgram\/(\d+)\/overview/i)])
     .set("catalogOverviewPageLink", ["catalogOverview", "catalog", new RegExp(/selectedListableCatalogIds=(\d+)/i)])
+    .set("catalogPageLink", ["catalogPage"])
     .set("ciPageLink", ["course", new RegExp(/courseInstance\/(\d+)/i), "instance"])
     .set("lpiPageLink", ["course", new RegExp(/lpInstance\/(\d+)/i), "instance"])
-    .set("catalogPageLink", LEARNER_PREFIX + "#/catalog/index?selectedSortOption=-date")
     .set("myLearningPageLink", LEARNER_PREFIX + "#/catalog/index?myLearning=true&selectedSortOption=dueDate");
 
   var WIDET_CONFIG_DATA = "data-cp-widget-configs",
@@ -91,6 +91,10 @@
       {
         var catalogIds = e.route.match(almLinksMapObj[2])[1];
         window.ALM.navigateToCatalogPage(catalogIds);
+      }
+      else if (pageType === "catalogPage")
+      {
+        window.ALM.navigateToHomePage();
       }
     }
   }
