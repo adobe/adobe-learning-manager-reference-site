@@ -1,9 +1,3 @@
-:root {
-  --alm-desktop-width: 1180px;
-  --alm-tablet-width: 930px;
-  --alm-mobile-width: 100%;
-}
-
 .cmp-title--right {
   align-content: center;
 }
@@ -341,47 +335,6 @@
   top: -10px;
 }
 
-/* CSS for ALM Footer */
-
-#alm-footer {
-  background: #292929 0% 0% no-repeat padding-box;
-  border: 1px solid #707070;
-  height: 70px;
-  color: #ebebeb;
-  display: none;
-}
-
-#alm-footer a {
-  color: #ebebeb;
-  font-size: 11px;
-  letter-spacing: 0px;
-  text-align: left;
-  text-decoration: none;
-}
-
-.alm-footer-scrollTop {
-  position: absolute;
-  right: 0;
-  top: 5px;
-}
-
-.alm-footer-scrollTop a {
-  display: flex;
-}
-
-.alm-footer-scrollTop a img {
-  border: 1px white solid;
-  border-radius: 50%;
-}
-
-.alm-footer-scrollTop div {
-  margin-right: 5px;
-}
-
-.alm-footer-container .footer-separator {
-  font-size: 11px;
-}
-
 #tmplt-carousel {
   margin-bottom: 10px;
 }
@@ -489,20 +442,6 @@
     /* width: 290px; */
   }
 
-  #alm-footer {
-    display: block;
-  }
-
-  #alm-footer .alm-footer-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    margin-top: 20px;
-    /* width: 930px; */
-    margin-left: auto;
-    margin-right: auto;
-  }
-
   #alm-support-header
   {
     height: 150px;
@@ -548,10 +487,6 @@
     /* width: 348px; */
   }
 
-  #alm-footer .alm-footer-container {
-    /* width: 1180px; */
-  }
-
   #alm-support-header .text
   {
       width: 1084px;
@@ -575,11 +510,6 @@
   margin: 0 auto;
 }
 
-#alm-footer .alm-footer-container {
-  max-width: var(--prime-container-max-width-desktop);
-  width: var(--prime-container-width);
-}
-
 #alm-support-header .text
 {
   max-width: var(--prime-container-max-width-desktop);
@@ -592,11 +522,6 @@
 @media screen and (max-width: 1024px) {
   #home-catalog-container,
   #learning-parent-container {
-    max-width: var(--prime-container-max-width-tablet);
-    width: var(--prime-container-width);
-    padding: 0;
-  }
-  #alm-footer .alm-footer-container {
     max-width: var(--prime-container-max-width-tablet);
     width: var(--prime-container-width);
     padding: 0;
@@ -942,123 +867,6 @@ body {
   color: #202020;
   line-height: 1.5;
 }
-
-/* body .root {
-  max-width: 105pc;
-  margin: 0 auto;
-} */
-/* 
-@media (max-width: 1024px) {
-  body .root {
-    padding-top: 130px;
-  }
-} */
-
-/* .h1,
-.h2,
-.h3,
-.h4,
-.h5,
-.h6,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  line-height: 1.5;
-  color: #202020;
-}
-
-.h1,
-.h2,
-.h3,
-h1,
-h2,
-h3 {
-  font-family: Asar, Georgia, Times New Roman, Times, serif;
-  font-weight: 400;
-  margin-top: 27px;
-  margin-bottom: 13.5px;
-}
-
-.h4,
-.h5,
-.h6,
-h4,
-h5,
-h6 {
-  font-family: Source Sans Pro, Helvetica Neue, Helvetica, Arial, sans-serif;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-
-.h1,
-h1 {
-  font-size: 40px;
-}
-
-.h2,
-h2 {
-  font-size: 36px;
-}
-
-.h3,
-h3 {
-  font-size: 24px;
-}
-
-.h4,
-h4 {
-  font-size: 1pc;
-}
-
-.h5,
-h5 {
-  font-size: 14px;
-}
-
-.h6,
-h6 {
-  font-size: 10px;
-}
-
-a {
-  color: #0045ff;
-  text-decoration: none;
-}
-
-h1 a,
-h2 a,
-h3 a {
-  color: #202020;
-}
-
-h1 a:after,
-h2 a:after,
-h3 a:after {
-  speak: none;
-  font-style: normal;
-  font-weight: 400;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  font-size: 1.25rem;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  content: "";
-  font-size: 9pt;
-  position: relative;
-  top: -0.5em;
-  left: 0.75em;
-}
-
-p {
-  margin: 0 0 13.5px;
-  font-size: 18px;
-  line-height: 2.5;
-  text-align: justify;
-} */
 
 .cmp-accordion .cmp-accordion__button {
   border: none;
