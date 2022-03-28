@@ -99,15 +99,172 @@ export function ReplaceAccountTerminology(translation: string): string {
 }
 
 export function SetupAccountTerminologies(
-  accountTerminologies: PrimeAccountTerminology[]
+  accountTerminologies: PrimeAccountTerminology[] = defaultAccountTerminologies
 ): void {
-  if (accountTerminologies) {
-    accountTerminologyMap = {};
-    accountTerminologies.forEach((item) => {
-      accountTerminologyMap[item.entityType] = {
-        name_lxpv: item.name,
-        pluralName_lxpv: item.pluralName,
-      };
-    });
-  }
+  accountTerminologyMap = {};
+  accountTerminologies.forEach((item) => {
+    accountTerminologyMap[item.entityType] = {
+      name_lxpv: item.name,
+      pluralName_lxpv: item.pluralName,
+    };
+  });
 }
+
+const defaultAccountTerminologies = [
+  {
+    entityType: "MODULE",
+    locale: "en-US",
+    name: "Module",
+    pluralName: "Modules",
+  },
+  {
+    entityType: "COURSE",
+    locale: "en-US",
+    name: "Course",
+    pluralName: "Courses",
+  },
+  {
+    entityType: "LEARNING_PATH",
+    locale: "en-US",
+    name: "Learning Path",
+    pluralName: "Learning Paths",
+  },
+  {
+    entityType: "CERTIFICATION",
+    locale: "en-US",
+    name: "Certification",
+    pluralName: "Certifications",
+  },
+  {
+    entityType: "LEARNING_PLAN",
+    locale: "en-US",
+    name: "Learning Plan",
+    pluralName: "Learning Plans",
+  },
+  {
+    entityType: "JOB_AID",
+    locale: "en-US",
+    name: "Job Aid",
+    pluralName: "Job Aids",
+  },
+  {
+    entityType: "CATALOG",
+    locale: "en-US",
+    name: "Catalog",
+    pluralName: "Catalogs",
+  },
+  {
+    entityType: "SKILL",
+    locale: "en-US",
+    name: "Skill",
+    pluralName: "Skills",
+  },
+  {
+    entityType: "BADGE",
+    locale: "en-US",
+    name: "Badge",
+    pluralName: "Badges",
+  },
+  {
+    entityType: "ANNOUNCEMENT",
+    locale: "en-US",
+    name: "Announcement",
+    pluralName: "Announcements",
+  },
+  {
+    entityType: "MY_LEARNING",
+    locale: "en-US",
+    name: "My Learning",
+    pluralName: "My Learning",
+  },
+  {
+    entityType: "LEADERBOARD",
+    locale: "en-US",
+    name: "Leaderboard",
+    pluralName: "Leaderboard",
+  },
+  {
+    entityType: "EFFECTIVENESS",
+    locale: "en-US",
+    name: "Effectiveness",
+    pluralName: "Effectiveness",
+  },
+  {
+    entityType: "PREREQUISITE",
+    locale: "en-US",
+    name: "Prerequisite",
+    pluralName: "Prerequisites",
+  },
+  {
+    entityType: "PREWORK",
+    locale: "en-US",
+    name: "Prework",
+    pluralName: "Prework",
+  },
+  {
+    entityType: "CORE_CONTENT",
+    locale: "en-US",
+    name: "Core Content",
+    pluralName: "Core Content",
+  },
+  {
+    entityType: "TESTOUT",
+    locale: "en-US",
+    name: "Testout",
+    pluralName: "Testout",
+  },
+  {
+    entityType: "SELF_PACED",
+    locale: "en-US",
+    name: "Self Paced",
+    pluralName: "Self Paced",
+  },
+  {
+    entityType: "BLENDED",
+    locale: "en-US",
+    name: "Blended",
+    pluralName: "Blended",
+  },
+  {
+    entityType: "CLASSROOM",
+    locale: "en-US",
+    name: "Classroom",
+    pluralName: "Classrooms",
+  },
+  {
+    entityType: "VIRTUAL_CLASSROOM",
+    locale: "en-US",
+    name: "Virtual Classroom",
+    pluralName: "Virtual Classroom",
+  },
+  {
+    entityType: "ACTIVITY",
+    locale: "en-US",
+    name: "Activity",
+    pluralName: "Activities",
+  },
+  {
+    entityType: "PATH",
+    locale: "en-US",
+    name: "Path",
+    pluralName: "Paths",
+  },
+  {
+    entityType: "SKILL_LEVEL",
+    locale: "en-US",
+    name: "Skill Level",
+    pluralName: "Skill Levels",
+  },
+  {
+    entityType: "SOCIAL_LEARNING",
+    locale: "en-US",
+    name: "Social Learning",
+    pluralName: "Social Learning",
+  },
+  {
+    entityType: "SOCIAL",
+    locale: "en-US",
+    name: "Social",
+    pluralName: "Social",
+  },
+] as PrimeAccountTerminology[];
