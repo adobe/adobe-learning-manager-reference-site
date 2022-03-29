@@ -24,7 +24,7 @@
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/select"
                         fieldDescription="Adobe Learning Manager Usage"
-                        fieldLabel="Learning Manager Usage"
+                        fieldLabel="Adobe Learning Manager Usage"
                         granite:id="alm-usage-type-select"
                         name="./usageType"
                         cq:showOnCreate="{Boolean}true">

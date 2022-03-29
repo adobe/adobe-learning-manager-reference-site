@@ -22,9 +22,9 @@
     .set("lpPageLink", ["loOverview", "learningProgram", new RegExp(/learningProgram\/(\d+)\/overview/i)])
     .set("catalogOverviewPageLink", ["catalogOverview", "catalog", new RegExp(/selectedListableCatalogIds=(\d+)/i)])
     .set("catalogPageLink", ["catalogPage"])
+    .set("myLearningPageLink", ["catalogPage"])
     .set("ciPageLink", ["course", new RegExp(/courseInstance\/(\d+)/i), "instance"])
-    .set("lpiPageLink", ["course", new RegExp(/lpInstance\/(\d+)/i), "instance"])
-    .set("myLearningPageLink", LEARNER_PREFIX + "#/catalog/index?myLearning=true&selectedSortOption=dueDate");
+    .set("lpiPageLink", ["course", new RegExp(/lpInstance\/(\d+)/i), "instance"]);
 
   var WIDET_CONFIG_DATA = "data-cp-widget-configs",
     WIDGET_REF_DATA = "cp-widget-ref",
