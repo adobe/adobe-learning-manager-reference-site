@@ -90,8 +90,9 @@ const PrimeCourseOverview: React.FC<{
           <PrimeModuleList
             launchPlayerHandler={launchPlayerHandler}
             loResources={preWorkResources}
-            trainingId={training.id}
+            training={training}
             isPartOfLP={isPartOfLP}
+            trainingInstance={trainingInstance}
           ></PrimeModuleList>
 
           {showDuration && (
@@ -107,8 +108,10 @@ const PrimeCourseOverview: React.FC<{
           <PrimeModuleList
             launchPlayerHandler={launchPlayerHandler}
             loResources={moduleReources}
-            trainingId={training.id}
+            training={training}
             isPartOfLP={isPartOfLP}
+            trainingInstance={trainingInstance}
+            isContent={true}
           ></PrimeModuleList>
         </Item>
         {showTestout && (
@@ -116,7 +119,8 @@ const PrimeCourseOverview: React.FC<{
             <PrimeModuleList
               launchPlayerHandler={launchPlayerHandler}
               loResources={testOutResources}
-              trainingId={training.id}
+              training={training}
+              trainingInstance={trainingInstance}
             ></PrimeModuleList>
           </Item>
         )}

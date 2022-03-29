@@ -34,10 +34,14 @@ const PrimeLPItemContainer: React.FC<{
   const { locale } = getALMConfig();
 
   const trainingInstance = filterTrainingInstance(training);
-  const { name, description, overview, richTextOverview } =
-    useMemo((): PrimeLocalizationMetadata => {
-      return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
-    }, [training.localizedMetadata, locale]);
+  const {
+    name,
+    description,
+    overview,
+    richTextOverview,
+  } = useMemo((): PrimeLocalizationMetadata => {
+    return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
+  }, [training.localizedMetadata, locale]);
 
   const { cardIconUrl, color } = useCardIcon(training);
   const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
