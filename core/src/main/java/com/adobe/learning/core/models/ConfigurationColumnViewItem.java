@@ -37,7 +37,7 @@ public class ConfigurationColumnViewItem {
     private static final String CONF_ROOT = "/conf";
     private static final String CONF_CONTAINER_BUCKET_NAME = "settings";
     private static final String CLOUDCONFIGS_BUCKET_NAME = "cloudconfigs";
-    private static final String ALM_CONFIG_NAME = "alm";
+    private static final String ALM_CONFIG_NAME = "adobe-learning-manager-config";
     private static final String ALM_BUCKET_PATH = StringUtils.join(new String[] { CONF_CONTAINER_BUCKET_NAME, CLOUDCONFIGS_BUCKET_NAME,
             ALM_CONFIG_NAME }, "/");
 

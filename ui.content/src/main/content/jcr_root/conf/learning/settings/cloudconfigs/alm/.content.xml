@@ -6,7 +6,7 @@
         cq:lastModifiedBy="admin"
         cq:template="/apps/learning/configuration/page/template"
         jcr:primaryType="cq:PageContent"
-        jcr:title="Adobe Learning Manager"
+        jcr:title="adobe-learning-manager-config"
         sling:configPropertyInherit="true"
         sling:resourceType="learning/configuration/page"
         accountId="7110"

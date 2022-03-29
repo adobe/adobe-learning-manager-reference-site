@@ -29,7 +29,7 @@ public class GlobalConfigurationServiceImpl implements GlobalConfigurationServic
 	private static final Map<String, Object> authInfo = ImmutableMap.of(ResourceResolverFactory.SUBSERVICE,
 			SUBSERVICE_NAME);
 
-	private static final String CONFIGURATION_NAME = "cloudconfigs/alm";
+	private static final String CONFIGURATION_NAME = "cloudconfigs/adobe-learning-manager-config";
 
 	@Reference
 	private ResourceResolverFactory resolverFactory;
