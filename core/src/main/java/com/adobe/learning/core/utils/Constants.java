@@ -14,6 +14,7 @@ public class Constants {
 		public static final String ALM_BASE_URL = "almBaseURL";
 		public static final String CLIENT_ID = "clientId";
 		public static final String CLIENT_SECRET = "clientSecret";
+		public static final String PAGE_LOCALE = "pageLocale";
 	}
 
 	public final class EmbeddableWidgetConfig {
