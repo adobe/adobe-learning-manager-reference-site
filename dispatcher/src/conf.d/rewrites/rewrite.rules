@@ -8,7 +8,7 @@
 Include conf.d/rewrites/default_rewrite.rules
 
 # rewrite for root redirect
-RewriteRule ^/?$ /content/${CONTENT_FOLDER_NAME}/us/en.html [PT,L]
+RewriteRule ^/?$ /content/${CONTENT_FOLDER_NAME}/language-masters/en/home.html [PT,L]
 
 RewriteCond %{REQUEST_URI} !^/apps
 RewriteCond %{REQUEST_URI} !^/bin

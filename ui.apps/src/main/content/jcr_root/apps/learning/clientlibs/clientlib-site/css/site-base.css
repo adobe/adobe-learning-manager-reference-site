@@ -293,6 +293,15 @@
 
 /* CSS for Template carousel */
 
+#tmplt-carousel .cmp-teaser .cmp-teaser__content
+{
+  max-width: var(--prime-container-max-width-desktop);
+  width: var(--prime-container-width);
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+
 #tmplt-carousel .cmp-teaser .cmp-teaser__title
 {
   font: normal normal bold 18px/23px Source Sans Pro;
@@ -532,6 +541,12 @@
     max-width: var(--prime-container-max-width-tablet);
     width: var(--prime-container-width);
   }
+
+  #tmplt-carousel .cmp-teaser .cmp-teaser__content
+  {
+    max-width: var(--prime-container-max-width-tablet);
+    width: var(--prime-container-width);
+  }
 }
 
 @media screen and (max-width: 414px) {
@@ -567,6 +582,12 @@
     max-width: 100%;
     width: 100%;
     padding: 0;
+  }
+
+  #tmplt-carousel .cmp-teaser .cmp-teaser__content
+  {
+    width: 100%;
+    max-width: 100%;
   }
 }
 
