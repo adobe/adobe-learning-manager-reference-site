@@ -2,12 +2,17 @@ import Calendar from "@spectrum-icons/workflow/Calendar";
 import Clock from "@spectrum-icons/workflow/Clock";
 import Link from "@spectrum-icons/workflow/Link";
 import Location from "@spectrum-icons/workflow/Location";
+import LockClosed from "@spectrum-icons/workflow/LockClosed";
 import Seat from "@spectrum-icons/workflow/Seat";
 import User from "@spectrum-icons/workflow/User";
+import Visibility from "@spectrum-icons/workflow/Visibility";
 import React, { useMemo } from "react";
 import { useIntl } from "react-intl";
 import {
+  PrimeLearningObject,
+  PrimeLearningObjectInstance,
   PrimeLearningObjectResource,
+  PrimeLearningObjectResourceGrade,
   PrimeResource,
 } from "../../../models/PrimeModels";
 import {
@@ -55,32 +60,84 @@ const moduleIconMap = {
   AUDIO: AUDIO_SVG(),
 };
 
-const PrimeModuleItem = (props: any) => {
-  const loResource: PrimeLearningObjectResource = props.loResource;
-  //const isPartOfLP = props.isPartOfLP;
+const PrimeModuleItem: React.FC<{
+  training: PrimeLearningObject;
+  trainingInstance: PrimeLearningObjectInstance;
+  launchPlayerHandler: Function;
+  loResource: PrimeLearningObjectResource;
+  isPartOfLP?: boolean;
+  isContent?: boolean;
+}> = (props) => {
+  const {
+    training,
+    trainingInstance,
+    launchPlayerHandler,
+    loResource,
+    isPartOfLP,
+    isContent,
+  } = props;
   const { formatMessage } = useIntl();
 
-  // loResource.learningObject.
-
-  const launchPlayerHandler = props.launchPlayerHandler;
   const config = getALMConfig();
   const locale = config.locale;
-  const trainingId = props.trainingId;
 
   let localizedMetadata = loResource.localizedMetadata;
   const { name, description, overview } = getPreferredLocalizedMetadata(
     localizedMetadata,
     locale
   );
-  // const resource = useMemo((): PrimeResource => {
-  //   return (
-  //     loResource.resources.filter((item) => item.locale === locale)[0] ||
-  //     loResource.resources.filter((item) => item.locale === "en-US")[0] ||
-  //     loResource.resources[0]
-  //   );
-  // }, [loResource.resources, locale]);
 
   const resource = useResource(loResource, locale);
+  const enrollment = training.enrollment;
+  const isModulePreviewAble =
+    (!enrollment || enrollment?.state === "PENDING_APPROVAL") &&
+    loResource.previewEnabled;
+
+  const isModuleLocked = (): boolean => {
+    if (!isContent) {
+      return false;
+    }
+    const id = loResource.id;
+
+    if (
+      training.prerequisiteLOs &&
+      training.isPrerequisiteEnforced &&
+      training.prerequisiteLOs.some(
+        (prerequisiteLO) =>
+          !prerequisiteLO.enrollment ||
+          prerequisiteLO.enrollment.state !== "COMPLETED"
+      )
+    ) {
+      return true;
+    }
+
+    if (training.isSubLoOrderEnforced) {
+      for (const res of trainingInstance.loResources) {
+        if (id === res.id) {
+          break;
+        }
+
+        const loResourceGrades = enrollment
+          ? enrollment.loResourceGrades
+          : ([] as PrimeLearningObjectResourceGrade[]);
+        const filteredResourceGrades = loResourceGrades.filter(
+          (loResourceGrade) => loResourceGrade.id.search(loResource.id)
+        );
+        const loResourceGrade = filteredResourceGrades.length
+          ? filteredResourceGrades[0]
+          : ({} as PrimeLearningObjectResourceGrade);
+
+        if (enrollment && loResourceGrades) {
+          if (loResourceGrade && !loResourceGrade.hasPassed) {
+            return true;
+          }
+        } else {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
 
   const isClassroomOrVC =
     loResource.resourceType === CLASSROOM ||
@@ -120,8 +177,13 @@ const PrimeModuleItem = (props: any) => {
   );
 
   const itemClickHandler = () => {
-    if (loResource.learningObject.enrollment && !isClassroomOrVC)
-      launchPlayerHandler({ id: trainingId, moduleId: loResource.id });
+    const enrollment = loResource.learningObject.enrollment;
+    if (
+      (enrollment && !isClassroomOrVC) ||
+      (!enrollment && loResource.previewEnabled)
+    ) {
+      launchPlayerHandler({ id: training.id, moduleId: loResource.id });
+    }
   };
   const keyDownHandler = (event: any) => {
     if (event.key === "Enter") {
@@ -147,9 +209,21 @@ const PrimeModuleItem = (props: any) => {
       >
         <div className={styles.icon} aria-hidden="true">
           {moduleIcon}
+          {isModuleLocked() && (
+            <span className={styles.moduleLocked}>
+              <LockClosed aria-hidden="true" />
+            </span>
+          )}
         </div>
         <div className={styles.headerWrapper}>
-          <div className={styles.title}>{name}</div>
+          <div className={styles.titleContainer}>
+            <span className={styles.title}>{name}</span>
+            {isModulePreviewAble && (
+              <span className={styles.previewable}>
+                Preview <Visibility aria-hidden="true" />
+              </span>
+            )}
+          </div>
           <div className={styles.resourceAndDuration}>
             <span className={styles.resourceType}>{fomatLabel}</span>
             <span>{durationText}</span>

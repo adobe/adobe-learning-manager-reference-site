@@ -64,9 +64,9 @@ const PrimeTrainingPage = () => {
   } = useTrainingPage(trainingId, trainingInstanceId);
   const locale = config.locale;
   const { formatMessage } = useIntl();
-  const [{ showAuthorInfo, showDescription, showEnrollDeadline }] = useState(
-    () => getTrainingOverviewAttributes(config)
-  );
+  const [
+    { showAuthorInfo, showDescription, showEnrollDeadline },
+  ] = useState(() => getTrainingOverviewAttributes(config));
 
   if (isLoading || !training) {
     return <ALMLoader classes={styles.loader} />;
@@ -118,7 +118,6 @@ const PrimeTrainingPage = () => {
             {loType === LEARNING_PROGRAM &&
               sections.map((section, index) => {
                 const trainingIds = section.loIds;
-                //const name = section.localizedMetadata;
                 const { name } = getPreferredLocalizedMetadata(
                   section.localizedMetadata,
                   locale

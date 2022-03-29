@@ -2,7 +2,6 @@ import { Button } from "@adobe/react-spectrum";
 import ChevronDown from "@spectrum-icons/workflow/ChevronDown";
 import ChevronUp from "@spectrum-icons/workflow/ChevronUp";
 import React, { useMemo, useState } from "react";
-import { PrimeCourseOverview } from "../PrimeCourseOverview";
 import {
   PrimeLearningObject,
   PrimeLocalizationMetadata,
@@ -15,6 +14,7 @@ import {
   useCardIcon,
 } from "../../../utils/hooks";
 import { getPreferredLocalizedMetadata } from "../../../utils/translationService";
+import { PrimeCourseOverview } from "../PrimeCourseOverview";
 import { PrimeTrainingItemContainerHeader } from "../PrimeTrainingItemContainerHeader";
 import styles from "./PrimeCourseItemContainer.module.css";
 const PrimeCourseItemContainer: React.FC<{
@@ -39,10 +39,14 @@ const PrimeCourseItemContainer: React.FC<{
   const { locale } = getALMConfig();
 
   const trainingInstance = filterTrainingInstance(training);
-  const { name, description, overview, richTextOverview } =
-    useMemo((): PrimeLocalizationMetadata => {
-      return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
-    }, [training.localizedMetadata, locale]);
+  const {
+    name,
+    description,
+    overview,
+    richTextOverview,
+  } = useMemo((): PrimeLocalizationMetadata => {
+    return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
+  }, [training.localizedMetadata, locale]);
 
   const { cardIconUrl, color } = useCardIcon(training);
   const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);

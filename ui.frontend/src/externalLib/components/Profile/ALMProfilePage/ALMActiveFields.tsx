@@ -21,6 +21,7 @@ const ALMActiveFields: React.FC<{
   const fields = accountActiveFields.fields?.filter((activeField) => {
     return configuredActiveFields.indexOf(activeField.name) !== -1;
   });
+
   console.log(fields);
   return (
     <>
@@ -30,7 +31,6 @@ const ALMActiveFields: React.FC<{
           <div className={styles.description}>{description}</div>
           {fields?.map((activeField) => {
             const allowedValuesPresent = activeField.allowedValues.length > 0;
-
             const isMultiValue = activeField.isMultiValue;
             const showTextField = !allowedValuesPresent;
             const showDropdown = allowedValuesPresent && !isMultiValue;
@@ -45,7 +45,6 @@ const ALMActiveFields: React.FC<{
                   <input type="text" defaultValue=""></input>
                 )}
                 {showDropdown && "Show dropdown"}
-
                 {isMultiValuedTextField && "Show multi value text field"}
                 {hasPredefinedMultiValues &&
                   "Show multi value with radio buttons"}

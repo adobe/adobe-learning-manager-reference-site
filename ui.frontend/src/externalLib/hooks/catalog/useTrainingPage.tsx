@@ -19,7 +19,7 @@ import { LaunchPlayer } from "../../utils/playback-utils";
 import { QueryParams } from "../../utils/restAdapter";
 
 const DEFAULT_INCLUDE_LO_OVERVIEW =
-  "authors,enrollment,subLOs.enrollment, subLOs.subLOs.enrollment, subLOs.subLOs.instances.loResources.resources, subLOs.instances.loResources.resources,instances.loResources.resources,supplementaryLOs.instances.loResources.resources,supplementaryResources,subLOs.enrollment,instances.badge, skills.skillLevel.badge,skills.skillLevel.skill";
+  "prerequisiteLOs,subLOs.prerequisiteLOs,subLOs.subLOs.prerequisiteLOs,authors,enrollment.loResourceGrades,subLOs.enrollment.loResourceGrades, subLOs.subLOs.enrollment.loResourceGrades, subLOs.subLOs.instances.loResources.resources, subLOs.instances.loResources.resources,instances.loResources.resources,supplementaryLOs.instances.loResources.resources,supplementaryResources,subLOs.enrollment,instances.badge, skills.skillLevel.badge,skills.skillLevel.skill";
 export const useTrainingPage = (
   trainingId: string,
   instanceId: string = "",

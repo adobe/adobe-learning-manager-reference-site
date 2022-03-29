@@ -64,6 +64,7 @@ a.details {
 .icon {
   display: flex;
   padding: 10px;
+  position: relative;
 }
 .headerIcon svg {
   fill: var(--prime-icon-color);
@@ -73,8 +74,8 @@ a.details {
 
 .icon svg {
   fill: var(--prime-icon-color);
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
 }
 .spectrumIcon {
   padding: 10px 15px;
@@ -108,6 +109,44 @@ a.details {
   justify-content: space-between;
   color: var(--prime-color-nc3);
   font-size: var(--prime-font-size-12);
+}
+
+.moduleLocked {
+  background-size: contain;
+  width: 45%;
+  height: 45%;
+  border-radius: 30px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  line-height: 40%;
+  background-color: #fff;
+}
+
+.moduleLocked svg {
+  fill: var(--prime-color-nc3);
+  width: 16px;
+  height: 16px;
+}
+
+.previewable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--prime-color-nc3);
+  font-size: var(--prime-font-size-12);
+}
+
+.previewable svg {
+  fill: var(--prime-icon-color);
+  width: 18px;
+  height: 13px;
+  margin-left: 3px;
+}
+
+.titleContainer {
+  display: flex;
+  justify-content: space-between;
 }
 
 @media screen and (max-width: 414px) {
