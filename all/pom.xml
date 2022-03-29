@@ -52,6 +52,9 @@
                     <group>com.adobe.learning</group>
                     <packageType>container</packageType>
                     <skipSubPackageValidation>true</skipSubPackageValidation>
+                    <properties>
+                        <cloudManagerTarget>all</cloudManagerTarget>
+                    </properties>
                     <embeddeds>
                         <embedded>
                             <groupId>com.adobe.learning</groupId>
@@ -187,6 +190,9 @@
                         <extensions>true</extensions>
                         <configuration>
                             <group>com.adobe.learning</group>
+                            <properties>
+                                <cloudManagerTarget>all</cloudManagerTarget>
+                            </properties>
                             <embeddeds>
                                 <embedded>
                                     <groupId>com.adobe.learning</groupId>

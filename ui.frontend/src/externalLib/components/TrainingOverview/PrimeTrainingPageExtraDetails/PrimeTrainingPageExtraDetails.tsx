@@ -109,7 +109,6 @@ const PrimeTrainingPageExtraDetails: React.FC<{
     trainingInstance.completionDeadline;
   const showEnrollmentDeadline =
     !training.enrollment && trainingInstance.enrollmentDeadline;
-
   const showJobAids = training.enrollment && training.supplementaryLOs?.length;
   const showResource = training.supplementaryResources?.length;
   const showUnenrollButton =
@@ -135,13 +134,22 @@ const PrimeTrainingPageExtraDetails: React.FC<{
           </Button>
         )}
         {action === "enroll" && (
-          <Button
-            variant="primary"
-            UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
-            onPress={enrollmentHandler}
-          >
-            {actionText}
-          </Button>
+          <>
+            <Button
+              variant="primary"
+              UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
+              onPress={enrollmentHandler}
+            >
+              {actionText}
+            </Button>
+            {trainingInstance.seatLimit > -1 ? (
+              <p style={{ textAlign: "center" }} className={styles.label}>
+                Seats Available : {trainingInstance.seatLimit}
+              </p>
+            ) : (
+              ""
+            )}
+          </>
         )}
         {(action === "start" ||
           action === "continue" ||
@@ -362,6 +370,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
                     className={styles.supplymentaryLoName}
                     target="_blank"
                     rel="noreferrer"
+                    key={item.id}
                   >
                     {item.name}
                   </a>
