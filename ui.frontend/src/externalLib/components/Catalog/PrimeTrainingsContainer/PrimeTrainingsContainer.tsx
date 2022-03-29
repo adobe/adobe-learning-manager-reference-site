@@ -1,8 +1,6 @@
-import { useRef } from "react";
+import { Button } from "@adobe/react-spectrum";
 import { useIntl } from "react-intl";
-import { useLoadMore } from "../../../hooks/loadMore";
 import { PrimeLearningObject } from "../../../models/PrimeModels";
-import { ALMLoader } from "../../Common/ALMLoader";
 import { PrimeTrainingCard } from "../PrimeTrainingCard";
 import styles from "./PrimeTrainingsContainer.module.css";
 
@@ -11,13 +9,7 @@ const PrimeTrainingsContainer: React.FC<{
   loadMoreTraining: () => void;
   hasMoreItems: boolean;
 }> = ({ trainings, loadMoreTraining, hasMoreItems }) => {
-  const elementRef = useRef(null);
   const { formatMessage } = useIntl();
-  useLoadMore({
-    items: trainings,
-    callback: loadMoreTraining,
-    elementRef,
-  });
   const listHtml = trainings?.length ? (
     <ul className={styles.primeTrainingsList}>
       {trainings?.map((training) => (
@@ -35,8 +27,19 @@ const PrimeTrainingsContainer: React.FC<{
   return (
     <div className={styles.primeTrainingsContainer}>
       {listHtml}
-      <div ref={elementRef} id="load-more-trainings">
-        {hasMoreItems ? <ALMLoader classes={styles.loader} /> : ""}
+      <div id="load-more-trainings" className={styles.loadMoreContainer}>
+        {hasMoreItems ? (
+          <Button
+            variant="cta"
+            isQuiet
+            onPress={loadMoreTraining}
+            UNSAFE_className={styles.loadMoreButton}
+          >
+            Load more
+          </Button>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );
