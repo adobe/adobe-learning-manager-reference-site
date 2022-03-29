@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
@@ -103,40 +104,41 @@ public class EmbeddableLrngWidgetModel {
 		{
 			String key = e.getKey();
 
-			Object value = e.getValue();
-			if (value instanceof String)
+			if (!StringUtils.startsWithAny(key, Constants.AEM_NODE_PROP_PREFIXES))
 			{
-				widgetObject.put(key, value.toString());
-			} else if (value instanceof Integer)
-			{
-				widgetObject.put(key, (Integer) value);
-			} else if (value instanceof Boolean)
-			{
-				widgetObject.put(key, (Boolean) value);
-			} else
-			{
-				widgetObject.put(key, gson.toJson(value));
+				Object value = e.getValue();
+				if (value instanceof String)
+				{
+					widgetObject.put(key, value.toString());
+				} else if (value instanceof Integer)
+				{
+					widgetObject.put(key, (Integer) value);
+				} else if (value instanceof Boolean)
+				{
+					widgetObject.put(key, (Boolean) value);
+				} else
+				{
+					widgetObject.put(key, gson.toJson(value));
+				}
 			}
 		}
 		widgetObject.put("widgetConfig.widgetRef", selectedWidgetRef);
-		widgetObject.put("type", "acapConfig");
-		widgetObject.put("auth.accessToken", "");
+		widgetObject.put(Constants.EmbeddableWidgetConfig.CONFIG_TYPE_KEY, Constants.EmbeddableWidgetConfig.CONFIG_TYPE_VALUE);
+		widgetObject.put(Constants.EmbeddableWidgetConfig.AUTH_ACCESS_TOKEN_KEY, "");
 		widgetObject.put(Constants.EmbeddableWidgetConfig.CP_HOST_NAME_PROP, adminConfigsObj.get(Constants.Config.ALM_BASE_URL).getAsString());
 		widgetObject.put(Constants.EmbeddableWidgetConfig.CP_EMIT_PLAYER_EVENT_PROP, Constants.EmbeddableWidgetConfig.CP_EMIT_PLAYER_EVENT_PROP_VALUE);
-		//widgetObject.put(Constants.EmbeddableWidgetConfig.CP_THEME_BACKGROUND_PROP, Constants.EmbeddableWidgetConfig.CP_THEME_BACKGROUND_PROP_VALUE);
-		
 
-//		widgetObject.remove(Constants.Config.CLIENT_ID);
-//		widgetObject.remove(Constants.Config.CLIENT_SECRET);
-//		widgetObject.remove(Constants.Config.SITES_AUTHOR_REFRESH_TOKEN_NAME);
-		
+		//		widgetObject.remove(Constants.Config.CLIENT_ID);
+		//		widgetObject.remove(Constants.Config.CLIENT_SECRET);
+		//		widgetObject.remove(Constants.Config.SITES_AUTHOR_REFRESH_TOKEN_NAME);
+
 		for (Entry<String, JsonElement> e : adminConfigsObj.entrySet())
 		{
 			widgetObject.put(e.getKey(), e.getValue().getAsString());
 		}
 
 		JsonObject obj = EmbeddableLrngWidgetUtils.getWidgetConfig(widgetObject);
-		
+
 		return gson.toJson(obj);
 	}
 

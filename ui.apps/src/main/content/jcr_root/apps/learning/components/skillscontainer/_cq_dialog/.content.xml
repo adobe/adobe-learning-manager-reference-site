@@ -15,8 +15,8 @@
                     <counts
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/radiogroup"
-                        fieldLabel="Number of topics per row"
-                        name="./topicRows">
+                        fieldLabel="Number of Products per row"
+                        name="./productRows">
                         <items jcr:primaryType="nt:unstructured">
                             <option1
                                 jcr:primaryType="nt:unstructured"

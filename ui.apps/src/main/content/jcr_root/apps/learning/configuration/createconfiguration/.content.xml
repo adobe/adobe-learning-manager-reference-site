@@ -7,7 +7,7 @@
           jcr:primaryType="cq:Page">
     <jcr:content
             jcr:primaryType="cq:PageContent"
-            jcr:title="Create ALM Configuration"
+            jcr:title="Adobe Learning Manager Configuration"
             sling:resourceType="granite/ui/components/coral/foundation/page">
         <head jcr:primaryType="nt:unstructured">
             <viewport
@@ -49,7 +49,7 @@
                         <name jcr:primaryType="nt:unstructured"
                               sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
                               name="./jcr:title"
-                              value="ALM"/>
+                              value="Adobe Learning Manager"/>
                         <configPropertyInherit jcr:primaryType="nt:unstructured"
                                                sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
                                                name="./sling:configPropertyInherit"
@@ -65,7 +65,7 @@
                                   value="/apps/learning/configuration/page/template"/>
                         <wizard
                                 jcr:primaryType="nt:unstructured"
-                                jcr:title="Create ALM Configuration"
+                                jcr:title="Adobe Learning Manager Configuration"
                                 sling:resourceType="granite/ui/components/coral/foundation/wizard"
                                 cancelHref="${empty header.Referer ? granite:concat('/apps/learning/configuration.html', granite:encodeURIPath(requestPathInfo.suffix)) : header.Referer}">
                             <items jcr:primaryType="nt:unstructured">

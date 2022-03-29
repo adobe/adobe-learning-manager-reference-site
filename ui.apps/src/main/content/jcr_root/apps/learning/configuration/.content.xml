@@ -14,7 +14,7 @@
                  consoleId="cq-alm-configurations"
                  contentPath="${requestInfo.suffix}"
                  currentView="${state['config-reactor.shell.collectionpage.layoutid'].string}"
-                 jcr:title="ALM Configurations"
+                 jcr:title="Adobe Learning Manager Configurations"
                  modeGroup="cq-confadmin-admin-childpages"
                  pageURITemplate="/apps/learning/configuration.html{+id}"
                  sling:resourceType="granite/ui/components/shell/collectionpage"
@@ -50,7 +50,7 @@
         </views>
         <breadcrumbs jcr:primaryType="nt:unstructured"
                      rootPath="/conf"
-                     rootTitle="ALM Configurations"
+                     rootTitle="Adobe Learning Manager Configurations"
                      sling:resourceType="cq/cloudconfig/components/admin/datasources/breadcrumbs"/>
         <actions jcr:primaryType="nt:unstructured">
             <primary jcr:primaryType="nt:unstructured"/>
@@ -80,7 +80,7 @@
                             sling:resourceType="granite/ui/components/coral/foundation/collection/actionlink"
                             action="foundation.link"
                             target=".cq-confadmin-admin-childpages"
-                            text="ALM Configuration"
+                            text="Adobe Learning Manager Configuration"
                             variant="primary">
                             <data jcr:primaryType="nt:unstructured"
                                   href.uritemplate="/mnt/overlay/learning/configuration/createconfiguration.html{+id}"/>

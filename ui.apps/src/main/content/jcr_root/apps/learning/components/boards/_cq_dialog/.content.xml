@@ -28,18 +28,18 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
-                                            <topics
+                                            <products
                                                 jcr:primaryType="nt:unstructured"
-                                                fieldLabel="Add Topics you want to show"
-                                                fieldDescription="Add Topics you want to show"
+                                                fieldLabel="Add Products you want to show"
+                                                fieldDescription="Add Products you want to show"
                                                 required="{Boolean}true"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/multifield">
                                                 <field
                                                     jcr:primaryType="nt:unstructured"
-                                                    name="./topics"
-                                                    emptyText="Enter a topic"
+                                                    name="./products"
+                                                    emptyText="Enter a Product"
                                                     sling:resourceType="granite/ui/components/coral/foundation/form/textfield"/>
-                                            </topics>
+                                            </products>
                                         </items>
                                     </column>
                                 </items>

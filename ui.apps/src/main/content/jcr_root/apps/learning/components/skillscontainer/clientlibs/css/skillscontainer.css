@@ -8,13 +8,13 @@
     height: 153px;
 }
 
-.alm-skills-container .topic 
+.alm-skills-container .product 
 {
     min-height: 100px;
     min-width: 100px;
 }
 
-.alm-skills-container .topic img {
+.alm-skills-container .product img {
     cursor: pointer;
 }
 
@@ -132,17 +132,17 @@
     }
 }
 
-/* .alm-skills-container.alm-skills-rows--4 .topic.image.aem-GridColumn.aem-GridColumn--default--12 {
+/* .alm-skills-container.alm-skills-rows--4 .product.image.aem-GridColumn.aem-GridColumn--default--12 {
     display: inline-block;
     width: 25%;
 }
 
-.alm-skills-container.alm-skills-rows--3 .topic.image.aem-GridColumn.aem-GridColumn--default--12 {
+.alm-skills-container.alm-skills-rows--3 .product.image.aem-GridColumn.aem-GridColumn--default--12 {
     display: inline-block;
     width: 33%;
 }
 
-.alm-skills-container.alm-skills-rows--2 .topic.image.aem-GridColumn.aem-GridColumn--default--12 {
+.alm-skills-container.alm-skills-rows--2 .product.image.aem-GridColumn.aem-GridColumn--default--12 {
     display: inline-block;
     width: 50%;
 }

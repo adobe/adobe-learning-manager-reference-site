@@ -806,7 +806,7 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="skill-cont-policy"
                     sling:resourceType="wcm/core/components/policy/policy"
-                    components="/apps/learning/components/topic">
+                    components="/apps/learning/components/product">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_1646843692619>
             </skillscontainer>

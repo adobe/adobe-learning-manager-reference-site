@@ -5,7 +5,7 @@
     sling:resourceType="cq/gui/components/authoring/dialog"
     extraClientlibs="[core.wcm.components.image.v2.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_image_v2"
-    trackingFeature="core-components:image:v2">
+    trackingFeature="learning:product">
     <content
         granite:class="cmp-image__editor"
         jcr:primaryType="nt:unstructured"
@@ -18,7 +18,7 @@
                 <items jcr:primaryType="nt:unstructured">
                     <asset
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Topic"
+                        jcr:title="Product"
                         sling:resourceType="granite/ui/components/coral/foundation/container"
                         margin="{Boolean}true">
                         <items jcr:primaryType="nt:unstructured">
