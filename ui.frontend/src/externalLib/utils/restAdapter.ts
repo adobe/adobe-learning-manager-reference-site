@@ -54,7 +54,7 @@ export class RestAdapter {
     return new Promise(function (resolve, reject) {
       const xhr = new XMLHttpRequest();
       xhr.open(options.method, getUrl(options.url, options.params));
-      if (getALMObject().isPrimeUserLoggedIn) {
+      if (getALMObject().isPrimeUserLoggedIn()) {
         xhr.withCredentials =
           options.withCredentials === undefined
             ? true

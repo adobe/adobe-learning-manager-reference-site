@@ -6,6 +6,7 @@ import {
   PrimeLearningObjectInstance,
   PrimeLearningObjectResource,
   PrimeLocalizationMetadata,
+  PrimeResource,
 } from "../models/PrimeModels";
 import { getALMConfig } from "./global";
 import { getPreferredLocalizedMetadata } from "./translationService";
@@ -135,6 +136,26 @@ const filterLoReourcesBasedOnResourceType = (
       loResource.loResourceType === loResourceType
   );
 };
+
+const filteredResource = (
+  loResource: PrimeLearningObjectResource,
+  locale: string
+) => {
+  return (
+    loResource.resources.filter((item) => item.locale === locale)[0] ||
+    loResource.resources[0]
+  );
+};
+
+const useResource = (
+  loResource: PrimeLearningObjectResource,
+  locale: string = "en-US"
+): PrimeResource => {
+  return useMemo(() => {
+    return filteredResource(loResource, locale);
+  }, [loResource, locale]);
+};
+
 export {
   useCardIcon,
   useCardBackgroundStyle,
@@ -143,4 +164,6 @@ export {
   useLocalizedMetaData,
   filterTrainingInstance,
   filterLoReourcesBasedOnResourceType,
+  useResource,
+  filteredResource,
 };
