@@ -15,6 +15,7 @@ import {
   GetFormattedDate,
 } from "../../../utils/dateTime";
 import { getALMConfig } from "../../../utils/global";
+import { useResource } from "../../../utils/hooks";
 import {
   ACTIVITY_SVG,
   AUDIO_SVG,
@@ -71,13 +72,15 @@ const PrimeModuleItem = (props: any) => {
     localizedMetadata,
     locale
   );
-  const resource = useMemo((): PrimeResource => {
-    return (
-      loResource.resources.filter((item) => item.locale === locale)[0] ||
-      loResource.resources.filter((item) => item.locale === "en-US")[0] ||
-      loResource.resources[0]
-    );
-  }, [loResource.resources, locale]);
+  // const resource = useMemo((): PrimeResource => {
+  //   return (
+  //     loResource.resources.filter((item) => item.locale === locale)[0] ||
+  //     loResource.resources.filter((item) => item.locale === "en-US")[0] ||
+  //     loResource.resources[0]
+  //   );
+  // }, [loResource.resources, locale]);
+
+  const resource = useResource(loResource, locale);
 
   const isClassroomOrVC =
     loResource.resourceType === CLASSROOM ||

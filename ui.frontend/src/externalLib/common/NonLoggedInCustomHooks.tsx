@@ -20,7 +20,7 @@ export default class NonLoggedInCustomHooks implements ICustomHooks {
   }
   async getTraining(id: string) {
     const response = await RestAdapter.get({
-      url: `${this.primeCdnTrainingBaseEndpoint}/course/1958508.json`,
+      url: `${this.primeCdnTrainingBaseEndpoint}/course/1964741.json`,
     });
     return JsonApiParse(response).learningObject;
   }
