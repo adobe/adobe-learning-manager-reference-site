@@ -6,6 +6,8 @@
         cq:template="/libs/cq/experience-fragments/components/experiencefragment/template"
         jcr:primaryType="cq:PageContent"
         jcr:title="Footer"
+        cq:lastModified="{Date}2022-03-07T17:00:09.899+05:30"
+        cq:lastModifiedBy="admin"
         sling:resourceType="cq/experience-fragments/components/experiencefragment"/>
     <master/>
 </jcr:root>
