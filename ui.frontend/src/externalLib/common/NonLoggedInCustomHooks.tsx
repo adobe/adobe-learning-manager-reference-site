@@ -5,6 +5,14 @@ import { JsonApiParse } from "../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
 import ICustomHooks from "./ICustomHooks";
 
+interface ISortMap {
+  date: string;
+  "-date": string;
+}
+const sortMap: any = {
+  date: "publishDate",
+  "-date": "publishDate",
+};
 export default class NonLoggedInCustomHooks implements ICustomHooks {
   primeCdnTrainingBaseEndpoint = getALMConfig().primeCdnTrainingBaseEndpoint;
   async getTrainings(
@@ -14,7 +22,7 @@ export default class NonLoggedInCustomHooks implements ICustomHooks {
   ) {
     const requestObject = getRequestObjectForESApi(
       filterState,
-      sort,
+      sortMap[sort as keyof ISortMap],
       searchText
     );
     console.log(requestObject, filterState);
