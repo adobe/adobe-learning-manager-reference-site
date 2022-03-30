@@ -14,7 +14,7 @@ import {
 } from "../../store/actions/catalog/action";
 import { State } from "../../store/state";
 import { locationUpdate } from "../../utils/catalog";
-import { getQueryParamsIObjectFromUrl } from "../../utils/global";
+import { getALMObject, getQueryParamsIObjectFromUrl } from "../../utils/global";
 import { getALMConfig } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { RestAdapter } from "../../utils/restAdapter";
@@ -337,8 +337,52 @@ export const useFilter = () => {
         console.log(error);
       }
     };
+    if (getALMObject().isPrimeUserLoggedIn()) {
+      getFilters();
+    }
 
-    getFilters();
+    //update state merged with filters in url
+    const updatedFilters = { ...filtersFromState, ...queryParams };
+    dispatch(updateFiltersOnLoad(updatedFilters));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    const queryParams = getQueryParamsIObjectFromUrl();
+    // getFilters();
+    const getESFilters = async () => {
+      try {
+        const response = await RestAdapter.get({
+          url: `https://primeapps-stage.adobe.com/almsearch/api/v1/qe/7110/a75477eb-2a4c-4f6e-b897-a6506da18e3f/filterableData`,
+        });
+        console.log(response);
+        //update only tagName , skillName and catalogs from the response
+        // const skills = JsonApiParse(skillsPromise)?.data?.names;
+        // let skillsList = skills?.map((item: string) => ({
+        //   value: item,
+        //   label: item,
+        //   checked: false,
+        // }));
+        // skillsList = updateFilterList(skillsList, queryParams, "skillName");
+
+        // const tags = JsonApiParse(tagsPromise)?.data?.names;
+        // let tagsList = tags?.map((item: string) => ({
+        //   value: item,
+        //   label: item,
+        //   checked: false,
+        // }));
+        // tagsList = updateFilterList(tagsList, queryParams, "tagName");
+
+        // const catalogs = JsonApiParse(catalogPromise)?.catalogList;
+        // let catalogList = catalogs?.map((item: any) => ({
+        //   value: item.id,
+        //   label: item.name,
+        //   checked: false,
+        // }));
+        // catalogList = updateFilterList(catalogList, queryParams, "catalogs");
+      } catch (error) {}
+    };
+
+    getESFilters();
     //update state merged with filters in url
     const updatedFilters = { ...filtersFromState, ...queryParams };
     dispatch(updateFiltersOnLoad(updatedFilters));
