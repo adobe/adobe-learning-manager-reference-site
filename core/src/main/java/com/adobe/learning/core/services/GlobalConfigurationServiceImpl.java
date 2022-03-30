@@ -58,8 +58,6 @@ public class GlobalConfigurationServiceImpl implements GlobalConfigurationServic
 					
 					String pageLocale = currentPage.getLanguage(false).toString();
 					globalConfig.addProperty(Constants.Config.PAGE_LOCALE, pageLocale);
-					
-					filterAdminConfigs(globalConfig);
 				}
 			}
 		} catch (LoginException le) {
@@ -67,12 +65,5 @@ public class GlobalConfigurationServiceImpl implements GlobalConfigurationServic
 		}
 
 		return globalConfig;
-	}
-	
-	private void filterAdminConfigs(JsonObject globalConfig)
-	{
-		globalConfig.remove(Constants.Config.CLIENT_SECRET);
-		globalConfig.remove(Constants.Config.SITES_AUTHOR_REFRESH_TOKEN_NAME);
-		globalConfig.remove(Constants.Config.COMMERCE_ADMIN_REFRESH_TOKEN);
 	}
 }

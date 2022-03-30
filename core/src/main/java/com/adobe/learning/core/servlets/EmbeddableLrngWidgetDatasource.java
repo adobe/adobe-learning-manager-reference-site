@@ -68,13 +68,6 @@ public class EmbeddableLrngWidgetDatasource extends SlingAllMethodsServlet
 					ValueMap valueMap = resource.getValueMap();
 					JsonObject adminObj = configService.getAdminConfigs(currentPage);
 
-					Map<String, Object> adminConfigs = new HashMap<String, Object>();
-
-					for(Entry<String, JsonElement> entry : adminObj.entrySet())
-					{
-						adminConfigs.put(entry.getKey(), entry.getValue().getAsString());
-					}
-
 					String hostName = adminObj.get(Constants.Config.ALM_BASE_URL).getAsString();
 
 					List<EmbeddableLrngWidgetConfig> widgets = EmbeddableLrngWidgetUtils.getEmbeddableWidgetsConfig(hostName);

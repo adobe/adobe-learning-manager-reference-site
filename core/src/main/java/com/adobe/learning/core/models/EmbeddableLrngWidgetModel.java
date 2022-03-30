@@ -24,6 +24,7 @@ import com.adobe.learning.core.entity.EmbeddableLrngWidgetConfig;
 import com.adobe.learning.core.services.GlobalConfigurationService;
 import com.adobe.learning.core.utils.Constants;
 import com.adobe.learning.core.utils.EmbeddableLrngWidgetUtils;
+import com.adobe.learning.core.utils.GlobalConfigurationUtils;
 import com.day.cq.wcm.api.Page;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -93,6 +94,7 @@ public class EmbeddableLrngWidgetModel {
 			widgetCommunicatorUrl = Constants.CPUrl.WIDGET_COMMUNICATOR_URL.replace("{hostName}", hostName);
 		}
 
+		GlobalConfigurationUtils.filterAdminConfigs(adminConfigsObj);
 		this.widgetConfigs = getWidgetConfig(map, selectedWidgetRef, adminConfigsObj);
 	}
 
@@ -127,10 +129,6 @@ public class EmbeddableLrngWidgetModel {
 		widgetObject.put(Constants.EmbeddableWidgetConfig.AUTH_ACCESS_TOKEN_KEY, "");
 		widgetObject.put(Constants.EmbeddableWidgetConfig.CP_HOST_NAME_PROP, adminConfigsObj.get(Constants.Config.ALM_BASE_URL).getAsString());
 		widgetObject.put(Constants.EmbeddableWidgetConfig.CP_EMIT_PLAYER_EVENT_PROP, Constants.EmbeddableWidgetConfig.CP_EMIT_PLAYER_EVENT_PROP_VALUE);
-
-		//		widgetObject.remove(Constants.Config.CLIENT_ID);
-		//		widgetObject.remove(Constants.Config.CLIENT_SECRET);
-		//		widgetObject.remove(Constants.Config.SITES_AUTHOR_REFRESH_TOKEN_NAME);
 
 		for (Entry<String, JsonElement> e : adminConfigsObj.entrySet())
 		{
