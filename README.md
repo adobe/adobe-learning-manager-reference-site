@@ -39,6 +39,8 @@ Or to deploy only the bundle to the author, run
 
     mvn clean install -PautoInstallBundle
 
+The `classic` profile can be combined with either of the examples mentioned above.
+
 ## Testing
 
 There are three levels of testing contained in the project:
