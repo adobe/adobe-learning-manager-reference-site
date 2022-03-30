@@ -198,6 +198,12 @@ const next: Reducer<string, AnyAction> = (
     case UPDATE_LOFORMAT_FILTERS:
     case UPDATE_LOTYPES_FILTERS:
     case UPDATE_SKILLNAME_FILTERS:
+    case UPDATE_CATALOGS_FILTERS:
+    case UPDATE_DURATION_FILTERS:
+    case UPDATE_TAGS_FILTERS:
+    case UPDATE_SKILLLEVEL_FILTERS:
+    case UPDATE_SEARCH_TEXT:
+    case RESET_SEARCH_TEXT:
       return "";
 
     case LOAD_TRAININGS:

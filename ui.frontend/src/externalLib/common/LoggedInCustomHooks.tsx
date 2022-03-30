@@ -44,7 +44,17 @@ export default class LoggedInCustomHooks implements ICustomHooks {
       next: parsedResponse.links?.next || "",
     };
   }
-
+  async loadMoreTrainings(
+    filterState: CatalogFilterState,
+    sort: string,
+    searchText: string,
+    url: string
+  ) {
+    const response = await RestAdapter.get({
+      url,
+    });
+    return JsonApiParse(response);
+  }
   async loadMore(url: string) {
     const response = await RestAdapter.get({
       url,

@@ -25,8 +25,7 @@ export default class NonLoggedInCustomHooks implements ICustomHooks {
       sortMap[sort as keyof ISortMap],
       searchText
     );
-    console.log(requestObject, filterState);
-    const response = await RestAdapter.post({
+    let response: any = await RestAdapter.post({
       url: `https://primeapps-stage.adobe.com/almsearch/api/v1/qe/7110/a75477eb-2a4c-4f6e-b897-a6506da18e3f/search`,
       method: "POST",
       headers: {
@@ -34,7 +33,39 @@ export default class NonLoggedInCustomHooks implements ICustomHooks {
       },
       body: JSON.stringify(requestObject),
     });
-    return response;
+    response = JSON.parse(response);
+    console.log(response);
+    return {
+      trainings: response.results || [],
+      next: response.next || "",
+    };
+  }
+
+  async loadMoreTrainings(
+    filterState: CatalogFilterState,
+    sort: string,
+    searchText: string = "",
+    url: string
+  ) {
+    const requestObject = getRequestObjectForESApi(
+      filterState,
+      sortMap[sort as keyof ISortMap],
+      searchText
+    );
+    let response: any = await RestAdapter.post({
+      url,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/vnd.api+json;charset=UTF-8",
+      },
+      body: JSON.stringify(requestObject),
+    });
+    response = JSON.parse(response);
+    console.log("load more : ", response);
+    return {
+      trainings: response.results || [],
+      next: response.next || "",
+    };
   }
   async loadMore(url: string) {
     return null;
