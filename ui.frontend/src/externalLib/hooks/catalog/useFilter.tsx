@@ -354,35 +354,45 @@ export const useFilter = () => {
         const response = await RestAdapter.get({
           url: `https://primeapps-stage.adobe.com/almsearch/api/v1/qe/7110/a75477eb-2a4c-4f6e-b897-a6506da18e3f/filterableData`,
         });
-        console.log(response);
-        //update only tagName , skillName and catalogs from the response
-        // const skills = JsonApiParse(skillsPromise)?.data?.names;
-        // let skillsList = skills?.map((item: string) => ({
-        //   value: item,
-        //   label: item,
-        //   checked: false,
-        // }));
-        // skillsList = updateFilterList(skillsList, queryParams, "skillName");
+        const data = JSON.parse(response as string);
+        if (data) {
+          const { terms } = data;
+          //generating the skill name list
+          let skillsList = terms?.loSkillNames?.map((item: string) => ({
+            value: item,
+            label: item,
+            checked: false,
+          }));
+          skillsList = updateFilterList(skillsList, queryParams, "skillName");
 
-        // const tags = JsonApiParse(tagsPromise)?.data?.names;
-        // let tagsList = tags?.map((item: string) => ({
-        //   value: item,
-        //   label: item,
-        //   checked: false,
-        // }));
-        // tagsList = updateFilterList(tagsList, queryParams, "tagName");
-
-        // const catalogs = JsonApiParse(catalogPromise)?.catalogList;
-        // let catalogList = catalogs?.map((item: any) => ({
-        //   value: item.id,
-        //   label: item.name,
-        //   checked: false,
-        // }));
-        // catalogList = updateFilterList(catalogList, queryParams, "catalogs");
-      } catch (error) {}
+          //generating the Taglist
+          let tagsList = terms?.tags?.map((item: string) => ({
+            value: item,
+            label: item,
+            checked: false,
+          }));
+          tagsList = updateFilterList(tagsList, queryParams, "tagName");
+          setFilterState((prevState) => ({
+            ...prevState,
+            skillName: {
+              ...prevState.skillName,
+              list: skillsList,
+            },
+            tagName: {
+              ...prevState.tagName,
+              list: tagsList,
+            },
+          }));
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     };
 
-    getESFilters();
+    if (!getALMObject().isPrimeUserLoggedIn()) {
+      getESFilters();
+    }
     //update state merged with filters in url
     const updatedFilters = { ...filtersFromState, ...queryParams };
     dispatch(updateFiltersOnLoad(updatedFilters));
