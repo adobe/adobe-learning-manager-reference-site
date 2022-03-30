@@ -43,6 +43,4 @@
   border-color: var(--prime-color-primary);
   outline: none;
 }
-.loadMoreButton::after {
-  /* border-radius: 0; */
-}
+

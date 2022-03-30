@@ -1,35 +1,37 @@
-import { useRef } from "react";
-import { useLoadMore } from "../../../hooks/loadMore";
+import { Button, lightTheme, Provider } from "@adobe/react-spectrum";
 import { PrimeBoard } from "../../../models/PrimeModels";
-import { ALMLoader } from "../../Common/ALMLoader";
 import { PrimeCommunityBoard } from "../PrimeCommunityBoard";
-
+import styles from "./PrimeCommunityBoardsContainer.module.css";
 const PrimeCommunityBoardsContainer: React.FC<{
-    boards: PrimeBoard[] | null;
-    loadMoreBoards: () => void;
-    hasMoreItems: boolean;
+  boards: PrimeBoard[] | null;
+  loadMoreBoards: () => void;
+  hasMoreItems: boolean;
 }> = ({ boards, loadMoreBoards, hasMoreItems }) => {
-    const elementRef = useRef(null);
-    useLoadMore({
-        items: boards,
-        callback: loadMoreBoards,
-        elementRef,
-    });
-    const listHtml = boards?.map((board) => (
-        <PrimeCommunityBoard
-        board={board}
-        key={board.id}
-        ></PrimeCommunityBoard>
-    ));
+  const listHtml = boards?.map((board) => (
+    <PrimeCommunityBoard board={board} key={board.id}></PrimeCommunityBoard>
+  ));
 
-    return (
-        <div>
-            {listHtml}
-            <div ref={elementRef} id="load-more-boards">
-                {hasMoreItems ? <ALMLoader /> : ""}
-            </div>
-        </div>
-    );
+  return (
+    <div>
+      {listHtml}
+      <div id="load-more-boards" className={styles.loadMoreContainer}>
+        {hasMoreItems ? (
+          <Provider theme={lightTheme} colorScheme={"light"}>
+            <Button
+              variant="cta"
+              isQuiet
+              onPress={loadMoreBoards}
+              UNSAFE_className={styles.loadMoreButton}
+            >
+              Load more
+            </Button>
+          </Provider>
+        ) : (
+          ""
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default PrimeCommunityBoardsContainer;
