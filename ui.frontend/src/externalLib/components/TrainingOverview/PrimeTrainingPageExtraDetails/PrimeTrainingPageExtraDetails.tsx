@@ -74,6 +74,18 @@ const PrimeTrainingPageExtraDetails: React.FC<{
     }
   }, [trainingInstance.state, trainingInstance.learningObject]);
 
+  const seatsAvailableText =
+    trainingInstance.seatLimit > -1 ? (
+      <p style={{ textAlign: "center" }} className={styles.label}>
+        {formatMessage({
+          id: `alm.overview.seatsAvailable`,
+        })}
+        {trainingInstance.seatLimit}
+      </p>
+    ) : (
+      ""
+    );
+
   const actionText = useMemo(() => {
     return formatMessage({
       id: `alm.overview.button.${action}`,
@@ -166,13 +178,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
             >
               {actionText}
             </Button>
-            {trainingInstance.seatLimit > -1 ? (
-              <p style={{ textAlign: "center" }} className={styles.label}>
-                Seats Available : {trainingInstance.seatLimit}
-              </p>
-            ) : (
-              ""
-            )}
+            {seatsAvailableText}
           </>
         )}
         {(action === "start" ||
@@ -200,6 +206,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
                 id: "alm.overview.manager.approval.pending",
               })}
             </div>
+            {seatsAvailableText}
           </>
         )}
       </div>
