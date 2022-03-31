@@ -30,7 +30,7 @@ export default class NonLoggedInCustomHooks implements ICustomHooks {
       url: `https://primeapps-stage.adobe.com/almsearch/api/v1/qe/7110/a75477eb-2a4c-4f6e-b897-a6506da18e3f/search`,
       method: "POST",
       headers: {
-        "Content-Type": "application/vnd.api+json;charset=UTF-8",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(requestObject),
     });
