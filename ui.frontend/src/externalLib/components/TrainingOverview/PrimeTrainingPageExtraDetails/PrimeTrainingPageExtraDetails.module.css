@@ -149,6 +149,9 @@
 
 .mangerPendingApprovalText {
   text-align: center;
+  color: var(--prime-color-nc3);
+  font-size: var(--prime-font-size-14);
+  margin: 5px 0;
 }
 
 .textOr {
