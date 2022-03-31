@@ -76,24 +76,25 @@ const PrimeCourseOverview: React.FC<{
       </TabList>
       <TabPanels UNSAFE_className={styles.tabPanels}>
         <Item key="Modules">
-          {showDuration && (
-            <div className={styles.overviewcontainer}>
-              <header role="heading" className={styles.header} aria-level={2}>
-                <div className={styles.loResourceType}>Prework</div>
-                <div className={styles.time}>
-                  {convertSecondsToTimeText(preWorkDuration)}
-                </div>
-              </header>
-            </div>
+          {showDuration && preWorkResources.length > 0 && (
+            <>
+              <div className={styles.overviewcontainer}>
+                <header role="heading" className={styles.header} aria-level={2}>
+                  <div className={styles.loResourceType}>Prework</div>
+                  <div className={styles.time}>
+                    {convertSecondsToTimeText(preWorkDuration)}
+                  </div>
+                </header>
+              </div>
+              <PrimeModuleList
+                launchPlayerHandler={launchPlayerHandler}
+                loResources={preWorkResources}
+                training={training}
+                isPartOfLP={isPartOfLP}
+                trainingInstance={trainingInstance}
+              ></PrimeModuleList>
+            </>
           )}
-
-          <PrimeModuleList
-            launchPlayerHandler={launchPlayerHandler}
-            loResources={preWorkResources}
-            training={training}
-            isPartOfLP={isPartOfLP}
-            trainingInstance={trainingInstance}
-          ></PrimeModuleList>
 
           {showDuration && (
             <div className={styles.overviewcontainer}>

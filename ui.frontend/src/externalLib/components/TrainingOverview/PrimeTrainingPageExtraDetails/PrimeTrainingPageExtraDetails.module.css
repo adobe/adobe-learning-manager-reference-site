@@ -12,12 +12,31 @@
   padding: 5px 12px;
   min-width: 70px;
   display: block;
+  border-radius: 2px;
 }
+
+.pendingButton {
+  background-color: var(--prime-color-nc2) !important;
+  color: var(--prime-color-white) !important;
+  outline: none;
+  border: none;
+}
+
+.previewButton {
+  border: 2px solid var(--prime-color-primary);
+}
+
+.previewButton:hover,
+.previewButton:focus,
+.previewButton:focus-visible {
+  background-color: var(--prime-color-nc2);
+  border: 2px solid var(--prime-color-primary) !important;
+}
+
 .actionButton {
   border: 2px solid var(--prime-color-primary);
   color: var(--prime-color-primary);
   background-color: var(--prime-color-white);
-  border-radius: 2px;
 }
 .actionButton:hover,
 .actionButton:focus,
@@ -128,12 +147,23 @@
   text-decoration: none;
 }
 
+.mangerPendingApprovalText {
+  text-align: center;
+}
+
+.textOr {
+  text-align: center;
+  color: var(--prime-color-nc3);
+  font-size: var(--prime-font-size-16);
+  margin: 5px 0;
+}
+
 @media screen and (max-width: 414px) {
-  .container .commonContainer{
+  .container .commonContainer {
     padding-bottom: 10px;
     margin-bottom: 10px;
   }
-  .container .commonContainer:last-child{
+  .container .commonContainer:last-child {
     padding-bottom: 0;
   }
 }

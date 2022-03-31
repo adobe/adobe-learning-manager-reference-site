@@ -357,6 +357,7 @@ export interface PrimeLearningObject {
   subLOs: PrimeLearningObject[];
   supplementaryLOs: PrimeLearningObject[];
   supplementaryResources: PrimeResource[];
+  hasPreview: boolean;
 }
 
 export interface PrimeLearningObjectInstance {

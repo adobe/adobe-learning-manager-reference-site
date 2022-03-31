@@ -7,7 +7,7 @@ import { QueryParams, RestAdapter } from "../utils/restAdapter";
 import ICustomHooks from "./ICustomHooks";
 
 export default class NonLoggedInCustomHooks implements ICustomHooks {
-  primeCdnTrainingBaseEndpoint = getALMConfig().primeCdnTrainingBaseEndpoint;
+  almCdnBaseUrl = getALMConfig().almCdnBaseUrl;
   async getTrainings(
     filterState: CatalogFilterState,
     sort: string,
@@ -19,8 +19,9 @@ export default class NonLoggedInCustomHooks implements ICustomHooks {
     return null;
   }
   async getTraining(id: string) {
+    const loPath = id.replace(":", "/");
     const response = await RestAdapter.get({
-      url: `${this.primeCdnTrainingBaseEndpoint}/course/1964741.json`,
+      url: `${this.almCdnBaseUrl}/${loPath}/.json`,
     });
     return JsonApiParse(response).learningObject;
   }
