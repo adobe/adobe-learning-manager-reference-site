@@ -8,11 +8,13 @@ export const usePost = () => {
       boardId: any,
       input: any,
       postingType: any,
-      resource: any
+      resource: any,
+      isResourceModified: any,
+      pollOptions: any
     ) => {
       // try {
       const baseApiUrl = getALMConfig().primeApiURL;
-      const postBody = {
+      const postBody: any = {
         data: {
           type: "post",
           attributes: {
@@ -23,6 +25,28 @@ export const usePost = () => {
           },
         },
       };
+
+      if(isResourceModified) {
+        postBody.data.attributes.resource = resource;
+      }
+
+      if(postingType === "POLL") {
+        let otherData = [] as any;
+        let index = 1;
+        pollOptions.map((value: any) => {
+          if (value !== "") {
+            let data = {
+              "id": index++,
+              "text": value,
+              "resourceId": null
+            }
+            return otherData.push(data);
+          }
+          return null;
+        });
+        postBody.data.attributes.otherData = JSON.stringify(otherData);
+      }
+
       const headers = { "content-type": "application/json" };
       await RestAdapter.ajax({
         url: `${baseApiUrl}/boards/${boardId}/posts`,
@@ -30,28 +54,13 @@ export const usePost = () => {
         body: JSON.stringify(postBody),
         headers: headers,
       });
-      //   const parsedResponse = JsonApiParse(response);
     },
     []
   );
 
-  //to-do, correct below after bug fix
-  const updatePost = useCallback(async (postId: any, input: any, postingType: any, resource: any, isResourceModified: any) => {
+  const patchPost = useCallback(async (postId: any, input: any, postingType: any, resource: any, isResourceModified: any, pollOptions) => {
       const baseApiUrl =  getALMConfig().primeApiURL;
-      const postBody = isResourceModified ? 
-      {
-        "data":{
-          "type":"post",
-          "id": postId,
-          "attributes": {
-            "postingType": postingType,
-            "state": "ACTIVE",
-            "text": input,
-            "resource": resource
-          }
-        }
-      }
-      :
+      const postBody:any = 
       {
         "data":{
           "type":"post",
@@ -63,6 +72,23 @@ export const usePost = () => {
           }
         }
       }
+
+      if(isResourceModified) {
+        postBody.data.attributes.resource = resource;
+      }
+
+      if(postingType === "POLL") {
+        let otherData = [] as any;
+        let index = 1;
+        pollOptions.map((value: any) => {
+          if(value !== "") {
+            return otherData.push("{\"id\":" + (index++) + ",\"text\":\"" + value + "\",\"resourceId\":null}");
+          }
+          return null;
+        });
+        postBody.data.attributes.otherData = JSON.stringify(otherData);
+      }
+
       const headers = { "content-type": "application/json" };
       await RestAdapter.ajax({
           url: `${baseApiUrl}/posts/${postId}`,
@@ -123,11 +149,21 @@ export const usePost = () => {
     []
   );
 
+  const submitPollVote = useCallback(
+    async (postId: any, optionId: any) => {
+      const baseApiUrl = getALMConfig().primeApiURL;
+      await RestAdapter.ajax({
+        url: `${baseApiUrl}/posts/${postId}/pollvote?optionId=${optionId}`,
+        method: "POST",
+      });
+  },[]);
+
   return {
     addPost,
-    updatePost,
+    patchPost,
     addComment,
     votePost,
     deletePostVote,
+    submitPollVote
   };
 };

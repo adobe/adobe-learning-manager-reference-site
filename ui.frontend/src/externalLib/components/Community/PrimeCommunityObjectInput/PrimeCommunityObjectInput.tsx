@@ -2,8 +2,9 @@ import styles from "./PrimeCommunityObjectInput.module.css";
 import { useIntl } from "react-intl";
 import Send from '@spectrum-icons/workflow/Send'
 import Cancel from '@spectrum-icons/workflow/Cancel'
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { PrimeCommunityLinkPreview } from "../PrimeCommunityLinkPreview";
+// import { PrimeCommunityLoLinkPreview } from "../PrimeCommunityLoLinkPreview";
 
 const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
     const { formatMessage } = useIntl();
@@ -11,11 +12,14 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
     const emptyString = "";
     const [charactersRemaining, setCharactersRemaining] = useState(objectTextLimit);
     const [ showLinkPreview, setShowLinkPreview ] = useState(false);
+    // const [ showLoLinkPreview, setShowLoLinkPreview ] = useState(false);
+    const firstRun = useRef(true);
 
     const exitActions = () => {
         ref.current.value = emptyString;
         setCharactersRemaining(objectTextLimit);
         setShowLinkPreview(false);
+        // setShowLoLinkPreview(false);
     }
 
     const primaryActionHandler = () => {
@@ -42,12 +46,35 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
         } else if(ref.current.value === emptyString) {
             setShowLinkPreview(false);
         }
+        // if(showLoLinkPreview) {
+        //     setShowLoLinkPreview(true);
+        // } else if(ref.current.value === emptyString) {
+        //     setShowLoLinkPreview(false);
+        // }
     }
 
     const checkTextCount = () => {
         const currentInputLength = ref && ref.current ? ref.current.value.length : 0;
         setCharactersRemaining(objectTextLimit < currentInputLength ? 0 : (objectTextLimit - currentInputLength));
+        if(currentInputLength > 0) {
+            if(typeof props.enablePrimaryAction === 'function') {
+                props.enablePrimaryAction();
+            }
+        } else {
+            if(typeof props.disablePrimaryAction === 'function') {
+                props.disablePrimaryAction();
+            }
+        }
     }
+
+    useEffect(() => {
+        if(firstRun.current) {
+            firstRun.current = false;
+            if(props.defaultValue !== "") {
+                processInput();
+            }
+        }
+    }, [props.defaultValue])
 
     return (
         <>
@@ -70,6 +97,7 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
                 </div>
             </div>
             <PrimeCommunityLinkPreview currentInput={ref?.current?.value} showLinkPreview={showLinkPreview}></PrimeCommunityLinkPreview>
+            {/* <PrimeCommunityLoLinkPreview currentInput={ref?.current?.value} showLoLinkPreview={showLoLinkPreview}></PrimeCommunityLoLinkPreview> */}
         </div>
         </>
     );

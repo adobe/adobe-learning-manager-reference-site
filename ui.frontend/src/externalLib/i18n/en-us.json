@@ -128,5 +128,9 @@
   "prime.error.message": "Error Loading the Component : ",
   "alm.overview.job.aid.not.in.list": "This ||JOB_AID|| does not exist in your list",
   "prime.community.showMoreComments": "Show more comments",
-  "prime.community.showMoreReplies": "Show more replies"
+  "prime.community.showMoreReplies": "Show more replies",
+  "prime.community.post.poll.submitChoice": "Submit Choice",
+  "prime.community.post.poll.submittedChoice": "You have submitted your choice",
+  "prime.community.post.poll.voteLabel": "vote"
+
 }

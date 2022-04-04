@@ -13,7 +13,7 @@
     const { formatMessage } = useIntl();
     const ref = useRef<any>();
     const post = props.post;
-    const { addComment, votePost, deletePostVote, updatePost } = usePost();
+    const { addComment, votePost, deletePostVote, patchPost, submitPollVote } = usePost();
     const { fetchComments } = useComments();
     const myVoteStatus = post.myVoteStatus ? post.myVoteStatus : "";
     const [myUpVoteStatus, setMyUpVoteStatus] = useState(myVoteStatus === "UPVOTE");
@@ -108,9 +108,9 @@
       setCommentCount(commentCount - 1);      
     }
 
-    const updatePostHandler = async(input: any, postingType: any, resource: any, isResourceModified: any) => {
+    const updatePostHandler = async(input: any, postingType: any, resource: any, isResourceModified: any, pollOptions: any) => {
       try {
-        await updatePost(post.id, input, postingType, resource, isResourceModified);
+        await patchPost(post.id, input, postingType, resource, isResourceModified, pollOptions);
         showConfirmationDialog();
         setTimeout(() => {
           //auto close alert
@@ -130,12 +130,16 @@
     const showConfirmationDialog  = () => {
         setShowSucessConfirmation(true)
     }
+ 
+    const submitPoll = (optionId: any) => {
+      submitPollVote(post.id, optionId);
+    }
 
     return (
       <>
       <div className={styles.primePostWrapper}>
-        <PrimeCommunityObjectHeader object={post} type="post" updateObjectHandler={(input: any, postingType: any, resource: any, isResourceModified: any) => {updatePostHandler(input, postingType, resource, isResourceModified)}}></PrimeCommunityObjectHeader>
-        <PrimeCommunityObjectBody object={post} type="post"></PrimeCommunityObjectBody>
+        <PrimeCommunityObjectHeader object={post} type="post" updateObjectHandler={(input: any, postingType: any, resource: any, isResourceModified: any, pollOptions: any) => {updatePostHandler(input, postingType, resource, isResourceModified, pollOptions)}}></PrimeCommunityObjectHeader>
+        <PrimeCommunityObjectBody object={post} type="post" submitPoll={(optionId: any) => {submitPoll(optionId)}}></PrimeCommunityObjectBody>
         <PrimeCommunityObjectActions
           buttonLabel={buttonLabel}
           buttonCount={commentCount} 

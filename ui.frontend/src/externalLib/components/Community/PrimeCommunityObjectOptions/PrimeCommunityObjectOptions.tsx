@@ -56,7 +56,7 @@ const PrimeCommunityObjectOptions = (props: any) => {
   return (
     <>
       <div ref={ref} className={styles.primeObjectOptionsList}>
-        {props.object.createdBy.id === user.id &&
+        {props.object.createdBy.id === user.id && Object.keys(props.object.myPoll).length === 0 &&
           <div className={styles.primeObjectRegularOption} onClick={editObjectHandler}>
             {
               formatMessage({

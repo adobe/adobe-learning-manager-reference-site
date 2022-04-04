@@ -12,9 +12,9 @@ const PrimeCommunityAddPost = (props: any) => {
     const [ showSuccessConfirmation, setShowSucessConfirmation ] = useState(false);
     const hideModalTimeInMillis = 10000;
     
-    const savePostHandler = async(input: any, postingType: any, resource: any) => {
+    const savePostHandler = async(input: any, postingType: any, resource: any, isResourceModified: any, pollOptions: any) => {
         try {
-            await addPost(boardId, input, postingType, resource);
+            await addPost(boardId, input, postingType, resource, isResourceModified, pollOptions);
             //below setTimeout is needed to fix spetrum dialog breaking scroll issue
             setTimeout(() => {
                 showConfirmationDialog();
@@ -54,7 +54,7 @@ const PrimeCommunityAddPost = (props: any) => {
                 </div>
                 <div className={styles.primeAddPostButtonDiv}>
                     <PrimeCommunityAddPostButton 
-                        savePostHandler={(input: any, postingType: any, resource: any) => savePostHandler(input, postingType, resource)}
+                        savePostHandler={(input: any, postingType: any, resource: any, isResourceModified: any, pollOptions: any) => savePostHandler(input, postingType, resource, isResourceModified, pollOptions)}
                     ></PrimeCommunityAddPostButton>
                 </div>
             </div>
@@ -71,7 +71,7 @@ const PrimeCommunityAddPost = (props: any) => {
         {/* below is for mobile only */}
             <div className={styles.primeAddPostButtonMobile}>
             <PrimeCommunityAddPostButton
-                savePostHandler={(input: any, postingType: any, resource: any) => savePostHandler(input, postingType, resource)}
+                savePostHandler={(input: any, postingType: any, resource: any, isResourceModified: any, pollOptions: any) => savePostHandler(input, postingType, resource, isResourceModified, pollOptions)}
             ></PrimeCommunityAddPostButton>
         </div>
         </>

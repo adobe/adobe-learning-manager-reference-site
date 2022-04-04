@@ -40,6 +40,7 @@ export * from "./Community/PrimeCommunityPosts";
 export * from "./Community/PrimeCommunityComment";
 export * from "./Community/PrimeCommunityBoardsContainer";
 export * from "./Community/PrimeCommunityPostsContainer";
+export * from "./Community/PrimeCommunityPoll";
 export * from "./Catalog/PrimeCatalogContainer";
 export * from "./Instance/PrimeInstancePage"
 export * from "./Notifications/PrimeNotificationContainer";

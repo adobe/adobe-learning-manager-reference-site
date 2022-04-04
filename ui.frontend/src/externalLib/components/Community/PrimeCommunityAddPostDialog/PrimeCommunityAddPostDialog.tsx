@@ -7,6 +7,7 @@ import {
   ProgressBar,
   Text,
 } from "@adobe/react-spectrum";
+import Close from "@spectrum-icons/workflow/Close";
 import { useEffect, useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import store from "../../../../store/APIStore";
@@ -15,6 +16,7 @@ import {
   SOCIAL_QUESTION_SVG,
   SOCIAL_TEXT_SVG,
   SOCIAL_UPLOAD_SVG,
+  SOCIAL_POLL_SVG
 } from "../../../utils/inline_svg";
 import { cancelUploadFile, uploadFile } from "../../../utils/uploadUtils";
 import { PrimeCommunityObjectInput } from "../PrimeCommunityObjectInput";
@@ -33,11 +35,17 @@ const PrimeCommunityAddPostDialog = (props: any) => {
   const [postingType, setPostingType] = useState(defaultPostingType);
   const [questionTypeSelected, setQuestionTypeSelected] = useState(false);
   const [pollTypeSelected, setPollTypeSelected] = useState(false);
-  const [saveEnabled, setSaveEnabled] = useState(true);
+
+  const isInputFilled = () => {
+    return ref?.current?.value !== "" ? true : false;
+  }
+
+  const [saveEnabled, setSaveEnabled] = useState(isInputFilled());
   const [fileUploadProgress, setFileUploadProgress] = useState(
     state.fileUpload.uploadProgress
   );
   const [textMode, setTextMode] = useState(true);
+  const [ pollOptions, setPollOptions ] = useState([] as any);
   // const [ uploadedFileUrl, setUploadedFileUrl ] = useState("");
   const COMMENT_CHAR_LIMIT = 4000;
   // let post = {
@@ -68,6 +76,12 @@ const PrimeCommunityAddPostDialog = (props: any) => {
         setQuestionTypeSelected(true);
       } else if (props.post.postingType === "POLL") {
         setPollTypeSelected(true);
+        let otherData = JSON.parse(props.post.otherData);
+        let existingPollOptions = [] as any;
+        otherData.map((object: any) => {
+          return existingPollOptions.push(object.text);
+        })
+        setPollOptions(existingPollOptions);
       }
     }
   }, [props.mode, props.post, state.fileUpload]);
@@ -77,6 +91,10 @@ const PrimeCommunityAddPostDialog = (props: any) => {
       setPostingType(questionPostingType);
     } else if (pollTypeSelected) {
       setPostingType(pollPostingType);
+      if(pollOptions?.length === 0) {
+        let pollQuestions = ["", ""];
+        setPollOptions(pollQuestions);
+      }
     } else {
       setPostingType(defaultPostingType);
     }
@@ -84,11 +102,13 @@ const PrimeCommunityAddPostDialog = (props: any) => {
 
   const questionButtonClickHandler = () => {
     setQuestionTypeSelected((questionTypeSelected) => !questionTypeSelected);
+    setPollTypeSelected(false);
   };
 
-  // const pollButtonClickHandler = () => {
-  //   setPollTypeSelected((pollTypeSelected) => !pollTypeSelected);
-  // };
+  const pollButtonClickHandler = () => {
+    setPollTypeSelected((pollTypeSelected) => !pollTypeSelected);
+    setQuestionTypeSelected(false);
+  };
 
   const closeDialogHandler = (close: any) => {
     if (typeof props.closeHandler === "function") {
@@ -101,7 +121,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
       return;
     }
     if (typeof props.saveHandler === "function") {
-      props.saveHandler(close, ref.current.value, postingType, resource, isResourceModified);
+      props.saveHandler(close, ref.current.value, postingType, resource, isResourceModified, pollOptions);
       onExitActions();
     }
   };
@@ -136,12 +156,13 @@ const PrimeCommunityAddPostDialog = (props: any) => {
     };
     setResource(resource);
     setIsResourceModified(true);
+    setPostingType(defaultPostingType);
     clearInterval(progressCheck);
   };
 
   const postUploadChecks = () => {
     setFileUploadProgress(100);
-    setSaveEnabled(true);
+    setSaveEnabled(isInputFilled());
   };
 
   const fileUploadHandler = async () => {
@@ -166,12 +187,32 @@ const PrimeCommunityAddPostDialog = (props: any) => {
   const onExitActions = () => {
     setResource({});
     setTextMode(true);
+    setQuestionTypeSelected(false);
+    setPollTypeSelected(false);
   }
+
   const getFileNameFromSourceUrl = (url: any) => {
     const urlParts = url?.split("/");
     return urlParts[urlParts.length - 1].split("?")[0];
   };
 
+  const addNewPollOption = () => {
+    let newOption = [""];
+    setPollOptions(pollOptions.concat(newOption));
+  }
+
+  const removePollOption = (index: any) => {
+    pollOptions.splice(index, 1);
+    setPollOptions([]); //to-do check why without this polloptions was not updating
+    setPollOptions(pollOptions);
+  }
+
+  const setInputValue = (index: any) => {
+    const inputElement = document.getElementById("poll-option-" + index) as HTMLInputElement;
+    pollOptions[index] = inputElement?.value ? inputElement.value : ""
+    setPollOptions(pollOptions);
+  }
+ 
   return (
     <Dialog UNSAFE_className={styles.primeConfirmationDialog}>
       <Heading>
@@ -214,9 +255,11 @@ const PrimeCommunityAddPostDialog = (props: any) => {
           })}
           characterLimit={COMMENT_CHAR_LIMIT}
           defaultValue={props.post?.richText}
+          enablePrimaryAction={() => {setSaveEnabled(true)}}
+          disablePrimaryAction={() => {setSaveEnabled(false)}}
         ></PrimeCommunityObjectInput>
         {textMode && (
-          <div>
+          <div className={styles.primeOptionsArea}>
             <div>
               <Text>
                 <div className={styles.primeOptionContainer}>
@@ -254,7 +297,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
                 </div>
               </Text>
             </div>
-            {/* <div>
+            <div>
               <Text>
                 <div className={styles.primeOptionContainer}>
                   {pollTypeSelected ?
@@ -272,16 +315,38 @@ const PrimeCommunityAddPostDialog = (props: any) => {
                         {SOCIAL_POLL_SVG()}
                       </div>
                       <div className={styles.primeOptionText}>
-                        {formatMessage({id: "prime.community.addPoll.label",defaultMessage: "Add Poll"})}
+                        {formatMessage({id: "prime.community.addPoll.label", defaultMessage: "Add Poll"})}
                       </div>
                     </div>
                   }
                 </div>
               </Text>
-            </div> */}
+            </div>
+            {pollTypeSelected &&
+              pollOptions?.map((item: any, index: any) => (
+                <div className={styles.primeCommunityPollInputContainer} key={index}>
+                  <input id={"poll-option-" + index} className={styles.primeCommunityPollInput} onKeyUp={() => setInputValue(index)} defaultValue={item} placeholder={
+                    formatMessage({id: "prime.community.pollOptionPlaceholder", defaultMessage: "Type Option here"})}>
+                  </input>
+                  <Button
+                    UNSAFE_className={styles.primeCommunityRemoveOption}
+                    variant="primary"
+                    // isQuiet
+                    onPress={() => {removePollOption(index)}}
+                  >
+                    <Close aria-label="Close" />
+                  </Button>
+                </div>
+              ))
+            }
+            {pollTypeSelected && 
+              <button className={styles.primeCommunityAddOptionButton} onClick={addNewPollOption}>
+                {formatMessage({id: "prime.community.addNewPollOption", defaultMessage: "Add Option"})}
+              </button>
+            }
           </div>
         )}
-        {!textMode && !saveEnabled && (
+        {!textMode && fileUploadProgress !== 100 && (
           <div>
             <ProgressBar
               label={formatMessage({
@@ -292,7 +357,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
             />
           </div>
         )}
-        {!textMode && saveEnabled && (
+        {!textMode && fileUploadProgress === 100 && (
           <div className={styles.primeStatus}>
             <div className={styles.primeStatusText}>
               Uploaded: {state.fileUpload.fileName}

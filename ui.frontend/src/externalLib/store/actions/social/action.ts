@@ -11,7 +11,8 @@ import {
     SET_SELECTED_POST,
     PAGINATE_COMMENTS,
     UPDATE_COMMENT,
-    UPDATE_REPLY
+    UPDATE_REPLY,
+    UPDATE_POST
 } from "./actionTypes";
 
 export const loadBoard = (payload: any): AnyAction => ({
@@ -114,5 +115,10 @@ export const updateComment = (payload: any): AnyAction => ({
 
 export const updateReply = (payload: any): AnyAction => ({
   type: UPDATE_REPLY,
+  payload,
+});
+
+export const updatePost = (payload: any): AnyAction => ({
+  type: UPDATE_POST,
   payload,
 });
