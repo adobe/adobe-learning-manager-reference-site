@@ -1,15 +1,16 @@
 import { CatalogFilterState } from "../store/reducers/catalog";
-import { getALMObject } from "../utils/global";
+import { getALMConfig, getALMObject } from "../utils/global";
 import { QueryParams } from "../utils/restAdapter";
-import LoggedInCustomHooks from "./LoggedInCustomHooks";
-import NonLoggedInCustomHooks from "./NonLoggedInCustomHooks";
+import ALMCustomHooks from "./ALMCustomHooks";
+import CommerceCustomHooks from "./CommerceCustomHooks";
+import ESCustomHooks from "./ESCustomHooks";
 class APIService {
   //customHooks: ICustomHooks;
   //services: {key: value[ICustomHooks]};
   // constructor() {
   //   // this.customHooks = this.isUserLoggedIn()
-  //   //   ? new LoggedInCustomHooks()
-  //   //   : new NonLoggedInCustomHooks();
+  //   //   ? new ALMCustomHooks()
+  //   //   : new ESCustomHooks();
   // }
 
   isUserLoggedIn() {
@@ -23,53 +24,57 @@ class APIService {
     searchText: string
   ) {
     if (this.isUserLoggedIn()) {
-      //this.customHooks = new LoggedInCustomHooks();
-      return new LoggedInCustomHooks().getTrainings(
+      //this.customHooks = new ALMCustomHooks();
+      return new ALMCustomHooks().getTrainings(filterState, sort, searchText);
+    }
+
+    if (getALMConfig().usageType == "aem-commerce") {
+      return new CommerceCustomHooks().getTrainings(
         filterState,
         sort,
         searchText
       );
     }
-    //this.customHooks = new NonLoggedInCustomHooks();
-    // return this.customHooks.getTrainings(filterState,sort);
-    return new NonLoggedInCustomHooks().getTrainings(
-      filterState,
-      sort,
-      searchText
-    );
+
+    return new ESCustomHooks().getTrainings(filterState, sort, searchText);
   }
-  public async loadMoreTrainings(filterState: CatalogFilterState,
+  public async loadMoreTrainings(
+    filterState: CatalogFilterState,
     sort: string,
-    searchText: string, url: string) {
+    searchText: string,
+    url: string
+  ) {
     if (this.isUserLoggedIn()) {
-      //this.customHooks = new LoggedInCustomHooks();
-      return new LoggedInCustomHooks().loadMoreTrainings(filterState,
+      //this.customHooks = new ALMCustomHooks();
+      return new ALMCustomHooks().loadMoreTrainings(
+        filterState,
         sort,
-        searchText, url);
+        searchText,
+        url
+      );
     }
-    return new NonLoggedInCustomHooks().loadMoreTrainings(
+    return new ESCustomHooks().loadMoreTrainings(
       filterState,
       sort,
       searchText,
       url
     );
-
   }
   public async loadMore(url: string) {
     if (this.isUserLoggedIn()) {
-      //this.customHooks = new LoggedInCustomHooks();
-      return new LoggedInCustomHooks().loadMore(url);
+      //this.customHooks = new ALMCustomHooks();
+      return new ALMCustomHooks().loadMore(url);
     }
-    //this.customHooks = new NonLoggedInCustomHooks();
+    //this.customHooks = new ESCustomHooks();
     // return this.customHooks.getTrainings(filterState,sort);
-    // return new NonLoggedInCustomHooks().loadMore(url);
+    // return new ESCustomHooks().loadMore(url);
   }
 
   public async getTraining(id: string, params: QueryParams) {
     if (this.isUserLoggedIn()) {
-      return new LoggedInCustomHooks().getTraining(id, params);
+      return new ALMCustomHooks().getTraining(id, params);
     } else {
-      return new NonLoggedInCustomHooks().getTraining(id);
+      return new ESCustomHooks().getTraining(id);
     }
   }
 
@@ -85,7 +90,7 @@ class APIService {
   //    isMagento = getAlmAttribute().isMagento();
 
   //    if(isMagento) {
-  //     new LoggedInCustomHooks()
+  //     new ALMCustomHooks()
 
   //    }
 
@@ -95,7 +100,7 @@ class APIService {
     instanceId: string
   ) {
     if (this.isUserLoggedIn()) {
-      return new LoggedInCustomHooks().getTrainingInstanceSummary(
+      return new ALMCustomHooks().getTrainingInstanceSummary(
         trainingId,
         instanceId
       );
@@ -103,12 +108,12 @@ class APIService {
   }
   public async enrollToTraining(params: QueryParams = {}) {
     if (this.isUserLoggedIn()) {
-      return new LoggedInCustomHooks().enrollToTraining(params);
+      return new ALMCustomHooks().enrollToTraining(params);
     }
   }
   public async unenrollFromTraining(enrollmentId: string = "") {
     if (this.isUserLoggedIn()) {
-      return new LoggedInCustomHooks().unenrollFromTraining(enrollmentId);
+      return new ALMCustomHooks().unenrollFromTraining(enrollmentId);
     }
   }
 }
