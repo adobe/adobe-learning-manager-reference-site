@@ -29,7 +29,7 @@
                         jcr:lastModified="{Date}2022-03-07T17:05:44.833+05:30"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        topics="[General,Gamification]"
+                        products="[General,Gamification]"
                         sling:resourceType="learning/components/boards"/>
                 </container>
             </container>

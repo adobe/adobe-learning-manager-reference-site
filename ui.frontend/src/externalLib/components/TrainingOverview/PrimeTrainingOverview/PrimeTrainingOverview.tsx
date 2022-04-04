@@ -24,7 +24,6 @@ const PrimeTrainingOverview: React.FC<{
           return (
             <PrimeCourseItemContainer
               key={training.id}
-              // trainingId={training.id}
               training={training}
               launchPlayerHandler={launchPlayerHandler}
               isPartOfLP={isPartOfLP}
@@ -36,7 +35,6 @@ const PrimeTrainingOverview: React.FC<{
             <PrimeLPItemContainer
               key={training.id}
               training={training}
-              // trainingId={trainings.id}
               launchPlayerHandler={launchPlayerHandler}
               isPartOfLP={isPartOfLP}
               showMandatoryLabel={showMandatoryLabel}

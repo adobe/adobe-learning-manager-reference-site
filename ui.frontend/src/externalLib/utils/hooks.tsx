@@ -1,17 +1,18 @@
 import { useMemo } from "react";
 import { cardColors } from "../common/Theme";
-import { CardBgStyle, InstanceBadge, Skill } from "../models/common";
+import { CardBgStyle, InstanceBadge, Skill } from "../models/custom";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
   PrimeLearningObjectResource,
   PrimeLocalizationMetadata,
+  PrimeResource,
 } from "../models/PrimeModels";
 import { getALMConfig } from "./global";
 import { getPreferredLocalizedMetadata } from "./translationService";
 
 const useCardIcon = (training: PrimeLearningObject) => {
-  const { cdnBaseUrl } = getALMConfig();
+  const { almCdnBaseUrl } = getALMConfig();
   const cardIconDetials: { [key: string]: string } = useMemo(() => {
     if (!training) {
       return {
@@ -28,11 +29,11 @@ const useCardIcon = (training: PrimeLearningObject) => {
 
     return {
       //TODO: updated the url to akamai from config
-      cardIconUrl: `${cdnBaseUrl}/public/images/default_card_icons/${colorCode}.svg`,
+      cardIconUrl: `${almCdnBaseUrl}/public/images/default_card_icons/${colorCode}.svg`,
       color: themeColors[colorCode],
       bannerUrl: training?.bannerUrl,
     };
-  }, [cdnBaseUrl, training]);
+  }, [almCdnBaseUrl, training]);
 
   return {
     ...cardIconDetials,
@@ -135,6 +136,26 @@ const filterLoReourcesBasedOnResourceType = (
       loResource.loResourceType === loResourceType
   );
 };
+
+const filteredResource = (
+  loResource: PrimeLearningObjectResource,
+  locale: string
+) => {
+  return (
+    loResource.resources.filter((item) => item.locale === locale)[0] ||
+    loResource.resources[0]
+  );
+};
+
+const useResource = (
+  loResource: PrimeLearningObjectResource,
+  locale: string = "en-US"
+): PrimeResource => {
+  return useMemo(() => {
+    return filteredResource(loResource, locale);
+  }, [loResource, locale]);
+};
+
 export {
   useCardIcon,
   useCardBackgroundStyle,
@@ -143,4 +164,6 @@ export {
   useLocalizedMetaData,
   filterTrainingInstance,
   filterLoReourcesBasedOnResourceType,
+  useResource,
+  filteredResource,
 };

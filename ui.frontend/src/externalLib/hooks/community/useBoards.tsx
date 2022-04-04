@@ -13,7 +13,7 @@ const setSkillValues = () => {
   const config = getALMConfig();
   if (config) {
     let cssSelector = config.mountingPoints.boardsContainer;
-    return (document.querySelector(cssSelector) as any)?.dataset.topics;
+    return (document.querySelector(cssSelector) as any)?.dataset.products;
   }
 };
 

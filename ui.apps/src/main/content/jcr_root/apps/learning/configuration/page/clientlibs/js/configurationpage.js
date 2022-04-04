@@ -1,35 +1,35 @@
 (function (window, document, $, Coral) {
   "use strict";
 
-  let nameCoralTextfieldComponent;
-  let formElement;
-  let redirectLocation;
+  let usageTypeSelectElem;
 
-  const USAGE_OPTIONS = ["aem-sites", "aem-es", "aem-magento"];
+  const USAGE_OPTIONS = ["aem-sites", "aem-es", "aem-commerce"];
   const USAGE_TYPE_SELECTED_SEL = "coral-select[name='./usageType']";
-  const USAGE_TYPE_INPUT_VALUE_SEL = "input[name='./usageType']";
+  const USAGE_TYPE_INPUT_VALUE_SEL = "coral-select[name='./usageType'] coral-select-item[selected='']";
+  const USAGE_TYPE_SELECT_ID_SEL = "#alm-usage-type-select";
+
 
   function hideUnselectedUsageOptions()
   {
-    var selectedUsageOption = $(USAGE_TYPE_INPUT_VALUE_SEL)[0].value;
+    var selectedUsageOption = $(USAGE_TYPE_INPUT_VALUE_SEL).attr("value");
+    USAGE_OPTIONS.forEach((usageOption) => {
+      if (usageOption !== selectedUsageOption)
+        $("." + usageOption).closest("div.coral-Form-fieldwrapper").attr("hidden",'');
+    });
+
     USAGE_OPTIONS.forEach((usageOption) => {
       if (usageOption === selectedUsageOption)
-      {
-        $("."+usageOption).closest("div.coral-Form-fieldwrapper").removeAttr("hidden");
-      }
-      else
-      {
-        $("."+usageOption).closest("div.coral-Form-fieldwrapper").attr("hidden",'');
-      }
+        $("." + usageOption).closest("div.coral-Form-fieldwrapper").removeAttr("hidden");
     });
   }
 
-  $(document).on("change", USAGE_TYPE_SELECTED_SEL, function(e) {
-    hideUnselectedUsageOptions();
-  });
+  $(document).on('foundation-contentloaded', () => {
+    usageTypeSelectElem = $(USAGE_TYPE_SELECT_ID_SEL).get(0);
 
-  Coral.commons.ready(USAGE_TYPE_SELECTED_SEL, function(e) {
-    hideUnselectedUsageOptions();
+    Coral.commons.ready(usageTypeSelectElem, function() {
+      hideUnselectedUsageOptions();
+      usageTypeSelectElem.on('change', hideUnselectedUsageOptions);
+    });
   });
 
 })(window, document, jQuery, Coral);

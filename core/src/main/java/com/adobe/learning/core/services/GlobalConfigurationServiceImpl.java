@@ -1,7 +1,6 @@
 package com.adobe.learning.core.services;
 
 import java.util.Map;
-import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.LoginException;
@@ -30,13 +29,12 @@ public class GlobalConfigurationServiceImpl implements GlobalConfigurationServic
 	private static final Map<String, Object> authInfo = ImmutableMap.of(ResourceResolverFactory.SUBSERVICE,
 			SUBSERVICE_NAME);
 
-	private static final String CONFIGURATION_NAME = "cloudconfigs/alm";
+	private static final String CONFIGURATION_NAME = "cloudconfigs/adobe-learning-manager-config";
 
 	@Reference
 	private ResourceResolverFactory resolverFactory;
 
 	private ValueMap adminConfigs = null;
-	private static final String[] colors = { "#00000", "#ffffff", "#445566" };
 
 	@Override
 	public JsonObject getAdminConfigs(Page currentPage) {
@@ -57,8 +55,10 @@ public class GlobalConfigurationServiceImpl implements GlobalConfigurationServic
 						if (!StringUtils.startsWithAny(key, Constants.AEM_NODE_PROP_PREFIXES))
 							globalConfig.addProperty(key, adminConfigs.get(key, ""));
 					}
+					
+					String pageLocale = currentPage.getLanguage(false).toString();
+					globalConfig.addProperty(Constants.Config.PAGE_LOCALE, pageLocale);
 				}
-
 			}
 		} catch (LoginException le) {
 			LOGGER.error("Login Exception in initializing global config model", le);

@@ -1,10 +1,13 @@
 import { CatalogFilterState } from "../store/reducers/catalog";
-import { QueryParams } from "../utils/restAdapter";
+import { getALMConfig } from "../utils/global";
+import { JsonApiParse } from "../utils/jsonAPIAdapter";
+import { QueryParams, RestAdapter } from "../utils/restAdapter";
 // import { JsonApiParse } from "../utils/jsonAPIAdapter";
 // import { QueryParams, RestAdapter } from "../utils/restAdapter";
 import ICustomHooks from "./ICustomHooks";
 
 export default class NonLoggedInCustomHooks implements ICustomHooks {
+  almCommerceCdnBaseUrl = getALMConfig().almCommerceCdnBaseUrl;
   async getTrainings(
     filterState: CatalogFilterState,
     sort: string,
@@ -15,8 +18,12 @@ export default class NonLoggedInCustomHooks implements ICustomHooks {
   async loadMore(url: string) {
     return null;
   }
-  async getTraining(id: string, params: QueryParams) {
-    return null;
+  async getTraining(id: string) {
+    const loPath = id.replace(":", "/");
+    const response = await RestAdapter.get({
+      url: `${this.almCommerceCdnBaseUrl}/${loPath}/.json`,
+    });
+    return JsonApiParse(response).learningObject;
   }
   async getTrainingInstanceSummary(trainingId: string, instanceId: string) {
     return null;

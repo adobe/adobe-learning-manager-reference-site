@@ -82,7 +82,10 @@
   "alm.overview.button.continue": "Continue",
   "alm.overview.button.registerInterest": "Register Interest",
   "alm.overview.button.enroll": "Enroll",
-  "alm.overview.button.pendingApproval": "Pending Manager Approval",
+  "alm.overview.button.pendingApproval": "Pending",
+  "alm.overview.manager.approval.pending": "Manager approval pending",
+  "alm.overview.text.or": "OR",
+  "alm.overview.button.preview": "Preview",
   "alm.overview.enrollment.count": "{0} enrollment(s)",
   "alm.overview.enrollment.deadline": "Enrollment Deadline",
   "alm.overview.completion.deadline": "Completion Deadline",
@@ -131,6 +134,6 @@
   "prime.community.showMoreReplies": "Show more replies",
   "prime.community.post.poll.submitChoice": "Submit Choice",
   "prime.community.post.poll.submittedChoice": "You have submitted your choice",
-  "prime.community.post.poll.voteLabel": "vote"
-
+  "prime.community.post.poll.voteLabel": "vote",
+  "alm.overview.seatsAvailable": "Seats Available :"
 }

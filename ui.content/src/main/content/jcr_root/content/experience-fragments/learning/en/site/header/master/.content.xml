@@ -7,6 +7,8 @@
         cq:xfMasterVariation="{Boolean}true"
         cq:xfVariantType="web"
         jcr:primaryType="cq:PageContent"
+        cq:lastModified="{Date}2022-03-07T17:00:09.899+05:30"
+        cq:lastModifiedBy="admin"
         jcr:title="Header"
         sling:resourceType="learning/components/xfpage">
         <root

@@ -1,20 +1,28 @@
-import { PrimeLearningObjectInstance, PrimeLearningObjectResource, PrimeResource } from "../models/PrimeModels";
+import {
+  PrimeLearningObjectInstance,
+  PrimeLearningObjectResource,
+  PrimeResource,
+} from "../models/PrimeModels";
 
 export const checkIfEnrollmentDeadlineNotPassed = (
-    instance: PrimeLearningObjectInstance
+  instance: PrimeLearningObjectInstance
 ) => {
-    const enrollmentDeadlineStr = instance.enrollmentDeadline;
-    return enrollmentDeadlineStr &&
-        new Date(enrollmentDeadlineStr) < new Date()
-        ? false
-        : true;
+  const enrollmentDeadlineStr = instance.enrollmentDeadline;
+  return enrollmentDeadlineStr && new Date(enrollmentDeadlineStr) < new Date()
+    ? false
+    : true;
 };
 
-
-export const getResourceBasedOnLocale = (loResource: PrimeLearningObjectResource, locale: string): PrimeResource => {
-    return loResource.resources.filter((item) => item.locale === locale)[0] ||
-        loResource.resources.filter((item) => item.locale === "en-US")[0] ||
-        loResource.resources[0]
-}
-
-
+export const getResourceBasedOnLocale = (
+  loResource: PrimeLearningObjectResource,
+  locale: string
+): PrimeResource => {
+  if (!loResource || !loResource.resources) {
+    return {} as PrimeResource;
+  }
+  return (
+    loResource.resources.filter((item) => item.locale === locale)[0] ||
+    loResource.resources.filter((item) => item.locale === "en-US")[0] ||
+    loResource.resources[0]
+  );
+};

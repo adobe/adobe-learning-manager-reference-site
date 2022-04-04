@@ -1,13 +1,4 @@
 .alm-header-vertical-nav {
-  /* display: none;
-    position: fixed;
-    top: 0;
-    height: 100%;
-    z-index: 199;
-    background: #232323 0% 0% no-repeat padding-box;
-    box-shadow: 3px 3px 6px #00000029;
-    font: normal normal normal 20px/25px Source Sans Pro;
-    width: 320px; */
   box-shadow: 3px 3px 6px #00000029;
   -webkit-transition: all ease-in-out 0.2s;
   -moz-transition: all ease-in-out 0.2s;
@@ -83,7 +74,6 @@
   margin-bottom: 6px;
 }
 
-/* CSS for Navigation */
 #alm-header {
   max-width: var(--prime-container-max-width-desktop);
   width: var(--prime-container-width);
@@ -99,11 +89,11 @@
   display: flex !important;
   margin-top: 10px;
 }
+
 #alm-header .alm-header-cont {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  /* border: 1px solid red; */
 }
 
 #alm-header .alm-header-cont .alm-header-logo {
@@ -139,13 +129,7 @@
   cursor: pointer;
 }
 
-#alm-header .alm-header-cont .alm-header-icons .alm-header-notification {
-  width: 36px;
-  height: 36px;
-  margin-top: 14px;
-}
-
-#alm-header .alm-header-cont .alm-header-icons .alm-header-down {
+.alm-header-down {
   width: 15px;
   height: 15px;
   margin-top: 30px;
@@ -158,6 +142,7 @@
   margin-left: 15px;
   display: none;
 }
+
 @media screen and (max-width: 1024px) {
   #alm-header {
     max-width: var(--prime-container-max-width-tablet);
@@ -168,6 +153,7 @@
     justify-content: space-between;
   }
 }
+
 @media screen and (max-width: 414px) {
   #alm-header {
     width: 100%;
@@ -193,7 +179,7 @@
     display: none;
   }
 
-  #alm-header .alm-header-cont .alm-header-icons .alm-header-down
+  .alm-header-down
   {
     display: none;
   }
@@ -247,5 +233,4 @@
   .alm-header-cont .alm-header-down {
     display: flex;
   }
-
 }

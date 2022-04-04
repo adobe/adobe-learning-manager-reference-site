@@ -5,7 +5,7 @@
           xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
           xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
           jcr:primaryType="nt:unstructured"
-          jcr:title="ALM Configuration"
+          jcr:title="Adobe Learning Manager Configuration"
           sling:resourceType="cq/gui/components/authoring/dialog"
           extraClientlibs="[alm.admin.configuration]">
     <content jcr:primaryType="nt:unstructured"
@@ -18,37 +18,38 @@
                     <title jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
                         name="./jcr:title"
-                        value="ALM"/>
+                        value="adobe-learning-manager-config"/>
 
                     <usage
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                        fieldDescription="ALM Usage"
-                        fieldLabel="ALM Usage"
+                        fieldDescription="Adobe Learning Manager Usage"
+                        fieldLabel="Adobe Learning Manager Usage"
+                        granite:id="alm-usage-type-select"
                         name="./usageType"
                         cq:showOnCreate="{Boolean}true">
                         
                         <items jcr:primaryType="nt:unstructured">
                             <sites
                                 jcr:primaryType="nt:unstructured"
-                                text="AEM+Sites"
+                                text="AEM+LearningManager"
                                 value="aem-sites"/>
                             <es
                                 jcr:primaryType="nt:unstructured"
-                                text="AEM+ES+Prime"
+                                text="AEM+ES+LearningManager"
                                 value="aem-es"/>
-                            <magento
+                            <commerce
                                 jcr:primaryType="nt:unstructured"
-                                text="AEM+Magento+Prime"
-                                value="aem-magento"/>
+                                text="AEM+Commerce+LearningManager"
+                                value="aem-commerce"/>
                         </items>
                     </usage>
 
                     <almBaseURL 
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="Prime ALM URL"
-                        fieldDescription="Prime ALM URL"
+                        fieldLabel="Adobe Learning Manager URL"
+                        fieldDescription="Adobe Learning Manager URL"
                         name="./almBaseURL"
                         cq:showOnCreate="{Boolean}true"/>
 
@@ -76,12 +77,12 @@
                         name="./clientSecret"
                         cq:showOnCreate="{Boolean}true"/>
 
-                    <primeRegister 
+                    <almRegister 
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="Prime Register Url"
-                        fieldDescription="Prime Register Url"
-                        name="./primeRegisterUrl"
+                        fieldLabel="Adobe Learning Manager Register Url"
+                        fieldDescription="Adobe Learning Manager Register Url"
+                        name="./almRegisterUrl"
                         cq:showOnCreate="{Boolean}true"/>
 
                     <authorRefreshToken 
@@ -92,62 +93,48 @@
                         name="./authorRefreshToken"
                         cq:showOnCreate="{Boolean}true"/>
 
-                    <primeJsonUrl 
+                    <almCdnBaseUrl 
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="Prime JSON Url"
-                        fieldDescription="Prime JSON Url"
-                        name="./primeJsonUrl"
+                        fieldLabel="Adobe Learning Manager CDN Base URL"
+                        fieldDescription="Adobe Learning Manager CDN Base URL"
+                        name="./almCdnBaseUrl"
+                        granite:rel="aem-commerce aem-es"
                         cq:showOnCreate="{Boolean}true"/>
-
-                    <primeApiURL 
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="Prime API URL"
-                        fieldDescription="Prime API prefix that should be used. This will be useful in case API calls need to be directed to custom backend"
-                        name="./commonConfig.primeApiPrefix"
-                        value="/primeapi/v2"
-                        cq:showOnCreate="{Boolean}true"/>
-
-                    <primeCdnBaseUrl 
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="Prime CDN Base Url"
-                        fieldDescription="Prime CDN Base Url"
-                        name="./primeCdnBaseUrl"
-                        cq:showOnCreate="{Boolean}true"/>
-
-                    <locale
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                        fieldDescription="Locale"
-                        fieldLabel="Locale"
-                        name="./locale"
-                        cq:showOnCreate="{Boolean}true">
-                        <items jcr:primaryType="nt:unstructured">
-                            <us
-                                jcr:primaryType="nt:unstructured"
-                                text="en-US"
-                                value="en-US"/>
-                        </items>
-                    </locale>
 
                     <siteMap
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                         checked="true"
                         name="./siteMap"
-                        text="Site Map"
+                        text="Create Site Map"
                         value="siteMap"
+                        granite:rel="aem-commerce aem-es"
                         cq:showOnCreate="{Boolean}true"/>
 
+                    <commerceURL 
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Commerce URL"
+                        fieldDescription="Commerce URL"
+                        name="./commerceURL"
+                        granite:rel="aem-commerce"
+                        cq:showOnCreate="{Boolean}true"/>
+                    <commerceStoreName 
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Commerce Store Name"
+                        fieldDescription="Commerce Store Name"
+                        name="./commerceStoreName"
+                        granite:rel="aem-commerce"
+                        cq:showOnCreate="{Boolean}true"/>
                     <refreshToken 
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                         fieldLabel="Admin Refresh Token"
                         fieldDescription="Admin Refresh Token"
                         name="./refreshToken"
-                        granite:rel="aem-magento"
+                        granite:rel="aem-commerce"
                         cq:showOnCreate="{Boolean}true"/>
 
                     <esBase 
@@ -160,15 +147,20 @@
                         cq:showOnCreate="{Boolean}true"/>
 
 
-
-
+                    <embWidgetSection
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/heading"
+                        level="2"
+                        text="Embeddable Widget Configurations"
+                        granite:id="emb-widget-config-section"
+                        cq:showOnCreate="{Boolean}true"/>
 
                     <higherOrderEnroll
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                         checked="false"
                         name="./commonConfig.ignoreHigherOrderLOEnrollment"
-                        text="Ignore Higher Order LO Enrollment"
+                        text="Ignore Higher Order Training Enrollment"
                         value="false"
                         cq:showOnCreate="{Boolean}true"/>
                      <higherOrderEnrollType
@@ -188,7 +180,7 @@
 
                     <primaryColor 
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/colorfield"
                         fieldLabel="Primary Color"
                         fieldDescription="Primary Color"
                         name="./theme.primaryColor"
@@ -197,7 +189,7 @@
 
                     <secondaryColor 
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/colorfield"
                         fieldLabel="Seconday Color"
                         fieldDescription="Seconday Color"
                         name="./theme.secondaryColor"

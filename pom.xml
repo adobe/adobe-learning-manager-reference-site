@@ -489,18 +489,6 @@ Bundle-DocURL:
                 <pluginManagement>
                     <plugins>
                         <plugin>
-                            <groupId>org.apache.jackrabbit</groupId>
-                            <artifactId>filevault-package-maven-plugin</artifactId>
-                            <executions>
-                                <execution>
-                                    <id>create-package</id>
-                                    <goals>
-                                        <goal>package</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-                        </plugin>
-                        <plugin>
                             <groupId>com.day.jcr.vault</groupId>
                             <artifactId>content-package-maven-plugin</artifactId>
                             <executions>
@@ -511,6 +499,7 @@ Bundle-DocURL:
                                     </goals>
                                     <configuration>
                                         <targetURL>http://${aem.host}:${aem.port}/crx/packmgr/service.jsp</targetURL>
+                                        <failOnError>true</failOnError>
                                     </configuration>
                                 </execution>
                             </executions>
@@ -529,18 +518,6 @@ Bundle-DocURL:
                 <pluginManagement>
                     <plugins>
                         <plugin>
-                            <groupId>org.apache.jackrabbit</groupId>
-                            <artifactId>filevault-package-maven-plugin</artifactId>
-                            <executions>
-                                <execution>
-                                    <id>create-package</id>
-                                    <goals>
-                                        <goal>package</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-                        </plugin>
-                        <plugin>
                             <groupId>com.day.jcr.vault</groupId>
                             <artifactId>content-package-maven-plugin</artifactId>
                             <executions>
@@ -551,6 +528,7 @@ Bundle-DocURL:
                                     </goals>
                                     <configuration>
                                         <targetURL>http://${aem.publish.host}:${aem.publish.port}/crx/packmgr/service.jsp</targetURL>
+                                        <failOnError>true</failOnError>
                                     </configuration>
                                 </execution>
                             </executions>

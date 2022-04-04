@@ -1,6 +1,6 @@
 import { useCallback } from "react";
-import { RestAdapter } from "../../utils/restAdapter";
 import { getALMConfig } from "../../utils/global";
+import { RestAdapter } from "../../utils/restAdapter";
 
 export const usePost = () => {
   const addPost = useCallback(
@@ -19,7 +19,7 @@ export const usePost = () => {
           type: "post",
           attributes: {
             postingType: postingType,
-            "resource": resource,
+            resource: resource,
             state: "ACTIVE",
             text: input,
           },
@@ -99,55 +99,47 @@ export const usePost = () => {
   }, []);
 
   const addComment = useCallback(async (postId: any, input: any) => {
-      const baseApiUrl =  getALMConfig().primeApiURL;
-      const postBody = {
-        data: {
-          type: "comment",
-          attributes: {
-            state: "ACTIVE",
-            text: input,
-          },
+    const baseApiUrl = getALMConfig().primeApiURL;
+    const postBody = {
+      data: {
+        type: "comment",
+        attributes: {
+          state: "ACTIVE",
+          text: input,
         },
-      };
-      const headers = { "content-type": "application/json" };
-      await RestAdapter.ajax({
-        url: `${baseApiUrl}/posts/${postId}/comments`,
-        method: "POST",
-        body: JSON.stringify(postBody),
-        headers: headers,
-      });
-      //   const parsedResponse = JsonApiParse(response);
-    },
-    []
-  );
+      },
+    };
+    const headers = { "content-type": "application/json" };
+    await RestAdapter.ajax({
+      url: `${baseApiUrl}/posts/${postId}/comments`,
+      method: "POST",
+      body: JSON.stringify(postBody),
+      headers: headers,
+    });
+    //   const parsedResponse = JsonApiParse(response);
+  }, []);
 
-  const votePost = useCallback(
-    async (postId: any, action: any) => {
-      // try {
-      const baseApiUrl = getALMConfig().primeApiURL;
-      //   const params: QueryParams = {};
-      await RestAdapter.ajax({
-        url: `${baseApiUrl}/posts/${postId}/vote?action=${action}`,
-        method: "POST",
-      });
-      //   const parsedResponse = JsonApiParse(response);
-    },
-    []
-  );
+  const votePost = useCallback(async (postId: any, action: any) => {
+    // try {
+    const baseApiUrl = getALMConfig().primeApiURL;
+    //   const params: QueryParams = {};
+    await RestAdapter.ajax({
+      url: `${baseApiUrl}/posts/${postId}/vote?action=${action}`,
+      method: "POST",
+    });
+    //   const parsedResponse = JsonApiParse(response);
+  }, []);
 
-  const deletePostVote = useCallback(
-    async (postId: any, action: any) => {
-      // try {
-      const baseApiUrl = getALMConfig().primeApiURL;
-      //   const params: QueryParams = {};
-      await RestAdapter.ajax({
-        url: `${baseApiUrl}/posts/${postId}/vote?action=${action}`,
-        method: "DELETE",
-      });
-      //   const parsedResponse = JsonApiParse(response);
-    },
-    []
-  );
+  const deletePostVote = useCallback(async (postId: any, action: any) => {
+    // try {
+    const baseApiUrl = getALMConfig().primeApiURL;
+    //   const params: QueryParams = {};
+    await RestAdapter.ajax({
+      url: `${baseApiUrl}/posts/${postId}/vote?action=${action}`,
+      method: "DELETE",
+    });
+    //   const parsedResponse = JsonApiParse(response);
+  }, []);
 
   const submitPollVote = useCallback(
     async (postId: any, optionId: any) => {

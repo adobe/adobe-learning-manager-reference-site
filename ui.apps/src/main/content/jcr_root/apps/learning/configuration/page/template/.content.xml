@@ -2,7 +2,7 @@
           xmlns:cq="http://www.day.com/jcr/cq/1.0"
           xmlns:jcr="http://www.jcp.org/jcr/1.0"
           xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
-          jcr:primaryType="cq:Template" jcr:title="ALM Configuration">
+          jcr:primaryType="cq:Template" jcr:title="Adobe Learning Manager Configuration">
     <jcr:content jcr:primaryType="cq:PageContent"
                  sling:resourceType="learning/configuration/page"/>
 </jcr:root>

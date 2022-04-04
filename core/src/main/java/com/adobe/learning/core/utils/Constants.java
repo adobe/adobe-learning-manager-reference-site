@@ -14,6 +14,8 @@ public class Constants {
 		public static final String ALM_BASE_URL = "almBaseURL";
 		public static final String CLIENT_ID = "clientId";
 		public static final String CLIENT_SECRET = "clientSecret";
+		public static final String PAGE_LOCALE = "pageLocale";
+		public static final String COMMERCE_ADMIN_REFRESH_TOKEN = "refreshToken";
 	}
 
 	public final class EmbeddableWidgetConfig {
@@ -23,6 +25,9 @@ public class Constants {
 		public static final String CP_HOST_NAME_PROP = "commonConfig.captivateHostName";
 		public static final String CP_EMIT_PLAYER_EVENT_PROP = "commonConfig.emitPlayerLaunchEvent";
 		public static final boolean CP_EMIT_PLAYER_EVENT_PROP_VALUE = true;
+		public static final String CONFIG_TYPE_KEY = "type";
+		public static final String CONFIG_TYPE_VALUE = "acapConfig";
+		public static final String AUTH_ACCESS_TOKEN_KEY = "auth.accessToken";
 		// public static final String CP_THEME_BACKGROUND_PROP = "theme.background";
 		// public static final String CP_THEME_BACKGROUND_PROP_VALUE = "transparent";
 	}

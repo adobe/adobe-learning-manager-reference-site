@@ -1,32 +1,37 @@
-import { useRef } from "react";
-import { useLoadMore } from "../../../hooks/loadMore";
+import { Button, lightTheme, Provider } from "@adobe/react-spectrum";
 import { PrimePost } from "../../../models/PrimeModels";
-import { ALMLoader } from "../../Common/ALMLoader";
 import { PrimeCommunityPost } from "../PrimeCommunityPost";
-
+import styles from "./PrimeCommunityPostsContainer.module.css";
 const PrimeCommunityPostsContainer: React.FC<{
-    posts: PrimePost[] | null;
-    loadMorePosts: () => void;
-    hasMoreItems: boolean;
+  posts: PrimePost[] | null;
+  loadMorePosts: () => void;
+  hasMoreItems: boolean;
 }> = ({ posts, loadMorePosts, hasMoreItems }) => {
-    const elementRef = useRef(null);
-    useLoadMore({
-        items: posts,
-        callback: loadMorePosts,
-        elementRef,
-    });
-    const listHtml = posts?.map((post) => (
-        <PrimeCommunityPost post={post} key={post.id}></PrimeCommunityPost>
-    ));
+  const listHtml = posts?.map((post) => (
+    <PrimeCommunityPost post={post} key={post.id}></PrimeCommunityPost>
+  ));
 
-    return (
-        <div>
-            {listHtml}
-            <div ref={elementRef} id="load-more-posts">
-                {hasMoreItems ? <ALMLoader /> : ""}
-            </div>
-        </div>
-    );
+  return (
+    <div>
+      {listHtml}
+      <div id="load-more-posts" className={styles.loadMoreContainer}>
+        {hasMoreItems ? (
+          <Provider theme={lightTheme} colorScheme={"light"}>
+            <Button
+              variant="cta"
+              isQuiet
+              onPress={loadMorePosts}
+              UNSAFE_className={styles.loadMoreButton}
+            >
+              Load more
+            </Button>
+          </Provider>
+        ) : (
+          ""
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default PrimeCommunityPostsContainer;
