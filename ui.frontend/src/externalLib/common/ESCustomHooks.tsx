@@ -3,8 +3,8 @@ import { getRequestObjectForESApi } from "../utils/catalog";
 import { getALMConfig } from "../utils/global";
 import { JsonApiParse, parseESResponse } from "../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
+import { DEFAULT_PAGE_LIMIT } from "./ALMCustomHooks";
 import ICustomHooks from "./ICustomHooks";
-import { DEFAULT_PAGE_LIMIT } from "./LoggedInCustomHooks";
 
 interface ISortMap {
   date: string;
@@ -18,7 +18,7 @@ const sortMap: any = {
 const headers = {
   "Content-Type": "application/json",
 };
-export default class NonLoggedInCustomHooks implements ICustomHooks {
+export default class ESCustomHooks implements ICustomHooks {
   almConfig = getALMConfig();
   primeCdnTrainingBaseEndpoint = this.almConfig.primeCdnTrainingBaseEndpoint;
   esBaseUrl = this.almConfig.esBaseUrl;

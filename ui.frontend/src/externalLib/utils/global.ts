@@ -18,6 +18,8 @@ export interface PrimeConfig {
   locale: string;
   almCdnBaseUrl: string;
   almCommerceCdnBaseUrl: string;
+  commerceURL: string;
+  usageType: "aem-sites" | "aem-es" | "aem-commerce";
   mountingPoints: {
     [key: string]: string;
   };

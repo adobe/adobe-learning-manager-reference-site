@@ -13,7 +13,7 @@ const DEFAULT_SEARCH_SNIPPETTYPE =
   "courseName,courseOverview,courseDescription,moduleName,certificationName,certificationOverview,certificationDescription,jobAidName,jobAidDescription,lpName,lpDescription,lpOverview,embedLpName,embedLpDesc,embedLpOverview,skillName,skillDescription,note,badgeName,courseTag,moduleTag,jobAidTag,lpTag,certificationTag,embedLpTag,discussion";
 const DEFAULT_SEARCH_INCLUDE =
   "model.instances.loResources.resources,model.instances.badge,model.supplementaryResources,model.enrollment.loResourceGrades,model.skills.skillLevel.skill";
-export default class LoggedInCustomHooks implements ICustomHooks {
+export default class ALMCustomHooks implements ICustomHooks {
   primeApiURL = getALMConfig().primeApiURL;
   async getTrainings(
     filterState: CatalogFilterState,
@@ -103,5 +103,5 @@ export default class LoggedInCustomHooks implements ICustomHooks {
 
 // APIServiceInstance.registerServiceInstance(
 //   SERVICEINSTANCE.PRIME,
-//   new LoggedInCustomHooks()
+//   new ALMCustomHooks()
 // );

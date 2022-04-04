@@ -34,7 +34,6 @@ interface Field {
   isMultiValue: boolean;
 }
 
-
 export interface ESPrimeLearningObject {
   authors: string[];
   averageRating: number;
@@ -49,5 +48,51 @@ export interface ESPrimeLearningObject {
   publishDate: string;
   ratingsCount: number;
   description: string;
-  tags: string[]
+  tags: string[];
 }
+
+// export interface CatalogLearningObject {
+//   id: string;
+//   _transient: any;
+//   authorNames: string[];
+//   bannerUrl: string;
+//   dateCreated: string;
+//   datePublished: string;
+//   dateUpdated: string;
+//   duration: number;
+//   effectiveModifiedDate: string;
+//   effectivenessIndex: number;
+//   enrollmentType: string;
+//   externalSkillNames: string[];
+//   hasOptionalLoResources: boolean;
+//   imageUrl: string;
+//   isEnhancedLP: boolean;
+//   isExternal: boolean;
+//   isMqaEnabled: boolean;
+//   isPrerequisiteEnforced: boolean;
+//   isSubLoOrderEnforced: boolean;
+//   loFormat: string;
+//   loType: string;
+//   moduleResetEnabled: boolean;
+//   rootCertificationId: string;
+//   state: string;
+//   tags: string[];
+//   type: string;
+//   unenrollmentAllowed: boolean;
+//   uniqueId: string;
+//   catalogLabels: PrimeCatalogLables[];
+//   localizedMetadata: PrimeLocalizationMetadata[];
+//   prequisiteConstraints: PrimePrerequisiteContraints[];
+//   rating: PrimeRating;
+//   sections: PrimeSections[];
+//   authors: PrimeUser[];
+//   enrollment: PrimeLearningObjectInstanceEnrollment;
+//   instances: PrimeLearningObjectInstance[];
+//   prerequisiteLOs: PrimeLearningObject[];
+//   skills: PrimeLearningObjectSkill[];
+//   subLOs: PrimeLearningObject[];
+//   supplementaryLOs: PrimeLearningObject[];
+//   supplementaryResources: PrimeResource[];
+//   skillNames?: string[]
+//   hasPreview: boolean;
+// }
