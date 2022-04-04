@@ -52,7 +52,7 @@ export const useCatalog = () => {
       setState({ isLoading: false, errorCode: "" });
     } catch (error: any) {
       dispatch(loadTrainings([] as PrimeLearningObject[]));
-      setState({ isLoading: false, errorCode: error });
+      setState({ isLoading: false, errorCode: error.status });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
