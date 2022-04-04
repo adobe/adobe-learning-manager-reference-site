@@ -6,7 +6,7 @@ import { JsonApiParse } from "../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
 import ICustomHooks from "./ICustomHooks";
 
-const DEFAULT_PAGE_LIMIT = 10;
+export const DEFAULT_PAGE_LIMIT = 9;
 const DEFUALT_LO_INCLUDE =
   "instances.loResources.resources,instances.badge,supplementaryResources,enrollment.loResourceGrades,skills.skillLevel.skill";
 const DEFAULT_SEARCH_SNIPPETTYPE =

@@ -1,6 +1,6 @@
-import { JsonApiResponse } from "../models";
+import { ESPrimeLearningObject, JsonApiResponse, PrimeLearningObject, PrimeLocalizationMetadata, PrimeRating } from "../models";
 
-let store : Store | undefined;
+let store: Store | undefined;
 export function GetStore(): Store {
     if (!store) {
         store = new Store();
@@ -46,7 +46,7 @@ export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
     if (Array.isArray(data)) {
         if (data.length && data[0]["type"] === "searchResult") {
             data = filterResponse(jsonApiResponse, "learningObject");
-            if(data?.length === 0) {
+            if (data?.length === 0) {
                 data = filterResponse(jsonApiResponse, "post");
             }
         }
@@ -55,7 +55,7 @@ export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
         for (let j = 0; j < data.length; ++j) {
             oneObj = data[j];
             storeToUse.put(oneObj);
-            result.push(ObjectWrapper.GetWrapper(oneObj["type"], oneObj["id"],storeToUse, oneObj));
+            result.push(ObjectWrapper.GetWrapper(oneObj["type"], oneObj["id"], storeToUse, oneObj));
             if (!dataType) {
                 dataType = oneObj["type"];
                 isList = true;
@@ -67,7 +67,7 @@ export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
         }
         dataType = data["type"];
         storeToUse.put(data);
-        result = ObjectWrapper.GetWrapper(data["type"], data["id"],storeToUse);
+        result = ObjectWrapper.GetWrapper(data["type"], data["id"], storeToUse);
     }
     const retval: any = {};
     if (dataType) {
@@ -128,44 +128,44 @@ export class ObjectWrapper {
                     let oneObj;
                     for (let ii = 0; ii < relData.length; ++ii) {
                         oneObj = relData[ii];
-                        retval.push(ObjectWrapper.GetWrapper(oneObj["type"], oneObj["id"],this.ALMStore));
+                        retval.push(ObjectWrapper.GetWrapper(oneObj["type"], oneObj["id"], this.ALMStore));
                     }
-                } else retval = relData ? ObjectWrapper.GetWrapper(relData["type"], relData["id"],this.ALMStore) : undefined;
+                } else retval = relData ? ObjectWrapper.GetWrapper(relData["type"], relData["id"], this.ALMStore) : undefined;
             }
         }
         return retval;
     }
 
     public set(attr: string, value: any) {
-        
+
         if (this.dataObject === undefined) return;
         if (this.dataObject.hasOwnProperty("attributes")) {
             //check in attributes
             if (this.dataObject["attributes"].hasOwnProperty(attr)) {
-                 this.dataObject["attributes"][attr] = value;
-                 return;
+                this.dataObject["attributes"][attr] = value;
+                return;
             }
         }
         if (this.dataObject.hasOwnProperty("relationships")) {
             //check in relationships
-            let propToUpdate = this.dataObject["relationships"][attr]; 
+            let propToUpdate = this.dataObject["relationships"][attr];
             if (propToUpdate) {
-                this.dataObject["relationships"][attr] = value; 
+                this.dataObject["relationships"][attr] = value;
             }
         }
 
     }
 
-    public static GetWrapper(type: string, id: string,storeToUse: Store,dataObj?: any): ObjectWrapper {
+    public static GetWrapper(type: string, id: string, storeToUse: Store, dataObj?: any): ObjectWrapper {
         let objWrapper = new ObjectWrapper(type, id, storeToUse, dataObj);
         objWrapper = new Proxy(objWrapper, {
             get: function (target: any, attr: string) {
                 return target.get(attr);
             },
-            set: function(target, attr, value, receiver) {
+            set: function (target, attr, value, receiver) {
                 target.set(attr, value);
                 return true;
-              }
+            }
         });
         return objWrapper;
     }
@@ -260,4 +260,48 @@ export class ObjectWrapper {
 //         return this.callFailed_lxpv;
 //     }
 // }
-export {};
+
+export function parseESResponse(response: ESPrimeLearningObject[]): PrimeLearningObject[] {
+    let loResponse: PrimeLearningObject[] = [];
+    response.forEach((item) => {
+        let lo: Partial<PrimeLearningObject> = {};
+        let rating: PrimeRating;
+        let localizedData: PrimeLocalizationMetadata;
+
+        lo.id = item.loId;
+        lo.loFormat = item.deliveryType;
+        lo.loType = item.loType;
+        lo.duration = item.duration;
+        lo.authorNames = item.authors;
+        lo.dateCreated = item.dateCreated;
+        lo.datePublished = item.publishDate;
+        lo.tags = item.tags;
+
+        localizedData = {
+            _transient: "",
+            description: item.description,
+            id: "",
+            locale: "en-US", //need to get from locale
+            name: item.name,
+            overview: "",
+            richTextOverview: "",
+            type: ""
+        }
+        lo.localizedMetadata = [localizedData]
+
+        rating = {
+            averageRating: item.averageRating,
+            ratingsCount: item.ratingsCount,
+            id: "",
+            _transient: ""
+        }
+        lo.rating = rating;
+        lo.skills = [];
+        lo.skillNames = item.loSkillNames;
+
+
+        loResponse.push(lo as PrimeLearningObject);
+    })
+    return loResponse;
+}
+export { };

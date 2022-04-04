@@ -16,7 +16,7 @@ export const formatMap: any = {
   Blended: "prime.catalog.card.blended",
   "Virtual Classroom": "prime.catalog.card.virtual.classroom",
   Elearning: "prime.catalog.card.elearning",
-  Classroom : "prime.catalog.card.classroom"
+  Classroom: "prime.catalog.card.classroom",
 };
 const PrimeTrainingCard: React.FC<{
   training: PrimeLearningObject;
@@ -24,7 +24,7 @@ const PrimeTrainingCard: React.FC<{
   const {
     format,
     type,
-    skills,
+    skillNames,
     name,
     description,
     imageUrl,
@@ -43,9 +43,7 @@ const PrimeTrainingCard: React.FC<{
     setIsHovered(false);
   };
 
-  const skillsAsString = skills
-    ?.map((item) => item.skillLevel?.skill?.name)
-    .join(",");
+  const skillsAsString = skillNames?.join(",");
   const descriptionHtml = description ? (
     <p className={styles.description}>{description}</p>
   ) : (

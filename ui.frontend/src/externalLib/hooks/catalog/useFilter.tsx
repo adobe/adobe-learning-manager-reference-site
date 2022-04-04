@@ -116,13 +116,15 @@ export const useFilter = () => {
     dispatch(updateFiltersOnLoad(updatedFilters));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   useEffect(() => {
     const queryParams = getQueryParamsIObjectFromUrl();
+    const esBaseUrl = getALMConfig().esBaseUrl;
     // getFilters();
     const getESFilters = async () => {
       try {
         const response = await RestAdapter.get({
-          url: `https://primeapps-stage.adobe.com/almsearch/api/v1/qe/7110/a75477eb-2a4c-4f6e-b897-a6506da18e3f/filterableData`,
+          url: `${esBaseUrl}/filterableData`,
         });
         const data = JSON.parse(response as string);
         if (data) {

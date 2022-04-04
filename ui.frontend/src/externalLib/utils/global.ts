@@ -6,6 +6,7 @@ export interface PrimeConfig {
   almBaseURL: string;
   primeApiURL: string;
   primeCdnTrainingBaseEndpoint: string;
+  esBaseUrl: string;
   accessToken: string;
   baseUrl: string;
   instancePath: string;

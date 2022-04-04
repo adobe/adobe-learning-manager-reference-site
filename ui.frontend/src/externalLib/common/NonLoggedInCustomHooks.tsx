@@ -1,9 +1,10 @@
 import { CatalogFilterState } from "../store/reducers/catalog";
 import { getRequestObjectForESApi } from "../utils/catalog";
 import { getALMConfig } from "../utils/global";
-import { JsonApiParse } from "../utils/jsonAPIAdapter";
+import { JsonApiParse, parseESResponse } from "../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
 import ICustomHooks from "./ICustomHooks";
+import { DEFAULT_PAGE_LIMIT } from "./LoggedInCustomHooks";
 
 interface ISortMap {
   date: string;
@@ -13,8 +14,14 @@ const sortMap: any = {
   date: "publishDate",
   "-date": "publishDate",
 };
+
+const headers = {
+  "Content-Type": "application/json",
+};
 export default class NonLoggedInCustomHooks implements ICustomHooks {
-  primeCdnTrainingBaseEndpoint = getALMConfig().primeCdnTrainingBaseEndpoint;
+  almConfig = getALMConfig();
+  primeCdnTrainingBaseEndpoint = this.almConfig.primeCdnTrainingBaseEndpoint;
+  esBaseUrl = this.almConfig.esBaseUrl;
   async getTrainings(
     filterState: CatalogFilterState,
     sort: string,
@@ -26,17 +33,15 @@ export default class NonLoggedInCustomHooks implements ICustomHooks {
       searchText
     );
     let response: any = await RestAdapter.post({
-      url: `https://primeapps-stage.adobe.com/almsearch/api/v1/qe/7110/a75477eb-2a4c-4f6e-b897-a6506da18e3f/search`,
+      url: `${this.esBaseUrl}/search?&size=${DEFAULT_PAGE_LIMIT}`,
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers,
       body: JSON.stringify(requestObject),
     });
     response = JSON.parse(response);
-    console.log(response);
+    const results = parseESResponse(response.results);
     return {
-      trainings: response.results || [],
+      trainings: results || [],
       next: response.next || "",
     };
   }
@@ -55,16 +60,17 @@ export default class NonLoggedInCustomHooks implements ICustomHooks {
     let response: any = await RestAdapter.post({
       url,
       method: "POST",
-      headers: {
-        "Content-Type": "application/vnd.api+json;charset=UTF-8",
-      },
+      headers,
       body: JSON.stringify(requestObject),
     });
     response = JSON.parse(response);
-    console.log("load more : ", response);
+    const results = parseESResponse(response.results);
+
     return {
-      trainings: response.results || [],
-      next: response.next || "",
+      learningObjectList: results || [],
+      links: {
+        next: response.next || "",
+      },
     };
   }
   async loadMore(url: string) {

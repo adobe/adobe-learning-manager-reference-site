@@ -85,18 +85,12 @@ export const useCatalog = () => {
           query,
           next
         );
-        // dispatch(
-        //   paginateTrainings({
-        //     trainings: parsedResponse!.learningObjectList,
-        //     next: parsedResponse?.next || "",
-        //   })
-        // );
-        // dispatch(
-        //   paginateTrainings({
-        //     trainings: parsedResponse!.learningObjectList,
-        //     next: parsedResponse?.next || "",
-        //   })
-        // );
+        dispatch(
+          paginateTrainings({
+            trainings: parsedResponse!.learningObjectList,
+            next: parsedResponse!.links?.next || "",
+          })
+        );
       } catch (error: any) {
         setState({ isLoading: false, errorCode: error.status });
       }
