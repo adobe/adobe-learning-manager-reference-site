@@ -17,7 +17,9 @@ const PrimeCommunityPosts = (props: any) => {
             firstRun.current = false;
             return;
         }
-        posts ? props.showLoader(false) : props.showLoader(true);
+        setTimeout(() => {
+            posts ? props.showLoader(false) : props.showLoader(true);
+        }, 700)
     }, [posts, props])
     
     const sortFilterChangeHandler = (sortValue: any) => {

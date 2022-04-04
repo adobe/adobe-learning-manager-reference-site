@@ -21,6 +21,7 @@ import { GetTranslation } from "../../../utils/translationService";
 import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJobAids";
 import styles from "./PrimeTrainingPageExtraDetails.module.css";
 
+const PENDING_APPROVAL = "PENDING_APPROVAL";
 const PrimeTrainingPageExtraDetails: React.FC<{
   trainingInstance: PrimeLearningObjectInstance;
   skills: Skill[];
@@ -49,16 +50,20 @@ const PrimeTrainingPageExtraDetails: React.FC<{
   const { formatMessage } = useIntl();
   const config = getALMConfig();
   const locale = config.locale;
+  const enrollment = training.enrollment;
+  let showPreviewButton =
+    training.hasPreview &&
+    (!enrollment || enrollment.state === PENDING_APPROVAL);
 
   const action: string = useMemo(() => {
     // if(trainingInstance.seatLimit)
 
-    if (trainingInstance.learningObject.enrollment) {
-      const { enrollment } = trainingInstance.learningObject;
-      if (enrollment.progressPercent === 0) {
+    if (enrollment) {
+      if (enrollment.state === PENDING_APPROVAL) {
+        return "pendingApproval";
+      } else if (enrollment.progressPercent === 0) {
         return "start";
-      }
-      if (enrollment.progressPercent === 100) {
+      } else if (enrollment.progressPercent === 100) {
         return "revisit";
       }
       return "continue";
@@ -68,6 +73,18 @@ const PrimeTrainingPageExtraDetails: React.FC<{
       return "enroll";
     }
   }, [trainingInstance.state, trainingInstance.learningObject]);
+
+  const seatsAvailableText =
+    trainingInstance.seatLimit > -1 ? (
+      <p style={{ textAlign: "center" }} className={styles.label}>
+        {formatMessage({
+          id: `alm.overview.seatsAvailable`,
+        })}
+        {trainingInstance.seatLimit}
+      </p>
+    ) : (
+      ""
+    );
 
   const actionText = useMemo(() => {
     return formatMessage({
@@ -115,7 +132,26 @@ const PrimeTrainingPageExtraDetails: React.FC<{
     training.enrollment && training.unenrollmentAllowed;
   return (
     <section className={styles.container}>
-      {/* buttons COnatiner */}
+      {showPreviewButton && (
+        <>
+          <Button
+            variant="primary"
+            UNSAFE_className={`${styles.previewButton} ${styles.commonButton}`}
+            onPress={launchPlayerHandler}
+          >
+            {formatMessage({
+              id: `alm.overview.button.preview`,
+            })}
+          </Button>
+
+          <div className={styles.textOr}>
+            {formatMessage({
+              id: `alm.overview.text.or`,
+            })}
+          </div>
+        </>
+      )}
+
       <div className={styles.actionContainer}>
         {/* {action === "preview" && (
           <Button
@@ -142,13 +178,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
             >
               {actionText}
             </Button>
-            {trainingInstance.seatLimit > -1 ? (
-              <p style={{ textAlign: "center" }} className={styles.label}>
-                Seats Available : {trainingInstance.seatLimit}
-              </p>
-            ) : (
-              ""
-            )}
+            {seatsAvailableText}
           </>
         )}
         {(action === "start" ||
@@ -163,12 +193,21 @@ const PrimeTrainingPageExtraDetails: React.FC<{
           </Button>
         )}
         {action === "pendingApproval" && (
-          <Button
-            variant="primary"
-            UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
-          >
-            {actionText}
-          </Button>
+          <>
+            <Button
+              variant="secondary"
+              UNSAFE_className={`${styles.pendingButton} ${styles.commonButton}`}
+              isDisabled={true}
+            >
+              {actionText}
+            </Button>
+            <div className={styles.mangerPendingApprovalText}>
+              {formatMessage({
+                id: "alm.overview.manager.approval.pending",
+              })}
+            </div>
+            {seatsAvailableText}
+          </>
         )}
       </div>
       {/* <div className={styles.buyNowContainer}>

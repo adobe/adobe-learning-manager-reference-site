@@ -17,6 +17,7 @@ import com.adobe.cq.sightly.SightlyWCMMode;
 import com.adobe.learning.core.services.CPTokenService;
 import com.adobe.learning.core.services.GlobalConfigurationService;
 import com.adobe.learning.core.utils.Constants;
+import com.adobe.learning.core.utils.GlobalConfigurationUtils;
 import com.day.cq.wcm.api.Page;
 import com.google.gson.JsonObject;
 
@@ -46,6 +47,7 @@ public class GlobalConfigurationModel {
 	@PostConstruct
 	protected void init() {
 		JsonObject jsonConfigs = configService.getAdminConfigs(currentPage);
+		GlobalConfigurationUtils.filterAdminConfigs(jsonConfigs);
 		String usageType = jsonConfigs.get(Constants.Config.USAGE_TYPE_NAME).getAsString();
 	
 		if (Constants.Config.SITES_USAGE.equals(usageType) && isAuthorMode())

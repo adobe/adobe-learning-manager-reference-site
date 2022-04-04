@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useIntl } from "react-intl";
 import Question from "@spectrum-icons/workflow/Question";
 import { PrimeCommunityLinkPreview } from "../PrimeCommunityLinkPreview";
+import { PrimeCommunityPoll } from "../PrimeCommunityPoll";
 
 const PrimeCommunityObjectBody = (props: any) => {
   const { formatMessage } = useIntl();
@@ -48,6 +49,10 @@ const PrimeCommunityObjectBody = (props: any) => {
       setViewIndex(viewIndex + 1);
   }
 
+  const submitPoll = (optionId: any) => {
+    props.submitPoll(optionId);
+  }
+
   return (
     <>
       <div className={isQuestionType ? styles.primeQuestionPostDescription : styles.primePostDescription}>
@@ -67,6 +72,9 @@ const PrimeCommunityObjectBody = (props: any) => {
         </button>
       }
       <PrimeCommunityLinkPreview currentInput={currentDescription} showLinkPreview={true}></PrimeCommunityLinkPreview>
+      {props.object.postingType === "POLL" &&
+        <PrimeCommunityPoll post={props.object} submitPoll={(optionId: any) => {submitPoll(optionId)}}></PrimeCommunityPoll>
+      }
       <div className={styles.primePostPreview}>
         {object.resource && object.resource.contentType === "VIDEO" && (
           <div className="image-box">

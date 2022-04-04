@@ -16,7 +16,8 @@ export interface PrimeConfig {
   communityBoardsPath: string;
   communityBoardDetailsPath: string;
   locale: string;
-  cdnBaseUrl: string;
+  almCdnBaseUrl: string;
+  almCommerceCdnBaseUrl: string;
   mountingPoints: {
     [key: string]: string;
   };

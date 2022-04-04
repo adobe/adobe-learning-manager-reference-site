@@ -22,6 +22,7 @@ export default class NonLoggedInCustomHooks implements ICustomHooks {
   almConfig = getALMConfig();
   primeCdnTrainingBaseEndpoint = this.almConfig.primeCdnTrainingBaseEndpoint;
   esBaseUrl = this.almConfig.esBaseUrl;
+  almCommerceCdnBaseUrl = this.almConfig.almCommerceCdnBaseUrl;
   async getTrainings(
     filterState: CatalogFilterState,
     sort: string,
@@ -77,8 +78,9 @@ export default class NonLoggedInCustomHooks implements ICustomHooks {
     return null;
   }
   async getTraining(id: string) {
+    const loPath = id.replace(":", "/");
     const response = await RestAdapter.get({
-      url: `${this.primeCdnTrainingBaseEndpoint}/course/1964741.json`,
+      url: `${this.almCommerceCdnBaseUrl}/${loPath}/.json`,
     });
     return JsonApiParse(response).learningObject;
   }

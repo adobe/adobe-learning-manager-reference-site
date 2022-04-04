@@ -358,6 +358,7 @@ export interface PrimeLearningObject {
   supplementaryLOs: PrimeLearningObject[];
   supplementaryResources: PrimeResource[];
   skillNames?: string[]
+  hasPreview: boolean;
 }
 
 export interface PrimeLearningObjectInstance {
