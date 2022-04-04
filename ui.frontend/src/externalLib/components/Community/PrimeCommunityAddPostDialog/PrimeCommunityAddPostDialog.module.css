@@ -93,3 +93,48 @@
 .primeStatusSvg:hover {
     cursor: pointer;
 }
+
+.primeCommunityPollInputContainer {
+    margin-top: 10px;
+}
+
+.primeCommunityPollInput {
+    padding: 5px;
+    font-size: 12px;
+    width: 35%;
+}
+
+.primeCommunityAddOptionButton {
+    margin-top: 10px;
+    border: none;
+    background: none;
+    color: #306EB5 !important;
+    font-weight: 550;
+    font-size: 12px;
+}
+
+.primeCommunityAddOptionButton:hover {
+    cursor: pointer;
+}
+
+@media (max-width: 414px) {
+    .primeCommunityPollInput {
+        width: 60%;
+    }
+    .primeCommunityRemoveOption{
+        margin-top: -5px;
+        margin-left: -10px;
+    }
+}
+
+.primeCommunityRemoveOption {
+    padding-left: 0px;
+    padding-bottom: 4px;
+    border: none!important;
+    background: none!important;
+    color: #808080!important;
+}
+
+.primeCommunityRemoveOption:hover {
+    cursor: pointer;
+}

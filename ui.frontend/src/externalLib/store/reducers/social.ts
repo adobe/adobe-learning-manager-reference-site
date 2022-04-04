@@ -357,7 +357,7 @@ const postsItems: Reducer<PrimePost[], AnyAction> = (
         return [];
       }
       // eslint-disable-next-line no-case-declarations
-      const index = state?.findIndex((item) => item.id === action.post.id);
+      const index = state?.findIndex((item) => item.id === action.payload.postId);
       if (index < 0) return state;
       //uncomment below if else
       // if (state[index].previewData) {
@@ -366,9 +366,9 @@ const postsItems: Reducer<PrimePost[], AnyAction> = (
       //         attributes: {...state[index].attributes, previewData: {...state[index].attributes.previewData, ...action.post.attributes.previewData,},},
       //     };
       // } else {
-      //     state[index] = action.post;
-      // }
-
+        // }
+        
+      state[index] = action.payload.post;
       return state;
     }
 
