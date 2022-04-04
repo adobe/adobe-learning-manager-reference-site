@@ -98,3 +98,54 @@ export function getParamsForCatalogApi(filterState: CatalogFilterState) {
   }
   return params;
 }
+
+
+interface DurationFilter {
+  lte: number;
+  gte: number;
+}
+
+export function getFiltersObjectForESApi(filterState: CatalogFilterState) {
+  const { duration, loFormat, loTypes, skillLevel, skillName, tagName } =
+    filterState;
+  let filters: any = {
+    terms: {
+      loSkillLevels: skillLevel ? filterState.skillLevel.split(",") : null,
+      loType: loTypes ? filterState.loTypes.split(",") : null,
+      deliveryType: loFormat ? filterState.loFormat.split(",") : null,
+      loSkillNames: skillName ? filterState.skillName.split(",") : null,
+      tags: tagName ? filterState.tagName.split(",") : null,
+    },
+    range: {},
+  };
+  //range object
+  if (duration) {
+    const durations = duration.split(",");
+    let durationFilter: DurationFilter[] = [];
+    durations.forEach((item) => {
+      const [minValue, maxValue] = item.split("-");
+      durationFilter.push({
+        lte: parseInt(maxValue),
+        gte: parseInt(minValue),
+      });
+    });
+    filters.range.duration = durationFilter;
+  }
+  return filters;
+}
+
+export function getRequestObjectForESApi(
+  filterState: CatalogFilterState,
+  sort: string,
+  searchText: string = ""
+) {
+  const requestObject = {
+    query: searchText,
+    sort: {
+      name: sort,
+      order: "desc",
+    },
+    filters: getFiltersObjectForESApi(filterState),
+  };
+  return requestObject;
+}

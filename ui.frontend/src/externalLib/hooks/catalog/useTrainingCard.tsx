@@ -20,32 +20,36 @@ import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 export const useTrainingCard = (training: PrimeLearningObject) => {
   const { locale } = getALMConfig();
 
-  const {
+  let {
     loFormat: format,
     loType: type,
     id,
-    skills,
     rating,
     imageUrl,
     state,
     tags,
     authorNames,
     enrollment,
+    skills,
+    skillNames,
   } = training;
 
+  const { name, description, overview, richTextOverview } =
+    useMemo((): PrimeLocalizationMetadata => {
+      return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
+    }, [training.localizedMetadata, locale]);
+
   const {
-    name,
-    description,
-    overview,
-    richTextOverview,
-  } = useMemo((): PrimeLocalizationMetadata => {
-    return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
-  }, [training.localizedMetadata, locale]);
+    cardIconUrl = "",
+    color = "",
+    bannerUrl = "",
+  } = useCardIcon(training);
 
-  const { cardIconUrl = "", color = "", bannerUrl = "" } = useCardIcon(
-    training
-  );
-
+  skillNames =
+    skillNames!?.length > 0
+      ? // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        skillNames
+      : skills?.map((item) => item.skillLevel?.skill?.name);
   const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
 
   const cardClickHandler = useCallback(async () => {
@@ -99,7 +103,7 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     id,
     format,
     type,
-    skills,
+    skillNames,
     rating,
     state,
     tags,

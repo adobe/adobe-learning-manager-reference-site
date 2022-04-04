@@ -38,7 +38,23 @@ class APIService {
       searchText
     );
   }
+  public async loadMoreTrainings(filterState: CatalogFilterState,
+    sort: string,
+    searchText: string, url: string) {
+    if (this.isUserLoggedIn()) {
+      //this.customHooks = new LoggedInCustomHooks();
+      return new LoggedInCustomHooks().loadMoreTrainings(filterState,
+        sort,
+        searchText, url);
+    }
+    return new NonLoggedInCustomHooks().loadMoreTrainings(
+      filterState,
+      sort,
+      searchText,
+      url
+    );
 
+  }
   public async loadMore(url: string) {
     if (this.isUserLoggedIn()) {
       //this.customHooks = new LoggedInCustomHooks();

@@ -1,4 +1,4 @@
-import { UpdateFiltersEvent } from "../../../hooks/catalog/useFilter";
+import { UpdateFiltersEvent } from "../../../utils/filters";
 import { GetTranslation } from "../../../utils/translationService";
 import { ALMLoader } from "../../Common/ALMLoader";
 import styles from "./PrimeCatalogFilters.module.css";

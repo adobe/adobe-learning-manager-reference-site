@@ -75,20 +75,42 @@ export const useCatalog = () => {
   }, [fetchTrainings]);
 
   //for pagination
-  const loadMoreTraining = useCallback(async () => {
-    if (!next) return;
-    try {
-      const parsedResponse = await APIServiceInstance.loadMore(next);
-      dispatch(
-        paginateTrainings({
-          trainings: parsedResponse!.learningObjectList,
-          next: parsedResponse!.links?.next || "",
-        })
-      );
-    } catch (error: any) {
-      setState({ isLoading: false, errorCode: error.status });
-    }
-  }, [dispatch, next]);
+  const loadMoreTraining = useCallback(
+    async () => {
+      if (!next) return;
+      try {
+        const parsedResponse = await APIServiceInstance.loadMoreTrainings(
+          filters,
+          sort,
+          query,
+          next
+        );
+        dispatch(
+          paginateTrainings({
+            trainings: parsedResponse!.learningObjectList,
+            next: parsedResponse!.links?.next || "",
+          })
+        );
+      } catch (error: any) {
+        setState({ isLoading: false, errorCode: error.status });
+      }
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      dispatch,
+      next,
+      filters.duration,
+      filters.learnerState,
+      filters.loFormat,
+      filters.loTypes,
+      filters.skillName,
+      filters.tagName,
+      filters.skillLevel,
+      filters.duration,
+      filters.catalogs,
+      query,
+      sort,
+    ]
+  );
 
   return {
     trainings,

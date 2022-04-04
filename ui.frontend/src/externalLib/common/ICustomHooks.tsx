@@ -7,6 +7,12 @@ export default interface ICustomHooks {
     sort: string,
     searchText: string
   ): void;
+  loadMoreTrainings(
+    filterState: CatalogFilterState,
+    sort: string,
+    searchText: string,
+    url: string
+  ): void;
   loadMore(url: string): void;
   getTraining(id: string, params: QueryParams): void;
 }

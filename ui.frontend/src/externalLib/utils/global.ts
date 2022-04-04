@@ -5,6 +5,8 @@ const _fontLoading = require("./fontLoading");
 export interface PrimeConfig {
   almBaseURL: string;
   primeApiURL: string;
+  primeCdnTrainingBaseEndpoint: string;
+  esBaseUrl: string;
   accessToken: string;
   baseUrl: string;
   instancePath: string;
@@ -16,7 +18,6 @@ export interface PrimeConfig {
   locale: string;
   almCdnBaseUrl: string;
   almCommerceCdnBaseUrl: string;
-  esBaseUrl: string;
   mountingPoints: {
     [key: string]: string;
   };

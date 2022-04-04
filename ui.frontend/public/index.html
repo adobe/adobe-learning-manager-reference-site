@@ -49,7 +49,8 @@
         primeBaseUrl: "1",
         "sling:configPropertyInherit": "true",
         "cq:lastModifiedBy": "admin",
-        esBaseUrl: "1",
+        esBaseUrl:
+          "https://primeapps-stage.adobe.com/almsearch/api/v1/qe/7110/a75477eb-2a4c-4f6e-b897-a6506da18e3f",
         siteMap: "siteMap",
         instancePath: "http://localhost:3000/instance.html",
         catalogPath: "http://localhost:3000/catalog.html",
@@ -70,12 +71,11 @@
       };
 
       const isPrimeUserLoggedIn = () => {
-        return true;
+        return false;
       };
 
       const getAccessToken = () => {
-        return "797ac974baa51e1a79d00ff1821d169b";
-      };
+        return "5c8b8d6a0c6cb86868089ab4aa19b0ca";
 
       const getALMConfig = () => {
         return window.ALM.ALMConfig;
@@ -182,7 +182,8 @@
       window.ALM = window.ALM || {};
       window.ALM.ALMConfig = ALMConfig; //window.ALM.ALMConfig || primeConfig;
       window.ALM.getALMConfig = getALMConfig;
-      window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
+      window.ALM.navigateToTrainingOverviewPage =
+        navigateToTrainingOverviewPage;
       window.ALM.navigateToInstancePage = navigateToInstancePage;
       window.ALM.navigateToBoardDetailsPage = navigateToBoardDetailsPage;
       window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
@@ -199,7 +200,8 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <!--/* <div class="instance__container"></div> */-->
-    <!--/* <div
+
+    <div
       class="catalog__container"
       data-show-filters="true"
       data-show-search="true"
@@ -213,7 +215,8 @@
       data-learner-state="true"
       data-tag-name="true"
       data-skill-level="true"
-    ></div> */-->
+    ></div>
+
 
     <!--/* <div
       class="profile__container"
@@ -224,12 +227,12 @@
       data-section2-description="Section 2 description"
       data-section2-active-fields="hobby, new location"
     ></div> */-->
-    <div
+    <!-- <div
       class="training__page__container"
       data-show-description="true"
       data-show-author-info="true"
       data-show-enroll-deadline="true"
-    ></div>
+    ></div> -->
 
     <!--/* <div class="notification__container"></div> */-->
     <!--/* <div class="boards__container"></div> */-->

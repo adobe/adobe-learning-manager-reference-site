@@ -33,3 +33,21 @@ interface Field {
   allowedValues: string[];
   isMultiValue: boolean;
 }
+
+
+export interface ESPrimeLearningObject {
+  authors: string[];
+  averageRating: number;
+  dateCreated: string;
+  deliveryType: string;
+  duration: number;
+  loId: string;
+  loSkillLevels: string[];
+  loSkillNames: string[];
+  loType: string;
+  name: string;
+  publishDate: string;
+  ratingsCount: number;
+  description: string;
+  tags: string[]
+}
