@@ -57,6 +57,10 @@
                                 cq:policy="learning/components/skillscontainer/policy_1646843692619"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="wcm/core/components/policies/mapping"/>
+                            <categories
+                                cq:policy="learning/components/categories/policy_1646843692620"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="wcm/core/components/policies/mapping"/>
                         </components>
                     </learning>
                 </container>

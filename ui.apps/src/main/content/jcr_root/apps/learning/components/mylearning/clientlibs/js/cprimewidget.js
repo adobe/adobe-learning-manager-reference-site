@@ -23,6 +23,8 @@
     .set("catalogOverviewPageLink", ["catalogOverview", "catalog", new RegExp(/selectedListableCatalogIds=(\d+)/i)])
     .set("catalogPageLink", ["catalogPage"])
     .set("myLearningPageLink", ["catalogPage"])
+    .set("postsLink", ["boardsPage"])
+    .set("allboardsPageLink", ["boardsPage"])
     .set("ciPageLink", ["course", new RegExp(/courseInstance\/(\d+)/i), "instance"])
     .set("lpiPageLink", ["course", new RegExp(/lpInstance\/(\d+)/i), "instance"]);
 
@@ -95,6 +97,10 @@
       else if (pageType === "catalogPage")
       {
         window.ALM.navigateToHomePage();
+      }
+      else if (pageType === "boardsPage")
+      {
+        window.ALM.navigateToBoardsPage();
       }
     }
   }

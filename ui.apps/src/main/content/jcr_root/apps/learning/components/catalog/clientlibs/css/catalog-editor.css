@@ -1,0 +1,13 @@
+.alm-catalog-dialog-search-filter,
+.alm-catalog-dialog-filters
+{
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding-top: 0;
+}
+
+.alm-catalog-dialog-heading
+{
+    margin: 20px 0 15px 0;
+}

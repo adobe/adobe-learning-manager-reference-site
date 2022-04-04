@@ -559,12 +559,6 @@
     margin: 0 10px 0 10px;
   }
 
-  #alm-footer .alm-footer-container {
-    max-width: var(--prime-container-max-width-tablet);
-    width: var(--prime-container-width);
-    padding: 0;
-  }
-
   .news-section {
     padding: 20px;
   }
@@ -588,12 +582,119 @@
   }
 }
 
+/* CSS for FOOTER */
+/* ############################################ */
+#alm-footer {
+  background: #292929 0% 0% no-repeat padding-box;
+  border: 1px solid #707070;
+  height: 70px;
+  color: #ebebeb;
+  display: block;
+}
 
+#alm-footer #alm-footer-container {
+  max-width: var(--prime-container-max-width-desktop);
+  width: var(--prime-container-width);
+  margin-top: 20px;
+  position:relative;
+}
 
+#alm-footer a {
+  color: #ebebeb;
+  font-size: 11px;
+  letter-spacing: 0px;
+  text-align: left;
+  text-decoration: none;
+  font: normal normal normal 11px/14px Source Sans Pro;
+}
 
+#alm-footer .cmp-title h6
+{
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
 
+#alm-footer .cmp-text p
+{
+  margin-top: 0px;
+  margin-bottom: 0px;
+  font-size: 11px;
+  margin: 0px 4px 0px 4px;
+  color: rgb(251, 112, 75);
+}
 
+#alm-footer #alm-footer-scrollTop .cmp-text p
+{
+  color: #ebebeb;
+}
 
+#alm-footer div.title,
+#alm-footer div.text
+{
+  width: auto;
+}
+
+#alm-footer-scrollTop {
+  display: flex;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+#alm-footer-scrollTop a {
+  display: flex;
+}
+
+#alm-footer-scrollTop img {
+  border: 1px white solid;
+  border-radius: 50%;
+  width: 20px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 0;
+}
+
+#alm-footer-scrollTop div {
+  margin-right: 5px;
+}
+
+#alm-footer-container .footer-separator {
+  font-size: 11px;
+}
+
+#alm-footer-titles-cont
+{
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (max-width: 414px) {
+  #alm-footer {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  #alm-footer #alm-footer-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    /* width: 930px; */
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  #alm-footer #alm-footer-container {
+    max-width: var(--prime-container-max-width-tablet);
+    width: var(--prime-container-width);
+    padding: 0;
+  }
+}
+/* CSS for FOOTER */
+/* ############################################ */
 
 
 

@@ -810,6 +810,17 @@
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_1646843692619>
             </skillscontainer>
+            <categories jcr:primaryType="nt:unstructured">
+                <policy_1646843692620
+                    jcr:lastModified="{Date}2022-03-10T08:07:54.054+05:30"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="categories-policy"
+                    sling:resourceType="wcm/core/components/policy/policy"
+                    components="/apps/learning/components/category">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                </policy_1646843692620>
+            </categories>
         </components>
     </learning>
 </jcr:root>
