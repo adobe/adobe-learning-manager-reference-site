@@ -116,7 +116,13 @@ const filterTrainingInstance = (
 ) => {
   const enrollment = training.enrollment;
   instanceId = enrollment?.loInstance.id || instanceId;
-  const trainingInstances = training.instances.filter((instance) => {
+
+  let instances = training.instances;
+  if (enrollment) {
+    instances = [...instances, enrollment.loInstance];
+  }
+
+  const trainingInstances = instances.filter((instance) => {
     if (instanceId) {
       return instance.id === instanceId;
     } else {

@@ -1,21 +1,19 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/aria-role */
+import { ProgressBar } from "@adobe/react-spectrum";
 import { useMemo, useState } from "react";
+import { useIntl } from "react-intl";
 import { useTrainingCard } from "../../../hooks/catalog/useTrainingCard";
 import { PrimeLearningObject } from "../../../models/PrimeModels";
-import { useIntl } from "react-intl";
-import { ProgressBar } from "@adobe/react-spectrum";
-import { GetTranslation } from "../../../utils/translationService";
-
-import styles from "./PrimeTrainingCard.module.css";
 import { SEND_SVG, THREE_DOTS_MENU_SVG } from "../../../utils/inline_svg";
+import { GetTranslation } from "../../../utils/translationService";
+import styles from "./PrimeTrainingCard.module.css";
 
 export const formatMap: any = {
-  "Self Paced": "prime.catalog.card.self.paced",
+  Elearning: "prime.catalog.card.self.paced",
   Activity: "prime.catalog.card.activity",
   Blended: "prime.catalog.card.blended",
   "Virtual Classroom": "prime.catalog.card.virtual.classroom",
-  Elearning: "prime.catalog.card.elearning",
   Classroom: "prime.catalog.card.classroom",
 };
 const PrimeTrainingCard: React.FC<{
