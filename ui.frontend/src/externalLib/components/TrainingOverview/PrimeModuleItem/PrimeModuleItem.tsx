@@ -6,7 +6,7 @@ import LockClosed from "@spectrum-icons/workflow/LockClosed";
 import Seat from "@spectrum-icons/workflow/Seat";
 import User from "@spectrum-icons/workflow/User";
 import Visibility from "@spectrum-icons/workflow/Visibility";
-import React, { useMemo } from "react";
+import React from "react";
 import { useIntl } from "react-intl";
 import {
   PrimeLearningObject,
@@ -190,11 +190,15 @@ const PrimeModuleItem: React.FC<{
       itemClickHandler();
     }
   };
-  const fomatLabel = useMemo(() => {
-    return loResource.resourceType && formatMap[loResource.resourceType]
+  // const formatLabel = useMemo(() => {
+  //   return loResource.resourceType && formatMap[loResource.resourceType]
+  //     ? GetTranslation(`${formatMap[loResource.resourceType]}`, true)
+  //     : "";
+  // }, [loResource.resourceType]);
+  const formatLabel =
+    loResource.resourceType && formatMap[loResource.resourceType]
       ? GetTranslation(`${formatMap[loResource.resourceType]}`, true)
       : "";
-  }, [loResource.resourceType]);
   return (
     <li className={styles.container}>
       <div
@@ -225,7 +229,7 @@ const PrimeModuleItem: React.FC<{
             )}
           </div>
           <div className={styles.resourceAndDuration}>
-            <span className={styles.resourceType}>{fomatLabel}</span>
+            <span className={styles.resourceType}>{formatLabel}</span>
             <span>{durationText}</span>
           </div>
         </div>
