@@ -135,5 +135,21 @@
   "prime.community.post.poll.submitChoice": "Submit Choice",
   "prime.community.post.poll.submittedChoice": "You have submitted your choice",
   "prime.community.post.poll.voteLabel": "vote",
-  "alm.overview.seatsAvailable": "Seats Available :"
+  "alm.overview.seatsAvailable": "Seats Available :",
+  "prime.profile.skillLevel.beginner": "Beginner",
+  "prime.profile.skillLevel.intermediate": "Intermediate",
+  "prime.profile.skillLevel.advanced": "Advanced",
+  "prime.profile.skills.adminAssign": "Added by Admin",
+  "prime.profile.skills.loEnroll": "Added based on trainings taken",
+  "prime.profile.skills.selfAssigned": "Self Assigned",
+  "prime.profile.skills.areasOfInterest": "Your Areas of Interest",
+  "prime.profile.skills.description": "Select areas of interest. You will see recommendations based on your interest.",
+  "prime.profile.skills.removeInterest": "Remove from My interests",
+  "prime.profile.skills.achieved": " Achieved",
+  "prime.profile.skills.viewMore": "View more",
+  "prime.profile.skills.noSkillInterest": "You have not expressed interest in any Skill",
+  "prime.profile.skills.modifyInterest": "Modify Interest",
+  "prime.profile.skills.noSkill": "No skill found",
+  "prime.profile.skills.addInterest": "Add Interest",
+  "prime.profile.skills.cancel": "Cancel"
 }
