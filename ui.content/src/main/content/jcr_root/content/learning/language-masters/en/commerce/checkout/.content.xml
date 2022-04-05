@@ -2,12 +2,11 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2022-03-07T16:24:34.432+05:30"
+        cq:lastModified="{Date}2022-04-05T14:07:16.402+05:30"
         cq:lastModifiedBy="admin"
-        cq:redirectTarget="/content/learning/language-masters/en/home"
         cq:template="/conf/learning/settings/wcm/templates/page-content"
         jcr:primaryType="cq:PageContent"
-        jcr:title="English"
+        jcr:title="Checkout"
         sling:resourceType="learning/components/page">
         <root
             jcr:primaryType="nt:unstructured"
@@ -23,19 +22,16 @@
                 <container
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="learning/components/container"
-                    layout="responsiveGrid"/>
+                    layout="responsiveGrid">
+                    <checkout
+                        jcr:created="{Date}2022-04-04T17:05:44.833+05:30"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2022-04-04T17:05:44.833+05:30"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="learning/components/checkout"/>
+                </container>
             </container>
         </root>
     </jcr:content>
-    <home/>
-    <learning/>
-    <explore/>
-    <skills/>
-    <overview/>
-    <instance/>
-    <board/>
-    <boards/>
-    <support/>
-    <profile/>
-    <commerce/>
 </jcr:root>
