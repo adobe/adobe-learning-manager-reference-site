@@ -94,6 +94,7 @@
   border: none;
   padding: 0;
   font-weight: 700;
+  margin-top: -90px;
 }
 
 .removeInterestButton:hover {
@@ -132,11 +133,23 @@
   display: block;
 }
 
+.skillBox:focus-within .removeInterestButton {
+  display: block;
+}
+
 .skillBox:hover .skillDataTooltip {
   display: block;
 }
 
+.skillBox:focus-within .skillDataTooltip {
+  display: block;
+}
+
 .skillBox:hover .arrowUp {
+  display: block;
+}
+
+.skillBox:focus-within .arrowUp {
   display: block;
 }
 
