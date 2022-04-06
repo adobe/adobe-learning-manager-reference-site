@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { accessToken, user, account, catalog, social, fileUpload, notification } from "./reducers";
+import { accessToken, user, account, catalog, social, fileUpload, notification, userSkillInterest, skill } from "./reducers";
 
 const reducer = combineReducers({
   accessToken,
@@ -8,6 +8,8 @@ const reducer = combineReducers({
   catalog,
   notification,
   social,
-  fileUpload
+  fileUpload,
+  userSkillInterest,
+  skill
 });
 export default reducer;

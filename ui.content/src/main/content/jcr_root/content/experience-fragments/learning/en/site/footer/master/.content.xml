@@ -32,8 +32,8 @@
                     jcr:lastModified="{Date}2022-04-04T14:25:05.576+05:30"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="learning/components/container"
-                    layout="responsiveGrid">
+                    sling:resourceType="learning/components/divWrap"
+                    id="alm-footer-titles-cont">
                     <title
                         jcr:created="{Date}2022-04-04T14:09:55.242+05:30"
                         jcr:createdBy="admin"
@@ -157,8 +157,8 @@
                     jcr:lastModified="{Date}2022-04-04T14:25:05.576+05:30"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="learning/components/container"
-                    layout="responsiveGrid">
+                    sling:resourceType="learning/components/divWrap"
+                    id="alm-footer-scrollTop">
                     <text
                         jcr:created="{Date}2022-04-04T14:24:31.791+05:30"
                         jcr:createdBy="admin"

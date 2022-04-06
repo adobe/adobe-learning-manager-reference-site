@@ -11,6 +11,7 @@ import {
 import ALMBackButton from "../../Common/ALMBackButton/ALMBackButton";
 import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 import ALMActiveFields from "./ALMActiveFields";
+import ALMSkillComponent from "./ALMSkillComponent";
 import styles from "./ALMProfilePage.module.css";
 
 const getActiveFieldAttributes = (config: PrimeConfig) => {
@@ -108,6 +109,7 @@ const ALMProfilePage = () => {
             </section>
           </div>
 
+          <ALMSkillComponent></ALMSkillComponent>
           <ALMActiveFields
             title={section1Title}
             description={section1Description}
