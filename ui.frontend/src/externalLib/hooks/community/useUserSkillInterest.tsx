@@ -21,14 +21,14 @@ export const useUserSkillInterest = () => {
     try {
       const baseApiUrl = getALMConfig().primeApiURL;
       const params: QueryParams = {};
-      params["type"] = "internal";
+      params["filter.skillInterestTypes"] = "ADMIN_DEFINED"; //internal skills only
       params["page[offset]"] = "0";
       params["page[limit]"] = "10";
       params["include"] = "skill,userSkills.skillLevel";
 
       const userResponse = await getALMUser();
       const response = await RestAdapter.get({
-        url: `${baseApiUrl}/users/${userResponse.user.id}/userSkillInterest?`,
+        url: `${baseApiUrl}/users/${userResponse.user.id}/skillInterests?`,
         params: params,
       });
       const parsedResponse = JsonApiParse(response);
