@@ -51,9 +51,35 @@ export interface ESPrimeLearningObject {
   tags: string[];
 }
 
+export interface CommercePrimeLearningObject {
+  almauthor: string[];
+  almavgrating: number;
+  almdeliverytype: string;
+  almduration: number;
+  almlotype: string;
+  almpublishdate: string;
+  almratingscount: number;
+  almskill: string;
+  almstatus: string;
+  almtags: string[];
+  almthumbnailurl: string;
+  almusecourseeffectiveness: string;
+  almusecourserating: string;
+  description: { html: string, __typename: string }
+  name: string;
+  sku: string;
+  price_range: {
+    maximum_price: {
+      final_price: {
+        value: number
+        currency: string
+      }
+    }
+  }
+}
+
 // export interface CatalogLearningObject {
 //   id: string;
-//   _transient: any;
 //   authorNames: string[];
 //   bannerUrl: string;
 //   dateCreated: string;

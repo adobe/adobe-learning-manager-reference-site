@@ -28,7 +28,7 @@ class APIService {
       return new ALMCustomHooks().getTrainings(filterState, sort, searchText);
     }
 
-    if (getALMConfig().usageType == "aem-commerce") {
+    if (getALMConfig().usageType === "aem-commerce") {
       return new CommerceCustomHooks().getTrainings(
         filterState,
         sort,
@@ -53,6 +53,15 @@ class APIService {
         url
       );
     }
+    if (getALMConfig().usageType === "aem-commerce") {
+      return new CommerceCustomHooks().loadMoreTrainings(
+        filterState,
+        sort,
+        searchText,
+        url
+      );
+    }
+
     return new ESCustomHooks().loadMoreTrainings(
       filterState,
       sort,
