@@ -6,7 +6,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   const ACCESS_TOKEN_COOKIE_NAME = "alm-cp-token";
   const CP_OAUTH_URL =
-    "{almBaseURL}/oauth/o/authorize?account={accountId}&client_id={clientId}&redirect_uri={redirectUri}&state={state}&scope=learner:read,learner:write&response_type=CODE&client_identifier=aemsite";
+    "{almBaseURL}/oauth/o/authorize?account={accountId}&client_id={clientId}&redirect_uri={redirectUri}&state={state}&scope=learner:read,learner:write&response_type=CODE&client_identifier=aemsite&logoutAfterAuthorize=true";
   const CP_OAUTH_STATE = "cpState";
 
   const WCM_AUTHOR_MODE = "author";
