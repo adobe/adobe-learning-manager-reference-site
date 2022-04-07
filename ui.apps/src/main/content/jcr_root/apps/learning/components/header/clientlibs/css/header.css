@@ -140,7 +140,7 @@
 #alm-header .alm-header-cont .alm-header-navigation .nav-highlight {
   position: absolute;
   bottom: 0;
-  border-top: 3px red solid;
+  border-top: 3px solid #FB704B;
   left: -5px;
 }
 
