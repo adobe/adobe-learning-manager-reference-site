@@ -126,6 +126,10 @@
       };
 
       async function getALMUser() {
+        if (!window.ALM.isPrimeUserLoggedIn()) {
+          window.sessionStorage.removeItem("user");
+          return;
+        }
         let user = window.sessionStorage.getItem("user");
         if (user) {
           return user;
@@ -148,7 +152,7 @@
             window.sessionStorage.setItem("user", userStr);
             return userStr;
           } else {
-            window.sessionStorage.removeItem("user");
+            console.error("User call failed!!");
           }
         } catch (e) {
           window.sessionStorage.removeItem("user");

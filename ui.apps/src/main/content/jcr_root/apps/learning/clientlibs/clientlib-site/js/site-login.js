@@ -20,28 +20,19 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   const CURRENT_USAGE_TYPE = window.ALM.ALMConfig.usageType || PRIME_USAGE_TYPE;
 
-  let isLoggedIn;
-
-  function handleCommerceLogIn()
-  {
-    if (!isPrimeUserLoggedIn())
-    {
-      isLoggedIn = false;
-
-      if (isLearningPage())
-        window.ALM.navigateToExplorePage();
-      else if (isCommunityPage())
-        window.ALM.navigateToCommerceSignInPage();
+  function handleCommerceLogIn() {
+    if (!isPrimeUserLoggedIn()) {
+      if (isLearningPage()) window.ALM.navigateToExplorePage();
+      else if (isCommunityPage()) window.ALM.navigateToCommerceSignInPage();
     }
   }
 
   function handlePrimeLogIn() {
     if (!isPrimeUserLoggedIn()) {
-      isLoggedIn = false;
       const currentUrl = new URL(window.location.href);
       const pathName = currentUrl.pathname;
       if (isAuthor()) {
-        var data = {
+        let data = {
           _charset_: "UTF-8",
           mode: WCM_AUTHOR_MODE,
           pagePath: pathName,
@@ -51,7 +42,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
         var oauthState = currentUrl.searchParams.get("state");
         var code = currentUrl.searchParams.get("code");
         if (CP_OAUTH_STATE == oauthState && code) {
-          var data = {
+          let data = {
             _charset_: "UTF-8",
             mode: WCM_NON_AUTHOR_MODE,
             code: code,
@@ -63,48 +54,40 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
           document.location.href = cpOauth;
         }
       }
-    } else {
-      isLoggedIn = true;
     }
   }
 
-  function isSignOutPage()
-  {
+  function isSignOutPage() {
     return window.location.pathname === window.ALM.getALMConfig().signOutPath;
   }
 
-  function isCommunityPage()
-  {
+  function isCommunityPage() {
     return window.location.pathname === window.ALM.getALMConfig().communityPath;
   }
 
-  function isCommerceSignInPage()
-  {
-    return window.location.pathname === window.ALM.getALMConfig().commerceSignInPath;
+  function isCommerceSignInPage() {
+    return (
+      window.location.pathname === window.ALM.getALMConfig().commerceSignInPath
+    );
   }
 
-  function isLearningPage()
-  {
+  function isLearningPage() {
     return window.location.pathname === window.ALM.getALMConfig().learningPath;
   }
 
   function handlePageLoad() {
     // If sign-out or sign-in Page do nothing
-    const CURRENT_PATH_NAME = window.location.pathname;
-    if (isSignOutPage() || isCommerceSignInPage)
-      return;
+    if (isSignOutPage() || isCommerceSignInPage) return;
 
-    switch (CURRENT_USAGE_TYPE)
-    {
+    switch (CURRENT_USAGE_TYPE) {
       case PRIME_USAGE_TYPE:
         handlePrimeLogIn();
         break;
 
       case ES_USAGE_TYPE:
-        // Auto-login only if user navigates to Community page. 
+        // Auto-login only if user navigates to Community page.
         // For rest pages, show non-logged in behavior
-        if (isCommunityPage())
-          handlePrimeLogIn();
+        if (isCommunityPage()) handlePrimeLogIn();
         break;
 
       case COMMERCE_USAGE_TYPE:
@@ -146,12 +129,9 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
         currentUrl.searchParams.delete("code");
         currentUrl.searchParams.delete("state");
         getALMUser();
-        if (isSignOutPage)
-        {
+        if (isSignOutPage) {
           window.ALM.navigateToHomePage();
-        }
-        else
-        {
+        } else {
           document.location.href = currentUrl.href;
         }
       },
@@ -162,6 +142,10 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   }
 
   async function getALMUser() {
+    if (!window.ALM.isPrimeUserLoggedIn()) {
+      window.sessionStorage.removeItem("user");
+      return;
+    }
     let user = window.sessionStorage.getItem("user");
     if (user) {
       return user;
@@ -184,7 +168,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
         window.sessionStorage.setItem("user", userStr);
         return userStr;
       } else {
-        window.sessionStorage.removeItem("user");
+        console.error("User call failed!!");
       }
     } catch (e) {
       window.sessionStorage.removeItem("user");
@@ -208,13 +192,13 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     return cookieValue == "" ? false : true;
   }
 
-  function handleLogOut()
-  {
-    document.cookie = ACCESS_TOKEN_COOKIE_NAME + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  function handleLogOut() {
+    document.cookie =
+      ACCESS_TOKEN_COOKIE_NAME +
+      "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
     window.sessionStorage.removeItem("user");
 
-    switch (CURRENT_USAGE_TYPE)
-    {
+    switch (CURRENT_USAGE_TYPE) {
       case PRIME_USAGE_TYPE:
         window.ALM.navigateToSignOutPage();
         break;
