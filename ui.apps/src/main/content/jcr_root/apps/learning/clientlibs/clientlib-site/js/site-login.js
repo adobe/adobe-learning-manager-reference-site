@@ -77,7 +77,8 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   function handlePageLoad() {
     // If sign-out or sign-in Page do nothing
-    if (isSignOutPage() || isCommerceSignInPage) return;
+    if (isSignOutPage() || isCommerceSignInPage()) 
+      return;
 
     switch (CURRENT_USAGE_TYPE) {
       case PRIME_USAGE_TYPE:
@@ -87,7 +88,8 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
       case ES_USAGE_TYPE:
         // Auto-login only if user navigates to Community page.
         // For rest pages, show non-logged in behavior
-        if (isCommunityPage()) handlePrimeLogIn();
+        if (isCommunityPage()) 
+        handlePrimeLogIn();
         break;
 
       case COMMERCE_USAGE_TYPE:
