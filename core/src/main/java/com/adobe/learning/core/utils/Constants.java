@@ -51,6 +51,7 @@ public class Constants {
 		NAVIGATION_PATHS.put("homePath", "home.html");
 		NAVIGATION_PATHS.put("learningPath", "learning.html");
 		NAVIGATION_PATHS.put("supportPath", "support.html");
+		NAVIGATION_PATHS.put("commerceSignInPath", "commerce/signIn.html");
 	}
 	/*
 	 * public static final String TRAINING_OVERVIEW_PATH = "trainingOverviewPath";

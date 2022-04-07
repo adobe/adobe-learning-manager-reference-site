@@ -85,6 +85,11 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     window.location = supportPath;
   }
 
+  const navigateToCommerceSignInPage = () => {
+    let {commerceSignInPath} = getALMConfig();
+    window.location = commerceSignInPath;
+  };
+
   const getUrl = (urlStr, params) => {
     for (const param in params) {
       urlStr = `${urlStr}/${param}/${params[param]}`;
@@ -104,4 +109,5 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.navigateToLearningPage = navigateToLearningPage;
   window.ALM.navigateToCommunityPage = navigateToCommunityPage;
   window.ALM.navigateToSupportPage = navigateToSupportPage;
+  window.ALM.navigateToCommerceSignInPage = navigateToCommerceSignInPage;
 })(window, document, Granite, jQuery);

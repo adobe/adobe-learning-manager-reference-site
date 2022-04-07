@@ -16,8 +16,21 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   const CP_ACCESS_TOKEN_URL = "/cpoauth.cpAccessToken.html";
 
-  function handlePageLoad() {
+  const PRIME_USAGE_TYPE = "aem-sites";
+  const ES_USAGE_TYPE = "aem-es";
+  const COMMERCE_USAGE_TYPE = "aem-commerce";
+
+  const HEADER_LOG_IN_REL = ".alm-log-in";
+  const HEADER_LOG_OUT_REL = ".alm-log-out";
+
+  const CURRENT_USAGE_TYPE = window.ALM.ALMConfig.usageType || PRIME_USAGE_TYPE;
+
+  let isLoggedIn;
+
+  function handlePrimeLogIn()
+  {
     if (!isPrimeUserLoggedIn()) {
+      isLoggedIn = false;
       const currentUrl = new URL(window.location.href);
       const pathName = currentUrl.pathname;
       if (isAuthor()) {
@@ -29,12 +42,9 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
         fetchAccessToken(data);
       }
       else {
-
         var oauthState = currentUrl.searchParams.get("state");
         var code = currentUrl.searchParams.get("code");
         if (CP_OAUTH_STATE == oauthState && code) {
-          // learner got here from cp oauth with code and state.
-          // make call to backend AEM to fetch access_token. On getting refresh the page.
           var data = {
             _charset_: "UTF-8",
             mode: WCM_NON_AUTHOR_MODE,
@@ -42,13 +52,30 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
             pagePath: pathName,
           };
           fetchAccessToken(data);
-          //document.location.reload();
         } else {
-          // redirect learner to cp oauth
           const cpOauth = getCpOauthUrl();
           document.location.href = cpOauth;
         }
       }
+    }
+    else{
+      isLoggedIn = true;
+    }
+  }
+
+  function handlePageLoad() {
+    switch (CURRENT_USAGE_TYPE)
+    {
+      case PRIME_USAGE_TYPE:
+      case ES_USAGE_TYPE:
+        handlePrimeLogIn();
+        break;
+
+      case COMMERCE_USAGE_TYPE:
+        break;
+
+      default:
+        break;
     }
   }
 
@@ -83,8 +110,8 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
         currentUrl.searchParams.delete("PRIME_BASE");
         currentUrl.searchParams.delete("code");
         currentUrl.searchParams.delete("state");
-        document.location.href = currentUrl.href;
         getALMUser();
+        document.location.href = currentUrl.href;
       },
       error: () => {
         alert("Failed to authenticate");
@@ -136,7 +163,63 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     return cookieValue == "" ? false : true;
   }
 
+  function renderLoginButtons()
+  {
+    if(isLoggedIn)
+    {
+      $(HEADER_LOG_IN_REL).hide();
+      $(HEADER_LOG_OUT_REL).show();
+    }
+    else
+    {
+      $(HEADER_LOG_IN_REL).show();
+      $(HEADER_LOG_OUT_REL).hide();
+    }
+  }
+
+  function handleLogOut()
+  {
+    switch (CURRENT_USAGE_TYPE)
+    {
+      case PRIME_USAGE_TYPE:
+      case ES_USAGE_TYPE:
+        document.cookie = ACCESS_TOKEN_COOKIE_NAME + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        window.sessionStorage.removeItem("user");
+        break;
+
+      case COMMERCE_USAGE_TYPE:
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  function handleLogIn()
+  {
+    switch (CURRENT_USAGE_TYPE)
+    {
+      case PRIME_USAGE_TYPE:
+      case ES_USAGE_TYPE:
+        handlePrimeLogIn();
+        break;
+
+      case COMMERCE_USAGE_TYPE:
+        window.ALM.navigateToCommerceSignInPage();
+        break;
+
+      default:
+        break;
+    }
+  }
+
   handlePageLoad();
+
+  $(document).ready(function () {
+    renderLoginButtons();
+    $(HEADER_LOG_IN_REL).on("click", () => handleLogIn());
+    $(HEADER_LOG_OUT_REL).on("click", () => handleLogOut());
+  });
 
   window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
   window.ALM.getAccessToken = getAccessToken;

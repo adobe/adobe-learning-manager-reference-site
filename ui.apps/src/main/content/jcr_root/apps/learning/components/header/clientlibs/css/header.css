@@ -209,6 +209,11 @@
   color: #000000;
 }
 
+.alm-header-profile-options .alm-log-in,
+.alm-header-profile-options .alm-log-out {
+  cursor: pointer;
+}
+
 .alm-header-profile {
   width: 38px;
   height: 38px;

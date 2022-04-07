@@ -11,3 +11,6 @@ $include "./default_filters.any"
 
 # Allow manifest.webmanifest files located in the content
 /0102 { /type "allow" /extension "webmanifest" /path "/content/*/manifest" }
+
+# Allow Access Token servlet
+/0104 { /type "allow" /method "POST" /extension "html" /selectors "cpAccessToken" /path "/cpoauth"}

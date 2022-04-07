@@ -77,14 +77,6 @@
                         name="./clientSecret"
                         cq:showOnCreate="{Boolean}true"/>
 
-                    <almRegister 
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="Adobe Learning Manager Register Url"
-                        fieldDescription="Adobe Learning Manager Register Url"
-                        name="./almRegisterUrl"
-                        cq:showOnCreate="{Boolean}true"/>
-
                     <authorRefreshToken 
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
@@ -143,6 +135,15 @@
                         fieldLabel="ES Base URL"
                         fieldDescription="ES Base URL"
                         name="./esBaseUrl"
+                        granite:rel="aem-es"
+                        cq:showOnCreate="{Boolean}true"/>
+
+                    <almRegister 
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Adobe Learning Manager Register Url"
+                        fieldDescription="Adobe Learning Manager Register Url"
+                        name="./almRegisterUrl"
                         granite:rel="aem-es"
                         cq:showOnCreate="{Boolean}true"/>
 
