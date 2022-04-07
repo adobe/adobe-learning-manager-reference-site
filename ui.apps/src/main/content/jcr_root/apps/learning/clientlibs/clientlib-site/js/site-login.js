@@ -56,10 +56,22 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   }
 
   function handlePageLoad() {
-    switch (CURRENT_USAGE_TYPE) {
+    // If sign-out Page do nothing
+    const CURRENT_PATH_NAME = window.location.pathname;
+    if (CURRENT_PATH_NAME === window.ALM.getALMConfig().signOutPath)
+      return;
+
+    switch (CURRENT_USAGE_TYPE)
+    {
       case PRIME_USAGE_TYPE:
-      case ES_USAGE_TYPE:
         handlePrimeLogIn();
+        break;
+
+      case ES_USAGE_TYPE:
+        // Auto-login only if user navigates to Community page. 
+        // For rest pages, show non-logged in behavior
+        if (CURRENT_PATH_NAME === window.ALM.getALMConfig().communityPath)
+          handlePrimeLogIn();
         break;
 
       case COMMERCE_USAGE_TYPE:
@@ -155,17 +167,20 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     return cookieValue == "" ? false : true;
   }
 
-  function handleLogOut() {
-    switch (CURRENT_USAGE_TYPE) {
+  function handleLogOut()
+  {
+    document.cookie = ACCESS_TOKEN_COOKIE_NAME + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    window.sessionStorage.removeItem("user");
+
+    switch (CURRENT_USAGE_TYPE)
+    {
       case PRIME_USAGE_TYPE:
-      case ES_USAGE_TYPE:
-        document.cookie =
-          ACCESS_TOKEN_COOKIE_NAME +
-          "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-        window.sessionStorage.removeItem("user");
+        window.ALM.navigateToSignOutPage();
         break;
 
+      case ES_USAGE_TYPE:
       case COMMERCE_USAGE_TYPE:
+        window.ALM.navigateToHomePage();
         break;
 
       default:

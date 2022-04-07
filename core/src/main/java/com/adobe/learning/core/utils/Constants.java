@@ -41,7 +41,7 @@ public class Constants {
 	
 	public static final Map<String, String> NAVIGATION_PATHS = new HashMap<String, String>();
 	static {
-		NAVIGATION_PATHS.put("trainingOverviewPath", "overview.html");
+		NAVIGATION_PATHS.put("trainingOverviewPath", "overview.html")
 		NAVIGATION_PATHS.put("catalogPath", "explore.html");
 		NAVIGATION_PATHS.put("communityPath", "skills.html");
 		NAVIGATION_PATHS.put("communityBoardsPath", "boards.html");
@@ -52,6 +52,7 @@ public class Constants {
 		NAVIGATION_PATHS.put("learningPath", "learning.html");
 		NAVIGATION_PATHS.put("supportPath", "support.html");
 		NAVIGATION_PATHS.put("commerceSignInPath", "commerce/sign-in.html");
+		NAVIGATION_PATHS.put("signOutPath", "sign-out.html");
 	}
 	/*
 	 * public static final String TRAINING_OVERVIEW_PATH = "trainingOverviewPath";
