@@ -57,6 +57,11 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     window.location = catalogUrl;
   };
 
+  const navigateToExplorePage = () => {
+    let { catalogPath } = getALMConfig();
+    window.location = catalogPath;
+  };
+
   const navigateToBoardsPage = (skillNames) => {
     let {communityBoardsPath} = getALMConfig();
     let boardsUrl = communityBoardsPath;
@@ -113,6 +118,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
   window.ALM.navigateToInstancePage = navigateToInstancePage;
   window.ALM.navigateToCatalogPage = navigateToCatalogPage;
+  window.ALM.navigateToExplorePage = navigateToExplorePage;
   window.ALM.navigateToBoardDetailsPage = navigateToBoardDetailsPage;
   window.ALM.navigateToBoardsPage = navigateToBoardsPage;
   window.ALM.navigateToHomePage = navigateToHomePage;
