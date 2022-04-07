@@ -74,6 +74,16 @@ const PrimeTrainingCard: React.FC<{
   const trainingTypeLabel = useMemo(() => {
     return type ? GetTranslation(`prime.catalog.card.${type}`, true) : "";
   }, [type]);
+  let priceLabel = "";
+  if (training.price?.value) {
+    const formatter = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: training.price?.currency,
+    });
+
+    priceLabel = formatter.format(training.price?.value!);
+  }
+
   return (
     <>
       <li className={styles.listItem}>
@@ -93,10 +103,10 @@ const PrimeTrainingCard: React.FC<{
             </div>
 
             <div className={styles.bottomBar}>
-              {/* <span className={styles.price}>$9009</span> */}
+              {priceLabel && <span className={styles.price}>{priceLabel}</span>}
               <div className={styles.title}>{name}</div>
               <div className={styles.trainingType}>
-                {trainingTypeLabel} - {fomatLabel}
+                {trainingTypeLabel} {fomatLabel ? `- ${fomatLabel}` : ""}
               </div>
               <div
                 className={styles.descriptionContainer}

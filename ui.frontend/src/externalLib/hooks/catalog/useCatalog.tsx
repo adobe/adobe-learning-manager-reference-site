@@ -87,7 +87,7 @@ export const useCatalog = () => {
         );
         dispatch(
           paginateTrainings({
-            trainings: parsedResponse!.learningObjectList,
+            trainings: parsedResponse!.learningObjectList || [],
             next: parsedResponse!.links?.next || "",
           })
         );

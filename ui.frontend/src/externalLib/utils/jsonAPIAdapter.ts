@@ -1,4 +1,4 @@
-import { ESPrimeLearningObject, JsonApiResponse, PrimeLearningObject, PrimeLocalizationMetadata, PrimeRating } from "../models";
+import { CommercePrimeLearningObject, ESPrimeLearningObject, JsonApiResponse, PrimeLearningObject, PrimeLocalizationMetadata, PrimeRating } from "../models";
 
 let store: Store | undefined;
 export function GetStore(): Store {
@@ -299,6 +299,52 @@ export function parseESResponse(response: ESPrimeLearningObject[]): PrimeLearnin
         lo.skills = [];
         lo.skillNames = item.loSkillNames;
 
+
+        loResponse.push(lo as PrimeLearningObject);
+    })
+    return loResponse;
+}
+
+export function parseCommerceResponse(response: CommercePrimeLearningObject[]): PrimeLearningObject[] {
+    let loResponse: PrimeLearningObject[] = [];
+    response.forEach((item) => {
+        let lo: Partial<PrimeLearningObject> = {};
+        let rating: PrimeRating;
+        let localizedData: PrimeLocalizationMetadata;
+
+        lo.id = item.sku;
+        lo.loFormat = item.almdeliverytype;
+        lo.loType = item.almlotype;
+        lo.duration = item.almduration;
+        lo.authorNames = item.almauthor;
+        // lo.dateCreated = item.dateCreated;
+        lo.datePublished = item.almpublishdate;
+        lo.tags = item.almtags;
+        localizedData = {
+            _transient: "",
+            description: item.description.html,
+            id: "",
+            locale: "en-US", //need to get from locale
+            name: item.name,
+            overview: "",
+            richTextOverview: "",
+            type: ""
+        }
+        lo.localizedMetadata = [localizedData];
+
+        rating = {
+            averageRating: item.almavgrating,
+            ratingsCount: item.almratingscount,
+            id: "",
+            _transient: ""
+        }
+        lo.rating = rating;
+        lo.skills = [];
+        lo.skillNames = item.almskill.split(",");
+        lo.price = {
+            value: item.price_range?.maximum_price?.final_price?.value,
+            currency: item.price_range?.maximum_price?.final_price?.currency
+        }
 
         loResponse.push(lo as PrimeLearningObject);
     })

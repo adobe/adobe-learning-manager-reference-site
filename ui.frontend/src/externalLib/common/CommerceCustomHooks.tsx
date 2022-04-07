@@ -1,10 +1,13 @@
 import { GET_COMMERCE_TRAININGS } from "../commerce";
 import { apolloClient } from "../contextProviders";
 import { CatalogFilterState } from "../store/reducers/catalog";
-import { getRequestObjectForESApi } from "../utils/catalog";
 import { getALMConfig } from "../utils/global";
-import { JsonApiParse, parseESResponse } from "../utils/jsonAPIAdapter";
+import {
+  JsonApiParse,
+  parseCommerceResponse,
+} from "../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
+import { DEFAULT_PAGE_LIMIT } from "./ALMCustomHooks";
 import ICustomHooks from "./ICustomHooks";
 
 interface ISortMap {
@@ -27,49 +30,65 @@ export default class CommerceCustomHooks implements ICustomHooks {
   async getTrainings(
     filterState: CatalogFilterState,
     sort: string,
-    searchText: string = ""
+    search: string = ""
   ) {
     try {
-      const response1 = await apolloClient.query({
-        query: GET_COMMERCE_TRAININGS as any,
-        variables: {},
+      const response = await apolloClient.query({
+        query: GET_COMMERCE_TRAININGS,
+        variables: {
+          pageSize: DEFAULT_PAGE_LIMIT,
+          filter: {},
+          search,
+        },
       });
+      const products = response?.data?.products;
+      const results = parseCommerceResponse(products?.items);
+      const page_info = products?.page_info;
+      return {
+        trainings: results || [],
+        next:
+          page_info?.current_page < page_info?.total_pages
+            ? page_info?.current_page
+            : "",
+      };
     } catch (error) {
       console.log(error);
+      return { error };
     }
-
-    //const { loading, error, data } = useQuery(GET_COMMERCE_TRAININGS as any);
-
-    //console.log(data);
-    return {};
   }
 
   async loadMoreTrainings(
     filterState: CatalogFilterState,
     sort: string,
-    searchText: string = "",
-    url: string
+    search: string = "",
+    currentPage: string
   ) {
-    const requestObject = getRequestObjectForESApi(
-      filterState,
-      sortMap[sort as keyof ISortMap],
-      searchText
-    );
-    let response: any = await RestAdapter.post({
-      url,
-      method: "POST",
-      headers,
-      body: JSON.stringify(requestObject),
-    });
-    response = JSON.parse(response);
-    const results = parseESResponse(response.results);
-
-    return {
-      learningObjectList: results || [],
-      links: {
-        next: response.next || "",
-      },
-    };
+    try {
+      const response = await apolloClient.query({
+        query: GET_COMMERCE_TRAININGS,
+        variables: {
+          pageSize: DEFAULT_PAGE_LIMIT,
+          filter: {},
+          currentPage: parseInt(currentPage) + 1,
+          search,
+        },
+      });
+      const products = response?.data?.products;
+      const results = parseCommerceResponse(products?.items);
+      const page_info = products?.page_info;
+      return {
+        learningObjectList: results || [],
+        links: {
+          next:
+            page_info?.current_page < page_info?.total_pages
+              ? page_info?.current_page
+              : "",
+        },
+      };
+    } catch (error) {
+      console.log(error);
+      return { error };
+    }
   }
   async loadMore(url: string) {
     return null;
