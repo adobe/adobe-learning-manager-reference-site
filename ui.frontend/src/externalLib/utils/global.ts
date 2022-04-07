@@ -17,7 +17,6 @@ export interface PrimeConfig {
   communityBoardDetailsPath: string;
   locale: string;
   almCdnBaseUrl: string;
-  almCommerceCdnBaseUrl: string;
   commerceURL: string;
   usageType: "aem-sites" | "aem-es" | "aem-commerce";
   mountingPoints: {
