@@ -20,6 +20,13 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   const CURRENT_USAGE_TYPE = window.ALM.ALMConfig.usageType || PRIME_USAGE_TYPE;
 
+  function handleCommerceLogIn() {
+    if (!isPrimeUserLoggedIn()) {
+      if (isLearningPage()) window.ALM.navigateToExplorePage();
+      else if (isCommunityPage()) window.ALM.navigateToCommerceSignInPage();
+    }
+  }
+
   function handlePrimeLogIn() {
     if (!isPrimeUserLoggedIn()) {
       const currentUrl = new URL(window.location.href);
@@ -50,10 +57,27 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     }
   }
 
+  function isSignOutPage() {
+    return window.location.pathname === window.ALM.getALMConfig().signOutPath;
+  }
+
+  function isCommunityPage() {
+    return window.location.pathname === window.ALM.getALMConfig().communityPath;
+  }
+
+  function isCommerceSignInPage() {
+    return (
+      window.location.pathname === window.ALM.getALMConfig().commerceSignInPath
+    );
+  }
+
+  function isLearningPage() {
+    return window.location.pathname === window.ALM.getALMConfig().learningPath;
+  }
+
   function handlePageLoad() {
-    // If sign-out Page do nothing
-    const CURRENT_PATH_NAME = window.location.pathname;
-    if (CURRENT_PATH_NAME === window.ALM.getALMConfig().signOutPath) return;
+    // If sign-out or sign-in Page do nothing
+    if (isSignOutPage() || isCommerceSignInPage) return;
 
     switch (CURRENT_USAGE_TYPE) {
       case PRIME_USAGE_TYPE:
@@ -63,11 +87,11 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
       case ES_USAGE_TYPE:
         // Auto-login only if user navigates to Community page.
         // For rest pages, show non-logged in behavior
-        if (CURRENT_PATH_NAME === window.ALM.getALMConfig().communityPath)
-          handlePrimeLogIn();
+        if (isCommunityPage()) handlePrimeLogIn();
         break;
 
       case COMMERCE_USAGE_TYPE:
+        handleCommerceLogIn();
         break;
 
       default:
@@ -105,7 +129,11 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
         currentUrl.searchParams.delete("code");
         currentUrl.searchParams.delete("state");
         getALMUser();
-        document.location.href = currentUrl.href;
+        if (isSignOutPage) {
+          window.ALM.navigateToHomePage();
+        } else {
+          document.location.href = currentUrl.href;
+        }
       },
       error: () => {
         alert("Failed to authenticate");
@@ -201,6 +229,22 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     }
   }
 
+  function handleRegister() {
+    switch (CURRENT_USAGE_TYPE) {
+      case PRIME_USAGE_TYPE:
+      case ES_USAGE_TYPE:
+        handlePrimeLogIn();
+        break;
+
+      case COMMERCE_USAGE_TYPE:
+        window.ALM.navigateToCommerceSignInPage();
+        break;
+
+      default:
+        break;
+    }
+  }
+
   handlePageLoad();
 
   window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
@@ -209,4 +253,5 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.updateALMUser = updateALMUser;
   window.ALM.handleLogIn = handleLogIn;
   window.ALM.handleLogOut = handleLogOut;
+  window.ALM.handleRegister = handleRegister;
 })(window, document, Granite, jQuery);

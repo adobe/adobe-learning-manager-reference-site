@@ -19,6 +19,7 @@
 
     const HEADER_LOG_IN_REL = ".alm-log-in";
     const HEADER_LOG_OUT_REL = ".alm-log-out";
+    const HEADER_REGISTER_REL = ".alm-register";
     const HEADER_PROFILE_TEXT_REL = ".alm-profile__text";
     const HEADER_NOTIFICATION_REL = ".alm-header-icons .notification__container";
 
@@ -47,6 +48,7 @@
       if(window.ALM.isPrimeUserLoggedIn())
       {
         $(HEADER_LOG_IN_REL).hide();
+        $(HEADER_REGISTER_REL).hide();
         $(HEADER_LOG_OUT_REL).show();
         $(HEADER_PROFILE_TEXT_REL).show();
         $(HEADER_NOTIFICATION_REL).show();
@@ -54,6 +56,7 @@
       else
       {
         $(HEADER_LOG_IN_REL).show();
+        $(HEADER_REGISTER_REL).show();
         $(HEADER_LOG_OUT_REL).hide();
         $(HEADER_PROFILE_TEXT_REL).hide();
         $(HEADER_NOTIFICATION_REL).hide();
@@ -80,6 +83,7 @@
         highlightNavigationButtons();
         $(HEADER_LOG_IN_REL).on("click", () => window.ALM.handleLogIn());
         $(HEADER_LOG_OUT_REL).on("click", () => window.ALM.handleLogOut());
+        $(HEADER_REGISTER_REL).on("click", () => window.ALM.handleRegister());
         $(HEADER_PROFILE_TEXT_REL).on("click", () => window.ALM.navigateToProfilePage());
 
         if (window.ALM.isPrimeUserLoggedIn())

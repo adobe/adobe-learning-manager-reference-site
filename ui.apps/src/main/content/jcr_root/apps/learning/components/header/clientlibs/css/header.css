@@ -237,7 +237,8 @@
 }
 
 .alm-header-profile-options .alm-log-in,
-.alm-header-profile-options .alm-log-out {
+.alm-header-profile-options .alm-log-out,
+.alm-header-profile-options .alm-register {
   cursor: pointer;
 }
 
