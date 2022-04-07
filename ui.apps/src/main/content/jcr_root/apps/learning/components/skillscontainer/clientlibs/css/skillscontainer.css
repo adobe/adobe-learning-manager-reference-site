@@ -12,6 +12,7 @@
 {
     min-height: 100px;
     min-width: 100px;
+    position: relative;
 }
 
 .alm-skills-container .product img {
@@ -47,7 +48,8 @@
         margin: 0 auto;
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
+        justify-content: flex-start;
+        gap: 20px;
     }
 
     #alm-skills-header
@@ -159,11 +161,16 @@
 }
 
 .cmp-image .cmp-image__title {
-    position: relative;
-    margin-top: -100px;
-    margin-left: 100px;
-    font-size: 18px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
     color: white;
+    font: normal normal 600 18px/25px Source Sans Pro;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    text-shadow: 0px 1px 2px #00000099;
+    text-transform: none;
 } 
 
 .aem-Grid::before, .aem-Grid::after {
