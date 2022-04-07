@@ -6,10 +6,8 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   const ACCESS_TOKEN_COOKIE_NAME = "alm-cp-token";
   const CP_OAUTH_URL =
-    "{almBaseURL}/oauth/o/authorize?account={accountId}&client_id={clientId}&redirect_uri={redirectUri}&state={state}&scope={scope}&response_type={responseType}";
-  const CP_OAUTH_SCOPE = "learner:read,learner:write";
+    "{almBaseURL}/oauth/o/authorize?account={accountId}&client_id={clientId}&redirect_uri={redirectUri}&state={state}&scope=learner:read,learner:write&response_type=CODE&client_identifier=aemsite";
   const CP_OAUTH_STATE = "cpState";
-  const CP_OAUTH_RESPONSE_TYPE = "CODE";
 
   const WCM_AUTHOR_MODE = "author";
   const WCM_NON_AUTHOR_MODE = "non-author";
@@ -19,9 +17,6 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   const PRIME_USAGE_TYPE = "aem-sites";
   const ES_USAGE_TYPE = "aem-es";
   const COMMERCE_USAGE_TYPE = "aem-commerce";
-
-  const HEADER_LOG_IN_REL = ".alm-log-in";
-  const HEADER_LOG_OUT_REL = ".alm-log-out";
 
   const CURRENT_USAGE_TYPE = window.ALM.ALMConfig.usageType || PRIME_USAGE_TYPE;
 
@@ -87,9 +82,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
       .replace("{accountId}", accountId)
       .replace("{clientId}", clientId)
       .replace("{redirectUri}", window.location.href)
-      .replace("{state}", CP_OAUTH_STATE)
-      .replace("{scope}", CP_OAUTH_SCOPE)
-      .replace("{responseType}", CP_OAUTH_RESPONSE_TYPE);
+      .replace("{state}", CP_OAUTH_STATE);
   }
 
   // fetch access_token from AEM
@@ -162,16 +155,6 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     return cookieValue == "" ? false : true;
   }
 
-  function renderLoginButtons() {
-    if (isLoggedIn) {
-      $(HEADER_LOG_IN_REL).hide();
-      $(HEADER_LOG_OUT_REL).show();
-    } else {
-      $(HEADER_LOG_IN_REL).show();
-      $(HEADER_LOG_OUT_REL).hide();
-    }
-  }
-
   function handleLogOut() {
     switch (CURRENT_USAGE_TYPE) {
       case PRIME_USAGE_TYPE:
@@ -208,14 +191,10 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   handlePageLoad();
 
-  $(document).ready(function () {
-    renderLoginButtons();
-    $(HEADER_LOG_IN_REL).on("click", () => handleLogIn());
-    $(HEADER_LOG_OUT_REL).on("click", () => handleLogOut());
-  });
-
   window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
   window.ALM.getAccessToken = getAccessToken;
   window.ALM.getALMUser = getALMUser;
   window.ALM.updateALMUser = updateALMUser;
+  window.ALM.handleLogIn = handleLogIn;
+  window.ALM.handleLogOut = handleLogOut;
 })(window, document, Granite, jQuery);
