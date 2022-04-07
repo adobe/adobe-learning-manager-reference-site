@@ -18,9 +18,6 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   const ES_USAGE_TYPE = "aem-es";
   const COMMERCE_USAGE_TYPE = "aem-commerce";
 
-  const HEADER_LOG_IN_REL = ".alm-log-in";
-  const HEADER_LOG_OUT_REL = ".alm-log-out";
-
   const CURRENT_USAGE_TYPE = window.ALM.ALMConfig.usageType || PRIME_USAGE_TYPE;
 
   let isLoggedIn;
@@ -159,20 +156,6 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     return cookieValue == "" ? false : true;
   }
 
-  function renderLoginButtons()
-  {
-    if(isLoggedIn)
-    {
-      $(HEADER_LOG_IN_REL).hide();
-      $(HEADER_LOG_OUT_REL).show();
-    }
-    else
-    {
-      $(HEADER_LOG_IN_REL).show();
-      $(HEADER_LOG_OUT_REL).hide();
-    }
-  }
-
   function handleLogOut()
   {
     switch (CURRENT_USAGE_TYPE)
@@ -211,14 +194,10 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   handlePageLoad();
 
-  $(document).ready(function () {
-    renderLoginButtons();
-    $(HEADER_LOG_IN_REL).on("click", () => handleLogIn());
-    $(HEADER_LOG_OUT_REL).on("click", () => handleLogOut());
-  });
-
   window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
   window.ALM.getAccessToken = getAccessToken;
   window.ALM.getALMUser = getALMUser;
   window.ALM.updateALMUser = updateALMUser;
+  window.ALM.handleLogIn = handleLogIn;
+  window.ALM.handleLogOut = handleLogOut;
 })(window, document, Granite, jQuery);

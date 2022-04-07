@@ -17,7 +17,31 @@
     const COMMUNITY_NAVIGATE_SEL = ".alm-community-navigate";
     const SUPPORT_NAVIGATE_SEL = ".alm-support-navigate";
 
-    $(document).ready(function () {
+    const HEADER_LOG_IN_REL = ".alm-log-in";
+    const HEADER_LOG_OUT_REL = ".alm-log-out";
+    const HEADER_PROFILE_TEXT_REL = ".alm-profile__text";
+    const HEADER_NOTIFICATION_REL = ".alm-header-icons .notification__container";
+
+    const DEFAULT_USER_AVATAR = "/content/dam/learning/site/default_user_avatar.svg";
+
+    function renderLoginButtons()
+    {
+      if(window.ALM.isPrimeUserLoggedIn())
+      {
+        $(HEADER_LOG_IN_REL).hide();
+        $(HEADER_LOG_OUT_REL).show();
+        $(HEADER_PROFILE_TEXT_REL).show();
+      }
+      else
+      {
+        $(HEADER_LOG_IN_REL).show();
+        $(HEADER_LOG_OUT_REL).hide();
+        $(HEADER_PROFILE_TEXT_REL).hide();
+      }
+    }
+
+    function fetchProfileDetails()
+    {
         window.ALM.getALMUser().then(function (user) {
             try {
                 const userAttrs = JSON.parse(user).data.attributes;
@@ -29,10 +53,25 @@
                 console.error("Unable to fetch user avatar.");
             }
         });
+    }
+
+    $(document).ready(function () {
+        renderLoginButtons();
+        $(HEADER_LOG_IN_REL).on("click", () => window.ALM.handleLogIn());
+        $(HEADER_LOG_OUT_REL).on("click", () => window.ALM.handleLogOut());
+
+        if (window.ALM.isPrimeUserLoggedIn())
+        {
+            fetchProfileDetails();
+            $(COMMUNITY_NAVIGATE_SEL).on("click", () => window.ALM.navigateToCommunityPage());
+        }
+        else
+        {
+            $(HEADER_PROFILE_PIC_SEL).attr("src", DEFAULT_USER_AVATAR);
+        }
 
         $(HOME_NAVIGATE_SEL).on("click", () => window.ALM.navigateToHomePage());
         $(LEARNING_NAVIGATE_SEL).on("click", () => window.ALM.navigateToLearningPage());
-        $(COMMUNITY_NAVIGATE_SEL).on("click", () => window.ALM.navigateToCommunityPage());
         $(SUPPORT_NAVIGATE_SEL).on("click", () => window.ALM.navigateToSupportPage());
 
         $(VERT_NAV_CLOSE_BUTTON_SEL + "," + HEADER_SHOW_MENU_SEL).on("click", () => {
