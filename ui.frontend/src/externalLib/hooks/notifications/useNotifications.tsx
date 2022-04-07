@@ -63,6 +63,9 @@ export const useNotifications = () => {
   const dispatch = useDispatch();
   const config = getALMConfig();
   const getUserId = async () => {
+    if (!getALMObject().isPrimeUserLoggedIn()) {
+      return;
+    }
     const userResponse = await getALMUser();
     return userResponse.user.id;
   };
@@ -73,6 +76,9 @@ export const useNotifications = () => {
   const fetchNotifications = useCallback(async () => {
     try {
       const userId = await getUserId();
+      if (!userId) {
+        return;
+      }
       const params: QueryParams = {};
       params["page[limit]"] = pageLimit;
       params["announcementsOnly"] = false;
@@ -99,6 +105,9 @@ export const useNotifications = () => {
   const pollUnreadNotificationCount = useCallback(async () => {
     try {
       const userId = await getUserId();
+      if (!userId) {
+        return;
+      }
       const params: QueryParams = {};
       params["page[limit]"] = pageLimit;
       params["announcementsOnly"] = false;

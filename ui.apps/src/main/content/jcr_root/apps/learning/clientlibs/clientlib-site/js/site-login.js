@@ -20,15 +20,12 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   const CURRENT_USAGE_TYPE = window.ALM.ALMConfig.usageType || PRIME_USAGE_TYPE;
 
-  let isLoggedIn;
-
   function handlePrimeLogIn() {
     if (!isPrimeUserLoggedIn()) {
-      isLoggedIn = false;
       const currentUrl = new URL(window.location.href);
       const pathName = currentUrl.pathname;
       if (isAuthor()) {
-        var data = {
+        let data = {
           _charset_: "UTF-8",
           mode: WCM_AUTHOR_MODE,
           pagePath: pathName,
@@ -38,7 +35,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
         var oauthState = currentUrl.searchParams.get("state");
         var code = currentUrl.searchParams.get("code");
         if (CP_OAUTH_STATE == oauthState && code) {
-          var data = {
+          let data = {
             _charset_: "UTF-8",
             mode: WCM_NON_AUTHOR_MODE,
             code: code,
@@ -50,25 +47,21 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
           document.location.href = cpOauth;
         }
       }
-    } else {
-      isLoggedIn = true;
     }
   }
 
   function handlePageLoad() {
     // If sign-out Page do nothing
     const CURRENT_PATH_NAME = window.location.pathname;
-    if (CURRENT_PATH_NAME === window.ALM.getALMConfig().signOutPath)
-      return;
+    if (CURRENT_PATH_NAME === window.ALM.getALMConfig().signOutPath) return;
 
-    switch (CURRENT_USAGE_TYPE)
-    {
+    switch (CURRENT_USAGE_TYPE) {
       case PRIME_USAGE_TYPE:
         handlePrimeLogIn();
         break;
 
       case ES_USAGE_TYPE:
-        // Auto-login only if user navigates to Community page. 
+        // Auto-login only if user navigates to Community page.
         // For rest pages, show non-logged in behavior
         if (CURRENT_PATH_NAME === window.ALM.getALMConfig().communityPath)
           handlePrimeLogIn();
@@ -121,6 +114,10 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   }
 
   async function getALMUser() {
+    if (!window.ALM.isPrimeUserLoggedIn()) {
+      window.sessionStorage.removeItem("user");
+      return;
+    }
     let user = window.sessionStorage.getItem("user");
     if (user) {
       return user;
@@ -143,7 +140,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
         window.sessionStorage.setItem("user", userStr);
         return userStr;
       } else {
-        window.sessionStorage.removeItem("user");
+        console.error("User call failed!!");
       }
     } catch (e) {
       window.sessionStorage.removeItem("user");
@@ -167,13 +164,13 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     return cookieValue == "" ? false : true;
   }
 
-  function handleLogOut()
-  {
-    document.cookie = ACCESS_TOKEN_COOKIE_NAME + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  function handleLogOut() {
+    document.cookie =
+      ACCESS_TOKEN_COOKIE_NAME +
+      "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
     window.sessionStorage.removeItem("user");
 
-    switch (CURRENT_USAGE_TYPE)
-    {
+    switch (CURRENT_USAGE_TYPE) {
       case PRIME_USAGE_TYPE:
         window.ALM.navigateToSignOutPage();
         break;
