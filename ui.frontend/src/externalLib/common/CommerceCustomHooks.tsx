@@ -2,10 +2,7 @@ import { GET_COMMERCE_TRAININGS } from "../commerce";
 import { apolloClient } from "../contextProviders";
 import { CatalogFilterState } from "../store/reducers/catalog";
 import { getALMConfig } from "../utils/global";
-import {
-  JsonApiParse,
-  parseCommerceResponse,
-} from "../utils/jsonAPIAdapter";
+import { JsonApiParse, parseCommerceResponse } from "../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
 import { DEFAULT_PAGE_LIMIT } from "./ALMCustomHooks";
 import ICustomHooks from "./ICustomHooks";
@@ -26,7 +23,7 @@ export default class CommerceCustomHooks implements ICustomHooks {
   almConfig = getALMConfig();
   primeCdnTrainingBaseEndpoint = this.almConfig.primeCdnTrainingBaseEndpoint;
   esBaseUrl = this.almConfig.esBaseUrl;
-  almCommerceCdnBaseUrl = this.almConfig.almCommerceCdnBaseUrl;
+  almCdnBaseUrl = this.almConfig.almCdnBaseUrl;
   async getTrainings(
     filterState: CatalogFilterState,
     sort: string,
@@ -96,7 +93,7 @@ export default class CommerceCustomHooks implements ICustomHooks {
   async getTraining(id: string) {
     const loPath = id.replace(":", "/");
     const response = await RestAdapter.get({
-      url: `${this.almCommerceCdnBaseUrl}/${loPath}/.json`,
+      url: `${this.almCdnBaseUrl}/${loPath}/.json`,
     });
     return JsonApiParse(response).learningObject;
   }

@@ -22,8 +22,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   let isLoggedIn;
 
-  function handlePrimeLogIn()
-  {
+  function handlePrimeLogIn() {
     if (!isPrimeUserLoggedIn()) {
       isLoggedIn = false;
       const currentUrl = new URL(window.location.href);
@@ -35,8 +34,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
           pagePath: pathName,
         };
         fetchAccessToken(data);
-      }
-      else {
+      } else {
         var oauthState = currentUrl.searchParams.get("state");
         var code = currentUrl.searchParams.get("code");
         if (CP_OAUTH_STATE == oauthState && code) {
@@ -52,15 +50,13 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
           document.location.href = cpOauth;
         }
       }
-    }
-    else{
+    } else {
       isLoggedIn = true;
     }
   }
 
   function handlePageLoad() {
-    switch (CURRENT_USAGE_TYPE)
-    {
+    switch (CURRENT_USAGE_TYPE) {
       case PRIME_USAGE_TYPE:
       case ES_USAGE_TYPE:
         handlePrimeLogIn();
@@ -129,20 +125,23 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
         headers,
         method: "GET",
       });
-      if (userResponse) {
+      if (userResponse && userResponse.status == 200) {
         user = await userResponse.json();
         const userStr = JSON.stringify(user);
         window.sessionStorage.setItem("user", userStr);
         return userStr;
+      } else {
+        window.sessionStorage.removeItem("user");
       }
     } catch (e) {
+      window.sessionStorage.removeItem("user");
       throw e;
     }
   }
   async function updateALMUser() {
     window.sessionStorage.removeItem("user");
     return getALMUser();
-  };
+  }
 
   function getAccessToken() {
     let cookieValues = document.cookie.match(
@@ -156,13 +155,13 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     return cookieValue == "" ? false : true;
   }
 
-  function handleLogOut()
-  {
-    switch (CURRENT_USAGE_TYPE)
-    {
+  function handleLogOut() {
+    switch (CURRENT_USAGE_TYPE) {
       case PRIME_USAGE_TYPE:
       case ES_USAGE_TYPE:
-        document.cookie = ACCESS_TOKEN_COOKIE_NAME + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        document.cookie =
+          ACCESS_TOKEN_COOKIE_NAME +
+          "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
         window.sessionStorage.removeItem("user");
         break;
 
@@ -174,10 +173,8 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     }
   }
 
-  function handleLogIn()
-  {
-    switch (CURRENT_USAGE_TYPE)
-    {
+  function handleLogIn() {
+    switch (CURRENT_USAGE_TYPE) {
       case PRIME_USAGE_TYPE:
       case ES_USAGE_TYPE:
         handlePrimeLogIn();

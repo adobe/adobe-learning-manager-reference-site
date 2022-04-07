@@ -22,7 +22,7 @@ export default class ESCustomHooks implements ICustomHooks {
   almConfig = getALMConfig();
   primeCdnTrainingBaseEndpoint = this.almConfig.primeCdnTrainingBaseEndpoint;
   esBaseUrl = this.almConfig.esBaseUrl;
-  almCommerceCdnBaseUrl = this.almConfig.almCommerceCdnBaseUrl;
+  almCdnBaseUrl = this.almConfig.almCdnBaseUrl;
   async getTrainings(
     filterState: CatalogFilterState,
     sort: string,
@@ -80,7 +80,7 @@ export default class ESCustomHooks implements ICustomHooks {
   async getTraining(id: string) {
     const loPath = id.replace(":", "/");
     const response = await RestAdapter.get({
-      url: `${this.almCommerceCdnBaseUrl}/${loPath}/.json`,
+      url: `${this.almCdnBaseUrl}/${loPath}.json`,
     });
     return JsonApiParse(response).learningObject;
   }

@@ -58,8 +58,8 @@
         communityPath: "http://localhost:3000/community.html",
         communityBoardsPath: "http://localhost:3000/community.html",
         communityBoardDetailsPath: "http://localhost:3000/community.html",
-        almCdnBaseUrl: "https://cpcontentsqe.adobe.com",
-        almCommerceCdnBaseUrl:
+        //almCdnBaseUrl: "https://cpcontentsqe.adobe.com",
+        almCdnBaseUrl:
           "https://cpcontentsqe.adobe.com/public/guest/qe/api/21135923-b63f-4a0a-801e-023c9e5bf72f/7110",
         primeTileColors: {
           0: "#00000",
@@ -69,7 +69,6 @@
         authorMode: true,
         commerceURL:
           "https://captiveprimeteam-bbkwwgi-qf7u6l5qi6iqs.ap-4.magentosite.cloud/",
-    
       };
 
       const isPrimeUserLoggedIn = () => {
@@ -126,33 +125,36 @@
         return urlStr;
       };
 
-      const getALMUser = async () => {
+      async function getALMUser() {
         let user = window.sessionStorage.getItem("user");
         if (user) {
           return user;
         }
-        const primeApiURL = getALMConfig().primeApiURL;
-        const userUrl = primeApiURL + "user?include=account";
+        const primeApiURL = window.ALM.ALMConfig.primeApiURL;
+        const userUrl = `${primeApiURL}/user?include=account`;
         const headers = {
           Accept: "application/vnd.api+json",
           Authorization: `oauth ${getAccessToken()}`,
         };
         try {
-          const userResponse = await fetch(userUrl, {
+          const userResponse = await fetch(`${userUrl}`, {
             credentials: "include",
             headers,
             method: "GET",
           });
-          if (userResponse) {
+          if (userResponse && userResponse.status == 200) {
             user = await userResponse.json();
             const userStr = JSON.stringify(user);
             window.sessionStorage.setItem("user", userStr);
             return userStr;
+          } else {
+            window.sessionStorage.removeItem("user");
           }
         } catch (e) {
+          window.sessionStorage.removeItem("user");
           throw e;
         }
-      };
+      }
 
       const updateALMUser = async () => {
         window.sessionStorage.removeItem("user");
@@ -203,7 +205,7 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <!--/* <div class="instance__container"></div> */-->
 
-    /* <div
+    <!--/* <div
       class="catalog__container"
       data-show-filters="true"
       data-show-search="true"
@@ -217,7 +219,7 @@
       data-learner-state="true"
       data-tag-name="true"
       data-skill-level="true"
-    ></div> */
+    ></div> */-->
 
     <!--/* <div
       class="profile__container"
@@ -228,12 +230,12 @@
       data-section2-description="Section 2 description"
       data-section2-active-fields="hobby, new location"
     ></div> */-->
-    <!-- <div
+    <div
       class="training__page__container"
       data-show-description="true"
       data-show-author-info="true"
       data-show-enroll-deadline="true"
-    ></div> -->
+    ></div>
 
     <!--/* <div class="notification__container"></div> */-->
     <!--/* <div class="boards__container"></div> */-->

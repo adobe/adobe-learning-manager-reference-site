@@ -4,6 +4,8 @@ import { QueryParams } from "../utils/restAdapter";
 import ALMCustomHooks from "./ALMCustomHooks";
 import CommerceCustomHooks from "./CommerceCustomHooks";
 import ESCustomHooks from "./ESCustomHooks";
+
+const ADOBE_COMMERCE = "aem-commerce";
 class APIService {
   //customHooks: ICustomHooks;
   //services: {key: value[ICustomHooks]};
@@ -28,7 +30,7 @@ class APIService {
       return new ALMCustomHooks().getTrainings(filterState, sort, searchText);
     }
 
-    if (getALMConfig().usageType === "aem-commerce") {
+    if (getALMConfig().usageType === ADOBE_COMMERCE) {
       return new CommerceCustomHooks().getTrainings(
         filterState,
         sort,
@@ -53,7 +55,7 @@ class APIService {
         url
       );
     }
-    if (getALMConfig().usageType === "aem-commerce") {
+    if (getALMConfig().usageType === ADOBE_COMMERCE) {
       return new CommerceCustomHooks().loadMoreTrainings(
         filterState,
         sort,
@@ -118,6 +120,8 @@ class APIService {
   public async enrollToTraining(params: QueryParams = {}) {
     if (this.isUserLoggedIn()) {
       return new ALMCustomHooks().enrollToTraining(params);
+    } else {
+      //redirect to login page
     }
   }
   public async unenrollFromTraining(enrollmentId: string = "") {

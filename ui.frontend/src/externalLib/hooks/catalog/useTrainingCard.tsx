@@ -34,16 +34,18 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     skillNames,
   } = training;
 
-  const { name, description, overview, richTextOverview } =
-    useMemo((): PrimeLocalizationMetadata => {
-      return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
-    }, [training.localizedMetadata, locale]);
-
   const {
-    cardIconUrl = "",
-    color = "",
-    bannerUrl = "",
-  } = useCardIcon(training);
+    name,
+    description,
+    overview,
+    richTextOverview,
+  } = useMemo((): PrimeLocalizationMetadata => {
+    return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
+  }, [training.localizedMetadata, locale]);
+
+  const { cardIconUrl = "", color = "", bannerUrl = "" } = useCardIcon(
+    training
+  );
 
   skillNames =
     skillNames!?.length > 0
@@ -54,6 +56,11 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
 
   const cardClickHandler = useCallback(async () => {
     if (!training) return;
+    let alm = getALMObject();
+    if (!alm.isPrimeUserLoggedIn()) {
+      alm.navigateToTrainingOverviewPage(training.id);
+      return;
+    }
 
     //if jobAid, need to enroll and open player or new tab
     if (isJobaid(training)) {
@@ -78,7 +85,7 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
       return;
     }
     //TODO: if user Loggedin --
-    let alm = getALMObject();
+
     if (training.enrollment) {
       alm.navigateToTrainingOverviewPage(
         training.id,

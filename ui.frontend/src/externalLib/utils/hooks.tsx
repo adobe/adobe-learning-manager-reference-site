@@ -8,11 +8,9 @@ import {
   PrimeLocalizationMetadata,
   PrimeResource,
 } from "../models/PrimeModels";
-import { getALMConfig } from "./global";
 import { getPreferredLocalizedMetadata } from "./translationService";
 
 const useCardIcon = (training: PrimeLearningObject) => {
-  const { almCdnBaseUrl } = getALMConfig();
   const cardIconDetials: { [key: string]: string } = useMemo(() => {
     if (!training) {
       return {
@@ -29,11 +27,11 @@ const useCardIcon = (training: PrimeLearningObject) => {
 
     return {
       //TODO: updated the url to akamai from config
-      cardIconUrl: `${almCdnBaseUrl}/public/images/default_card_icons/${colorCode}.svg`,
+      cardIconUrl: `https://cpcontents.adobe.com/public/images/default_card_icons/${colorCode}.svg`,
       color: themeColors[colorCode],
       bannerUrl: training?.bannerUrl,
     };
-  }, [almCdnBaseUrl, training]);
+  }, [training]);
 
   return {
     ...cardIconDetials,

@@ -1,4 +1,3 @@
-
 (function (document, window, $) {
     "use strict";
 
@@ -42,17 +41,19 @@
 
     function fetchProfileDetails()
     {
-        window.ALM.getALMUser().then(function (user) {
-            try {
-                const userAttrs = JSON.parse(user).data.attributes;
-                $(HEADER_PROFILE_PIC_SEL).attr("src", userAttrs.avatarUrl);
-                $(VERT_NAV_PROFILE_NAME_SEL).text(userAttrs.name);
+        if (window.ALM.isPrimeUserLoggedIn()) {
+            window.ALM.getALMUser().then(function (user) {
+                try {
+                    const userAttrs = JSON.parse(user).data.attributes;
+                    $(HEADER_PROFILE_PIC_SEL).attr("src", userAttrs.avatarUrl);
+                    $(VERT_NAV_PROFILE_NAME_SEL).text(userAttrs.name);
 
-                $(VERT_NAV_PROFILE_PIC_SEL).attr("src", userAttrs.avatarUrl);
-            } catch (e) {
-                console.error("Unable to fetch user avatar.");
-            }
-        });
+                    $(VERT_NAV_PROFILE_PIC_SEL).attr("src", userAttrs.avatarUrl);
+                } catch (e) {
+                    console.error("Unable to fetch user avatar.");
+                }
+            });
+        }
     }
 
     $(document).ready(function () {
@@ -83,5 +84,5 @@
         });
 
     });
-
+  });
 })(document, window, jQuery);

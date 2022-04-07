@@ -15,7 +15,7 @@ import {
   PrimeLoInstanceSummary,
 } from "../../../models/PrimeModels";
 import { modifyTime } from "../../../utils/dateTime";
-import { getALMConfig } from "../../../utils/global";
+import { getALMConfig, getALMObject } from "../../../utils/global";
 import { LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
 import { GetTranslation } from "../../../utils/translationService";
 import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJobAids";
@@ -119,7 +119,10 @@ const PrimeTrainingPageExtraDetails: React.FC<{
 
   // const showModulesCompleted = trainingInstance.learningObject.enrollment;
 
-  const showAuthors = showAuthorInfo === "true" && training.authors?.length > 0;
+  const showAuthors =
+    showAuthorInfo === "true" &&
+    training.authors?.length > 0 &&
+    getALMObject().isPrimeUserLoggedIn();
   const showCompletionDeadline =
     showEnrollDeadline === "true" &&
     training.enrollment &&
