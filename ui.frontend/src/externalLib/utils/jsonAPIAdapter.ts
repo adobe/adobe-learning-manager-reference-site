@@ -340,7 +340,7 @@ export function parseCommerceResponse(response: CommercePrimeLearningObject[]): 
         }
         lo.rating = rating;
         lo.skills = [];
-        lo.skillNames = item.almskill.split(",");
+        lo.skillNames = item.almskill?.split(",");
         lo.price = {
             value: item.price_range?.maximum_price?.final_price?.value,
             currency: item.price_range?.maximum_price?.final_price?.currency
