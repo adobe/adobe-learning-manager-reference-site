@@ -1,6 +1,5 @@
 import { updateCatalogsFilter, updateDurationFilter, updateLearnerStateFilter, updateLoFormatFilter, updateLoTypesFilter, updateSkillLevelFilter, updateSkillNameFilter, updateTagsFilter } from "../store/actions/catalog/action";
 import { getQueryParamsIObjectFromUrl } from "./global";
-
 export const filtersDefaultState: Filter1State = {
     loTypes: {
         type: "loTypes",
@@ -192,7 +191,7 @@ export const updateFilterList = (list: any, filtersFromUrl: any, type: string) =
             item.checked = true;
         }
     });
-    return list;
+    return list || [];
 };
 
 

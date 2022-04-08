@@ -7,18 +7,6 @@ import { QueryParams, RestAdapter } from "../utils/restAdapter";
 import { DEFAULT_PAGE_LIMIT } from "./ALMCustomHooks";
 import ICustomHooks from "./ICustomHooks";
 
-interface ISortMap {
-  date: string;
-  "-date": string;
-}
-const sortMap: any = {
-  date: "publishDate",
-  "-date": "publishDate",
-};
-
-const headers = {
-  "Content-Type": "application/json",
-};
 export default class CommerceCustomHooks implements ICustomHooks {
   almConfig = getALMConfig();
   primeCdnTrainingBaseEndpoint = this.almConfig.primeCdnTrainingBaseEndpoint;
@@ -106,4 +94,6 @@ export default class CommerceCustomHooks implements ICustomHooks {
   async unenrollFromTraining(params: QueryParams = {}) {
     return null;
   }
+
+  async getFilters() {}
 }

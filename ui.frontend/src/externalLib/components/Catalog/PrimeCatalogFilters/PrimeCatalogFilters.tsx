@@ -1,4 +1,5 @@
 import { UpdateFiltersEvent } from "../../../utils/filters";
+import { getALMObject } from "../../../utils/global";
 import { GetTranslation } from "../../../utils/translationService";
 import { ALMLoader } from "../../Common/ALMLoader";
 import styles from "./PrimeCatalogFilters.module.css";
@@ -18,7 +19,7 @@ const PrimeCatalogFilters = (props: any) => {
     catalogs,
   } = props.filterState;
   const { updateFilters, catalogAttributes } = props;
-
+  const isLoggedIn = getALMObject().isPrimeUserLoggedIn();
   const onChangeHandler = (data: UpdateFiltersEvent) => {
     updateFilters(data);
   };
@@ -27,16 +28,7 @@ const PrimeCatalogFilters = (props: any) => {
     return <ALMLoader />;
   }
 
-  const filterList = [
-    catalogs,
-    loTypes,
-    loFormat,
-    duration,
-    skillName,
-    skillLevel,
-    tagName,
-    learnerState,
-  ].map((filter) => {
+  const renderFilterList = (filter: any) => {
     if (!filter.list || filter.list?.length <= 1) {
       return "";
     }
@@ -62,13 +54,43 @@ const PrimeCatalogFilters = (props: any) => {
     ) : (
       ""
     );
-  });
+  };
 
   return (
     <>
       <div className={styles.primeFilterContainer}>
         <h3 className={styles.filtersLabel}>Filters</h3>
-        {filterList}
+        {/* catalog Filter start */}
+        {renderFilterList(catalogs)}
+        {/* catalog Filter ends */}
+
+        {/* loTypes Filter start */}
+        {renderFilterList(loTypes)}
+        {/* loTypes Filter ends */}
+
+        {/* loFormat Filter start */}
+        {renderFilterList(loFormat)}
+        {/* loFormat Filter ends */}
+
+        {/* duration Filter start */}
+        {renderFilterList(duration)}
+        {/* duration Filter ends */}
+
+        {/* skillName Filter start */}
+        {renderFilterList(skillName)}
+        {/* skillName Filter ends */}
+
+        {/* skillLevel Filter start */}
+        {renderFilterList(skillLevel)}
+        {/* skillLevel Filter ends */}
+
+        {/* tagName Filter start */}
+        {renderFilterList(tagName)}
+        {/* tagName Filter ends */}
+
+        {/* learnerState Filter start */}
+        {isLoggedIn && renderFilterList(learnerState)}
+        {/* learnerState Filter ends */}
       </div>
     </>
   );

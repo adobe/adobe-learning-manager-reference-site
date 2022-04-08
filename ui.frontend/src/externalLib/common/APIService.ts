@@ -129,6 +129,18 @@ class APIService {
       return new ALMCustomHooks().unenrollFromTraining(enrollmentId);
     }
   }
+
+  public async getFilters(): Promise<any> {
+    if (this.isUserLoggedIn()) {
+      //this.customHooks = new ALMCustomHooks();
+      return new ALMCustomHooks().getFilters();
+    }
+    if (getALMConfig().usageType === ADOBE_COMMERCE) {
+      return new CommerceCustomHooks().getFilters();
+    }
+
+    return new ESCustomHooks().getFilters();
+  }
 }
 
 const APIServiceInstance = new APIService();
