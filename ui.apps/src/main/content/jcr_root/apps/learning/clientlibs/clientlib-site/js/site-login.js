@@ -22,8 +22,12 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   function handleCommerceLogIn() {
     if (!isPrimeUserLoggedIn()) {
-      if (isLearningPage()) window.ALM.navigateToExplorePage();
-      else if (isCommunityPage()) window.ALM.navigateToCommerceSignInPage();
+      if (isLearningPage()) {
+        window.ALM.navigateToExplorePage();
+      }
+      else if (isCommunityPage()) {
+        window.ALM.navigateToCommerceSignInPage();
+      }
     }
   }
 
@@ -75,10 +79,15 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     return window.location.pathname === window.ALM.getALMConfig().learningPath;
   }
 
+  function isEmailRedirectPage() {
+    return window.location.pathname === window.ALM.getALMConfig().emailRedirectPath;
+  }
+
   function handlePageLoad() {
     // If sign-out or sign-in Page do nothing
-    if (isSignOutPage() || isCommerceSignInPage()) 
+    if (isSignOutPage() || isCommerceSignInPage() || isEmailRedirectPage()) {
       return;
+    }
 
     switch (CURRENT_USAGE_TYPE) {
       case PRIME_USAGE_TYPE:
@@ -256,4 +265,5 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.handleLogIn = handleLogIn;
   window.ALM.handleLogOut = handleLogOut;
   window.ALM.handleRegister = handleRegister;
+  
 })(window, document, Granite, jQuery);

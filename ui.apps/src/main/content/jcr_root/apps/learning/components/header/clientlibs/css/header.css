@@ -120,6 +120,16 @@
   margin-left: 35px;
 }
 
+#alm-header .alm-header-cont .alm-header-icons .alm-header-cart
+{
+  height: 22px;
+  width: 22px;
+  margin-top: 22px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+
 #alm-header .alm-header-cont .alm-header-navigation {
   list-style-type: none;
   display: flex;

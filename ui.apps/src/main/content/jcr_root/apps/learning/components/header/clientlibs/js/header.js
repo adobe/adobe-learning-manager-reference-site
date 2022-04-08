@@ -16,6 +16,7 @@
     const COMMUNITY_NAVIGATE_SEL = ".alm-community-navigate";
     const SUPPORT_NAVIGATE_SEL = ".alm-support-navigate";
     const NAV_NAVIGATE_HIGHLIGHT_SEL = ".nav-highlight";
+    const HEADER_CART_SEL = ".alm-header-cart";
 
     const HEADER_LOG_IN_REL = ".alm-log-in";
     const HEADER_LOG_OUT_REL = ".alm-log-out";
@@ -24,6 +25,8 @@
     const HEADER_NOTIFICATION_REL = ".alm-header-icons .notification__container";
 
     const DEFAULT_USER_AVATAR = "/content/dam/learning/site/default_user_avatar.svg";
+
+    const COMMERCE_USAGE_TYPE = "aem-commerce";
 
     function highlightNavigationButtons()
     {
@@ -78,13 +81,42 @@
         });    
     }
 
+    function renderCommerceSpecificUI()
+    {
+        if (COMMERCE_USAGE_TYPE === window.ALM.ALMConfig.usageType)
+        {
+            if (window.ALM.isPrimeUserLoggedIn())
+            {
+                $(HEADER_CART_SEL).show();
+            }
+            else
+            {
+                $(HEADER_CART_SEL).hide();
+            }   
+        }
+    }
+
     $(document).ready(function () {
         renderLoginButtons();
         highlightNavigationButtons();
+        renderCommerceSpecificUI();
+
         $(HEADER_LOG_IN_REL).on("click", () => window.ALM.handleLogIn());
         $(HEADER_LOG_OUT_REL).on("click", () => window.ALM.handleLogOut());
         $(HEADER_REGISTER_REL).on("click", () => window.ALM.handleRegister());
         $(HEADER_PROFILE_TEXT_REL).on("click", () => window.ALM.navigateToProfilePage());
+        $(COMMUNITY_NAVIGATE_SEL).on("click", () => window.ALM.navigateToCommunityPage());
+        $(HOME_NAVIGATE_SEL).on("click", () => window.ALM.navigateToHomePage());
+        $(LEARNING_NAVIGATE_SEL).on("click", () => window.ALM.navigateToLearningPage());
+        $(SUPPORT_NAVIGATE_SEL).on("click", () => window.ALM.navigateToSupportPage());
+        $(HEADER_CART_SEL).on("click", () => window.ALM.navigateToCommerceCartPage());
+
+        $(VERT_NAV_CLOSE_BUTTON_SEL + "," + HEADER_SHOW_MENU_SEL).on("click", () => {
+            $(VERT_NAV_CONTAINER_SEL).toggleClass('open');
+        });
+        $(HEADER_PROFILE_OPTIONS_SEL).on("click", () => {
+            $(HEADER_PROFILE_OPTIONS_CONT_SEL).toggle();
+        });
 
         if (window.ALM.isPrimeUserLoggedIn())
         {
@@ -95,19 +127,6 @@
             $(HEADER_PROFILE_PIC_SEL).attr("src", DEFAULT_USER_AVATAR);
             $(VERT_NAV_PROFILE_PIC_SEL).attr("src", DEFAULT_USER_AVATAR);
         }
-
-        $(COMMUNITY_NAVIGATE_SEL).on("click", () => window.ALM.navigateToCommunityPage());
-        $(HOME_NAVIGATE_SEL).on("click", () => window.ALM.navigateToHomePage());
-        $(LEARNING_NAVIGATE_SEL).on("click", () => window.ALM.navigateToLearningPage());
-        $(SUPPORT_NAVIGATE_SEL).on("click", () => window.ALM.navigateToSupportPage());
-
-        $(VERT_NAV_CLOSE_BUTTON_SEL + "," + HEADER_SHOW_MENU_SEL).on("click", () => {
-            $(VERT_NAV_CONTAINER_SEL).toggleClass('open');
-        });
-
-        $(HEADER_PROFILE_OPTIONS_SEL).on("click", () => {
-            $(HEADER_PROFILE_OPTIONS_CONT_SEL).toggle();
-        });
 
     });
 })(document, window, jQuery);

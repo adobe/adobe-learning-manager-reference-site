@@ -95,6 +95,11 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     window.location = commerceSignInPath;
   };
 
+  const navigateToCommerceCartPage = () => {
+    let {commerceCartPath} = getALMConfig();
+    window.location = commerceCartPath;
+  };
+
   const navigateToProfilePage = () => {
     let {profilePath} = getALMConfig();
     window.location = profilePath;
@@ -126,6 +131,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.navigateToCommunityPage = navigateToCommunityPage;
   window.ALM.navigateToSupportPage = navigateToSupportPage;
   window.ALM.navigateToCommerceSignInPage = navigateToCommerceSignInPage;
+  window.ALM.navigateToCommerceCartPage = navigateToCommerceCartPage;
   window.ALM.navigateToProfilePage = navigateToProfilePage;
   window.ALM.navigateToSignOutPage = navigateToSignOutPage;
 })(window, document, Granite, jQuery);
