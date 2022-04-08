@@ -10,7 +10,7 @@
             </li>
             <li><img class="vert-nav-profile-image" src="" /></li>
             <li><span class="vert-nav-profile-name"></span></li>
-            <li><a href="/content/learning/language-masters/en/profile.html">Your Profile</a></li> 
+            <li><span class="alm-profile__text">Your Profile</span></li></li> 
         </ul>
 
         <ul>
@@ -40,10 +40,22 @@
 
     <!-- block for navigation -->
     <ul class="alm-header-navigation">
-        <li><a class="alm-home-navigate">Home</a></li>
-        <li><a class="alm-learning-navigate">Learning</a></li>
-        <li><a class="alm-community-navigate">Community</a></li>
-        <li><a class="alm-support-navigate">Support</a></li>
+        <li>
+            <a class="alm-home-navigate">Home</a>
+            <div class="nav-highlight" style="display: none;"></div>
+        </li>
+        <li>
+            <a class="alm-learning-navigate">Learning</a>
+            <div class="nav-highlight" style="display: none;"></div>
+        </li>
+        <li>
+            <a class="alm-community-navigate">Community</a>
+            <div class="nav-highlight" style="display: none;"></div>
+        </li>
+        <li>
+            <a class="alm-support-navigate">Support</a>
+            <div class="nav-highlight" style="display: none;"></div>
+        </li>
     </ul>
 
     <!-- block for icons right align -->
@@ -51,12 +63,13 @@
         <sly data-sly-resource="${resource.path @ resourceType='learning/components/notification', appendPath='/*'}"/>
         <!-- <img class="alm-header-notification" src="/content/dam/learning/site/Smock_Bell.png" ></img> -->
         <img class="alm-header-profile" src="" ></img>
-        <img class="alm-header-down" src="/content/dam/learning/site/ChevronDown.svg" ></img>
+        <img class="alm-header-down" src="/content/dam/learning/site/ChevronDown.svg"></img>
         <div class="alm-header-profile-options">
             <ul>
-                <li><span class="alm-profile__text"><a href="/content/learning/language-masters/en/profile.html">Your Profile</a></span></li>
+                <li><span class="alm-profile__text">Your Profile</span></li>
                 <li><span class="alm-log-in">Log In</span></li>
                 <li><span class="alm-log-out">Log Out</span></li>
+                <li><span class="alm-register">Register</span></li>
             </ul>
         </div>
     </div>

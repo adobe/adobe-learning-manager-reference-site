@@ -57,6 +57,11 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     window.location = catalogUrl;
   };
 
+  const navigateToExplorePage = () => {
+    let { catalogPath } = getALMConfig();
+    window.location = catalogPath;
+  };
+
   const navigateToBoardsPage = (skillNames) => {
     let {communityBoardsPath} = getALMConfig();
     let boardsUrl = communityBoardsPath;
@@ -90,6 +95,16 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     window.location = commerceSignInPath;
   };
 
+  const navigateToProfilePage = () => {
+    let {profilePath} = getALMConfig();
+    window.location = profilePath;
+  };
+
+  const navigateToSignOutPage = () => {
+    let {signOutPath} = getALMConfig();
+    window.location = signOutPath;
+  };
+
   const getUrl = (urlStr, params) => {
     for (const param in params) {
       urlStr = `${urlStr}/${param}/${params[param]}`;
@@ -103,6 +118,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
   window.ALM.navigateToInstancePage = navigateToInstancePage;
   window.ALM.navigateToCatalogPage = navigateToCatalogPage;
+  window.ALM.navigateToExplorePage = navigateToExplorePage;
   window.ALM.navigateToBoardDetailsPage = navigateToBoardDetailsPage;
   window.ALM.navigateToBoardsPage = navigateToBoardsPage;
   window.ALM.navigateToHomePage = navigateToHomePage;
@@ -110,4 +126,6 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.navigateToCommunityPage = navigateToCommunityPage;
   window.ALM.navigateToSupportPage = navigateToSupportPage;
   window.ALM.navigateToCommerceSignInPage = navigateToCommerceSignInPage;
+  window.ALM.navigateToProfilePage = navigateToProfilePage;
+  window.ALM.navigateToSignOutPage = navigateToSignOutPage;
 })(window, document, Granite, jQuery);

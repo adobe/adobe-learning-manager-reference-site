@@ -96,6 +96,11 @@
   justify-content: space-between;
 }
 
+#alm-header .alm-profile__text
+{
+  cursor: pointer;
+}
+
 #alm-header .alm-header-cont .alm-header-logo {
   width: 137px;
   height: 33px;
@@ -126,6 +131,29 @@
   margin: 20px 60px 20px 0px;
   display: inline-block;
   cursor: pointer;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation li {
+  position: relative;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation .nav-highlight {
+  position: absolute;
+  bottom: 0;
+  border-top: 3px solid #FB704B;
+  left: -5px;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation .size__XS {
+  width: 50px;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation .size__S {
+  width: 65px;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation .size__M {
+  width: 80px;
 }
 
 .alm-header-down {
@@ -209,7 +237,8 @@
 }
 
 .alm-header-profile-options .alm-log-in,
-.alm-header-profile-options .alm-log-out {
+.alm-header-profile-options .alm-log-out,
+.alm-header-profile-options .alm-register {
   cursor: pointer;
 }
 
