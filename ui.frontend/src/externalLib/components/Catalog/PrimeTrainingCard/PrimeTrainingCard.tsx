@@ -15,6 +15,7 @@ export const formatMap: any = {
   Blended: "prime.catalog.card.blended",
   "Virtual Classroom": "prime.catalog.card.virtual.classroom",
   Classroom: "prime.catalog.card.classroom",
+  "Self Paced": "prime.catalog.card.self.paced"
 };
 const PrimeTrainingCard: React.FC<{
   training: PrimeLearningObject;
