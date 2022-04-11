@@ -63,7 +63,6 @@ const PrimeCourseItemContainer: React.FC<{
         description={description}
         overview={overview}
         richTextOverview={richTextOverview}
-        cardBgStyle={cardBgStyle}
         training={training}
         trainingInstance={trainingInstance}
         launchPlayerHandler={launchPlayerHandler}

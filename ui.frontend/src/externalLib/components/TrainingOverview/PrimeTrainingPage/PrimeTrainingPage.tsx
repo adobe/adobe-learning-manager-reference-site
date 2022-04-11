@@ -10,11 +10,13 @@ import {
   PrimeConfig,
   setALMAttribute,
 } from "../../../utils/global";
+import { useCardBackgroundStyle, useCardIcon } from "../../../utils/hooks";
 import { getPreferredLocalizedMetadata } from "../../../utils/translationService";
 import { ALMBackButton } from "../../Common/ALMBackButton";
 import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 import { ALMLoader } from "../../Common/ALMLoader";
 import { PrimeCourseOverview } from "../PrimeCourseOverview";
+import { PrimeTrainingItemContainerHeader } from "../PrimeTrainingItemContainerHeader";
 import { PrimeTrainingOverview } from "../PrimeTrainingOverview";
 import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
 import { PrimeTrainingPageExtraDetails } from "../PrimeTrainingPageExtraDetails";
@@ -61,18 +63,21 @@ const PrimeTrainingPage = () => {
     launchPlayerHandler,
     unEnrollmentHandler,
     jobAidClickHandler,
+    cardBgStyle,
   } = useTrainingPage(trainingId, trainingInstanceId);
   const locale = config.locale;
   const { formatMessage } = useIntl();
-  const [
-    { showAuthorInfo, showDescription, showEnrollDeadline },
-  ] = useState(() => getTrainingOverviewAttributes(config));
+  const [{ showAuthorInfo, showDescription, showEnrollDeadline }] = useState(
+    () => getTrainingOverviewAttributes(config)
+  );
 
   if (isLoading || !training) {
     return <ALMLoader classes={styles.loader} />;
   }
   const loType = training.loType;
   const sections = training.sections;
+  const prerequisiteLOs = training.prerequisiteLOs;
+  const prequisiteConstraints = training.prequisiteConstraints;
 
   return (
     <ALMErrorBoundary>
@@ -102,6 +107,49 @@ const PrimeTrainingPage = () => {
                 { 0: convertSecondsToTimeText(training.duration) }
               )}
             </span>
+            {prerequisiteLOs ? (
+              <div className={styles.trainingPrequisiteHeader}>
+                {formatMessage({
+                  id: "alm.trainingOverviewPrequisite",
+                })}
+              </div>
+            ) : (
+              ""
+            )}
+            {prerequisiteLOs?.map((prerequisiteLO) => {
+              const { name, description, overview, richTextOverview } =
+                getPreferredLocalizedMetadata(
+                  prerequisiteLO.localizedMetadata,
+                  locale
+                );
+
+              let showMandatoryLabel = false;
+              let instance = prerequisiteLO.instances[0];
+              prequisiteConstraints.filter((prequisiteConstraints) => {
+                if (
+                  prequisiteConstraints.prerequisiteLOId === prerequisiteLO.id
+                ) {
+                  showMandatoryLabel = prequisiteConstraints.mandatory;
+                  return;
+                }
+              });
+              return (
+                <section className={styles.trainingOverviewPrequisite}>
+                  <PrimeTrainingItemContainerHeader
+                    name={name}
+                    description={description}
+                    training={prerequisiteLO}
+                    trainingInstance={instance}
+                    overview={overview}
+                    richTextOverview={richTextOverview}
+                    isPartOfLP={prerequisiteLO.loType === LEARNING_PROGRAM}
+                    showMandatoryLabel={showMandatoryLabel}
+                    isprerequisiteLOs={true}
+                  />
+                </section>
+              );
+            })}
+
             {loType === COURSE && (
               <PrimeCourseOverview
                 training={training}

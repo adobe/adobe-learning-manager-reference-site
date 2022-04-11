@@ -8,6 +8,7 @@ import {
 } from "../../../models/PrimeModels";
 import { convertSecondsToTimeText } from "../../../utils/dateTime";
 import { getALMObject } from "../../../utils/global";
+import { useCardBackgroundStyle, useCardIcon } from "../../../utils/hooks";
 import { GetTranslation } from "../../../utils/translationService";
 import styles from "./PrimeTrainingItemContainerHeader.module.css";
 
@@ -16,35 +17,39 @@ const PrimeTrainingItemContainerHeader: React.FC<{
   description: string;
   overview: string;
   richTextOverview: string;
-  cardBgStyle: CardBgStyle;
   training: PrimeLearningObject;
-  trainingInstance: PrimeLearningObjectInstance;
-  launchPlayerHandler: Function;
+  trainingInstance: PrimeLearningObjectInstance ;
+  launchPlayerHandler?: Function;
   isPartOfLP?: boolean;
   showMandatoryLabel?: boolean;
+  isprerequisiteLOs?:boolean
 }> = (props) => {
   const {
     name,
     description,
     overview,
-    cardBgStyle,
     training,
     trainingInstance,
     launchPlayerHandler,
     isPartOfLP = false,
     showMandatoryLabel = false,
+    isprerequisiteLOs = false,
   } = props;
   const { formatMessage } = useIntl();
   const authorNames = training.authorNames?.length
     ? training.authorNames.join(", ")
     : "";
 
+  const { cardIconUrl, color } = useCardIcon(training);         
+  const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
   let loType = training.loType;
 
   const onClickHandler = (event: any) => {
     //NOTE: Don't open player in case training name is clicked
-    if (event.target?.tagName !== "A") {
-      if (training.enrollment) {
+
+    // For prerequisiteLOs never open the Launch Player.
+    if (event.target?.tagName !== "A" && !isprerequisiteLOs) {
+      if (training.enrollment && launchPlayerHandler!=undefined) {
         launchPlayerHandler({ id: training.id });
       }
     } else {
@@ -75,7 +80,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
       <div className={styles.metadata}>
         <div className={styles.metadataContents}>
           <div>{GetTranslation(`prime.catalog.card.${loType}`, true)}</div>
-          {authorNames.length ? (
+          {isprerequisiteLOs ? <div className={styles.metadata__separator}></div>: authorNames.length ? (
             <>
               <div className={styles.metadata__separator}></div>
               <div className={styles.authorNames}>{authorNames}</div>
@@ -83,7 +88,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
           ) : (
             ""
           )}
-          {training.duration ? (
+          {isprerequisiteLOs? "" : training.duration ? (
             <>
               <div className={styles.metadata__separator}></div>
               <div>{convertSecondsToTimeText(training.duration)}</div>
