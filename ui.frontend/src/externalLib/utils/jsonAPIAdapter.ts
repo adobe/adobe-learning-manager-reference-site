@@ -1,4 +1,5 @@
-import { CommercePrimeLearningObject, ESPrimeLearningObject, JsonApiResponse, PrimeLearningObject, PrimeLocalizationMetadata, PrimeRating } from "../models";
+import { CommercePrimeLearningObject, ESPrimeLearningObject, ESPrimeLearningObjectInstance, JsonApiResponse, PrimeLearningObject, PrimeLearningObjectInstance, PrimeLocalizationMetadata, PrimeRating } from "../models";
+import { getALMConfig } from "./global";
 
 let store: Store | undefined;
 export function GetStore(): Store {
@@ -264,6 +265,7 @@ export class ObjectWrapper {
 export function parseESResponse(response: ESPrimeLearningObject[]): PrimeLearningObject[] {
     let loResponse: PrimeLearningObject[] = [];
     response.forEach((item) => {
+        const locale = getALMConfig().locale;
         let lo: Partial<PrimeLearningObject> = {};
         let rating: PrimeRating;
         let localizedData: PrimeLocalizationMetadata;
@@ -281,7 +283,7 @@ export function parseESResponse(response: ESPrimeLearningObject[]): PrimeLearnin
             _transient: "",
             description: item.description,
             id: "",
-            locale: "en-US", //need to get from locale
+            locale,
             name: item.name,
             overview: "",
             richTextOverview: "",
@@ -298,7 +300,27 @@ export function parseESResponse(response: ESPrimeLearningObject[]): PrimeLearnin
         lo.rating = rating;
         lo.skills = [];
         lo.skillNames = item.loSkillNames;
-
+        lo.instances = [];
+        item.loInstances?.forEach((instanceItem: ESPrimeLearningObjectInstance) => {
+            let localizedMetadata: PrimeLocalizationMetadata;
+            localizedMetadata = {
+                _transient: "",
+                description: "",
+                id: "",
+                locale,
+                name: instanceItem.name,
+                overview: "",
+                richTextOverview: "",
+                type: ""
+            }
+            let instance: Partial<PrimeLearningObjectInstance> = {
+                localizedMetadata: [localizedMetadata],
+                state: instanceItem.status,
+                completionDeadline: instanceItem.completionDeadline,
+                id: instanceItem.id
+            }
+            lo.instances?.push(instance as PrimeLearningObjectInstance)
+        })
 
         loResponse.push(lo as PrimeLearningObject);
     })

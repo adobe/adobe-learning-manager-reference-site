@@ -34,18 +34,16 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     skillNames,
   } = training;
 
-  const {
-    name,
-    description,
-    overview,
-    richTextOverview,
-  } = useMemo((): PrimeLocalizationMetadata => {
-    return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
-  }, [training.localizedMetadata, locale]);
+  const { name, description, overview, richTextOverview } =
+    useMemo((): PrimeLocalizationMetadata => {
+      return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
+    }, [training.localizedMetadata, locale]);
 
-  const { cardIconUrl = "", color = "", bannerUrl = "" } = useCardIcon(
-    training
-  );
+  const {
+    cardIconUrl = "",
+    color = "",
+    bannerUrl = "",
+  } = useCardIcon(training);
 
   skillNames =
     skillNames!?.length > 0
@@ -58,7 +56,12 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     if (!training) return;
     let alm = getALMObject();
     if (!alm.isPrimeUserLoggedIn()) {
-      alm.navigateToTrainingOverviewPage(training.id);
+      const activeInstances = getActiveInstances(training);
+      if (activeInstances?.length === 1) {
+        alm.navigateToTrainingOverviewPage(training.id);
+      } else {
+        alm.navigateToInstancePage(training.id);
+      }
       return;
     }
 
@@ -79,12 +82,9 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
         } else {
           LaunchPlayer({ trainingId: training.id });
         }
-      } catch (error) {
-        //TODO : handle error
-      }
+      } catch (error) {}
       return;
     }
-    //TODO: if user Loggedin --
 
     if (training.enrollment) {
       alm.navigateToTrainingOverviewPage(

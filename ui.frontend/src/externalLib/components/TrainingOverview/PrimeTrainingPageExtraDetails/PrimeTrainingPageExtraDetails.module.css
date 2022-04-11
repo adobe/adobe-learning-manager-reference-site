@@ -24,6 +24,8 @@
 
 .previewButton {
   border: 2px solid var(--prime-color-primary);
+  color: var(--prime-color-primary);
+
 }
 
 .previewButton:hover,
