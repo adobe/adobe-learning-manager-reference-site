@@ -2,7 +2,7 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2022-03-13T14:31:28.728+05:30"
+        cq:lastModified="{Date}2022-04-12T10:21:04.789+05:30"
         cq:lastModifiedBy="admin"
         cq:template="/conf/learning/settings/wcm/templates/page-content1"
         jcr:primaryType="cq:PageContent"
@@ -34,6 +34,121 @@
                         sling:resourceType="learning/components/container"
                         id="home-catalog-container"
                         layout="responsiveGrid">
+                        <container
+                            jcr:created="{Date}2022-03-13T13:43:45.178+05:30"
+                            jcr:createdBy="admin"
+                            jcr:lastModified="{Date}2022-03-13T14:31:28.707+05:30"
+                            jcr:lastModifiedBy="admin"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="learning/components/container"
+                            id="home-categories-container"
+                            layout="responsiveGrid">
+                            <text
+                                jcr:created="{Date}2022-04-12T10:02:30.948+05:30"
+                                jcr:createdBy="admin"
+                                jcr:lastModified="{Date}2022-04-12T10:19:47.134+05:30"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="learning/components/text"
+                                id="categories-headline"
+                                text="&lt;p style=&quot;text-align: center;&quot;>&lt;u>Discover&lt;/u>&lt;/p>&#xd;&#xa;"
+                                textIsRich="true"/>
+                            <text_371530116
+                                jcr:created="{Date}2022-04-12T10:02:35.792+05:30"
+                                jcr:createdBy="admin"
+                                jcr:lastModified="{Date}2022-04-12T10:21:04.785+05:30"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="learning/components/text"
+                                id="categories-desc"
+                                text="&lt;p style=&quot;text-align: center;&quot;>Secur Financial offers wide range of courses to help you learn our products and excel at your role. Discover hundreds of courses based on the job roles that suits you.&lt;/p>&#xd;&#xa;"
+                                textIsRich="true"/>
+                            <categories_151943519
+                                jcr:created="{Date}2022-04-10T23:25:19.548+05:30"
+                                jcr:createdBy="admin"
+                                jcr:lastModified="{Date}2022-04-11T14:50:44.483+05:30"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="learning/components/categories">
+                                <categories jcr:primaryType="nt:unstructured">
+                                    <item0
+                                        jcr:primaryType="nt:unstructured"
+                                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                                        fileReference="/content/dam/we-retail/en/activities/biking/enduro-trail-jump.jpg"
+                                        headline="Secur Financial For Accountants"
+                                        queryParams="title11"
+                                        title="title11"/>
+                                    <item1
+                                        jcr:primaryType="nt:unstructured"
+                                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                                        fileReference="/content/dam/we-retail/en/activities/biking/forest-trail.jpg"
+                                        headline="Secur Financial For Admins"
+                                        queryParams="a1"
+                                        title="a1"/>
+                                    <item2
+                                        jcr:primaryType="nt:unstructured"
+                                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                                        fileReference="/content/dam/we-retail/en/activities/biking/cycling_1.jpg"
+                                        headline="Secur Financial For Auditors"
+                                        queryParams="quer1=10&amp;t=2"
+                                        title="title1"/>
+                                    <item3
+                                        jcr:primaryType="nt:unstructured"
+                                        description="title11"
+                                        fileReference="/content/dam/we-retail/en/activities/biking/enduro-trail-jump.jpg"
+                                        queryParams="title11"
+                                        title="title11"/>
+                                    <item4
+                                        jcr:primaryType="nt:unstructured"
+                                        description="title11"
+                                        fileReference="/content/dam/we-retail/en/activities/biking/enduro-trail-jump.jpg"
+                                        queryParams="title11"
+                                        title="title11"/>
+                                    <Copy_x0020_of_x0020_item1
+                                        jcr:primaryType="nt:unstructured"
+                                        description="a1"
+                                        fileReference="/content/dam/we-retail/en/activities/biking/forest-trail.jpg"
+                                        queryParams="a1"
+                                        title="a1"/>
+                                    <Copy_x0020_of_x0020_Copy_x0020_of_x0020_item1
+                                        jcr:primaryType="nt:unstructured"
+                                        description="a1"
+                                        fileReference="/content/dam/we-retail/en/activities/biking/forest-trail.jpg"
+                                        queryParams="a1"
+                                        title="a1"/>
+                                    <Copy_x0020_of_x0020_item2
+                                        jcr:primaryType="nt:unstructured"
+                                        description="desc1"
+                                        fileReference="/content/dam/we-retail/en/activities/biking/cycling_1.jpg"
+                                        queryParams="quer1=10&amp;t=2"
+                                        title="title1"/>
+                                    <Copy_x0020_of_x0020_Copy_x0020_of_x0020_item2
+                                        jcr:primaryType="nt:unstructured"
+                                        description="desc1"
+                                        fileReference="/content/dam/we-retail/en/activities/biking/cycling_1.jpg"
+                                        queryParams="quer1=10&amp;t=2"
+                                        title="title1"/>
+                                    <Copy_x0020_of_x0020_Copy_x0020_of_x0020_Copy_x0020_of_x0020_item2
+                                        jcr:primaryType="nt:unstructured"
+                                        description="desc1"
+                                        fileReference="/content/dam/we-retail/en/activities/biking/cycling_1.jpg"
+                                        queryParams="quer1=10&amp;t=2"
+                                        title="title1"/>
+                                    <Copy_x0020_of_x0020_item3
+                                        jcr:primaryType="nt:unstructured"
+                                        description="title11"
+                                        fileReference="/content/dam/we-retail/en/activities/biking/enduro-trail-jump.jpg"
+                                        queryParams="title11"
+                                        title="title11"/>
+                                    <Copy_x0020_of_x0020_item4
+                                        jcr:primaryType="nt:unstructured"
+                                        description="title11"
+                                        fileReference="/content/dam/we-retail/en/activities/biking/enduro-trail-jump.jpg"
+                                        queryParams="title11"
+                                        title="title11"/>
+                                </categories>
+                            </categories_151943519>
+                        </container>
                         <text
                             jcr:created="{Date}2022-03-13T13:44:23.200+05:30"
                             jcr:createdBy="admin"
@@ -94,18 +209,18 @@
                             jcr:createdBy="admin"
                             jcr:lastModified="{Date}2022-03-13T14:04:27.590+05:30"
                             jcr:lastModifiedBy="admin"
-                            skillsFilter="true"
-                            showCatalogFilter="true"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="learning/components/catalog"
                             durationFilter="true"
+                            formatFilter="true"
+                            priceFilter="false"
+                            showCatalogFilter="true"
                             showFilters="true"
                             showSearch="true"
-                            priceFilter="false"
-                            formatFilter="true"
-                            statusFilter="false"
+                            skillsFilter="true"
                             skillsLevelFilter="true"
-                            typeFilter="true"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="learning/components/catalog"/>
+                            statusFilter="false"
+                            typeFilter="true"/>
                     </container>
                 </container>
             </container>

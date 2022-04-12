@@ -57,6 +57,23 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     window.location = catalogUrl;
   };
 
+  const navigateToCatalogPageFromCategory = (catalogNames, skillNames, tagNames) => {
+    let { catalogPath } = getALMConfig();
+    let catalogUrl = catalogPath;
+
+    catalogUrl += "?";
+    if (catalogNames)
+      catalogUrl += "catalogs=" + catalogNames + "&";
+    if (skillNames)
+      catalogUrl += "skillName=" + skillNames + "&";
+    if (tagNames)
+      catalogUrl += "tags=" + tagNames + "&";
+      
+    catalogUrl = catalogUrl.slice(0, -1);
+    
+    window.location = catalogUrl;
+  };
+
   const navigateToExplorePage = () => {
     let { catalogPath } = getALMConfig();
     window.location = catalogPath;
@@ -134,4 +151,5 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.navigateToCommerceCartPage = navigateToCommerceCartPage;
   window.ALM.navigateToProfilePage = navigateToProfilePage;
   window.ALM.navigateToSignOutPage = navigateToSignOutPage;
+  window.ALM.navigateToCatalogPageFromCategory = navigateToCatalogPageFromCategory;
 })(window, document, Granite, jQuery);

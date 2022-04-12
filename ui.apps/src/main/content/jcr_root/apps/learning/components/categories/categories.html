@@ -1,0 +1,15 @@
+<div class="categories-wrapper">
+    <ol class="categories-list" data-sly-repeat="${resource.children}">
+            <li class="category-item" data-sly-repeat="${item.children}">
+                <img class="category-img" src="${item.fileReference}"></img>
+                <span class="category-headline">${item.headline}</span>
+                <span class="category-desc">${item.description}</span>
+                <button data-catalogs="${item.catalogs}" data-tags="${item.tags}" data-products="${item.products}" class="category-link-btn">Explore</button>
+            </li>
+        </ol>
+</div>
+
+<img class="categories-left-arrow" src="/content/dam/learning/site/Carousel-Left.svg"/>
+<img class="categories-right-arrow" src="/content/dam/learning/site/Carousel-Right.svg"/>
+
+<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html" data-sly-call="${clientlib.all @ categories='learning.site,apps.alm.components.categories'}"/>
