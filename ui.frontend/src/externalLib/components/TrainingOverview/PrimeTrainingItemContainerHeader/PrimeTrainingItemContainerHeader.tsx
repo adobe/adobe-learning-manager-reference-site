@@ -18,7 +18,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
   overview: string;
   richTextOverview: string;
   training: PrimeLearningObject;
-  trainingInstance: PrimeLearningObjectInstance ;
+  trainingInstance: PrimeLearningObjectInstance;
   launchPlayerHandler?: Function;
   isPartOfLP?: boolean;
   showMandatoryLabel?: boolean;

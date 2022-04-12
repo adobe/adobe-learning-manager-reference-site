@@ -67,9 +67,9 @@ const PrimeTrainingPage = () => {
   } = useTrainingPage(trainingId, trainingInstanceId);
   const locale = config.locale;
   const { formatMessage } = useIntl();
-  const [{ showAuthorInfo, showDescription, showEnrollDeadline }] = useState(
-    () => getTrainingOverviewAttributes(config)
-  );
+  const [
+    { showAuthorInfo, showDescription, showEnrollDeadline },
+  ] = useState(() => getTrainingOverviewAttributes(config));
 
   if (isLoading || !training) {
     return <ALMLoader classes={styles.loader} />;
@@ -108,9 +108,9 @@ const PrimeTrainingPage = () => {
               )}
             </span>
             {prerequisiteLOs ? (
-              <div className={styles.trainingPrequisiteHeader}>
+              <div className={styles.trainingPrequisiteLabel}>
                 {formatMessage({
-                  id: "alm.trainingOverviewPrequisite",
+                  id: "alm.training.overviewPrequisite.label",
                 })}
               </div>
             ) : (
