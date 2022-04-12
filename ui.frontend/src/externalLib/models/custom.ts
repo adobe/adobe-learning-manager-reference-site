@@ -34,6 +34,13 @@ interface Field {
   isMultiValue: boolean;
 }
 
+export interface ESPrimeLearningObjectInstance {
+  id: string;
+  name: string;
+  status: string;
+  completionDeadline: string;
+}
+
 export interface ESPrimeLearningObject {
   authors: string[];
   averageRating: number;
@@ -49,6 +56,7 @@ export interface ESPrimeLearningObject {
   ratingsCount: number;
   description: string;
   tags: string[];
+  loInstances: ESPrimeLearningObjectInstance[];
 }
 
 export interface CommercePrimeLearningObject {
