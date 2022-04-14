@@ -125,7 +125,7 @@ const PrimeTrainingPage = () => {
 
               let showMandatoryLabel = false;
               let instance = prerequisiteLO.instances[0];
-              prequisiteConstraints.filter((prequisiteConstraints) => {
+              prequisiteConstraints?.filter((prequisiteConstraints) => {
                 if (
                   prequisiteConstraints.prerequisiteLOId === prerequisiteLO.id
                 ) {
