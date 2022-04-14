@@ -22,7 +22,7 @@ import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJo
 import styles from "./PrimeTrainingPageMetadata.module.css";
 
 const PENDING_APPROVAL = "PENDING_APPROVAL";
-const PrimeTrainingPageExtraDetails: React.FC<{
+const PrimeTrainingPageMetaData: React.FC<{
   trainingInstance: PrimeLearningObjectInstance;
   skills: Skill[];
   training: PrimeLearningObject;
@@ -455,4 +455,4 @@ const PrimeTrainingPageExtraDetails: React.FC<{
     </section>
   );
 };
-export default PrimeTrainingPageExtraDetails;
+export default PrimeTrainingPageMetaData;
