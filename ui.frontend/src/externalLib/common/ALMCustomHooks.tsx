@@ -1,7 +1,12 @@
 import { PrimeLearningObject } from "..";
 import { CatalogFilterState } from "../store/reducers/catalog";
 import { getParamsForCatalogApi } from "../utils/catalog";
-import { getALMAttribute, getALMConfig } from "../utils/global";
+import { updateFilterList } from "../utils/filters";
+import {
+  getALMAttribute,
+  getALMConfig,
+  getQueryParamsIObjectFromUrl,
+} from "../utils/global";
 import { JsonApiParse } from "../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
 import ICustomHooks from "./ICustomHooks";
@@ -98,6 +103,47 @@ export default class ALMCustomHooks implements ICustomHooks {
       method: "DELETE",
     });
     return response;
+  }
+
+  async getFilters() {
+    const config = getALMConfig();
+    const queryParams = getQueryParamsIObjectFromUrl();
+
+    const [skillsPromise, tagsPromise, catalogPromise] = await Promise.all([
+      RestAdapter.get({
+        url: `${config.primeApiURL}data?filter.skillName=true`,
+      }),
+      RestAdapter.get({
+        url: `${config.primeApiURL}data?filter.tagName=true`,
+      }),
+      RestAdapter.get({
+        url: `${config.primeApiURL}catalogs`,
+      }),
+    ]);
+    const skills = JsonApiParse(skillsPromise)?.data?.names;
+    let skillsList = skills?.map((item: string) => ({
+      value: item,
+      label: item,
+      checked: false,
+    }));
+    skillsList = updateFilterList(skillsList, queryParams, "skillName");
+
+    const tags = JsonApiParse(tagsPromise)?.data?.names;
+    let tagsList = tags?.map((item: string) => ({
+      value: item,
+      label: item,
+      checked: false,
+    }));
+    tagsList = updateFilterList(tagsList, queryParams, "tagName");
+
+    const catalogs = JsonApiParse(catalogPromise)?.catalogList;
+    let catalogList = catalogs?.map((item: any) => ({
+      value: item.id,
+      label: item.name,
+      checked: false,
+    }));
+    catalogList = updateFilterList(catalogList, queryParams, "catalogs");
+    return { skillsList, tagsList, catalogList };
   }
 }
 

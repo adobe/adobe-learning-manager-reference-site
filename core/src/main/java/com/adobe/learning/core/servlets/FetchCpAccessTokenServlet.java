@@ -80,15 +80,8 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
 			{
 				String code = request.getParameter("code");
 
-				Pair<String, Integer> refreshTokenResp = tokenService.getRefreshToken(almURL, clientId, clientSecret, code);
-				if (refreshTokenResp == null)
-				{
-					LOGGER.error("CPPrime:: Exception in fetching refresh_token");
-					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-					return;
-				}
-
-				Pair<String, Integer> accessTokenResp = tokenService.getAccessToken(almURL, clientId, clientSecret, refreshTokenResp.getLeft());
+				Pair<String, Integer> accessTokenResp = tokenService.getAccessTokenFromCode(almURL, clientId, clientSecret, code);
+				
 				if (accessTokenResp == null)
 				{
 					LOGGER.error("CPPrime:: Exception in fetching access_token");

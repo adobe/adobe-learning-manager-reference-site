@@ -8,6 +8,7 @@
 }
 .locationWrapper {
   width: 15%;
+  word-break: break-all;
 }
 .actionWrapper {
   width: 20%;

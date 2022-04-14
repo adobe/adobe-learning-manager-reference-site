@@ -14,7 +14,7 @@
         clientId="4c0e8131-8ef0-44f2-b17b-96265ec6ddf9"
         clientSecret="a8221fe8-e961-4d74-b65c-10e1ee0c62be"
         locale="en-US"
-        almBaseURL="https://captivateprimeqe.adobe.com"
+        almBaseURL="https://learningmanagerqe.adobe.com"
         siteMap="siteMap"
         usageType="aem-sites"
         theme.background="transparent"

@@ -57,6 +57,28 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     window.location = catalogUrl;
   };
 
+  const navigateToCatalogPageFromCategory = (catalogNames, skillNames, tagNames) => {
+    let { catalogPath } = getALMConfig();
+    let catalogUrl = catalogPath;
+
+    catalogUrl += "?";
+    if (catalogNames)
+      catalogUrl += "catalogs=" + catalogNames + "&";
+    if (skillNames)
+      catalogUrl += "skillName=" + skillNames + "&";
+    if (tagNames)
+      catalogUrl += "tags=" + tagNames + "&";
+      
+    catalogUrl = catalogUrl.slice(0, -1);
+    
+    window.location = catalogUrl;
+  };
+
+  const navigateToExplorePage = () => {
+    let { catalogPath } = getALMConfig();
+    window.location = catalogPath;
+  };
+
   const navigateToBoardsPage = (skillNames) => {
     let {communityBoardsPath} = getALMConfig();
     let boardsUrl = communityBoardsPath;
@@ -85,6 +107,26 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     window.location = supportPath;
   }
 
+  const navigateToCommerceSignInPage = () => {
+    let {commerceSignInPath} = getALMConfig();
+    window.location = commerceSignInPath;
+  };
+
+  const navigateToCommerceCartPage = () => {
+    let {commerceCartPath} = getALMConfig();
+    window.location = commerceCartPath;
+  };
+
+  const navigateToProfilePage = () => {
+    let {profilePath} = getALMConfig();
+    window.location = profilePath;
+  };
+
+  const navigateToSignOutPage = () => {
+    let {signOutPath} = getALMConfig();
+    window.location = signOutPath;
+  };
+
   const getUrl = (urlStr, params) => {
     for (const param in params) {
       urlStr = `${urlStr}/${param}/${params[param]}`;
@@ -98,10 +140,16 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
   window.ALM.navigateToInstancePage = navigateToInstancePage;
   window.ALM.navigateToCatalogPage = navigateToCatalogPage;
+  window.ALM.navigateToExplorePage = navigateToExplorePage;
   window.ALM.navigateToBoardDetailsPage = navigateToBoardDetailsPage;
   window.ALM.navigateToBoardsPage = navigateToBoardsPage;
   window.ALM.navigateToHomePage = navigateToHomePage;
   window.ALM.navigateToLearningPage = navigateToLearningPage;
   window.ALM.navigateToCommunityPage = navigateToCommunityPage;
   window.ALM.navigateToSupportPage = navigateToSupportPage;
+  window.ALM.navigateToCommerceSignInPage = navigateToCommerceSignInPage;
+  window.ALM.navigateToCommerceCartPage = navigateToCommerceCartPage;
+  window.ALM.navigateToProfilePage = navigateToProfilePage;
+  window.ALM.navigateToSignOutPage = navigateToSignOutPage;
+  window.ALM.navigateToCatalogPageFromCategory = navigateToCatalogPageFromCategory;
 })(window, document, Granite, jQuery);

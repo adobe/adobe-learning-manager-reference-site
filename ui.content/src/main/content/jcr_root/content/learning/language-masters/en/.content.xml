@@ -38,4 +38,6 @@
     <support/>
     <profile/>
     <commerce/>
+    <sign-out/>
+    <email-redirect/>
 </jcr:root>

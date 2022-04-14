@@ -1,6 +1,7 @@
 import { CatalogFilterState } from "../store/reducers/catalog";
 import { getRequestObjectForESApi } from "../utils/catalog";
-import { getALMConfig } from "../utils/global";
+import { updateFilterList } from "../utils/filters";
+import { getALMConfig, getQueryParamsIObjectFromUrl } from "../utils/global";
 import { JsonApiParse, parseESResponse } from "../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
 import { DEFAULT_PAGE_LIMIT } from "./ALMCustomHooks";
@@ -22,7 +23,7 @@ export default class ESCustomHooks implements ICustomHooks {
   almConfig = getALMConfig();
   primeCdnTrainingBaseEndpoint = this.almConfig.primeCdnTrainingBaseEndpoint;
   esBaseUrl = this.almConfig.esBaseUrl;
-  almCommerceCdnBaseUrl = this.almConfig.almCommerceCdnBaseUrl;
+  almCdnBaseUrl = this.almConfig.almCdnBaseUrl;
   async getTrainings(
     filterState: CatalogFilterState,
     sort: string,
@@ -80,7 +81,7 @@ export default class ESCustomHooks implements ICustomHooks {
   async getTraining(id: string) {
     const loPath = id.replace(":", "/");
     const response = await RestAdapter.get({
-      url: `${this.almCommerceCdnBaseUrl}/${loPath}/.json`,
+      url: `${this.almCdnBaseUrl}/${loPath}.json`,
     });
     return JsonApiParse(response).learningObject;
   }
@@ -92,5 +93,34 @@ export default class ESCustomHooks implements ICustomHooks {
   }
   async unenrollFromTraining(params: QueryParams = {}) {
     return null;
+  }
+
+  async getFilters() {
+    const queryParams = getQueryParamsIObjectFromUrl();
+    const esBaseUrl = getALMConfig().esBaseUrl;
+    const response = await RestAdapter.get({
+      url: `${esBaseUrl}/filterableData`,
+    });
+    const data = JSON.parse(response as string);
+    if (data) {
+      const { terms } = data;
+      //generating the skill name list
+      let skillsList = terms?.loSkillNames?.map((item: string) => ({
+        value: item,
+        label: item,
+        checked: false,
+      }));
+      skillsList = updateFilterList(skillsList, queryParams, "skillName");
+
+      //generating the Taglist
+      let tagsList = terms?.tags?.map((item: string) => ({
+        value: item,
+        label: item,
+        checked: false,
+      }));
+      tagsList = updateFilterList(tagsList, queryParams, "tagName");
+      let catalogList: any[] = [];
+      return { skillsList, tagsList, catalogList };
+    }
   }
 }

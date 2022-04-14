@@ -4,7 +4,6 @@
   let usageTypeSelectElem;
 
   const USAGE_OPTIONS = ["aem-sites", "aem-es", "aem-commerce"];
-  const USAGE_TYPE_SELECTED_SEL = "coral-select[name='./usageType']";
   const USAGE_TYPE_INPUT_VALUE_SEL = "coral-select[name='./usageType'] coral-select-item[selected='']";
   const USAGE_TYPE_SELECT_ID_SEL = "#alm-usage-type-select";
 
@@ -14,12 +13,18 @@
     var selectedUsageOption = $(USAGE_TYPE_INPUT_VALUE_SEL).attr("value");
     USAGE_OPTIONS.forEach((usageOption) => {
       if (usageOption !== selectedUsageOption)
+      {
         $("." + usageOption).closest("div.coral-Form-fieldwrapper").attr("hidden",'');
+        $("coral-checkbox." + usageOption).attr("hidden",'');
+      }
     });
 
     USAGE_OPTIONS.forEach((usageOption) => {
       if (usageOption === selectedUsageOption)
+      {
         $("." + usageOption).closest("div.coral-Form-fieldwrapper").removeAttr("hidden");
+        $("coral-checkbox." + usageOption).removeAttr("hidden");
+      }
     });
   }
 

@@ -54,6 +54,16 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
 
   const cardClickHandler = useCallback(async () => {
     if (!training) return;
+    let alm = getALMObject();
+    if (!alm.isPrimeUserLoggedIn()) {
+      const activeInstances = getActiveInstances(training);
+      if (activeInstances?.length === 1) {
+        alm.navigateToTrainingOverviewPage(training.id);
+      } else {
+        alm.navigateToInstancePage(training.id);
+      }
+      return;
+    }
 
     //if jobAid, need to enroll and open player or new tab
     if (isJobaid(training)) {
@@ -72,13 +82,10 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
         } else {
           LaunchPlayer({ trainingId: training.id });
         }
-      } catch (error) {
-        //TODO : handle error
-      }
+      } catch (error) {}
       return;
     }
-    //TODO: if user Loggedin --
-    let alm = getALMObject();
+
     if (training.enrollment) {
       alm.navigateToTrainingOverviewPage(
         training.id,

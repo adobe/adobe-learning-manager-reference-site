@@ -359,6 +359,10 @@ export interface PrimeLearningObject {
   supplementaryResources: PrimeResource[];
   skillNames?: string[]
   hasPreview: boolean;
+  price?: {
+    currency: string;
+    value: number;
+  }
 }
 
 export interface PrimeLearningObjectInstance {

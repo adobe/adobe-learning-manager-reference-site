@@ -79,6 +79,15 @@
                             rows="6"
                             type="textarea"
                             usePlaceholder="true"/>
+                        <button
+                            jcr:created="{Date}2022-03-18T19:47:13.305+05:30"
+                            jcr:createdBy="admin"
+                            jcr:lastModified="{Date}2022-03-18T19:48:44.258+05:30"
+                            jcr:lastModifiedBy="admin"
+                            jcr:primaryType="nt:unstructured"
+                            id="support-send-btn"
+                            jcr:title="Send"
+                            sling:resourceType="learning/components/button"/>
                     </support-container>
                 </container>
             </container>

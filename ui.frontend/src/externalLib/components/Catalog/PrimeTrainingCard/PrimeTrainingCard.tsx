@@ -15,6 +15,7 @@ export const formatMap: any = {
   Blended: "prime.catalog.card.blended",
   "Virtual Classroom": "prime.catalog.card.virtual.classroom",
   Classroom: "prime.catalog.card.classroom",
+  "Self Paced": "prime.catalog.card.self.paced",
 };
 const PrimeTrainingCard: React.FC<{
   training: PrimeLearningObject;
@@ -74,6 +75,20 @@ const PrimeTrainingCard: React.FC<{
   const trainingTypeLabel = useMemo(() => {
     return type ? GetTranslation(`prime.catalog.card.${type}`, true) : "";
   }, [type]);
+  let priceLabel = "";
+  if (training.price?.value) {
+    const formatter = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: training.price?.currency,
+    });
+
+    priceLabel = formatter.format(training.price?.value!);
+  }
+
+  const extraIconHtml = (
+    <div className={styles.extraIcon}>{THREE_DOTS_MENU_SVG()}</div>
+  );
+
   return (
     <>
       <li className={styles.listItem}>
@@ -93,42 +108,52 @@ const PrimeTrainingCard: React.FC<{
             </div>
 
             <div className={styles.bottomBar}>
-              {/* <span className={styles.price}>$9009</span> */}
+              {priceLabel && <span className={styles.price}>{priceLabel}</span>}
               <div className={styles.title}>{name}</div>
               <div className={styles.trainingType}>
-                {trainingTypeLabel} - {fomatLabel}
+                {trainingTypeLabel} {fomatLabel ? `- ${fomatLabel}` : ""}
               </div>
               <div
                 className={styles.descriptionContainer}
                 onMouseEnter={onMouseEnterHandler}
               >
                 <div className={styles.extra}>
-                  {hasCompletedTrainingHtml || (
-                    <div className={styles.extraWrapper}>
-                      <div className={styles.sendIcon}>{SEND_SVG()}</div>
-                      <div className={styles.extraLabel}>
-                        <span>
-                          {GetTranslation(
-                            "prime.catalog.card.skills.label",
-                            true
-                          )}
-                        </span>
-                        <span>{skillsAsString}</span>
+                  {hasCompletedTrainingHtml ||
+                    (skillsAsString ? (
+                      <div className={styles.extraWrapper}>
+                        <div className={styles.sendIcon}>{SEND_SVG()}</div>
+                        <div className={styles.extraLabel}>
+                          <span>
+                            {GetTranslation(
+                              "prime.catalog.card.skills.label",
+                              true
+                            )}
+                          </span>
+                          <span>{skillsAsString}</span>
+                        </div>
+                        {extraIconHtml}
                       </div>
-                      <div className={styles.extraIcon}>
-                        {THREE_DOTS_MENU_SVG()}
-                      </div>
-                    </div>
-                  )}
+                    ) : (
+                      extraIconHtml
+                    ))}
                 </div>
                 <div className={styles.showOnHover}>
                   {descriptionHtml}
-                  <div className={styles.skillsContainer}>
-                    <span className={styles.skiillsLabel}>
-                      {GetTranslation("prime.catalog.card.skills.label", true)}
-                    </span>
-                    <span className={styles.skillsValue}>{skillsAsString}</span>
-                  </div>
+                  {skillsAsString ? (
+                    <div className={styles.skillsContainer}>
+                      <span className={styles.skiillsLabel}>
+                        {GetTranslation(
+                          "prime.catalog.card.skills.label",
+                          true
+                        )}
+                      </span>
+                      <span className={styles.skillsValue}>
+                        {skillsAsString}
+                      </span>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                   <div className={styles.skillsContainer}>
                     {enrollment ? (
                       <>

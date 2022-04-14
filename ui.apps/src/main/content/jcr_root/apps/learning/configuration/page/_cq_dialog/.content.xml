@@ -77,14 +77,6 @@
                         name="./clientSecret"
                         cq:showOnCreate="{Boolean}true"/>
 
-                    <almRegister 
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="Adobe Learning Manager Register Url"
-                        fieldDescription="Adobe Learning Manager Register Url"
-                        name="./almRegisterUrl"
-                        cq:showOnCreate="{Boolean}true"/>
-
                     <authorRefreshToken 
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
@@ -99,16 +91,6 @@
                         fieldLabel="Adobe Learning Manager CDN Base URL"
                         fieldDescription="Adobe Learning Manager CDN Base URL"
                         name="./almCdnBaseUrl"
-                        granite:rel="aem-commerce aem-es"
-                        cq:showOnCreate="{Boolean}true"/>
-
-                    <siteMap
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                        checked="true"
-                        name="./siteMap"
-                        text="Create Site Map"
-                        value="siteMap"
                         granite:rel="aem-commerce aem-es"
                         cq:showOnCreate="{Boolean}true"/>
 
@@ -144,6 +126,25 @@
                         fieldDescription="ES Base URL"
                         name="./esBaseUrl"
                         granite:rel="aem-es"
+                        cq:showOnCreate="{Boolean}true"/>
+
+                    <almRegister 
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Adobe Learning Manager Register Url"
+                        fieldDescription="Adobe Learning Manager Register Url"
+                        name="./almRegisterUrl"
+                        granite:rel="aem-es"
+                        cq:showOnCreate="{Boolean}true"/>
+
+                    <siteMap
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                        checked="true"
+                        name="./siteMap"
+                        text="Create Site Map"
+                        value="siteMap"
+                        granite:rel="aem-commerce aem-es"
                         cq:showOnCreate="{Boolean}true"/>
 
 

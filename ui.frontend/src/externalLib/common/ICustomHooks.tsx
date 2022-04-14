@@ -15,4 +15,6 @@ export default interface ICustomHooks {
   ): void;
   loadMore(url: string): void;
   getTraining(id: string, params: QueryParams): void;
+
+  getFilters(): void;
 }

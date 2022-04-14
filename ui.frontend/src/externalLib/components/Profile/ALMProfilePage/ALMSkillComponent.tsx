@@ -31,16 +31,16 @@ const ALMSkillComponent = (props: any) => {
     if (selectedSkills.indexOf(skillId) > -1) {
       selectedSkills.splice(selectedSkills.indexOf(skillId), 1);
       node.style.boxShadow = "none";
+      node.setAttribute("aria-pressed", "false");
     } else {
       selectedSkills.push(skillId);
       node.style.boxShadow = "0 0 3pt 3pt #4283d0";
+      node.setAttribute("aria-pressed", "true");
     }
   };
 
-  const handleClickOnSkillBox = (event: Event) => {
-    event.preventDefault();
+  const handleClickOnSkillBox = (event: any) => {
     let node = event.target as HTMLElement;
-
     if (
       node.className.indexOf("skillBoxSelectable") > -1 ||
       node.className.indexOf("skillNameSelectable") > -1
@@ -197,6 +197,9 @@ const ALMSkillComponent = (props: any) => {
                     removeFocus_lxpv(event);
                   }}
                 >
+                  <span className={styles.skillName}>
+                    {skillInterest.skill.name}
+                  </span>
                   <button
                     onClick={() => {
                       removeSkillInterest(skillInterest.skill.id);
@@ -211,9 +214,6 @@ const ALMSkillComponent = (props: any) => {
                       defaultMessage: "Remove from My interests",
                     })}
                   ></button>
-                  <span className={styles.skillName}>
-                    {skillInterest.skill.name}
-                  </span>
                   <div className={styles.arrowUp}></div>
                   <div className={styles.skillDataTooltip} aria-hidden="true">
                     {skillInterest.skill.name}
@@ -289,13 +289,13 @@ const ALMSkillComponent = (props: any) => {
                   tabIndex={0}
                   id={"skill-" + skill.id}
                   aria-labelledby={"skillName-" + skill.id}
-                  role="group"
-                  onMouseDown={(event: any) => {
+                  onClick={(event: any) => {
                     handleClickOnSkillBox(event);
                   }}
                   onMouseLeave={(event: any) => {
                     removeFocus_lxpv(event);
                   }}
+                  aria-pressed={false}
                 >
                   <span className={styles.skillNameSelectable}>
                     {skill.name}

@@ -1,10 +1,10 @@
 .alm-header-vertical-nav {
   box-shadow: 3px 3px 6px #00000029;
-  -webkit-transition: all ease-in-out 0.2s;
+  /* -webkit-transition: all ease-in-out 0.2s;
   -moz-transition: all ease-in-out 0.2s;
   -ms-transition: all ease-in-out 0.2s;
   -o-transition: all ease-in-out 0.2s;
-  transition: all ease-in-out 0.2s;
+  transition: all ease-in-out 0.2s; */
   background-color: #232323;
   display: flex;
   flex-direction: column;
@@ -86,7 +86,7 @@
 }
 
 .alm-header-icons .notification__container {
-  display: flex !important;
+  display: flex;
   margin-top: 10px;
 }
 
@@ -94,6 +94,11 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+}
+
+#alm-header .alm-profile__text
+{
+  cursor: pointer;
 }
 
 #alm-header .alm-header-cont .alm-header-logo {
@@ -104,7 +109,6 @@
 
 #alm-header .alm-header-cont .alm-header-navigation,
 #alm-header .alm-header-cont .alm-header-icons {
-  display: none;
   font: normal normal normal 14px/18px Source Sans Pro;
 }
 
@@ -115,6 +119,16 @@
   margin-top: 15px;
   margin-left: 35px;
 }
+
+#alm-header .alm-header-cont .alm-header-icons .alm-header-cart
+{
+  height: 22px;
+  width: 22px;
+  margin-top: 22px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
 
 #alm-header .alm-header-cont .alm-header-navigation {
   list-style-type: none;
@@ -127,6 +141,29 @@
   margin: 20px 60px 20px 0px;
   display: inline-block;
   cursor: pointer;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation li {
+  position: relative;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation .nav-highlight {
+  position: absolute;
+  bottom: 0;
+  border-top: 3px solid #FB704B;
+  left: -5px;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation .size__XS {
+  width: 50px;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation .size__S {
+  width: 65px;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation .size__M {
+  width: 80px;
 }
 
 .alm-header-down {
@@ -207,6 +244,12 @@
 .alm-header-profile-options a {
   text-decoration: none;
   color: #000000;
+}
+
+.alm-header-profile-options .alm-log-in,
+.alm-header-profile-options .alm-log-out,
+.alm-header-profile-options .alm-register {
+  cursor: pointer;
 }
 
 .alm-header-profile {

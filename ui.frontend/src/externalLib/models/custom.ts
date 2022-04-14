@@ -34,6 +34,13 @@ interface Field {
   isMultiValue: boolean;
 }
 
+export interface ESPrimeLearningObjectInstance {
+  id: string;
+  name: string;
+  status: string;
+  completionDeadline: string;
+}
+
 export interface ESPrimeLearningObject {
   authors: string[];
   averageRating: number;
@@ -49,11 +56,38 @@ export interface ESPrimeLearningObject {
   ratingsCount: number;
   description: string;
   tags: string[];
+  loInstances: ESPrimeLearningObjectInstance[];
+}
+
+export interface CommercePrimeLearningObject {
+  almauthor: string[];
+  almavgrating: number;
+  almdeliverytype: string;
+  almduration: number;
+  almlotype: string;
+  almpublishdate: string;
+  almratingscount: number;
+  almskill: string;
+  almstatus: string;
+  almtags: string[];
+  almthumbnailurl: string;
+  almusecourseeffectiveness: string;
+  almusecourserating: string;
+  description: { html: string, __typename: string }
+  name: string;
+  sku: string;
+  price_range: {
+    maximum_price: {
+      final_price: {
+        value: number
+        currency: string
+      }
+    }
+  }
 }
 
 // export interface CatalogLearningObject {
 //   id: string;
-//   _transient: any;
 //   authorNames: string[];
 //   bannerUrl: string;
 //   dateCreated: string;

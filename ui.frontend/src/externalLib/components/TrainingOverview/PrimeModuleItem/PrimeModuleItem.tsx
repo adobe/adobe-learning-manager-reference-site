@@ -19,7 +19,7 @@ import {
   convertSecondsToTimeText,
   GetFormattedDate,
 } from "../../../utils/dateTime";
-import { getALMConfig } from "../../../utils/global";
+import { getALMConfig, getALMObject } from "../../../utils/global";
 import { useResource } from "../../../utils/hooks";
 import {
   ACTIVITY_SVG,
@@ -181,10 +181,12 @@ const PrimeModuleItem: React.FC<{
   );
 
   const itemClickHandler = () => {
-    const enrollment = loResource.learningObject.enrollment;
+    const enrollment = loResource?.learningObject?.enrollment;
     if (
       (enrollment && !isClassroomOrVC) ||
-      (!enrollment && loResource.previewEnabled)
+      (!enrollment &&
+        loResource.previewEnabled &&
+        getALMObject().isPrimeUserLoggedIn())
     ) {
       launchPlayerHandler({ id: training.id, moduleId: loResource.id });
     }
