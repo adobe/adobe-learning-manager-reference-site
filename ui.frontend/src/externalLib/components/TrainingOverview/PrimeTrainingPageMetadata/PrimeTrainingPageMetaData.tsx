@@ -19,10 +19,10 @@ import { getALMConfig, getALMObject } from "../../../utils/global";
 import { LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
 import { GetTranslation } from "../../../utils/translationService";
 import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJobAids";
-import styles from "./PrimeTrainingPageExtraDetails.module.css";
+import styles from "./PrimeTrainingPageMetadata.module.css";
 
 const PENDING_APPROVAL = "PENDING_APPROVAL";
-const PrimeTrainingPageExtraDetails: React.FC<{
+const PrimeTrainingPageMetaData: React.FC<{
   trainingInstance: PrimeLearningObjectInstance;
   skills: Skill[];
   training: PrimeLearningObject;
@@ -54,7 +54,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
   let showPreviewButton =
     training.hasPreview &&
     (!enrollment || enrollment.state === PENDING_APPROVAL);
-
+ 
   const action: string = useMemo(() => {
     // if(trainingInstance.seatLimit)
 
@@ -107,6 +107,14 @@ const PrimeTrainingPageExtraDetails: React.FC<{
   const unEnrollClickHandler = () => {
     unEnrollmentHandler({ enrollmentId: training.enrollment.id });
   };
+
+  const onPressHandler = async () => {
+    try {
+      await enrollmentHandler();
+      launchPlayerHandler();
+    } catch (e) {}
+  };
+
   //show only if not enrolled
   const showEnrollmentCount =
     !trainingInstance.learningObject.enrollment &&
@@ -177,10 +185,11 @@ const PrimeTrainingPageExtraDetails: React.FC<{
             <Button
               variant="primary"
               UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
-              onPress={enrollmentHandler}
+              onPress={onPressHandler}
             >
               {actionText}
             </Button>
+          
             {seatsAvailableText}
           </>
         )}
@@ -449,4 +458,4 @@ const PrimeTrainingPageExtraDetails: React.FC<{
     </section>
   );
 };
-export default PrimeTrainingPageExtraDetails;
+export default PrimeTrainingPageMetaData;

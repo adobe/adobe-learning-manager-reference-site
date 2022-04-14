@@ -57,7 +57,6 @@ const PrimeLPItemContainer: React.FC<{
       <PrimeTrainingItemContainerHeader
         name={name}
         description={description}
-        cardBgStyle={cardBgStyle}
         training={training}
         trainingInstance={trainingInstance}
         overview={overview}

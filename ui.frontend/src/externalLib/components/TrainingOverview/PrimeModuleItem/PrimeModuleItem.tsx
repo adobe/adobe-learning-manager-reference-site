@@ -32,6 +32,8 @@ import {
   VIDEO_SVG,
   VIRTUAL_CLASSROOM_SVG,
   XLS_SVG,
+  CAPTIVATE_SVG,
+  PRESENTER_SVG,
 } from "../../../utils/inline_svg";
 import {
   getPreferredLocalizedMetadata,
@@ -53,11 +55,13 @@ const moduleIconMap = {
   Elearning: SCORM_SVG(),
   ACTIVITY: ACTIVITY_SVG(),
   VIDEO: VIDEO_SVG(),
-  PPTX: PPT_SVG(),
+  PPT: PPT_SVG(),
   DOC: DOC_SVG(),
   PDF: PDF_SVG(),
   XLS: XLS_SVG(),
   AUDIO: AUDIO_SVG(),
+  CP:CAPTIVATE_SVG(),
+  PR:PRESENTER_SVG(),
 };
 
 const PrimeModuleItem: React.FC<{

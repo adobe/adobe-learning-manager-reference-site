@@ -9,12 +9,21 @@
   width: 256px;
   padding: 20px 0;
 }
-.trainingOverviewContainer {
+.trainingOverviewContainer, .trainingOverviewPrequisite {
   border: 1px solid var(--prime-color-nc6);
   border-radius: 6px;
-  padding: 10px;
   margin-bottom: 20px;
 }
+
+.trainingOverviewContainer {
+  padding: 10px;
+}
+
+.trainingPrequisiteLabel {
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
 .sectionName {
   margin: 0 0 10px 0;
   color: var(--prime-color-nc1);
