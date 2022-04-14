@@ -19,7 +19,7 @@ import { PrimeCourseOverview } from "../PrimeCourseOverview";
 import { PrimeTrainingItemContainerHeader } from "../PrimeTrainingItemContainerHeader";
 import { PrimeTrainingOverview } from "../PrimeTrainingOverview";
 import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
-import { PrimeTrainingPageExtraDetails } from "../PrimeTrainingPageExtraDetails";
+import { PrimeTrainingPageMetadata } from "../PrimeTrainingPageMetadata";
 import styles from "./PrimeTrainingPage.module.css";
 
 const COURSE = "course";
@@ -144,7 +144,7 @@ const PrimeTrainingPage = () => {
                     richTextOverview={richTextOverview}
                     isPartOfLP={prerequisiteLO.loType === LEARNING_PROGRAM}
                     showMandatoryLabel={showMandatoryLabel}
-                    isprerequisiteLOs={true}
+                    isprerequisiteLO={true}
                   />
                 </section>
               );
@@ -228,7 +228,7 @@ const PrimeTrainingPage = () => {
               })}
           </div>
           <div className={styles.right}>
-            <PrimeTrainingPageExtraDetails
+            <PrimeTrainingPageMetadata  
               skills={skills}
               training={training}
               trainingInstance={trainingInstance}

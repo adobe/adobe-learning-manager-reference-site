@@ -1,12 +1,12 @@
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { Button } from "@adobe/react-spectrum";
+import { ActionButton, AlertDialog, Button, DialogTrigger } from "@adobe/react-spectrum";
 import Calendar from "@spectrum-icons/workflow/Calendar";
 import Download from "@spectrum-icons/workflow/Download";
 import PinOff from "@spectrum-icons/workflow/PinOff";
 import Send from "@spectrum-icons/workflow/Send";
 import UserGroup from "@spectrum-icons/workflow/UserGroup";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { InstanceBadge, Skill } from "../../../models/custom";
 import {
@@ -19,7 +19,8 @@ import { getALMConfig } from "../../../utils/global";
 import { LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
 import { GetTranslation } from "../../../utils/translationService";
 import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJobAids";
-import styles from "./PrimeTrainingPageExtraDetails.module.css";
+import styles from "./PrimeTrainingPageMetadata.module.css";
+import { setDefaultResultOrder } from "dns/promises";
 
 const PENDING_APPROVAL = "PENDING_APPROVAL";
 const PrimeTrainingPageExtraDetails: React.FC<{
@@ -54,7 +55,7 @@ const PrimeTrainingPageExtraDetails: React.FC<{
   let showPreviewButton =
     training.hasPreview &&
     (!enrollment || enrollment.state === PENDING_APPROVAL);
-
+ 
   const action: string = useMemo(() => {
     // if(trainingInstance.seatLimit)
 
@@ -107,6 +108,14 @@ const PrimeTrainingPageExtraDetails: React.FC<{
   const unEnrollClickHandler = () => {
     unEnrollmentHandler({ enrollmentId: training.enrollment.id });
   };
+
+  const onPressHandler = async () => {
+    try {
+      await enrollmentHandler();
+      launchPlayerHandler();
+    } catch (e) {}
+  };
+
   //show only if not enrolled
   const showEnrollmentCount =
     !trainingInstance.learningObject.enrollment &&
@@ -174,10 +183,11 @@ const PrimeTrainingPageExtraDetails: React.FC<{
             <Button
               variant="primary"
               UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
-              onPress={enrollmentHandler}
+              onPress={onPressHandler}
             >
               {actionText}
             </Button>
+          
             {seatsAvailableText}
           </>
         )}

@@ -22,7 +22,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
   launchPlayerHandler?: Function;
   isPartOfLP?: boolean;
   showMandatoryLabel?: boolean;
-  isprerequisiteLOs?:boolean
+  isprerequisiteLO?: boolean
 }> = (props) => {
   const {
     name,
@@ -33,7 +33,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
     launchPlayerHandler,
     isPartOfLP = false,
     showMandatoryLabel = false,
-    isprerequisiteLOs = false,
+    isprerequisiteLO = false,
   } = props;
   const { formatMessage } = useIntl();
   const authorNames = training.authorNames?.length
@@ -48,7 +48,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
     //NOTE: Don't open player in case training name is clicked
 
     // For prerequisiteLOs never open the Launch Player.
-    if (event.target?.tagName !== "A" && !isprerequisiteLOs) {
+    if (event.target?.tagName !== "A" && !isprerequisiteLO) {
       if (training.enrollment && launchPlayerHandler!=undefined) {
         launchPlayerHandler({ id: training.id });
       }
@@ -80,7 +80,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
       <div className={styles.metadata}>
         <div className={styles.metadataContents}>
           <div>{GetTranslation(`prime.catalog.card.${loType}`, true)}</div>
-          {isprerequisiteLOs ? <div className={styles.metadata__separator}></div>: authorNames.length ? (
+          {(isprerequisiteLO && !loType) ? "":authorNames.length ? (
             <>
               <div className={styles.metadata__separator}></div>
               <div className={styles.authorNames}>{authorNames}</div>
@@ -88,7 +88,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
           ) : (
             ""
           )}
-          {isprerequisiteLOs? "" : training.duration ? (
+          {isprerequisiteLO? "" : training.duration ? (
             <>
               <div className={styles.metadata__separator}></div>
               <div>{convertSecondsToTimeText(training.duration)}</div>
