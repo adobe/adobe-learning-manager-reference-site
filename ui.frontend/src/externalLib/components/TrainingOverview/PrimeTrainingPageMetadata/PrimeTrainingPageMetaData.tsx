@@ -1,12 +1,12 @@
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { ActionButton, AlertDialog, Button, DialogTrigger } from "@adobe/react-spectrum";
+import { Button } from "@adobe/react-spectrum";
 import Calendar from "@spectrum-icons/workflow/Calendar";
 import Download from "@spectrum-icons/workflow/Download";
 import PinOff from "@spectrum-icons/workflow/PinOff";
 import Send from "@spectrum-icons/workflow/Send";
 import UserGroup from "@spectrum-icons/workflow/UserGroup";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useIntl } from "react-intl";
 import { InstanceBadge, Skill } from "../../../models/custom";
 import {
@@ -20,7 +20,6 @@ import { LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
 import { GetTranslation } from "../../../utils/translationService";
 import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJobAids";
 import styles from "./PrimeTrainingPageMetadata.module.css";
-import { setDefaultResultOrder } from "dns/promises";
 
 const PENDING_APPROVAL = "PENDING_APPROVAL";
 const PrimeTrainingPageExtraDetails: React.FC<{
