@@ -53,7 +53,7 @@ const moduleIconMap = {
   Classroom: CLASSROOM_SVG(),
   "Virtual Classroom": VIRTUAL_CLASSROOM_SVG(),
   Elearning: SCORM_SVG(),
-  ACTIVITY: ACTIVITY_SVG(),
+  Activity: ACTIVITY_SVG(),
   VIDEO: VIDEO_SVG(),
   PPT: PPT_SVG(),
   DOC: DOC_SVG(),
