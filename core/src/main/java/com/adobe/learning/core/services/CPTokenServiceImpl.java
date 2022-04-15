@@ -29,38 +29,6 @@ public class CPTokenServiceImpl implements CPTokenService {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(CPTokenServiceImpl.class);
 
-	// @Override
-	// public Pair<String, Integer> getRefreshToken(String almURL, String clientId, String clientSecret, String code)
-	// {
-	// 	if (StringUtils.isAnyEmpty(almURL, clientId, clientSecret, code))
-	// 	{
-	// 		LOGGER.error("CPPrime FetchRefreshToken:: Errors in admin configuration. almURL {}, ClientId {}, ClientSecret {}, code {}", almURL, clientId, clientSecret);
-	// 		return null;
-	// 	}
-
-	// 	String url = almURL + "/oauth/token";
-
-	// 	List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-	// 	nvps.add(new BasicNameValuePair("code", code));
-	// 	nvps.add(new BasicNameValuePair("client_id", clientId));
-	// 	nvps.add(new BasicNameValuePair("client_secret", clientSecret));
-
-	// 	String responseStr = doCPPost(url, nvps);
-
-	// 	if (StringUtils.isBlank(responseStr) || !responseStr.contains("refresh_token"))
-	// 	{
-	// 		LOGGER.error("CPPrime FetchRefreshToken:: Empty responseStr {}", responseStr);
-	// 		return null;
-	// 	}
-	// 	else
-	// 	{
-	// 		JsonObject jsonObject = new Gson().fromJson(responseStr, JsonObject.class);
-	// 		String refreshToken = jsonObject.get("refresh_token").getAsString();
-	// 		Integer expirySecond = jsonObject.get("expires_in").getAsInt();
-	// 		return new ImmutablePair<String, Integer>(refreshToken, expirySecond);
-	// 	}
-	// }
-
 	@Override
 	public Pair<String, Integer> getAccessTokenFromCode(String almURL, String clientId, String clientSecret, String code)
 	{

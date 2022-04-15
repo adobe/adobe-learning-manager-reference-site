@@ -32,16 +32,18 @@
                         <items jcr:primaryType="nt:unstructured">
                             <sites
                                 jcr:primaryType="nt:unstructured"
-                                text="AEM+LearningManager"
+                                text="AEM + Learning Manager"
                                 value="aem-sites"/>
-                            <es
-                                jcr:primaryType="nt:unstructured"
-                                text="AEM+ES+LearningManager"
-                                value="aem-es"/>
+
                             <commerce
                                 jcr:primaryType="nt:unstructured"
-                                text="AEM+Commerce+LearningManager"
+                                text="AEM + Learning Manager + Commerce"
                                 value="aem-commerce"/>
+
+                            <es
+                                jcr:primaryType="nt:unstructured"
+                                text="AEM + Learning Manager + Training Metadata"
+                                value="aem-es"/>
                         </items>
                     </usage>
 
@@ -102,6 +104,14 @@
                         name="./commerceURL"
                         granite:rel="aem-commerce"
                         cq:showOnCreate="{Boolean}true"/>
+                    <graphqlProxyPath 
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="GraphQL Proxy Path "
+                        fieldDescription="Path of the GraphQL endpoint proxy used by client-side components."
+                        name="./graphqlProxyPath"
+                        granite:rel="aem-commerce"
+                        cq:showOnCreate="{Boolean}true"/>
                     <commerceStoreName 
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
@@ -122,8 +132,8 @@
                     <esBase 
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="ES Base URL"
-                        fieldDescription="ES Base URL"
+                        fieldLabel="Training Metadata Base URL"
+                        fieldDescription="Training Metadata Base URL"
                         name="./esBaseUrl"
                         granite:rel="aem-es"
                         cq:showOnCreate="{Boolean}true"/>

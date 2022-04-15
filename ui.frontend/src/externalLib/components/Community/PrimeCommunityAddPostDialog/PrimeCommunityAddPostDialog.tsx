@@ -217,12 +217,6 @@ const PrimeCommunityAddPostDialog = (props: any) => {
     <Dialog UNSAFE_className={styles.primeConfirmationDialog}>
       <Heading>
         <div className={styles.primeDialogHeaderContainer}>
-          <button className={styles.primeDialogHeader}>
-            <div className={styles.primeDialogHeaderSvg}>
-              {SOCIAL_TEXT_SVG()}
-            </div>
-            <div className={styles.primeDialogHeaderText}>Text</div>
-          </button>
           <button
             className={styles.primeDialogHeader}
             onClick={fileUploadClickHandler}

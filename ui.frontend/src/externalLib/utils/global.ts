@@ -18,6 +18,7 @@ export interface PrimeConfig {
   locale: string;
   almCdnBaseUrl: string;
   commerceURL: string;
+  graphqlProxyPath: string;
   usageType: "aem-sites" | "aem-es" | "aem-commerce";
   mountingPoints: {
     [key: string]: string;

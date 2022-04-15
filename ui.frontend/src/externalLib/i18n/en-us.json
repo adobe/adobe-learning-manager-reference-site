@@ -19,7 +19,7 @@
   "prime.community.board.report": "Report",
   "prime.community.board.sortBy": "Sort by",
   "prime.notification.icon": "User Notifications",
-  "prime.catalog.header": "Collection of |||COURSE|||, |||CERTIFICATION||| and More",
+  "prime.catalog.header": "Collection of |||COURSE|||, |||CERTIFICATION||| and |||LEARNING_PATH|||",
   "prime.catalog.search.placeholder": "Enter text and press enter",
   "prime.catalog.filter.loType.label": "Type",
   "prime.catalog.filter.status.label": "Status",

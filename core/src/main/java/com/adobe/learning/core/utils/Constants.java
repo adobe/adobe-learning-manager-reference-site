@@ -16,11 +16,11 @@ public class Constants {
 		public static final String CLIENT_SECRET = "clientSecret";
 		public static final String PAGE_LOCALE = "pageLocale";
 		public static final String COMMERCE_ADMIN_REFRESH_TOKEN = "refreshToken";
+		public static final String COMMERCE_URL = "commerceURL";
 	}
 
 	public final class EmbeddableWidgetConfig {
 		public static final String WIDGET_REF = "widgetRef";
-		// public static final String CP_NODE_PROPERTY_PREFIX = "cpWidget#";
 		public static final String SELECTED_WIDGET_REF = "widgetRefSelected";
 		public static final String CP_HOST_NAME_PROP = "commonConfig.captivateHostName";
 		public static final String CP_EMIT_PLAYER_EVENT_PROP = "commonConfig.emitPlayerLaunchEvent";
@@ -28,8 +28,6 @@ public class Constants {
 		public static final String CONFIG_TYPE_KEY = "type";
 		public static final String CONFIG_TYPE_VALUE = "acapConfig";
 		public static final String AUTH_ACCESS_TOKEN_KEY = "auth.accessToken";
-		// public static final String CP_THEME_BACKGROUND_PROP = "theme.background";
-		// public static final String CP_THEME_BACKGROUND_PROP_VALUE = "transparent";
 	}
 
 	public final class CPUrl {
@@ -56,36 +54,4 @@ public class Constants {
 		NAVIGATION_PATHS.put("commerceSignInPath", "commerce/sign-in.html");
 		NAVIGATION_PATHS.put("commerceCartPath", "commerce/cart.html");
 	}
-	/*
-	 * public static final String TRAINING_OVERVIEW_PATH = "trainingOverviewPath";
-	 * public static final String TRAINING_OVERVIEW_PATH_VALUE = "overview.html";
-	 * 
-	 * public static final String CATALOG_PATH = "catalogPath"; public static final
-	 * String CATALOG_PATH_VALUE = "explore.html";
-	 * 
-	 * public static final String COMMUNITY_PATH = "communityPath"; public static
-	 * final String COMMUNITY_PATH_VALUE = "skills.html";
-	 * 
-	 * public static final String COMMUNITY_BOARDS_PATH = "communityBoardsPath";
-	 * public static final String COMMUNITY_BOARDS_PATH_VALUE = "boards.html";
-	 * 
-	 * public static final String COMMUNITY_BOARD_DETAILS_PATH =
-	 * "communityBoardDetailsPath"; public static final String
-	 * COMMUNITY_BOARD_DETAILS_PATH_VALUE = "board.html";
-	 * 
-	 * public static final String INSTANCE_PATH = "instancePath"; public static
-	 * final String INSTANCE_PATH_VALUE = "instance.html";
-	 * 
-	 * public static final String PROFILE_PATH = "profilePath"; public static final
-	 * String PROFILE_PATH_VALUE = "profile.html";
-	 * 
-	 * public static final String HOME_PATH = "homePath"; public static final String
-	 * HOME_PATH_VALUE = "home.html";
-	 * 
-	 * public static final String LEARNING_PATH = "learningPath"; public static
-	 * final String LEARNING_PATH_VALUE = "learning.html";
-	 * 
-	 * public static final String SUPPORT_PATH = "supportPath"; public static final
-	 * String SUPPORT_PATH_VALUE = "support.html";
-	 */
 }
