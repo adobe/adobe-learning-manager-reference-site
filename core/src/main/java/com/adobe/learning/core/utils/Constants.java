@@ -10,6 +10,8 @@ public class Constants {
 	public final class Config {
 		public static final String USAGE_TYPE_NAME = "usageType";
 		public static final String SITES_USAGE = "aem-sites";
+		public static final String ES_USAGE = "aem-es";
+		public static final String COMMERCE_USAGE = "aem-commerce";
 		public static final String SITES_AUTHOR_REFRESH_TOKEN_NAME = "authorRefreshToken";
 		public static final String ALM_BASE_URL = "almBaseURL";
 		public static final String CLIENT_ID = "clientId";
@@ -17,6 +19,10 @@ public class Constants {
 		public static final String PAGE_LOCALE = "pageLocale";
 		public static final String COMMERCE_ADMIN_REFRESH_TOKEN = "refreshToken";
 		public static final String COMMERCE_URL = "commerceURL";
+		public static final String SITE_MAP = "siteMap";
+		public static final String SITE_MAP_TRAINING_PATH = "sitemapTrainingPath";
+		public static final String ES_BASE_URL_NAME = "esBaseUrl";
+		public static final String COMMERCE_URL_NAME = "commerceURL";
 	}
 
 	public final class EmbeddableWidgetConfig {

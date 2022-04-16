@@ -153,7 +153,15 @@
                         checked="true"
                         name="./siteMap"
                         text="Create Site Map"
-                        value="siteMap"
+                        value="true"
+                        granite:rel="aem-commerce aem-es"
+                        cq:showOnCreate="{Boolean}true"/>
+                    <sitemapTrainingPath
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="SiteMap Training Page Path"
+                        fieldDescription="SiteMap Training Page Path"
+                        name="./sitemapTrainingPath"
                         granite:rel="aem-commerce aem-es"
                         cq:showOnCreate="{Boolean}true"/>
 
