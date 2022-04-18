@@ -1,11 +1,15 @@
 import { useCallback, useMemo, useState, useEffect } from 'react';
 import { useApolloClient, useMutation, useLazyQuery } from '@apollo/client';
 import { SIGN_IN, CREATE_CART } from './singIn.gql';
+import { useNavigate } from "react-router-dom";
+
 import storageInstance from "../../utils/storage";
 
 
 
 export const useAlmSignIn = (props) => {
+    let navigate = useNavigate();
+
     const [isSigningIn, setIsSigningIn] = useState(false);
     const [isLoggedIn, setIsloggedIn] = useState(() => {
         const token = storageInstance.getItem("TOKEN");
@@ -24,7 +28,11 @@ export const useAlmSignIn = (props) => {
             getCart();
         }
     }, [fetchCartId, isLoggedIn]);
-
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate(`/cart`);
+        }
+    }, [isLoggedIn, navigate]);
 
     const handleSubmit = useCallback(
         async ({ email, password }) => {

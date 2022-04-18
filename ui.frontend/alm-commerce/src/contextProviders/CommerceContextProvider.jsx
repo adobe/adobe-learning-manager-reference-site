@@ -5,6 +5,7 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+import { CartContextProvider } from "./CartContextProvider";
 
 import { getALMConfig } from "../utils/global";
 import storageInstance from "../utils/storage";
@@ -33,7 +34,7 @@ export const apolloClient = new ApolloClient({
 });
 
 
-const contextProviders = [BrowserRouter];
+const contextProviders = [BrowserRouter, CartContextProvider];
 
 export const CommerceContextProviders = (props) => {
   return (
