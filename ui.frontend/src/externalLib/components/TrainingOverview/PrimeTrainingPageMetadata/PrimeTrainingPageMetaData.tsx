@@ -131,6 +131,9 @@ const PrimeTrainingPageMetaData: React.FC<{
     showAuthorInfo === "true" &&
     training.authors?.length > 0 &&
     getALMObject().isPrimeUserLoggedIn();
+  var legacyAuthorNames = new Set(training.authorNames);
+    training.authors?.forEach(author=>{
+      legacyAuthorNames.delete(author.name);})  
   const showCompletionDeadline =
     showEnrollDeadline === "true" &&
     training.enrollment &&
@@ -350,6 +353,20 @@ const PrimeTrainingPageMetaData: React.FC<{
       {/* Author */}
       {showAuthors && (
         <div className={styles.authorContainer}>
+          {Array.from(legacyAuthorNames).map((legacyAuthorName) => {
+            return (
+              <>
+                <div className={styles.authors}>
+                  <span className={styles.cpauthorcircle}>
+                  </span>
+                  <div className={styles.innerContainer}>
+                    <label className={styles.label}>Author</label>
+                    <p className={styles.authorName}>{legacyAuthorName}</p>
+                  </div>
+                </div>
+              </>
+            );
+          })}
           {training.authors?.map((author) => {
             return (
               <div key={author.id}>
@@ -423,10 +440,10 @@ const PrimeTrainingPageMetaData: React.FC<{
                     rel="noreferrer"
                     key={item.id}
                   >
-                    {item.name}
+                    <span className={styles.resourceName}>{item.name}</span>
                   </a>
                 ) : (
-                  <span>{item.name}</span>
+                  <span className={styles.resourceName}>{item.name}</span>
                 );
               })}
             </div>
