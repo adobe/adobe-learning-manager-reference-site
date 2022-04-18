@@ -16,7 +16,7 @@ import {
 } from "../../../models/PrimeModels";
 import { modifyTime } from "../../../utils/dateTime";
 import { getALMConfig, getALMObject } from "../../../utils/global";
-import { LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
+import { LEARNER_BADGE_SVG,DEFAULT_USER_SVG } from "../../../utils/inline_svg";
 import { GetTranslation } from "../../../utils/translationService";
 import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJobAids";
 import styles from "./PrimeTrainingPageMetadata.module.css";
@@ -355,16 +355,15 @@ const PrimeTrainingPageMetaData: React.FC<{
         <div className={styles.authorContainer}>
           {Array.from(legacyAuthorNames).map((legacyAuthorName) => {
             return (
-              <>
                 <div className={styles.authors}>
                   <span className={styles.cpauthorcircle}>
+                  {DEFAULT_USER_SVG()}
                   </span>
                   <div className={styles.innerContainer}>
                     <label className={styles.label}>Author</label>
                     <p className={styles.authorName}>{legacyAuthorName}</p>
                   </div>
                 </div>
-              </>
             );
           })}
           {training.authors?.map((author) => {
