@@ -6,14 +6,17 @@
   const USAGE_OPTIONS = ["aem-sites", "aem-es", "aem-commerce"];
   const USAGE_TYPE_INPUT_VALUE_SEL = "coral-select[name='./usageType'] coral-select-item[selected='']";
   const USAGE_TYPE_SELECT_ID_SEL = "#alm-usage-type-select";
-  const CONFIG_FORM_SAVE_SEL = ".granite-form-saveactivator";
+  const NOMENCLATURE_BUTTON_SEL = "#fetch-nomenclature-button";
   const CONFIG_FORM_DONE_ACT_SEL = "#shell-propertiespage-doneactivator";
   const CONFIG_FORM_SAVE_ACT_SEL = "#shell-propertiespage-saveactivator";
   const DX_SKU_VALIDATION_ERROR_ID = "alm-dx-sku-validator";
+
   const SKU_URL = "{almURL}/primeapi/v2/account/{accountId}/connectorConfig?connectorName=aemReferenceSites";
+  const NOMENCLAURE_URL = "{almURL}/primeapi/v2/account";
 
   let skuValidationSuccess = false;
   let validationInProgress = false;
+  let nomenclatureFetchingInProgress = false;
 
 
   function hideUnselectedUsageOptions()
@@ -76,17 +79,54 @@
         }
         else
         {
-          showErrorPopup("Error in SKU Validation.");
+          showPopup("Error in SKU Validation.", "error", "Error");
         }
       }
     })
     .fail(function (jqxhr, settings, exception) {
       validationInProgress = false;
-      showErrorPopup("Error in SKU Validation.");
+      showPopup("Error in SKU Validation.", "error", "Error");
     });
   }
 
-  function showErrorPopup(errorMsg) {
+  function fetchNomenclatureData()
+  {
+    if (nomenclatureFetchingInProgress)
+    {
+      return;
+    }
+    nomenclatureFetchingInProgress = true;
+    const almBaseURL = $("input[name='./almBaseURL']").val();
+    const refreshToken = $("input[name='./refreshToken']").val();
+    let nomenclatureURL = NOMENCLAURE_URL.replace("{almURL}", almBaseURL);
+
+    $.ajax({
+      type: "GET",
+      url: nomenclatureURL,
+      headers: {
+        "Authorization": "oauth " + refreshToken
+      },
+    })
+    .done(function (response, textStatus, jqXHR) {
+      if (response.data && response.data.attributes && response.data.attributes.accountTerminologies)
+      {
+        let accountTerminologies = response.data.attributes.accountTerminologies;
+        $("input[name='./nomenclatureData']").val(JSON.stringify(accountTerminologies));
+        showPopup("Nomenclature Data fetched successfully.", "success", "Success");
+      }
+      else
+      {
+        showPopup("Error in  fetching nomenclature data.", "error", "Error");
+      }
+      nomenclatureFetchingInProgress = false;
+    })
+    .fail(function (jqxhr, settings, exception) {
+      showPopup("Error in  fetching nomenclature data.", "error", "Error");
+      nomenclatureFetchingInProgress = false;
+    });
+  }
+
+  function showPopup(errorMsg, variant, header) {
     let dialogElem = $("#" + DX_SKU_VALIDATION_ERROR_ID);
     let dialogModal;
 
@@ -97,10 +137,10 @@
 
     dialogModal = new Coral.Dialog().set({
       id: DX_SKU_VALIDATION_ERROR_ID,
-      variant: "error",
+      variant: variant,
       closable: "on",
       header: {
-        innerHTML: "Error"
+        innerHTML: header
       },
       content: {
         innerHTML: errorMsg
@@ -128,6 +168,7 @@
 
     $(CONFIG_FORM_DONE_ACT_SEL).on("click", (e) => handleSubmit(e));
     $(CONFIG_FORM_SAVE_ACT_SEL).on("click", (e) => handleSubmit(e));
+    $(NOMENCLATURE_BUTTON_SEL).on("click", () => fetchNomenclatureData());
   });
 
 

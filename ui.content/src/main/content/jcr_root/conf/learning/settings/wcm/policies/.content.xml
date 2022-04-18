@@ -716,7 +716,7 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="LRNG Landing Page"
                     sling:resourceType="wcm/core/components/policy/policy"
-                    clientlibs="[learning.ui,learning.site]"
+                    clientlibs="[learning.ui,learning.site, commerce.ui]"
                     clientlibsJsHead="learning.dependencies">
                     <jcr:content
                         cq:lastReplicated="{Date}2019-10-22T13:34:50.533-07:00"
@@ -731,7 +731,7 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="LRNG Article"
                     sling:resourceType="wcm/core/components/policy/policy"
-                    clientlibs="[learning.ui,learning.site]">
+                    clientlibs="[learning.ui,learning.site, commerce.ui]">
                     <jcr:content
                         cq:lastReplicated="{Date}2019-10-22T13:34:50.533-07:00"
                         cq:lastReplicatedBy="admin"
@@ -745,7 +745,7 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="LRNG Experience Fragment"
                     sling:resourceType="wcm/core/components/policy/policy"
-                    clientlibs="[learning.ui,learning.site]">
+                    clientlibs="[learning.ui,learning.site, commerce.ui]">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_654239029509196>
                 <policy_1570140199406
@@ -754,7 +754,7 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Learning Site Theme"
                     sling:resourceType="wcm/core/components/policy/policy"
-                    clientlibs="[learning.ui,learning.site]"
+                    clientlibs="[learning.ui,learning.site, commerce.ui]"
                     clientlibsJsHead="learning.dependencies">
                     <jcr:content
                         cq:lastReplicated="{Date}2019-10-22T13:34:50.533-07:00"
@@ -768,7 +768,7 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Generic Page"
                     sling:resourceType="wcm/core/components/policy/policy"
-                    clientlibs="[learning.dependencies,learning.site, learning.ui]"
+                    clientlibs="[learning.dependencies,learning.site, learning.ui, commerce.ui]"
                     clientlibsJsHead="learning.dependencies">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy>
@@ -780,7 +780,7 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Experience Fragment Web"
                     sling:resourceType="wcm/core/components/policy/policy"
-                    clientlibs="[learning.dependencies,learning.site, learning.ui]"
+                    clientlibs="[learning.dependencies,learning.site, learning.ui, commerce.ui]"
                     clientlibsJsHead="learning.dependencies">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_1572461714642>
