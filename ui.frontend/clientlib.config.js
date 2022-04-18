@@ -14,23 +14,23 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-const path = require('path');
-const getEntrypoints = require('./utils/entrypoints');
+const path = require("path");
+const getEntrypoints = require("./utils/entrypoints");
 
-const BUILD_DIR = path.join(__dirname, 'build');
+const BUILD_DIR = path.join(__dirname, "build");
 const CLIENTLIB_DIR = path.join(
   __dirname,
-  '..',
-  'ui.apps',
-  'src',
-  'main',
-  'content',
-  'jcr_root',
-  'apps',
-  'learning',
-  'clientlibs'
+  "..",
+  "ui.apps",
+  "src",
+  "main",
+  "content",
+  "jcr_root",
+  "apps",
+  "learning",
+  "clientlibs"
 );
-const ASSET_MANIFEST_PATH = path.join(BUILD_DIR, 'asset-manifest.json');
+const ASSET_MANIFEST_PATH = path.join(BUILD_DIR, "asset-manifest.json");
 
 const entrypoints = getEntrypoints(ASSET_MANIFEST_PATH);
 console.log("Entry points are:: " + entrypoints);
@@ -39,30 +39,30 @@ module.exports = {
   context: BUILD_DIR,
   clientLibRoot: CLIENTLIB_DIR,
   libs: {
-    name: 'clientlib-react',
+    name: "clientlib-alm",
     allowProxy: true,
-    categories: ['learning.ui'],
-    serializationFormat: 'xml',
-    cssProcessor: ['default:none', 'min:none'],
-    jsProcessor: ['default:none', 'min:none'],
+    categories: ["learning.ui"],
+    serializationFormat: "xml",
+    cssProcessor: ["default:none", "min:none"],
+    jsProcessor: ["default:none", "min:none"],
     assets: {
       js: {
-        cwd: '.',
-        files: ['**/*.js'],
-        flatten: false
+        cwd: ".",
+        files: ["**/*.js"],
+        flatten: false,
       },
       css: {
-          cwd: '.',
-          files: ['**/*.css'],
-          flatten: false
+        cwd: ".",
+        files: ["**/*.css"],
+        flatten: false,
       },
       // Copy all other files into the `resources` ClientLib directory
       resources: {
-        cwd: '.',
-        files: ['**/*.*'],
+        cwd: ".",
+        files: ["**/*.*"],
         flatten: false,
-        ignore: entrypoints
-      }
-    }
-  }
+        ignore: entrypoints,
+      },
+    },
+  },
 };

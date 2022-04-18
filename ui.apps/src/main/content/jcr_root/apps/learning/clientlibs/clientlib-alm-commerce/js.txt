@@ -1,0 +1,3 @@
+#base=js
+
+static/js/main.32dc4b4f.js

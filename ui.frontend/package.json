@@ -84,7 +84,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js && clientlib",
-    "sync": "aemsync -d -w ../ui.apps/src/main/content"
+    "sync": "aemsync -d -w ../ui.apps/src/main/content",
+    "postinstall": "(cd alm-commerce && npm install)"
   },
   "eslintConfig": {
     "extends": [
