@@ -2,7 +2,7 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2022-03-29T21:59:12.468+05:30"
+        cq:lastModified="{Date}2022-04-18T10:23:14.053+05:30"
         cq:lastModifiedBy="admin"
         cq:template="/conf/learning/settings/wcm/templates/page-content"
         jcr:primaryType="cq:PageContent"
@@ -45,79 +45,62 @@
                     <skillscontainer
                         jcr:created="{Date}2022-03-07T17:05:44.833+05:30"
                         jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2022-03-29T21:58:07.669+05:30"
+                        jcr:lastModified="{Date}2022-04-18T10:23:14.052+05:30"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="learning/components/skillscontainer"
-                        productRows="3">
+                        productRows="4">
                         <product
                             jcr:created="{Date}2022-03-13T14:56:49.919+05:30"
                             jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2022-03-29T21:57:57.269+05:30"
+                            jcr:lastModified="{Date}2022-04-18T10:21:16.635+05:30"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            jcr:title="Product Intuit"
+                            jcr:title="TaxSaver"
                             sling:resourceType="learning/components/product"
                             displayPopupTitle="false"
-                            fileName="ele.jpg">
-                            <file/>
-                        </product>
+                            fileReference="/content/dam/learning/site/community/TaxSaver.png"/>
                         <product_364117892
                             jcr:created="{Date}2022-03-13T14:56:55.911+05:30"
                             jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2022-03-29T21:58:21.120+05:30"
+                            jcr:lastModified="{Date}2022-04-18T10:21:41.968+05:30"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            jcr:title="Fidget"
+                            jcr:title="Velocity"
                             sling:resourceType="learning/components/product"
                             displayPopupTitle="false"
-                            fileName="Fidget.png">
-                            <file/>
-                        </product_364117892>
+                            fileReference="/content/dam/learning/site/community/Velocity.png"/>
                         <product_642957428
                             jcr:created="{Date}2022-03-13T14:57:02.714+05:30"
                             jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2022-03-29T21:59:02.501+05:30"
+                            jcr:lastModified="{Date}2022-04-18T10:22:01.700+05:30"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            jcr:title="Product Lamp"
+                            jcr:title="Books"
                             sling:resourceType="learning/components/product"
                             displayPopupTitle="false"
-                            fileName="DevConsole.JPG">
-                            <file/>
-                        </product_642957428>
+                            fileReference="/content/dam/learning/site/community/Books.png"/>
                         <product_820733814
                             jcr:created="{Date}2022-03-13T14:57:07.919+05:30"
                             jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2022-03-29T21:59:12.394+05:30"
+                            jcr:lastModified="{Date}2022-04-18T10:22:27.202+05:30"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            jcr:title="Turbo Tax"
+                            jcr:title="TaxDream"
                             sling:resourceType="learning/components/product"
                             displayPopupTitle="false"
-                            fileName="Badge_Test_2.png">
-                            <file/>
-                        </product_820733814>
+                            fileReference="/content/dam/learning/site/community/TaxDream.png"/>
                         <product_78167179
                             jcr:created="{Date}2022-03-13T14:58:42.952+05:30"
                             jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2022-03-13T14:58:57.765+05:30"
+                            jcr:lastModified="{Date}2022-04-18T10:22:51.763+05:30"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            jcr:title="Skills 1"
+                            jcr:title="CreditDesign"
                             sling:resourceType="learning/components/product"
                             displayPopupTitle="false"
-                            fileName="1498472422285.jpg"/>
-                        <product_250050267
-                            jcr:created="{Date}2022-03-13T14:59:09.319+05:30"
-                            jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2022-03-13T14:59:21.385+05:30"
-                            jcr:lastModifiedBy="admin"
-                            jcr:primaryType="nt:unstructured"
-                            jcr:title="FinEase"
-                            sling:resourceType="learning/components/product"
-                            displayPopupTitle="false"
-                            fileName="lrng-logo.png"/>
+                            fileName="1498472422285.jpg"
+                            fileReference="/content/dam/learning/site/community/CreditDesign.png"/>
                     </skillscontainer>
                 </container>
             </container>
