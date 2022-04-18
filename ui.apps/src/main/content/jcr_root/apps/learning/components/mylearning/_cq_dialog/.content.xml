@@ -45,9 +45,9 @@
 
                                     </column>
                                     <clientlibs
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/includeclientlibs"
-                                                categories="apps.alm.components.mylearning"/>
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/includeclientlibs"
+                                        categories="apps.alm.components.mylearning"/>
                                                 
                                 </items>
                             </columns>
