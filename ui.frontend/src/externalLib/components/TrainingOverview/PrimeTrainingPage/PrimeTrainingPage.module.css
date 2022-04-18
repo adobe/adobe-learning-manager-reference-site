@@ -3,6 +3,7 @@
 .left {
   width: calc(100% - 256px);
   padding-right: 80px;
+  padding-bottom: 30px;
 }
 
 .right {

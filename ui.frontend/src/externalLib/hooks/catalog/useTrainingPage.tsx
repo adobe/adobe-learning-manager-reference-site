@@ -102,6 +102,7 @@ export const useTrainingPage = (
           setRefreshTraining((prevState) => !prevState);
         }
       } catch (error) {
+        throw error;
         //TODO : handle error
       }
     },

@@ -125,6 +125,12 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+.resourceName {
+  display: flex;
+  flex-direction: column;
+}
+
 .badge svg {
   transform: scale(1.5);
 }
@@ -161,6 +167,18 @@
   color: var(--prime-color-nc3);
   font-size: var(--prime-font-size-16);
   margin: 5px 0;
+}
+
+.cpauthorcircle {
+  text-align: center;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+  border-radius: 200px;
+  display: inline-block;
+  height: 36px;
+  width: 36px;
+  vertical-align: top;
 }
 
 @media screen and (max-width: 414px) {
