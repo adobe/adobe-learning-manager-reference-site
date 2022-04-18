@@ -74,78 +74,51 @@
                                     <item0
                                         jcr:primaryType="nt:unstructured"
                                         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                                        fileReference="/content/dam/we-retail/en/activities/biking/enduro-trail-jump.jpg"
+                                        fileReference="/content/dam/learning/site/explore/Accountant.png"
                                         headline="Secur Financial For Accountants"
-                                        queryParams="title11"
-                                        title="title11"/>
+                                        catalogs="catalog1,catalog2"
+                                        tags="tags1"
+                                        products="skill1,skill2"/>
                                     <item1
                                         jcr:primaryType="nt:unstructured"
-                                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                                        fileReference="/content/dam/we-retail/en/activities/biking/forest-trail.jpg"
-                                        headline="Secur Financial For Admins"
-                                        queryParams="a1"
-                                        title="a1"/>
+                                        description="Utilize state of the art administrative management tools providing unique solutions for your information management needs."
+                                        fileReference="/content/dam/learning/site/explore/Admin.png"
+                                        headline="SecurFinancial for Admins"
+                                        catalogs="catalog1"
+                                        tags="tags1"
+                                        products="skill1,skill2"/>
                                     <item2
                                         jcr:primaryType="nt:unstructured"
-                                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                                        fileReference="/content/dam/we-retail/en/activities/biking/cycling_1.jpg"
-                                        headline="Secur Financial For Auditors"
-                                        queryParams="quer1=10&amp;t=2"
-                                        title="title1"/>
+                                        description="Reap the benefits of award-winning auditing tools providing robust solutions for your compliance assessment and recordkeeping needs."
+                                        fileReference="/content/dam/learning/site/explore/Auditor.png"
+                                        headline="SecurFinancial for Auditors"
+                                        catalogs="catalog1"
+                                        tags="tags1"
+                                        products="skill1,skill2"/>
                                     <item3
                                         jcr:primaryType="nt:unstructured"
-                                        description="title11"
-                                        fileReference="/content/dam/we-retail/en/activities/biking/enduro-trail-jump.jpg"
-                                        queryParams="title11"
-                                        title="title11"/>
+                                        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                                        fileReference="/content/dam/learning/site/explore/Accountant.png"
+                                        headline="Secur Financial For Accountants"
+                                        catalogs="catalog1,catalog2"
+                                        tags="tags1"
+                                        products="skill1,skill2"/>
                                     <item4
                                         jcr:primaryType="nt:unstructured"
-                                        description="title11"
-                                        fileReference="/content/dam/we-retail/en/activities/biking/enduro-trail-jump.jpg"
-                                        queryParams="title11"
-                                        title="title11"/>
-                                    <Copy_x0020_of_x0020_item1
+                                        description="Utilize state of the art administrative management tools providing unique solutions for your information management needs."
+                                        fileReference="/content/dam/learning/site/explore/Admin.png"
+                                        headline="SecurFinancial for Admins"
+                                        catalogs="catalog1"
+                                        tags="tags1"
+                                        products="skill1,skill2"/>
+                                    <item5
                                         jcr:primaryType="nt:unstructured"
-                                        description="a1"
-                                        fileReference="/content/dam/we-retail/en/activities/biking/forest-trail.jpg"
-                                        queryParams="a1"
-                                        title="a1"/>
-                                    <Copy_x0020_of_x0020_Copy_x0020_of_x0020_item1
-                                        jcr:primaryType="nt:unstructured"
-                                        description="a1"
-                                        fileReference="/content/dam/we-retail/en/activities/biking/forest-trail.jpg"
-                                        queryParams="a1"
-                                        title="a1"/>
-                                    <Copy_x0020_of_x0020_item2
-                                        jcr:primaryType="nt:unstructured"
-                                        description="desc1"
-                                        fileReference="/content/dam/we-retail/en/activities/biking/cycling_1.jpg"
-                                        queryParams="quer1=10&amp;t=2"
-                                        title="title1"/>
-                                    <Copy_x0020_of_x0020_Copy_x0020_of_x0020_item2
-                                        jcr:primaryType="nt:unstructured"
-                                        description="desc1"
-                                        fileReference="/content/dam/we-retail/en/activities/biking/cycling_1.jpg"
-                                        queryParams="quer1=10&amp;t=2"
-                                        title="title1"/>
-                                    <Copy_x0020_of_x0020_Copy_x0020_of_x0020_Copy_x0020_of_x0020_item2
-                                        jcr:primaryType="nt:unstructured"
-                                        description="desc1"
-                                        fileReference="/content/dam/we-retail/en/activities/biking/cycling_1.jpg"
-                                        queryParams="quer1=10&amp;t=2"
-                                        title="title1"/>
-                                    <Copy_x0020_of_x0020_item3
-                                        jcr:primaryType="nt:unstructured"
-                                        description="title11"
-                                        fileReference="/content/dam/we-retail/en/activities/biking/enduro-trail-jump.jpg"
-                                        queryParams="title11"
-                                        title="title11"/>
-                                    <Copy_x0020_of_x0020_item4
-                                        jcr:primaryType="nt:unstructured"
-                                        description="title11"
-                                        fileReference="/content/dam/we-retail/en/activities/biking/enduro-trail-jump.jpg"
-                                        queryParams="title11"
-                                        title="title11"/>
+                                        description="Reap the benefits of award-winning auditing tools providing robust solutions for your compliance assessment and recordkeeping needs."
+                                        fileReference="/content/dam/learning/site/explore/Auditor.png"
+                                        headline="SecurFinancial for Auditors"
+                                        catalogs="catalog1"
+                                        tags="tags1"
+                                        products="skill1,skill2"/>        
                                 </categories>
                             </categories_151943519>
                         </container>
