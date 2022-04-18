@@ -22,7 +22,8 @@
                     jcr:lastModified="{Date}2022-03-07T17:00:09.768+05:30"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="learning/components/header"/>
+                    sling:resourceType="learning/components/header"
+                    fileReference="/content/dam/learning/site/lrng-logo.png"/>
             </container>
         </root>
     </jcr:content>
