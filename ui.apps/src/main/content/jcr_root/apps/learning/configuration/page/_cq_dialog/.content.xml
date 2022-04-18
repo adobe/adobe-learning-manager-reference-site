@@ -85,6 +85,7 @@
                         fieldLabel="Author Refresh Token"
                         fieldDescription="Author Refresh Token"
                         name="./authorRefreshToken"
+                        granite:rel="aem-sites"
                         cq:showOnCreate="{Boolean}true"/>
 
                     <almCdnBaseUrl 
@@ -126,7 +127,7 @@
                         fieldLabel="Admin Refresh Token"
                         fieldDescription="Admin Refresh Token"
                         name="./refreshToken"
-                        granite:rel="aem-commerce"
+                        granite:rel="aem-commerce aem-es"
                         cq:showOnCreate="{Boolean}true"/>
 
                     <esBase 
@@ -164,6 +165,24 @@
                         name="./sitemapTrainingPath"
                         granite:rel="aem-commerce aem-es"
                         cq:showOnCreate="{Boolean}true"/>
+
+                    <nomenclatureData
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/foundation/form/hidden"
+                        name="./nomenclatureData"
+                        value=""
+                        cq:showOnCreate="{Boolean}true"/>
+
+                    <nomenclature
+                        granite:id="fetch-nomenclature-button"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/button"
+                        text="Fetch Nomenclature"
+                        granite:rel="aem-commerce aem-es"
+                        variant="primary"/>
+
+
+
 
 
                     <embWidgetSection

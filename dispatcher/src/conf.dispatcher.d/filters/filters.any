@@ -14,3 +14,6 @@ $include "./default_filters.any"
 
 # Allow Access Token servlet
 /0104 { /type "allow" /method "POST" /extension "html" /selectors "cpAccessToken" /path "/cpoauth"}
+
+# Allow Commerce Access Token servlet
+/0105 { /type "allow" /method "GET" /extension "html" /selectors "commerceToken" /path "/cpoauth"}
