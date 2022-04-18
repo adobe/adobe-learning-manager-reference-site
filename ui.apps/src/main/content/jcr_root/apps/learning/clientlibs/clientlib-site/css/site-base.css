@@ -714,6 +714,10 @@
     padding: 0;
   }
 }
+
+div#root {
+  display: none;
+}
 /* CSS for FOOTER */
 /* ############################################ */
 
