@@ -23,16 +23,17 @@ export const useAlmSignIn = (props) => {
         const getCart = async () => {
             const cartResponse = await fetchCartId();
             storageInstance.setItem("CART_ID", cartResponse?.data?.customerCart.id, 3600);
+            navigate(`/cart`);
         }
         if (isLoggedIn && !storageInstance.getItem("CART_ID")) {
             getCart();
         }
-    }, [fetchCartId, isLoggedIn]);
-    useEffect(() => {
-        if (isLoggedIn) {
-            navigate(`/cart`);
-        }
-    }, [isLoggedIn, navigate]);
+    }, [fetchCartId, isLoggedIn, navigate]);
+    // useEffect(() => {
+    //     if (isLoggedIn) {
+    //         ;
+    //     }
+    // }, [isLoggedIn, navigate]);
 
     const handleSubmit = useCallback(
         async ({ email, password }) => {

@@ -1,24 +1,25 @@
 import React, { useEffect } from "react";
-import { useCartPage } from "../../hooks/CartPage/useCartPage";
 import ProductList from "./productList";
 import { useNavigate } from "react-router-dom";
-import { useCartContext } from "../../contextProviders/CartContextProvider";
+import { useCartPage } from "../../hooks/CartPage/useCartPage"
 
 const CartPage = (props) => {
   let navigate = useNavigate();
   const { cartItems,
     hasItems,
     isCartUpdating,
-    shouldShowLoadingIndicator, totalQuantity, prices = {} } = useCartContext();
+    shouldShowLoadingIndicator, totalQuantity, prices = {} } = useCartPage();
 
   const totalPrice = prices["grand_total"]?.value || 0;
 
+
   const proceedToCheckout = () => {
-    navigate(`/checkout`);
+    navigate(`../checkout`);
   }
+  console.log("Hi")
   return (
     <div>
-      <div>hasItems : {hasItems}</div>
+      <div>CArt page , hasItems : {hasItems ? "Y" : "N"}</div>
       <div>isCartUpdating : {isCartUpdating}</div>
       <div>shouldShowLoadingIndicator : {shouldShowLoadingIndicator}</div>
       <ProductList cartItems={cartItems} />

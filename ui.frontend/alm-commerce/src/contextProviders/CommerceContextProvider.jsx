@@ -34,7 +34,7 @@ export const apolloClient = new ApolloClient({
 });
 
 
-const contextProviders = [BrowserRouter, CartContextProvider];
+const contextProviders = [BrowserRouter];
 
 export const CommerceContextProviders = (props) => {
   return (

@@ -1,11 +1,10 @@
-import { createContext, useEffect, useContext, useState, useMemo } from "react";
+import { createContext, useContext, useMemo } from "react";
 
 import { useCartPage } from "../hooks/CartPage/useCartPage";
 
 const CartContext = createContext(undefined);
 const Provider = (props) => {
     const { children } = props;
-    // const [contextValue, setContextValue] = useState({});
     const { cartItems,
         hasItems,
         isCartUpdating,
