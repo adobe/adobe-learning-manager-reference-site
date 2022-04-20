@@ -9,9 +9,9 @@ import {
   SET_PAYMENT_MODE,
 } from "./checkout.gql";
 
-const cartId = storageInstance.getItem("CART_ID");
 export const useCheckoutPage = (props) => {
   let navigate = useNavigate();
+  const [cartId] = useState(() => storageInstance.getItem("CART_ID"));
 
   const [isLoggedIn] = useState(() => {
     const token = storageInstance.getItem("TOKEN");
@@ -46,11 +46,8 @@ export const useCheckoutPage = (props) => {
     if (isLoggedIn && cartId) {
       getPaymentModes();
     }
-  }, [fetchPaymentModes, isLoggedIn]);
+  }, [cartId, fetchPaymentModes, isLoggedIn]);
 
-  const error = useMemo(() => {
-    return { getPaymentError: getPaymentError?.message };
-  }, [getPaymentError]);
 
   const createOrder = useCallback(async ({ paymentMode } = {}) => {
     try {
@@ -76,7 +73,14 @@ export const useCheckoutPage = (props) => {
       console.log(e);
       //TODO : handle error
     }
-  }, []);
+  }, [cartId, processOrder, setBillingAddress, setPaymentMode]);
+
+  const error = useMemo(() => {
+    return {
+      getPaymentError: getPaymentError?.message,
+      orderError: orderError?.message
+    };
+  }, [getPaymentError?.message, orderError?.message]);
 
   return {
     paymentModes,

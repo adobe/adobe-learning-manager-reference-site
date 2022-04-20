@@ -29,11 +29,6 @@ export const useAlmSignIn = (props) => {
             getCart();
         }
     }, [fetchCartId, isLoggedIn, navigate]);
-    // useEffect(() => {
-    //     if (isLoggedIn) {
-    //         ;
-    //     }
-    // }, [isLoggedIn, navigate]);
 
     const handleSubmit = useCallback(
         async ({ email, password }) => {

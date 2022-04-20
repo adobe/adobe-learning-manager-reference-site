@@ -1,41 +1,40 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useAlmSignIn } from "../../hooks/SignIn/useSignIn";
+import styles from "./signIn.module.css";
+import { Button, lightTheme, Provider, Form, TextField } from '@adobe/react-spectrum';
 
 const SignIn = () => {
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
-
   const { handleSubmit, isLoggedIn, isSigningIn, error } = useAlmSignIn();
-
-  const click = (event) => {
+  const [state, setState] = useState({ email: "", password: "" })
+  const { email, password } = state;
+  const submitHandler = (event) => {
     handleSubmit({
-      email: emailRef.current.value,
-      password: passwordRef.current.value,
+      email,
+      password
     });
   };
+  const setValue = (key, value) => {
+    setState((prevState) => {
+      return { ...prevState, [key]: value }
+    })
+  }
 
-  useEffect(() => {
-    // if (isLoggedIn) {
-    //     alert("redirect to cart page");
-    // }
-  }, []);
+
   return (
-    <div>
-      <input ref={emailRef} defaultValue="pugalia@adobe.com" />
+    <Provider theme={lightTheme} colorScheme={"light"}>
+      <div className={styles.signInContainer}>
 
-      <input ref={passwordRef} type="password" defaultValue="Learner#12" />
+        <Form maxWidth="size-3600" aria-labelledby="label-3" UNSAFE_className={styles.form}>
+          <span className={styles.error}>{error["signInError"]}</span>
 
-      <button onClick={click}>SignIN</button>
-
-      <br />
-      <br />
-      <br />
-      <span>is isLoggedIn :{isLoggedIn ? "Yes" : "No"}</span>
-      <span>is isSigningIn :{isSigningIn ? "Yes" : "No"}</span>
-
-      <br />
-      <span>{error["signInError"]}</span>
-    </div>
+          <TextField label="Email" name="email" value={email}
+            onChange={(value) => setValue("email", value)} />
+          <TextField label="Password" value={password} type="password" onChange={(value) => setValue("password", value)} />
+          <br />
+          <Button variant="cta" type="button" onPress={submitHandler}>Login</Button>
+        </Form>
+      </div>
+    </Provider>
   );
 };
 
