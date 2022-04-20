@@ -1,4 +1,5 @@
 import { ProgressBar } from "@adobe/react-spectrum";
+import { url } from "inspector";
 import React from "react";
 import { PrimeLearningObjectInstanceEnrollment } from "../../../models/PrimeModels";
 import { GetTranslation } from "../../../utils/translationService";
@@ -12,10 +13,10 @@ const PrimeTrainingOverviewHeader: React.FC<{
   showProgressBar?: boolean;
   enrollment?: PrimeLearningObjectInstanceEnrollment;
 }> = (props) => {
-  const { format, title, color, showProgressBar = false, enrollment } = props;
+  const { format, title, color, bannerUrl, showProgressBar = false, enrollment } = props;
 
   return (
-    <div style={{ backgroundColor: color }} className={styles.header}>
+    <div style={bannerUrl ? { backgroundImage: `url(${bannerUrl})` } : { backgroundColor: color }} className={styles.header}>
       <div className={styles.headingContainer}>
         <div className={styles.format}>
           {GetTranslation(`prime.catalog.card.${format}`, true)}

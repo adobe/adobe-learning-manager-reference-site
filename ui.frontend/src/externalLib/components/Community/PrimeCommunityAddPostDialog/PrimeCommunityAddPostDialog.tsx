@@ -14,7 +14,6 @@ import store from "../../../../store/APIStore";
 import {
   SOCIAL_CANCEL_SVG,
   SOCIAL_QUESTION_SVG,
-  SOCIAL_TEXT_SVG,
   SOCIAL_UPLOAD_SVG,
   SOCIAL_POLL_SVG
 } from "../../../utils/inline_svg";
