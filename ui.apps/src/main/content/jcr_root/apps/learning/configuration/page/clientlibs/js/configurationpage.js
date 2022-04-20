@@ -9,6 +9,7 @@
   const NOMENCLATURE_BUTTON_SEL = "#fetch-nomenclature-button";
   const CONFIG_FORM_DONE_ACT_SEL = "#shell-propertiespage-doneactivator";
   const CONFIG_FORM_SAVE_ACT_SEL = "#shell-propertiespage-saveactivator";
+  const CONFIG_FORM_CREATE_SEL = ".foundation-wizard-control";
   const DX_SKU_VALIDATION_ERROR_ID = "alm-dx-sku-validator";
 
   const SKU_URL = "{almURL}/primeapi/v2/account/{accountId}/connectorConfig?connectorName=aemReferenceSites";
@@ -76,6 +77,7 @@
         {
           skuValidationSuccess = true;
           $(CONFIG_FORM_DONE_ACT_SEL).click();
+          $(CONFIG_FORM_CREATE_SEL).filter("button[type='submit']").click();
         }
         else
         {
@@ -166,8 +168,9 @@
       usageTypeSelectElem.on('change', hideUnselectedUsageOptions);
     });
 
-    $(CONFIG_FORM_DONE_ACT_SEL).on("click", (e) => handleSubmit(e));
-    $(CONFIG_FORM_SAVE_ACT_SEL).on("click", (e) => handleSubmit(e));
+    $(CONFIG_FORM_DONE_ACT_SEL).off("click", handleSubmit).on("click", handleSubmit);
+    $(CONFIG_FORM_SAVE_ACT_SEL).off("click", handleSubmit).on("click", handleSubmit);
+    $(CONFIG_FORM_CREATE_SEL).filter("button[type='submit']").off("click", handleSubmit).on("click", handleSubmit);
     $(NOMENCLATURE_BUTTON_SEL).on("click", () => fetchNomenclatureData());
   });
 

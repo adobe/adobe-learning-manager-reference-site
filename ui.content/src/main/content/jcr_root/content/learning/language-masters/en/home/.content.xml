@@ -2,7 +2,7 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2022-04-12T10:21:04.789+05:30"
+        cq:lastModified="{Date}2022-04-19T18:39:04.059+05:30"
         cq:lastModifiedBy="admin"
         cq:template="/conf/learning/settings/wcm/templates/page-content1"
         jcr:primaryType="cq:PageContent"
@@ -73,52 +73,52 @@
                                 <categories jcr:primaryType="nt:unstructured">
                                     <item0
                                         jcr:primaryType="nt:unstructured"
+                                        catalogs="catalog1,catalog2"
                                         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                                         fileReference="/content/dam/learning/site/explore/Accountant.png"
                                         headline="Secur Financial For Accountants"
-                                        catalogs="catalog1,catalog2"
-                                        tags="tags1"
-                                        products="skill1,skill2"/>
+                                        products="skill1,skill2"
+                                        tags="tags1"/>
                                     <item1
                                         jcr:primaryType="nt:unstructured"
+                                        catalogs="catalog1"
                                         description="Utilize state of the art administrative management tools providing unique solutions for your information management needs."
                                         fileReference="/content/dam/learning/site/explore/Admin.png"
                                         headline="SecurFinancial for Admins"
-                                        catalogs="catalog1"
-                                        tags="tags1"
-                                        products="skill1,skill2"/>
+                                        products="skill1,skill2"
+                                        tags="tags1"/>
                                     <item2
                                         jcr:primaryType="nt:unstructured"
+                                        catalogs="catalog1"
                                         description="Reap the benefits of award-winning auditing tools providing robust solutions for your compliance assessment and recordkeeping needs."
                                         fileReference="/content/dam/learning/site/explore/Auditor.png"
                                         headline="SecurFinancial for Auditors"
-                                        catalogs="catalog1"
-                                        tags="tags1"
-                                        products="skill1,skill2"/>
+                                        products="skill1,skill2"
+                                        tags="tags1"/>
                                     <item3
                                         jcr:primaryType="nt:unstructured"
+                                        catalogs="catalog1,catalog2"
                                         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                                         fileReference="/content/dam/learning/site/explore/Accountant.png"
                                         headline="Secur Financial For Accountants"
-                                        catalogs="catalog1,catalog2"
-                                        tags="tags1"
-                                        products="skill1,skill2"/>
+                                        products="skill1,skill2"
+                                        tags="tags1"/>
                                     <item4
                                         jcr:primaryType="nt:unstructured"
+                                        catalogs="catalog1"
                                         description="Utilize state of the art administrative management tools providing unique solutions for your information management needs."
                                         fileReference="/content/dam/learning/site/explore/Admin.png"
                                         headline="SecurFinancial for Admins"
-                                        catalogs="catalog1"
-                                        tags="tags1"
-                                        products="skill1,skill2"/>
+                                        products="skill1,skill2"
+                                        tags="tags1"/>
                                     <item5
                                         jcr:primaryType="nt:unstructured"
+                                        catalogs="catalog1"
                                         description="Reap the benefits of award-winning auditing tools providing robust solutions for your compliance assessment and recordkeeping needs."
                                         fileReference="/content/dam/learning/site/explore/Auditor.png"
                                         headline="SecurFinancial for Auditors"
-                                        catalogs="catalog1"
-                                        tags="tags1"
-                                        products="skill1,skill2"/>        
+                                        products="skill1,skill2"
+                                        tags="tags1"/>
                                 </categories>
                             </categories_151943519>
                         </container>
@@ -129,7 +129,7 @@
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="learning/components/text"
-                            text="&lt;p style=&quot;text-align: center;&quot;>News About Fin Ease&lt;/p>&#xa;"
+                            text="&lt;p style=&quot;text-align: center;&quot;>News on SecurFinancial&lt;/p>&#xa;"
                             textIsRich="true"/>
                         <carousel
                             jcr:created="{Date}2022-03-13T13:45:26.165+05:30"
@@ -173,10 +173,17 @@
                         <newssection
                             jcr:created="{Date}2022-03-13T14:04:27.590+05:30"
                             jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2022-03-13T14:04:27.590+05:30"
+                            jcr:lastModified="{Date}2022-04-19T18:39:04.055+05:30"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="learning/components/newssection"/>
+                            sling:resourceType="learning/components/newssection"
+                            section1Description="Videos, webinars, and educational programs to upgrade your skills and knowledge."
+                            section1Title="SecurFinancial Educational Resources"
+                            section2Description="Hundreds of courses covering every feature of SecurFinancial products ensure that you learn well and make the most of our products."
+                            section2Title="Collection of Courses, Certificates…"
+                            section3Description="Read on to know more about how we started and how the academy empowers millions to succeed in what they do every day."
+                            section3Link="https://www.adobe.com"
+                            section3Title="SecurFinancial Academy, Our Journey"/>
                         <catalog
                             jcr:created="{Date}2022-03-13T14:04:27.590+05:30"
                             jcr:createdBy="admin"
