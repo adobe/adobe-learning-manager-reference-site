@@ -14,19 +14,9 @@ const PrimeTrainingOverviewHeader: React.FC<{
   enrollment?: PrimeLearningObjectInstanceEnrollment;
 }> = (props) => {
   const { format, title, color, bannerUrl, showProgressBar = false, enrollment } = props;
-  
-  const bannerAndProgressbarWrapper = (condition: string) => {
-    if (condition) {
-      return {
-        backgroundImage: `url(${bannerUrl})`,
-      };
-    }
-    return {
-      backgroundColor: color,
-    };
-  };
+
   return (
-    <div style={bannerAndProgressbarWrapper(bannerUrl)} className={styles.header}>
+    <div style={bannerUrl ? { backgroundImage: `url(${bannerUrl})` } : { backgroundColor: color }} className={styles.header}>
       <div className={styles.headingContainer}>
         <div className={styles.format}>
           {GetTranslation(`prime.catalog.card.${format}`, true)}
