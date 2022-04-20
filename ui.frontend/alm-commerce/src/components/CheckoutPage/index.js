@@ -1,30 +1,59 @@
-import React from 'react';
-import ProductList from "../CheckoutPage";
-import { useCheckoutPage } from '../../hooks/CheckoutPage/useCheckout';
+import React, { useState } from "react";
 import { useCartPage } from "../../hooks/CartPage/useCartPage";
-
+import { useCheckoutPage } from "../../hooks/CheckoutPage/useCheckoutPage";
+import ProductList from "../CartPage/productList";
 
 export default function CheckoutPage() {
+  const {
+    cartItems,
+    hasItems,
+    isCartUpdating,
+    shouldShowLoadingIndicator,
+    totalQuantity,
+    prices = {},
+  } = useCartPage();
 
-    const {
-        // cartItems,
-        hasItems,
-        isCartUpdating,
-        shouldShowLoadingIndicator, totalQuantity,
-        // prices = {}
-    } = useCartPage();
+  const totalPrice = prices["grand_total"]?.value || 0;
 
-    // // const totalPrice = prices["grand_total"]?.value || 0;
+  const { error, paymentModes, createOrder, orderData } = useCheckoutPage();
 
-    const { error, paymentModes } = useCheckoutPage();
-    console.log(paymentModes)
-    return (
-        <div>
-            Checkout page {hasItems ? "Y" : "N"}
-            {/* <ProductList cartItems={cartItems} /> */}
-            <div>
-                {totalQuantity}
-            </div>
-        </div>
-    )
+  const paymentMethods = paymentModes?.cart?.available_payment_methods || [];
+  console.log("Checkout page");
+
+  const [selectedPaymentMode, setSelectedPaymentMode] = useState("checkmo");
+
+  const handlePaymentModeSelection = (paymentMode) => {
+    setSelectedPaymentMode(paymentMode);
+  };
+
+  const placeOrder = () => {
+    createOrder({ paymentMode: selectedPaymentMode });
+  };
+
+  console.log("orderData::" + orderData);
+  return (
+    <div>
+      <ProductList cartItems={cartItems} />
+      <div>{totalQuantity}</div>
+
+      {paymentMethods.map((paymentMethod) => {
+        return (
+          <div key={paymentMethod.code}>
+            <input
+              id={paymentMethod.code}
+              type="radio"
+              defaultChecked={selectedPaymentMode == paymentMethod.code}
+              name="paymentMethod"
+              value={paymentMethod.code}
+              onChange={() => handlePaymentModeSelection(paymentMethod.code)}
+            />
+            <label htmlFor={paymentMethod.code}>{paymentMethod.title}</label>
+            <br></br>
+
+            <button onClick={placeOrder}>Place Order</button>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
