@@ -134,6 +134,7 @@
   list-style-type: none;
   display: flex;
   width: 60%;
+  max-width: 500px;
   justify-content: space-between;
 }
 
