@@ -1,15 +1,17 @@
 # Include customer defined variables
 Include conf.d/variables/custom.vars
 
-SSLProxyEngine on
-<IfDefine HTTP_EGRESS_PROXY>
-        ProxyRemote ${ALM_COMMERCE_ENDPOINT} "http://${AEM_HTTP_PROXY_HOST}:${AEM_HTTP_PROXY_PORT}"
+<IfDefine ${ALM_COMMERCE_ENABLED}>
+    SSLProxyEngine on
+    <IfDefine HTTP_EGRESS_PROXY>
+            ProxyRemote ${ALM_COMMERCE_ENDPOINT} "http://${AEM_HTTP_PROXY_HOST}:${AEM_HTTP_PROXY_PORT}"
+    </IfDefine>
+    <LocationMatch "/alm/graphql">
+            ProxyPass        ${ALM_COMMERCE_ENDPOINT}
+            ProxyPassReverse ${ALM_COMMERCE_ENDPOINT}
+            RewriteEngine Off
+    </LocationMatch>
 </IfDefine>
-<LocationMatch "/alm/graphql">
-        ProxyPass        ${ALM_COMMERCE_ENDPOINT}
-        ProxyPassReverse ${ALM_COMMERCE_ENDPOINT}
-        RewriteEngine Off
-</LocationMatch>
 
 <VirtualHost *:80>
        ServerName      "publish"

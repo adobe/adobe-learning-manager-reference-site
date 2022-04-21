@@ -28,6 +28,7 @@
       {
         $("." + usageOption).closest("div.coral-Form-fieldwrapper").attr("hidden",'');
         $("coral-checkbox." + usageOption).attr("hidden",'');
+        $("button." + usageOption).attr("hidden",'');
       }
     });
 
@@ -36,6 +37,7 @@
       {
         $("." + usageOption).closest("div.coral-Form-fieldwrapper").removeAttr("hidden");
         $("coral-checkbox." + usageOption).removeAttr("hidden");
+        $("button." + usageOption).removeAttr("hidden");
       }
     });
   }

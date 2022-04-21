@@ -14,7 +14,7 @@ import {
 } from "react-router-dom";
 
 const httpLink = createHttpLink({
-  uri: `${getALMConfig().commerceURL}/graphql`,
+  uri: `${getALMConfig().graphqlProxyPath}`,
 });
 
 const authLink = setContext((_, { headers }) => {

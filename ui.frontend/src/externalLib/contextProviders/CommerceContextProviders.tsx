@@ -3,7 +3,7 @@ import React from "react";
 import { getALMConfig } from "../utils/global";
 
 export const apolloClient = new ApolloClient({
-  uri: `${getALMConfig().commerceURL}/graphql`,
+  uri: `${getALMConfig().graphqlProxyPath}`,
   cache: new InMemoryCache(),
 });
 
