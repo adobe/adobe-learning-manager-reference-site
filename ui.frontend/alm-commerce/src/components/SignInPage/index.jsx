@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAlmSignIn } from "../../hooks/SignIn/useSignIn";
 import styles from "./signIn.module.css";
 import { Button, lightTheme, Provider, Form, TextField } from '@adobe/react-spectrum';
 
 const SignIn = () => {
-  const { handleSubmit, isLoggedIn, isSigningIn, error } = useAlmSignIn();
+  const { handleSubmit, isSigningIn, error } = useAlmSignIn();
   const [state, setState] = useState({ email: "", password: "" })
   const { email, password } = state;
   const submitHandler = (event) => {
@@ -31,7 +31,8 @@ const SignIn = () => {
             onChange={(value) => setValue("email", value)} />
           <TextField label="Password" value={password} type="password" onChange={(value) => setValue("password", value)} />
           <br />
-          <Button variant="cta" type="button" onPress={submitHandler}>Login</Button>
+          <Button variant="cta" type="button" onPress={submitHandler} isDisabled={isSigningIn}>
+            Login</Button>
         </Form>
       </div>
     </Provider>

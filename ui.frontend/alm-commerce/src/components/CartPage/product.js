@@ -1,17 +1,11 @@
-import React from 'react'
+import React from 'react';
+import { formatPrice } from "../../utils/price";
+
 
 export default function Product(props) {
   const { name, almthumbnailurl, price_range } = props.training;
   let finalPrice = price_range?.maximum_price?.final_price;
-  let priceLabel = "";
-  if (finalPrice) {
-    const formatter = new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: finalPrice.currency,
-    });
-
-    priceLabel = formatter.format(finalPrice.value);
-  }
+  let priceLabel = formatPrice(finalPrice);
   return (
     <div>
       <img src={almthumbnailurl} alt="" />

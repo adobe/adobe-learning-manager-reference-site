@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import ProductList from "./productList";
 import { useNavigate } from "react-router-dom";
-import { useCartPage } from "../../hooks/CartPage/useCartPage"
+import { useCartPage } from "../../hooks/CartPage/useCartPage";
+import styles from "./cartPage.module.css";
+import OrderSummary from "./orderSummary";
+import { lightTheme, Provider } from '@adobe/react-spectrum';
+
 
 const CartPage = (props) => {
   let navigate = useNavigate();
@@ -10,7 +14,7 @@ const CartPage = (props) => {
     isCartUpdating,
     shouldShowLoadingIndicator, totalQuantity, prices = {} } = useCartPage();
 
-  const totalPrice = prices["grand_total"]?.value || 0;
+  const totalPrice = prices["grand_total"] || {};
 
 
   const proceedToCheckout = () => {
@@ -18,18 +22,23 @@ const CartPage = (props) => {
   }
   console.log("Hi")
   return (
-    <div>
-      <div>CArt page , hasItems : {hasItems ? "Y" : "N"}</div>
-      <div>isCartUpdating : {isCartUpdating}</div>
-      <div>shouldShowLoadingIndicator : {shouldShowLoadingIndicator}</div>
-      <ProductList cartItems={cartItems} />
-      <div>
-        {totalQuantity} , {totalPrice}
+    <Provider theme={lightTheme} colorScheme={"light"}>
+      <div className={styles.pageContainer}>
+        <h1>Shopping Cart</h1>
+        <div className={styles.cartPageContainer}>
+          <div className={styles.productList}>
+            <ProductList cartItems={cartItems} />
+          </div>
+          {
+            hasItems && <div className={styles.orderSummary}>
+              <OrderSummary buttonLabel={"Proceed to Checkout"} clickHandler={proceedToCheckout} totalPrice={totalPrice} />
+            </div>
+          }
+        </div>
+
+        {/* <button onClick={proceedToCheckout}>Procees to Checkout</button> */}
       </div>
-
-
-      <button onClick={proceedToCheckout}>Procees to Checkout</button>
-    </div>
+    </Provider>
   )
 };
 
