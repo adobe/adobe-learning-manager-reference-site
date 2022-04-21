@@ -133,12 +133,15 @@
 #alm-header .alm-header-cont .alm-header-navigation {
   list-style-type: none;
   display: flex;
+  width: 60%;
+  max-width: 500px;
+  justify-content: space-between;
 }
 
 #alm-header .alm-header-cont .alm-header-navigation a {
   text-decoration: none;
   color: #292929;
-  margin: 20px 60px 20px 0px;
+  margin: 20px 0px 20px 0px;
   display: inline-block;
   cursor: pointer;
 }

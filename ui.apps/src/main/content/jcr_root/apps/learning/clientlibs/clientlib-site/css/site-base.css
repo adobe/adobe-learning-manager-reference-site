@@ -129,6 +129,11 @@
   float: unset !important;
 }
 
+.experiencefragment.cmp-experiencefragment--footer
+{
+  margin-top: 50px;
+}
+
 .experiencefragment.cmp-experiencefragment--footer a {
   color: #ebebeb;
   font-size: 14px;
