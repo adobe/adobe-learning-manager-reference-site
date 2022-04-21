@@ -16,8 +16,8 @@ export default function ProductList({ cartItems = [] }) {
     return (
         <div>
             <div className={styles.headerSection}>
-                <span class={styles.headerLabel}>Item</span>
-                <span class={styles.headerLabel}>Price</span>
+                <span className={styles.headerLabel}>Item</span>
+                <span className={styles.headerLabel}>Price</span>
             </div>
             {productList}
         </div>

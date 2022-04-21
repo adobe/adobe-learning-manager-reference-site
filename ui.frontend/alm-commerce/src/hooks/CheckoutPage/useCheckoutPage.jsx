@@ -2,10 +2,10 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import storageInstance from "../../utils/storage";
+import { postMethod } from "../../utils/global"
 import {
   GET_PAYMENTS_MODE,
   PROCESS_ORDER,
-  SET_BILLING_ADDRESS,
   SET_PAYMENT_MODE,
 } from "./checkout.gql";
 
@@ -31,7 +31,7 @@ export const useCheckoutPage = (props) => {
     PROCESS_ORDER
   );
 
-  const [setBillingAddress] = useMutation(SET_BILLING_ADDRESS);
+  // const [setBillingAddress] = useMutation(SET_BILLING_ADDRESS);
 
   useEffect(() => {
     const getPaymentModes = async () => {
@@ -49,13 +49,17 @@ export const useCheckoutPage = (props) => {
   }, [cartId, fetchPaymentModes, isLoggedIn]);
 
 
+
+
   const createOrder = useCallback(async ({ paymentMode } = {}) => {
     try {
-      await setBillingAddress({
-        variables: {
-          cardId: cartId,
-        },
-      });
+      postMethod("/ecommerce/purchaseInitiated");
+
+      // await setBillingAddress({
+      //   variables: {
+      //     cardId: cartId,
+      //   },
+      // });
 
       await setPaymentMode({
         variables: {
@@ -69,11 +73,14 @@ export const useCheckoutPage = (props) => {
           cardId: cartId,
         },
       });
+      // move it to Order success page
+      //const response = await postMethod("/ecommerce/purchaseCompleted");
+
     } catch (e) {
       console.log(e);
       //TODO : handle error
     }
-  }, [cartId, processOrder, setBillingAddress, setPaymentMode]);
+  }, [cartId, processOrder, setPaymentMode]);
 
   const error = useMemo(() => {
     return {

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useCartPage } from "../../hooks/CartPage/useCartPage";
 import { useCheckoutPage } from "../../hooks/CheckoutPage/useCheckoutPage";
 import ProductList from "../CartPage/productList";
+import AddressBook from "../AddressBook/addressBook";
+import { lightTheme, Provider } from '@adobe/react-spectrum';
 
 export default function CheckoutPage() {
   const {
@@ -32,7 +34,9 @@ export default function CheckoutPage() {
 
   console.log("orderData::" + orderData);
   return (
-    <div>
+    <Provider theme={lightTheme} colorScheme={"light"}>
+
+      <AddressBook />
       <ProductList cartItems={cartItems} />
       <div>{totalQuantity}</div>
 
@@ -54,6 +58,6 @@ export default function CheckoutPage() {
           </div>
         );
       })}
-    </div>
+    </Provider>
   );
 }
