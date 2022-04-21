@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jcr:root xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
-    jcr:mixinTypes="[mix:referenceable]"
+    jcr:isCheckedOut="{Boolean}true"
+    jcr:mixinTypes="[mix:referenceable,mix:versionable]"
     jcr:primaryType="dam:Asset"
     jcr:uuid="4623f7ba-d7fe-48f9-8ecd-858265f3b195">
     <jcr:content
+        cq:name="Admin.png"
+        cq:parentPath="/content/dam/learning/site/explore"
         dam:assetState="processed"
-        jcr:lastModified="{Date}2022-04-18T10:00:40.350+05:30"
+        jcr:lastModified="{Date}2022-04-19T19:15:57.040+05:30"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
             dam:Bitsperpixel="{Long}32"
-            dam:extracted="{Date}2022-04-18T10:00:36.826+05:30"
+            dam:extracted="{Date}2022-04-19T19:15:55.321+05:30"
             dam:Fileformat="PNG"
             dam:MIMEtype="image/png"
             dam:Numberofimages="{Long}1"
@@ -20,9 +23,12 @@
             dam:Physicalwidthindpi="{Long}-1"
             dam:Physicalwidthininches="{Decimal}-1.0"
             dam:Progressive="no"
-            dam:sha1="b239f131418e96d6aeba3224f145897960aa721c"
+            dam:sha1="f4f8f6d9c5ee8ff425aa12eca36840ad8979ddec"
             dam:size="{Long}120939"
             dc:format="image/png"
+            dc:modified="{Date}2022-04-19T19:15:56.909+05:30"
+            jcr:lastModified="{Date}2022-04-19T19:15:56.908+05:30"
+            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"
             tiff:ImageLength="{Long}205"
