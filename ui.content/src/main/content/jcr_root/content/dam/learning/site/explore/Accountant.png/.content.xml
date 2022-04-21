@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jcr:root xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
-    jcr:mixinTypes="[mix:referenceable]"
+    jcr:isCheckedOut="{Boolean}true"
+    jcr:mixinTypes="[mix:referenceable,mix:versionable]"
     jcr:primaryType="dam:Asset"
     jcr:uuid="adf1dffd-ec24-4c26-9e94-f725dba7c515">
     <jcr:content
+        cq:name="Accountant.png"
+        cq:parentPath="/content/dam/learning/site/explore"
         dam:assetState="processed"
-        jcr:lastModified="{Date}2022-04-18T10:00:40.308+05:30"
+        jcr:lastModified="{Date}2022-04-19T19:15:56.833+05:30"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
             dam:Bitsperpixel="{Long}32"
-            dam:extracted="{Date}2022-04-18T10:00:36.826+05:30"
+            dam:extracted="{Date}2022-04-19T19:15:56.650+05:30"
             dam:Fileformat="PNG"
             dam:MIMEtype="image/png"
             dam:Numberofimages="{Long}1"
@@ -20,9 +23,12 @@
             dam:Physicalwidthindpi="{Long}-1"
             dam:Physicalwidthininches="{Decimal}-1.0"
             dam:Progressive="no"
-            dam:sha1="320b03dd55e241c4b747ecd5ecab779f3747f04e"
+            dam:sha1="bf9f84cff731e61beaecfe5b5cf32045728b400d"
             dam:size="{Long}116469"
             dc:format="image/png"
+            dc:modified="{Date}2022-04-19T19:15:56.536+05:30"
+            jcr:lastModified="{Date}2022-04-19T19:15:56.536+05:30"
+            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"
             tiff:ImageLength="{Long}205"

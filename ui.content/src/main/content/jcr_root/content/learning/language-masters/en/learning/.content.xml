@@ -143,7 +143,7 @@
                             sling:resourceType="learning/components/teaser"
                             actionsEnabled="false"
                             descriptionFromPage="false"
-                            fileReference="/content/dam/learning/site/running_2.jpeg"
+                            fileReference="/content/dam/learning/site/templates/Masterclass.png"
                             textIsRich="true"
                             titleFromPage="false">
                             <actions jcr:primaryType="nt:unstructured">
@@ -155,15 +155,15 @@
                         </teaser>
                         <item_1647150560093
                             cq:panelTitle="2"
-                            jcr:description="&lt;p>QuickBooks Masterclass Just Released&lt;br>&#xd;&#xa;&lt;a href=&quot;https://www.facebook.com&quot; target=&quot;_blank&quot;>Find Out More&lt;/a>&lt;/p>&#xd;&#xa;"
+                            jcr:description="&lt;p>Take this course to know it all about Quickbooks 3.0&lt;br>&#xd;&#xa;&lt;a href=&quot;https://www.adobe.com&quot; target=&quot;_blank&quot;>Find Out More&lt;/a>&lt;/p>&#xd;&#xa;"
                             jcr:lastModified="{Date}2022-03-19T08:42:23.780+05:30"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            jcr:title="Skills"
+                            jcr:title="Quickbooks Masterclass, just released!"
                             sling:resourceType="learning/components/teaser"
                             actionsEnabled="false"
                             descriptionFromPage="false"
-                            fileReference="/content/dam/learning/site/running.jpg"
+                            fileReference="/content/dam/learning/site/templates/Masterclass.png"
                             textIsRich="true"
                             titleFromPage="false">
                             <actions jcr:primaryType="nt:unstructured">
