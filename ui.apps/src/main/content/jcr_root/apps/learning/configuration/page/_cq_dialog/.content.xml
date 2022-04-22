@@ -68,8 +68,8 @@
                     <clientId 
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="Client id"
-                        fieldDescription="Client id"
+                        fieldLabel="Client ID"
+                        fieldDescription="Client ID"
                         name="./clientId"
                         required="{Boolean}true"
                         cq:showOnCreate="{Boolean}true"/>

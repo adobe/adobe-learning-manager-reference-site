@@ -27,6 +27,7 @@
       if (usageOption !== selectedUsageOption)
       {
         $("." + usageOption).closest("div.coral-Form-fieldwrapper").attr("hidden",'');
+        $("." + usageOption).attr("disabled", "");
         $("coral-checkbox." + usageOption).attr("hidden",'');
         $("button." + usageOption).attr("hidden",'');
       }
@@ -36,6 +37,7 @@
       if (usageOption === selectedUsageOption)
       {
         $("." + usageOption).closest("div.coral-Form-fieldwrapper").removeAttr("hidden");
+        $("." + usageOption).removeAttr("disabled");
         $("coral-checkbox." + usageOption).removeAttr("hidden");
         $("button." + usageOption).removeAttr("hidden");
       }
@@ -175,7 +177,5 @@
     $(CONFIG_FORM_CREATE_SEL).filter("button[type='submit']").off("click", handleSubmit).on("click", handleSubmit);
     $(NOMENCLATURE_BUTTON_SEL).on("click", () => fetchNomenclatureData());
   });
-
-
 
 })(window, document, jQuery, Coral);
