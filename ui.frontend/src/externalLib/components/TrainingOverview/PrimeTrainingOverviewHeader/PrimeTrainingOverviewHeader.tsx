@@ -16,7 +16,7 @@ const PrimeTrainingOverviewHeader: React.FC<{
   const { format, title, color, bannerUrl, showProgressBar = false, enrollment } = props;
 
   return (
-    <div style={bannerUrl ? { backgroundImage: `url(${bannerUrl})` } : { backgroundColor: color }} className={styles.header}>
+    <div style={bannerUrl ? { background: `url(${bannerUrl}) no-repeat center center / cover`} : { backgroundColor: color }} className={styles.header}>
       <div className={styles.headingContainer}>
         <div className={styles.format}>
           {GetTranslation(`prime.catalog.card.${format}`, true)}
