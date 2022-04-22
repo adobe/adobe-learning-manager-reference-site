@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunklearning=self.webpackChunklearning||[]).push([[970],{8970:function(e,n,t){t.r(n),t.d(n,{locale:function(){return o},messages:function(){return l}});var r=t(1413),a=t(397),i=JSON.parse('{"prime.text.noDescription":"No description available","prime.text.coreContent":"Core Content","prime.text.seatsAvailable":"Seats Available","prime.text.enroll":"Enroll"}'),l=(0,r.Z)((0,r.Z)({},a),i),o="en"}}]);
-//# sourceMappingURL=970.bdf28967.chunk.js.map
