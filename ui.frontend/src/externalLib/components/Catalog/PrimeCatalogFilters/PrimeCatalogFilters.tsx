@@ -29,7 +29,7 @@ const PrimeCatalogFilters = (props: any) => {
   }
 
   const renderFilterList = (filter: any) => {
-    if (!filter.list || filter.list?.length <= 1) {
+    if (!filter || !filter.list || filter.list?.length <= 1) {
       return "";
     }
     return catalogAttributes[filter.type] === "true" ? (

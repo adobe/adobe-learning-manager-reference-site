@@ -1,1 +1,1 @@
-export { GET_COMMERCE_TRAININGS } from "./training.gql";
+export { GET_COMMERCE_FILTERS, GET_COMMERCE_TRAININGS } from "./commerce.gql";

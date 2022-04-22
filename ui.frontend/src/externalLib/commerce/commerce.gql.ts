@@ -1,8 +1,24 @@
 import { gql } from "@apollo/client";
-import { DEFAULT_PAGE_LIMIT } from "../common/ALMCustomHooks";
+
 // export const GET_COMMERCE_TRAININGS = gql`
-//   query GetCommerceTrainings {
-//     products(filter: {}) {
+//   query GetCommerceTrainings(
+//     $pageSize: Int
+//     $filter: ProductAttributeFilterInput
+//     $currentPage: Int = 1
+//     $search: String = ""
+//   ) {
+//     products(
+//       pageSize: $pageSize
+//       filter: $filter
+//       currentPage: $currentPage
+//       search: $search
+//     ) {
+//       page_info {
+//         page_size
+//         current_page
+//         total_pages
+//       }
+//       total_count
 //       items {
 //         name
 //         sku
@@ -24,26 +40,36 @@ import { DEFAULT_PAGE_LIMIT } from "../common/ALMCustomHooks";
 //         }
 //         price_range {
 //           minimum_price {
-//             discount {
-//               percent_off
-//               amount_off
-//             }
 //             final_price {
 //               value
 //               currency
 //             }
-//             regular_price {
+//           }
+//           maximum_price {
+//             final_price {
 //               value
+//               currency
 //             }
 //           }
 //         }
 //       }
 //     }
 //   }
+// `;
 
 export const GET_COMMERCE_TRAININGS = gql`
-  query GetCommerceTrainings($pageSize:Int, $filter:ProductAttributeFilterInput, $currentPage:Int = 1, $search:String = "") {
-    products(pageSize : $pageSize, filter: $filter, currentPage:$currentPage,search:$search) {
+  query GetCommerceTrainings(
+    $pageSize: Int
+    $filter: ProductAttributeFilterInput
+    $currentPage: Int = 1
+    $search: String = ""
+  ) {
+    products(
+      pageSize: $pageSize
+      filter: $filter
+      currentPage: $currentPage
+      search: $search
+    ) {
       page_info {
         page_size
         current_page
@@ -54,7 +80,6 @@ export const GET_COMMERCE_TRAININGS = gql`
         name
         sku
         almskill
-        almtags
         almdeliverytype
         almusecourserating
         almratingscount
@@ -71,17 +96,38 @@ export const GET_COMMERCE_TRAININGS = gql`
         }
         price_range {
           minimum_price {
-            final_price{
+            final_price {
               value
               currency
-            } 
+            }
           }
           maximum_price {
-            final_price{
+            final_price {
               value
               currency
-            } 
+            }
           }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_COMMERCE_FILTERS = gql`
+  query getFilters {
+    customAttributeMetadata(
+      attributes: [
+        { attribute_code: "almlotype", entity_type: "catalog_product" }
+        { attribute_code: "almdeliverytype", entity_type: "catalog_product" }
+        { attribute_code: "almduration", entity_type: "catalog_product" }
+        { attribute_code: "almcatalog", entity_type: "catalog_product" }
+      ]
+    ) {
+      items {
+        attribute_code
+        attribute_options {
+          value
+          label
         }
       }
     }
