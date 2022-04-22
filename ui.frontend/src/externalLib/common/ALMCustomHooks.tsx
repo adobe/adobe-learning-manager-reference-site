@@ -1,7 +1,7 @@
 import { PrimeLearningObject } from "..";
 import { CatalogFilterState } from "../store/reducers/catalog";
 import { getParamsForCatalogApi } from "../utils/catalog";
-import { updateFilterList } from "../utils/filters";
+import { getDefaultFiltersState, updateFilterList } from "../utils/filters";
 import {
   getALMAttribute,
   getALMConfig,
@@ -143,7 +143,25 @@ export default class ALMCustomHooks implements ICustomHooks {
       checked: false,
     }));
     catalogList = updateFilterList(catalogList, queryParams, "catalogs");
-    return { skillsList, tagsList, catalogList };
+
+    const defaultFiltersState = getDefaultFiltersState();
+
+    return {
+      ...defaultFiltersState,
+      skillName: {
+        ...defaultFiltersState.skillName,
+        list: skillsList,
+      },
+      tagName: {
+        ...defaultFiltersState.tagName,
+        list: tagsList,
+      },
+      catalogs: {
+        ...defaultFiltersState.catalogs,
+        list: catalogList,
+      },
+    };
+    // return { skillsList, tagsList, catalogList };
   }
 }
 

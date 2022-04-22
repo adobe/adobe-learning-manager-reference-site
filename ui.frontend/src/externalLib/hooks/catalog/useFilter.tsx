@@ -7,16 +7,17 @@ import { locationUpdate } from "../../utils/catalog";
 import {
   ActionMap,
   ACTION_MAP,
-  Filter1State,
-  getDefaultFiltersState,
+  FilterState,
   UpdateFiltersEvent,
 } from "../../utils/filters";
 import { getQueryParamsIObjectFromUrl } from "../../utils/global";
 
 export const useFilter = () => {
-  const [filterState, setFilterState] = useState(() =>
-    getDefaultFiltersState()
-  );
+  // const [filterState, setFilterState] = useState(() =>
+  //   getDefaultFiltersState()
+  // );
+  const emptyFilterState = {} as FilterState;
+  const [filterState, setFilterState] = useState(() => emptyFilterState);
   const filtersFromState = useSelector(
     (state: State) => state.catalog.filterState
   );
@@ -24,7 +25,7 @@ export const useFilter = () => {
   const dispatch = useDispatch();
 
   const updateFilters = (data: UpdateFiltersEvent) => {
-    const filters = filterState[data.filterType as keyof Filter1State]!;
+    const filters = filterState[data.filterType as keyof FilterState]!;
     let payload = "";
 
     filters.list?.forEach((item) => {
@@ -47,24 +48,23 @@ export const useFilter = () => {
     const queryParams = getQueryParamsIObjectFromUrl();
     const getFilters = async () => {
       try {
-        const { skillsList, tagsList, catalogList } =
-          await APIServiceInstance.getFilters();
-
-        setFilterState((prevState) => ({
-          ...prevState,
-          skillName: {
-            ...prevState.skillName,
-            list: skillsList,
-          },
-          tagName: {
-            ...prevState.tagName,
-            list: tagsList,
-          },
-          catalogs: {
-            ...prevState.catalogs,
-            list: catalogList,
-          },
-        }));
+        const filters = await APIServiceInstance.getFilters();
+        setFilterState(filters);
+        // setFilterState((prevState) => ({
+        //   ...prevState,
+        //   skillName: {
+        //     ...prevState.skillName,
+        //     list: skillsList,
+        //   },
+        //   tagName: {
+        //     ...prevState.tagName,
+        //     list: tagsList,
+        //   },
+        //   catalogs: {
+        //     ...prevState.catalogs,
+        //     list: catalogList,
+        //   },
+        // }));
         setIsLoading(false);
       } catch (error) {
         console.log(error);
