@@ -188,6 +188,30 @@
         }
       };
 
+      const updateAccountActiveFields = async (accountActiveField) => {
+        const baseApiUrl = getALMConfig().primeApiURL;
+        const updateAccountActiveFieldsUrl = baseApiUrl + "users/"+ `${accountActiveField.id}`;
+        const headers = { "content-type": "application/json" };
+        try {
+          const response = await fetch(updateAccountActiveFieldsUrl, {
+            credentials: "include",
+            headers: {
+              'Content-type': 'application/json',
+              'Authorization': `oauth ${getAccessToken()}`, // notice the Bearer before your token
+            },
+            method: "PATCH",
+            body:JSON.stringify(accountActiveField),
+            Accept:"application/vnd.api+json",
+          });
+          if (response) {
+            const activeFields = await response.json();
+            console.log(activeFields);
+            return activeFields;
+          }
+        } catch (e) {
+          throw e;
+        }
+  
       window.ALM = window.ALM || {};
       window.ALM.ALMConfig = ALMConfig; //window.ALM.ALMConfig || primeConfig;
       window.ALM.getALMConfig = getALMConfig;
@@ -198,6 +222,7 @@
       window.ALM.getAccessToken = getAccessToken;
       window.ALM.getALMUser = getALMUser;
       window.ALM.getAccountActiveFields = getAccountActiveFields;
+      window.ALM.updateAccountActiveFields = updateAccountActiveFields;
       window.ALM.updateALMUser = updateALMUser;
       if (isPrimeUserLoggedIn()) {
         getALMUser();

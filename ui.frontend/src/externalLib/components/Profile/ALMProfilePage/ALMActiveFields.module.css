@@ -17,12 +17,33 @@
 
 .activeFieldName {
   font-weight: var(--prime-font-weight-600);
+  width: 20%;
 }
 
 .description,
 .activeFieldName {
-  font-size: var(--prime-font-size-18);
+  font-size: var(--prime-font-size-20);
   color: var(--prime-color-nc1);
+}
+
+
+.activeFieldSectionBottom {
+  margin-bottom: 30px;
+  display: flex;
+}
+
+.description {
+  padding-bottom: 20px;
+}
+
+.allowedActiveFieldValues {
+  display: block;
+  width: 150px;
+}
+
+.alignSwitchItem {
+  display: flex;
+  align-items: center;
 }
 
 @media screen and (min-width: 1024px) {

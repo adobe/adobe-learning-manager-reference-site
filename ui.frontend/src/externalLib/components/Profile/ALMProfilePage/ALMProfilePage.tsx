@@ -1,6 +1,6 @@
 import { Button, lightTheme, Provider } from "@adobe/react-spectrum";
 import Edit from "@spectrum-icons/workflow/Edit";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import { useProfile } from "../../../hooks";
 import {
@@ -20,10 +20,21 @@ const getActiveFieldAttributes = (config: PrimeConfig) => {
   return activeFieldAttributes;
 };
 
+// ToDo: Create a Sctive Field Model
+const initUserActiveField=()=>{
+  let userActiveFieldData :any={};
+  userActiveFieldData.data ={};
+  userActiveFieldData.data.type="user";
+  userActiveFieldData.data.attributes={};
+  userActiveFieldData.data.attributes.fields={};
+  return userActiveFieldData;
+}
+
 const ALMProfilePage = () => {
+  const [userActiveFieldData,setUserActiveFieldData]=useState(initUserActiveField());
   const { formatMessage } = useIntl();
   const config = getALMConfig();
-  const { profileAttributes, updateProfileImage } = useProfile();
+  const { profileAttributes, updateProfileImage, updateAccountActiveFields, userFieldData, setUserFieldData} = useProfile();
   const { user, accountActiveFields } = profileAttributes;
 
   console.log("Active fields :: " + accountActiveFields);
@@ -54,6 +65,46 @@ const ALMProfilePage = () => {
     }
     await updateProfileImage(file.name, file);
   };
+
+  const onActiveFieldUpdate= (value: any,name:any)=>{ 
+    userActiveFieldData.data.id = user.id;
+    userActiveFieldData.data.attributes.fields[name] = value;
+
+    let fields: any = userFieldData.fields;
+    fields[name] = value;
+
+    // ToDo: Spread the proxy object insetad of creating new object
+    let userFieldDataTemp: any = {};
+    userFieldDataTemp.fields = userFieldData.fields;
+    setUserFieldData(userFieldDataTemp);
+  }
+
+  const onActiveFieldSwitchValueUpdate=(attrName:any,attrValue:any,fieldName:any)=>{
+    userActiveFieldData.data.id=user.id;
+    if (attrValue) {
+      if (userActiveFieldData.data.attributes.fields[fieldName] == undefined) {
+        userActiveFieldData.data.attributes.fields[fieldName] = [];
+      }
+      userActiveFieldData.data.attributes.fields[fieldName].push(attrName);
+    } 
+    // Remove the value from data if user switch off.
+    else {
+      if (userActiveFieldData.data.attributes.fields[fieldName] == undefined) {
+        return;
+      } else {
+        userActiveFieldData.data.attributes.fields[fieldName] =
+          userActiveFieldData.data.attributes.fields[fieldName].filter(
+            function (f: any) {
+              return f !== attrName;
+            }
+          );
+      }
+    }
+  }
+
+  const UpdateAccountActiveFields=async (e: any)=>{
+    await updateAccountActiveFields(userActiveFieldData);
+  }
 
   const startFileUpload = () => {
     (inputRef?.current as HTMLInputElement)?.click();
@@ -116,6 +167,9 @@ const ALMProfilePage = () => {
             activeFields={section1ActiveFields}
             user={user}
             accountActiveFields={accountActiveFields}
+            onActiveFieldUpdate={onActiveFieldUpdate}
+            onActiveFieldSwitchValueUpdate={onActiveFieldSwitchValueUpdate}
+            userFieldData={userFieldData}
           />
           <ALMActiveFields
             title={section2Title}
@@ -123,7 +177,23 @@ const ALMProfilePage = () => {
             activeFields={section2ActiveFields}
             user={user}
             accountActiveFields={accountActiveFields}
+            onActiveFieldUpdate={onActiveFieldUpdate}
+            onActiveFieldSwitchValueUpdate={onActiveFieldSwitchValueUpdate}
+            userFieldData={userFieldData}
           />
+          <section>
+            <></><hr style={{ width: "1100px" }} />
+            <div className={styles.activeFieldButtonContainer}>
+              <Button
+                UNSAFE_className={styles.activeFieldsSaveOption}
+                variant="cta" onPress={UpdateAccountActiveFields}>
+                {formatMessage({
+                  id: "alm.profile.fields.saveProfileChanges",
+                  defaultMessage: "Save Changes",
+                })}
+              </Button>
+            </div>
+          </section>
         </div>
       </Provider>
     </ALMErrorBoundary>
