@@ -141,6 +141,15 @@ class APIService {
 
     return new ESCustomHooks().getFilters();
   }
+
+  public async addProductToCart(
+    sku: string
+  ): Promise<{ items: any; error: any }> {
+    if (this.isUserLoggedIn() && getALMConfig().usageType === ADOBE_COMMERCE) {
+      return new CommerceCustomHooks().addProductToCart(sku);
+    }
+    return { items: [], error: null };
+  }
 }
 
 const APIServiceInstance = new APIService();

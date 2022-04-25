@@ -32,6 +32,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   showEnrollDeadline: string;
   enrollmentHandler: () => void;
   launchPlayerHandler: () => void;
+  addToCartHandler: () => Promise<{ items: any; error: any }>;
   unEnrollmentHandler: Function;
   jobAidClickHandler: Function;
 }> = ({
@@ -44,6 +45,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   showEnrollDeadline,
   enrollmentHandler,
   launchPlayerHandler,
+  addToCartHandler,
   unEnrollmentHandler,
   jobAidClickHandler,
 }) => {
@@ -130,11 +132,15 @@ const PrimeTrainingPageMetaData: React.FC<{
     // } catch (e) {}
   };
 
-  const addToCartHandler = async () => {
-    // try {
-    //   await enrollmentHandler();
-    //   launchPlayerHandler();
-    // } catch (e) {}
+  const addProductToCart = async () => {
+    try {
+      const { items, error } = await addToCartHandler();
+      if (error && error[0]?.message) {
+        console.error(error[0].message);
+      } else {
+        console.log(items);
+      }
+    } catch (e) {}
   };
 
   //show only if not enrolled
@@ -233,7 +239,7 @@ const PrimeTrainingPageMetaData: React.FC<{
               <Button
                 variant="primary"
                 UNSAFE_className={`${styles.addToCartButton} ${styles.commonButton}`}
-                onPress={addToCartHandler}
+                onPress={addProductToCart}
               >
                 {formatMessage({
                   id: `alm.addToCart`,
