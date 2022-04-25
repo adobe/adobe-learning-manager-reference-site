@@ -1,4 +1,8 @@
-import { GET_COMMERCE_FILTERS, GET_COMMERCE_TRAININGS } from "../commerce";
+import {
+  ADD_PRODUCTS_TO_CART,
+  GET_COMMERCE_FILTERS,
+  GET_COMMERCE_TRAININGS,
+} from "../commerce";
 import { apolloClient } from "../contextProviders";
 import { CatalogFilterState } from "../store/reducers/catalog";
 import { getIndividiualtFiltersForCommerce } from "../utils/catalog";
@@ -10,6 +14,7 @@ import BrowserPersistence from "../utils/storage";
 import { DEFAULT_PAGE_LIMIT } from "./ALMCustomHooks";
 import ICustomHooks from "./ICustomHooks";
 
+const CART_ID = "CART_ID";
 const COMMERCE_FILTERS = "COMMERCE_FILTERS";
 interface CommerceTypes {
   almlotype: string;
@@ -411,6 +416,33 @@ export default class CommerceCustomHooks implements ICustomHooks {
       }
     } catch (e) {
       return {};
+    }
+  }
+
+  async addProductToCart(sku: string) {
+    try {
+      sku = sku.replace("_", ":"); // Magento SKU has a colon; Public API training instance id is of the format course:1234_12345
+      const cartId = BrowserPersistence.getItem(CART_ID);
+      if (!cartId) {
+        //TO-DO redirect to sign in or fetch cart id
+      }
+      const response = await apolloClient.mutate({
+        mutation: ADD_PRODUCTS_TO_CART,
+        variables: {
+          sku: sku,
+          cartId: cartId,
+        },
+      });
+      const addProductsToCart = response?.data?.addProductsToCart!;
+      const items = addProductsToCart.items;
+      const error = addProductsToCart.user_errors;
+      return {
+        items,
+        error,
+      };
+    } catch (error) {
+      console.log(error);
+      return { items: [], error };
     }
   }
 }

@@ -124,6 +124,19 @@ export const useTrainingPage = (
     },
     []
   );
+
+  const addToCartHandler = useCallback(async (): Promise<{
+    items: any;
+    error: any;
+  }> => {
+    try {
+      return await APIServiceInstance.addProductToCart(trainingInstance.id);
+    } catch (error) {
+      // throw error;
+      return { items: [], error: error };
+    }
+  }, [trainingInstance]);
+
   const jobAidClickHandler = useCallback(
     (supplymentaryLo: PrimeLearningObject) => {
       if (isJobaidContentTypeUrl(supplymentaryLo)) {
@@ -177,6 +190,7 @@ export const useTrainingPage = (
     launchPlayerHandler,
     unEnrollmentHandler,
     jobAidClickHandler,
+    addToCartHandler,
     errorCode,
   };
   //date create, published, duration

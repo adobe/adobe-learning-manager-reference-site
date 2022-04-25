@@ -10,7 +10,6 @@ import {
   PrimeConfig,
   setALMAttribute,
 } from "../../../utils/global";
-import { useCardBackgroundStyle, useCardIcon } from "../../../utils/hooks";
 import { getPreferredLocalizedMetadata } from "../../../utils/translationService";
 import { ALMBackButton } from "../../Common/ALMBackButton";
 import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
@@ -63,6 +62,7 @@ const PrimeTrainingPage = () => {
     launchPlayerHandler,
     unEnrollmentHandler,
     jobAidClickHandler,
+    addToCartHandler,
     cardBgStyle,
   } = useTrainingPage(trainingId, trainingInstanceId);
   const locale = config.locale;
@@ -117,11 +117,15 @@ const PrimeTrainingPage = () => {
               ""
             )}
             {prerequisiteLOs?.map((prerequisiteLO) => {
-              const { name, description, overview, richTextOverview } =
-                getPreferredLocalizedMetadata(
-                  prerequisiteLO.localizedMetadata,
-                  locale
-                );
+              const {
+                name,
+                description,
+                overview,
+                richTextOverview,
+              } = getPreferredLocalizedMetadata(
+                prerequisiteLO.localizedMetadata,
+                locale
+              );
 
               let showMandatoryLabel = false;
               let instance = prerequisiteLO.instances[0];
@@ -228,7 +232,7 @@ const PrimeTrainingPage = () => {
               })}
           </div>
           <div className={styles.right}>
-            <PrimeTrainingPageMetadata  
+            <PrimeTrainingPageMetadata
               skills={skills}
               training={training}
               trainingInstance={trainingInstance}
@@ -239,6 +243,7 @@ const PrimeTrainingPage = () => {
               enrollmentHandler={enrollmentHandler}
               launchPlayerHandler={launchPlayerHandler}
               unEnrollmentHandler={unEnrollmentHandler}
+              addToCartHandler={addToCartHandler}
               jobAidClickHandler={jobAidClickHandler}
             />
           </div>

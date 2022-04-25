@@ -136,3 +136,25 @@ export const GET_COMMERCE_FILTERS = gql`
     }
   }
 `;
+
+export const ADD_PRODUCTS_TO_CART = gql`
+  mutation addProductsToCart($cartId: String!, $sku: String!) {
+    addProductsToCart(
+      cartId: $cartId
+      cartItems: [{ quantity: 1, sku: $sku }]
+    ) {
+      cart {
+        items {
+          product {
+            name
+            sku
+          }
+          quantity
+        }
+      }
+      user_errors {
+        message
+      }
+    }
+  }
+`;
