@@ -121,6 +121,9 @@ export const GET_COMMERCE_FILTERS = gql`
         { attribute_code: "almdeliverytype", entity_type: "catalog_product" }
         { attribute_code: "almduration", entity_type: "catalog_product" }
         { attribute_code: "almcatalog", entity_type: "catalog_product" }
+        { attribute_code: "almtags", entity_type: "catalog_product" }
+        { attribute_code: "almskill", entity_type: "catalog_product" }
+        { attribute_code: "almskilllevel", entity_type: "catalog_product" }
       ]
     ) {
       items {

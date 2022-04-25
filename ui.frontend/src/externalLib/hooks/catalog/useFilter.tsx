@@ -13,9 +13,6 @@ import {
 import { getQueryParamsIObjectFromUrl } from "../../utils/global";
 
 export const useFilter = () => {
-  // const [filterState, setFilterState] = useState(() =>
-  //   getDefaultFiltersState()
-  // );
   const emptyFilterState = {} as FilterState;
   const [filterState, setFilterState] = useState(() => emptyFilterState);
   const filtersFromState = useSelector(
@@ -50,21 +47,6 @@ export const useFilter = () => {
       try {
         const filters = await APIServiceInstance.getFilters();
         setFilterState(filters);
-        // setFilterState((prevState) => ({
-        //   ...prevState,
-        //   skillName: {
-        //     ...prevState.skillName,
-        //     list: skillsList,
-        //   },
-        //   tagName: {
-        //     ...prevState.tagName,
-        //     list: tagsList,
-        //   },
-        //   catalogs: {
-        //     ...prevState.catalogs,
-        //     list: catalogList,
-        //   },
-        // }));
         setIsLoading(false);
       } catch (error) {
         console.log(error);
