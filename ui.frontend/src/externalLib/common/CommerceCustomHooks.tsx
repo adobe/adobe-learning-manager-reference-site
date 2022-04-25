@@ -5,9 +5,11 @@ import { getDefaultFiltersState } from "../utils/filters";
 import { getALMConfig, getQueryParamsIObjectFromUrl } from "../utils/global";
 import { JsonApiParse, parseCommerceResponse } from "../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
+import BrowserPersistence from "../utils/storage";
 import { DEFAULT_PAGE_LIMIT } from "./ALMCustomHooks";
 import ICustomHooks from "./ICustomHooks";
 
+const COMMERCE_FILTERS = "COMMERCE_FILTERS";
 interface CommerceTypes {
   almlotype: string;
   almdeliverytype: string;
@@ -42,8 +44,12 @@ const commerceTypesToALMMap = {
 };
 
 const getTransformedFilter = (filterState: CatalogFilterState) => {
+  let filters = BrowserPersistence.getItem(COMMERCE_FILTERS);
   const filter: any = {};
   if (filterState.loTypes) {
+    const loTypes = filterState.loTypes.split(",");
+    // transform;
+
     filter["almlotype"] = {
       in: filterState.loTypes.split(","),
     };
@@ -53,17 +59,12 @@ const getTransformedFilter = (filterState: CatalogFilterState) => {
       match: filterState.loFormat.split(",")[0],
     };
   }
-  // if (filterState.duration) {
-  //   filter["almduration"] = {
-  //     in: filterState.duration.split(","),
-  //   };
-  // }
-  // TO-DO uncomment once its supported by API
-  // if (filterState.catalogs) {
-  //   filter["almcatalog"] = {
-  //     in: filterState.catalogs.split(","),
-  //   };
-  // }
+  if (filterState.duration) {
+    filter["almduration"] = {
+      in: filterState.duration.split(","),
+    };
+  }
+
   // if (filterState.skillName) {
   //   filter["almskills"] = {
   //     in: filterState.skillName.split(","),
@@ -74,6 +75,14 @@ const getTransformedFilter = (filterState: CatalogFilterState) => {
   //     in: filterState.skillLevel.split(","),
   //   };
   // }
+
+  // TO-DO uncomment once its supported by API
+  // if (filterState.catalogs) {
+  //   filter["almcatalog"] = {
+  //     in: filterState.catalogs.split(","),
+  //   };
+  // }
+
   // if (filterState.tagName) {
   //   filter["almtags"] = {
   //     in: filterState.tagName.split(","),
@@ -87,6 +96,22 @@ export default class CommerceCustomHooks implements ICustomHooks {
   primeCdnTrainingBaseEndpoint = this.almConfig.primeCdnTrainingBaseEndpoint;
   esBaseUrl = this.almConfig.esBaseUrl;
   almCdnBaseUrl = this.almConfig.almCdnBaseUrl;
+
+  async getOrUpdateFilters() {
+    const filterItems = BrowserPersistence.getItem(COMMERCE_FILTERS);
+    if (filterItems) {
+      return filterItems;
+    }
+    const queryParams = getQueryParamsIObjectFromUrl();
+    try {
+      const response = await apolloClient.query({
+        query: GET_COMMERCE_FILTERS,
+      });
+
+      const items = response.data.customAttributeMetadata.items;
+      BrowserPersistence.setItem(COMMERCE_FILTERS, items);
+    } catch (e) {}
+  }
 
   async getTrainings(
     filterState: CatalogFilterState,
@@ -180,6 +205,7 @@ export default class CommerceCustomHooks implements ICustomHooks {
       });
 
       const items = response.data.customAttributeMetadata.items;
+      BrowserPersistence.setItem(COMMERCE_FILTERS, items);
       const defaultFiltersState = getDefaultFiltersState();
       if (items) {
         items.forEach(
@@ -204,7 +230,7 @@ export default class CommerceCustomHooks implements ICustomHooks {
                     (loType) => loType.value == label
                   );
                   if (index !== -1) {
-                    defaultFilters[index].value = value;
+                    defaultFilters[index].value = label;
                   }
                 });
                 defaultFiltersState.loTypes.list = defaultFilters;

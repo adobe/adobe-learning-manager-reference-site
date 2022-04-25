@@ -8,9 +8,10 @@ import "./index.css";
 // </React.StrictMode>, document.getElementById("alm-commerce"));
 
 window.onload = async () => {
-  const root = document.createElement("div");
-  root.id = "root";
-  document.body.appendChild(root);
-  ReactDOM.render(<App />, root);
+  // const root = document.createElement("div");
+  // root.id = "root";
+  // document.body.appendChild(root);
+  const container = document.getElementById("alm-commerce");
+  console.log("Commerce loading container:::" + container);
+  ReactDOM.render(<App />, container);
 };
-
