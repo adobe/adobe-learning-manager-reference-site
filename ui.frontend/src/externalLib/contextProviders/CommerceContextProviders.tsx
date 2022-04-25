@@ -2,8 +2,10 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import React from "react";
 import { getALMConfig } from "../utils/global";
 
+const uri = getALMConfig().graphqlProxyPath || getALMConfig().commerceURL;
+
 export const apolloClient = new ApolloClient({
-  uri: `${getALMConfig().commerceURL}/graphql`,
+  uri: uri,
   cache: new InMemoryCache(),
 });
 

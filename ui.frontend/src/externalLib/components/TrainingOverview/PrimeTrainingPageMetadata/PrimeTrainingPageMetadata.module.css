@@ -25,7 +25,6 @@
 .previewButton {
   border: 2px solid var(--prime-color-primary);
   color: var(--prime-color-primary);
-
 }
 
 .previewButton:hover,
@@ -58,12 +57,14 @@
   padding: 20px;
   margin-bottom: 20px;
 }
-.buyNowContainer .actionButton {
+.addToCartButton {
   border-radius: 20px;
+  color: var(--prime-color-black);
 }
 .buyNowButton {
   background: #ffc80f;
   border: 2px solid #ffc80f;
+  border-radius: 20px;
   color: var(--prime-color-black);
   border: none;
   margin-bottom: 10px;

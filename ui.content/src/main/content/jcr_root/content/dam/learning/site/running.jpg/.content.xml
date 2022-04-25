@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jcr:root xmlns:exif="http://ns.adobe.com/exif/1.0/" xmlns:photoshop="http://ns.adobe.com/photoshop/1.0/" xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:xmp="http://ns.adobe.com/xap/1.0/" xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/" xmlns:stEvt="http://ns.adobe.com/xap/1.0/sType/ResourceEvent#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
-    jcr:mixinTypes="[mix:referenceable]"
+    jcr:isCheckedOut="{Boolean}true"
+    jcr:mixinTypes="[mix:referenceable,mix:versionable]"
     jcr:primaryType="dam:Asset"
     jcr:uuid="40d104be-d263-4dbf-b704-db86b76366e0">
     <jcr:content
         cq:name="running.jpg"
         cq:parentPath="/content/dam/learning/site"
         dam:assetState="processed"
-        jcr:lastModified="{Date}2022-03-24T10:17:24.068+05:30"
+        jcr:lastModified="{Date}2022-04-19T19:15:56.894+05:30"
         jcr:lastModifiedBy="admin"
+        jcr:mixinTypes="[]"
         jcr:primaryType="dam:AssetContent">
         <metadata
             dam:Bitsperpixel="{Long}24"
-            dam:extracted="{Date}2022-03-24T10:17:11.654+05:30"
+            dam:extracted="{Date}2022-04-19T19:15:54.829+05:30"
             dam:Fileformat="JPEG"
             dam:MIMEtype="image/jpeg"
             dam:Numberofimages="{Long}1"
@@ -22,7 +24,7 @@
             dam:Physicalwidthindpi="{Long}300"
             dam:Physicalwidthininches="{Decimal}6.400000095367432"
             dam:Progressive="no"
-            dam:sha1="d5ce6e08a42bdfc2e56f831cbb3819b3e78f65ed"
+            dam:sha1="bb0d83ed972437172ea1e07265cc4e9b60dcf652"
             dam:size="{Long}255932"
             dc:format="image/jpeg"
             dc:modified="{Date}2016-01-14T14:22:19.376-08:00"
@@ -30,7 +32,7 @@
             exif:ExifVersion="0221"
             exif:PixelXDimension="{Long}1920"
             exif:PixelYDimension="{Long}1080"
-            jcr:lastModified="{Date}2022-03-24T10:17:22.219+05:30"
+            jcr:lastModified="{Date}2022-04-19T19:15:56.775+05:30"
             jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"

@@ -4,7 +4,7 @@
     <jcr:content
         cq:lastModified="{Date}2022-04-05T14:07:16.402+05:30"
         cq:lastModifiedBy="admin"
-        cq:template="/conf/learning/settings/wcm/templates/page-content"
+        cq:template="/conf/learning/settings/wcm/templates/commerce-page"
         jcr:primaryType="cq:PageContent"
         jcr:title="Checkout"
         sling:resourceType="learning/components/page">

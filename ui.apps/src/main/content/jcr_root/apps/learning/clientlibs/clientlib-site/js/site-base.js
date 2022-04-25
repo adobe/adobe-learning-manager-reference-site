@@ -57,6 +57,12 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     window.location = catalogUrl;
   };
 
+  const navigateToCatalogPageForStates = (learnerStates) => {
+    let { catalogPath } = getALMConfig();
+    let catalogUrl = catalogPath + "?learnerState=" + learnerStates;
+    window.location = catalogUrl;
+  };
+
   const navigateToCatalogPageFromCategory = (catalogNames, skillNames, tagNames) => {
     let { catalogPath } = getALMConfig();
     let catalogUrl = catalogPath;
@@ -152,4 +158,5 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.navigateToProfilePage = navigateToProfilePage;
   window.ALM.navigateToSignOutPage = navigateToSignOutPage;
   window.ALM.navigateToCatalogPageFromCategory = navigateToCatalogPageFromCategory;
+  window.ALM.navigateToCatalogPageForStates = navigateToCatalogPageForStates;
 })(window, document, Granite, jQuery);

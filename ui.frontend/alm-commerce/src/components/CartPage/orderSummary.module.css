@@ -1,0 +1,27 @@
+@import "../../styles/variables.css";
+
+.summaryContainer {
+  background-color: var(--prime-color-nc6);
+  padding: 20px;
+  font-size: var(--prime-font-size-21);
+}
+
+h2 {
+  font-size: var(--prime-font-size-21);
+  margin: 0;
+}
+.orderTotal {
+  margin: 20px 0;
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--prime-font-size-18);
+  color: var(--prime-color-black);
+  font-weight: 600;
+}
+
+.actionContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+}

@@ -1,0 +1,41 @@
+@import "../../styles/variables.css";
+
+.pageContainer {
+  max-width: var(--prime-container-max-width-desktop);
+  width: var(--prime-container-width);
+  margin: 0 auto;
+}
+
+.productList {
+  width: 70%;
+  padding-right: 30px;
+  padding-bottom: 30px;
+}
+.cartPageContainer {
+  display: flex;
+}
+
+.orderSummary {
+  width: 30%;
+  /* padding: 20px 0; */
+}
+
+@media screen and (max-width: 414px) {
+  .productList {
+    /* order: 2; */
+    width: 100%;
+    padding: 20px;
+  }
+  .orderSummary {
+    /* order: 1; */
+    width: 100%;
+    padding: 20px 20px 0 20px;
+  }
+  .pageContainer {
+    width: 100%;
+    max-width: var(--prime-container-max-width-mobile);
+  }
+  .cartPageContainer {
+    flex-direction: column;
+  }
+}

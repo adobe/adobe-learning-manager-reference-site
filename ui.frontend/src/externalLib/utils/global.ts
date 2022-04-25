@@ -20,6 +20,7 @@ export interface PrimeConfig {
   commerceURL: string;
   graphqlProxyPath: string;
   usageType: "aem-sites" | "aem-es" | "aem-commerce";
+  nomenclatureData: string;
   mountingPoints: {
     [key: string]: string;
   };

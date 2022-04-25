@@ -27,7 +27,7 @@
                                 <file
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
-                                    allowUpload="{Boolean}true"
+                                    allowUpload="{Boolean}false"
                                     class="cq-droptarget"
                                     fieldLabel="Image Asset"
                                     fileNameParameter="./fileName"

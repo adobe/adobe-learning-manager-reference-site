@@ -16,7 +16,7 @@ import {
 } from "../../../models/PrimeModels";
 import { modifyTime } from "../../../utils/dateTime";
 import { getALMConfig, getALMObject } from "../../../utils/global";
-import { LEARNER_BADGE_SVG,DEFAULT_USER_SVG } from "../../../utils/inline_svg";
+import { DEFAULT_USER_SVG, LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
 import { GetTranslation } from "../../../utils/translationService";
 import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJobAids";
 import styles from "./PrimeTrainingPageMetadata.module.css";
@@ -54,7 +54,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   let showPreviewButton =
     training.hasPreview &&
     (!enrollment || enrollment.state === PENDING_APPROVAL);
- 
+
   const action: string = useMemo(() => {
     // if(trainingInstance.seatLimit)
 
@@ -69,6 +69,8 @@ const PrimeTrainingPageMetaData: React.FC<{
       return "continue";
     } else if (trainingInstance.state === "Retired") {
       return "registerInterest";
+    } else if (training.price) {
+      return "buyNow";
     } else {
       return "enroll";
     }
@@ -87,6 +89,12 @@ const PrimeTrainingPageMetaData: React.FC<{
     );
 
   const actionText = useMemo(() => {
+    if (action == "buyNow") {
+      return formatMessage(
+        { id: "alm.training.buyNow" },
+        { x: training.price }
+      );
+    }
     return formatMessage({
       id: `alm.overview.button.${action}`,
     });
@@ -115,6 +123,20 @@ const PrimeTrainingPageMetaData: React.FC<{
     } catch (e) {}
   };
 
+  const buyNowHandler = async () => {
+    // try {
+    //   await enrollmentHandler();
+    //   launchPlayerHandler();
+    // } catch (e) {}
+  };
+
+  const addToCartHandler = async () => {
+    // try {
+    //   await enrollmentHandler();
+    //   launchPlayerHandler();
+    // } catch (e) {}
+  };
+
   //show only if not enrolled
   const showEnrollmentCount =
     !trainingInstance.learningObject.enrollment &&
@@ -132,12 +154,11 @@ const PrimeTrainingPageMetaData: React.FC<{
     training.authors?.length > 0 &&
     getALMObject().isPrimeUserLoggedIn();
   var legacyAuthorNames = new Set(training.authorNames);
-    training.authors?.forEach(author=>{
-      legacyAuthorNames.delete(author.name);})  
+  training.authors?.forEach((author) => {
+    legacyAuthorNames.delete(author.name);
+  });
   const showCompletionDeadline =
-    showEnrollDeadline === "true" &&
-    training.enrollment &&
-    trainingInstance.completionDeadline;
+    showEnrollDeadline === "true" && trainingInstance.completionDeadline;
   const showEnrollmentDeadline =
     !training.enrollment && trainingInstance.enrollmentDeadline;
   const showJobAids = training.enrollment && training.supplementaryLOs?.length;
@@ -167,14 +188,6 @@ const PrimeTrainingPageMetaData: React.FC<{
       )}
 
       <div className={styles.actionContainer}>
-        {/* {action === "preview" && (
-          <Button
-            variant="primary"
-            UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
-          >
-            Preview
-          </Button>
-        )} */}
         {action === "registerInterest" && (
           <Button
             variant="primary"
@@ -192,7 +205,6 @@ const PrimeTrainingPageMetaData: React.FC<{
             >
               {actionText}
             </Button>
-          
             {seatsAvailableText}
           </>
         )}
@@ -206,6 +218,30 @@ const PrimeTrainingPageMetaData: React.FC<{
           >
             {actionText}
           </Button>
+        )}
+        {action === "buyNow" && (
+          <>
+            <div className={styles.buyNowContainer}>
+              <Button
+                variant="primary"
+                UNSAFE_className={`${styles.buyNowButton} ${styles.commonButton}`}
+                onPress={buyNowHandler}
+              >
+                {actionText}
+              </Button>
+
+              <Button
+                variant="primary"
+                UNSAFE_className={`${styles.addToCartButton} ${styles.commonButton}`}
+                onPress={addToCartHandler}
+              >
+                {formatMessage({
+                  id: `alm.addToCart`,
+                })}
+              </Button>
+            </div>
+            {seatsAvailableText}
+          </>
         )}
         {action === "pendingApproval" && (
           <>
@@ -241,6 +277,7 @@ const PrimeTrainingPageMetaData: React.FC<{
         </Button>
       </div> */}
       {/* Enrollment Deadline container */}
+
       {showEnrollmentDeadline && (
         <div className={styles.commonContainer}>
           <span aria-hidden="true" className={styles.icon}>
@@ -257,6 +294,7 @@ const PrimeTrainingPageMetaData: React.FC<{
           </div>
         </div>
       )}
+
       {/* Completion Deadline container */}
       {showCompletionDeadline && (
         <div className={styles.commonContainer}>
@@ -355,15 +393,15 @@ const PrimeTrainingPageMetaData: React.FC<{
         <div className={styles.authorContainer}>
           {Array.from(legacyAuthorNames).map((legacyAuthorName) => {
             return (
-                <div className={styles.authors}>
-                  <span className={styles.cpauthorcircle}>
+              <div className={styles.authors}>
+                <span className={styles.cpauthorcircle}>
                   {DEFAULT_USER_SVG()}
-                  </span>
-                  <div className={styles.innerContainer}>
-                    <label className={styles.label}>Author</label>
-                    <p className={styles.authorName}>{legacyAuthorName}</p>
-                  </div>
+                </span>
+                <div className={styles.innerContainer}>
+                  <label className={styles.label}>Author</label>
+                  <p className={styles.authorName}>{legacyAuthorName}</p>
                 </div>
+              </div>
             );
           })}
           {training.authors?.map((author) => {

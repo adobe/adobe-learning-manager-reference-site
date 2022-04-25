@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:lastModified="{Date}2022-04-18T13:59:33.891+05:30"
+        cq:lastModifiedBy="admin"
+        cq:template="/apps/learning/configuration/page/template"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="adobe-learning-manager-config"
+        sling:configPropertyInherit="true"
+        sling:resourceType="learning/configuration/page"
+        accountId="8725"
+        almBaseURL="https://captivateprimeqe.adobe.com/"
+        authorRefreshToken="b8ea034df9cb7e5d1a6b7ad42e38647d"
+        clientId="29da093a-0549-4305-80f2-9803fb205dc9"
+        clientSecret="3c09299f-40e7-4154-abed-02f76a0777fc"
+        commonConfig.disableLinks="{Boolean}true"
+        commonConfig.emitPageLinkEvents="true"
+        siteMap="true"
+        theme.background="transparent"
+        theme.primaryColor="rgb(38,118,255)"
+        theme.secondaryColor="rgb(0,145,255)"
+        usageType="aem-sites"/>
+</jcr:root>

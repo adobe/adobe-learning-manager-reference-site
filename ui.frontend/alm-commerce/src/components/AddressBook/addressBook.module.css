@@ -1,0 +1,154 @@
+@import "../../styles/variables.css";
+
+.addressContainer {
+  width: 100%;
+}
+.heading {
+  font-size: var(--prime-font-size-18);
+  color: var(--prime-color-black);
+  padding: 10px 20px;
+  margin: 0;
+}
+
+.formContainer {
+  padding: 10px 20px;
+}
+.row {
+  width: 100%;
+  display: flex;
+  gap: 20px;
+  margin: 10px 0;
+}
+
+.half {
+  width: 50%;
+}
+
+.full {
+  width: 100%;
+}
+
+.actionButton {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.label {
+  display: flex;
+  box-sizing: border-box;
+  padding: var(
+      --spectrum-fieldlabel-padding-top,
+      var(--spectrum-global-dimension-size-50)
+    )
+    0
+    var(
+      --spectrum-fieldlabel-padding-bottom,
+      var(--spectrum-global-dimension-size-65)
+    );
+  font-size: var(
+    --spectrum-fieldlabel-text-size,
+    var(--spectrum-global-dimension-font-size-75)
+  );
+  font-weight: var(
+    --spectrum-fieldlabel-text-font-weight,
+    var(--spectrum-global-font-weight-regular)
+  );
+  line-height: var(
+    --spectrum-fieldlabel-text-line-height,
+    var(--spectrum-global-font-line-height-small)
+  );
+  vertical-align: top;
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: auto;
+  font-smoothing: subpixel-antialiased;
+  cursor: default;
+  flex: none;
+  display: flex;
+  color: var(
+    --spectrum-fieldlabel-text-color,
+    var(--spectrum-alias-label-text-color)
+  );
+  text-align: left;
+}
+.select {
+  box-sizing: border-box;
+  border: var(
+      --spectrum-textfield-border-size,
+      var(--spectrum-alias-border-size-thin)
+    )
+    solid;
+  border-radius: var(
+    --spectrum-textfield-border-radius,
+    var(--spectrum-alias-border-radius-regular)
+  );
+  padding: 3px
+    var(
+      --spectrum-textfield-padding-x,
+      var(--spectrum-global-dimension-size-150)
+    )
+    5px
+    calc(
+      var(
+          --spectrum-textfield-padding-x,
+          var(--spectrum-global-dimension-size-150)
+        ) - 1px
+    );
+  text-indent: 0;
+  width: 100%;
+  height: var(
+    --spectrum-textfield-height,
+    var(--spectrum-alias-single-line-height)
+  );
+  vertical-align: top;
+  font-size: var(
+    --spectrum-textfield-text-size,
+    var(--spectrum-alias-font-size-default)
+  );
+  line-height: var(
+    --spectrum-textfield-text-line-height,
+    var(--spectrum-alias-body-text-line-height)
+  );
+  text-overflow: ellipsis;
+  transition: border-color var(--spectrum-global-animation-duration-100, 130ms)
+      ease-in-out,
+    box-shadow var(--spectrum-global-animation-duration-100, 130ms) ease-in-out;
+  /* -webkit-appearance: none; */
+  /* -moz-appearance: textfield; */
+  outline: 0;
+  margin: 0;
+  overflow: visible;
+  background-color: var(
+    --spectrum-textfield-background-color,
+    var(--spectrum-global-color-gray-50)
+  );
+  border-color: var(
+    --spectrum-textfield-border-color,
+    var(--spectrum-alias-border-color)
+  );
+  color: var(--spectrum-textfield-text-color, var(--spectrum-alias-text-color));
+}
+
+.addressContainer svg {
+  display: none !important;
+}
+
+.error {
+  border: 1px solid
+    var(
+      --spectrum-textfield-border-color-error,
+      var(--spectrum-semantic-negative-color-default)
+    );
+}
+
+.errorText {
+  padding-top: var(--spectrum-global-dimension-static-size-50, 4px);
+  padding-bottom: var(--spectrum-global-dimension-size-115);
+  line-height: var(--spectrum-global-font-line-height-small, 1.3);
+  text-transform: none;
+  letter-spacing: var(--spectrum-global-font-letter-spacing-none, 0);
+  flex: 1 1;
+  color: var(
+    --spectrum-semantic-negative-color-text-small,
+    var(--spectrum-global-color-red-600)
+  );
+}

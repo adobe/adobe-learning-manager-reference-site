@@ -97,7 +97,8 @@
         margin: 0 auto;
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
+        justify-content: flex-start;
+        gap: 20px;
     }
 
     #alm-skills-header .text
@@ -134,30 +135,8 @@
     }
 }
 
-/* .alm-skills-container.alm-skills-rows--4 .product.image.aem-GridColumn.aem-GridColumn--default--12 {
-    display: inline-block;
-    width: 25%;
-}
-
-.alm-skills-container.alm-skills-rows--3 .product.image.aem-GridColumn.aem-GridColumn--default--12 {
-    display: inline-block;
-    width: 33%;
-}
-
-.alm-skills-container.alm-skills-rows--2 .product.image.aem-GridColumn.aem-GridColumn--default--12 {
-    display: inline-block;
-    width: 50%;
-}
-
- @media screen and (max-width: 414px) {
-    .skillscontainer {
-        padding-left: 20px;
-        padding-right: 20px;
-      }
-  } */
-
 .aem-Grid-newComponent {
-        width: 100%;
+    width: 100%;
 }
 
 .cmp-image .cmp-image__title {

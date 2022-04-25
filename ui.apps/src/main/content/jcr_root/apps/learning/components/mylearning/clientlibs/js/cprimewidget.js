@@ -22,7 +22,7 @@
     .set("lpPageLink", ["loOverview", "learningProgram", new RegExp(/learningProgram\/(\d+)\/overview/i)])
     .set("catalogOverviewPageLink", ["catalogOverview", "catalog", new RegExp(/selectedListableCatalogIds=(\d+)/i)])
     .set("catalogPageLink", ["catalogPage"])
-    .set("myLearningPageLink", ["catalogPage"])
+    .set("myLearningPageLink", ["myLearningPage"])
     .set("postsLink", ["boardsPage"])
     .set("allboardsPageLink", ["boardsPage"])
     .set("ciPageLink", ["course", new RegExp(/courseInstance\/(\d+)/i), "instance"])
@@ -96,7 +96,11 @@
       }
       else if (pageType === "catalogPage")
       {
-        window.ALM.navigateToHomePage();
+        window.ALM.navigateToExplorePage();
+      }
+      else if (pageType === "myLearningPage")
+      {
+        window.ALM.navigateToCatalogPageForStates("enrolled");
       }
       else if (pageType === "boardsPage")
       {

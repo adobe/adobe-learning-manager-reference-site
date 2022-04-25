@@ -1,6 +1,6 @@
 import { CatalogFilterState } from "../store/reducers/catalog";
 import { getRequestObjectForESApi } from "../utils/catalog";
-import { updateFilterList } from "../utils/filters";
+import { getDefaultFiltersState, updateFilterList } from "../utils/filters";
 import { getALMConfig, getQueryParamsIObjectFromUrl } from "../utils/global";
 import { JsonApiParse, parseESResponse } from "../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
@@ -120,7 +120,23 @@ export default class ESCustomHooks implements ICustomHooks {
       }));
       tagsList = updateFilterList(tagsList, queryParams, "tagName");
       let catalogList: any[] = [];
-      return { skillsList, tagsList, catalogList };
+      const defaultFiltersState = getDefaultFiltersState();
+
+      return {
+        ...defaultFiltersState,
+        skillName: {
+          ...defaultFiltersState.skillName,
+          list: skillsList,
+        },
+        tagName: {
+          ...defaultFiltersState.tagName,
+          list: tagsList,
+        },
+        catalogs: {
+          ...defaultFiltersState.catalogs,
+          list: catalogList,
+        },
+      };
     }
   }
 }

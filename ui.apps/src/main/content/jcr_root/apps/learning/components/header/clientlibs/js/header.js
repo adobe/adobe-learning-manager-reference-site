@@ -6,6 +6,7 @@
     const HEADER_PROFILE_OPTIONS_SEL = ".alm-header-profile,.alm-header-down";
     const VERT_NAV_CLOSE_BUTTON_SEL = ".vert-nav-close-button"
     const VERT_NAV_PROFILE_NAME_SEL = ".vert-nav-profile-name";
+    const HEADER_PROFILE_ARROW_DOWN_SEL = ".alm-header-down";
 
     const VERT_NAV_CONTAINER_SEL = ".alm-header-vertical-nav";
     const VERT_NAV_PROFILE_PIC_SEL = ".vert-nav-profile-image";
@@ -15,6 +16,9 @@
     const LEARNING_NAVIGATE_SEL = ".alm-learning-navigate";
     const COMMUNITY_NAVIGATE_SEL = ".alm-community-navigate";
     const SUPPORT_NAVIGATE_SEL = ".alm-support-navigate";
+    const LOGOUT_NAVIGATE_SEL = ".alm-logout-navigate";
+    const LOGIN_NAVIGATE_SEL = ".alm-login-navigate";
+    const REGISTER_NAVIGATE_SEL = ".alm-register-navigate";
     const NAV_NAVIGATE_HIGHLIGHT_SEL = ".nav-highlight";
     const HEADER_CART_SEL = ".alm-header-cart";
 
@@ -27,6 +31,7 @@
     const DEFAULT_USER_AVATAR = "/content/dam/learning/site/default_user_avatar.svg";
 
     const COMMERCE_USAGE_TYPE = "aem-commerce";
+    const ALM_USAGE_TYPE = "aem-sites";
 
     function highlightNavigationButtons()
     {
@@ -51,18 +56,40 @@
       if(window.ALM.isPrimeUserLoggedIn())
       {
         $(HEADER_LOG_IN_REL).hide();
+        $(LOGIN_NAVIGATE_SEL).hide();
+        $(LOGIN_NAVIGATE_SEL).prev().hide();
         $(HEADER_REGISTER_REL).hide();
+        $(REGISTER_NAVIGATE_SEL).hide();
+        $(REGISTER_NAVIGATE_SEL).prev().hide();
         $(HEADER_LOG_OUT_REL).show();
+        $(LOGOUT_NAVIGATE_SEL).show();
         $(HEADER_PROFILE_TEXT_REL).show();
         $(HEADER_NOTIFICATION_REL).show();
       }
       else
       {
-        $(HEADER_LOG_IN_REL).show();
-        $(HEADER_REGISTER_REL).show();
-        $(HEADER_LOG_OUT_REL).hide();
-        $(HEADER_PROFILE_TEXT_REL).hide();
-        $(HEADER_NOTIFICATION_REL).hide();
+        if (ALM_USAGE_TYPE === window.ALM.ALMConfig.usageType)
+        {
+            $(HEADER_PROFILE_OPTIONS_CONT_SEL).remove();
+            $(HEADER_PROFILE_ARROW_DOWN_SEL).remove();
+            $(LOGIN_NAVIGATE_SEL).prev().remove();
+            $(LOGIN_NAVIGATE_SEL).remove();
+            $(REGISTER_NAVIGATE_SEL).prev().remove();
+            $(REGISTER_NAVIGATE_SEL).remove();
+            $(LOGOUT_NAVIGATE_SEL).prev().remove();
+            $(LOGOUT_NAVIGATE_SEL).remove();
+            $(HEADER_PROFILE_TEXT_REL).hide();
+        }
+        else
+        {
+            $(HEADER_LOG_IN_REL).show();
+            $(LOGIN_NAVIGATE_SEL).show();
+            $(HEADER_REGISTER_REL).show();
+            $(REGISTER_NAVIGATE_SEL).show();
+            $(HEADER_LOG_OUT_REL).hide();
+            $(HEADER_PROFILE_TEXT_REL).hide();
+            $(HEADER_NOTIFICATION_REL).hide();
+        }
       }
     }
 
@@ -102,8 +129,11 @@
         renderCommerceSpecificUI();
 
         $(HEADER_LOG_IN_REL).on("click", () => window.ALM.handleLogIn());
+        $(LOGIN_NAVIGATE_SEL).on("click", () => window.ALM.handleLogIn());
         $(HEADER_LOG_OUT_REL).on("click", () => window.ALM.handleLogOut());
+        $(LOGOUT_NAVIGATE_SEL).on("click", () => window.ALM.handleLogOut());
         $(HEADER_REGISTER_REL).on("click", () => window.ALM.handleRegister());
+        $(REGISTER_NAVIGATE_SEL).on("click", () => window.ALM.handleRegister());
         $(HEADER_PROFILE_TEXT_REL).on("click", () => window.ALM.navigateToProfilePage());
         $(COMMUNITY_NAVIGATE_SEL).on("click", () => window.ALM.navigateToCommunityPage());
         $(HOME_NAVIGATE_SEL).on("click", () => window.ALM.navigateToHomePage());
