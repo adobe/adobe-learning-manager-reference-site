@@ -6,7 +6,7 @@
         cq:lastModifiedBy="admin"
         cq:template="/conf/learning/settings/wcm/templates/page-content"
         jcr:primaryType="cq:PageContent"
-        jcr:title="Community Board"
+        jcr:title="Community Board Overview"
         sling:resourceType="learning/components/page">
         <root
             jcr:primaryType="nt:unstructured"
