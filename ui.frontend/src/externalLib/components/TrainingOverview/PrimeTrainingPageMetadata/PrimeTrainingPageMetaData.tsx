@@ -53,6 +53,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   const config = getALMConfig();
   const locale = config.locale;
   const enrollment = training.enrollment;
+  const loType = training.loType;
   let showPreviewButton =
     training.hasPreview &&
     (!enrollment || enrollment.state === PENDING_APPROVAL);
@@ -380,7 +381,7 @@ const PrimeTrainingPageMetaData: React.FC<{
         <div className={styles.innerContainer}>
           <label className={styles.label}>
             {GetTranslation(
-              `alm.overview.skills.achieve.level.${training.loType}`,
+              `alm.overview.skills.achieve.level.${loType}`,
               true
             )}
           </label>
@@ -510,7 +511,11 @@ const PrimeTrainingPageMetaData: React.FC<{
               className={styles.supplymentaryLoName}
               onClick={unEnrollClickHandler}
             >
-              Unenroll from course
+               {loType === "certification"
+                  ? "Unenroll from certification"
+                  : loType === "learningProgram"
+                  ? "Unenroll from learning Program"
+                  : "Unenroll from course"}
             </a>
           </div>
         </div>
