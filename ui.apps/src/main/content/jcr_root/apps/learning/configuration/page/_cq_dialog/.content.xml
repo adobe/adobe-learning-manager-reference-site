@@ -173,7 +173,7 @@
                         cq:showOnCreate="{Boolean}true"/>
                     <sitemapTrainingPath
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
                         fieldLabel="SiteMap training page path"
                         fieldDescription="SiteMap training page path"
                         name="./sitemapTrainingPath"
