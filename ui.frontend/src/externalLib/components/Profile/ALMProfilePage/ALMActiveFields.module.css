@@ -20,6 +20,14 @@
   width: 20%;
 }
 
+.textFieldAlign{
+  width: 100%;
+  height: 38px;
+}
+.switch{
+  width: 50px;
+  left: 20px;
+}
 .description,
 .activeFieldName {
   font-size: var(--prime-font-size-20);

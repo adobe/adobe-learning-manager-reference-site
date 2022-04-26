@@ -6,7 +6,7 @@ import {
   getALMConfig,
   getALMUser,
   updateALMUser,
-  updateAccountActiveFields,
+  updateAccountActiveFieldsDetails
 } from "../../utils/global";
 import { RestAdapter } from "../../utils/restAdapter";
 import { getUploadInfo, uploadFile } from "../../utils/uploadUtils";
@@ -77,11 +77,12 @@ export const useProfile = () => {
     }
   }, []);
 
-  const updateAccountActiveFields = useCallback(async (accountActiveFields) => {
+  const updateAccountActiveFields = useCallback(async (accountActiveFields:any,userId:any) => {
     try {
-      await updateAccountActiveFields(accountActiveFields);
-    } catch {}
+      await updateAccountActiveFieldsDetails(accountActiveFields,userId);
+    } catch(error : any) {
+    }
   }, []);
 
-  return { profileAttributes, updateProfileImage, errorCode, updateAccountActiveFields,userFieldData,setUserFieldData};
+  return { profileAttributes, updateProfileImage, errorCode, updateAccountActiveFields, userFieldData, setUserFieldData};
 };

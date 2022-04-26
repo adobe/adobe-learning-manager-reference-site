@@ -13,42 +13,36 @@ const ALMActiveFields: React.FC<{
   user: PrimeUser;
   accountActiveFields: AccountActiveFields;
   onActiveFieldUpdate: Function;
-  onActiveFieldSwitchValueUpdate: Function;
+  onSwitchValueUpdate: Function;
   userFieldData: any
 }> = (props) => {
   // const { formatMessage } = useIntl();
   // const config = getALMConfig();
 
-  const { activeFields, description, title, user, accountActiveFields, onActiveFieldUpdate, onActiveFieldSwitchValueUpdate, userFieldData } = props;
-
-  const [activeFieldSwitchList, setActiveFieldSwitchList] = useState([false]);
-
+  const { activeFields, description, title, user, accountActiveFields, onActiveFieldUpdate, onSwitchValueUpdate, userFieldData } = props;
+  const [predefinedMultiValues, setPredefinedMultiValues] = useState(new Map());
+  
   useEffect(() => {
-    let isSelectedActiveFieldList: any = [];
+    let multiValues: any;
+    let selectedMultiValues = new Map();
+    const userFields: any = user.fields;
     fields?.map((activeField) => {
-      activeField?.allowedValues.map((allowedValue) => {
-        let present: boolean = false;
-        let userFields: any = user.fields;
-        let switchCollection = userFields[activeField.name];
-
-        for (let i = 0; i < switchCollection.length; i++) {
-          if (switchCollection[i] === allowedValue) {
-            isSelectedActiveFieldList.push(true);
-            present = true;
-          }
-        }
-        if (present == false) {
-          isSelectedActiveFieldList.push(false);
-        }
+      if (activeField.allowedValues.length > 0 && activeField.isMultiValue) {
+        multiValues = userFields[activeField.name].filter(
+          (value: string) => activeField.allowedValues.includes(value)
+        );
+      }
+      multiValues?.map((filteredArrayTemp1: any) => {
+        selectedMultiValues.set(filteredArrayTemp1, true);
       });
     });
-    setActiveFieldSwitchList(isSelectedActiveFieldList);
+    setPredefinedMultiValues(selectedMultiValues);
   }, [user]);
 
-  const updateActiveFieldSwitchList = (index: any, value: boolean) => {
-    let activeFieldSwitchListTemp = [...activeFieldSwitchList];
-    activeFieldSwitchListTemp[index] = value;
-    setActiveFieldSwitchList(activeFieldSwitchListTemp);
+  const updateSelectedMultiValues = (allowedValue: any, value: boolean) => {
+    let selectedMultiValues = new Map(predefinedMultiValues);
+    selectedMultiValues.set(allowedValue,value);
+    setPredefinedMultiValues(selectedMultiValues);
   }
 
   const configuredActiveFields = activeFields
@@ -82,10 +76,10 @@ const ALMActiveFields: React.FC<{
               if (showDropdown) {
                 let options: dropDown[] = [];
                 activeField?.allowedValues.map((allowedValue) => {
-                  let obj: dropDown = { id: "", name: "" };
-                  obj.id = allowedValue;
-                  obj.name = allowedValue;
-                  options.push(obj);
+                  let option: dropDown = { id: "", name: "" };
+                  option.id = allowedValue;
+                  option.name = allowedValue;
+                  options.push(option);
                 });
                 return options;
               }
@@ -104,8 +98,7 @@ const ALMActiveFields: React.FC<{
                         onChange={(value) => {
                           onActiveFieldUpdate(value, activeField.name);
                         }}
-                        width={"115%"}
-                        height={"38px"}
+                        UNSAFE_className={styles.textFieldAlign}
                       />
                     )}
                     {showDropdown && (
@@ -125,9 +118,7 @@ const ALMActiveFields: React.FC<{
                         onChange={(value) => {
                           onActiveFieldUpdate(value, activeField.name);
                         }}
-                        width={"115%"}
-                        height={"38px"}
-                        UNSAFE_className={styles.customInput}
+                        UNSAFE_className={styles.textFieldAlign}
                       />
                     )}
                     {hasPredefinedMultiValues &&
@@ -140,13 +131,11 @@ const ALMActiveFields: React.FC<{
                             <span>No</span>
                             <Switch
                               isEmphasized
-                              width={"50px"}
-                              left={"20px"}
-                              UNSAFE_className={styles.switchSize}
-                              isSelected={activeFieldSwitchList[index]}
+                              UNSAFE_className={styles.switch}
+                              isSelected={predefinedMultiValues?.get(allowedValue)}
                               onChange={(value) => {
-                                updateActiveFieldSwitchList(index, value);
-                                onActiveFieldSwitchValueUpdate(
+                                updateSelectedMultiValues(allowedValue,value);
+                                onSwitchValueUpdate(
                                   allowedValue,
                                   value,
                                   activeField.name

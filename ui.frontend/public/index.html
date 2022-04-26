@@ -190,30 +190,40 @@
         }
       };
 
-      const updateAccountActiveFields = async (accountActiveField) => {
-        const baseApiUrl = getALMConfig().primeApiURL;
-        const updateAccountActiveFieldsUrl = baseApiUrl + "users/" + `${accountActiveField.id}`;
-        const headers = { "content-type": "application/json" };
-        try {
-          const response = await fetch(updateAccountActiveFieldsUrl, {
-            credentials: "include",
-            headers: {
-              'Content-type': 'application/json',
-              'Authorization': `oauth ${getAccessToken()}`,
+      const updateAccountActiveFieldsDetails = async (activeFields, userId) => {
+          const baseApiUrl = getALMConfig().primeApiURL;
+          const body = {
+            data: {
+              type: "user",
+              id: userId,
+              attributes: {
+                fields: activeFields,
+              },
             },
-            method: "PATCH",
-            body: JSON.stringify(accountActiveField),
-            Accept: "application/vnd.api+json",
-          });
-          if (response) {
-            const activeFields = await response.json();
-            console.log(activeFields);
-            return activeFields;
+          };
+
+          const updateAccountActiveFieldsUrl = baseApiUrl + "users/" + `${userId}`;
+          const headers = { "content-type": "application/json" };
+          try {
+            const response = await fetch(updateAccountActiveFieldsUrl, {
+              credentials: "include",
+              headers: {
+                'Content-type': 'application/json',
+                'Authorization': `oauth ${getAccessToken()}`,
+              },
+              method: "PATCH",
+              body: JSON.stringify(body),
+              Accept: "application/vnd.api+json",
+            });
+            if (response) {
+              const activeFields = await response.json();
+              console.log(activeFields);
+              return activeFields;
+            }
+          } catch (e) {
+            throw e;
           }
-        } catch (e) {
-          throw e;
-        }
-      };
+        };
       window.ALM = window.ALM || {};
       window.ALM.ALMConfig = ALMConfig; //window.ALM.ALMConfig || primeConfig;
       window.ALM.getALMConfig = getALMConfig;
@@ -224,7 +234,7 @@
       window.ALM.getAccessToken = getAccessToken;
       window.ALM.getALMUser = getALMUser;
       window.ALM.getAccountActiveFields = getAccountActiveFields;
-      window.ALM.updateAccountActiveFields = updateAccountActiveFields;
+      window.ALM.updateAccountActiveFieldsDetails = updateAccountActiveFieldsDetails;
       window.ALM.updateALMUser = updateALMUser;
       if (isPrimeUserLoggedIn()) {
         getALMUser();

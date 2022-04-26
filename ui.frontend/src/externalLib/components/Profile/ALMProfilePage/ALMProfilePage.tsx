@@ -20,18 +20,9 @@ const getActiveFieldAttributes = (config: PrimeConfig) => {
   return activeFieldAttributes;
 };
 
-// ToDo: Create a Sctive Field Model
-const initUserActiveField=()=>{
-  let userActiveFieldData :any={};
-  userActiveFieldData.data ={};
-  userActiveFieldData.data.type="user";
-  userActiveFieldData.data.attributes={};
-  userActiveFieldData.data.attributes.fields={};
-  return userActiveFieldData;
-}
+let userActiveFields : any = {};
 
 const ALMProfilePage = () => {
-  const [userActiveFieldData,setUserActiveFieldData]=useState(initUserActiveField());
   const { formatMessage } = useIntl();
   const config = getALMConfig();
   const { profileAttributes, updateProfileImage, updateAccountActiveFields, userFieldData, setUserFieldData} = useProfile();
@@ -49,10 +40,7 @@ const ALMProfilePage = () => {
     section2Title,
   } = activeFieldAttributes;
 
-  const userActiveFields = user.fields;
-  // console.log("Active field user :: " + userActiveFields);
 
-  // console.log("Active field attr :: " + activeFieldAttributes);
   const inputRef = useRef<null | HTMLInputElement>(null);
   const imageUploaded = async (event: any) => {
     let file: any;
@@ -67,43 +55,31 @@ const ALMProfilePage = () => {
   };
 
   const onActiveFieldUpdate= (value: any,name:any)=>{ 
-    userActiveFieldData.data.id = user.id;
-    userActiveFieldData.data.attributes.fields[name] = value;
-
+    userActiveFields[name] = value;
     let fields: any = userFieldData.fields;
     fields[name] = value;
-
-    // ToDo: Spread the proxy object insetad of creating new object
-    let userFieldDataTemp: any = {};
-    userFieldDataTemp.fields = userFieldData.fields;
-    setUserFieldData(userFieldDataTemp);
+    let data: any = {};
+    data.fields = userFieldData.fields;
+    setUserFieldData(data);
   }
 
-  const onActiveFieldSwitchValueUpdate=(attrName:any,attrValue:any,fieldName:any)=>{
-    userActiveFieldData.data.id=user.id;
+  const onSwitchValueUpdate=(attrName:any ,attrValue:any, fieldName:any)=>{
     if (attrValue) {
-      if (userActiveFieldData.data.attributes.fields[fieldName] == undefined) {
-        userActiveFieldData.data.attributes.fields[fieldName] = [];
+      if (userActiveFields[fieldName] == undefined) {
+        userActiveFields[fieldName] = [];
       }
-      userActiveFieldData.data.attributes.fields[fieldName].push(attrName);
-    } 
+      userActiveFields[fieldName].push(attrName);
+    }
     // Remove the value from data if user switch off.
     else {
-      if (userActiveFieldData.data.attributes.fields[fieldName] == undefined) {
-        return;
-      } else {
-        userActiveFieldData.data.attributes.fields[fieldName] =
-          userActiveFieldData.data.attributes.fields[fieldName].filter(
-            function (f: any) {
-              return f !== attrName;
-            }
-          );
-      }
+      userActiveFields[fieldName] = userActiveFields[fieldName].filter(
+        (x: any) => x !== attrName
+      );
     }
   }
 
   const UpdateAccountActiveFields=async (e: any)=>{
-    await updateAccountActiveFields(userActiveFieldData);
+   await updateAccountActiveFields(userActiveFields,user?.id);
   }
 
   const startFileUpload = () => {
@@ -168,7 +144,7 @@ const ALMProfilePage = () => {
             user={user}
             accountActiveFields={accountActiveFields}
             onActiveFieldUpdate={onActiveFieldUpdate}
-            onActiveFieldSwitchValueUpdate={onActiveFieldSwitchValueUpdate}
+            onSwitchValueUpdate={onSwitchValueUpdate}
             userFieldData={userFieldData}
           />
           <ALMActiveFields
@@ -178,7 +154,7 @@ const ALMProfilePage = () => {
             user={user}
             accountActiveFields={accountActiveFields}
             onActiveFieldUpdate={onActiveFieldUpdate}
-            onActiveFieldSwitchValueUpdate={onActiveFieldSwitchValueUpdate}
+            onSwitchValueUpdate={onSwitchValueUpdate}
             userFieldData={userFieldData}
           />
           <section>
