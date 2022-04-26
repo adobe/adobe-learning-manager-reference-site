@@ -133,7 +133,7 @@ export const filtersDefaultState: FilterState = {
       },
       {
         value: "1801-7200",
-        label: "prime.catalog.filter.31minutesTo2Hours",
+        label: "prime.catalog.filter.30minutesTo2Hours",
         checked: false,
       },
       {

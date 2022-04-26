@@ -1,1 +1,5 @@
-export { GET_COMMERCE_FILTERS, GET_COMMERCE_TRAININGS } from "./commerce.gql";
+export {
+  ADD_PRODUCTS_TO_CART,
+  GET_COMMERCE_FILTERS,
+  GET_COMMERCE_TRAININGS,
+} from "./commerce.gql";

@@ -1,3 +1,4 @@
+
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
@@ -148,4 +149,29 @@ export function getRequestObjectForESApi(
     filters: getFiltersObjectForESApi(filterState),
   };
   return requestObject;
+}
+
+
+
+export function getIndividiualtFiltersForCommerce(
+  options: any[],
+  filterState: CatalogFilterState,
+  type: string
+) {
+  const optionsMap: any = {};
+  options?.forEach((element: { label: any; value: any }) => {
+    if (!optionsMap[element.label]) {
+      optionsMap[element.label] = element.value;
+    }
+  });
+
+  const loTypes = filterState[type as keyof CatalogFilterState].split(",");
+  let value: any[] = [];
+  loTypes.forEach((element) => {
+    if (optionsMap[element]) {
+      value.push(optionsMap[element]);
+    }
+  });
+
+  return value
 }

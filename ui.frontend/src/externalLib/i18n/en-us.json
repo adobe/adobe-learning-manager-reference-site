@@ -123,7 +123,7 @@
   "prime.catalog.filter.intermediate": "Intermediate",
   "prime.catalog.filter.advanced": "Advanced",
   "prime.catalog.filter.lessThan30Minutes": "30 mins or less",
-  "prime.catalog.filter.31minutesTo2Hours": "31 mins to 2 hours",
+  "prime.catalog.filter.30minutesTo2Hours": "30 mins to 2 hours",
   "prime.catalog.filter.moreThan2Hours": "2 hours+",
   "prime.catalog.no.result": "No results found",
   "prime.community.board.markAsRightAnswer": "Mark as Right answer",

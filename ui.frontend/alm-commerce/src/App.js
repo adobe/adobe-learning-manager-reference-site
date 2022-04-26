@@ -1,31 +1,27 @@
-import SignIn from "./components/SignInPage";
-import CheckoutPage from "./components/CheckoutPage";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import CartPage from "./components/CartPage";
-import {
-  Routes,
-  Route
-} from "react-router-dom";
-import { CommerceContextProviders } from "./contextProviders/CommerceContextProvider"
-
+import CheckoutPage from "./components/CheckoutPage";
+import SignIn from "./components/SignInPage";
+import { CommerceContextProviders } from "./contextProviders/CommerceContextProvider";
 function App() {
+  // eslint-disable-next-line no-restricted-globals
+  const basePath = window.location.pathname;
+  const checkoutPath = `${basePath}/checkout`;
+  const cartPath = `${basePath}/cart`;
   return (
     <CommerceContextProviders>
       <div className="App">
         <Routes>
-          <Route path="checkout" element={<CheckoutPage></CheckoutPage>} />
-          <Route path="cart" element={<CartPage></CartPage>} />
-          <Route path="/" element={<SignIn></SignIn>} />
+          <Route path={checkoutPath} element={<CheckoutPage></CheckoutPage>} />
+          <Route path={cartPath} element={<CartPage></CartPage>} />
+          <Route path={basePath} element={<SignIn></SignIn>} />
         </Routes>
-      </div >
-    </CommerceContextProviders >
+      </div>
+    </CommerceContextProviders>
   );
 }
-
 export default App;
-
-
-
 /**
   return (
     <div className="App">
@@ -44,5 +40,4 @@ export default App;
       </header >
     </div >
   );
-
  */

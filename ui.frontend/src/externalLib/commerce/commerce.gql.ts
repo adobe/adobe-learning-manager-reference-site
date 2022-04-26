@@ -121,6 +121,9 @@ export const GET_COMMERCE_FILTERS = gql`
         { attribute_code: "almdeliverytype", entity_type: "catalog_product" }
         { attribute_code: "almduration", entity_type: "catalog_product" }
         { attribute_code: "almcatalog", entity_type: "catalog_product" }
+        { attribute_code: "almtags", entity_type: "catalog_product" }
+        { attribute_code: "almskill", entity_type: "catalog_product" }
+        { attribute_code: "almskilllevel", entity_type: "catalog_product" }
       ]
     ) {
       items {
@@ -129,6 +132,28 @@ export const GET_COMMERCE_FILTERS = gql`
           value
           label
         }
+      }
+    }
+  }
+`;
+
+export const ADD_PRODUCTS_TO_CART = gql`
+  mutation addProductsToCart($cartId: String!, $sku: String!) {
+    addProductsToCart(
+      cartId: $cartId
+      cartItems: [{ quantity: 1, sku: $sku }]
+    ) {
+      cart {
+        items {
+          product {
+            name
+            sku
+          }
+          quantity
+        }
+      }
+      user_errors {
+        message
       }
     }
   }
