@@ -147,6 +147,10 @@ const PrimeModuleItem: React.FC<{
     loResource.resourceType === CLASSROOM ||
     loResource.resourceType === VIRTUAL_CLASSROOM;
 
+  const isModuleClicable: boolean = enrollment
+    ? enrollment.state != "PENDING_APPROVAL"
+    : isModulePreviewAble;
+ 
   const isVC = loResource.resourceType === VIRTUAL_CLASSROOM;
 
   const isElearning = loResource.resourceType === ELEARNING;
@@ -209,7 +213,7 @@ const PrimeModuleItem: React.FC<{
     <li className={styles.container}>
       <div
         className={`${styles.headerContainer} ${
-          !isClassroomOrVC ? styles.cursor : ""
+          isModuleClicable ? styles.cursor : ""
         }`}
         tabIndex={0}
         data-test={loResource.id}
