@@ -94,12 +94,12 @@ const PrimeTrainingPage = () => {
         <div className={styles.pageContainer}>
           <div className={styles.left}>
             {showDescription === "true" && (
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: richTextOverview || overview || description,
-                }}
-                className={styles.overview}
-              ></p>
+              <div
+              dangerouslySetInnerHTML={{
+                __html: richTextOverview || overview || description,
+              }}
+              className={styles.overview}
+            ></div>
             )}
             <span className={styles.duration}>
               {formatMessage(
