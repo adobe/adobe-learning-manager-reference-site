@@ -1,0 +1,27 @@
+@import "../../styles/variables.css";
+
+.paymentModeContainer {
+  padding: 10px;
+}
+.paymentContainer {
+  padding: 20px 0;
+}
+input {
+  padding: 10px;
+}
+.paymentHeading {
+  padding: 10px;
+  border-bottom: 1px solid var(--prime-color-black);
+}
+.totalPrice {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--prime-font-size-18);
+  font-weight: 600;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: end;
+}

@@ -12,9 +12,9 @@ import storageInstance from "../utils/storage";
 import {
   BrowserRouter
 } from "react-router-dom";
-
+const uri = getALMConfig().graphqlProxyPath || getALMConfig().commerceURL;
 const httpLink = createHttpLink({
-  uri: `${getALMConfig().graphqlProxyPath}`,
+  uri,
 });
 
 const authLink = setContext((_, { headers }) => {

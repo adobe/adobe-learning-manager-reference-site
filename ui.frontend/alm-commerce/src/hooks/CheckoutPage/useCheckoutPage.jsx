@@ -1,6 +1,6 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, createSearchParams } from "react-router-dom";
 import storageInstance from "../../utils/storage";
 import { postMethod } from "../../utils/global"
 import {
@@ -31,8 +31,6 @@ export const useCheckoutPage = (props) => {
     PROCESS_ORDER
   );
 
-  // const [setBillingAddress] = useMutation(SET_BILLING_ADDRESS);
-
   useEffect(() => {
     const getPaymentModes = async () => {
       try {
@@ -49,18 +47,18 @@ export const useCheckoutPage = (props) => {
   }, [cartId, fetchPaymentModes, isLoggedIn]);
 
 
-
+  const navigateToOrdersSuccessPage = useCallback(() => {
+    navigate({
+      pathname: "../orders",
+      search: createSearchParams({
+        orderId: "000000030"
+      }).toString()
+    });
+  }, [navigate])
 
   const createOrder = useCallback(async ({ paymentMode } = {}) => {
     try {
       postMethod("/ecommerce/purchaseInitiated");
-
-      // await setBillingAddress({
-      //   variables: {
-      //     cardId: cartId,
-      //   },
-      // });
-
       await setPaymentMode({
         variables: {
           cardId: cartId,
@@ -95,5 +93,6 @@ export const useCheckoutPage = (props) => {
     error,
     orderData,
     createOrder,
+    navigateToOrdersSuccessPage
   };
 };
