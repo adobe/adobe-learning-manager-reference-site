@@ -26,10 +26,13 @@ export const useCheckoutPage = (props) => {
     },
   });
 
-  const [setPaymentMode] = useMutation(SET_PAYMENT_MODE);
-  const [processOrder, { data: orderData, error: orderError }] = useMutation(
+  const [setPaymentMode, { loading: setPaymentModeLoading, error: setPaymentModeError }] = useMutation(SET_PAYMENT_MODE);
+  const [processOrder, { data: orderData, loading: processOrderLoading, error: orderError }] = useMutation(
     PROCESS_ORDER
   );
+
+  const shouldShowLoadingIndicator =
+    (processOrderLoading || setPaymentModeLoading);
 
   useEffect(() => {
     const getPaymentModes = async () => {
@@ -56,7 +59,7 @@ export const useCheckoutPage = (props) => {
         }).toString()
       });
     }
-  }, [navigate, orderData]);
+  }, [navigate]);
 
   useEffect(() => {
     navigateToOrdersSuccessPage(orderData?.placeOrder?.order?.order_number);
@@ -89,9 +92,10 @@ export const useCheckoutPage = (props) => {
   const error = useMemo(() => {
     return {
       getPaymentError: getPaymentError?.message,
-      orderError: orderError?.message
+      orderError: orderError?.message,
+      setPaymentModeError: setPaymentModeError?.message
     };
-  }, [getPaymentError?.message, orderError?.message]);
+  }, [getPaymentError?.message, orderError?.message, setPaymentModeError?.message]);
 
   return {
     paymentModes,
@@ -99,6 +103,6 @@ export const useCheckoutPage = (props) => {
     error,
     orderData,
     createOrder,
-    navigateToOrdersSuccessPage
+    shouldShowLoadingIndicator
   };
 };

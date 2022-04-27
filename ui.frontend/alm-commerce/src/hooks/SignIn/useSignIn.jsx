@@ -24,7 +24,7 @@ export const useAlmSignIn = (props) => {
       storageInstance.setItem(
         CART_ID,
         cartResponse?.data?.customerCart.id,
-        3600
+        10800
       );
       navigate(`/cart`);
       //TO- DO: handle redirect, if query params is there then redirect there, else home page redirect

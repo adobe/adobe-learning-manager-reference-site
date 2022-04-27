@@ -6,6 +6,7 @@ import OrdersPage from "./components/OrdersPage";
 import SignIn from "./components/SignInPage";
 import { CommerceContextProviders } from "./contextProviders/CommerceContextProvider";
 import { getALMConfig } from "./utils/global";
+import { lightTheme, Provider } from '@adobe/react-spectrum';
 function App() {
   // eslint-disable-next-line no-restricted-globals
   let basePage = getALMConfig().commerceBasePath;
@@ -23,18 +24,22 @@ function App() {
   return (
     <BrowserRouter basename={basePage} basePage>
       <CommerceContextProviders>
-        <div className="App">
-          <Routes>
-            <Route path={ordersPage} element={<OrdersPage></OrdersPage>} />
-            <Route path={checkoutPage} element={<CheckoutPage></CheckoutPage>} />
-            <Route path={cartPage} element={<CartPage></CartPage>} />
-            <Route path="*"
-              element={<SignIn></SignIn>}
-            />
-          </Routes>
-        </div>
+        <Provider theme={lightTheme} colorScheme={"light"}>
+          <div className="AppContainer">
+            <Routes>
+              <Route path={ordersPage} element={<OrdersPage></OrdersPage>} />
+              <Route path={checkoutPage} element={<CheckoutPage></CheckoutPage>} />
+              <Route path={cartPage} element={<CartPage></CartPage>} />
+              <Route path="*"
+                element={<SignIn></SignIn>}
+              />
+            </Routes>
+          </div>
+        </Provider>
       </CommerceContextProviders>
+
     </BrowserRouter>
+
   );
 }
 export default App;

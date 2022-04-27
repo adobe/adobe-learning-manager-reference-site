@@ -10,17 +10,15 @@ import {
 
 export const useAddressBook = (props) => {
     const { data: countriesData, error: fetchCountriesError } = useQuery(GET_COUNTRIES);
-    const { data: addressData, error: fetchAddressesError } = useQuery(GET_ADDRESSES);
+    const { data: addressData, loading: addressDataLoading, error: fetchAddressesError } = useQuery(GET_ADDRESSES);
     const [fetchRegions, { error: fetchRegionsError, data: regionsData }] = useLazyQuery(GET_COUNTRY_REGIONS);
     const [addDefaultBillingAddress,
         { error: addBillingAddressError }
     ] = useMutation(ADD_DEFAULT_BILLING_ADDRESS);
 
     const [addBillingAddressOnCart,
-        { error: addBillingAddressOnCartError }
+        { error: addBillingAddressOnCartError, data: addBillingAddressData, loading: addBillingAddressLoading }
     ] = useMutation(SET_BILLING_ADDRESS);
-
-
 
     const getCountryRegions = useCallback(async ({ code } = {}) => {
         await fetchRegions({
@@ -39,6 +37,7 @@ export const useAddressBook = (props) => {
 
     }, [addBillingAddressOnCart, addDefaultBillingAddress]);
 
+    const doeCartHasBillingAddress = !!addBillingAddressData;
 
     const countries = useMemo(() => {
         if (countriesData?.countries) {
@@ -85,6 +84,9 @@ export const useAddressBook = (props) => {
         getCountryRegions,
         regions,
         addBillingAddress,
-        defaultBillingAddress
+        defaultBillingAddress,
+        adressLoading: addressDataLoading,
+        addBillingAddressLoading,
+        doeCartHasBillingAddress
     };
 };
