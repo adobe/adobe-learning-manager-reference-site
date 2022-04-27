@@ -21,6 +21,7 @@
   "prime.notification.icon": "User Notifications",
   "prime.catalog.header": "Repository of |||COURSE|||, |||CERTIFICATION||| and |||LEARNING_PATH|||",
   "prime.catalog.search.placeholder": "Enter text and press enter",
+  "active.filed.placeholder": "Use comma to seperate multiple values",
   "prime.catalog.filter.loType.label": "Type",
   "prime.catalog.filter.status.label": "Status",
   "prime.catalog.filter.format.label": "Format",
@@ -151,6 +152,7 @@
   "prime.profile.skills.modifyInterest": "Modify Interest",
   "prime.profile.skills.noSkill": "No skill found",
   "prime.profile.skills.addInterest": "Add Interest",
+  "alm.profile.fields.saveProfileChanges":"Save Changes",
   "prime.profile.skills.cancel": "Cancel",
   "alm.training.buyNow": "Buy Now for ${x}",
   "alm.addToCart": "Add to cart"

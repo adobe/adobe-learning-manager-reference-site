@@ -1,10 +1,10 @@
-(function (document, window, $) {
+    (function (document, window, $) {
     "use strict";
 
-    const HEADER_SHOW_MENU_SEL = ".alm-header-cont .alm-header-menu"
+    const HEADER_SHOW_MENU_SEL = ".alm-header-cont .alm-header-menu";
     const HEADER_PROFILE_PIC_SEL = ".alm-header-profile";
     const HEADER_PROFILE_OPTIONS_SEL = ".alm-header-profile,.alm-header-down";
-    const VERT_NAV_CLOSE_BUTTON_SEL = ".vert-nav-close-button"
+    const VERT_NAV_CLOSE_BUTTON_SEL = ".vert-nav-close-button";
     const VERT_NAV_PROFILE_NAME_SEL = ".vert-nav-profile-name";
     const HEADER_PROFILE_ARROW_DOWN_SEL = ".alm-header-down";
 
@@ -28,98 +28,119 @@
     const HEADER_PROFILE_TEXT_REL = ".alm-profile__text";
     const HEADER_NOTIFICATION_REL = ".alm-header-icons .notification__container";
 
-    const DEFAULT_USER_AVATAR = "/content/dam/learning/site/default_user_avatar.svg";
+    const DEFAULT_USER_AVATAR =
+        "/content/dam/learning/site/default_user_avatar.svg";
 
     const COMMERCE_USAGE_TYPE = "aem-commerce";
     const ALM_USAGE_TYPE = "aem-sites";
 
-    function highlightNavigationButtons()
-    {
+    function isAuthor() {
+        return window.ALM.ALMConfig.authorMode == true;
+    }
+
+    function highlightNavigationButtons() {
         const ALM_CONFIG = window.ALM.getALMConfig();
         const CURRENT_PATH_NAME = window.location.pathname;
         const ALM_LINKS_MAP = new Map()
-        .set(ALM_CONFIG.homePath, [HOME_NAVIGATE_SEL + "+" + NAV_NAVIGATE_HIGHLIGHT_SEL, "size__XS"])
-        .set(ALM_CONFIG.learningPath, [LEARNING_NAVIGATE_SEL + "+" + NAV_NAVIGATE_HIGHLIGHT_SEL, "size__S"])
-        .set(ALM_CONFIG.communityPath, [COMMUNITY_NAVIGATE_SEL + "+" + NAV_NAVIGATE_HIGHLIGHT_SEL, "size__M"])
-        .set(ALM_CONFIG.supportPath, [SUPPORT_NAVIGATE_SEL  + "+" + NAV_NAVIGATE_HIGHLIGHT_SEL, "size__S"]);
+        .set(ALM_CONFIG.homePath, [
+            HOME_NAVIGATE_SEL + "+" + NAV_NAVIGATE_HIGHLIGHT_SEL,
+            "size__XS",
+        ])
+        .set(ALM_CONFIG.learningPath, [
+            LEARNING_NAVIGATE_SEL + "+" + NAV_NAVIGATE_HIGHLIGHT_SEL,
+            "size__S",
+        ])
+        .set(ALM_CONFIG.communityPath, [
+            COMMUNITY_NAVIGATE_SEL + "+" + NAV_NAVIGATE_HIGHLIGHT_SEL,
+            "size__M",
+        ])
+        .set(ALM_CONFIG.supportPath, [
+            SUPPORT_NAVIGATE_SEL + "+" + NAV_NAVIGATE_HIGHLIGHT_SEL,
+            "size__S",
+        ]);
 
         const CURRENT_NAV_OBJ = ALM_LINKS_MAP.get(CURRENT_PATH_NAME);
-        if (CURRENT_NAV_OBJ)
-        {
-            $(CURRENT_NAV_OBJ[0]).show();
-            $(CURRENT_NAV_OBJ[0]).addClass(CURRENT_NAV_OBJ[1]);
+        if (CURRENT_NAV_OBJ) {
+        $(CURRENT_NAV_OBJ[0]).show();
+        $(CURRENT_NAV_OBJ[0]).addClass(CURRENT_NAV_OBJ[1]);
         }
     }
 
-    function renderLoginButtons()
-    {
-      if(window.ALM.isPrimeUserLoggedIn())
-      {
-        $(HEADER_LOG_IN_REL).hide();
-        $(LOGIN_NAVIGATE_SEL).hide();
-        $(LOGIN_NAVIGATE_SEL).prev().hide();
-        $(HEADER_REGISTER_REL).hide();
-        $(REGISTER_NAVIGATE_SEL).hide();
-        $(REGISTER_NAVIGATE_SEL).prev().hide();
-        $(HEADER_LOG_OUT_REL).show();
-        $(LOGOUT_NAVIGATE_SEL).show();
-        $(HEADER_PROFILE_TEXT_REL).show();
-        $(HEADER_NOTIFICATION_REL).show();
-      }
-      else
-      {
-        if (ALM_USAGE_TYPE === window.ALM.ALMConfig.usageType)
-        {
-            $(HEADER_PROFILE_OPTIONS_CONT_SEL).remove();
-            $(HEADER_PROFILE_ARROW_DOWN_SEL).remove();
-            $(LOGIN_NAVIGATE_SEL).prev().remove();
-            $(LOGIN_NAVIGATE_SEL).remove();
-            $(REGISTER_NAVIGATE_SEL).prev().remove();
-            $(REGISTER_NAVIGATE_SEL).remove();
-            $(LOGOUT_NAVIGATE_SEL).prev().remove();
-            $(LOGOUT_NAVIGATE_SEL).remove();
-            $(HEADER_PROFILE_TEXT_REL).hide();
+    function renderLoginButtons() {
+        if (isAuthor()) {
+            // in author mode, don't show Login/Logout/Register option. User will always be logged in.
+            hideLoginOption();
+            hideRegisterOption();
+            hideLogoutOption();
+        } 
+        else {
+            if (window.ALM.isPrimeUserLoggedIn()) {
+                hideLoginOption();
+                hideRegisterOption();
+            } 
+            else {
+                hideLogoutOption();
+                hideProfileOption();
+                $(HEADER_NOTIFICATION_REL).hide();
+                if (ALM_USAGE_TYPE === window.ALM.ALMConfig.usageType) {
+                    $(HEADER_PROFILE_OPTIONS_CONT_SEL).remove();
+                    $(HEADER_PROFILE_ARROW_DOWN_SEL).remove();
+                    hideLoginOption();
+                    hideRegisterOption();
+                }
+                else {
+                    let registerURL = window.ALM.ALMConfig.almRegisterUrl || "";
+                    if (!registerURL.trim()) {
+                        hideRegisterOption();
+                    }
+                }
+            }
         }
-        else
-        {
-            $(HEADER_LOG_IN_REL).show();
-            $(LOGIN_NAVIGATE_SEL).show();
-            $(HEADER_REGISTER_REL).show();
-            $(REGISTER_NAVIGATE_SEL).show();
-            $(HEADER_LOG_OUT_REL).hide();
-            $(HEADER_PROFILE_TEXT_REL).hide();
-            $(HEADER_NOTIFICATION_REL).hide();
-        }
-      }
     }
 
-    function fetchProfileDetails()
-    {     
+    function hideProfileOption() {
+        $(HEADER_PROFILE_TEXT_REL).remove();
+    }
+
+    function hideLogoutOption() {
+        $(HEADER_LOG_OUT_REL).remove();
+        $(LOGOUT_NAVIGATE_SEL).prev().remove();
+        $(LOGOUT_NAVIGATE_SEL).remove();
+    }
+
+    function hideRegisterOption() {
+        $(HEADER_REGISTER_REL).remove();
+        $(REGISTER_NAVIGATE_SEL).prev().remove();
+        $(REGISTER_NAVIGATE_SEL).remove();
+    }
+
+    function hideLoginOption() {
+        $(HEADER_LOG_IN_REL).remove();
+        $(LOGIN_NAVIGATE_SEL).prev().remove();
+        $(LOGIN_NAVIGATE_SEL).remove();
+    }
+
+    function fetchProfileDetails() {
         window.ALM.getALMUser().then(function (user) {
-            try {
-                const userAttrs = JSON.parse(user).data.attributes;
-                $(HEADER_PROFILE_PIC_SEL).attr("src", userAttrs.avatarUrl);
-                $(VERT_NAV_PROFILE_NAME_SEL).text(userAttrs.name);
+        try {
+            const userAttrs = JSON.parse(user).data.attributes;
+            $(HEADER_PROFILE_PIC_SEL).attr("src", userAttrs.avatarUrl);
+            $(VERT_NAV_PROFILE_NAME_SEL).text(userAttrs.name);
 
-                $(VERT_NAV_PROFILE_PIC_SEL).attr("src", userAttrs.avatarUrl);
-            } catch (e) {
-                console.error("Unable to fetch user avatar.");
-            }
-        });    
+            $(VERT_NAV_PROFILE_PIC_SEL).attr("src", userAttrs.avatarUrl);
+        } catch (e) {
+            console.error("Unable to fetch user avatar.");
+        }
+        });
     }
 
-    function renderCommerceSpecificUI()
-    {
-        if (COMMERCE_USAGE_TYPE === window.ALM.ALMConfig.usageType)
-        {
-            if (window.ALM.isPrimeUserLoggedIn())
-            {
+    function renderCommerceSpecificUI() {
+        if (COMMERCE_USAGE_TYPE === window.ALM.ALMConfig.usageType) {
+            if (window.ALM.isPrimeUserLoggedIn()) {
                 $(HEADER_CART_SEL).show();
-            }
-            else
-            {
+            } else {
                 $(HEADER_CART_SEL).hide();
-            }   
+            }
         }
     }
 
@@ -134,29 +155,36 @@
         $(LOGOUT_NAVIGATE_SEL).on("click", () => window.ALM.handleLogOut());
         $(HEADER_REGISTER_REL).on("click", () => window.ALM.handleRegister());
         $(REGISTER_NAVIGATE_SEL).on("click", () => window.ALM.handleRegister());
-        $(HEADER_PROFILE_TEXT_REL).on("click", () => window.ALM.navigateToProfilePage());
-        $(COMMUNITY_NAVIGATE_SEL).on("click", () => window.ALM.navigateToCommunityPage());
+        $(HEADER_PROFILE_TEXT_REL).on("click", () =>
+            window.ALM.navigateToProfilePage()
+        );
+        $(COMMUNITY_NAVIGATE_SEL).on("click", () =>
+            window.ALM.navigateToCommunityPage()
+        );
         $(HOME_NAVIGATE_SEL).on("click", () => window.ALM.navigateToHomePage());
-        $(LEARNING_NAVIGATE_SEL).on("click", () => window.ALM.navigateToLearningPage());
-        $(SUPPORT_NAVIGATE_SEL).on("click", () => window.ALM.navigateToSupportPage());
-        $(HEADER_CART_SEL).on("click", () => window.ALM.navigateToCommerceCartPage());
+        $(LEARNING_NAVIGATE_SEL).on("click", () =>
+            window.ALM.navigateToLearningPage()
+        );
+        $(SUPPORT_NAVIGATE_SEL).on("click", () =>
+            window.ALM.navigateToSupportPage()
+        );
+        $(HEADER_CART_SEL).on("click", () =>
+            window.ALM.navigateToCommerceCartPage()
+        );
 
         $(VERT_NAV_CLOSE_BUTTON_SEL + "," + HEADER_SHOW_MENU_SEL).on("click", () => {
-            $(VERT_NAV_CONTAINER_SEL).toggleClass('open');
-        });
+                $(VERT_NAV_CONTAINER_SEL).toggleClass("open");
+            }
+        );
         $(HEADER_PROFILE_OPTIONS_SEL).on("click", () => {
             $(HEADER_PROFILE_OPTIONS_CONT_SEL).toggle();
         });
 
-        if (window.ALM.isPrimeUserLoggedIn())
-        {
+        if (window.ALM.isPrimeUserLoggedIn()) {
             fetchProfileDetails();
-        }
-        else
-        {
+        } else {
             $(HEADER_PROFILE_PIC_SEL).attr("src", DEFAULT_USER_AVATAR);
             $(VERT_NAV_PROFILE_PIC_SEL).attr("src", DEFAULT_USER_AVATAR);
         }
-
     });
-})(document, window, jQuery);
+    })(document, window, jQuery);
