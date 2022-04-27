@@ -3,6 +3,7 @@
 import { Button } from "@adobe/react-spectrum";
 import Calendar from "@spectrum-icons/workflow/Calendar";
 import Download from "@spectrum-icons/workflow/Download";
+import ClockCheck from "@spectrum-icons/workflow/ClockCheck";
 import PinOff from "@spectrum-icons/workflow/PinOff";
 import Send from "@spectrum-icons/workflow/Send";
 import UserGroup from "@spectrum-icons/workflow/UserGroup";
@@ -180,6 +181,8 @@ const PrimeTrainingPageMetaData: React.FC<{
   const showResource = training.supplementaryResources?.length;
   const showUnenrollButton =
     training.enrollment && training.unenrollmentAllowed;
+  const isCertification = loType == "certification";
+
   return (
     <section className={styles.container}>
       {showPreviewButton && (
@@ -323,7 +326,40 @@ const PrimeTrainingPageMetaData: React.FC<{
                 defaultMessage: "Completion Deadline",
               })}
             </label>
-            <div>{modifyTime(trainingInstance.completionDeadline, locale)}</div>
+            <div>
+              {loType == "certification"
+                ? formatMessage(
+                  {
+                    id: "alm.overview.certification.deadline",
+                  },
+                  {
+                    0: trainingInstance?.completionDeadline?.slice(0,-1),
+                  }
+                )
+                : modifyTime(trainingInstance.completionDeadline, locale)}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Certificate Validity container */}
+      {isCertification && (
+        <div className={styles.commonContainer}>
+          <span aria-hidden="true" className={styles.icon}>
+            <ClockCheck />
+          </span>
+          <div className={styles.innerContainer}>
+            <label className={styles.label}>
+              {formatMessage({
+                id: "alm.overview.certification.validity",
+                defaultMessage: "Validity",
+              })}
+            </label>
+            <div>
+              {trainingInstance?.validity
+                ? trainingInstance?.validity?.slice(0, -1) + " " + "months"
+                : "Perpetual"}
+            </div>
           </div>
         </div>
       )}
