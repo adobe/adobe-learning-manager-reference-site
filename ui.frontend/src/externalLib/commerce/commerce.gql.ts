@@ -159,5 +159,3 @@ export const ADD_PRODUCTS_TO_CART = gql`
     }
   }
 `;
-
-

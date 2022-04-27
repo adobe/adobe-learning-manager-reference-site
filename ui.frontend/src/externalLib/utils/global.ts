@@ -15,6 +15,7 @@ export interface PrimeConfig {
   communityPath: string;
   communityBoardsPath: string;
   communityBoardDetailsPath: string;
+  commerceBasePath: string;
   locale: string;
   almCdnBaseUrl: string;
   commerceURL: string;
@@ -24,7 +25,6 @@ export interface PrimeConfig {
   mountingPoints: {
     [key: string]: string;
   };
-  commerceBasePath: string;
 }
 
 export interface ALM {
@@ -39,6 +39,7 @@ export interface ALM {
   setALMAttribute: Function;
   getALMAttribute: Function;
   updateALMUser: Function;
+  updateCart: Function;
   getAccountActiveFields: Function;
   updateAccountActiveFieldsDetails: Function;
 }
@@ -100,9 +101,15 @@ export const getAccountActiveFields = async () => {
   return await getALMObject().getAccountActiveFields();
 };
 
-export const updateAccountActiveFieldsDetails = async(accountActiveFields:any, userId:string) => {
-  return await getALMObject().updateAccountActiveFieldsDetails(accountActiveFields,userId);
-}
+export const updateAccountActiveFieldsDetails = async (
+  accountActiveFields: any,
+  userId: string
+) => {
+  return await getALMObject().updateAccountActiveFieldsDetails(
+    accountActiveFields,
+    userId
+  );
+};
 
 export const updateALMUser = async () => {
   return JsonApiParse(await getALMObject().updateALMUser());

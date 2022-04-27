@@ -58,7 +58,7 @@
         communityPath: "http://localhost:3000/community.html",
         communityBoardsPath: "http://localhost:3000/community.html",
         communityBoardDetailsPath: "http://localhost:3000/community.html",
-        commerceBasePath: "/content/learning/language-masters/en/commerce.html",
+        commerceBasePath: "",
         //almCdnBaseUrl: "https://cpcontentsqe.adobe.com",
         almCdnBaseUrl:
           "https://cpcontentsqe.adobe.com/public/guest/qe/api/c6caced3-3750-4647-8868-08aa7317726a/8722",
@@ -192,39 +192,40 @@
       };
 
       const updateAccountActiveFieldsDetails = async (activeFields, userId) => {
-          const baseApiUrl = getALMConfig().primeApiURL;
-          const body = {
-            data: {
-              type: "user",
-              id: userId,
-              attributes: {
-                fields: activeFields,
-              },
+        const baseApiUrl = getALMConfig().primeApiURL;
+        const body = {
+          data: {
+            type: "user",
+            id: userId,
+            attributes: {
+              fields: activeFields,
             },
-          };
-
-          const updateAccountActiveFieldsUrl = baseApiUrl + "users/" + `${userId}`;
-          const headers = { "content-type": "application/json" };
-          try {
-            const response = await fetch(updateAccountActiveFieldsUrl, {
-              credentials: "include",
-              headers: {
-                'Content-type': 'application/json',
-                'Authorization': `oauth ${getAccessToken()}`,
-              },
-              method: "PATCH",
-              body: JSON.stringify(body),
-              Accept: "application/vnd.api+json",
-            });
-            if (response) {
-              const activeFields = await response.json();
-              console.log(activeFields);
-              return activeFields;
-            }
-          } catch (e) {
-            throw e;
-          }
+          },
         };
+
+        const updateAccountActiveFieldsUrl =
+          baseApiUrl + "users/" + `${userId}`;
+        const headers = { "content-type": "application/json" };
+        try {
+          const response = await fetch(updateAccountActiveFieldsUrl, {
+            credentials: "include",
+            headers: {
+              "Content-type": "application/json",
+              Authorization: `oauth ${getAccessToken()}`,
+            },
+            method: "PATCH",
+            body: JSON.stringify(body),
+            Accept: "application/vnd.api+json",
+          });
+          if (response) {
+            const activeFields = await response.json();
+            console.log(activeFields);
+            return activeFields;
+          }
+        } catch (e) {
+          throw e;
+        }
+      };
       window.ALM = window.ALM || {};
       window.ALM.ALMConfig = ALMConfig; //window.ALM.ALMConfig || primeConfig;
       window.ALM.getALMConfig = getALMConfig;

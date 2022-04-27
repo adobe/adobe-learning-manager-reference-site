@@ -109,7 +109,7 @@ const getTransformedFilter = async (filterState: CatalogFilterState) => {
   if (filterState.skillLevel) {
     const skillLevelOptions =
       filterMap.get(ALMToCommerceTypes["skillLevel"]) || [];
-      debugger;
+    debugger;
     filter[ALM_SKILL_LEVELS] = {
       in: getIndividiualtFiltersForCommerce(
         skillLevelOptions,
@@ -435,14 +435,16 @@ export default class CommerceCustomHooks implements ICustomHooks {
       });
       const addProductsToCart = response?.data?.addProductsToCart!;
       const items = addProductsToCart.items;
+      const totalQuantity = addProductsToCart.total_quantity;
       const error = addProductsToCart.user_errors;
       return {
         items,
+        totalQuantity,
         error,
       };
     } catch (error) {
       console.log(error);
-      return { items: [], error };
+      return { items: [], totalQuantity: 0, error };
     }
   }
 }

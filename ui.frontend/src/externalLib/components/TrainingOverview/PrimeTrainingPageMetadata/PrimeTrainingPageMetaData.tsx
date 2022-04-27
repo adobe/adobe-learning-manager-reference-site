@@ -32,7 +32,11 @@ const PrimeTrainingPageMetaData: React.FC<{
   showEnrollDeadline: string;
   enrollmentHandler: () => void;
   launchPlayerHandler: () => void;
-  addToCartHandler: () => Promise<{ items: any; error: any }>;
+  addToCartHandler: () => Promise<{
+    items: any;
+    totalQuantity: Number;
+    error: any;
+  }>;
   unEnrollmentHandler: Function;
   jobAidClickHandler: Function;
 }> = ({
@@ -126,22 +130,26 @@ const PrimeTrainingPageMetaData: React.FC<{
     } catch (e) {}
   };
 
-  const buyNowHandler = async () => {
-    // try {
-    //   await enrollmentHandler();
-    //   launchPlayerHandler();
-    // } catch (e) {}
-  };
-
-  const addProductToCart = async () => {
+  const addToCart = async (redirectPathName = "") => {
     try {
-      const { items, error } = await addToCartHandler();
+      const { items, totalQuantity, error } = await addToCartHandler();
       if (error && error[0]?.message) {
         console.error(error[0].message);
       } else {
         console.log(items);
+        getALMObject().updateCart(totalQuantity);
+        window.location.pathname = redirectPathName;
       }
     } catch (e) {}
+  };
+
+  const buyNowHandler = async () => {
+    const redirectPathName = getALMConfig().commerceBasePath + "/cart";
+    await addToCart(redirectPathName);
+  };
+
+  const addProductToCart = async () => {
+    await addToCart();
   };
 
   //show only if not enrolled
@@ -511,11 +519,11 @@ const PrimeTrainingPageMetaData: React.FC<{
               className={styles.supplymentaryLoName}
               onClick={unEnrollClickHandler}
             >
-               {loType === "certification"
-                  ? "Unenroll from certification"
-                  : loType === "learningProgram"
-                  ? "Unenroll from learning Program"
-                  : "Unenroll from course"}
+              {loType === "certification"
+                ? "Unenroll from certification"
+                : loType === "learningProgram"
+                ? "Unenroll from learning Program"
+                : "Unenroll from course"}
             </a>
           </div>
         </div>
