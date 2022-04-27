@@ -18,7 +18,7 @@ const CartPage = (props) => {
 
 
   const proceedToCheckout = () => {
-    navigate(`../checkout`);
+    navigate(`/checkout`);
   }
   console.log("Hi")
   return (

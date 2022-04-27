@@ -48,13 +48,16 @@ export const useCheckoutPage = (props) => {
 
 
   const navigateToOrdersSuccessPage = useCallback(() => {
-    navigate({
-      pathname: "../orders",
-      search: createSearchParams({
-        orderId: "000000030"
-      }).toString()
-    });
-  }, [navigate])
+    debugger;
+    // if (orderData?.placeOrder?.order?.order_number) {
+      navigate({
+        pathname: "/orders",
+        search: createSearchParams({
+          orderId: orderData?.placeOrder?.order?.order_number
+        }).toString()
+      });
+    // }
+  }, [navigate, orderData])
 
   const createOrder = useCallback(async ({ paymentMode } = {}) => {
     try {

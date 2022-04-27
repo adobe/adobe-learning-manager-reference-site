@@ -36,7 +36,12 @@ export default function CheckoutPage() {
     navigateToOrdersSuccessPage();
   };
 
-  console.log("orderData::" + orderData);
+  if(!hasItems){
+    return <h1>No Items in your cart! <Button variant="cta" type="button" onPress={placeOrder}>
+    Place Order
+  </Button></h1>
+  }
+
   return (
     <Provider theme={lightTheme} colorScheme={"light"}>
 
@@ -47,32 +52,36 @@ export default function CheckoutPage() {
         <h2>Grand Total</h2>
         <span>{formatPrice(prices["grand_total"])}</span>
       </div>
-      <Button variant="cta" type="button" onPress={placeOrder}>
+      {/* <Button variant="cta" type="button" onPress={placeOrder}>
         Place Order
-      </Button>
-      {paymentMethods.map((paymentMethod) => {
+      </Button> */}
+      <h2 className={styles.paymentHeading}>Payment Method</h2>
+      {paymentMethods.slice(0,1).map((paymentMethod) => {
         return (
-          <div className={styles.paymentContainer}>
-            <h2 className={styles.paymentHeading}>Payment Method</h2>
-            <div key={paymentMethod.code} className={styles.paymentModeContainer}>
-              <input
-                id={paymentMethod.code}
-                type="radio"
-                defaultChecked={selectedPaymentMode === paymentMethod.code}
-                name="paymentMethod"
-                value={paymentMethod.code}
-                onChange={() => handlePaymentModeSelection(paymentMethod.code)}
-              />
-              <label htmlFor={paymentMethod.code}>{paymentMethod.title}</label>
+          <>
+            <div className={styles.paymentContainer}>
+              
+              <div key={paymentMethod.code} className={styles.paymentModeContainer}>
+                <input
+                  id={paymentMethod.code}
+                  type="radio"
+                  defaultChecked={selectedPaymentMode === paymentMethod.code}
+                  name="paymentMethod"
+                  value={paymentMethod.code}
+                  onChange={() => handlePaymentModeSelection(paymentMethod.code)}
+                />
+                <label htmlFor={paymentMethod.code}>{paymentMethod.title}</label>
+              </div>
+
             </div>
-            <div className={styles.buttonContainer}>
-              <Button variant="cta" type="button" onPress={placeOrder}>
-                Place Order
-              </Button>
-            </div>
-          </div>
+          </>
         );
       })}
+      <div className={styles.buttonContainer}>
+        <Button variant="cta" type="button" onPress={placeOrder}>
+          Place Order
+        </Button>
+      </div>
     </Provider>
   );
 }
