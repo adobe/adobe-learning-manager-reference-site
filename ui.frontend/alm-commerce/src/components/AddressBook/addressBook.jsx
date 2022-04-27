@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useAddressBook } from '../../hooks/AddressBook/useAddressBook';
 import styles from "./addressBook.module.css";
 import { TextField, Checkbox, Button, ComboBox, Item, Picker } from '@adobe/react-spectrum';
-import storageInstance from "../../utils/storage"
+import storageInstance from "../../utils/storage";
+import CommerceLoader from "../Common/Loader"
 
 const REQUIRED_ERROR_MESSAGE = "Is required";
-function AddressBook() {
+function AddressBook({props}) {
     const [state, setState] = useState({
         firstName: { value: "", error: REQUIRED_ERROR_MESSAGE },
         middleName: { value: "", error: REQUIRED_ERROR_MESSAGE },
@@ -25,7 +26,11 @@ function AddressBook() {
         streetAddress, streetAddress2, telephone } = state;
 
 
-    const { error, countries, getCountryRegions, regions, addBillingAddress, defaultBillingAddress } = useAddressBook();
+    const { error, countries, getCountryRegions, regions,
+        addBillingAddress, defaultBillingAddress,
+        adressLoading, addBillingAddressLoading,
+        doeCartHasBillingAddress
+    } = useAddressBook();
 
     useEffect(() => {
         getCountryRegions({ code: country_code.value })
@@ -53,7 +58,10 @@ function AddressBook() {
             });
         }
     }, [defaultBillingAddress])
-    // console.log("state ", state);
+
+    // useEffect(() => {
+    //     if(doeCartHasBillingAddress) 
+    // }, [doeCartHasBillingAddress])
 
     const changeHandler = (key, value) => {
         setState((prevState) => {
@@ -92,6 +100,10 @@ function AddressBook() {
     const getDropDownClass = (value) => {
         let className = styles.select;
         return getValidationState(value) ? `${className} ${styles.error}` : className;
+    }
+
+    if (adressLoading) {
+        <CommerceLoader size="L" />
     }
 
     return (
@@ -200,9 +212,17 @@ function AddressBook() {
                 <div className={styles.row}>
                     <div className={styles.half}></div>
                     <div className={`${styles.half} ${styles.actionButton}`}>
-                        <Button variant="cta" type="button" onPress={submitHandler}>
-                            Add Billing Address
-                        </Button>
+                        {
+                            !doeCartHasBillingAddress ? (
+                                <Button variant="cta" type="button" onPress={submitHandler} isDisabled={addBillingAddressLoading}>
+                                    {addBillingAddressLoading ? <CommerceLoader size="S" /> : "Add Billing Address"}
+                                </Button>
+                            ) : <Button variant="cta" type="button" isDisabled={true}>
+                                Billing Address added
+                            </Button>
+
+                        }
+
                     </div>
                 </div>
 

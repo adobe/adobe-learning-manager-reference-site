@@ -4,14 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { useCartPage } from "../../hooks/CartPage/useCartPage";
 import styles from "./cartPage.module.css";
 import OrderSummary from "./orderSummary";
-import { lightTheme, Provider } from '@adobe/react-spectrum';
+import CommerceLoader from "../Common/Loader";
 
 
 const CartPage = (props) => {
   let navigate = useNavigate();
   const { cartItems,
     hasItems,
-    isCartUpdating,
     shouldShowLoadingIndicator, totalQuantity, prices = {} } = useCartPage();
 
   const totalPrice = prices["grand_total"] || {};
@@ -20,25 +19,25 @@ const CartPage = (props) => {
   const proceedToCheckout = () => {
     navigate(`/checkout`);
   }
-  console.log("Hi")
+  if (shouldShowLoadingIndicator) {
+    return (<CommerceLoader size="L"></CommerceLoader>)
+  }
   return (
-    <Provider theme={lightTheme} colorScheme={"light"}>
-      <div className={styles.pageContainer}>
-        <h1>Shopping Cart</h1>
-        <div className={styles.cartPageContainer}>
-          <div className={styles.productList}>
-            <ProductList cartItems={cartItems} />
-          </div>
-          {
-            hasItems && <div className={styles.orderSummary}>
-              <OrderSummary buttonLabel={"Proceed to Checkout"} clickHandler={proceedToCheckout} totalPrice={totalPrice} />
-            </div>
-          }
+    <div className={styles.pageContainer}>
+      <h1>Shopping Cart</h1>
+      <div className={styles.cartPageContainer}>
+        <div className={styles.productList}>
+          <ProductList cartItems={cartItems} />
         </div>
-
-        {/* <button onClick={proceedToCheckout}>Procees to Checkout</button> */}
+        {
+          hasItems && <div className={styles.orderSummary}>
+            <OrderSummary buttonLabel={"Proceed to Checkout"} clickHandler={proceedToCheckout} totalPrice={totalPrice} />
+          </div>
+        }
       </div>
-    </Provider>
+
+      {/* <button onClick={proceedToCheckout}>Procees to Checkout</button> */}
+    </div>
   )
 };
 

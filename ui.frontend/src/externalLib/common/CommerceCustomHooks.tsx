@@ -433,7 +433,7 @@ export default class CommerceCustomHooks implements ICustomHooks {
           cartId: cartId,
         },
       });
-      const addProductsToCart = response?.data?.addProductsToCart!;
+      const addProductsToCart = response?.data?.addProductsToCart?.cart;
       const items = addProductsToCart.items;
       const totalQuantity = addProductsToCart.total_quantity;
       const error = addProductsToCart.user_errors;

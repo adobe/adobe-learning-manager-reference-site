@@ -11,7 +11,7 @@ export default function Product(props) {
     <div className={styles.itemContainer}>
       <img src={almthumbnailurl} alt="" className={styles.itemImage} />
       <div className={styles.detailsContainer}>
-        <div>{name}</div>
+        <div className={styles.name}>{name}</div>
         <div>
           <span>{priceLabel}</span>
         </div>

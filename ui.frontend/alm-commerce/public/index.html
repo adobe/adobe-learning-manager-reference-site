@@ -201,6 +201,9 @@
       window.ALM.getALMUser = getALMUser;
       window.ALM.getAccountActiveFields = getAccountActiveFields;
       window.ALM.updateALMUser = updateALMUser;
+      window.ALM.updateCart = function (value) {
+        console.log(value);
+      };
       if (isPrimeUserLoggedIn()) {
         getALMUser();
       }

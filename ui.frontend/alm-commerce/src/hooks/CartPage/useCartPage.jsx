@@ -7,7 +7,7 @@ import storageInstance from "../../utils/storage";
 export const useCartPage = (props = {}) => {
   const cartId = storageInstance.getItem("CART_ID");
 
-  const [isCartUpdating, setIsCartUpdating] = useState(false);
+  // const [isCartUpdating, setIsCartUpdating] = useState(false);
 
   const { loading, error:cartDetailsError, data } = useQuery(GET_CART_DETAILS, 
     { variables: { cartId } ,
@@ -38,12 +38,12 @@ export const useCartPage = (props = {}) => {
   
   return {
     hasItems,
-    isCartUpdating,
     shouldShowLoadingIndicator,
     prices,
     cartItems,
     totalQuantity: data?.cart?.total_quantity || 0,
     error
+    // isCartUpdating,
   };
 };
 

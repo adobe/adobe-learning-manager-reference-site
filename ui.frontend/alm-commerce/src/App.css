@@ -1,10 +1,11 @@
+@import "./styles/variables.css";
+
 button {
   cursor: pointer !important;
 }
 
-
-
-.App {
-  max-width: 60%;
-  margin: auto;
+.AppContainer {
+  max-width: var(--prime-container-max-width-desktop);
+  width: var(--prime-container-width);
+  margin: 20px auto;
 }
