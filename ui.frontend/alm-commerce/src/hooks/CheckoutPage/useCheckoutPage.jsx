@@ -47,17 +47,20 @@ export const useCheckoutPage = (props) => {
   }, [cartId, fetchPaymentModes, isLoggedIn]);
 
 
-  const navigateToOrdersSuccessPage = useCallback(() => {
-    debugger;
-    // if (orderData?.placeOrder?.order?.order_number) {
+  const navigateToOrdersSuccessPage = useCallback((orderId) => {
+    if (orderId) {
       navigate({
         pathname: "/orders",
         search: createSearchParams({
-          orderId: orderData?.placeOrder?.order?.order_number
+          orderId
         }).toString()
       });
-    // }
-  }, [navigate, orderData])
+    }
+  }, [navigate, orderData]);
+
+  useEffect(() => {
+    navigateToOrdersSuccessPage(orderData?.placeOrder?.order?.order_number);
+  }, [navigateToOrdersSuccessPage, orderData])
 
   const createOrder = useCallback(async ({ paymentMode } = {}) => {
     try {

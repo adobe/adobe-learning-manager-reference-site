@@ -53,7 +53,7 @@ function AddressBook() {
             });
         }
     }, [defaultBillingAddress])
-    console.log("state ", state);
+    // console.log("state ", state);
 
     const changeHandler = (key, value) => {
         setState((prevState) => {

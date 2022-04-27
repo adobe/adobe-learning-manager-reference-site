@@ -32,14 +32,11 @@ export default function CheckoutPage() {
   };
 
   const placeOrder = () => {
-    // createOrder({ paymentMode: selectedPaymentMode });
-    navigateToOrdersSuccessPage();
+    createOrder({ paymentMode: selectedPaymentMode });
   };
 
-  if(!hasItems){
-    return <h1>No Items in your cart! <Button variant="cta" type="button" onPress={placeOrder}>
-    Place Order
-  </Button></h1>
+  if (!hasItems) {
+    return <h1>No Items in your cart! </h1>
   }
 
   return (
@@ -56,11 +53,11 @@ export default function CheckoutPage() {
         Place Order
       </Button> */}
       <h2 className={styles.paymentHeading}>Payment Method</h2>
-      {paymentMethods.slice(0,1).map((paymentMethod) => {
+      {paymentMethods.slice(0, 1).map((paymentMethod) => {
         return (
           <>
             <div className={styles.paymentContainer}>
-              
+
               <div key={paymentMethod.code} className={styles.paymentModeContainer}>
                 <input
                   id={paymentMethod.code}

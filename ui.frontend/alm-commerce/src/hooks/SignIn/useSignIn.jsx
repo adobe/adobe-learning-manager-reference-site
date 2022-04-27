@@ -63,7 +63,6 @@ export const useAlmSignIn = (props) => {
   );
 
   const error = useMemo(() => {
-    console.log(signInError);
     return { signInError: signInError?.message };
   }, [signInError]);
   return {

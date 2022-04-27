@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Redirect } from "react-router-dom";
 import "./App.css";
 import CartPage from "./components/CartPage";
 import CheckoutPage from "./components/CheckoutPage";
@@ -18,6 +18,7 @@ function App() {
   let checkoutPage = `/checkout`;
   let ordersPage = `/orders`;
   let cartPage = `/cart`;
+  let signPage = `/singIn`;
   // }
   return (
     <BrowserRouter basename={basePage} basePage>
@@ -27,7 +28,9 @@ function App() {
             <Route path={ordersPage} element={<OrdersPage></OrdersPage>} />
             <Route path={checkoutPage} element={<CheckoutPage></CheckoutPage>} />
             <Route path={cartPage} element={<CartPage></CartPage>} />
-            <Route path={basePage} element={<SignIn></SignIn>} />
+            <Route path="*"
+              element={<SignIn></SignIn>}
+            />
           </Routes>
         </div>
       </CommerceContextProviders>

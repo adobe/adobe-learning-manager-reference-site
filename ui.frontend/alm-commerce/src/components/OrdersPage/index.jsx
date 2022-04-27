@@ -7,7 +7,7 @@ export default function OrdersPage() {
     const orderId = useMemo(() => {
         return searchParams.get('orderId')
     }, [searchParams])
-    console.log("order id: ", orderId);
+    // console.log("order id: ", orderId);
     const { orderDetails } = useOrdersPage({ orderId });
     console.log("order Details : ", orderDetails);
     if (!orderDetails) return ("Loading....")
