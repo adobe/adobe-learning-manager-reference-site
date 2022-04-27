@@ -14,37 +14,15 @@ const ALMActiveFields: React.FC<{
   accountActiveFields: AccountActiveFields;
   onActiveFieldUpdate: Function;
   onSwitchValueUpdate: Function;
+  updateSelectedMultiValues: Function;
   userFieldData: any
+  predefinedMultiValues: any
 }> = (props) => {
   // const { formatMessage } = useIntl();
   // const config = getALMConfig();
 
-  const { activeFields, description, title, user, accountActiveFields, onActiveFieldUpdate, onSwitchValueUpdate, userFieldData } = props;
-  const [predefinedMultiValues, setPredefinedMultiValues] = useState(new Map());
-  
-  useEffect(() => {
-    let multiValues: any;
-    let selectedMultiValues = new Map();
-    const userFields: any = user.fields;
-    fields?.map((activeField) => {
-      if (activeField.allowedValues.length > 0 && activeField.isMultiValue) {
-        multiValues = userFields[activeField.name].filter(
-          (value: string) => activeField.allowedValues.includes(value)
-        );
-      }
-      multiValues?.map((filteredArrayTemp1: any) => {
-        selectedMultiValues.set(filteredArrayTemp1, true);
-      });
-    });
-    setPredefinedMultiValues(selectedMultiValues);
-  }, [user]);
-
-  const updateSelectedMultiValues = (allowedValue: any, value: boolean) => {
-    let selectedMultiValues = new Map(predefinedMultiValues);
-    selectedMultiValues.set(allowedValue,value);
-    setPredefinedMultiValues(selectedMultiValues);
-  }
-
+  const { activeFields, description, title, user, accountActiveFields, onActiveFieldUpdate, onSwitchValueUpdate,updateSelectedMultiValues, userFieldData, predefinedMultiValues } = props;
+ 
   const configuredActiveFields = activeFields
     ? activeFields.split(",").map((item) => item.trim())
     : [];

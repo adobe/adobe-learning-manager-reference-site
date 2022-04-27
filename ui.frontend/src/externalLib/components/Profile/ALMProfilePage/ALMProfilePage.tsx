@@ -20,17 +20,14 @@ const getActiveFieldAttributes = (config: PrimeConfig) => {
   return activeFieldAttributes;
 };
 
-let userActiveFields : any = {};
-
 const ALMProfilePage = () => {
   const { formatMessage } = useIntl();
   const config = getALMConfig();
   const { profileAttributes, updateProfileImage, updateAccountActiveFields, userFieldData, setUserFieldData} = useProfile();
   const { user, accountActiveFields } = profileAttributes;
-
+  const [predefinedMultiValues, setPredefinedMultiValues] = useState(new Map());
   console.log("Active fields :: " + accountActiveFields);
   const activeFieldAttributes = getActiveFieldAttributes(config);
-
   const {
     section1ActiveFields,
     section1Description,
@@ -40,6 +37,28 @@ const ALMProfilePage = () => {
     section2Title,
   } = activeFieldAttributes;
 
+  useEffect(() => {
+    let multiValues: any;
+    let selectedMultiValues = new Map();
+    const userFields: any = user.fields;
+    accountActiveFields?.fields?.map((activeField) => {
+      if (activeField.allowedValues.length > 0 && activeField.isMultiValue) {
+        multiValues = userFields[activeField.name].filter(
+          (value: string) => activeField.allowedValues.includes(value)
+        );
+      }
+      multiValues?.map((filteredArrayTemp1: any) => {
+        selectedMultiValues.set(filteredArrayTemp1, true);
+      });
+    });
+    setPredefinedMultiValues(selectedMultiValues);
+  }, [user]);
+
+  const updateSelectedMultiValues = (allowedValue: any, value: boolean) => {
+    let selectedMultiValues = new Map(predefinedMultiValues);
+    selectedMultiValues.set(allowedValue,value);
+    setPredefinedMultiValues(selectedMultiValues);
+  }
 
   const inputRef = useRef<null | HTMLInputElement>(null);
   const imageUploaded = async (event: any) => {
@@ -54,32 +73,34 @@ const ALMProfilePage = () => {
     await updateProfileImage(file.name, file);
   };
 
-  const onActiveFieldUpdate= (value: any,name:any)=>{ 
-    userActiveFields[name] = value;
+  const onActiveFieldUpdate= (value: any,name:any)=> {
     let fields: any = userFieldData.fields;
     fields[name] = value;
-    let data: any = {};
-    data.fields = userFieldData.fields;
-    setUserFieldData(data);
+    let userField: any = {};
+    userField.fields = userFieldData.fields;
+    setUserFieldData(userField);
   }
 
   const onSwitchValueUpdate=(attrName:any ,attrValue:any, fieldName:any)=>{
+    let fields: any = userFieldData.fields;
     if (attrValue) {
-      if (userActiveFields[fieldName] == undefined) {
-        userActiveFields[fieldName] = [];
+      if (fields[fieldName] == undefined) {
+        fields[fieldName] = [];
       }
-      userActiveFields[fieldName].push(attrName);
+      fields[fieldName].push(attrName);
     }
     // Remove the value from data if user switch off.
     else {
-      userActiveFields[fieldName] = userActiveFields[fieldName].filter(
-        (x: any) => x !== attrName
-      );
+      fields[fieldName] = fields[fieldName].filter((x: any) => x !== attrName);
+      let data: any = {};
+      data.fields = userFieldData.fields;
+      setUserFieldData(data);
     }
   }
 
-  const UpdateAccountActiveFields=async (e: any)=>{
-   await updateAccountActiveFields(userActiveFields,user?.id);
+  const UpdateAccountActiveFields= async ()=>{
+    let data: any = userFieldData.fields;
+    await updateAccountActiveFields(data, user?.id);
   }
 
   const startFileUpload = () => {
@@ -146,6 +167,8 @@ const ALMProfilePage = () => {
             onActiveFieldUpdate={onActiveFieldUpdate}
             onSwitchValueUpdate={onSwitchValueUpdate}
             userFieldData={userFieldData}
+            updateSelectedMultiValues={updateSelectedMultiValues}
+            predefinedMultiValues={predefinedMultiValues}
           />
           <ALMActiveFields
             title={section2Title}
@@ -156,6 +179,8 @@ const ALMProfilePage = () => {
             onActiveFieldUpdate={onActiveFieldUpdate}
             onSwitchValueUpdate={onSwitchValueUpdate}
             userFieldData={userFieldData}
+            updateSelectedMultiValues={updateSelectedMultiValues}
+            predefinedMultiValues={predefinedMultiValues}
           />
           <section>
             <></><hr style={{ width: "1100px" }} />
