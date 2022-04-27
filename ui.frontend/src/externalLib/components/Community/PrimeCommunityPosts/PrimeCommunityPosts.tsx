@@ -42,7 +42,7 @@ const PrimeCommunityPosts = (props: any) => {
                 {posts.length === 0 && !props.isSearchMode &&
                     <div className={styles.primeCommunityNoPostFound}>
                         {formatMessage({
-                            id: "prime.community.noPostMessage",
+                            id: "alm.community.noPostMessage",
                             defaultMessage: "No post found",
                         })}
                     </div>

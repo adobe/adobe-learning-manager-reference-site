@@ -446,7 +446,7 @@ const PrimeTrainingPageMetaData: React.FC<{
           </span>
           <div className={styles.innerContainer}>
             <label className={styles.label}>
-              {GetTranslation("prime.catalog.card.jobAid", true)}
+              {GetTranslation("alm.catalog.card.jobAid", true)}
             </label>
             <div>
               {training.supplementaryLOs.map((item) => {

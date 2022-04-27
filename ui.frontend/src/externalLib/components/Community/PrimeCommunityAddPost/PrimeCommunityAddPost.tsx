@@ -48,7 +48,7 @@ const PrimeCommunityAddPost = (props: any) => {
             <div className={styles.primeAddPostSection}>
                 <div className={styles.primeAddPostMessage}>
                     {formatMessage({
-                        id: "prime.community.shareLearningMessage",
+                        id: "alm.community.shareLearningMessage",
                         defaultMessage: "Share your learning with your colleagues",
                     })}
                 </div>
@@ -62,9 +62,9 @@ const PrimeCommunityAddPost = (props: any) => {
         {showSuccessConfirmation && 
                 <PrimeAlertDialog
                     variant="confirmation"
-                    title={formatMessage({id: "prime.community.postPublished.label",defaultMessage: "Post Published"})}
-                    primaryActionLabel={formatMessage({id: "prime.community.ok.label",defaultMessage: "Ok"})}
-                    body={formatMessage({id: "prime.community.postPublished.successMessage",defaultMessage: "Your post has been published. It may take some time to appear on the board."})}
+                    title={formatMessage({id: "alm.community.postPublished.label",defaultMessage: "Post Published"})}
+                    primaryActionLabel={formatMessage({id: "alm.community.ok.label",defaultMessage: "Ok"})}
+                    body={formatMessage({id: "alm.community.postPublished.successMessage",defaultMessage: "Your post has been published. It may take some time to appear on the board."})}
                     onPrimaryAction={hideConfirmationDialog}
                 ></PrimeAlertDialog>
         }

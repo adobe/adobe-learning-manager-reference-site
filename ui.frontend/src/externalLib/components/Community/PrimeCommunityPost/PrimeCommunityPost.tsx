@@ -23,8 +23,8 @@
     const firstRunForUpvote = useRef(true);
     const firstRunForDownvote = useRef(true);
     const [showComments, setShowComments] = useState(false);
-    const showCommentsLabel = formatMessage({id: "prime.community.post.showComments", defaultMessage: "Show Comments",});
-    const hideCommentsLabel = formatMessage({id: "prime.community.post.hideComments", defaultMessage: "Hide Comments",});
+    const showCommentsLabel = formatMessage({id: "alm.community.post.showComments", defaultMessage: "Show Comments",});
+    const hideCommentsLabel = formatMessage({id: "alm.community.post.hideComments", defaultMessage: "Hide Comments",});
     const [buttonLabel, setButtonLabel] = useState(showCommentsLabel);
     const [commentCount, setCommentCount] = useState(post.commentCount);
     const [ showSuccessConfirmation, setShowSucessConfirmation ] = useState(false);
@@ -155,7 +155,7 @@
           <PrimeCommunityObjectInput 
             ref={ref}
             object={post} 
-            inputPlaceholder={formatMessage({id: "prime.community.post.commentHere", defaultMessage: "Comment here"})}
+            inputPlaceholder={formatMessage({id: "alm.community.post.commentHere", defaultMessage: "Comment here"})}
             primaryActionHandler={(value: any) => saveCommentHandler(value)}
           ></PrimeCommunityObjectInput>
         </div>
@@ -166,9 +166,9 @@
         {showSuccessConfirmation && 
           <PrimeAlertDialog
               variant="confirmation"
-              title={formatMessage({id: "prime.community.postPublished.label",defaultMessage: "Post Published"})}
-              primaryActionLabel={formatMessage({id: "prime.community.ok.label",defaultMessage: "Ok"})}
-              body={formatMessage({id: "prime.community.postPublished.successMessage", defaultMessage: "Your post has been published. It may take some time to appear on the board."})}
+              title={formatMessage({id: "alm.community.postPublished.label",defaultMessage: "Post Published"})}
+              primaryActionLabel={formatMessage({id: "alm.community.ok.label",defaultMessage: "Ok"})}
+              body={formatMessage({id: "alm.community.postPublished.successMessage", defaultMessage: "Your post has been published. It may take some time to appear on the board."})}
               onPrimaryAction={hideConfirmationDialog}
           ></PrimeAlertDialog>
         }

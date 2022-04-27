@@ -38,7 +38,7 @@ const PrimeCommunityBoardPage = () => {
       value
         ? value.length
         : formatMessage({
-            id: "prime.community.search.no.label",
+            id: "alm.community.search.no.label",
             defaultMessage: "No",
           })
     );
@@ -73,7 +73,7 @@ const PrimeCommunityBoardPage = () => {
               searchModeHandler={searchModeHandler}
               resetSearchHandler={resetSearchHandler}
               placeHolderText={formatMessage({
-                id: "prime.community.searchInBoard.placeholder",
+                id: "alm.community.searchInBoard.placeholder",
                 defaultMessage: "Search within board",
               })}
             ></PrimeCommunitySearch>
@@ -96,7 +96,7 @@ const PrimeCommunityBoardPage = () => {
           <div className={styles.primeCommunitySearchCount}>
             {searchResult}{" "}
             {formatMessage({
-              id: "prime.community.search.resultFound",
+              id: "alm.community.search.resultFound",
               defaultMessage: "result(s) found",
             })}
           </div>
@@ -106,7 +106,7 @@ const PrimeCommunityBoardPage = () => {
           >
             (
             {formatMessage({
-              id: "prime.community.search.clear.label",
+              id: "alm.community.search.clear.label",
               defaultMessage: "Clear",
             })}
             )

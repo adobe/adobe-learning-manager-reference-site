@@ -12,7 +12,7 @@ const PrimeCommunityAddPostButton = (props: any) => {
     return (
         <>
             <PrimeCommunityAddPostDialogTrigger
-                buttonLabel={formatMessage({id: "prime.community.newPost.label", defaultMessage: "New Post",})}
+                buttonLabel={formatMessage({id: "alm.community.newPost.label", defaultMessage: "New Post",})}
                 savePostHandler={(input: any, postingType: any, resource: any, isResourceModified: any, pollOptions: any) => {saveHandler(input, postingType, resource, isResourceModified, pollOptions)}}
             ></PrimeCommunityAddPostDialogTrigger>
         </>

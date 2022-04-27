@@ -79,7 +79,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
       {/* <h2 className={styles.courseInfoHeader}>{name} </h2> */}
       <div className={styles.metadata}>
         <div className={styles.metadataContents}>
-          <div>{GetTranslation(`prime.catalog.card.${loType}`, true)}</div>
+          <div>{GetTranslation(`alm.catalog.card.${loType}`, true)}</div>
           {(isprerequisiteLO && !loType) ? "":authorNames.length ? (
             <>
               <div className={styles.metadata__separator}></div>

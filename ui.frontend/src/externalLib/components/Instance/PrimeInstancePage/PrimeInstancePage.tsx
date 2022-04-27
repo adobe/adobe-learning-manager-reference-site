@@ -85,7 +85,7 @@ const PrimeInstancePage = () => {
 
   const headerLabel = formatMessage(
     {
-      id: "prime.instance.header.label",
+      id: "alm.instance.header.label",
     },
     {
       0: name,
@@ -112,7 +112,7 @@ const PrimeInstancePage = () => {
             <div className={styles.courseDetials}>
               <h3 className={styles.title}>{name}</h3>
               <p className={styles.type}>
-                {GetTranslation(`prime.catalog.card.${training.loType}`, true)}
+                {GetTranslation(`alm.catalog.card.${training.loType}`, true)}
               </p>
             </div>
           </div>
@@ -121,7 +121,7 @@ const PrimeInstancePage = () => {
           <div className={styles.selectInstanceContainer}>
             <h3 className={styles.selectInstance}>
               {formatMessage({
-                id: "prime.instance.select.instance",
+                id: "alm.instance.select.instance",
                 defaultMessage: "Select An Instance",
               })}
             </h3>
@@ -135,7 +135,7 @@ const PrimeInstancePage = () => {
                     className={`${styles.instanceNameWrapper} ${styles.commonHeader}`}
                   >
                     {formatMessage({
-                      id: "prime.instance.name",
+                      id: "alm.instance.name",
                       defaultMessage: "Instance Name",
                     })}
                     <span
@@ -149,7 +149,7 @@ const PrimeInstancePage = () => {
                     className={`${styles.dateWrapper} ${styles.commonHeader} `}
                   >
                     {formatMessage({
-                      id: "prime.instance.start.date",
+                      id: "alm.instance.start.date",
                       defaultMessage: "Start Date",
                     })}
 
@@ -164,7 +164,7 @@ const PrimeInstancePage = () => {
                     className={`${styles.locationWrapper} ${styles.commonHeader}`}
                   >
                     {formatMessage({
-                      id: "prime.instance.location",
+                      id: "alm.instance.location",
                       defaultMessage: "Location",
                     })}
 

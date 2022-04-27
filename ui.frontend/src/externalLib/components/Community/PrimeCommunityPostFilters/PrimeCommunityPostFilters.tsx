@@ -8,7 +8,7 @@ const PrimeCommunityPostFilters  = (props: any) => {
         "Date Created": "-dateCreated", 
         "Date Updated": "-dateUpdated", 
     };
-    const sortFilterLabel = {id: "prime.community.board.sortBy", defaultMessage: "Sort by"}
+    const sortFilterLabel = {id: "alm.community.board.sortBy", defaultMessage: "Sort by"}
 
     const sortClickHandler = (option: any) => {
         setSelectedSortFilter(option);

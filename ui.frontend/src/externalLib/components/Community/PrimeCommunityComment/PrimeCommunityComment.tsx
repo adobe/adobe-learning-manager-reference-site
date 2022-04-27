@@ -24,8 +24,8 @@ const PrimeCommunityComment  = (props: any) => {
   const firstRunForDownvote = useRef(true);
   const [showReplies, setShowReplies] = useState(false);
   const [showReplyInput, setShowReplyInput] = useState(false);
-  const showRepliesLabel = formatMessage({id: "prime.community.comment.showReplies", defaultMessage: "Show Replies",});
-  const hideRepliesLabel = formatMessage({id: "prime.community.comment.hideReplies", defaultMessage: "Hide Replies",});
+  const showRepliesLabel = formatMessage({id: "alm.community.comment.showReplies", defaultMessage: "Show Replies",});
+  const hideRepliesLabel = formatMessage({id: "alm.community.comment.hideReplies", defaultMessage: "Hide Replies",});
   const [buttonLabel, setButtonLabel] = useState(showRepliesLabel);
   const [replyCount, setReplyCount] = useState(comment.replyCount);
   const [ showEditCommentView, setShowEditCommentView ] = useState(false);
@@ -152,7 +152,7 @@ const PrimeCommunityComment  = (props: any) => {
         <PrimeCommunityObjectActions
           object={comment} 
           type="comment"
-          actionLabel={formatMessage({id: "prime.community.reply.label", defaultMessage: "Reply",})} 
+          actionLabel={formatMessage({id: "alm.community.reply.label", defaultMessage: "Reply",})} 
           actionClickHandler={replyClickHandler}
           buttonLabel={buttonLabel} 
           buttonCount={replyCount} 
@@ -170,7 +170,7 @@ const PrimeCommunityComment  = (props: any) => {
             <PrimeCommunityObjectInput 
               ref={ref}
               object={comment} 
-              inputPlaceholder={formatMessage({id: "prime.community.comment.replyHere", defaultMessage: "Reply here"})}
+              inputPlaceholder={formatMessage({id: "alm.community.comment.replyHere", defaultMessage: "Reply here"})}
               primaryActionHandler={(value: any) => saveReplyHandler(value)}
             ></PrimeCommunityObjectInput>
         }
@@ -181,7 +181,7 @@ const PrimeCommunityComment  = (props: any) => {
       <PrimeCommunityObjectInput 
         ref={ref}
         object={comment}
-        inputPlaceholder={formatMessage({id: "prime.community.comment.commentHere", defaultMessage: "Comment here"})}
+        inputPlaceholder={formatMessage({id: "alm.community.comment.commentHere", defaultMessage: "Comment here"})}
         defaultValue={comment.richText}
         primaryActionHandler={(value: any) => updateComment(value)}
         secondaryActionHandler={() => setShowEditCommentView(false)}

@@ -30,7 +30,7 @@ const PrimeCatalogSearch: React.FC<{
     <div className={styles.container}>
       <TextField
         placeholder={formatMessage({
-          id: "prime.catalog.search.placeholder",
+          id: "alm.catalog.search.placeholder",
           defaultMessage: "Enter text and press enter",
         })}
         onKeyDown={searchChangedHandler}

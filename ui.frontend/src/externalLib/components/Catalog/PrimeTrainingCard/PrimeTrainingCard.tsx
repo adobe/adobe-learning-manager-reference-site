@@ -10,12 +10,12 @@ import { GetTranslation } from "../../../utils/translationService";
 import styles from "./PrimeTrainingCard.module.css";
 
 export const formatMap: any = {
-  Elearning: "prime.catalog.card.self.paced",
-  Activity: "prime.catalog.card.activity",
-  Blended: "prime.catalog.card.blended",
-  "Virtual Classroom": "prime.catalog.card.virtual.classroom",
-  Classroom: "prime.catalog.card.classroom",
-  "Self Paced": "prime.catalog.card.self.paced",
+  Elearning: "alm.catalog.card.self.paced",
+  Activity: "alm.catalog.card.activity",
+  Blended: "alm.catalog.card.blended",
+  "Virtual Classroom": "alm.catalog.card.virtual.classroom",
+  Classroom: "alm.catalog.card.classroom",
+  "Self Paced": "alm.catalog.card.self.paced",
 };
 const PrimeTrainingCard: React.FC<{
   training: PrimeLearningObject;
@@ -60,7 +60,7 @@ const PrimeTrainingCard: React.FC<{
   const hasCompletedTrainingHtml = enrollment?.hasPassed ? (
     <div className={styles.completed}>
       {formatMessage({
-        id: "prime.catalog.card.complete.label",
+        id: "alm.catalog.card.complete.label",
         defaultMessage: "Complete",
       })}
     </div>
@@ -73,7 +73,7 @@ const PrimeTrainingCard: React.FC<{
     return format ? GetTranslation(`${formatMap[format]}`, true) : "";
   }, [format]);
   const trainingTypeLabel = useMemo(() => {
-    return type ? GetTranslation(`prime.catalog.card.${type}`, true) : "";
+    return type ? GetTranslation(`alm.catalog.card.${type}`, true) : "";
   }, [type]);
   let priceLabel = "";
   if (training.price?.value) {
@@ -125,7 +125,7 @@ const PrimeTrainingCard: React.FC<{
                         <div className={styles.extraLabel}>
                           <span>
                             {GetTranslation(
-                              "prime.catalog.card.skills.label",
+                              "alm.catalog.card.skills.label",
                               true
                             )}
                           </span>
@@ -143,7 +143,7 @@ const PrimeTrainingCard: React.FC<{
                     <div className={styles.skillsContainer}>
                       <span className={styles.skiillsLabel}>
                         {GetTranslation(
-                          "prime.catalog.card.skills.label",
+                          "alm.catalog.card.skills.label",
                           true
                         )}
                       </span>
@@ -161,7 +161,7 @@ const PrimeTrainingCard: React.FC<{
                         <div className={styles.percentComplete}>
                           {formatMessage(
                             {
-                              id: "prime.catalog.card.progress.percent",
+                              id: "alm.catalog.card.progress.percent",
                               defaultMessage: `${enrollment?.progressPercent}% completes`,
                             },
                             { "0": enrollment?.progressPercent }

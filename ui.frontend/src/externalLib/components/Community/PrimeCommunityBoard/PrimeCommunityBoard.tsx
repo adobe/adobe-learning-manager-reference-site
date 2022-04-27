@@ -86,23 +86,23 @@ const PrimeCommunityBoard  = (props: any) => {
           <div className={styles.primeBoardSkill}>
             {boardSkills && 
               <span className={styles.primeBoardSkillNames}>
-                {formatMessage({id: "prime.community.board.skills", defaultMessage: "Skills"})}: {boardSkills}
+                {formatMessage({id: "alm.community.board.skills", defaultMessage: "Skills"})}: {boardSkills}
               </span>
             }
             <div className={styles.primeBoardIcon} title={
               board.visibility === "PUBLIC" ? 
                 formatMessage({
-                  id: "prime.community.board.public",
+                  id: "alm.community.board.public",
                   defaultMessage: "Public Board",
                 }) 
                 : board.visibility === "PRIVATE" ?
                   formatMessage({
-                    id: "prime.community.board.private",
+                    id: "alm.community.board.private",
                     defaultMessage: "Private Board",
                   })
                   :
                   formatMessage({
-                    id: "prime.community.board.restricted",
+                    id: "alm.community.board.restricted",
                     defaultMessage: "Restricted Board",
                 })
               }
@@ -121,22 +121,22 @@ const PrimeCommunityBoard  = (props: any) => {
                 <span className={styles.primeActivityStatsText}>
                     {board.visibility === "HIGH" ? 
                     formatMessage({
-                      id: "prime.community.board.highActivity",
+                      id: "alm.community.board.highActivity",
                       defaultMessage: "High Activity",
                     }) : 
                       board.visibility === "NORMAL" ? 
                       formatMessage({
-                        id: "prime.community.board.normalActivity",
+                        id: "alm.community.board.normalActivity",
                         defaultMessage: "Normal Activity",
                       }) : 
                         formatMessage({
-                          id: "prime.community.board.lowActivity",
+                          id: "alm.community.board.lowActivity",
                           defaultMessage: "Low Activity",
                         })}
                 </span>
                 <div className={styles.primeActivityInfoIcon} data-toggle="tooltip" data-trigger="hover" data-tooltip-position="right" title={
                   formatMessage({
-                    id: "prime.community.board.activityCalc",
+                    id: "alm.community.board.activityCalc",
                     defaultMessage: "Calculated daily based on the number of new posts, comments, participants, views, likes and dislikes",
                   })}>
                   {<Info/>}
@@ -148,7 +148,7 @@ const PrimeCommunityBoard  = (props: any) => {
                 {<FileTxt/>}
               </div>
               <span className={styles.primeActivityStatsText}>
-                {board.postCount} {formatMessage({id: "prime.community.board.post.label", defaultMessage: "Post(s)",})}
+                {board.postCount} {formatMessage({id: "alm.community.board.post.label", defaultMessage: "Post(s)",})}
               </span>
             </div>
             <div className={styles.primeBoardActivityStats}>
@@ -156,7 +156,7 @@ const PrimeCommunityBoard  = (props: any) => {
                 {<Visibility/>}
               </div>
               <span className={styles.primeActivityStatsText}>
-                {board.viewsCount} {formatMessage({id: "prime.community.board.view.label", defaultMessage: "View(s)",})}
+                {board.viewsCount} {formatMessage({id: "alm.community.board.view.label", defaultMessage: "View(s)",})}
               </span>
             </div>
             <div className={styles.primeBoardActivityStats}>
@@ -164,7 +164,7 @@ const PrimeCommunityBoard  = (props: any) => {
                 {<UserGroup/>}
               </div>
               <span className={styles.primeActivityStatsText}>
-                {board.userCount} {formatMessage({id: "prime.community.board.people.label", defaultMessage: "People",})}
+                {board.userCount} {formatMessage({id: "alm.community.board.people.label", defaultMessage: "People",})}
               </span>
             </div>
             <div className={styles.primeVerticalSeperator}></div>
@@ -173,11 +173,11 @@ const PrimeCommunityBoard  = (props: any) => {
                 {<Clock/>}
               </div>
               <span className={styles.primeActivityStatsText}>
-                {formatMessage({id: "prime.community.board.createdOn.label", defaultMessage: "Created on ",})}
+                {formatMessage({id: "alm.community.board.createdOn.label", defaultMessage: "Created on ",})}
                 {formatDate(board.dateCreated)}
-                {formatMessage({id: "prime.community.board.by.label", defaultMessage: " by ",})}
+                {formatMessage({id: "alm.community.board.by.label", defaultMessage: " by ",})}
                 {board.createdBy.name !== "" ? board.createdBy.name : 
-                  formatMessage({id: "prime.community.board.anoymous.label", defaultMessage: "Anonymous",})}
+                  formatMessage({id: "alm.community.board.anoymous.label", defaultMessage: "Anonymous",})}
               </span>
             </div>
         </div>

@@ -232,7 +232,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
             </div>
             <div className={styles.primeDialogHeaderText}>
               {formatMessage({
-                id: "prime.community.upload.label",
+                id: "alm.community.upload.label",
                 defaultMessage: "Upload",
               })}
             </div>
@@ -243,7 +243,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
         <PrimeCommunityObjectInput
           ref={ref}
           inputPlaceholder={formatMessage({
-            id: "prime.community.postHere.label",
+            id: "alm.community.postHere.label",
             defaultMessage: "Write or paste something here...",
           })}
           characterLimit={COMMENT_CHAR_LIMIT}
@@ -266,7 +266,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
                       </div>
                       <div className={styles.primeOptionTextFilled}>
                         {formatMessage({
-                          id: "prime.community.markQuestion.label",
+                          id: "alm.community.markQuestion.label",
                           defaultMessage: "Mark Question",
                         })}
                       </div>
@@ -281,7 +281,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
                       </div>
                       <div className={styles.primeOptionText}>
                         {formatMessage({
-                          id: "prime.community.markQuestion.label",
+                          id: "alm.community.markQuestion.label",
                           defaultMessage: "Mark Question",
                         })}
                       </div>
@@ -299,7 +299,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
                         {SOCIAL_POLL_SVG()}
                       </div>
                       <div className={styles.primeOptionTextFilled}>
-                        {formatMessage({id: "prime.community.addPoll.label",defaultMessage: "Add Poll"})}
+                        {formatMessage({id: "alm.community.addPoll.label",defaultMessage: "Add Poll"})}
                       </div>
                     </div>
                     :
@@ -308,7 +308,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
                         {SOCIAL_POLL_SVG()}
                       </div>
                       <div className={styles.primeOptionText}>
-                        {formatMessage({id: "prime.community.addPoll.label", defaultMessage: "Add Poll"})}
+                        {formatMessage({id: "alm.community.addPoll.label", defaultMessage: "Add Poll"})}
                       </div>
                     </div>
                   }
@@ -319,7 +319,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
               pollOptions?.map((item: any, index: any) => (
                 <div className={styles.primeCommunityPollInputContainer} key={index}>
                   <input id={"poll-option-" + index} className={styles.primeCommunityPollInput} onKeyUp={() => setInputValue(index)} defaultValue={item} placeholder={
-                    formatMessage({id: "prime.community.pollOptionPlaceholder", defaultMessage: "Type Option here"})}>
+                    formatMessage({id: "alm.community.pollOptionPlaceholder", defaultMessage: "Type Option here"})}>
                   </input>
                   <Button
                     UNSAFE_className={styles.primeCommunityRemoveOption}
@@ -334,7 +334,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
             }
             {pollTypeSelected && 
               <button className={styles.primeCommunityAddOptionButton} onClick={addNewPollOption}>
-                {formatMessage({id: "prime.community.addNewPollOption", defaultMessage: "Add Option"})}
+                {formatMessage({id: "alm.community.addNewPollOption", defaultMessage: "Add Option"})}
               </button>
             }
           </div>
@@ -343,7 +343,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
           <div>
             <ProgressBar
               label={formatMessage({
-                id: "prime.community.uploading.label",
+                id: "alm.community.uploading.label",
                 defaultMessage: "Uploading...",
               })}
               value={fileUploadProgress}
@@ -358,7 +358,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
             <button
               className={styles.primeStatusSvg}
               title={formatMessage({
-                id: "prime.community.removeUpload.label",
+                id: "alm.community.removeUpload.label",
                 defaultMessage: "Remove upload",
               })}
               onClick={cancelClickHandler}
@@ -376,7 +376,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
           }}
         >
           {formatMessage({
-            id: "prime.community.cancel.label",
+            id: "alm.community.cancel.label",
             defaultMessage: "Cancel",
           })}
         </Button>
@@ -388,14 +388,14 @@ const PrimeCommunityAddPostDialog = (props: any) => {
             }}
           >
             {formatMessage({
-              id: "prime.community.post.label",
+              id: "alm.community.post.label",
               defaultMessage: "Post",
             })}
           </Button>
         ) : (
           <Button variant="cta" isDisabled={true}>
             {formatMessage({
-              id: "prime.community.post.label",
+              id: "alm.community.post.label",
               defaultMessage: "Post",
             })}
           </Button>

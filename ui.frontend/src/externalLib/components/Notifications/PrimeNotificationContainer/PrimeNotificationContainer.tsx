@@ -67,7 +67,7 @@ const PrimeNotificationContainer = () => {
           type="button"
           className={styles.notificationBellIcon}
           title={formatMessage({
-            id: "prime.notifications.icon",
+            id: "alm.notifications.icon",
             defaultMessage: "User Notifications",
           })}
           id="userNotificationIcon"

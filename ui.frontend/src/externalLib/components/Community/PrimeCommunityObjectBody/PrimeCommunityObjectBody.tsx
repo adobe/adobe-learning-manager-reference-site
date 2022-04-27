@@ -66,7 +66,7 @@ const PrimeCommunityObjectBody = (props: any) => {
       {viewMore &&
         <button className={styles.primeCommunityViewMoreButton} onClick={getTruncatedDescription}>
           {formatMessage({
-            id: "prime.community.viewMore",
+            id: "alm.community.viewMore",
             defaultMessage: "View more",
           })}
         </button>

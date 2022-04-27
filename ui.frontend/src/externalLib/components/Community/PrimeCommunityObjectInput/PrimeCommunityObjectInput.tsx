@@ -93,7 +93,7 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
                     </button>
                 }
                 <div className={styles.primeTextAreaCountRemaining}>
-                    {charactersRemaining} {formatMessage({id: "prime.community.post.charactersLeft", defaultMessage: "characters left"})}
+                    {charactersRemaining} {formatMessage({id: "alm.community.post.charactersLeft", defaultMessage: "characters left"})}
                 </div>
             </div>
             <PrimeCommunityLinkPreview currentInput={ref?.current?.value} showLinkPreview={showLinkPreview}></PrimeCommunityLinkPreview>

@@ -48,7 +48,7 @@ const PrimeCommunityBoardList = () => {
       value
         ? value.length
         : formatMessage({
-            id: "prime.community.search.no.label",
+            id: "alm.community.search.no.label",
             defaultMessage: "No",
           })
     );
@@ -100,7 +100,7 @@ const PrimeCommunityBoardList = () => {
                 searchModeHandler={searchModeHandler}
                 resetSearchHandler={resetSearchHandler}
                 placeHolderText={formatMessage({
-                  id: "prime.community.search.placeholder",
+                  id: "alm.community.search.placeholder",
                   defaultMessage: "Search within community",
                 })}
               ></PrimeCommunitySearch>
@@ -117,7 +117,7 @@ const PrimeCommunityBoardList = () => {
             <div className={styles.primeCommunitySearchCount}>
               {searchResult}{" "}
               {formatMessage({
-                id: "prime.community.search.resultFound",
+                id: "alm.community.search.resultFound",
                 defaultMessage: "result(s) found",
               })}
             </div>
@@ -127,7 +127,7 @@ const PrimeCommunityBoardList = () => {
             >
               (
               {formatMessage({
-                id: "prime.community.search.clear.label",
+                id: "alm.community.search.clear.label",
                 defaultMessage: "Clear",
               })}
               )
@@ -154,7 +154,7 @@ const PrimeCommunityBoardList = () => {
         {!isSearchMode && items?.length === 0 && (
           <div className={styles.primeCommunityNoBoardFound}>
             {formatMessage({
-              id: "prime.community.noBoardMessage",
+              id: "alm.community.noBoardMessage",
               defaultMessage: "No boards found",
             })}
           </div>
