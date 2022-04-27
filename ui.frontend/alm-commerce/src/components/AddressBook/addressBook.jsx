@@ -32,8 +32,28 @@ function AddressBook() {
     }, [country_code.value, getCountryRegions]);
 
     useEffect(() => {
-        console.log("inside default address useeffect", defaultBillingAddress);
+        // console.log("inside default address useeffect", defaultBillingAddress);
+        if (defaultBillingAddress?.firstname) {
+            setState((prevState) => {
+                const street1 = defaultBillingAddress.street?.length ? defaultBillingAddress.street[0] : "";
+                const street2 = defaultBillingAddress.street?.length > 0 ? defaultBillingAddress.street[1] : "";
+                return {
+                    ...prevState,
+                    city: { value: defaultBillingAddress.city },
+                    firstName: { value: defaultBillingAddress.firstname },
+                    middleName: { value: defaultBillingAddress.middleName || "" },
+                    lastName: { value: defaultBillingAddress.lastname },
+                    country_code: { value: defaultBillingAddress.country_code },
+                    streetAddress: { value: street1 },
+                    streetAddress2: { value: "" },
+                    region: { value: defaultBillingAddress.region?.region_id },
+                    postcode: { value: defaultBillingAddress.postcode },
+                    telephone: { value: defaultBillingAddress.telephone },
+                }
+            });
+        }
     }, [defaultBillingAddress])
+    // console.log("state ", state);
 
     const changeHandler = (key, value) => {
         setState((prevState) => {
@@ -66,7 +86,7 @@ function AddressBook() {
     }
 
     const getValidationState = (value = "") => {
-        return isSubmitted && value.trim() === "" && "invalid"
+        return isSubmitted && value.toString().trim() === "" && "invalid"
     }
 
     const getDropDownClass = (value) => {

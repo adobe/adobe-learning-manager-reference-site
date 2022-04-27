@@ -1,3 +1,10 @@
 button {
   cursor: pointer !important;
 }
+
+
+
+.App {
+  max-width: 60%;
+  margin: auto;
+}

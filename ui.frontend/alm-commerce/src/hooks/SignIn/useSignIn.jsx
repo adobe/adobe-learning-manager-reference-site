@@ -27,6 +27,7 @@ export const useAlmSignIn = (props) => {
         3600
       );
       navigate(`/cart`);
+      //TO- DO: handle redirect, if query params is there then redirect there, else home page redirect
     };
     if (isLoggedIn && !storageInstance.getItem(CART_ID)) {
       getCart();
@@ -47,6 +48,9 @@ export const useAlmSignIn = (props) => {
         storageInstance.setItem("TOKEN", token, 3600);
         setIsloggedIn(true);
         setIsSigningIn(false);
+        if (process.env.NODE_ENV === "production") {
+          fetch(`/cpoauth.commerceToken.html?token=${token}&pagePath=${window.location.pathname}`);
+        }
       } catch (error) {
         if (process.env.NODE_ENV !== "production") {
           console.error(error);
@@ -59,7 +63,6 @@ export const useAlmSignIn = (props) => {
   );
 
   const error = useMemo(() => {
-    console.log(signInError);
     return { signInError: signInError?.message };
   }, [signInError]);
   return {

@@ -144,11 +144,11 @@ class APIService {
 
   public async addProductToCart(
     sku: string
-  ): Promise<{ items: any; error: any }> {
+  ): Promise<{ items: any; totalQuantity: Number; error: any }> {
     if (this.isUserLoggedIn() && getALMConfig().usageType === ADOBE_COMMERCE) {
       return new CommerceCustomHooks().addProductToCart(sku);
     }
-    return { items: [], error: null };
+    return { items: [], totalQuantity: 0, error: null };
   }
 }
 

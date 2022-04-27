@@ -133,39 +133,39 @@ export const CREATE_ORDER = gql`
 
 
 export const GET_ORDERS = gql`
-    query getOrders {
-        customer {
-            orders(filter: {}, currentPage: 1, pageSize: 20) {     
-            items {
-                total {
-                    base_grand_total {
-                        currency
-                        value
-                    }
-                }
-                id
-                items {
-                    id
-                    product_sku
-                    product_name
-                    selected_options {
-                        label
-                        value
-                    }
-                    eligible_for_return
-                    product_type
-                    status
-                    
-                }
+query getOrders($orderId:String!) {
+    customer {
+      orders(filter: {number: {eq: $orderId}}) {
+        items {
+          total {
+            base_grand_total {
+              currency
+              value
             }
-            page_info {
-                current_page
-                page_size
-                total_pages
+          }
+          id
+          items {
+            id
+            product_sku
+            product_name
+            selected_options {
+              label
+              value
             }
+            eligible_for_return
+            product_type
+            status
+          }
         }
+        page_info {
+          current_page
+          page_size
+          total_pages
+        }
+      }
     }
-}
+  }
+  
 
 `;
 

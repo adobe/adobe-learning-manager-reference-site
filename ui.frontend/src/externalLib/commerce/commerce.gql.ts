@@ -151,6 +151,7 @@ export const ADD_PRODUCTS_TO_CART = gql`
           }
           quantity
         }
+        total_quantity
       }
       user_errors {
         message

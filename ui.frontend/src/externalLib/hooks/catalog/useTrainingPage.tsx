@@ -127,13 +127,14 @@ export const useTrainingPage = (
 
   const addToCartHandler = useCallback(async (): Promise<{
     items: any;
+    totalQuantity: Number;
     error: any;
   }> => {
     try {
       return await APIServiceInstance.addProductToCart(trainingInstance.id);
     } catch (error) {
       // throw error;
-      return { items: [], error: error };
+      return { items: [], totalQuantity: 0, error: error };
     }
   }, [trainingInstance]);
 

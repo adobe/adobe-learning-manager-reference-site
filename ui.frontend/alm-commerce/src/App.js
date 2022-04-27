@@ -1,24 +1,40 @@
-import { Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Redirect } from "react-router-dom";
 import "./App.css";
 import CartPage from "./components/CartPage";
 import CheckoutPage from "./components/CheckoutPage";
+import OrdersPage from "./components/OrdersPage";
 import SignIn from "./components/SignInPage";
 import { CommerceContextProviders } from "./contextProviders/CommerceContextProvider";
+import { getALMConfig } from "./utils/global";
 function App() {
   // eslint-disable-next-line no-restricted-globals
-  const basePath = window.location.pathname;
-  const checkoutPath = `${basePath}/checkout`;
-  const cartPath = `${basePath}/cart`;
+  let basePage = getALMConfig().commerceBasePath;
+  // let checkoutPage = `${basePage}/checkout`;
+  // let ordersPage = `${basePage}/orders`;
+  // let cartPage = `${basePage}/cart`;
+  //http://localhost:4502/content/learning/language-masters/en/commerce/cart.html/
+
+  // if (process.env.NODE_ENV !== "production") {
+  let checkoutPage = `/checkout`;
+  let ordersPage = `/orders`;
+  let cartPage = `/cart`;
+  let signPage = `/singIn`;
+  // }
   return (
-    <CommerceContextProviders>
-      <div className="App">
-        <Routes>
-          <Route path={checkoutPath} element={<CheckoutPage></CheckoutPage>} />
-          <Route path={cartPath} element={<CartPage></CartPage>} />
-          <Route path={basePath} element={<SignIn></SignIn>} />
-        </Routes>
-      </div>
-    </CommerceContextProviders>
+    <BrowserRouter basename={basePage} basePage>
+      <CommerceContextProviders>
+        <div className="App">
+          <Routes>
+            <Route path={ordersPage} element={<OrdersPage></OrdersPage>} />
+            <Route path={checkoutPage} element={<CheckoutPage></CheckoutPage>} />
+            <Route path={cartPage} element={<CartPage></CartPage>} />
+            <Route path="*"
+              element={<SignIn></SignIn>}
+            />
+          </Routes>
+        </div>
+      </CommerceContextProviders>
+    </BrowserRouter>
   );
 }
 export default App;

@@ -120,7 +120,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   const navigateToCommerceCartPage = () => {
     let {commerceCartPath} = getALMConfig();
-    window.location = commerceCartPath;
+    window.location = commerceCartPath + "/cart";
   };
 
   const navigateToProfilePage = () => {
