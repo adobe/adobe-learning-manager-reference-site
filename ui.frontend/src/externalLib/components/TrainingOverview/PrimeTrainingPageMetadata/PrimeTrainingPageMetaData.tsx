@@ -136,9 +136,10 @@ const PrimeTrainingPageMetaData: React.FC<{
       if (error && error[0]?.message) {
         console.error(error[0].message);
       } else {
-        console.log(items);
         getALMObject().updateCart(totalQuantity);
-        window.location.pathname = redirectPathName;
+        if (redirectPathName) {
+          window.location.pathname = `${redirectPathName}`;
+        }
       }
     } catch (e) {}
   };
