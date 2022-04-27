@@ -1,0 +1,19 @@
+.itemContainer {
+  display: flex;
+  padding: 10px 0;
+  gap: 20px;
+}
+
+.itemImage {
+  width: 100px;
+  height: 100px;
+  background-color: grey;
+  flex-direction: row;
+  flex: 100px 0 0;
+}
+.detailsContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  flex: 4 0 0;
+}

@@ -25,6 +25,7 @@ export interface PrimeConfig {
   mountingPoints: {
     [key: string]: string;
   };
+  commerceBasePath: string;
 }
 
 export interface ALM {
