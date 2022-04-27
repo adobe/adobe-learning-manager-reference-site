@@ -5,6 +5,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   "use strict";
 
   const CONFIG_META_TAG_NAME = "cp-config";
+  const COMMERCE_CART_COUNTER_REL = ".alm-header-cart-counter";
 
   const setALMConfig = () => {
     const cpConfigElmt = document.querySelector(
@@ -140,6 +141,19 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     return urlStr;
   };
 
+  const updateCart = (counter) => {
+    if (counter > 0)
+    {
+      let counterElem = $(COMMERCE_CART_COUNTER_REL);
+      counterElem.show();
+      counterElem.text(counter);
+    }
+    else
+    {
+      $(COMMERCE_CART_COUNTER_REL).hide();
+    }
+  };
+
   init();
 
   window.ALM.getALMConfig = getALMConfig;
@@ -159,4 +173,5 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.navigateToSignOutPage = navigateToSignOutPage;
   window.ALM.navigateToCatalogPageFromCategory = navigateToCatalogPageFromCategory;
   window.ALM.navigateToCatalogPageForStates = navigateToCatalogPageForStates;
+  window.ALM.updateCart = updateCart;
 })(window, document, Granite, jQuery);

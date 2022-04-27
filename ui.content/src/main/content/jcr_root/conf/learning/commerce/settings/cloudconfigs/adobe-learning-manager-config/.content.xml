@@ -2,7 +2,7 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2022-03-07T12:55:59.528+05:30"
+        cq:lastModified="{Date}2022-04-18T14:00:17.789+05:30"
         cq:lastModifiedBy="admin"
         cq:template="/apps/learning/configuration/page/template"
         jcr:primaryType="cq:PageContent"
@@ -10,16 +10,19 @@
         sling:configPropertyInherit="true"
         sling:resourceType="learning/configuration/page"
         accountId="7110"
-        authorRefreshToken="e5f4371ef030cc3ae76ebd266ba1b3f9"
-        clientId="4c0e8131-8ef0-44f2-b17b-96265ec6ddf9"
-        clientSecret="a8221fe8-e961-4d74-b65c-10e1ee0c62be"
-        locale="en-US"
         almBaseURL="https://learningmanagerqe.adobe.com"
-        siteMap="siteMap"
-        usageType="aem-sites"
+        refreshToken="683f05f7a3463f382b797d3e6889a9f2"
+        clientId="c495b4f0-2f9b-441c-acd4-22dcfba84718"
+        clientSecret="c08aef1d-51d2-47d8-9b13-481dceca66d3"
+        almCdnBaseUrl="https://primeapps-stage.adobe.com/almsearch/api/v1/qe/7110/a75477eb-2a4c-4f6e-b897-a6506da18e3f"
+        commerceURL="https://cprime-tpb4idi-i6chtryvajcii.ap-4.magentosite.cloud"
+        graphqlProxyPath="https://cprime-tpb4idi-i6chtryvajcii.ap-4.magentosite.cloud/graphql"
+        commerceStoreName="default"
+        commonConfig.disableLinks="{Boolean}true"
+        commonConfig.emitPageLinkEvents="true"
+        siteMap="false"
         theme.background="transparent"
         theme.primaryColor="rgb(38,118,255)"
         theme.secondaryColor="rgb(0,145,255)"
-        commonConfig.emitPageLinkEvents="true"
-        commonConfig.disableLinks="true"/>
+        usageType="aem-commerce"/>
 </jcr:root>

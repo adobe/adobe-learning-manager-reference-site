@@ -71,7 +71,10 @@
     <div class="alm-header-icons">
         <sly data-sly-resource="${resource.path @ resourceType='learning/components/notification', appendPath='/*'}"/>
         <!-- <img class="alm-header-notification" src="/content/dam/learning/site/Smock_Bell.png" ></img> -->
-        <img class="alm-header-cart" src="/content/dam/learning/site/cart-icon.svg" style="display: none;"></img>
+        <div class="alm-header-cart-cont">
+            <img class="alm-header-cart" src="/content/dam/learning/site/cart-icon.svg" style="display: none;"></img>
+            <span class="alm-header-cart-counter"></span>
+        </div>
         <img class="alm-header-profile" src="" ></img>
         <img class="alm-header-down" src="/content/dam/learning/site/ChevronDown.svg"></img>
         <div class="alm-header-profile-options">
