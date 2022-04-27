@@ -32,7 +32,11 @@ const PrimeTrainingPageMetaData: React.FC<{
   showEnrollDeadline: string;
   enrollmentHandler: () => void;
   launchPlayerHandler: () => void;
-  addToCartHandler: () => Promise<{ items: any; error: any }>;
+  addToCartHandler: () => Promise<{
+    items: any;
+    totalQuantity: Number;
+    error: any;
+  }>;
   unEnrollmentHandler: Function;
   jobAidClickHandler: Function;
 }> = ({
@@ -128,11 +132,12 @@ const PrimeTrainingPageMetaData: React.FC<{
 
   const addToCart = async (redirectPathName = "") => {
     try {
-      const { items, error } = await addToCartHandler();
+      const { items, totalQuantity, error } = await addToCartHandler();
       if (error && error[0]?.message) {
         console.error(error[0].message);
       } else {
         console.log(items);
+        getALMObject().updateCart(totalQuantity);
         window.location.pathname = redirectPathName;
       }
     } catch (e) {}

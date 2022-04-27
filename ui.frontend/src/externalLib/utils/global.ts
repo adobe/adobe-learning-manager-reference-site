@@ -25,7 +25,6 @@ export interface PrimeConfig {
   mountingPoints: {
     [key: string]: string;
   };
-  commerceBasePath: string;
 }
 
 export interface ALM {
@@ -40,6 +39,7 @@ export interface ALM {
   setALMAttribute: Function;
   getALMAttribute: Function;
   updateALMUser: Function;
+  updateCart: Function;
   getAccountActiveFields: Function;
   updateAccountActiveFieldsDetails: Function;
 }
