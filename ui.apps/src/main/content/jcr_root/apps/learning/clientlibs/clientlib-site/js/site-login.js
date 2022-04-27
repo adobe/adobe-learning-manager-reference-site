@@ -239,6 +239,40 @@
       return getALMUser();
     }
 
+    const updateAccountActiveFieldsDetails = async (activeFields, userId) => {
+      const baseApiUrl = getALMConfig().primeApiURL;
+      const body = {
+        data: {
+          type: "user",
+          id: userId,
+          attributes: {
+            fields: activeFields,
+          },
+        },
+      };
+      const updateAccountActiveFieldsUrl = baseApiUrl + "users/" + `${userId}`;
+      const headers = { "content-type": "application/json" };
+      try {
+        const response = await fetch(updateAccountActiveFieldsUrl, {
+          credentials: "include",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `oauth ${getAccessToken()}`,
+          },
+          method: "PATCH",
+          body: JSON.stringify(body),
+          Accept: "application/vnd.api+json",
+        });
+        if (response) {
+          const activeFields = await response.json();
+          console.log(activeFields);
+          return activeFields;
+        }
+      } catch (e) {
+        throw e;
+      }
+    };
+
     function getAccessToken() {
       let cookieValues = document.cookie.match(
         `(^|[^;]+)\\s*${ACCESS_TOKEN_COOKIE_NAME}\\s*=\\s*([^;]+)`
@@ -314,6 +348,7 @@
     window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
     window.ALM.getAccessToken = getAccessToken;
     window.ALM.getALMUser = getALMUser;
+    window.ALM.updateAccountActiveFieldsDetails = updateAccountActiveFieldsDetails;
     window.ALM.updateALMUser = updateALMUser;
     window.ALM.handleLogIn = handleLogIn;
     window.ALM.handleLogOut = handleLogOut;
