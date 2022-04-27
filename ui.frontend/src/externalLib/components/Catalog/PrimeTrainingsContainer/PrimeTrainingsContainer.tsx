@@ -21,7 +21,7 @@ const PrimeTrainingsContainer: React.FC<{
     </ul>
   ) : (
     <p className={styles.noResults}>
-      {formatMessage({ id: "prime.catalog.no.result" })}
+      {formatMessage({ id: "alm.catalog.no.result" })}
     </p>
   );
   return (

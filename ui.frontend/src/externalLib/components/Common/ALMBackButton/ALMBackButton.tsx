@@ -17,7 +17,7 @@ const ALMBackButton = () => {
         <ChevronLeft></ChevronLeft>
         <span className={styles.buttonLabel}>
           {formatMessage({
-            id: "prime.community.back.label",
+            id: "alm.community.back.label",
             defaultMessage: "Back",
           })}
         </span>

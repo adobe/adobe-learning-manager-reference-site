@@ -84,7 +84,7 @@ const PrimeCatalogContainer = () => {
         onPress={toggleFiltersonMobile}
       >
         {formatMessage({
-          id: "prime.catalog.filter",
+          id: "alm.catalog.filter",
           defaultMessage: "Filters",
         })}
         <Filter />
@@ -112,7 +112,7 @@ const PrimeCatalogContainer = () => {
           <div className={styles.headerContainer}>
             <div className={styles.header}>
               <h1 className={styles.label}>
-                {GetTranslation("prime.catalog.header", true)}
+                {GetTranslation("alm.catalog.header", true)}
               </h1>
 
               {searchContainerHTML}

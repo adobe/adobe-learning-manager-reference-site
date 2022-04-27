@@ -31,7 +31,7 @@ export default class ALMErrorBoundary extends React.Component<
       return (
         <div>
           <h2 className={styles.errorMessage}>
-            {GetTranslation("prime.error.message")}
+            {GetTranslation("alm.error.message")}
             {this.state.error && this.state.error?.toString()}
           </h2>
         </div>

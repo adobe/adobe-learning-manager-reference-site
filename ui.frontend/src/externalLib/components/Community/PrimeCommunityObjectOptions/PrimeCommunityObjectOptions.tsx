@@ -60,7 +60,7 @@ const PrimeCommunityObjectOptions = (props: any) => {
           <div className={styles.primeObjectRegularOption} onClick={editObjectHandler}>
             {
               formatMessage({
-                id: "prime.community.board.edit",
+                id: "alm.community.board.edit",
                 defaultMessage: "Edit",
               })
             }
@@ -70,7 +70,7 @@ const PrimeCommunityObjectOptions = (props: any) => {
           <div className={styles.primeObjectRegularOption} onClick={() => {updateRightAnswerHandler(true)}}>
             {
               formatMessage({
-                id: "prime.community.board.markAsRightAnswer",
+                id: "alm.community.board.markAsRightAnswer",
                 defaultMessage: "Mark as Right answer",
               })
             }
@@ -81,7 +81,7 @@ const PrimeCommunityObjectOptions = (props: any) => {
           <div className={styles.primeObjectRegularOption} onClick={() => {updateRightAnswerHandler(false)}}>
             {
               formatMessage({
-                id: "prime.community.board.unmarkAsRightAnswer",
+                id: "alm.community.board.unmarkAsRightAnswer",
                 defaultMessage: "Unmark as Right answer",
               })
             }
@@ -92,7 +92,7 @@ const PrimeCommunityObjectOptions = (props: any) => {
           <div className={styles.primeObjectCriticalOption} onClick={deleteObjectHandler}>
             {
               formatMessage({
-                id: "prime.community.board.delete",
+                id: "alm.community.board.delete",
                 defaultMessage: "Delete",
               })
             }
@@ -101,7 +101,7 @@ const PrimeCommunityObjectOptions = (props: any) => {
         <div className={styles.primeObjectCriticalOption} onClick={reportObjectHandler}>
           {
             formatMessage({
-              id: "prime.community.board.report",
+              id: "alm.community.board.report",
               defaultMessage: "Report",
             })
           }

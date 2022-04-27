@@ -12,7 +12,7 @@ const PrimeCommunityMobileBackBanner = (props: any) => {
                         <ChevronLeft></ChevronLeft>
                     </div>
                     <button className={styles.primeCommunityBackButton}>
-                        {formatMessage({id: "prime.community.back.label", defaultMessage: "Back",})}    
+                        {formatMessage({id: "alm.community.back.label", defaultMessage: "Back",})}    
                     </button>
                 </div>
             </div>

@@ -61,7 +61,7 @@ const PrimeCommunityBoardOptions = (props: any) => {
             onClick={removeFavouriteHandler}
           >
             {formatMessage({
-              id: "prime.community.board.removeFromFavourites",
+              id: "alm.community.board.removeFromFavourites",
               defaultMessage: "Remove from Favourites",
             })}
           </div>
@@ -71,14 +71,14 @@ const PrimeCommunityBoardOptions = (props: any) => {
             onClick={addFavouriteHandler}
           >
             {formatMessage({
-              id: "prime.community.board.addToFavourites",
+              id: "alm.community.board.addToFavourites",
               defaultMessage: "Add to Favourites",
             })}
           </div>
         )} */}
         <div className={styles.primeBoardOption} onClick={copyUrlHandler}>
           {formatMessage({
-            id: "prime.community.board.copyUrl",
+            id: "alm.community.board.copyUrl",
             defaultMessage: "Copy URL",
           })}
         </div>
@@ -86,7 +86,7 @@ const PrimeCommunityBoardOptions = (props: any) => {
         {/* <div className={styles.primeBoardCriticalOption} onClick={deleteBoardHandler}>
                 {
                     formatMessage({
-                    id: "prime.community.board.delete",
+                    id: "alm.community.board.delete",
                     defaultMessage: "Delete",
                     })
                 }
@@ -96,7 +96,7 @@ const PrimeCommunityBoardOptions = (props: any) => {
           onClick={reportBoardHandler}
         >
           {formatMessage({
-            id: "prime.community.board.report",
+            id: "alm.community.board.report",
             defaultMessage: "Report",
           })}
         </div>

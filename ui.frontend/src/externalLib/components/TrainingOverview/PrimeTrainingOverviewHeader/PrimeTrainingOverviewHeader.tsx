@@ -19,7 +19,7 @@ const PrimeTrainingOverviewHeader: React.FC<{
     <div style={bannerUrl ? { background: `url(${bannerUrl}) no-repeat center center / cover`} : { backgroundColor: color }} className={styles.header}>
       <div className={styles.headingContainer}>
         <div className={styles.format}>
-          {GetTranslation(`prime.catalog.card.${format}`, true)}
+          {GetTranslation(`alm.catalog.card.${format}`, true)}
         </div>
         <h1
           className={styles.title}

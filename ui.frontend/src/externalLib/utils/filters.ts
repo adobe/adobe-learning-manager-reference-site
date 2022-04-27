@@ -12,79 +12,79 @@ import { getQueryParamsIObjectFromUrl } from "./global";
 export const filtersDefaultState: FilterState = {
   loTypes: {
     type: "loTypes",
-    label: "prime.catalog.filter.loType.label",
+    label: "alm.catalog.filter.loType.label",
     list: [
       {
         value: "course",
-        label: "prime.catalog.card.course.plural",
+        label: "alm.catalog.card.course.plural",
         checked: false,
       },
       {
         value: "learningProgram",
-        label: "prime.catalog.card.learningProgram.plural",
+        label: "alm.catalog.card.learningProgram.plural",
         checked: false,
       },
       {
         value: "jobAid",
-        label: "prime.catalog.card.jobAid.plural",
+        label: "alm.catalog.card.jobAid.plural",
         checked: false,
       },
       {
         value: "certification",
-        label: "prime.catalog.card.certification.plural",
+        label: "alm.catalog.card.certification.plural",
         checked: false,
       },
     ],
   },
   learnerState: {
     type: "learnerState",
-    label: "prime.catalog.filter.status.label",
+    label: "alm.catalog.filter.status.label",
     list: [
       {
         value: "enrolled",
-        label: "prime.catalog.filter.enrolled",
+        label: "alm.catalog.filter.enrolled",
         checked: false,
       },
       {
         value: "completed",
-        label: "prime.catalog.filter.completed",
+        label: "alm.catalog.filter.completed",
         checked: false,
       },
       {
         value: "started",
-        label: "prime.catalog.filter.started",
+        label: "alm.catalog.filter.started",
         checked: false,
       },
       {
         value: "notenrolled",
-        label: "prime.catalog.filter.notenrolled",
+        label: "alm.catalog.filter.notenrolled",
         checked: false,
       },
     ],
   },
   loFormat: {
     type: "loFormat",
-    label: "prime.catalog.filter.format.label",
+    label: "alm.catalog.filter.format.label",
     list: [
       {
         value: "ACTIVITY",
-        label: "prime.catalog.card.activity",
+        label: "alm.catalog.card.activity",
         checked: false,
       },
-      { value: "BLENDED", label: "prime.catalog.card.blended", checked: false },
+      { value: "BLENDED", label: "alm.catalog.card.blended", checked: false },
       {
         value: "SELF PACED",
-        label: "prime.catalog.card.self.paced",
+        label: "alm.catalog.card.self.paced",
         checked: false,
       },
       {
         value: "VIRTUAL CLASSROOM",
-        label: "prime.catalog.card.virtual.classroom",
+        label: "alm.catalog.card.virtual.classroom",
         checked: false,
       },
       {
         value: "CLASSROOM",
-        label: "prime.catalog.card.classroom",
+        label: "alm.catalog.card.classroom",
         checked: false,
       },
     ],
@@ -92,53 +92,53 @@ export const filtersDefaultState: FilterState = {
   //TO-DO : Add pagination for filters
   skillName: {
     type: "skillName",
-    label: "prime.catalog.filter.skills.label",
+    label: "alm.catalog.filter.skills.label",
     list: [],
     isListDynamic: true,
   },
   tagName: {
     type: "tagName",
-    label: "prime.catalog.filter.tags.label",
+    label: "alm.catalog.filter.tags.label",
     list: [],
     isListDynamic: true,
   },
 
   catalogs: {
     type: "catalogs",
-    label: "prime.catalog.card.catalogs.label.plural",
+    label: "alm.catalog.card.catalogs.label.plural",
     list: [],
     isListDynamic: true,
   },
   skillLevel: {
     type: "skillLevel",
-    label: "prime.catalog.filter.skills.level.label",
+    label: "alm.catalog.filter.skills.level.label",
     list: [
-      { value: "1", label: "prime.catalog.filter.beginner", checked: false },
+      { value: "1", label: "alm.catalog.filter.beginner", checked: false },
       {
         value: "2",
-        label: "prime.catalog.filter.intermediate",
+        label: "alm.catalog.filter.intermediate",
         checked: false,
       },
-      { value: "3", label: "prime.catalog.filter.advanced", checked: false },
+      { value: "3", label: "alm.catalog.filter.advanced", checked: false },
     ],
   },
   duration: {
     type: "duration",
-    label: "prime.catalog.filter.duration.label",
+    label: "alm.catalog.filter.duration.label",
     list: [
       {
         value: "0-1800",
-        label: "prime.catalog.filter.lessThan30Minutes",
+        label: "alm.catalog.filter.lessThan30Minutes",
         checked: false,
       },
       {
         value: "1801-7200",
-        label: "prime.catalog.filter.30minutesTo2Hours",
+        label: "alm.catalog.filter.30minutesTo2Hours",
         checked: false,
       },
       {
         value: "7201-3600000",
-        label: "prime.catalog.filter.moreThan2Hours",
+        label: "alm.catalog.filter.moreThan2Hours",
         checked: false,
       },
     ],

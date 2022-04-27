@@ -41,7 +41,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
       case "post":
         setConfirmationMessage(
           formatMessage({
-            id: "prime.community.post.deleteConfirmation",
+            id: "alm.community.post.deleteConfirmation",
             defaultMessage: "Are you sure you want to delete this post?"
           })
         );
@@ -49,7 +49,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
       case "comment":
         setConfirmationMessage(
           formatMessage({
-            id: "prime.community.comment.deleteConfirmation",
+            id: "alm.community.comment.deleteConfirmation",
             defaultMessage: "Are you sure you want to delete this comment?"
           })
         );
@@ -57,7 +57,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
       case "reply":
         setConfirmationMessage(
           formatMessage({
-            id: "prime.community.reply.deleteConfirmation",
+            id: "alm.community.reply.deleteConfirmation",
             defaultMessage: "Are you sure you want to delete this reply?"
           })
         );
@@ -74,7 +74,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
       case "post":
         setConfirmationMessage(
           formatMessage({
-            id: "prime.community.post.reportConfirmation",
+            id: "alm.community.post.reportConfirmation",
             defaultMessage: "Are you sure you want to report this post?"
           })
         );
@@ -82,7 +82,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
       case "comment":
         setConfirmationMessage(
           formatMessage({
-            id: "prime.community.comment.reportConfirmation",
+            id: "alm.community.comment.reportConfirmation",
             defaultMessage: "Are you sure you want to report this comment?"
           })
         );
@@ -90,7 +90,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
       case "reply":
         setConfirmationMessage(
           formatMessage({
-            id: "prime.community.reply.reportConfirmation",
+            id: "alm.community.reply.reportConfirmation",
             defaultMessage: "Are you sure you want to report this reply?"
           })
         );

@@ -37,7 +37,7 @@ const PrimeCommunityBoardFilters = (props: any) => {
   },[skills]);
 
   const skillFilterLabel = {
-    id: "prime.community.board.skill",
+    id: "alm.community.board.skill",
     defaultMessage: "Skill",
   };
 
@@ -51,7 +51,7 @@ const PrimeCommunityBoardFilters = (props: any) => {
     // "relevance": "Relavance"
   };
   const sortFilterLabel = {
-    id: "prime.community.board.sortBy",
+    id: "alm.community.board.sortBy",
     defaultMessage: "Sort by",
   };
 

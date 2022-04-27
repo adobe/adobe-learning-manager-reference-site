@@ -43,7 +43,7 @@ const PrimeInstanceItem = (props: any) => {
           <p className={styles.instructorsName}>
             <span className={styles.aboveMobile}>
               {formatMessage({
-                id: "prime.instance.instructors",
+                id: "alm.instance.instructors",
                 defaultMessage: "Instructors",
               })}
               {" : "}
@@ -92,7 +92,7 @@ const PrimeInstanceItem = (props: any) => {
           UNSAFE_className={styles.button}
         >
           {formatMessage({
-            id: "prime.instance.see.details",
+            id: "alm.instance.see.details",
             defaultMessage: "See details",
           })}
         </Button>

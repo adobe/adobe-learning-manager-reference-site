@@ -108,14 +108,14 @@ const PrimeCommunityPoll= (props: any) => {
                         }
                     </div>
                     {pollStats[index] && alreadyVoted &&
-                        <div className={styles.primeCommunityPollStats}>{getVotePercent(parseInt(pollStats[index]))}% ({pollStats[index]} {formatMessage({id: "prime.community.post.poll.voteLabel", defaultMessage: "vote"})})</div>
+                        <div className={styles.primeCommunityPollStats}>{getVotePercent(parseInt(pollStats[index]))}% ({pollStats[index]} {formatMessage({id: "alm.community.post.poll.voteLabel", defaultMessage: "vote"})})</div>
                     }
                 </div>
             ))}
             {choiceSelected !== "" && !alreadyVoted &&
                 <div className={styles.primeCommunitySubmitPollContainer}>
                     <button className={styles.primeCommunitySubmitPollButton} onClick={submitPoll}>
-                        {formatMessage({id: "prime.community.post.poll.submitChoice", defaultMessage: "Submit Choice"})}
+                        {formatMessage({id: "alm.community.post.poll.submitChoice", defaultMessage: "Submit Choice"})}
                     </button>
                     <hr/>
                 </div>
@@ -123,7 +123,7 @@ const PrimeCommunityPoll= (props: any) => {
             {choiceSelected !== "" && alreadyVoted &&
             <div>
                 <div className={styles.primeCommunityAlreadySubmittedPoll}>
-                    {formatMessage({id: "prime.community.post.poll.submittedChoice", defaultMessage: "You have submitted your choice"})}
+                    {formatMessage({id: "alm.community.post.poll.submittedChoice", defaultMessage: "You have submitted your choice"})}
                 </div>
                 <hr/>
             </div>

@@ -95,17 +95,17 @@ const ALMSkillComponent = (props: any) => {
   const getSkillLevelName = (levelId: any) => {
     if (levelId === "1")
       return formatMessage({
-        id: "prime.profile.skillLevel.beginner",
+        id: "alm.profile.skillLevel.beginner",
         defaultMessage: "Beginner",
       });
     else if (levelId === "2")
       return formatMessage({
-        id: "prime.profile.skillLevel.intermediate",
+        id: "alm.profile.skillLevel.intermediate",
         defaultMessage: "Intermediate",
       });
     else if (levelId === "3")
       return formatMessage({
-        id: "prime.profile.skillLevel.advanced",
+        id: "alm.profile.skillLevel.advanced",
         defaultMessage: "Advanced",
       });
     else return "";
@@ -114,17 +114,17 @@ const ALMSkillComponent = (props: any) => {
   const getFormattedSourceString = (source: any) => {
     if (source === "ADMIN_ASSIGN")
       return formatMessage({
-        id: "prime.profile.skills.adminAssign",
+        id: "alm.profile.skills.adminAssign",
         defaultMessage: "Added by Admin",
       });
     else if (source === "LO_ENROLL")
       return formatMessage({
-        id: "prime.profile.skills.loEnroll",
+        id: "alm.profile.skills.loEnroll",
         defaultMessage: "Added based on trainings taken",
       });
     else if (source === "USER_SELECTED")
       return formatMessage({
-        id: "prime.profile.skills.selfAssigned",
+        id: "alm.profile.skills.selfAssigned",
         defaultMessage: "Self Assigned",
       });
     else return "";
@@ -161,14 +161,14 @@ const ALMSkillComponent = (props: any) => {
       <section className={styles.skillsArea}>
         <div className={styles.skillsHeading}>
           {formatMessage({
-            id: "prime.profile.skills.areasOfInterest",
+            id: "alm.profile.skills.areasOfInterest",
             defaultMessage: "Your Areas of Interest",
           })}
         </div>
         <hr />
         <div className={styles.skillsDescription}>
           {formatMessage({
-            id: "prime.profile.skills.description",
+            id: "alm.profile.skills.description",
             defaultMessage:
               "Select areas of interest. You will see recommendations based on your interest.",
           })}
@@ -206,11 +206,11 @@ const ALMSkillComponent = (props: any) => {
                     }}
                     className={styles.removeInterestButton}
                     aria-label={formatMessage({
-                      id: "prime.profile.skills.removeInterest",
+                      id: "alm.profile.skills.removeInterest",
                       defaultMessage: "Remove from My interests",
                     })}
                     title={formatMessage({
-                      id: "prime.profile.skills.removeInterest",
+                      id: "alm.profile.skills.removeInterest",
                       defaultMessage: "Remove from My interests",
                     })}
                   ></button>
@@ -236,7 +236,7 @@ const ALMSkillComponent = (props: any) => {
                             )}
                             %
                             {formatMessage({
-                              id: "prime.profile.skills.achieved",
+                              id: "alm.profile.skills.achieved",
                               defaultMessage: " Achieved",
                             })}
                           </div>
@@ -254,7 +254,7 @@ const ALMSkillComponent = (props: any) => {
             onClick={loadMoreUserSkillInterest}
           >
             {formatMessage({
-              id: "prime.profile.skills.viewMore",
+              id: "alm.profile.skills.viewMore",
               defaultMessage: "View more",
             })}
           </button>
@@ -263,7 +263,7 @@ const ALMSkillComponent = (props: any) => {
           <div className={styles.skillsContainer}>
             <span>
               {formatMessage({
-                id: "prime.profile.skills.noSkillInterest",
+                id: "alm.profile.skills.noSkillInterest",
                 defaultMessage: "You have not expressed interest in any Skill",
               })}
             </span>
@@ -273,7 +273,7 @@ const ALMSkillComponent = (props: any) => {
           <div className={styles.modifyInterest}>
             <button className={styles.actionButton} onClick={editSkillInterest}>
               {formatMessage({
-                id: "prime.profile.skills.modifyInterest",
+                id: "alm.profile.skills.modifyInterest",
                 defaultMessage: "Modify Interest",
               })}
             </button>
@@ -307,7 +307,7 @@ const ALMSkillComponent = (props: any) => {
         {mode === "edit" && hasMoreSkills && (
           <button className={styles.showMoreButton} onClick={loadMoreSkills}>
             {formatMessage({
-              id: "prime.profile.skills.viewMore",
+              id: "alm.profile.skills.viewMore",
               defaultMessage: "View more",
             })}
           </button>
@@ -316,7 +316,7 @@ const ALMSkillComponent = (props: any) => {
           <div className={styles.skillsContainer}>
             <span>
               {formatMessage({
-                id: "prime.profile.skills.noSkill",
+                id: "alm.profile.skills.noSkill",
                 defaultMessage: "No skill found",
               })}
             </span>
@@ -326,13 +326,13 @@ const ALMSkillComponent = (props: any) => {
           <div className={styles.modifyInterest}>
             <button className={styles.actionButton} onClick={saveSkillInterest}>
               {formatMessage({
-                id: "prime.profile.skills.addInterest",
+                id: "alm.profile.skills.addInterest",
                 defaultMessage: "Add Interest",
               })}
             </button>
             <button className={styles.actionButton} onClick={discardSelection}>
               {formatMessage({
-                id: "prime.profile.skills.cancel",
+                id: "alm.profile.skills.cancel",
                 defaultMessage: "Cancel",
               })}
             </button>

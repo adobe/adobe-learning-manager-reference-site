@@ -63,7 +63,7 @@ const PrimeCommunityComments = (props: any) => {
                 {hasMoreItems &&
                     <button className={styles.showMoreCommentsButton} onClick={loadMoreComments}>
                         {formatMessage({
-                            id: "prime.community.showMoreComments",
+                            id: "alm.community.showMoreComments",
                             defaultMessage: "Show more comments",
                         })}
                     </button>

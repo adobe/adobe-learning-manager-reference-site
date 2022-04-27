@@ -96,7 +96,7 @@ const PrimeCommunityReply  = (props: any) => {
       <PrimeCommunityObjectInput 
         ref={ref}
         object={reply}
-        inputPlaceholder={formatMessage({id: "prime.community.comment.replyHere", defaultMessage: "Reply here"})}
+        inputPlaceholder={formatMessage({id: "alm.community.comment.replyHere", defaultMessage: "Reply here"})}
         defaultValue={reply.richText}
         primaryActionHandler={(value: any) => updateReply(value)}
         secondaryActionHandler={() => setShowEditReplyView(false)}

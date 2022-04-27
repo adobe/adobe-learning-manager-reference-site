@@ -136,7 +136,7 @@ const ALMProfilePage = () => {
                     onPress={startFileUpload}
                   >
                     {formatMessage({
-                      id: "prime.profile.change.image",
+                      id: "alm.profile.change.image",
                       defaultMessage: "Change image",
                     })}
                   </Button>

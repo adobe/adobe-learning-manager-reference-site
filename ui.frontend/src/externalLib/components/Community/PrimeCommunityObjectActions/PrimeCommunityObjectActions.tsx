@@ -58,7 +58,7 @@ const PrimeCommunityObjectActions  = (props: any) => {
             </button>
             {props.object && props.object.id === props.answerCommentId &&
                 <div className={styles.primeObjectRightAnswer}>
-                    {formatMessage({id: "prime.community.comment.rightAnswer", defaultMessage: "RIGHT ANSWER",})}
+                    {formatMessage({id: "alm.community.comment.rightAnswer", defaultMessage: "RIGHT ANSWER",})}
                 </div>}
         </div>
         </>
