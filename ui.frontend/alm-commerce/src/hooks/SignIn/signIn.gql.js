@@ -20,6 +20,7 @@ export const CREATE_CART = gql`
                 }
                 quantity
             }
+            total_quantity
         }
     }
 `;

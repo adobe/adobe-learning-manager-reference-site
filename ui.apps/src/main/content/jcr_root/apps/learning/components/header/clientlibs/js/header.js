@@ -72,6 +72,10 @@
             hideLoginOption();
             hideRegisterOption();
             hideLogoutOption();
+            if (!window.ALM.isPrimeUserLoggedIn()) {
+                hideProfileOption();
+                hideAllOptions();
+            }
         } 
         else {
             if (window.ALM.isPrimeUserLoggedIn()) {
@@ -83,8 +87,7 @@
                 hideProfileOption();
                 $(HEADER_NOTIFICATION_REL).hide();
                 if (ALM_USAGE_TYPE === window.ALM.ALMConfig.usageType) {
-                    $(HEADER_PROFILE_OPTIONS_CONT_SEL).remove();
-                    $(HEADER_PROFILE_ARROW_DOWN_SEL).remove();
+                    hideAllOptions();
                     hideLoginOption();
                     hideRegisterOption();
                 }
@@ -96,6 +99,11 @@
                 }
             }
         }
+    }
+
+    function hideAllOptions() {
+        $(HEADER_PROFILE_OPTIONS_CONT_SEL).remove();
+        $(HEADER_PROFILE_ARROW_DOWN_SEL).remove();
     }
 
     function hideProfileOption() {

@@ -70,7 +70,7 @@
         },
         authorMode: true,
         commerceURL:
-          "https://cprime-tpb4idi-i6chtryvajcii.ap-4.magentosite.cloud/graphql",
+          "https://aemsites-mfabl2i-i6chtryvajcii.ap-4.magentosite.cloud/graphql",
         /* "https://captiveprimeteam-bbkwwgi-qf7u6l5qi6iqs.ap-4.magentosite.cloud/", */
       };
 
@@ -79,7 +79,7 @@
       };
 
       const getAccessToken = () => {
-        return "3a4f3a2b834a22e5adca9786f2875c48";
+        return "74578edc16b215c5c00f72a75727830a";
       };
 
       const getALMConfig = () => {
@@ -229,15 +229,20 @@
       window.ALM = window.ALM || {};
       window.ALM.ALMConfig = ALMConfig; //window.ALM.ALMConfig || primeConfig;
       window.ALM.getALMConfig = getALMConfig;
-      window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
+      window.ALM.navigateToTrainingOverviewPage =
+        navigateToTrainingOverviewPage;
       window.ALM.navigateToInstancePage = navigateToInstancePage;
       window.ALM.navigateToBoardDetailsPage = navigateToBoardDetailsPage;
       window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
       window.ALM.getAccessToken = getAccessToken;
       window.ALM.getALMUser = getALMUser;
       window.ALM.getAccountActiveFields = getAccountActiveFields;
-      window.ALM.updateAccountActiveFieldsDetails = updateAccountActiveFieldsDetails;
+      window.ALM.updateAccountActiveFieldsDetails =
+        updateAccountActiveFieldsDetails;
       window.ALM.updateALMUser = updateALMUser;
+      window.ALM.updateCart = function (value) {
+        console.log(value);
+      };
       if (isPrimeUserLoggedIn()) {
         getALMUser();
       }

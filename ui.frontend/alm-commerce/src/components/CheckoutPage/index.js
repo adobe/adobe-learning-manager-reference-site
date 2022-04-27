@@ -7,20 +7,21 @@ import { lightTheme, Provider } from '@adobe/react-spectrum';
 import styles from "./CheckoutPage.module.css";
 import { Button } from '@adobe/react-spectrum';
 import { formatPrice } from "../../utils/price";
+import CommerceLoader from "../Common/Loader"
 
 export default function CheckoutPage() {
   const {
     cartItems,
     hasItems,
     isCartUpdating,
-    shouldShowLoadingIndicator,
+    shouldShowLoadingIndicator: cartLoading,
     totalQuantity,
     prices = {},
   } = useCartPage();
 
   const totalPrice = prices["grand_total"]?.value || 0;
 
-  const { error, paymentModes, createOrder, orderData, navigateToOrdersSuccessPage } = useCheckoutPage();
+  const { error, paymentModes, createOrder, orderData, navigateToOrdersSuccessPage, shouldShowLoadingIndicator } = useCheckoutPage();
 
   const paymentMethods = paymentModes?.cart?.available_payment_methods || [];
   console.log("Checkout page");
@@ -35,13 +36,15 @@ export default function CheckoutPage() {
     createOrder({ paymentMode: selectedPaymentMode });
   };
 
+  if (cartLoading) {
+    return <CommerceLoader size="L" />
+  }
   if (!hasItems) {
-    return <h1>No Items in your cart! </h1>
+    return <h1 style={{ display: "flex", justifyContent: "center" }}>No Items in your cart! </h1>
   }
 
   return (
-    <Provider theme={lightTheme} colorScheme={"light"}>
-
+    <>
       <AddressBook />
       <ProductList cartItems={cartItems} />
       <hr />
@@ -75,10 +78,12 @@ export default function CheckoutPage() {
         );
       })}
       <div className={styles.buttonContainer}>
-        <Button variant="cta" type="button" onPress={placeOrder}>
-          Place Order
+        <Button variant="cta" type="button" onPress={placeOrder} isDisabled={shouldShowLoadingIndicator}>
+          {
+            shouldShowLoadingIndicator ? <CommerceLoader size="S" /> : "Proceed to Checkout"
+          }
         </Button>
       </div>
-    </Provider>
+    </>
   );
 }

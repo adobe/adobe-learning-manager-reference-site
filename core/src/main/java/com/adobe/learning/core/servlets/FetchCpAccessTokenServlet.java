@@ -66,8 +66,18 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
 
 			if(AUTHOR_MODE.equals(mode))
 			{
-				String authorRefreshToken = jsonConfigs.get("authorRefreshToken").getAsString();
-				Pair<String, Integer> accessTokenResp = tokenService.getAccessToken(almURL, clientId, clientSecret, authorRefreshToken);
+				String refreshToken = "";
+				String usageType = jsonConfigs.get(Constants.Config.USAGE_TYPE_NAME).getAsString();
+				if (Constants.Config.SITES_USAGE.equals(usageType))
+				{
+					refreshToken = jsonConfigs.get(Constants.Config.SITES_AUTHOR_REFRESH_TOKEN_NAME).getAsString();
+				}
+				else
+				{
+					refreshToken = jsonConfigs.get(Constants.Config.COMMERCE_ADMIN_REFRESH_TOKEN).getAsString();
+				}
+				
+				Pair<String, Integer> accessTokenResp = tokenService.getAccessToken(almURL, clientId, clientSecret, refreshToken);
 				if (accessTokenResp == null)
 				{
 					LOGGER.error("CPPrime:: Exception in fetching access_token");

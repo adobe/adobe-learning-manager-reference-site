@@ -2,7 +2,8 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import storageInstance from "../../utils/storage";
-import { CREATE_CART, SIGN_IN } from "./singIn.gql";
+import { CREATE_CART, SIGN_IN } from "./signIn.gql";
+import { getALMObject } from "../../utils/global"
 
 const CART_ID = "CART_ID";
 
@@ -24,8 +25,9 @@ export const useAlmSignIn = (props) => {
       storageInstance.setItem(
         CART_ID,
         cartResponse?.data?.customerCart.id,
-        3600
+        10800
       );
+      getALMObject().updateCart(cartResponse?.data?.customerCart?.total_quantity);
       navigate(`/cart`);
       //TO- DO: handle redirect, if query params is there then redirect there, else home page redirect
     };

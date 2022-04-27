@@ -1,9 +1,9 @@
 @import "../../styles/variables.css";
 
 .pageContainer {
-  max-width: var(--prime-container-max-width-desktop);
+  /* max-width: var(--prime-container-max-width-desktop);
   width: var(--prime-container-width);
-  margin: 0 auto;
+  margin: 0 auto; */
 }
 
 .productList {

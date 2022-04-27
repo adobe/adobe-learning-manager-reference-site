@@ -1,10 +1,5 @@
 .alm-header-vertical-nav {
   box-shadow: 3px 3px 6px #00000029;
-  /* -webkit-transition: all ease-in-out 0.2s;
-  -moz-transition: all ease-in-out 0.2s;
-  -ms-transition: all ease-in-out 0.2s;
-  -o-transition: all ease-in-out 0.2s;
-  transition: all ease-in-out 0.2s; */
   background-color: #232323;
   display: flex;
   flex-direction: column;
@@ -279,4 +274,23 @@
   .alm-header-cont .alm-header-down {
     display: flex;
   }
+}
+
+.alm-header-cart-cont {
+  position: relative;
+}
+
+.alm-header-cart-cont .alm-header-cart-counter {
+  display: none;
+  position: absolute;
+  top: 15px;
+  right: -10px;
+  font-weight: 600;
+  background-color: rgb(31 57 255);
+  border-radius: 100px;
+  line-height: 15px;
+  min-width: 15px;
+  font-size: 12px;
+  color: white;
+  text-align: center;
 }

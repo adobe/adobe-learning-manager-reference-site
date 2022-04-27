@@ -17,3 +17,7 @@
   align-items: start;
   flex: 4 0 0;
 }
+
+.name{
+  padding-right: 20px;
+}

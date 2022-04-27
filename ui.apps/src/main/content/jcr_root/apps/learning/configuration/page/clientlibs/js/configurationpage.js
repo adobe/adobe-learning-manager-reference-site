@@ -14,10 +14,12 @@
 
   const SKU_URL = "{almURL}/primeapi/v2/account/{accountId}/connectorConfig?connectorName=aemReferenceSites";
   const NOMENCLAURE_URL = "{almURL}/primeapi/v2/account";
+  const CP_ACCESS_TOKEN_URL = "{almURL}/oauth/token/refresh";
 
   let skuValidationSuccess = false;
   let validationInProgress = false;
   let nomenclatureFetchingInProgress = false;
+  let accessToken = "";
 
 
   function hideUnselectedUsageOptions()
@@ -104,31 +106,54 @@
     nomenclatureFetchingInProgress = true;
     const almBaseURL = $("input[name='./almBaseURL']").val();
     const refreshToken = $("input[name='./refreshToken']").val();
+    const clientId = $("input[name='./clientId']").val();
+    const clientSecret = $("input[name='./clientSecret']").val();
     let nomenclatureURL = NOMENCLAURE_URL.replace("{almURL}", almBaseURL);
 
+    let accessTokenURL = CP_ACCESS_TOKEN_URL.replace("{almURL}", almBaseURL);
+
     $.ajax({
-      type: "GET",
-      url: nomenclatureURL,
-      headers: {
-        "Authorization": "oauth " + refreshToken
+      url: accessTokenURL,
+      type: "POST",
+      async: false,
+      data: {
+        refresh_token: refreshToken,
+        client_id: clientId,
+        client_secret: clientSecret,
       },
-    })
-    .done(function (response, textStatus, jqXHR) {
-      if (response.data && response.data.attributes && response.data.attributes.accountTerminologies)
-      {
-        let accountTerminologies = response.data.attributes.accountTerminologies;
-        $("input[name='./nomenclatureData']").val(JSON.stringify(accountTerminologies));
-        showPopup("Nomenclature Data fetched successfully.", "success", "Success");
-      }
-      else
-      {
+      success: (response, textStatus, jqXHR) => {
+        if (textStatus === "success" || jqXHR.status === 200)
+        {
+          $.ajax({
+            type: "GET",
+            url: nomenclatureURL,
+            headers: {
+              "Authorization": "oauth " + response.access_token
+            },
+          })
+          .done(function (response, textStatus, jqXHR) {
+            if (response.data && response.data.attributes && response.data.attributes.accountTerminologies)
+            {
+              let accountTerminologies = response.data.attributes.accountTerminologies;
+              $("input[name='./nomenclatureData']").val(JSON.stringify(accountTerminologies));
+              showPopup("Nomenclature Data fetched successfully.", "success", "Success");
+            }
+            else
+            {
+              showPopup("Error in  fetching nomenclature data.", "error", "Error");
+            }
+            nomenclatureFetchingInProgress = false;
+          })
+          .fail(function (jqxhr, settings, exception) {
+            showPopup("Error in  fetching nomenclature data.", "error", "Error");
+            nomenclatureFetchingInProgress = false;
+          });
+        }
+      },
+      error: (jqxhr, settings, exception) => {
         showPopup("Error in  fetching nomenclature data.", "error", "Error");
-      }
-      nomenclatureFetchingInProgress = false;
-    })
-    .fail(function (jqxhr, settings, exception) {
-      showPopup("Error in  fetching nomenclature data.", "error", "Error");
-      nomenclatureFetchingInProgress = false;
+        nomenclatureFetchingInProgress = false;
+      },
     });
   }
 
