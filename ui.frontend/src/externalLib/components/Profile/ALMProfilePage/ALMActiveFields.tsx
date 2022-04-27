@@ -1,4 +1,8 @@
-import React from "react";
+import { Item, Picker, Switch, TextField } from "@adobe/react-spectrum";
+import { maxHeaderSize } from "http";
+import React, { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
+import { PrimeDropdown } from "../..";
 import { AccountActiveFields, PrimeUser } from "../../../models";
 import styles from "./ALMActiveFields.module.css";
 
@@ -8,12 +12,17 @@ const ALMActiveFields: React.FC<{
   title: string;
   user: PrimeUser;
   accountActiveFields: AccountActiveFields;
+  onActiveFieldUpdate: Function;
+  onSwitchValueUpdate: Function;
+  updateSelectedMultiValues: Function;
+  userFieldData: any
+  predefinedMultiValues: any
 }> = (props) => {
   // const { formatMessage } = useIntl();
   // const config = getALMConfig();
 
-  const { activeFields, description, title, user, accountActiveFields } = props;
-
+  const { activeFields, description, title, user, accountActiveFields, onActiveFieldUpdate, onSwitchValueUpdate,updateSelectedMultiValues, userFieldData, predefinedMultiValues } = props;
+ 
   const configuredActiveFields = activeFields
     ? activeFields.split(",").map((item) => item.trim())
     : [];
@@ -37,17 +46,86 @@ const ALMActiveFields: React.FC<{
             const isMultiValuedTextField = isMultiValue && showTextField;
             const hasPredefinedMultiValues =
               isMultiValue && allowedValuesPresent;
+            interface dropDown {
+              id: string;
+              name: string;
+            }
+            const dropDownValue = () => {
+              if (showDropdown) {
+                let options: dropDown[] = [];
+                activeField?.allowedValues.map((allowedValue) => {
+                  let option: dropDown = { id: "", name: "" };
+                  option.id = allowedValue;
+                  option.name = allowedValue;
+                  options.push(option);
+                });
+                return options;
+              }
+            };
 
             return (
               <React.Fragment key={activeField.name}>
-                <div className={styles.activeFieldName}>{activeField.name}</div>
-                {showTextField && !isMultiValue && (
-                  <input type="text" defaultValue=""></input>
-                )}
-                {showDropdown && "Show dropdown"}
-                {isMultiValuedTextField && "Show multi value text field"}
-                {hasPredefinedMultiValues &&
-                  "Show multi value with radio buttons"}
+                <div className={styles.activeFieldSectionBottom}>
+                  <div className={styles.activeFieldName}>
+                    {activeField.name}
+                  </div>
+                  <div>
+                    {showTextField && !isMultiValue && (
+                      <TextField
+                        value={userFieldData.fields[activeField.name]}
+                        onChange={(value) => {
+                          onActiveFieldUpdate(value, activeField.name);
+                        }}
+                        UNSAFE_className={styles.textFieldAlign}
+                      />
+                    )}
+                    {showDropdown && (
+                      <Picker
+                        items={dropDownValue()}
+                        onSelectionChange={(value) => {
+                          onActiveFieldUpdate(value, activeField.name);
+                        }}
+                        selectedKey={userFieldData.fields[activeField.name]}
+                      >
+                        {(item) => <Item>{item.name}</Item>}
+                      </Picker>
+                    )}
+                    {isMultiValuedTextField && (
+                      <TextField
+                        value={userFieldData.fields[activeField.name]}
+                        onChange={(value) => {
+                          onActiveFieldUpdate(value, activeField.name);
+                        }}
+                        UNSAFE_className={styles.textFieldAlign}
+                      />
+                    )}
+                    {hasPredefinedMultiValues &&
+                      activeField?.allowedValues.map((allowedValue, index) => {
+                        return (
+                          <div className={styles.alignSwitchItem}>
+                            <span className={styles.allowedActiveFieldValues}>
+                              {allowedValue}
+                            </span>
+                            <span>No</span>
+                            <Switch
+                              isEmphasized
+                              UNSAFE_className={styles.switch}
+                              isSelected={predefinedMultiValues?.get(allowedValue)}
+                              onChange={(value) => {
+                                updateSelectedMultiValues(allowedValue,value);
+                                onSwitchValueUpdate(
+                                  allowedValue,
+                                  value,
+                                  activeField.name
+                                );
+                              }}
+                            ></Switch>
+                            <span>Yes</span>
+                          </div>
+                        );
+                      })}
+                  </div>
+                </div>
               </React.Fragment>
             );
           })}

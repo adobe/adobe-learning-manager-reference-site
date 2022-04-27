@@ -190,6 +190,40 @@
         }
       };
 
+      const updateAccountActiveFieldsDetails = async (activeFields, userId) => {
+          const baseApiUrl = getALMConfig().primeApiURL;
+          const body = {
+            data: {
+              type: "user",
+              id: userId,
+              attributes: {
+                fields: activeFields,
+              },
+            },
+          };
+
+          const updateAccountActiveFieldsUrl = baseApiUrl + "users/" + `${userId}`;
+          const headers = { "content-type": "application/json" };
+          try {
+            const response = await fetch(updateAccountActiveFieldsUrl, {
+              credentials: "include",
+              headers: {
+                'Content-type': 'application/json',
+                'Authorization': `oauth ${getAccessToken()}`,
+              },
+              method: "PATCH",
+              body: JSON.stringify(body),
+              Accept: "application/vnd.api+json",
+            });
+            if (response) {
+              const activeFields = await response.json();
+              console.log(activeFields);
+              return activeFields;
+            }
+          } catch (e) {
+            throw e;
+          }
+        };
       window.ALM = window.ALM || {};
       window.ALM.ALMConfig = ALMConfig; //window.ALM.ALMConfig || primeConfig;
       window.ALM.getALMConfig = getALMConfig;
@@ -200,6 +234,7 @@
       window.ALM.getAccessToken = getAccessToken;
       window.ALM.getALMUser = getALMUser;
       window.ALM.getAccountActiveFields = getAccountActiveFields;
+      window.ALM.updateAccountActiveFieldsDetails = updateAccountActiveFieldsDetails;
       window.ALM.updateALMUser = updateALMUser;
       if (isPrimeUserLoggedIn()) {
         getALMUser();
@@ -250,10 +285,8 @@
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
-
       You can add webfonts, meta tags, or analytics to this file.
       The build step will place the bundled scripts into the <body> tag.
-
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
