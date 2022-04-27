@@ -24,7 +24,12 @@
     const CURRENT_USAGE_TYPE = window.ALM.ALMConfig.usageType || PRIME_USAGE_TYPE;
 
     function handleCommerceLogIn() {
-      if (!isPrimeUserLoggedIn()) {
+      if (isAuthor())
+      {
+        // for Author mode, behavior should be same as AEM+ALM
+        handlePrimeLogIn();
+      }
+      else if (!isPrimeUserLoggedIn()) {
         if (isLearningPage()) {
           window.ALM.navigateToExplorePage();
         }
@@ -40,7 +45,13 @@
       const code = currentUrl.searchParams.get("code");
       const pathName = currentUrl.pathname;
 
-      if (ES_REGISTER_STATE == state && code)
+      // For author mode, behavior same as AEM+ALM
+
+      if (isAuthor())
+      {
+        handlePrimeLogIn();
+      }
+      else if (ES_REGISTER_STATE == state && code)
       {
         // Handle User registration
         const data = {
