@@ -21,7 +21,9 @@ export const useProfile = () => {
     { user: {}, accountActiveFields: {} } as ProfileAttributes
   );
 
-  const [userFieldData, setUserFieldData] = useState<any>({ fields: {} });
+  const [userFieldData, setUserFieldData] = useState<PrimeUser>(
+    {fields: {} } as PrimeUser
+  );
   // const [errorMessage, setErrorMessage] = useState("");
 
   const [errorCode, setErrorCode] = useState("");
@@ -37,7 +39,7 @@ export const useProfile = () => {
           user: userResponse.user,
           accountActiveFields: response,
         });
-        setUserFieldData(userResponse.user.fields);
+        setUserFieldData(userResponse.user);
         setErrorCode("");
       } catch (error: any) {
         // setErrorMessage("Error fetching profile details");
