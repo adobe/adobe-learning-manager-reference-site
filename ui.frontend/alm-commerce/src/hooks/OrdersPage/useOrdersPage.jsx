@@ -1,6 +1,6 @@
 import { useLazyQuery } from "@apollo/client";
 import { useEffect, useMemo } from "react";
-import { CREATE_CART } from "../SignIn/singIn.gql";
+import { CREATE_CART } from "../SignIn/signIn.gql";
 import storageInstance from "../../utils/storage";
 import { postMethod } from "../../utils/global"
 import {
