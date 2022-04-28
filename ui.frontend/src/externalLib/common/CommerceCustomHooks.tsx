@@ -6,7 +6,11 @@ import {
 import { apolloClient } from "../contextProviders";
 import { CatalogFilterState } from "../store/reducers/catalog";
 import { getIndividiualtFiltersForCommerce } from "../utils/catalog";
-import { getDefaultFiltersState, updateFilterList } from "../utils/filters";
+import {
+  FilterState,
+  getDefaultFiltersState,
+  updateFilterList,
+} from "../utils/filters";
 import { getALMConfig, getQueryParamsIObjectFromUrl } from "../utils/global";
 import { JsonApiParse, parseCommerceResponse } from "../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
@@ -57,6 +61,27 @@ export const ALMToCommerceTypes = {
   skillLevel: "almskilllevel",
   tagName: "almtags",
 };
+interface FilterItem {
+  attribute_code: string;
+  attribute_options: CommerceItem[];
+}
+
+const transformFilters = (
+  defaultFiltersState: FilterState,
+  item: FilterItem,
+  filterType: string
+) => {
+  let defaultFilters =
+    defaultFiltersState[filterType as keyof FilterState].list!;
+  item.attribute_options.forEach((attributeOption) => {
+    const { label } = attributeOption;
+    const index = defaultFilters?.findIndex((type) => type.value === label);
+    if (index !== -1) {
+      defaultFilters[index].value = label;
+    }
+  });
+  defaultFiltersState[filterType as keyof FilterState].list = defaultFilters;
+};
 
 const getTransformedFilter = async (filterState: CatalogFilterState) => {
   let filters = await getOrUpdateFilters();
@@ -69,6 +94,18 @@ const getTransformedFilter = async (filterState: CatalogFilterState) => {
     }
   );
   const filter: any = {};
+
+  if (filterState.catalogs) {
+    const catalogOptions = filterMap.get(ALMToCommerceTypes["catalogs"]) || [];
+    filter[ALM_CATALOG] = {
+      in: getIndividiualtFiltersForCommerce(
+        catalogOptions,
+        filterState,
+        "catalogs"
+      ),
+    };
+  }
+
   if (filterState.loTypes) {
     const loTypesOptions = filterMap.get(ALMToCommerceTypes["loTypes"]) || [];
     filter[ALM_LO] = {
@@ -79,16 +116,16 @@ const getTransformedFilter = async (filterState: CatalogFilterState) => {
       ),
     };
   }
-  // if (filterState.loFormat) {
-  //   const loFormatOptions = filterMap.get(ALMToCommerceTypes["loFormat"]) || [];
-  //   filter[ALM_DELIVERY] = {
-  //     in: getIndividiualtFiltersForCommerce(
-  //       loFormatOptions,
-  //       filterState,
-  //       "loFormat"
-  //     ),
-  //   };
-  // }
+  if (filterState.loFormat) {
+    const loFormatOptions = filterMap.get(ALMToCommerceTypes["loFormat"]) || [];
+    filter[ALM_DELIVERY] = {
+      in: getIndividiualtFiltersForCommerce(
+        loFormatOptions,
+        filterState,
+        "loFormat"
+      ),
+    };
+  }
   if (filterState.duration) {
     const durationOptions = filterMap.get(ALMToCommerceTypes["duration"]) || [];
     filter[ALM_DURATION] = {
@@ -109,7 +146,6 @@ const getTransformedFilter = async (filterState: CatalogFilterState) => {
   if (filterState.skillLevel) {
     const skillLevelOptions =
       filterMap.get(ALMToCommerceTypes["skillLevel"]) || [];
-    debugger;
     filter[ALM_SKILL_LEVELS] = {
       in: getIndividiualtFiltersForCommerce(
         skillLevelOptions,
@@ -120,16 +156,6 @@ const getTransformedFilter = async (filterState: CatalogFilterState) => {
   }
 
   // TO-DO uncomment once its supported by API
-  if (filterState.catalogs) {
-    const catalogOptions = filterMap.get(ALMToCommerceTypes["catalogs"]) || [];
-    filter[ALM_CATALOG] = {
-      in: getIndividiualtFiltersForCommerce(
-        catalogOptions,
-        filterState,
-        "catalogs"
-      ),
-    };
-  }
 
   if (filterState.tagName) {
     const tagNameOptions = filterMap.get(ALMToCommerceTypes["tagName"]) || [];
@@ -265,154 +291,75 @@ export default class CommerceCustomHooks implements ICustomHooks {
             attribute_options: CommerceItem[];
           }) => {
             const attributeCode = item.attribute_code;
+
             switch (attributeCode) {
               case ALM_LO: {
-                let defaultFilters = defaultFiltersState.loTypes.list!;
-                defaultFilters = defaultFilters.filter(
-                  (defaultFilter) => defaultFilter.value !== "jobAid"
-                );
-                item.attribute_options.forEach((attributeOption) => {
-                  const { label } = attributeOption;
-
-                  const index = defaultFilters?.findIndex(
-                    (type) => type.value === label
-                  );
-                  if (index !== -1) {
-                    defaultFilters[index].value = label;
-                  }
-                });
-                defaultFiltersState.loTypes.list = defaultFilters;
+                transformFilters(defaultFiltersState, item, "loTypes");
                 break;
               }
 
               case ALM_DELIVERY: {
-                let defaultFilters = defaultFiltersState.loFormat.list!;
-                item.attribute_options.forEach((attributeOption) => {
-                  const { label } = attributeOption;
-
-                  const index = defaultFilters?.findIndex(
-                    (type) => type.value === label
-                  );
-                  if (index !== -1) {
-                    defaultFilters[index].value = label;
-                  }
-                });
-                defaultFiltersState.loFormat.list = defaultFilters;
+                transformFilters(defaultFiltersState, item, "loFormat");
                 break;
               }
 
               case ALM_DURATION: {
-                let defaultFilters = defaultFiltersState.duration.list!;
-                item.attribute_options.forEach((attributeOption) => {
-                  const { label } = attributeOption;
-
-                  const index = defaultFilters?.findIndex(
-                    (type) => type.value === label
-                  );
-                  if (index !== -1) {
-                    defaultFilters[index].value = label;
-                  }
-                });
-                defaultFiltersState.duration.list = defaultFilters;
+                transformFilters(defaultFiltersState, item, "duration");
                 break;
               }
 
               case ALM_SKILL_LEVELS: {
-                let defaultFilters = defaultFiltersState.skillLevel.list!;
-                item.attribute_options.forEach((attributeOption) => {
-                  const { label } = attributeOption;
-
-                  const index = defaultFilters?.findIndex(
-                    (type) => type.value === label
-                  );
-                  if (index !== -1) {
-                    defaultFilters[index].value = label;
-                  }
-                });
-                defaultFiltersState.skillLevel.list = defaultFilters;
+                transformFilters(defaultFiltersState, item, "skillLevel");
                 break;
               }
 
               case ALM_SKILLS: {
-                let list = item.attribute_options?.map((item) => ({
+                let skillsList = item.attribute_options?.map((item) => ({
                   value: item.label,
                   label: item.label,
                   checked: false,
                 }));
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                list = updateFilterList(list, queryParams, "skillName");
-                defaultFiltersState.skillName.list = list;
-                debugger;
+                skillsList = updateFilterList(
+                  skillsList,
+                  queryParams,
+                  "skillName"
+                );
+                defaultFiltersState.skillName.list = skillsList;
+                // debugger;
                 break;
               }
 
               case ALM_TAGS: {
-                let list = item.attribute_options?.map((item) => ({
+                let tagsList = item.attribute_options?.map((item) => ({
                   value: item.label,
                   label: item.label,
                   checked: false,
                 }));
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                list = updateFilterList(list, queryParams, "tagName");
-                defaultFiltersState.tagName.list = list;
+                tagsList = updateFilterList(tagsList, queryParams, "tagName");
+                defaultFiltersState.tagName.list = tagsList;
                 break;
               }
               case ALM_CATALOG: {
-                let list = item.attribute_options?.map((item) => ({
+                let catalogList = item.attribute_options?.map((item) => ({
                   value: item.label,
                   label: item.label,
                   checked: false,
                 }));
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                list = updateFilterList(list, queryParams, "catalogs");
-                defaultFiltersState.catalogs.list = list;
+                catalogList = updateFilterList(
+                  catalogList,
+                  queryParams,
+                  "catalogs"
+                );
+                defaultFiltersState.catalogs.list = catalogList;
                 break;
               }
-
-              // almlotype: "loTypes",
-              // almdeliverytype: "loFormat",
-              // almduration: "duration",
-              // almcatalog: "catalogs",
-              // almskills: "skillName",
-              // almskilllevels: "skillLevel",
-              // almtags: "tagName",
             }
           }
         );
         return defaultFiltersState;
-        //   const { terms } = items;
-        //   //generating the skill name list
-        //   let skillsList = terms?.loSkillNames?.map((item: string) => ({
-        //     value: item,
-        //     label: item,
-        //     checked: false,
-        //   }));
-        //   skillsList = updateFilterList(skillsList, queryParams, "skillName");
-
-        //   //generating the Taglist
-        //   let tagsList = terms?.tags?.map((item: string) => ({
-        //     value: item,
-        //     label: item,
-        //     checked: false,
-        //   }));
-        //   tagsList = updateFilterList(tagsList, queryParams, "tagName");
-        //   let catalogList: any[] = [];
-
-        //   return {
-        //     ...defaultFiltersState,
-        //     skillName: {
-        //       ...defaultFiltersState.skillName,
-        //       list: skillsList,
-        //     },
-        //     tagName: {
-        //       ...defaultFiltersState.tagName,
-        //       list: tagsList,
-        //     },
-        //     catalogs: {
-        //       ...defaultFiltersState.catalogs,
-        //       list: catalogList,
-        //     },
-        //   };
       }
     } catch (e) {
       return {};

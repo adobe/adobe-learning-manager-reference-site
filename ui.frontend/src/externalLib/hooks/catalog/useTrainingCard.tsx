@@ -56,8 +56,9 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     if (!training) return;
     let alm = getALMObject();
     if (!alm.isPrimeUserLoggedIn()) {
+      //Does ES have instances in response
       const activeInstances = getActiveInstances(training);
-      if (activeInstances?.length === 1) {
+      if (!activeInstances || activeInstances?.length === 1) {
         alm.navigateToTrainingOverviewPage(training.id);
       } else {
         alm.navigateToInstancePage(training.id);

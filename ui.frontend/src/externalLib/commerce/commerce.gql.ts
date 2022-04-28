@@ -80,6 +80,7 @@ export const GET_COMMERCE_TRAININGS = gql`
         name
         sku
         almskill
+        almtags
         almdeliverytype
         almusecourserating
         almratingscount
