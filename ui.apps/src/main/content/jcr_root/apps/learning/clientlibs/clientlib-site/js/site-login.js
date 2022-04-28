@@ -46,24 +46,30 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
     if (isAuthor()) {
       handlePrimeLogIn();
-    } else if (ES_REGISTER_STATE == state && code) {
-      // Handle User registration
-      const data = {
-        _charset_: "UTF-8",
-        mode: WCM_NON_AUTHOR_MODE,
-        code: code,
-        pagePath: pathName,
-      };
-      fetchAccessToken(data);
-    } else if (isCommunityPage()) {
-      // Auto-login like Prime Usage only if user navigates to Community page.
-      // For rest pages, show non-logged in behavior
-      handlePrimeLogIn();
-    } else if (!isPrimeUserLoggedIn()) {
-      if (isLearningPage()) {
-        window.ALM.navigateToExplorePage();
-      }
     }
+    else
+    {
+      if (ES_REGISTER_STATE == state && code) {
+        // Handle User registration
+        const data = {
+          _charset_: "UTF-8",
+          mode: WCM_NON_AUTHOR_MODE,
+          code: code,
+          pagePath: pathName,
+        };
+        fetchAccessToken(data);
+      }
+      else if (isCommunityPage() || (CP_OAUTH_STATE == state && code)) {
+        // Auto-login like Prime Usage only if user navigates to Community page.
+        // For rest pages, show non-logged in behavior
+        handlePrimeLogIn();
+      }
+      else if (!isPrimeUserLoggedIn()) {
+        if (isLearningPage()) {
+          window.ALM.navigateToExplorePage();
+        }
+      }
+    }  
   }
 
   function handlePrimeLogIn() {
