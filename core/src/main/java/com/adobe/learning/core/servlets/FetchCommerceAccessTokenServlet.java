@@ -2,9 +2,6 @@ package com.adobe.learning.core.servlets;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.Servlet;
 import javax.servlet.http.Cookie;
@@ -55,10 +52,6 @@ public class FetchCommerceAccessTokenServlet extends SlingAllMethodsServlet {
 
 	private static final String ALM_CREATE_USER_BODY = "{\"data\": { \"type\": \"user\", \"attributes\": {\"email\":\"{email}\",\"name\": \"{name}\",\"userType\":\"INTERNAL\"}}}";
 
-	private static final String ACCESS_TOKEN_URL = "/oauth/o/learnerToken?learner_email={email}&min_validity_sec={min_validity_sec}";
-
-	private static final long ACCESS_TOKEN_MIN_VALIDITY_SEC = 518400; // 24 Hr
-
 	@Reference
 	private transient GlobalConfigurationService configService;
 
@@ -96,7 +89,7 @@ public class FetchCommerceAccessTokenServlet extends SlingAllMethodsServlet {
 			{
 				String email = customer.getEmail();
 
-				String accessTokenResp = fetchAccessToken(almURL, clientId, clientSecret, refreshToken, email);
+				String accessTokenResp = tokenService.fetchLearnerToken(almURL, clientId, clientSecret, refreshToken, email);
 				if(containValidAccessToken(accessTokenResp))
 				{
 					accessTokenWithExpiry = getAccessTokenWithExpiry(accessTokenResp);
@@ -107,7 +100,7 @@ public class FetchCommerceAccessTokenServlet extends SlingAllMethodsServlet {
 					boolean success = createALMUser(almURL, clientId, clientSecret, refreshToken, email, customer.getFirstname(), customer.getLastname());
 					if (success)
 					{
-						accessTokenResp = fetchAccessToken(almURL, clientId, clientSecret, refreshToken, email);
+						accessTokenResp = tokenService.fetchLearnerToken(almURL, clientId, clientSecret, refreshToken, email);
 						if(containValidAccessToken(accessTokenResp))
 						{
 							accessTokenWithExpiry = getAccessTokenWithExpiry(accessTokenResp);
@@ -191,36 +184,6 @@ public class FetchCommerceAccessTokenServlet extends SlingAllMethodsServlet {
 
 		}
 		return false;
-	}
-
-	private String fetchAccessToken(String almURL, String clientId, String clientSecret, String refreshToken, String email)
-	{
-		LOGGER.debug("CPPrime::FetchCommerceAccessTokenServlet::FetchAccessToken almURL {}, email {}", almURL, email);
-		try
-		{
-			String url = almURL + ACCESS_TOKEN_URL.replace("{email}", URLEncoder.encode(email, "UTF-8")).replace("{min_validity_sec}", String.valueOf(ACCESS_TOKEN_MIN_VALIDITY_SEC));
-			HttpPost post = new HttpPost(url);
-			post.setHeader("Content-Type", "application/json");
-
-			Map<String, String> requestBodyMap = new HashMap<String, String>();
-			requestBodyMap.put("client_id", clientId);
-			requestBodyMap.put("client_secret", clientSecret);
-			requestBodyMap.put("refresh_token", refreshToken);
-			post.setEntity(new StringEntity(new Gson().toJson(requestBodyMap), ContentType.APPLICATION_JSON));
-
-			try (CloseableHttpClient httpClient = HttpClients.createDefault(); CloseableHttpResponse response = httpClient.execute(post))
-			{
-				return EntityUtils.toString(response.getEntity());
-			} catch (ParseException | IOException e)
-			{
-				LOGGER.error("CPPrime::FetchCommerceAccessTokenServlet::FetchAccessToken Exception in http call while fetching access-token", e);
-			}
-
-		} catch (UnsupportedEncodingException uee)
-		{
-			LOGGER.error("CPPrime::FetchCommerceAccessTokenServlet::FetchAccessToken UnsupportedEncodingException in fetching access-token", uee);
-		}
-		return null;
 	}
 
 	private CustomerCommerceEntity getCustomerFromCommerce(String token, String commerceURL)

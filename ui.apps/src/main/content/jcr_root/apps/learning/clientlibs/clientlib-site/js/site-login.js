@@ -1,357 +1,373 @@
-  window.ALM = window.ALM || {};
-  window.ALM.ALMConfig = window.ALM.ALMConfig || {};
+window.ALM = window.ALM || {};
+window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
-  (function (window, document, Granite, $) {
-    "use strict";
+(function (window, document, Granite, $) {
+  "use strict";
 
-    const ACCESS_TOKEN_COOKIE_NAME = "alm-cp-token";
-    const CP_OAUTH_URL =
-      "{almBaseURL}/oauth/o/authorize?account={accountId}&client_id={clientId}&redirect_uri={redirectUri}&state={state}&scope=learner:read,learner:write&response_type=CODE&client_identifier=aemsite&logoutAfterAuthorize=true";
-      const ES_REGISTER_URL = 
-      "{almBaseURL}/oauth/o/authorize?client_id={clientId}&redirect_uri={redirectUri}&state={state}&scope=learner:read,learner:write&response_type=CODE&client_identifier=aemsite&logoutAfterAuthorize=true&loginUrl={loginUrl}";
-    const CP_OAUTH_STATE = "cpState";
-    const ES_REGISTER_STATE = "esRegisterState";
+  const ACCESS_TOKEN_COOKIE_NAME = "alm-cp-token";
+  const CP_OAUTH_URL =
+    "{almBaseURL}/oauth/o/authorize?account={accountId}&client_id={clientId}&redirect_uri={redirectUri}&state={state}&scope=learner:read,learner:write&response_type=CODE&client_identifier=aemsite&logoutAfterAuthorize=true";
+  const ES_REGISTER_URL =
+    "{almBaseURL}/oauth/o/authorize?client_id={clientId}&redirect_uri={redirectUri}&state={state}&scope=learner:read,learner:write&response_type=CODE&client_identifier=aemsite&logoutAfterAuthorize=true&loginUrl={loginUrl}";
+  const CP_OAUTH_STATE = "cpState";
+  const ES_REGISTER_STATE = "esRegisterState";
 
-    const WCM_AUTHOR_MODE = "author";
-    const WCM_NON_AUTHOR_MODE = "non-author";
+  const WCM_AUTHOR_MODE = "author";
+  const WCM_NON_AUTHOR_MODE = "non-author";
 
-    const CP_ACCESS_TOKEN_URL = "/cpoauth.cpAccessToken.html";
+  const CP_ACCESS_TOKEN_URL = "/cpoauth.cpAccessToken.html";
 
-    const PRIME_USAGE_TYPE = "aem-sites";
-    const ES_USAGE_TYPE = "aem-es";
-    const COMMERCE_USAGE_TYPE = "aem-commerce";
+  const PRIME_USAGE_TYPE = "aem-sites";
+  const ES_USAGE_TYPE = "aem-es";
+  const COMMERCE_USAGE_TYPE = "aem-commerce";
 
-    const CURRENT_USAGE_TYPE = window.ALM.ALMConfig.usageType || PRIME_USAGE_TYPE;
+  const CURRENT_USAGE_TYPE = window.ALM.ALMConfig.usageType || PRIME_USAGE_TYPE;
 
-    function handleCommerceLogIn() {
-      if (isAuthor())
-      {
-        // for Author mode, behavior should be same as AEM+ALM
-        handlePrimeLogIn();
-      }
-      else if (!isPrimeUserLoggedIn()) {
-        if (isLearningPage()) {
-          window.ALM.navigateToExplorePage();
-        }
-        else if (isCommunityPage()) {
-          window.ALM.navigateToCommerceSignInPage();
-        }
+  function handleCommerceLogIn() {
+    if (isAuthor()) {
+      // for Author mode, behavior should be same as AEM+ALM
+      handlePrimeLogIn();
+    } else if (!isPrimeUserLoggedIn()) {
+      if (isLearningPage()) {
+        window.ALM.navigateToExplorePage();
+      } else if (isCommunityPage()) {
+        window.ALM.navigateToCommerceSignInPage();
       }
     }
+  }
 
-    function handleESLogIn() {
+  function handleESLogIn() {
+    const currentUrl = new URL(window.location.href);
+    const state = currentUrl.searchParams.get("state");
+    const code = currentUrl.searchParams.get("code");
+    const pathName = currentUrl.pathname;
+
+    // For author mode, behavior same as AEM+ALM
+
+    if (isAuthor()) {
+      handlePrimeLogIn();
+    } else if (ES_REGISTER_STATE == state && code) {
+      // Handle User registration
+      const data = {
+        _charset_: "UTF-8",
+        mode: WCM_NON_AUTHOR_MODE,
+        code: code,
+        pagePath: pathName,
+      };
+      fetchAccessToken(data);
+    } else if (isCommunityPage()) {
+      // Auto-login like Prime Usage only if user navigates to Community page.
+      // For rest pages, show non-logged in behavior
+      handlePrimeLogIn();
+    }
+  }
+
+  function handlePrimeLogIn() {
+    if (!isPrimeUserLoggedIn()) {
       const currentUrl = new URL(window.location.href);
-      const state = currentUrl.searchParams.get("state");
-      const code = currentUrl.searchParams.get("code");
       const pathName = currentUrl.pathname;
-
-      // For author mode, behavior same as AEM+ALM
-
-      if (isAuthor())
-      {
-        handlePrimeLogIn();
-      }
-      else if (ES_REGISTER_STATE == state && code)
-      {
-        // Handle User registration
-        const data = {
+      if (isAuthor()) {
+        let data = {
           _charset_: "UTF-8",
-          mode: WCM_NON_AUTHOR_MODE,
-          code: code,
+          mode: WCM_AUTHOR_MODE,
           pagePath: pathName,
         };
         fetchAccessToken(data);
-      }
-      else if (isCommunityPage())
-      {
-        // Auto-login like Prime Usage only if user navigates to Community page.
-        // For rest pages, show non-logged in behavior
-        handlePrimeLogIn();
-      }
-    }
-
-    function handlePrimeLogIn() {
-      if (!isPrimeUserLoggedIn()) {
-        const currentUrl = new URL(window.location.href);
-        const pathName = currentUrl.pathname;
-        if (isAuthor()) {
+      } else {
+        var oauthState = currentUrl.searchParams.get("state");
+        var code = currentUrl.searchParams.get("code");
+        if (CP_OAUTH_STATE == oauthState && code) {
           let data = {
             _charset_: "UTF-8",
-            mode: WCM_AUTHOR_MODE,
+            mode: WCM_NON_AUTHOR_MODE,
+            code: code,
             pagePath: pathName,
           };
           fetchAccessToken(data);
         } else {
-          var oauthState = currentUrl.searchParams.get("state");
-          var code = currentUrl.searchParams.get("code");
-          if (CP_OAUTH_STATE == oauthState && code) {
-            let data = {
-              _charset_: "UTF-8",
-              mode: WCM_NON_AUTHOR_MODE,
-              code: code,
-              pagePath: pathName,
-            };
-            fetchAccessToken(data);
-          } else {
-            const cpOauth = getCpOauthUrl();
-            document.location.href = cpOauth;
-          }
+          const cpOauth = getCpOauthUrl();
+          document.location.href = cpOauth;
         }
       }
     }
+  }
 
-    function isSignOutPage() {
-      return window.location.pathname === window.ALM.getALMConfig().signOutPath;
+  function isSignOutPage() {
+    return window.location.pathname === window.ALM.getALMConfig().signOutPath;
+  }
+
+  function isCommunityPage() {
+    return window.location.pathname === window.ALM.getALMConfig().communityPath;
+  }
+
+  function isCommerceSignInPage() {
+    return (
+      window.location.pathname === window.ALM.getALMConfig().commerceSignInPath
+    );
+  }
+
+  function isLearningPage() {
+    return window.location.pathname === window.ALM.getALMConfig().learningPath;
+  }
+
+  function isEmailRedirectPage() {
+    return (
+      window.location.pathname === window.ALM.getALMConfig().emailRedirectPath
+    );
+  }
+
+  function handlePageLoad() {
+    // If sign-out or sign-in Page do nothing
+    if (isSignOutPage() || isCommerceSignInPage() || isEmailRedirectPage()) {
+      return;
     }
 
-    function isCommunityPage() {
-      return window.location.pathname === window.ALM.getALMConfig().communityPath;
+    switch (CURRENT_USAGE_TYPE) {
+      case PRIME_USAGE_TYPE:
+        handlePrimeLogIn();
+        break;
+
+      case ES_USAGE_TYPE:
+        handleESLogIn();
+        break;
+
+      case COMMERCE_USAGE_TYPE:
+        handleCommerceLogIn();
+        break;
+
+      default:
+        break;
     }
+  }
 
-    function isCommerceSignInPage() {
-      return (
-        window.location.pathname === window.ALM.getALMConfig().commerceSignInPath
-      );
-    }
+  function isAuthor() {
+    return window.ALM.ALMConfig.authorMode == true;
+  }
 
-    function isLearningPage() {
-      return window.location.pathname === window.ALM.getALMConfig().learningPath;
-    }
+  function getCpOauthUrl() {
+    const almBaseURL = window.ALM.ALMConfig.almBaseURL;
+    const clientId = window.ALM.ALMConfig.clientId;
+    const accountId = window.ALM.ALMConfig.accountId;
+    return CP_OAUTH_URL.replace("{almBaseURL}", almBaseURL)
+      .replace("{accountId}", accountId)
+      .replace("{clientId}", clientId)
+      .replace("{redirectUri}", window.location.href)
+      .replace("{state}", CP_OAUTH_STATE);
+  }
 
-    function isEmailRedirectPage() {
-      return window.location.pathname === window.ALM.getALMConfig().emailRedirectPath;
-    }
+  function getESRegisterUrl() {
+    const almBaseURL = window.ALM.ALMConfig.almBaseURL;
+    const clientId = window.ALM.ALMConfig.clientId;
+    const registerUrl = window.ALM.ALMConfig.almRegisterUrl;
+    return ES_REGISTER_URL.replace("{almBaseURL}", almBaseURL)
+      .replace("{clientId}", clientId)
+      .replace("{redirectUri}", window.location.href)
+      .replace("{state}", ES_REGISTER_STATE)
+      .replace("{loginUrl}", encodeURIComponent(registerUrl));
+  }
 
-    function handlePageLoad() {
-      // If sign-out or sign-in Page do nothing
-      if (isSignOutPage() || isCommerceSignInPage() || isEmailRedirectPage()) {
-        return;
-      }
+  // fetch access_token from AEM
+  function fetchAccessToken(data) {
+    const ACCESS_TOKEN_URL = Granite.HTTP.externalize(CP_ACCESS_TOKEN_URL);
 
-      switch (CURRENT_USAGE_TYPE) {
-        case PRIME_USAGE_TYPE:
-          handlePrimeLogIn();
-          break;
-
-        case ES_USAGE_TYPE:
-          handleESLogIn();
-          break;
-
-        case COMMERCE_USAGE_TYPE:
-          handleCommerceLogIn();
-          break;
-
-        default:
-          break;
-      }
-    }
-
-    function isAuthor() {
-      return window.ALM.ALMConfig.authorMode == true;
-    }
-
-    function getCpOauthUrl() {
-      const almBaseURL = window.ALM.ALMConfig.almBaseURL;
-      const clientId = window.ALM.ALMConfig.clientId;
-      const accountId = window.ALM.ALMConfig.accountId;
-      return CP_OAUTH_URL.replace("{almBaseURL}", almBaseURL)
-        .replace("{accountId}", accountId)
-        .replace("{clientId}", clientId)
-        .replace("{redirectUri}", window.location.href)
-        .replace("{state}", CP_OAUTH_STATE);
-    }
-
-    function getESRegisterUrl()
-    {
-      const almBaseURL = window.ALM.ALMConfig.almBaseURL;
-      const clientId = window.ALM.ALMConfig.clientId;
-      const registerUrl = window.ALM.ALMConfig.almRegisterUrl;
-      return ES_REGISTER_URL.replace("{almBaseURL}", almBaseURL)
-        .replace("{clientId}", clientId)
-        .replace("{redirectUri}", window.location.href)
-        .replace("{state}", ES_REGISTER_STATE)
-        .replace("{loginUrl}", encodeURIComponent(registerUrl));
-    }
-
-    // fetch access_token from AEM
-    function fetchAccessToken(data) {
-      const ACCESS_TOKEN_URL = Granite.HTTP.externalize(CP_ACCESS_TOKEN_URL);
-
-      $.ajax({
-        url: ACCESS_TOKEN_URL,
-        type: "POST",
-        async: false,
-        data: data,
-        success: () => {
-          const currentUrl = new URL(window.location.href);
-          currentUrl.searchParams.delete("PRIME_BASE");
-          currentUrl.searchParams.delete("code");
-          currentUrl.searchParams.delete("state");
-          getALMUser();
-          if (isSignOutPage()) {
-            window.ALM.navigateToHomePage();
-          } else {
-            document.location.href = currentUrl.href;
-          }
-        },
-        error: () => {
-          alert("Failed to authenticate");
-        },
-      });
-    }
-
-    async function getALMUser() {
-      if (!window.ALM.isPrimeUserLoggedIn()) {
-        window.sessionStorage.removeItem("user");
-        return;
-      }
-      let user = window.sessionStorage.getItem("user");
-      if (user) {
-        return user;
-      }
-      const primeApiURL = window.ALM.ALMConfig.primeApiURL;
-      const userUrl = `${primeApiURL}/user?include=account`;
-      const headers = {
-        Accept: "application/vnd.api+json",
-        Authorization: `oauth ${getAccessToken()}`,
-      };
-      try {
-        const userResponse = await fetch(`${userUrl}`, {
-          credentials: "include",
-          headers,
-          method: "GET",
-        });
-        if (userResponse && userResponse.status == 200) {
-          user = await userResponse.json();
-          const userStr = JSON.stringify(user);
-          window.sessionStorage.setItem("user", userStr);
-          return userStr;
-        } else {
-          console.error("User call failed!!");
-        }
-      } catch (e) {
-        window.sessionStorage.removeItem("user");
-        throw e;
-      }
-    }
-    async function updateALMUser() {
-      window.sessionStorage.removeItem("user");
-      return getALMUser();
-    }
-
-    const updateAccountActiveFieldsDetails = async (activeFields, userId) => {
-      const baseApiUrl = getALMConfig().primeApiURL;
-      const body = {
-        data: {
-          type: "user",
-          id: userId,
-          attributes: {
-            fields: activeFields,
-          },
-        },
-      };
-      const updateAccountActiveFieldsUrl = baseApiUrl + "users/" + `${userId}`;
-      const headers = { "content-type": "application/json" };
-      try {
-        const response = await fetch(updateAccountActiveFieldsUrl, {
-          credentials: "include",
-          headers: {
-            "Content-type": "application/json",
-            Authorization: `oauth ${getAccessToken()}`,
-          },
-          method: "PATCH",
-          body: JSON.stringify(body),
-          Accept: "application/vnd.api+json",
-        });
-        if (response) {
-          const activeFields = await response.json();
-          console.log(activeFields);
-          return activeFields;
-        }
-      } catch (e) {
-        throw e;
-      }
-    };
-
-    function getAccessToken() {
-      let cookieValues = document.cookie.match(
-        `(^|[^;]+)\\s*${ACCESS_TOKEN_COOKIE_NAME}\\s*=\\s*([^;]+)`
-      );
-      return cookieValues ? cookieValues.pop() : "";
-    }
-
-    function isPrimeUserLoggedIn() {
-      let cookieValue = getAccessToken();
-      return cookieValue == "" ? false : true;
-    }
-
-    function handleLogOut() {
-      document.cookie =
-        ACCESS_TOKEN_COOKIE_NAME +
-        "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-      window.sessionStorage.removeItem("user");
-
-      switch (CURRENT_USAGE_TYPE) {
-        case PRIME_USAGE_TYPE:
-          window.ALM.navigateToSignOutPage();
-          break;
-
-        case ES_USAGE_TYPE:
-        case COMMERCE_USAGE_TYPE:
+    $.ajax({
+      url: ACCESS_TOKEN_URL,
+      type: "POST",
+      async: false,
+      data: data,
+      success: () => {
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.delete("PRIME_BASE");
+        currentUrl.searchParams.delete("code");
+        currentUrl.searchParams.delete("state");
+        getALMUser();
+        if (isSignOutPage()) {
           window.ALM.navigateToHomePage();
-          break;
+        } else {
+          document.location.href = currentUrl.href;
+        }
+      },
+      error: () => {
+        alert("Failed to authenticate");
+      },
+    });
+  }
 
-        default:
-          break;
+  async function getALMUser() {
+    if (!window.ALM.isPrimeUserLoggedIn()) {
+      window.sessionStorage.removeItem("user");
+      return;
+    }
+    let user = window.sessionStorage.getItem("user");
+    if (user) {
+      return user;
+    }
+    const primeApiURL = window.ALM.ALMConfig.primeApiURL;
+    const userUrl = `${primeApiURL}/user?include=account`;
+    const headers = {
+      Accept: "application/vnd.api+json",
+      Authorization: `oauth ${getAccessToken()}`,
+    };
+    try {
+      const userResponse = await fetch(`${userUrl}`, {
+        credentials: "include",
+        headers,
+        method: "GET",
+      });
+      if (userResponse && userResponse.status == 200) {
+        user = await userResponse.json();
+        const userStr = JSON.stringify(user);
+        window.sessionStorage.setItem("user", userStr);
+        return userStr;
+      } else {
+        console.error("User call failed!!");
       }
+    } catch (e) {
+      window.sessionStorage.removeItem("user");
+      throw e;
     }
+  }
 
-    function handleLogIn() {
-      switch (CURRENT_USAGE_TYPE) {
-        case PRIME_USAGE_TYPE:
-        case ES_USAGE_TYPE:
-          handlePrimeLogIn();
-          break;
-
-        case COMMERCE_USAGE_TYPE:
-          window.ALM.navigateToCommerceSignInPage();
-          break;
-
-        default:
-          break;
+  const getAccountActiveFields = async () => {
+    const primeApiURL = window.ALM.getALMConfig().primeApiURL;
+    const accountActiveFieldsUrl = primeApiURL + "account/fields";
+    const headers = {
+      Accept: "application/vnd.api+json",
+      Authorization: `oauth ${getAccessToken()}`,
+    };
+    try {
+      const response = await fetch(accountActiveFieldsUrl, {
+        credentials: "include",
+        headers,
+        method: "GET",
+      });
+      if (response) {
+        const activeFields = await response.json();
+        console.log(activeFields);
+        return activeFields;
       }
+    } catch (e) {
+      throw e;
     }
+  };
 
-    function handleESRegister()
-    {
-      const registerUrl = getESRegisterUrl();
-      document.location.href = registerUrl;
-    }
+  async function updateALMUser() {
+    window.sessionStorage.removeItem("user");
+    return getALMUser();
+  }
 
-    function handleRegister() {
-      switch (CURRENT_USAGE_TYPE) {
-        case ES_USAGE_TYPE:
-          handleESRegister();
-          break;
-
-        case COMMERCE_USAGE_TYPE:
-          window.ALM.navigateToCommerceSignInPage();
-          break;
-
-        default:
-          break;
+  const updateAccountActiveFieldsDetails = async (activeFields, userId) => {
+    const baseApiUrl = window.ALM.getALMConfig().primeApiURL;
+    const body = {
+      data: {
+        type: "user",
+        id: userId,
+        attributes: {
+          fields: activeFields,
+        },
+      },
+    };
+    const updateAccountActiveFieldsUrl = baseApiUrl + "users/" + `${userId}`;
+    const headers = { "content-type": "application/json" };
+    try {
+      const response = await fetch(updateAccountActiveFieldsUrl, {
+        credentials: "include",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `oauth ${getAccessToken()}`,
+        },
+        method: "PATCH",
+        body: JSON.stringify(body),
+        Accept: "application/vnd.api+json",
+      });
+      if (response) {
+        const activeFields = await response.json();
+        console.log(activeFields);
+        return activeFields;
       }
+    } catch (e) {
+      throw e;
     }
+  };
 
-    handlePageLoad();
+  function getAccessToken() {
+    let cookieValues = document.cookie.match(
+      `(^|[^;]+)\\s*${ACCESS_TOKEN_COOKIE_NAME}\\s*=\\s*([^;]+)`
+    );
+    return cookieValues ? cookieValues.pop() : "";
+  }
 
-    window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
-    window.ALM.getAccessToken = getAccessToken;
-    window.ALM.getALMUser = getALMUser;
-    window.ALM.updateAccountActiveFieldsDetails = updateAccountActiveFieldsDetails;
-    window.ALM.updateALMUser = updateALMUser;
-    window.ALM.handleLogIn = handleLogIn;
-    window.ALM.handleLogOut = handleLogOut;
-    window.ALM.handleRegister = handleRegister;
-    
-  })(window, document, Granite, jQuery);
+  function isPrimeUserLoggedIn() {
+    let cookieValue = getAccessToken();
+    return cookieValue == "" ? false : true;
+  }
+
+  function handleLogOut() {
+    document.cookie =
+      ACCESS_TOKEN_COOKIE_NAME +
+      "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    window.sessionStorage.removeItem("user");
+
+    switch (CURRENT_USAGE_TYPE) {
+      case PRIME_USAGE_TYPE:
+        window.ALM.navigateToSignOutPage();
+        break;
+
+      case ES_USAGE_TYPE:
+      case COMMERCE_USAGE_TYPE:
+        window.ALM.navigateToHomePage();
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  function handleLogIn() {
+    switch (CURRENT_USAGE_TYPE) {
+      case PRIME_USAGE_TYPE:
+      case ES_USAGE_TYPE:
+        handlePrimeLogIn();
+        break;
+
+      case COMMERCE_USAGE_TYPE:
+        window.ALM.navigateToCommerceSignInPage();
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  function handleESRegister() {
+    const registerUrl = getESRegisterUrl();
+    document.location.href = registerUrl;
+  }
+
+  function handleRegister() {
+    switch (CURRENT_USAGE_TYPE) {
+      case ES_USAGE_TYPE:
+        handleESRegister();
+        break;
+
+      case COMMERCE_USAGE_TYPE:
+        window.ALM.navigateToCommerceSignInPage();
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  handlePageLoad();
+
+  window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
+  window.ALM.getAccessToken = getAccessToken;
+  window.ALM.getALMUser = getALMUser;
+  window.ALM.updateAccountActiveFieldsDetails = updateAccountActiveFieldsDetails;
+  window.ALM.updateALMUser = updateALMUser;
+  window.ALM.handleLogIn = handleLogIn;
+  window.ALM.handleLogOut = handleLogOut;
+  window.ALM.handleRegister = handleRegister;
+  window.ALM.getAccountActiveFields = getAccountActiveFields;
+})(window, document, Granite, jQuery);

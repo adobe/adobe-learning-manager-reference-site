@@ -7,4 +7,6 @@ public interface CPTokenService {
 	public Pair<String, Integer> getAccessTokenFromCode(String almURL, String clientId, String clientSecret, String code);
 
 	public Pair<String, Integer> getAccessToken(String almURL, String clientId, String clientSecret, String refreshToken);
+	
+	public String fetchLearnerToken(String almURL, String clientId, String clientSecret, String refreshToken, String email);
 }
