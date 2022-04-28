@@ -135,7 +135,7 @@ const filterLoReourcesBasedOnResourceType = (
   trainingInstance: PrimeLearningObjectInstance,
   loResourceType: string
 ): PrimeLearningObjectResource[] => {
-  return trainingInstance.loResources.filter(
+  return trainingInstance?.loResources?.filter(
     (loResource: PrimeLearningObjectResource) =>
       loResource.loResourceType === loResourceType
   );
