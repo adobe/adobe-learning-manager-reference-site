@@ -5,7 +5,7 @@ import ALMCustomHooks from "./ALMCustomHooks";
 import CommerceCustomHooks from "./CommerceCustomHooks";
 import ESCustomHooks from "./ESCustomHooks";
 
-const ADOBE_COMMERCE = "aem-commerce";
+export const ADOBE_COMMERCE = "aem-commerce";
 class APIService {
   //customHooks: ICustomHooks;
   //services: {key: value[ICustomHooks]};

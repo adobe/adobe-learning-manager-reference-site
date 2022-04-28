@@ -29,6 +29,7 @@ export interface CatalogFilterState {
   duration: string;
   skillLevel: string;
   catalogs: string;
+  price: string;
 }
 
 export interface CatalogState {
@@ -175,6 +176,20 @@ const duration: Reducer<string, AnyAction> = (
   }
 };
 
+const price: Reducer<string, AnyAction> = (
+  state: string | undefined,
+  action: AnyAction
+) => {
+  switch (action.type) {
+    case UPDATE_DURATION_FILTERS:
+      return action.payload;
+    case UPDATE_FILTERS_ON_LOAD:
+      return action.payload.price;
+    default:
+      return state || "";
+  }
+};
+
 const query: Reducer<string, AnyAction> = (
   state: string | undefined,
   action: AnyAction
@@ -249,7 +264,8 @@ const filterState: Reducer<CatalogFilterState, AnyAction> = combineReducers({
   loFormat,
   duration,
   skillLevel,
-  catalogs
+  catalogs,
+  price
 });
 
 const catalog: Reducer<CatalogState, AnyAction> = combineReducers({

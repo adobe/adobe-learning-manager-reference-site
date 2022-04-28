@@ -143,6 +143,27 @@ export const filtersDefaultState: FilterState = {
       },
     ],
   },
+  price: {
+    type: "price",
+    label: "alm.catalog.filter.duration.label",
+    list: [
+      {
+        value: "10",
+        label: "alm.catalog.filter.lessThan30Minutes",
+        checked: false,
+      },
+      {
+        value: "10-1000",
+        label: "alm.catalog.filter.30minutesTo2Hours",
+        checked: false,
+      },
+      {
+        value: "1001",
+        label: "alm.catalog.filter.moreThan2Hours",
+        checked: false,
+      },
+    ],
+  },
 };
 
 export interface FilterListObject {
@@ -188,6 +209,7 @@ export interface FilterState {
   catalogs: FilterType;
   skillLevel: FilterType;
   duration: FilterType;
+  price: FilterType;
 }
 
 export const updateFilterList = (

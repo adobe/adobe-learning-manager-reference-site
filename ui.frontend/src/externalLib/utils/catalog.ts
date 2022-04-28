@@ -107,7 +107,7 @@ interface DurationFilter {
 }
 
 export function getFiltersObjectForESApi(filterState: CatalogFilterState) {
-  const { duration, loFormat, loTypes, skillLevel, skillName, tagName } =
+  const { duration, loFormat, loTypes, skillLevel, skillName, tagName, catalogs } =
     filterState;
   let filters: any = {
     terms: {
@@ -116,6 +116,7 @@ export function getFiltersObjectForESApi(filterState: CatalogFilterState) {
       deliveryType: loFormat ? filterState.loFormat.split(",") : null,
       loSkillNames: skillName ? filterState.skillName.split(",") : null,
       tags: tagName ? filterState.tagName.split(",") : null,
+      catalogNames: catalogs ? catalogs.split(",") : null
     },
     range: {},
   };

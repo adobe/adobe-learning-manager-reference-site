@@ -119,7 +119,13 @@ export default class ESCustomHooks implements ICustomHooks {
         checked: false,
       }));
       tagsList = updateFilterList(tagsList, queryParams, "tagName");
-      let catalogList: any[] = [];
+      debugger;
+      let catalogList: any[] = terms?.catalogNames?.map((item: string) => ({
+        value: item,
+        label: item,
+        checked: false,
+      }));
+      catalogList = updateFilterList(catalogList, queryParams, "catalogs");
       const defaultFiltersState = getDefaultFiltersState();
 
       return {

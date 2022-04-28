@@ -130,3 +130,8 @@ const init = async () => {
 };
 
 init();
+
+export const isCommerceEnabledOnAccount = async () => {
+  const response = await getALMUser()
+  return response.account.enableECommerce;
+}

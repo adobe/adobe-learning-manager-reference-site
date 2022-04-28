@@ -1,5 +1,10 @@
+import { ADOBE_COMMERCE } from "../../../common/APIService";
 import { UpdateFiltersEvent } from "../../../utils/filters";
-import { getALMObject } from "../../../utils/global";
+import {
+  getALMConfig,
+  getALMObject,
+  isCommerceEnabledOnAccount,
+} from "../../../utils/global";
 import { GetTranslation } from "../../../utils/translationService";
 import { ALMLoader } from "../../Common/ALMLoader";
 import styles from "./PrimeCatalogFilters.module.css";
@@ -17,6 +22,7 @@ const PrimeCatalogFilters = (props: any) => {
     skillLevel,
     duration,
     catalogs,
+    price,
   } = props.filterState;
   const { updateFilters, catalogAttributes } = props;
   const isLoggedIn = getALMObject().isPrimeUserLoggedIn();
@@ -91,6 +97,17 @@ const PrimeCatalogFilters = (props: any) => {
         {/* learnerState Filter start */}
         {isLoggedIn && renderFilterList(learnerState)}
         {/* learnerState Filter ends */}
+
+        {/* Price Filter start */}
+        {/* {!isLoggedIn &&
+          getALMConfig().usageType === ADOBE_COMMERCE &&
+          renderFilterList(learnerState)}
+
+        {isLoggedIn &&
+          getALMConfig().usageType === ADOBE_COMMERCE &&
+          isCommerceEnabledOnAccount() &&
+          renderFilterList(price)} */}
+        {/* Price Filter ends */}
       </div>
     </>
   );
