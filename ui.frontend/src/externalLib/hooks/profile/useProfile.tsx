@@ -5,8 +5,8 @@ import {
   getAccountActiveFields,
   getALMConfig,
   getALMUser,
+  updateAccountActiveFieldsDetails,
   updateALMUser,
-  updateAccountActiveFieldsDetails
 } from "../../utils/global";
 import { RestAdapter } from "../../utils/restAdapter";
 import { getUploadInfo, uploadFile } from "../../utils/uploadUtils";
@@ -21,9 +21,7 @@ export const useProfile = () => {
     { user: {}, accountActiveFields: {} } as ProfileAttributes
   );
 
-  const [userFieldData, setUserFieldData] = useState<PrimeUser>(
-    {fields: {} } as PrimeUser
-  );
+  const [userFieldData, setUserFieldData] = useState<any>({ fields: {} });
   // const [errorMessage, setErrorMessage] = useState("");
 
   const [errorCode, setErrorCode] = useState("");
@@ -39,12 +37,12 @@ export const useProfile = () => {
           user: userResponse.user,
           accountActiveFields: response,
         });
-        setUserFieldData(userResponse.user);
+        setUserFieldData(userResponse.user.fields);
         setErrorCode("");
       } catch (error: any) {
         // setErrorMessage("Error fetching profile details");
         setErrorCode(error.status);
-        console.error("Error etching profile details : ", error);
+        console.error("Error fetching profile details : ", error);
       }
     };
 
@@ -77,12 +75,21 @@ export const useProfile = () => {
     }
   }, []);
 
-  const updateAccountActiveFields = useCallback(async (accountActiveFields:any,userId:any) => {
-    try {
-      await updateAccountActiveFieldsDetails(accountActiveFields,userId);
-    } catch(error : any) {
-    }
-  }, []);
+  const updateAccountActiveFields = useCallback(
+    async (accountActiveFields: any, userId: any) => {
+      try {
+        await updateAccountActiveFieldsDetails(accountActiveFields, userId);
+      } catch (error: any) {}
+    },
+    []
+  );
 
-  return { profileAttributes, updateProfileImage, errorCode, updateAccountActiveFields, userFieldData, setUserFieldData};
+  return {
+    profileAttributes,
+    updateProfileImage,
+    errorCode,
+    updateAccountActiveFields,
+    userFieldData,
+    setUserFieldData,
+  };
 };
