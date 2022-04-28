@@ -10,7 +10,7 @@
         sling:configPropertyInherit="true"
         sling:resourceType="learning/configuration/page"
         accountId="7110"
-        authorRefreshToken="e5f4371ef030cc3ae76ebd266ba1b3f9"
+        authorRefreshToken="b0f977a9779e5caba1959d230ff9ffa7"
         clientId="4c0e8131-8ef0-44f2-b17b-96265ec6ddf9"
         clientSecret="a8221fe8-e961-4d74-b65c-10e1ee0c62be"
         locale="en-US"

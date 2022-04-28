@@ -21,6 +21,7 @@
     .set("certPageLink", ["loOverview", "certification", new RegExp(/certification\/(\d+)\/overview/i)])
     .set("lpPageLink", ["loOverview", "learningProgram", new RegExp(/learningProgram\/(\d+)\/overview/i)])
     .set("catalogOverviewPageLink", ["catalogOverview", "catalog", new RegExp(/selectedListableCatalogIds=(\d+)/i)])
+    .set("courseInstancePreviewPageLink", ["loInstance", "course", new RegExp(/course\/(\d+)\/instance\/(\d+)\/preview/i)])
     .set("catalogPageLink", ["catalogPage"])
     .set("myLearningPageLink", ["myLearningPage"])
     .set("postsLink", ["boardsPage"])
@@ -28,37 +29,37 @@
     .set("ciPageLink", ["course", new RegExp(/courseInstance\/(\d+)/i), "instance"])
     .set("lpiPageLink", ["course", new RegExp(/lpInstance\/(\d+)/i), "instance"]);
 
-  var WIDET_CONFIG_DATA = "data-cp-widget-configs",
+  const WIDET_CONFIG_DATA = "data-cp-widget-configs",
     WIDGET_REF_DATA = "cp-widget-ref",
     DATA_RUN_MODE = "cp-runmode",
     WIDGET_SRC_URL_DATA = "cp-widget-src-url",
     WIDGET_WRAPPER_DIV = ".cpWidgetWrapperDiv",
     WIDGET_COMMUNICATOR_URL = "cp-widget-communicator-url";
 
-  var scriptLoaded = false;
+  let scriptLoaded = false;
 
   $(document).ready(function () {
     loadWidgetCommunicatorScript().then(function (data) {
       $(WIDGET_WRAPPER_DIV).each(function (e) {
-        var rendered = $(this).attr("rendered");
+        let rendered = $(this).attr("rendered");
 
         if (rendered === "true") {
           return true;
         }
 
         $(this).attr("rendered", true);
-        var configsDivWrapper = $(this).find("div").first();
-        var widgetConfigObj = {};
-        var widgetConfigs = configsDivWrapper.attr(WIDET_CONFIG_DATA);
+        let configsDivWrapper = $(this).find("div").first();
+        let widgetConfigObj = {};
+        let widgetConfigs = configsDivWrapper.attr(WIDET_CONFIG_DATA);
         if (widgetConfigs) {
           widgetConfigObj = JSON.parse(widgetConfigs);
         }
 
         widgetConfigObj.auth.accessToken = ALM.getAccessToken();
-        var containerObj = $(this).get(0);
-        var ref = configsDivWrapper.data(WIDGET_REF_DATA);
+        let containerObj = $(this).get(0);
+        let ref = configsDivWrapper.data(WIDGET_REF_DATA);
 
-        var isAuthorMode =
+        let isAuthorMode =
           configsDivWrapper.data(DATA_RUN_MODE) === "author" ? true : false;
 
         let primeWidget = window.primecommunicator.createWidget({
@@ -80,18 +81,25 @@
 
   function handleEvents(e) {
     if (e.changeType === "primelink") {
-      var almLinksMapObj = ALM_LINKS_MAP.get(e.path);
-      var pageType = almLinksMapObj[0];
+      let almLinksMapObj = ALM_LINKS_MAP.get(e.path);
+      let pageType = almLinksMapObj[0];
 
       if (pageType === "loOverview")
       {
-        var loType = almLinksMapObj[1];
-        var loId = e.route.match(almLinksMapObj[2])[1];
+        let loType = almLinksMapObj[1];
+        let loId = e.route.match(almLinksMapObj[2])[1];
         window.ALM.navigateToTrainingOverviewPage(loType + ":" + loId);
+      }
+      else if (pageType === "loInstance")
+      {
+        let loType = almLinksMapObj[1];
+        let loId = e.route.match(almLinksMapObj[2])[1];
+        let instanceId = e.route.match(almLinksMapObj[2])[2];
+        window.ALM.navigateToTrainingOverviewPage(loType + ":" + loId, loType + ":" + loId + "_" + instanceId);
       }
       else if (pageType === "catalogOverview")
       {
-        var catalogIds = e.route.match(almLinksMapObj[2])[1];
+        let catalogIds = e.route.match(almLinksMapObj[2])[1];
         window.ALM.navigateToCatalogPage(catalogIds);
       }
       else if (pageType === "catalogPage")
@@ -111,8 +119,8 @@
 
   function loadWidgetCommunicatorScript() {
     if (!scriptLoaded) {
-      var configsDivWrapper = $(WIDGET_WRAPPER_DIV).first().find("div").first();
-      var url = configsDivWrapper.data(WIDGET_COMMUNICATOR_URL);
+      let configsDivWrapper = $(WIDGET_WRAPPER_DIV).first().find("div").first();
+      let url = configsDivWrapper.data(WIDGET_COMMUNICATOR_URL);
       return $.ajax({
         url: url,
         async: false,

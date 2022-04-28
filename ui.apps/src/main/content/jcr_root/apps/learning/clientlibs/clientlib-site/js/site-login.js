@@ -59,6 +59,10 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
       // Auto-login like Prime Usage only if user navigates to Community page.
       // For rest pages, show non-logged in behavior
       handlePrimeLogIn();
+    } else if (!isPrimeUserLoggedIn()) {
+      if (isLearningPage()) {
+        window.ALM.navigateToExplorePage();
+      }
     }
   }
 
