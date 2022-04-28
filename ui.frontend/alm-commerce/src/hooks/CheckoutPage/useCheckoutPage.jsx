@@ -2,7 +2,9 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import storageInstance from "../../utils/storage";
-import { postMethod } from "../../utils/global"
+import { postMethod } from "../../utils/global";
+import { CART_ID, TOKEN, SIGN_IN_PATH, PURCHASE_INITIATED_PATH } from "../../utils/constants";
+
 import {
   GET_PAYMENTS_MODE,
   PROCESS_ORDER,
@@ -11,10 +13,10 @@ import {
 
 export const useCheckoutPage = (props) => {
   let navigate = useNavigate();
-  const [cartId] = useState(() => storageInstance.getItem("CART_ID"));
+  const [cartId] = useState(() => storageInstance.getItem(CART_ID));
 
   const [isLoggedIn] = useState(() => {
-    const token = storageInstance.getItem("TOKEN");
+    const token = storageInstance.getItem(TOKEN);
     return Boolean(token);
   });
   const [
@@ -25,6 +27,12 @@ export const useCheckoutPage = (props) => {
       cardId: cartId,
     },
   });
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate(SIGN_IN_PATH);
+    }
+  }, [isLoggedIn, navigate])
 
   const [setPaymentMode, { loading: setPaymentModeLoading, error: setPaymentModeError }] = useMutation(SET_PAYMENT_MODE);
   const [processOrder, { data: orderData, loading: processOrderLoading, error: orderError }] = useMutation(
@@ -67,7 +75,7 @@ export const useCheckoutPage = (props) => {
 
   const createOrder = useCallback(async ({ paymentMode } = {}) => {
     try {
-      postMethod("/ecommerce/purchaseInitiated");
+      postMethod(PURCHASE_INITIATED_PATH);
       await setPaymentMode({
         variables: {
           cardId: cartId,
@@ -80,8 +88,6 @@ export const useCheckoutPage = (props) => {
           cardId: cartId,
         },
       });
-      // move it to Order success page
-      //const response = await postMethod("/ecommerce/purchaseCompleted");
 
     } catch (e) {
       console.log(e);

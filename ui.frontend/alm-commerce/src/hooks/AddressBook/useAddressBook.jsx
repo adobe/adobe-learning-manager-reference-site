@@ -1,14 +1,21 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useEffect } from 'react';
 import { useQuery, useLazyQuery, useMutation } from '@apollo/client';
+import { useNavigate } from "react-router-dom";
+
 import {
     GET_COUNTRIES, GET_COUNTRY_REGIONS,
     ADD_DEFAULT_BILLING_ADDRESS, GET_ADDRESSES,
     SET_BILLING_ADDRESS
 } from './addressBook.gql';
+import storageInstance from "../../utils/storage";
+import { TOKEN, SIGN_IN_PATH } from "../../utils/constants";
+
 
 
 
 export const useAddressBook = (props) => {
+    let navigate = useNavigate();
+
     const { data: countriesData, error: fetchCountriesError } = useQuery(GET_COUNTRIES);
     const { data: addressData, loading: addressDataLoading, error: fetchAddressesError } = useQuery(GET_ADDRESSES);
     const [fetchRegions, { error: fetchRegionsError, data: regionsData }] = useLazyQuery(GET_COUNTRY_REGIONS);
@@ -28,6 +35,13 @@ export const useAddressBook = (props) => {
         });
 
     }, [fetchRegions]);
+
+
+    useEffect(() => {
+        if (!storageInstance.getItem(TOKEN)) {
+            navigate(SIGN_IN_PATH);
+        }
+    }, [navigate])
 
     const addBillingAddress = useCallback(async (variables = {}) => {
         await addDefaultBillingAddress({

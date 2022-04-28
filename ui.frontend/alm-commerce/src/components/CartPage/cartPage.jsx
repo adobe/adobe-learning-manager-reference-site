@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ProductList from "./productList";
-import { useNavigate } from "react-router-dom";
 import { useCartPage } from "../../hooks/CartPage/useCartPage";
 import styles from "./cartPage.module.css";
 import OrderSummary from "./orderSummary";
@@ -8,17 +7,12 @@ import CommerceLoader from "../Common/Loader";
 
 
 const CartPage = (props) => {
-  let navigate = useNavigate();
   const { cartItems,
     hasItems,
-    shouldShowLoadingIndicator, totalQuantity, prices = {} } = useCartPage();
+    shouldShowLoadingIndicator, prices = {}, proceedToCheckout } = useCartPage();
 
   const totalPrice = prices["grand_total"] || {};
 
-
-  const proceedToCheckout = () => {
-    navigate(`/checkout`);
-  }
   if (shouldShowLoadingIndicator) {
     return (<CommerceLoader size="L"></CommerceLoader>)
   }
@@ -35,8 +29,6 @@ const CartPage = (props) => {
           </div>
         }
       </div>
-
-      {/* <button onClick={proceedToCheckout}>Procees to Checkout</button> */}
     </div>
   )
 };

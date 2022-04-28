@@ -1,11 +1,15 @@
-import { useLazyQuery, useQuery } from "@apollo/client";
-import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@apollo/client";
+import { useCallback, useEffect, useMemo } from "react";
 import { GET_CART_DETAILS } from "./cartPage.gql";
 import storageInstance from "../../utils/storage";
+import {CART_ID, TOKEN, SIGN_IN_PATH} from "../../utils/constants";
+import { useNavigate } from "react-router-dom";
+
 
 
 export const useCartPage = (props = {}) => {
-  const cartId = storageInstance.getItem("CART_ID");
+  const cartId = storageInstance.getItem(CART_ID);
+  let navigate = useNavigate();
 
   // const [isCartUpdating, setIsCartUpdating] = useState(false);
 
@@ -15,6 +19,12 @@ export const useCartPage = (props = {}) => {
       nextFetchPolicy: "network-only",
       errorPolicy: "all",
     });
+
+    useEffect(()=>{
+      if(!storageInstance.getItem(TOKEN)){
+        navigate(SIGN_IN_PATH);
+      }
+    },[navigate]);
 
   const hasItems = !!data?.cart?.total_quantity;
   const shouldShowLoadingIndicator =
@@ -30,11 +40,12 @@ export const useCartPage = (props = {}) => {
 
   const error = useMemo(
     () => {
-
         return { signInError: cartDetailsError?.message }
-    },
-    [cartDetailsError]
-);
+    },[cartDetailsError]);
+
+const proceedToCheckout = useCallback(()=>{
+  navigate(`/checkout`);
+}, [navigate])
   
   return {
     hasItems,
@@ -42,7 +53,8 @@ export const useCartPage = (props = {}) => {
     prices,
     cartItems,
     totalQuantity: data?.cart?.total_quantity || 0,
-    error
+    error,
+    proceedToCheckout
     // isCartUpdating,
   };
 };

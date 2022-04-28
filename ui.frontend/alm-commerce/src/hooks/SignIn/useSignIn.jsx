@@ -31,7 +31,7 @@ export const useAlmSignIn = (props) => {
       navigate(`/cart`);
       //TO- DO: handle redirect, if query params is there then redirect there, else home page redirect
     };
-    if (isLoggedIn && !storageInstance.getItem(CART_ID)) {
+    if (isLoggedIn) {
       getCart();
     }
   }, [fetchCartId, isLoggedIn, navigate]);
