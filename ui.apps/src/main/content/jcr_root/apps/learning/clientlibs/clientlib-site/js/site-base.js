@@ -116,7 +116,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   const navigateToCommerceSignInPage = () => {
     let {commerceSignInPath} = getALMConfig();
-    window.location = commerceSignInPath + "?redirectPath=" + window.location.pathname;
+    window.location = commerceSignInPath + "?redirectPath=" + encodeURIComponent(window.location.pathname);
   };
 
   const navigateToCommerceCartPage = () => {
