@@ -4,6 +4,7 @@ import { Button } from "@adobe/react-spectrum";
 import Calendar from "@spectrum-icons/workflow/Calendar";
 import Download from "@spectrum-icons/workflow/Download";
 import ClockCheck from "@spectrum-icons/workflow/ClockCheck";
+import Clock from "@spectrum-icons/workflow/Clock";
 import PinOff from "@spectrum-icons/workflow/PinOff";
 import Send from "@spectrum-icons/workflow/Send";
 import UserGroup from "@spectrum-icons/workflow/UserGroup";
@@ -330,19 +331,37 @@ const PrimeTrainingPageMetaData: React.FC<{
             <div>
               {loType == "certification"
                 ? formatMessage(
-                  {
-                    id: "alm.overview.certification.deadline",
-                  },
-                  {
-                    0: trainingInstance?.completionDeadline?.slice(0,-1),
-                  }
-                )
+                    {
+                      id: "alm.overview.certification.deadline",
+                    },
+                    {
+                      0: trainingInstance?.completionDeadline?.slice(0, -1),
+                    }
+                  )
                 : modifyTime(trainingInstance.completionDeadline, locale)}
             </div>
           </div>
         </div>
       )}
-
+      {/* Certificate Type container */}
+      {isCertification && (
+        <div className={styles.commonContainer}>
+          <span aria-hidden="true" className={styles.icon}>
+            <Clock />
+          </span>
+          <div className={styles.innerContainer}>
+            <label className={styles.label}>
+              {formatMessage({
+                id: "alm.overview.certification.type",
+                defaultMessage: "Type",
+              })}
+            </label>
+            <div>
+              {trainingInstance?.validity ? "Recurring" : "Non Recurring"}
+            </div>
+          </div>
+        </div>
+      )}
       {/* Certificate Validity container */}
       {isCertification && (
         <div className={styles.commonContainer}>
