@@ -23,6 +23,8 @@ public class Constants {
 		public static final String SITE_MAP_TRAINING_PATH = "sitemapTrainingPath";
 		public static final String ES_BASE_URL_NAME = "esBaseUrl";
 		public static final String COMMERCE_URL_NAME = "commerceURL";
+		public static final String LEARNER_TOKEN_URL = "/oauth/o/learnerToken?learner_email={email}&min_validity_sec={min_validity_sec}";
+		public static final long LEARNER_TOKEN_MIN_VALIDITY_SEC = 518400; // 24 Hr
 	}
 
 	public final class EmbeddableWidgetConfig {

@@ -11,7 +11,7 @@
         sling:resourceType="learning/configuration/page"
         accountId="7110"
         almBaseURL="https://learningmanagerqe.adobe.com"
-        refreshToken="683f05f7a3463f382b797d3e6889a9f2"
+        refreshToken="6eb025063596297b3517e4b69239028f"
         clientId="c495b4f0-2f9b-441c-acd4-22dcfba84718"
         clientSecret="c08aef1d-51d2-47d8-9b13-481dceca66d3"
         almCdnBaseUrl="https://primeapps-stage.adobe.com/almsearch/api/v1/qe/7110/a75477eb-2a4c-4f6e-b897-a6506da18e3f"
