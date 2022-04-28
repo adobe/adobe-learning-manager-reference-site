@@ -1,10 +1,14 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useNavigate, createSearchParams } from "react-router-dom";
-import storageInstance from "../../utils/storage";
+import { createSearchParams, useNavigate } from "react-router-dom";
+import {
+  CART_ID,
+  PURCHASE_INITIATED_PATH,
+  SIGN_IN_PATH,
+  TOKEN,
+} from "../../utils/constants";
 import { postMethod } from "../../utils/global";
-import { CART_ID, TOKEN, SIGN_IN_PATH, PURCHASE_INITIATED_PATH } from "../../utils/constants";
-
+import storageInstance from "../../utils/storage";
 import {
   GET_PAYMENTS_MODE,
   PROCESS_ORDER,
@@ -32,15 +36,19 @@ export const useCheckoutPage = (props) => {
     if (!isLoggedIn) {
       navigate(SIGN_IN_PATH);
     }
-  }, [isLoggedIn, navigate])
+  }, [isLoggedIn, navigate]);
 
-  const [setPaymentMode, { loading: setPaymentModeLoading, error: setPaymentModeError }] = useMutation(SET_PAYMENT_MODE);
-  const [processOrder, { data: orderData, loading: processOrderLoading, error: orderError }] = useMutation(
-    PROCESS_ORDER
-  );
+  const [
+    setPaymentMode,
+    { loading: setPaymentModeLoading, error: setPaymentModeError },
+  ] = useMutation(SET_PAYMENT_MODE);
+  const [
+    processOrder,
+    { data: orderData, loading: processOrderLoading, error: orderError },
+  ] = useMutation(PROCESS_ORDER);
 
   const shouldShowLoadingIndicator =
-    (processOrderLoading || setPaymentModeLoading);
+    processOrderLoading || setPaymentModeLoading;
 
   useEffect(() => {
     const getPaymentModes = async () => {
@@ -57,51 +65,59 @@ export const useCheckoutPage = (props) => {
     }
   }, [cartId, fetchPaymentModes, isLoggedIn]);
 
-
-  const navigateToOrdersSuccessPage = useCallback((orderId) => {
-    if (orderId) {
-      navigate({
-        pathname: "/orders",
-        search: createSearchParams({
-          orderId
-        }).toString()
-      });
-    }
-  }, [navigate]);
+  const navigateToOrdersSuccessPage = useCallback(
+    (orderId) => {
+      if (orderId) {
+        navigate({
+          pathname: "/orders",
+          search: createSearchParams({
+            orderId,
+          }).toString(),
+        });
+      }
+    },
+    [navigate]
+  );
 
   useEffect(() => {
     navigateToOrdersSuccessPage(orderData?.placeOrder?.order?.order_number);
-  }, [navigateToOrdersSuccessPage, orderData])
+  }, [navigateToOrdersSuccessPage, orderData]);
 
-  const createOrder = useCallback(async ({ paymentMode } = {}) => {
-    try {
-      postMethod(PURCHASE_INITIATED_PATH);
-      await setPaymentMode({
-        variables: {
-          cardId: cartId,
-          code: paymentMode,
-        },
-      });
+  const createOrder = useCallback(
+    async ({ paymentMode } = {}) => {
+      try {
+        await postMethod(PURCHASE_INITIATED_PATH);
+        await setPaymentMode({
+          variables: {
+            cardId: cartId,
+            code: paymentMode,
+          },
+        });
 
-      await processOrder({
-        variables: {
-          cardId: cartId,
-        },
-      });
-
-    } catch (e) {
-      console.log(e);
-      //TODO : handle error
-    }
-  }, [cartId, processOrder, setPaymentMode]);
+        await processOrder({
+          variables: {
+            cardId: cartId,
+          },
+        });
+      } catch (e) {
+        console.log(e);
+        //TODO : handle error
+      }
+    },
+    [cartId, processOrder, setPaymentMode]
+  );
 
   const error = useMemo(() => {
     return {
       getPaymentError: getPaymentError?.message,
       orderError: orderError?.message,
-      setPaymentModeError: setPaymentModeError?.message
+      setPaymentModeError: setPaymentModeError?.message,
     };
-  }, [getPaymentError?.message, orderError?.message, setPaymentModeError?.message]);
+  }, [
+    getPaymentError?.message,
+    orderError?.message,
+    setPaymentModeError?.message,
+  ]);
 
   return {
     paymentModes,
@@ -109,6 +125,6 @@ export const useCheckoutPage = (props) => {
     error,
     orderData,
     createOrder,
-    shouldShowLoadingIndicator
+    shouldShowLoadingIndicator,
   };
 };

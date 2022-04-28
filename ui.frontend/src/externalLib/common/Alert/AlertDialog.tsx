@@ -1,23 +1,22 @@
-import css from "classnames"
-import React, { FC, useEffect } from "react";
-import { useState } from "react";
+// import css from "classnames"
+import React from "react";
 import styles from "./AlertDialog.module.css";
 
 const AlertDialog: React.FC<{
   icon: string;
-  show : boolean;
+  show: boolean;
   message: string;
-}> = ({icon, show, message}) => {
-  debugger
+}> = ({ icon, show, message }) => {
+  debugger;
   return (
     <>
-        {show && (
-          <div className={styles.modal}>
+      {show && (
+        <div className={styles.modal}>
           <div className={styles.modalcontent}>
-          <div className={css(styles.alert, styles[icon])}>{message}</div>
+            {/* <div className={css(styles.alert, styles[icon])}>{message}</div> */}
           </div>
-          </div>
-        )} 
+        </div>
+      )}
     </>
   );
 };
