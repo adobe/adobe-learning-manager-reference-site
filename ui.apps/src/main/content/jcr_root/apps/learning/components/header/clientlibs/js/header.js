@@ -49,7 +49,8 @@
         {
             try {
                 const cartID = JSON.parse(window.localStorage.getItem(STORAGE_CART_ID_KEY)).value;
-                const commerceToken = JSON.parse(window.localStorage.getItem(STORAGE_COMMERCE_TOKEN_KEY)).value;
+                let commerceToken = JSON.parse(window.localStorage.getItem(STORAGE_COMMERCE_TOKEN_KEY)).value;
+                commerceToken = commerceToken.replace(/\"/g, '');
                 const graphqlCartQuery = GRAPHQL_CART_QUERY.replace("{cart_id}", cartID);
                 const graphqlProxyURL = window.ALM.ALMConfig.graphqlProxyPath + "?query=" + encodeURIComponent(graphqlCartQuery);
                 const response = await fetch(graphqlProxyURL, {
