@@ -1,16 +1,21 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getALMObject } from "../../utils/global";
 import storageInstance from "../../utils/storage";
-import { CREATE_CART, SIGN_IN } from "./signIn.gql";
-import { getALMObject } from "../../utils/global"
+import {
+  CREATE_ACCOUNT,
+  CREATE_CART,
+  REQUEST_PASSWORD_RESET_EMAIL,
+  SIGN_IN,
+} from "./signIn.gql";
 
 const CART_ID = "CART_ID";
 
 export const useAlmSignIn = (props) => {
   let navigate = useNavigate();
 
-  const [isSigningIn, setIsSigningIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsloggedIn] = useState(() => {
     const token = storageInstance.getItem("TOKEN");
     return Boolean(token);
@@ -18,6 +23,21 @@ export const useAlmSignIn = (props) => {
   const [signIn, { error: signInError }] = useMutation(SIGN_IN, {
     fetchPolicy: "no-cache",
   });
+
+  const [createAccount, { error: createAccountError }] = useMutation(
+    CREATE_ACCOUNT,
+    {
+      fetchPolicy: "no-cache",
+    }
+  );
+
+  const [forgotPassword, { error: forgotPasswordError }] = useMutation(
+    REQUEST_PASSWORD_RESET_EMAIL,
+    {
+      fetchPolicy: "no-cache",
+    }
+  );
+
   const [fetchCartId] = useLazyQuery(CREATE_CART);
   useEffect(() => {
     const getCart = async () => {
@@ -27,7 +47,9 @@ export const useAlmSignIn = (props) => {
         cartResponse?.data?.customerCart.id,
         10800
       );
-      getALMObject().updateCart(cartResponse?.data?.customerCart?.total_quantity);
+      getALMObject().updateCart(
+        cartResponse?.data?.customerCart?.total_quantity
+      );
       navigate(`/cart`);
       //TO- DO: handle redirect, if query params is there then redirect there, else home page redirect
     };
@@ -36,9 +58,9 @@ export const useAlmSignIn = (props) => {
     }
   }, [fetchCartId, isLoggedIn, navigate]);
 
-  const handleSubmit = useCallback(
+  const signInHandler = useCallback(
     async ({ email, password }) => {
-      setIsSigningIn(true);
+      setIsLoading(true);
       try {
         const signInResponse = await signIn({
           variables: {
@@ -49,28 +71,75 @@ export const useAlmSignIn = (props) => {
         const token = signInResponse.data.generateCustomerToken.token;
         storageInstance.setItem("TOKEN", token, 3600);
         setIsloggedIn(true);
-        setIsSigningIn(false);
+        setIsLoading(false);
         if (process.env.NODE_ENV === "production") {
-          fetch(`/cpoauth.commerceToken.html?token=${token}&pagePath=${window.location.pathname}`);
+          fetch(
+            `/cpoauth.commerceToken.html?token=${token}&pagePath=${window.location.pathname}`
+          );
         }
-      } catch (error) {
-        if (process.env.NODE_ENV !== "production") {
-          console.error(error);
-        }
-        setIsSigningIn(false);
+      } catch (exception) {
+        // if (process.env.NODE_ENV !== "production") {
+        //   console.error(exception);
+        // }
+        setIsLoading(false);
         setIsloggedIn(false);
       }
     },
     [signIn]
   );
 
+  const createAccountHandler = useCallback(
+    async ({ firstname, lastname, email, password, is_subscribed }) => {
+      setIsLoading(true);
+      try {
+        await createAccount({
+          variables: {
+            firstname,
+            lastname,
+            email,
+            password,
+            is_subscribed,
+          },
+        });
+        await signInHandler({ email, password });
+      } catch (e) {
+        setIsLoading(false);
+        setIsloggedIn(false);
+      }
+    },
+    [createAccount]
+  );
+
+  const forgotPasswordHandler = useCallback(
+    async ({ email }) => {
+      setIsLoading(true);
+      try {
+        await forgotPassword({
+          variables: {
+            email,
+          },
+        });
+      } catch (e) {
+        setIsLoading(false);
+        setIsloggedIn(false);
+      }
+    },
+    [createAccount]
+  );
+
   const error = useMemo(() => {
-    return { signInError: signInError?.message };
-  }, [signInError]);
+    return {
+      signInError: signInError?.message,
+      createAccountError: createAccountError?.message,
+      forgotPasswordError: forgotPasswordError?.message,
+    };
+  }, [signInError, createAccountError]);
   return {
-    handleSubmit,
+    signInHandler,
+    createAccountHandler,
+    forgotPasswordHandler,
     isLoggedIn,
-    isSigningIn,
+    isLoading,
     error,
   };
 };
