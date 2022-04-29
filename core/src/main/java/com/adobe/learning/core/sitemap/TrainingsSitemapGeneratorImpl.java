@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
-import org.apache.http.HttpStatus;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -54,6 +56,22 @@ public class TrainingsSitemapGeneratorImpl implements SitemapGenerator {
 			"      almloid\r\n" + 
 			"    }\r\n" + 
 			"  }\r\n" + 
+			"}";
+
+	private static final String COMMERCE_CUSTOM_ATTRS_QUERY = "{\r\n" + 
+			"    customAttributeMetadata(\r\n" + 
+			"      attributes: [\r\n" + 
+			"        { attribute_code: \"almlotype\", entity_type: \"catalog_product\" }\r\n" + 
+			"      ]\r\n" + 
+			"    ) {\r\n" + 
+			"      items {\r\n" + 
+			"        attribute_code\r\n" + 
+			"        attribute_options {\r\n" + 
+			"          value\r\n" + 
+			"          label\r\n" + 
+			"        }\r\n" + 
+			"      }\r\n" + 
+			"    }\r\n" + 
 			"}";
 
 	private static final int COMMERCE_PRODUCTS_QUERY_PAGE_SIZE = 20;
@@ -107,35 +125,37 @@ public class TrainingsSitemapGeneratorImpl implements SitemapGenerator {
 			String trainingPagePath = TRAINING_URL_FORMAT.replace("{trainingPage}", sitemapTrainingPath);
 			ResourceResolver resResolver = sitemapRoot.getResourceResolver();
 
-			int currentPage = 1;
-
-
-
-			while (currentPage <= Integer.MAX_VALUE)
+			JsonObject customAttrDataObj = fetchDataFromCommerceGraphql(commerceURL, COMMERCE_CUSTOM_ATTRS_QUERY);
+			if (customAttrDataObj != null)
 			{
-				String queryParam = URLEncoder.encode(COMMERCE_PRODUCTS_QUERY.replace("{pageSize}", String.valueOf(COMMERCE_PRODUCTS_QUERY_PAGE_SIZE)).replace("{currentPage}", String.valueOf(currentPage)), "UTF-8");
-				String commerceGraphqlURL = commerceURL + "?query=" + queryParam;
+				JsonArray attrOptions = customAttrDataObj.getAsJsonObject("customAttributeMetadata").getAsJsonArray("items").get(0).getAsJsonObject().getAsJsonArray("attribute_options");
+				Map<String, String> loTypeMap = new HashMap<String, String>();
+				loTypeMap.put("course", "course");
+				for(JsonElement option : attrOptions)
+				{
+					JsonObject optionObj = option.getAsJsonObject();
+					String value = (optionObj.get("value").isJsonNull() == false) ? optionObj.get("value").getAsString() : "";
+					String label = (optionObj.get("label").isJsonNull() == false) ? optionObj.get("label").getAsString() : "";
+					loTypeMap.put(value, label);
+				}
 
-				HttpGet getCall = new HttpGet(commerceGraphqlURL);
+				int currentPage = 1;
 
-				try (CloseableHttpClient httpClient = HttpClients.createDefault(); CloseableHttpResponse response = httpClient.execute(getCall)) {
-					String configResponse = EntityUtils.toString(response.getEntity());
-					Gson gson = new Gson();
-					JsonObject jsonObj = gson.fromJson(configResponse, JsonObject.class);
-					if (jsonObj.get("errors") != null)
+				while (currentPage <= Integer.MAX_VALUE)
+				{
+					String productQuery = COMMERCE_PRODUCTS_QUERY.replace("{pageSize}", String.valueOf(COMMERCE_PRODUCTS_QUERY_PAGE_SIZE)).replace("{currentPage}", String.valueOf(currentPage));
+					JsonObject dataObj = fetchDataFromCommerceGraphql(commerceURL, productQuery);
+
+					if (dataObj != null) 
 					{
-						LOGGER.error("CPPrime::TrainingsSitemapGeneratorImpl::generateForCommerceUsage Exception in Graphql Products query. Reponse {}", configResponse);
-						return;
-					}
-					else
-					{
-						JsonArray productItems = jsonObj.getAsJsonObject("data").getAsJsonObject("products").getAsJsonArray("items");
+						JsonArray productItems = dataObj.getAsJsonObject("products").getAsJsonArray("items");
 						for (JsonElement product : productItems)
 						{
-							String loId = product.getAsJsonObject().get("almloid").isJsonNull() ? "1" : product.getAsJsonObject().get("almloid").getAsString();
-							String loType = product.getAsJsonObject().get("almlotype").isJsonNull() ? "course" : product.getAsJsonObject().get("almlotype").getAsString();
+							JsonObject productObj = product.getAsJsonObject();
+							String loId = productObj.get("almloid").isJsonNull() ? "1" : productObj.get("almloid").getAsString();
+							String loType = productObj.get("almlotype").isJsonNull() ? "course" : productObj.get("almlotype").getAsString();
 
-							String pagePath = trainingPagePath.replace("{loType}", loType).replace("{loId}", loId);
+							String pagePath = trainingPagePath.replace("{loType}", loTypeMap.get(loType)).replace("{loId}", loId);
 							Resource trainingResource = resResolver.resolve(pagePath);
 							String trainingURL = externalizerService.externalize(trainingResource);
 							String externalURL = trainingURL;
@@ -145,17 +165,45 @@ public class TrainingsSitemapGeneratorImpl implements SitemapGenerator {
 							}
 							sitemap.addUrl(externalURL);
 						}
+						currentPage++;
+						continue;
 					}
+					break;
 				}
-				currentPage++;
 			}
-		} catch (UnsupportedEncodingException uee)
-		{
-			LOGGER.error("CPPrime::TrainingsSitemapGeneratorImpl::generateForCommerceUsage Exception while encoding query-param", uee);
-		} catch (IOException ioe)
-		{
-			LOGGER.error("CPPrime::TrainingsSitemapGeneratorImpl::generateForCommerceUsage Exception while product query", ioe);
+		} catch (NullPointerException npe) {
+			LOGGER.error("CPPrime::TrainingsSitemapGeneratorImpl::fetchDataFromCommerceGraphql Exception in generating sitemap for commerce usage", npe);
 		}
+	}
+
+	private JsonObject fetchDataFromCommerceGraphql(String commerceGraphqlURL, String query)
+	{
+		try {
+			query = URLEncoder.encode(query, "UTF-8");
+			String getURL = commerceGraphqlURL + "?query=" + query;
+			HttpGet getCall = new HttpGet(getURL);
+
+			try (CloseableHttpClient httpClient = HttpClients.createDefault(); CloseableHttpResponse response = httpClient.execute(getCall)) {
+				String responseStr = EntityUtils.toString(response.getEntity());
+				Gson gson = new Gson();
+				JsonObject jsonObj = gson.fromJson(responseStr, JsonObject.class);
+				if (jsonObj.get("errors") != null)
+				{
+					LOGGER.error("CPPrime::TrainingsSitemapGeneratorImpl::fetchDataFromCommerceGraphql Exception in Graphql Products query. Reponse {}", responseStr);
+					return null;
+				}
+				else
+				{
+					return jsonObj.getAsJsonObject("data");
+				}
+			}
+			catch (IOException ioe) {
+				LOGGER.error("CPPrime::TrainingsSitemapGeneratorImpl::fetchDataFromCommerceGraphql Exception while executing query", ioe);
+			}
+		} catch (UnsupportedEncodingException uee) {
+			LOGGER.error("CPPrime::TrainingsSitemapGeneratorImpl::fetchDataFromCommerceGraphql Exception while encoding query- {}", query, uee);
+		}
+		return null;
 	}
 
 	private void generateForESUsage(Resource sitemapRoot, String name, Sitemap sitemap, SitemapGenerator.Context context, String sitemapTrainingPath, String esBaseURL) throws SitemapException {
@@ -196,5 +244,4 @@ public class TrainingsSitemapGeneratorImpl implements SitemapGenerator {
 			LOGGER.error("CPPrime::TrainingsSitemapGeneratorImpl::generateForESUsage Exception while query for trainings", ioe);
 		}
 	}
-
 }
