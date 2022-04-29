@@ -1,9 +1,8 @@
 @import "../../styles/variables.css";
 .signInContainer {
   width: 400px;
-  height: 400px;
+  min-height: 450px;
   background: #ffffff 0% 0% no-repeat padding-box;
-  /* border: 1px solid #707070; */
   margin: auto;
   margin-top: 50px;
   display: flex;
@@ -17,4 +16,27 @@
 }
 .error {
   color: var(--prime-error-color);
+}
+
+.button,
+.createAccountButton,
+.cancelButton {
+  margin: 0 auto;
+  width: 100%;
+  display: block;
+}
+
+.createAccountButton,
+.cancelButton {
+  margin-top: 20px;
+}
+
+.forgotPassword {
+  color: var(--prime-color-primary);
+  padding: 0;
+  margin-bottom: 10px;
+}
+
+.mandatory > label > svg {
+  fill: red;
 }
