@@ -1,6 +1,9 @@
 import { PrimeLearningObject } from "..";
 import { CatalogFilterState } from "../store/reducers/catalog";
-import { getParamsForCatalogApi } from "../utils/catalog";
+import {
+  getParamsForCatalogApi,
+  getOrUpdateCatalogFilters,
+} from "../utils/catalog";
 import { getDefaultFiltersState, updateFilterList } from "../utils/filters";
 import {
   getALMAttribute,
@@ -18,6 +21,7 @@ const DEFAULT_SEARCH_SNIPPETTYPE =
   "courseName,courseOverview,courseDescription,moduleName,certificationName,certificationOverview,certificationDescription,jobAidName,jobAidDescription,lpName,lpDescription,lpOverview,embedLpName,embedLpDesc,embedLpOverview,skillName,skillDescription,note,badgeName,courseTag,moduleTag,jobAidTag,lpTag,certificationTag,embedLpTag,discussion";
 const DEFAULT_SEARCH_INCLUDE =
   "model.instances.loResources.resources,model.instances.badge,model.supplementaryResources,model.enrollment.loResourceGrades,model.skills.skillLevel.skill";
+
 export default class ALMCustomHooks implements ICustomHooks {
   primeApiURL = getALMConfig().primeApiURL;
   async getTrainings(
@@ -26,7 +30,7 @@ export default class ALMCustomHooks implements ICustomHooks {
     searchText: string
   ) {
     const catalogAttributes = getALMAttribute("catalogAttributes");
-    const params: QueryParams = getParamsForCatalogApi(filterState);
+    const params: QueryParams = await getParamsForCatalogApi(filterState);
     params["sort"] = sort;
     params["page[limit]"] = DEFAULT_PAGE_LIMIT;
     params["include"] = DEFUALT_LO_INCLUDE;
@@ -116,9 +120,7 @@ export default class ALMCustomHooks implements ICustomHooks {
       RestAdapter.get({
         url: `${config.primeApiURL}data?filter.tagName=true`,
       }),
-      RestAdapter.get({
-        url: `${config.primeApiURL}catalogs`,
-      }),
+      getOrUpdateCatalogFilters(),
     ]);
     const skills = JsonApiParse(skillsPromise)?.data?.names;
     let skillsList = skills?.map((item: string) => ({
@@ -136,14 +138,12 @@ export default class ALMCustomHooks implements ICustomHooks {
     }));
     tagsList = updateFilterList(tagsList, queryParams, "tagName");
 
-    const catalogs = JsonApiParse(catalogPromise)?.catalogList;
-    let catalogList = catalogs?.map((item: any) => ({
-      value: item.id,
+    let catalogList = catalogPromise?.map((item: any) => ({
+      value: item.name,
       label: item.name,
       checked: false,
     }));
     catalogList = updateFilterList(catalogList, queryParams, "catalogs");
-
     const defaultFiltersState = getDefaultFiltersState();
 
     return {

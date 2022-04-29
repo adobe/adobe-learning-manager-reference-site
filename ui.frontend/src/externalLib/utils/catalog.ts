@@ -1,11 +1,16 @@
 
 import {
+  PrimeCatalog,
   PrimeLearningObject,
   PrimeLearningObjectInstance,
 } from "../models/PrimeModels";
 import { CatalogFilterState } from "../store/reducers/catalog";
-import { getALMAttribute, getWindowObject } from "./global";
-import { QueryParams } from "./restAdapter";
+import { getALMAttribute, getALMConfig, getWindowObject } from "./global";
+import { JsonApiParse } from "./jsonAPIAdapter";
+import { QueryParams, RestAdapter } from "./restAdapter";
+import BrowserPersistence from "../utils/storage";
+
+const PRIME_CATALOG_FILTER = "PRIME_CATALOG_FILTER";
 
 export function isJobaid(training: PrimeLearningObject): boolean {
   return training.loType.toLowerCase() === "jobaid" ? true : false;
@@ -63,7 +68,35 @@ export function debounce(fn: Function, time = 250) {
   };
 }
 
-export function getParamsForCatalogApi(filterState: CatalogFilterState) {
+export const getOrUpdateCatalogFilters = async (): Promise<PrimeCatalog[] | undefined> => {
+  try {
+    const filterItems = BrowserPersistence.getItem(PRIME_CATALOG_FILTER);
+    if (filterItems) {
+      return JsonApiParse(filterItems)?.catalogList;
+    }
+    const config = getALMConfig();
+    const catalogPromise = await RestAdapter.get({
+      url: `${config.primeApiURL}catalogs`,
+    });
+    BrowserPersistence.setItem(PRIME_CATALOG_FILTER, catalogPromise);
+    return JsonApiParse(catalogPromise)?.catalogList;
+  } catch (e) { }
+};
+
+const getCatalogParamsForAPi = async (catalogState: string): Promise<string> => {
+  const catalogFilterFromStorage = await getOrUpdateCatalogFilters();
+  const catalogFilterFromState = catalogState.split(",");
+  let returnValue = "";
+  catalogFilterFromStorage?.forEach((item) => {
+    if (catalogFilterFromState.indexOf(item.name) > -1) {
+      returnValue += returnValue ? "," + item.id : item.id;
+    }
+  })
+
+  return returnValue;
+}
+
+export async function getParamsForCatalogApi(filterState: CatalogFilterState) {
   const params: QueryParams = {};
   const catalogAttributes = getALMAttribute("catalogAttributes");
 
@@ -94,7 +127,7 @@ export function getParamsForCatalogApi(filterState: CatalogFilterState) {
       params["filter.skill.level"] = filterState.skillLevel;
     }
     if (filterState.catalogs && catalogAttributes?.catalogs === "true") {
-      params["filter.catalogIds"] = filterState.catalogs;
+      params["filter.catalogIds"] = await getCatalogParamsForAPi(filterState.catalogs);
     }
   }
   return params;

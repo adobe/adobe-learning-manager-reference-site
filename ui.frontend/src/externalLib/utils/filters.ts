@@ -67,23 +67,23 @@ export const filtersDefaultState: FilterState = {
     label: "alm.catalog.filter.format.label",
     list: [
       {
-        value: "ACTIVITY",
+        value: "Activity",
         label: "alm.catalog.card.activity",
         checked: false,
       },
-      { value: "BLENDED", label: "alm.catalog.card.blended", checked: false },
+      { value: "Blended", label: "alm.catalog.card.blended", checked: false },
       {
-        value: "SELF PACED",
+        value: "Self Paced",
         label: "alm.catalog.card.self.paced",
         checked: false,
       },
       {
-        value: "VIRTUAL CLASSROOM",
+        value: "Virtual Classroom",
         label: "alm.catalog.card.virtual.classroom",
         checked: false,
       },
       {
-        value: "CLASSROOM",
+        value: "Classroom",
         label: "alm.catalog.card.classroom",
         checked: false,
       },
