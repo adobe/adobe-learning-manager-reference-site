@@ -208,8 +208,12 @@ export default class CommerceCustomHooks implements ICustomHooks {
           search,
         },
       });
+      const filtersFromStorage = await getOrUpdateFilters();
       const products = response?.data?.products;
-      const results = parseCommerceResponse(products?.items);
+      const results = parseCommerceResponse(
+        products?.items,
+        filtersFromStorage
+      );
       const page_info = products?.page_info;
       return {
         trainings: results || [],
@@ -242,8 +246,13 @@ export default class CommerceCustomHooks implements ICustomHooks {
           search,
         },
       });
+      const filtersFromStorage = await getOrUpdateFilters();
+
       const products = response?.data?.products;
-      const results = parseCommerceResponse(products?.items);
+      const results = parseCommerceResponse(
+        products?.items,
+        filtersFromStorage
+      );
       const page_info = products?.page_info;
       return {
         learningObjectList: results || [],

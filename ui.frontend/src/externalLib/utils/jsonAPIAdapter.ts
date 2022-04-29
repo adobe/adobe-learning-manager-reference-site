@@ -1,3 +1,4 @@
+import { ALMToCommerceTypes } from "../common/CommerceCustomHooks";
 import { CommercePrimeLearningObject, ESPrimeLearningObject, ESPrimeLearningObjectInstance, JsonApiResponse, PrimeLearningObject, PrimeLearningObjectInstance, PrimeLocalizationMetadata, PrimeRating } from "../models";
 import { getALMConfig } from "./global";
 
@@ -327,26 +328,33 @@ export function parseESResponse(response: ESPrimeLearningObject[]): PrimeLearnin
     return loResponse;
 }
 
-export function parseCommerceResponse(response: CommercePrimeLearningObject[]): PrimeLearningObject[] {
+export function parseCommerceResponse(response: CommercePrimeLearningObject[], filtersFromStorage: any = []): PrimeLearningObject[] {
     let loResponse: PrimeLearningObject[] = [];
+
+    const filterMap = new Map();
+    filtersFromStorage.forEach(
+        (filter: { attribute_code: string | number; attribute_options: any }) => {
+            if (!filterMap.has(filter.attribute_code)) {
+                filterMap.set(filter.attribute_code, filter.attribute_options);
+            }
+        }
+    );
+
     response.forEach((item) => {
         let lo: Partial<PrimeLearningObject> = {};
         let rating: PrimeRating;
         let localizedData: PrimeLocalizationMetadata;
 
         lo.id = item.sku;
-        lo.loFormat = item.almdeliverytype;
-        lo.loType = item.almlotype;
         lo.duration = item.almduration;
         lo.authorNames = item.almauthor;
-        // lo.dateCreated = item.dateCreated;
         lo.datePublished = item.almpublishdate;
         lo.tags = item.almtags;
         localizedData = {
             _transient: "",
             description: item.description.html,
             id: "",
-            locale: "en-US", //need to get from locale
+            locale: getALMConfig().locale, //need to get from locale
             name: item.name,
             overview: "",
             richTextOverview: "",
@@ -362,7 +370,40 @@ export function parseCommerceResponse(response: CommercePrimeLearningObject[]): 
         }
         lo.rating = rating;
         lo.skills = [];
-        lo.skillNames = item.almskill?.split(",");
+        let skillValues = item.almskill?.split(",");
+        lo.skillNames = [];
+        if (skillValues?.length) {
+            const options = filterMap.get(ALMToCommerceTypes["skillName"]) || [];
+            const optionsMap: any = {};
+            options?.forEach((element: { label: any; value: any }) => {
+                if (!optionsMap[element.value]) {
+                    optionsMap[element.value] = element.label;
+                }
+            });
+            skillValues.forEach((skill) => {
+                if (optionsMap[skill]) {
+                    debugger;
+                    lo.skillNames?.push(optionsMap[skill]);
+                }
+            })
+        }
+        if (item.almdeliverytype) {
+            const loFormatOptions = filterMap.get(ALMToCommerceTypes["loFormat"]) || [];
+            loFormatOptions?.forEach((element: { label: any; value: any }) => {
+                if (element.value == item.almdeliverytype) {
+                    lo.loFormat = element.label;
+                }
+            });
+        }
+        if (item.almlotype) {
+            const loTypesOptions = filterMap.get(ALMToCommerceTypes["loTypes"]) || [];
+            loTypesOptions?.forEach((element: { label: any; value: any }) => {
+                if (element.value == item.almlotype) {
+                    lo.loType = element.label;
+                }
+            });
+
+        }
         lo.price = {
             value: item.price_range?.maximum_price?.final_price?.value,
             currency: item.price_range?.maximum_price?.final_price?.currency
