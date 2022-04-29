@@ -3,3 +3,4 @@
 site-base.js
 site-login.js
 site-content.js
+site-storage.js
