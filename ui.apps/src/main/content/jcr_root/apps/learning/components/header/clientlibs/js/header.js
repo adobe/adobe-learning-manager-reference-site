@@ -34,6 +34,48 @@
     const COMMERCE_USAGE_TYPE = "aem-commerce";
     const ALM_USAGE_TYPE = "aem-sites";
 
+    const STORAGE_CART_ID_KEY = "ALM_BROWSER_PERSISTENCE__CART_ID";
+    const STORAGE_COMMERCE_TOKEN_KEY = "ALM_BROWSER_PERSISTENCE__TOKEN";
+    const GRAPHQL_CART_QUERY = `{
+        cart(cart_id: {cart_id}) {
+          total_quantity
+        }
+      }`;
+
+    async function updateCart() {
+        if (typeof window !== 'undefined' && window.localStorage 
+        && window.localStorage.getItem(STORAGE_CART_ID_KEY)
+        && window.localStorage.getItem(STORAGE_COMMERCE_TOKEN_KEY))
+        {
+            try {
+                const cartID = JSON.parse(window.localStorage.getItem(STORAGE_CART_ID_KEY)).value;
+                const commerceToken = JSON.parse(window.localStorage.getItem(STORAGE_COMMERCE_TOKEN_KEY)).value;
+                const graphqlCartQuery = GRAPHQL_CART_QUERY.replace("{cart_id}", cartID);
+                const graphqlProxyURL = window.ALM.ALMConfig.graphqlProxyPath + "?query=" + encodeURIComponent(graphqlCartQuery);
+                const response = await fetch(graphqlProxyURL, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${commerceToken}`,
+                    }
+                });
+                if (response && response.ok)
+                {
+                    let responseJson = await response.json();
+                    if (responseJson.errors)
+                    {
+                        console.error(JSON.stringify(responseJson.errors));
+                    }
+                    else if (responseJson.data && responseJson.data.cart && responseJson.data.cart.total_quantity)
+                    {
+                        window.ALM.updateCart(responseJson.data.cart.total_quantity);
+                    }
+                }
+            } catch (e) {
+                console.error("Exception in getting cart details");
+            }
+        }
+    }
+
     function isAuthor() {
         return window.ALM.ALMConfig.authorMode == true;
     }
@@ -146,6 +188,7 @@
         if (COMMERCE_USAGE_TYPE === window.ALM.ALMConfig.usageType) {
             if (window.ALM.isPrimeUserLoggedIn()) {
                 $(HEADER_CART_SEL).show();
+                updateCart();
             } else {
                 $(HEADER_CART_SEL).hide();
             }
@@ -163,22 +206,12 @@
         $(LOGOUT_NAVIGATE_SEL).on("click", () => window.ALM.handleLogOut());
         $(HEADER_REGISTER_REL).on("click", () => window.ALM.handleRegister());
         $(REGISTER_NAVIGATE_SEL).on("click", () => window.ALM.handleRegister());
-        $(HEADER_PROFILE_TEXT_REL).on("click", () =>
-            window.ALM.navigateToProfilePage()
-        );
-        $(COMMUNITY_NAVIGATE_SEL).on("click", () =>
-            window.ALM.navigateToCommunityPage()
-        );
+        $(HEADER_PROFILE_TEXT_REL).on("click", () => window.ALM.navigateToProfilePage());
+        $(COMMUNITY_NAVIGATE_SEL).on("click", () => window.ALM.navigateToCommunityPage());
         $(HOME_NAVIGATE_SEL).on("click", () => window.ALM.navigateToHomePage());
-        $(LEARNING_NAVIGATE_SEL).on("click", () =>
-            window.ALM.navigateToLearningPage()
-        );
-        $(SUPPORT_NAVIGATE_SEL).on("click", () =>
-            window.ALM.navigateToSupportPage()
-        );
-        $(HEADER_CART_SEL).on("click", () =>
-            window.ALM.navigateToCommerceCartPage()
-        );
+        $(LEARNING_NAVIGATE_SEL).on("click", () => window.ALM.navigateToLearningPage());
+        $(SUPPORT_NAVIGATE_SEL).on("click", () => window.ALM.navigateToSupportPage());
+        $(HEADER_CART_SEL).on("click", () => window.ALM.navigateToCommerceCartPage());
 
         $(VERT_NAV_CLOSE_BUTTON_SEL + "," + HEADER_SHOW_MENU_SEL).on("click", () => {
                 $(VERT_NAV_CONTAINER_SEL).toggleClass("open");

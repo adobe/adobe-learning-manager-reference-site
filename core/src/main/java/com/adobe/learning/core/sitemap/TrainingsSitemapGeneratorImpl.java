@@ -6,6 +6,7 @@ import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.Set;
 
+import org.apache.http.HttpStatus;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -166,23 +167,26 @@ public class TrainingsSitemapGeneratorImpl implements SitemapGenerator {
 
 			try (CloseableHttpClient httpClient = HttpClients.createDefault(); CloseableHttpResponse response = httpClient.execute(getCall))
 			{
-				String configResponse = EntityUtils.toString(response.getEntity());
-				JsonArray loIdsArray = new Gson().fromJson(configResponse, JsonObject.class).getAsJsonArray("loIds");
-
-				for (JsonElement loObj : loIdsArray)
+				if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode())
 				{
-					String[] lo = loObj.getAsString().split(":");
-					if (lo != null && lo.length == 2)
+					String configResponse = EntityUtils.toString(response.getEntity());
+					JsonArray loIdsArray = new Gson().fromJson(configResponse, JsonObject.class).getAsJsonArray("loIds");
+
+					for (JsonElement loObj : loIdsArray)
 					{
-						String pagePath = trainingPagePath.replace("{loType}", lo[0]).replace("{loId}", lo[1]);
-						Resource trainingResource = resResolver.resolve(pagePath);
-						String trainingURL = externalizerService.externalize(trainingResource);
-						String externalURL = trainingURL;
-						if (StringUtils.isNotBlank(trainingURL) && pagePath.startsWith(trainingURL))
+						String[] lo = loObj.getAsString().split(":");
+						if (lo != null && lo.length == 2)
 						{
-							externalURL = trainingURL + pagePath.substring(trainingURL.length());
+							String pagePath = trainingPagePath.replace("{loType}", lo[0]).replace("{loId}", lo[1]);
+							Resource trainingResource = resResolver.resolve(pagePath);
+							String trainingURL = externalizerService.externalize(trainingResource);
+							String externalURL = trainingURL;
+							if (StringUtils.isNotBlank(trainingURL) && pagePath.startsWith(trainingURL))
+							{
+								externalURL = trainingURL + pagePath.substring(trainingURL.length());
+							}
+							sitemap.addUrl(externalURL);
 						}
-						sitemap.addUrl(externalURL);
 					}
 				}
 			}
