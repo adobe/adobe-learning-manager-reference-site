@@ -70,11 +70,11 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
     catalogUrl += "?";
     if (catalogNames)
-      catalogUrl += "catalogs=" + catalogNames + "&";
+      catalogUrl += "catalogs=" + encodeURIComponent(catalogNames) + "&";
     if (skillNames)
-      catalogUrl += "skillName=" + skillNames + "&";
+      catalogUrl += "skillName=" + encodeURIComponent(skillNames) + "&";
     if (tagNames)
-      catalogUrl += "tags=" + tagNames + "&";
+      catalogUrl += "tags=" + encodeURIComponent(tagNames) + "&";
       
     catalogUrl = catalogUrl.slice(0, -1);
     

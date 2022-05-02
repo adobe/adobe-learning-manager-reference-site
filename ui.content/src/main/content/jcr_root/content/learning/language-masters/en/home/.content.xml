@@ -73,27 +73,27 @@
                                 <categories jcr:primaryType="nt:unstructured">
                                     <item0
                                         jcr:primaryType="nt:unstructured"
-                                        catalogs="catalog1,catalog2"
+                                        catalogs="LinkedIn Learning,Digital Marketing"
                                         description="Take advantage of strong computational tools employing unique financial management strategies that keep your accounting worries at bay."
                                         fileReference="/content/dam/learning/site/explore/Accountant.png"
                                         headline="Secur Financial For Accountants"
-                                        products="skill1,skill2"
+                                        products="Accounting,Adapt to change"
                                         tags="tags1"/>
                                     <item1
                                         jcr:primaryType="nt:unstructured"
-                                        catalogs="catalog1"
+                                        catalogs="Default Catalog"
                                         description="Utilize state of the art administrative management tools providing unique solutions for your information management needs."
                                         fileReference="/content/dam/learning/site/explore/Admin.png"
                                         headline="SecurFinancial for Admins"
-                                        products="skill1,skill2"
+                                        products="Adobe Advantage,Abstract Skill"
                                         tags="tags1"/>
                                     <item2
                                         jcr:primaryType="nt:unstructured"
-                                        catalogs="catalog1"
+                                        catalogs="Default Catalog,LinkedIn Learning,Digital Marketing"
                                         description="Reap the benefits of award-winning auditing tools providing robust solutions for your compliance assessment and recordkeeping needs."
                                         fileReference="/content/dam/learning/site/explore/Auditor.png"
                                         headline="SecurFinancial for Auditors"
-                                        products="skill1,skill2"
+                                        products="Accounting"
                                         tags="tags1"/>
                                     <item3
                                         jcr:primaryType="nt:unstructured"
