@@ -50,8 +50,14 @@ export const useAlmSignIn = (props) => {
       getALMObject().updateCart(
         cartResponse?.data?.customerCart?.total_quantity
       );
-      navigate(`/cart`);
-      //TO- DO: handle redirect, if query params is there then redirect there, else home page redirect
+
+      let urlSearchParams = new URLSearchParams(window.location.search);
+      const redirectPath = urlSearchParams.get("redirectPath");
+      if (redirectPath) {
+        window.location.pathname = decodeURIComponent(redirectPath);
+      } else {
+        window.location.href = getALMObject().navigateToExplorePage();
+      }
     };
     if (isLoggedIn) {
       getCart();
