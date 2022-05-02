@@ -53,7 +53,7 @@
           "https://primeapps-stage.adobe.com/almsearch/api/v1/qe/7110/a75477eb-2a4c-4f6e-b897-a6506da18e3f",
         siteMap: "siteMap",
         instancePath: "http://localhost:3000/instance.html",
-        catalogPath: "http://localhost:3000/catalog.html",
+        catalogPath: "http://localhost:3000/explore.html",
         trainingOverviewPath: "http://localhost:3000/trainingOverview.html",
         communityPath: "http://localhost:3000/community.html",
         communityBoardsPath: "http://localhost:3000/community.html",
@@ -220,13 +220,14 @@
           if (response) {
             const activeFields = await response.json();
             console.log(activeFields);
+            await updateALMUser();
             return activeFields;
           }
         } catch (e) {
           throw e;
         }
       };
-      
+
       class NamespacedLocalStorage {
         constructor(localStorage, key) {
           this.localStorage = localStorage;
@@ -293,16 +294,15 @@
       window.ALM = window.ALM || {};
       window.ALM.ALMConfig = ALMConfig; //window.ALM.ALMConfig || primeConfig;
       window.ALM.getALMConfig = getALMConfig;
-      window.ALM.navigateToTrainingOverviewPage =
-        navigateToTrainingOverviewPage;
+      window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
       window.ALM.navigateToInstancePage = navigateToInstancePage;
       window.ALM.navigateToBoardDetailsPage = navigateToBoardDetailsPage;
+      window.ALM.navigateToExplorePage = navigateToExplorePage;
       window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
       window.ALM.getAccessToken = getAccessToken;
       window.ALM.getALMUser = getALMUser;
       window.ALM.getAccountActiveFields = getAccountActiveFields;
-      window.ALM.updateAccountActiveFieldsDetails =
-        updateAccountActiveFieldsDetails;
+      window.ALM.updateAccountActiveFieldsDetails = updateAccountActiveFieldsDetails;
       window.ALM.updateALMUser = updateALMUser;
       window.ALM.updateCart = function (value) {
         console.log(value);

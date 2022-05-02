@@ -46,9 +46,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
     if (isAuthor()) {
       handlePrimeLogIn();
-    }
-    else
-    {
+    } else {
       if (ES_REGISTER_STATE == state && code) {
         // Handle User registration
         const data = {
@@ -58,18 +56,16 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
           pagePath: pathName,
         };
         fetchAccessToken(data);
-      }
-      else if (isCommunityPage() || (CP_OAUTH_STATE == state && code)) {
+      } else if (isCommunityPage() || (CP_OAUTH_STATE == state && code)) {
         // Auto-login like Prime Usage only if user navigates to Community page.
         // For rest pages, show non-logged in behavior
         handlePrimeLogIn();
-      }
-      else if (!isPrimeUserLoggedIn()) {
+      } else if (!isPrimeUserLoggedIn()) {
         if (isLearningPage()) {
           window.ALM.navigateToExplorePage();
         }
       }
-    }  
+    }
   }
 
   function handlePrimeLogIn() {
@@ -278,9 +274,8 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
       },
     };
     const updateAccountActiveFieldsUrl = baseApiUrl + "users/" + `${userId}`;
-    const headers = { "content-type": "application/json" };
     try {
-      const response = await fetch(updateAccountActiveFieldsUrl, {
+      await fetch(updateAccountActiveFieldsUrl, {
         credentials: "include",
         headers: {
           "Content-type": "application/json",
@@ -290,12 +285,9 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
         body: JSON.stringify(body),
         Accept: "application/vnd.api+json",
       });
-      if (response) {
-        const activeFields = await response.json();
-        console.log(activeFields);
-        return activeFields;
-      }
+      await updateALMUser();
     } catch (e) {
+      console.error(e);
       throw e;
     }
   };

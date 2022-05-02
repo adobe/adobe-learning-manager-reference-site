@@ -180,6 +180,9 @@ const SignIn = () => {
         )}
       </Form>
     </div>
+
+    // Recover Password
+    // If there is an account associated with yogesh.nitd@gmail.com you will receive an email with a link to change your password.
   );
 };
 
