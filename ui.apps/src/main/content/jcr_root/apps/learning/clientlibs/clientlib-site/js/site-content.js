@@ -16,8 +16,10 @@
     handleFooterScrollToTop();
     $(SIGNOUT_PAGE_LOGIN_BTN_SEL).on("click", () => window.ALM.navigateToHomePage());
 
-    // Extra div is added after each component causing extra space.
-    $(DIV_NEW_PAR_SEL).remove();
+    if (!window.ALM.ALMConfig.authorMode) {
+      // Extra div is added after each component causing extra space.
+      $(DIV_NEW_PAR_SEL).remove();
+    }
   });
 
 })(window, document, Granite, jQuery);
