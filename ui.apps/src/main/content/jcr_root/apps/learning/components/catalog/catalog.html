@@ -15,7 +15,7 @@
   data-sly-attribute.data-tag-name="${data.tagsFilter}"
 ></div>
 <sly data-sly-call="${placeholderTemplate.placeholder @ isEmpty=true}"></sly>
-<sly
+<sly 
   data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"
   data-sly-call="${clientlib.all @ categories='learning.site'}"
 />
