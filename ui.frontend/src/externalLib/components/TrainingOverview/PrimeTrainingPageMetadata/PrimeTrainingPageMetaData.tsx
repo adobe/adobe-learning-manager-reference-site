@@ -2,9 +2,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Button } from "@adobe/react-spectrum";
 import Calendar from "@spectrum-icons/workflow/Calendar";
-import Download from "@spectrum-icons/workflow/Download";
-import ClockCheck from "@spectrum-icons/workflow/ClockCheck";
 import Clock from "@spectrum-icons/workflow/Clock";
+import ClockCheck from "@spectrum-icons/workflow/ClockCheck";
+import Download from "@spectrum-icons/workflow/Download";
 import PinOff from "@spectrum-icons/workflow/PinOff";
 import Send from "@spectrum-icons/workflow/Send";
 import UserGroup from "@spectrum-icons/workflow/UserGroup";
@@ -242,22 +242,25 @@ const PrimeTrainingPageMetaData: React.FC<{
         {action === "buyNow" && (
           <>
             <div className={styles.buyNowContainer}>
-              <Button
+              {/* <Button
                 variant="primary"
                 UNSAFE_className={`${styles.buyNowButton} ${styles.commonButton}`}
                 onPress={buyNowHandler}
               >
                 {actionText}
-              </Button>
+              </Button> */}
 
               <Button
                 variant="primary"
                 UNSAFE_className={`${styles.addToCartButton} ${styles.commonButton}`}
                 onPress={addProductToCart}
               >
-                {formatMessage({
-                  id: `alm.addToCart`,
-                })}
+                {formatMessage(
+                  {
+                    id: `alm.addToCart`,
+                  },
+                  { x: training.price }
+                )}
               </Button>
             </div>
             {seatsAvailableText}

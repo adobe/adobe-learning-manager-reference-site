@@ -40,3 +40,19 @@
 .mandatory > label > svg {
   fill: red;
 }
+
+.recoverPassword {
+  padding: 20px;
+}
+
+.recoverPasswordText {
+  color: var(--prime-color-nc1);
+  font-size: var(--prime-font-size-16);
+  font-weight: var(--prime-font-weight-600);
+}
+
+.emailSentText {
+  margin-top: 20px;
+  color: var(--prime-color-nc1);
+  font-size: var(--prime-font-size-14);
+}

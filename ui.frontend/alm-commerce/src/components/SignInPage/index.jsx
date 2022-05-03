@@ -7,6 +7,7 @@ import styles from "./signIn.module.css";
 const LOGIN = "LOGIN";
 const FORGOT_PASSWORD = "FORGOT_PASSWORD";
 const CREATE_ACCOUNT = "CREATE_ACCOUNT";
+const RESET_PASSWORD = "RESET_PASSWORD";
 
 const SignIn = () => {
   const {
@@ -51,7 +52,12 @@ const SignIn = () => {
     } else if (view == LOGIN) {
       signInHandler(signInForm);
     } else {
-      forgotPasswordHandler(forgotPasswordForm);
+      try {
+        forgotPasswordHandler(forgotPasswordForm);
+        setView(RESET_PASSWORD);
+      } catch (e) {
+        console.error("Reset password failed");
+      }
     }
   };
 
@@ -73,116 +79,123 @@ const SignIn = () => {
 
   return (
     <div className={styles.signInContainer}>
-      <Form
-        maxWidth="size-3600"
-        aria-labelledby="label-3"
-        UNSAFE_className={styles.form}
-      >
-        <span className={styles.error}>
-          {error["signInError"] || error["createAccountError"]}
-        </span>
+      {view != RESET_PASSWORD ? (
+        <Form
+          maxWidth="size-3600"
+          aria-labelledby="label-3"
+          UNSAFE_className={styles.form}
+        >
+          <span className={styles.error}>
+            {error["signInError"] || error["createAccountError"]}
+          </span>
 
-        {view === CREATE_ACCOUNT && (
-          <>
-            <TextField
-              label="First Name"
-              name="firstname"
-              value={firstname}
-              onChange={(value) => setValue("firstname", value)}
-              isRequired={true}
-              UNSAFE_className={styles.mandatory}
-            />
-            <TextField
-              label="Last Name"
-              value={lastname}
-              name="lastname"
-              onChange={(value) => setValue("lastname", value)}
-              isRequired={true}
-              UNSAFE_className={styles.mandatory}
-            />
-          </>
-        )}
+          {view === CREATE_ACCOUNT && (
+            <>
+              <TextField
+                label="First Name"
+                name="firstname"
+                value={firstname}
+                onChange={(value) => setValue("firstname", value)}
+                isRequired={true}
+                UNSAFE_className={styles.mandatory}
+              />
+              <TextField
+                label="Last Name"
+                value={lastname}
+                name="lastname"
+                onChange={(value) => setValue("lastname", value)}
+                isRequired={true}
+                UNSAFE_className={styles.mandatory}
+              />
+            </>
+          )}
 
-        <TextField
-          label="Email"
-          name="email"
-          value={email}
-          onChange={(value) => setValue("email", value)}
-          isRequired={true}
-          UNSAFE_className={styles.mandatory}
-        />
-        {view !== FORGOT_PASSWORD && (
           <TextField
-            label="Password"
-            value={password}
-            type="password"
-            onChange={(value) => setValue("password", value)}
+            label="Email"
+            name="email"
+            value={email}
+            onChange={(value) => setValue("email", value)}
             isRequired={true}
             UNSAFE_className={styles.mandatory}
           />
-        )}
+          {view !== FORGOT_PASSWORD && (
+            <TextField
+              label="Password"
+              value={password}
+              type="password"
+              onChange={(value) => setValue("password", value)}
+              isRequired={true}
+              UNSAFE_className={styles.mandatory}
+            />
+          )}
 
-        {view === LOGIN && (
-          <div>
-            <Button
-              variant="overBackground"
-              type="button"
-              onPress={() => setView(FORGOT_PASSWORD)}
-              isDisabled={isLoading}
-              UNSAFE_className={styles.forgotPassword}
-            >
-              Forgot Password?
-            </Button>
-            <br />
-            <Button
-              variant="cta"
-              type="button"
-              onPress={submitHandler}
-              isDisabled={isLoading}
-              UNSAFE_className={styles.button}
-            >
-              {isLoading ? <CommerceLoader size="S" /> : "LOGIN"}
-            </Button>
+          {view === LOGIN && (
+            <div>
+              <Button
+                variant="overBackground"
+                type="button"
+                onPress={() => setView(FORGOT_PASSWORD)}
+                isDisabled={isLoading}
+                UNSAFE_className={styles.forgotPassword}
+              >
+                Forgot Password?
+              </Button>
+              <br />
+              <Button
+                variant="cta"
+                type="button"
+                onPress={submitHandler}
+                isDisabled={isLoading}
+                UNSAFE_className={styles.button}
+              >
+                {isLoading ? <CommerceLoader size="S" /> : "LOGIN"}
+              </Button>
 
-            <Button
-              variant="cta"
-              type="button"
-              onPress={() => setView(CREATE_ACCOUNT)}
-              isDisabled={isLoading}
-              UNSAFE_className={styles.createAccountButton}
-            >
-              CREATE AN ACCOUNT
-            </Button>
+              <Button
+                variant="cta"
+                type="button"
+                onPress={() => setView(CREATE_ACCOUNT)}
+                isDisabled={isLoading}
+                UNSAFE_className={styles.createAccountButton}
+              >
+                CREATE AN ACCOUNT
+              </Button>
+            </div>
+          )}
+          {view !== LOGIN && (
+            <div>
+              <Button
+                variant="cta"
+                type="button"
+                onPress={submitHandler}
+                isDisabled={isLoading}
+                UNSAFE_className={styles.createAccountButton}
+              >
+                {view == CREATE_ACCOUNT ? "CREATE AN ACCOUNT" : "SUBMIT"}
+              </Button>
+
+              <Button
+                variant="secondary"
+                type="button"
+                onPress={() => setView(LOGIN)}
+                isDisabled={isLoading}
+                UNSAFE_className={styles.cancelButton}
+              >
+                CANCEL
+              </Button>
+            </div>
+          )}
+        </Form>
+      ) : (
+        <div className={styles.recoverPassword}>
+          <div className={styles.recoverPasswordText}>Recover Password</div>
+          <div className={styles.emailSentText}>
+            If there is an account associated with {email} you will receive an
+            email with a link to change your password.
           </div>
-        )}
-        {view !== LOGIN && (
-          <div>
-            <Button
-              variant="cta"
-              type="button"
-              onPress={submitHandler}
-              isDisabled={isLoading}
-              UNSAFE_className={styles.createAccountButton}
-            >
-              {view == CREATE_ACCOUNT ? "CREATE AN ACCOUNT" : "SUBMIT"}
-            </Button>
-
-            <Button
-              variant="secondary"
-              type="button"
-              onPress={() => setView(LOGIN)}
-              isDisabled={isLoading}
-              UNSAFE_className={styles.cancelButton}
-            >
-              CANCEL
-            </Button>
-          </div>
-        )}
-      </Form>
+        </div>
+      )}
     </div>
-
-    // Recover Password
-    // If there is an account associated with yogesh.nitd@gmail.com you will receive an email with a link to change your password.
   );
 };
 

@@ -14,7 +14,7 @@
         refreshToken="6eb025063596297b3517e4b69239028f"
         clientId="c495b4f0-2f9b-441c-acd4-22dcfba84718"
         clientSecret="c08aef1d-51d2-47d8-9b13-481dceca66d3"
-        almCdnBaseUrl="https://primeapps-stage.adobe.com/almsearch/api/v1/qe/7110/a75477eb-2a4c-4f6e-b897-a6506da18e3f"
+        almCdnBaseUrl="https://cpcontentsqe.adobe.com/public/guest/qe/api/21135923-b63f-4a0a-801e-023c9e5bf72f/7110"
         commerceURL="https://aemsites-mfabl2i-i6chtryvajcii.ap-4.magentosite.cloud"
         graphqlProxyPath="https://aemsites-mfabl2i-i6chtryvajcii.ap-4.magentosite.cloud/graphql"
         commerceStoreName="default"
