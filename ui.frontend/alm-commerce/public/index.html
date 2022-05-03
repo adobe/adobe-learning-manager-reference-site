@@ -72,10 +72,6 @@
           "https://aemsites-mfabl2i-i6chtryvajcii.ap-4.magentosite.cloud/graphql",
       };
 
-      const isPrimeUserLoggedIn = () => {
-        return false;
-      };
-
       const getAccessToken = () => {
         return "9e87bc3fd1b022fe801fdabed5c0b00c";
       };
@@ -166,6 +162,9 @@
         return getALMUser();
       };
 
+      const isPrimeUserLoggedIn = () => {
+        return false;
+      };
       const navigateToExplorePage = () => {
         let { catalogPath } = getALMConfig();
         window.location = catalogPath;
