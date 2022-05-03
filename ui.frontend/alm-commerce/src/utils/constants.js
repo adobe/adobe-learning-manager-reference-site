@@ -4,5 +4,6 @@ export const SIGN_IN_PATH = "/";
 export const CART_PATH = "/cart";
 export const CHECKOUT_PATH = "/checkout";
 export const ORDER_PATH = "/orders";
+export const RESET_PASSWORD_PATH = "/resetPassword";
 export const PURCHASE_COMPLETED_PATH = "/ecommerce/purchaseCompleted";
 export const PURCHASE_INITIATED_PATH = "/ecommerce/purchaseInitiated";

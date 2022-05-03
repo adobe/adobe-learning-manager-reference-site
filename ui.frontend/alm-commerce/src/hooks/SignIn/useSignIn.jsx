@@ -55,8 +55,10 @@ export const useAlmSignIn = (props) => {
       const redirectPath = urlSearchParams.get("redirectPath");
       if (redirectPath) {
         window.location.pathname = decodeURIComponent(redirectPath);
+      } else if (process.env.NODE_ENV === "production") {
+        getALMObject().navigateToExplorePage();
       } else {
-        window.location.href = getALMObject().navigateToExplorePage();
+        navigate("/cart");
       }
     };
     if (isLoggedIn) {
@@ -84,9 +86,6 @@ export const useAlmSignIn = (props) => {
           );
         }
       } catch (exception) {
-        // if (process.env.NODE_ENV !== "production") {
-        //   console.error(exception);
-        // }
         setIsLoading(false);
         setIsloggedIn(false);
       }
@@ -128,6 +127,7 @@ export const useAlmSignIn = (props) => {
       } catch (e) {
         setIsLoading(false);
         setIsloggedIn(false);
+        throw e;
       }
     },
     [createAccount]

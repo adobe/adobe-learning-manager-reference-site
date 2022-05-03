@@ -166,6 +166,11 @@
         return getALMUser();
       };
 
+      const navigateToExplorePage = () => {
+        let { catalogPath } = getALMConfig();
+        window.location = catalogPath;
+      };
+
       const getAccountActiveFields = async () => {
         const primeApiURL = getALMConfig().primeApiURL;
         const accountActiveFieldsUrl = primeApiURL + "account/fields";
@@ -192,8 +197,7 @@
       window.ALM = window.ALM || {};
       window.ALM.ALMConfig = ALMConfig; //window.ALM.ALMConfig || primeConfig;
       window.ALM.getALMConfig = getALMConfig;
-      window.ALM.navigateToTrainingOverviewPage =
-        navigateToTrainingOverviewPage;
+      window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
       window.ALM.navigateToInstancePage = navigateToInstancePage;
       window.ALM.navigateToBoardDetailsPage = navigateToBoardDetailsPage;
       window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
@@ -201,6 +205,7 @@
       window.ALM.getALMUser = getALMUser;
       window.ALM.getAccountActiveFields = getAccountActiveFields;
       window.ALM.updateALMUser = updateALMUser;
+      window.ALM.navigateToExplorePage = navigateToExplorePage;
       window.ALM.updateCart = function (value) {
         console.log(value);
       };

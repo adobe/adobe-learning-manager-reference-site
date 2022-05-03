@@ -88,8 +88,8 @@
   "alm.overview.text.or": "OR",
   "alm.overview.button.preview": "Preview",
   "alm.overview.enrollment.count": "{0} enrollment(s)",
-  "alm.overview.certification.validity":"Validity",
-  "alm.overview.certification.type":"Type",
+  "alm.overview.certification.validity": "Validity",
+  "alm.overview.certification.type": "Type",
   "alm.overview.enrollment.deadline": "Enrollment Deadline",
   "alm.overview.completion.deadline": "Completion Deadline",
   "alm.jobaid": "Job Aid",
@@ -155,8 +155,8 @@
   "alm.profile.skills.modifyInterest": "Modify Interest",
   "alm.profile.skills.noSkill": "No skill found",
   "alm.profile.skills.addInterest": "Add Interest",
-  "alm.profile.fields.saveProfileChanges":"Save Changes",
+  "alm.profile.fields.saveProfileChanges": "Save Changes",
   "alm.profile.skills.cancel": "Cancel",
   "alm.training.buyNow": "Buy Now for ${x}",
-  "alm.addToCart": "Add to cart"
+  "alm.addToCart": "Add to cart for ${x}"
 }
