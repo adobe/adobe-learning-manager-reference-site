@@ -42,6 +42,7 @@ export interface ALM {
   updateCart: Function;
   getAccountActiveFields: Function;
   updateAccountActiveFieldsDetails: Function;
+  navigateToCommerceSignInPage: Function;
 }
 
 export function getWindowObject() {
@@ -132,6 +133,6 @@ const init = async () => {
 init();
 
 export const isCommerceEnabledOnAccount = async () => {
-  const response = await getALMUser()
+  const response = await getALMUser();
   return response.account.enableECommerce;
-}
+};

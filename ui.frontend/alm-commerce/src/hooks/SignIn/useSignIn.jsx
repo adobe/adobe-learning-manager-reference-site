@@ -78,13 +78,14 @@ export const useAlmSignIn = (props) => {
         });
         const token = signInResponse.data.generateCustomerToken.token;
         storageInstance.setItem("TOKEN", token, 3600);
-        setIsloggedIn(true);
+
         setIsLoading(false);
         if (process.env.NODE_ENV === "production") {
-          fetch(
+          await fetch(
             `/cpoauth.commerceToken.html?token=${token}&pagePath=${window.location.pathname}`
           );
         }
+        setIsloggedIn(true);
       } catch (exception) {
         setIsLoading(false);
         setIsloggedIn(false);

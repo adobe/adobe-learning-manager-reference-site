@@ -133,6 +133,10 @@ const PrimeTrainingPageMetaData: React.FC<{
   };
 
   const addToCart = async (redirectPathName = "") => {
+    if (!getALMObject().isPrimeUserLoggedIn()) {
+      getALMObject().navigateToCommerceSignInPage();
+      return;
+    }
     try {
       const { items, totalQuantity, error } = await addToCartHandler();
       if (error && error[0]?.message) {
