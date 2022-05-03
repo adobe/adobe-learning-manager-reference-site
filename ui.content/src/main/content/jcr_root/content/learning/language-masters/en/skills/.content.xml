@@ -59,6 +59,7 @@
                             jcr:title="TaxSaver"
                             sling:resourceType="learning/components/product"
                             displayPopupTitle="false"
+                            titleValueFromDAM="false"
                             fileReference="/content/dam/learning/site/community/TaxSaver.png"/>
                         <product_364117892
                             jcr:created="{Date}2022-03-13T14:56:55.911+05:30"
@@ -69,6 +70,7 @@
                             jcr:title="Velocity"
                             sling:resourceType="learning/components/product"
                             displayPopupTitle="false"
+                            titleValueFromDAM="false"
                             fileReference="/content/dam/learning/site/community/Velocity.png"/>
                         <product_642957428
                             jcr:created="{Date}2022-03-13T14:57:02.714+05:30"
@@ -79,6 +81,7 @@
                             jcr:title="Books"
                             sling:resourceType="learning/components/product"
                             displayPopupTitle="false"
+                            titleValueFromDAM="false"
                             fileReference="/content/dam/learning/site/community/Books.png"/>
                         <product_820733814
                             jcr:created="{Date}2022-03-13T14:57:07.919+05:30"
@@ -89,6 +92,7 @@
                             jcr:title="TaxDream"
                             sling:resourceType="learning/components/product"
                             displayPopupTitle="false"
+                            titleValueFromDAM="false"
                             fileReference="/content/dam/learning/site/community/TaxDream.png"/>
                         <product_78167179
                             jcr:created="{Date}2022-03-13T14:58:42.952+05:30"
@@ -99,7 +103,7 @@
                             jcr:title="CreditDesign"
                             sling:resourceType="learning/components/product"
                             displayPopupTitle="false"
-                            fileName="1498472422285.jpg"
+                            titleValueFromDAM="false"
                             fileReference="/content/dam/learning/site/community/CreditDesign.png"/>
                     </skillscontainer>
                 </container>
