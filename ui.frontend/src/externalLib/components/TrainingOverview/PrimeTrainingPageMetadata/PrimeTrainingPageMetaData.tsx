@@ -78,7 +78,7 @@ const PrimeTrainingPageMetaData: React.FC<{
       return "continue";
     } else if (trainingInstance.state === "Retired") {
       return "registerInterest";
-    } else if (training.price) {
+    } else if (training.price && getALMConfig().usageType == "aem-commerce") {
       return "buyNow";
     } else {
       return "enroll";
