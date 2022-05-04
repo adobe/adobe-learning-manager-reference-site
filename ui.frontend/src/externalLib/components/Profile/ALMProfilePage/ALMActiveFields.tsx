@@ -68,11 +68,22 @@ const ALMActiveFields: React.FC<{
                 <div className={styles.activeFieldSectionBottom}>
                   <div className={styles.activeFieldName}>
                     {activeField.name}
+                    {isMultiValuedTextField || hasPredefinedMultiValues ? (
+                      <div className={styles.multiValueLabelText}>
+                        (Supports one or more
+                        <span className={styles.multiValueLabelText}>
+                          values)
+                        </span>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div>
                     {showTextField && !isMultiValue && (
                       <TextField
                         value={userFieldData.fields[activeField.name]}
+                        placeholder="Type here..."
                         onChange={(value) => {
                           onActiveFieldUpdate(value, activeField.name);
                         }}
@@ -93,6 +104,7 @@ const ALMActiveFields: React.FC<{
                     {isMultiValuedTextField && (
                       <TextField
                         value={userFieldData.fields[activeField.name]}
+                        placeholder="Use comma to separate multiple values"
                         onChange={(value) => {
                           onActiveFieldUpdate(value, activeField.name);
                         }}
@@ -106,11 +118,14 @@ const ALMActiveFields: React.FC<{
                             <span className={styles.allowedActiveFieldValues}>
                               {allowedValue}
                             </span>
-                            <span>No</span>
+                            <span style={predefinedMultiValues?.get(
+                                allowedValue) ? { fontWeight: "normal"} : { fontWeight: "bold"}}>No</span>
                             <Switch
                               isEmphasized
                               UNSAFE_className={styles.switch}
-                              isSelected={predefinedMultiValues?.get(allowedValue)}
+                              isSelected={predefinedMultiValues?.get(
+                                allowedValue
+                              )}
                               onChange={(value) => {
                                 updateSelectedMultiValues(allowedValue,value);
                                 onSwitchValueUpdate(
@@ -120,7 +135,8 @@ const ALMActiveFields: React.FC<{
                                 );
                               }}
                             ></Switch>
-                            <span>Yes</span>
+                            <span style={predefinedMultiValues?.get(
+                                allowedValue) ? { fontWeight: "bold"} : { fontWeight: "normal"}}>Yes</span>
                           </div>
                         );
                       })}
