@@ -42,7 +42,7 @@ export interface ALM {
   updateCart: Function;
   getAccountActiveFields: Function;
   updateAccountActiveFieldsDetails: Function;
-  navigateToCommerceSignInPage: Function;
+  handleLogIn: Function;
 }
 
 export function getWindowObject() {
@@ -73,8 +73,8 @@ export const getPathParams = (pagePath: string, pathParams: string[] = []) => {
   let paramsMap: {
     [key: string]: string;
   } = {};
-  const location = getWindowObject().location;
-  let params: string[] = location.href.split(pagePath)[1].split("/");
+  const pathname = getWindowObject().location.pathname;
+  let params: string[] = pathname.split(pagePath)[1].split("/");
   for (let i = 0; i < pathParams.length; i++) {
     const pathParam = pathParams[i];
     const paramIdx = params.findIndex((element) => element === pathParam);
@@ -122,7 +122,15 @@ export const getConfigurableAttributes = (cssSelector: string) => {
 
 const init = async () => {
   if (!getALMObject().isPrimeUserLoggedIn()) {
-    SetupAccountTerminologies();
+    const nomenclatureStr = getALMConfig().nomenclatureData;
+    const nomenclatureData = nomenclatureStr
+      ? JSON.parse(nomenclatureStr)
+      : null;
+    if (nomenclatureData) {
+      SetupAccountTerminologies(nomenclatureData);
+    } else {
+      SetupAccountTerminologies();
+    }
     return;
   }
   const response = await getALMUser();

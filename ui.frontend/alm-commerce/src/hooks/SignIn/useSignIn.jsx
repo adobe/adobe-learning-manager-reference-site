@@ -54,6 +54,12 @@ export const useAlmSignIn = (props) => {
       let urlSearchParams = new URLSearchParams(window.location.search);
       const redirectPath = urlSearchParams.get("redirectPath");
       if (redirectPath) {
+        urlSearchParams.delete("redirectPath");
+        window.history.replaceState(
+          null,
+          "",
+          "?" + urlSearchParams + window.location.hash
+        );
         window.location.pathname = decodeURIComponent(redirectPath);
       } else if (process.env.NODE_ENV === "production") {
         getALMObject().navigateToExplorePage();
