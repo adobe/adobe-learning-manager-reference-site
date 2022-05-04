@@ -1,4 +1,4 @@
-(function (window, document, $, Coral) {
+(function (window, document, $) {
   "use strict";
 
   let usageTypeSelectElem;
@@ -228,4 +228,4 @@
     $(NOMENCLATURE_BUTTON_SEL).on("click", () => fetchNomenclatureData());
   });
 
-})(window, document, jQuery, Coral);
+})(window, document, jQuery);

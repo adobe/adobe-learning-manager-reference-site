@@ -32,17 +32,17 @@
                         <items jcr:primaryType="nt:unstructured">
                             <sites
                                 jcr:primaryType="nt:unstructured"
-                                text="AEM + Learning Manager"
+                                text="For training internal employees (AEM + Learning Manager)"
                                 value="aem-sites"/>
 
                             <commerce
                                 jcr:primaryType="nt:unstructured"
-                                text="AEM + Learning Manager + Commerce"
+                                text="For hosting paid courses on learning (AEM + Learning Manager + Commerce)"
                                 value="aem-commerce"/>
 
                             <es
                                 jcr:primaryType="nt:unstructured"
-                                text="AEM + Learning Manager + Training Metadata"
+                                text="For showcasing products to customers & partners without account creation (AEM + Learning Manager + Training Metadata)"
                                 value="aem-es"/>
                         </items>
                     </usage>
