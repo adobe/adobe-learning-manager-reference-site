@@ -34,8 +34,8 @@
     const COMMERCE_USAGE_TYPE = "aem-commerce";
     const ALM_USAGE_TYPE = "aem-sites";
 
-    const STORAGE_CART_ID_KEY = "ALM_BROWSER_PERSISTENCE__CART_ID";
-    const STORAGE_COMMERCE_TOKEN_KEY = "ALM_BROWSER_PERSISTENCE__TOKEN";
+    const STORAGE_CART_ID_KEY = "CART_ID";
+    const STORAGE_COMMERCE_TOKEN_KEY = "TOKEN";
     const GRAPHQL_CART_QUERY = `{
         cart(cart_id: {cart_id}) {
           total_quantity
@@ -44,12 +44,12 @@
 
     async function updateCart() {
         if (typeof window !== 'undefined' && window.localStorage 
-        && window.localStorage.getItem(STORAGE_CART_ID_KEY)
-        && window.localStorage.getItem(STORAGE_COMMERCE_TOKEN_KEY))
+        && window.ALM.storage.getItem(STORAGE_CART_ID_KEY)
+        && window.ALM.storage.getItem(STORAGE_COMMERCE_TOKEN_KEY))
         {
             try {
-                const cartID = JSON.parse(window.localStorage.getItem(STORAGE_CART_ID_KEY)).value;
-                let commerceToken = JSON.parse(window.localStorage.getItem(STORAGE_COMMERCE_TOKEN_KEY)).value;
+                const cartID = JSON.parse(window.ALM.storage.getItem(STORAGE_CART_ID_KEY)).value;
+                let commerceToken = JSON.parse(window.ALM.storage.getItem(STORAGE_COMMERCE_TOKEN_KEY)).value;
                 commerceToken = commerceToken.replace(/\"/g, '');
                 const graphqlCartQuery = GRAPHQL_CART_QUERY.replace("{cart_id}", cartID);
                 const graphqlProxyURL = window.ALM.ALMConfig.graphqlProxyPath + "?query=" + encodeURIComponent(graphqlCartQuery);

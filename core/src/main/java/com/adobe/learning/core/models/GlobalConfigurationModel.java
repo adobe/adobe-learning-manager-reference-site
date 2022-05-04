@@ -48,7 +48,6 @@ public class GlobalConfigurationModel {
 	protected void init() {
 		JsonObject jsonConfigs = configService.getAdminConfigs(currentPage);
 		GlobalConfigurationUtils.filterAdminConfigs(jsonConfigs);
-		String usageType = jsonConfigs.get(Constants.Config.USAGE_TYPE_NAME).getAsString();
 	
 		if (isAuthorMode())
 		{

@@ -11,6 +11,8 @@
   const CONFIG_FORM_SAVE_ACT_SEL = "#shell-propertiespage-saveactivator";
   const CONFIG_FORM_CREATE_SEL = ".foundation-wizard-control";
   const DX_SKU_VALIDATION_ERROR_ID = "alm-dx-sku-validator";
+  const SITE_MAP_SEL = "coral-checkbox[name='./siteMap']";
+  const SITE_MAP_TRAINING_PATH_SEL = "foundation-autocomplete[name='./sitemapTrainingPath']";
 
   const SKU_URL = "{almURL}/primeapi/v2/account/{accountId}/connectorConfig?connectorName=aemReferenceSites";
   const NOMENCLAURE_URL = "{almURL}/primeapi/v2/account";
@@ -19,8 +21,6 @@
   let skuValidationSuccess = false;
   let validationInProgress = false;
   let nomenclatureFetchingInProgress = false;
-  let accessToken = "";
-
 
   function hideUnselectedUsageOptions()
   {
@@ -32,6 +32,7 @@
         $("." + usageOption).attr("disabled", "");
         $("coral-checkbox." + usageOption).attr("hidden",'');
         $("button." + usageOption).attr("hidden",'');
+        $("foundation-autocomplete." + usageOption).attr("hidden",'');
       }
     });
 
@@ -42,8 +43,11 @@
         $("." + usageOption).removeAttr("disabled");
         $("coral-checkbox." + usageOption).removeAttr("hidden");
         $("button." + usageOption).removeAttr("hidden");
+        $("foundation-autocomplete." + usageOption).removeAttr("hidden");
       }
     });
+
+    renderSitemapTrainingPath();
   }
 
   function handleSubmit(e)
@@ -89,6 +93,8 @@
         {
           showPopup("Error in SKU Validation.", "error", "Error");
         }
+      } else {
+        showPopup("Error in SKU Validation.", "error", "Error");
       }
     })
     .fail(function (jqxhr, settings, exception) {
@@ -189,6 +195,16 @@
     dialogModal.show();
   }
 
+  function renderSitemapTrainingPath() {
+      if ($(SITE_MAP_SEL).attr("checked") === 'checked') {
+        $(SITE_MAP_TRAINING_PATH_SEL).find("input[is='coral-textfield']").removeAttr("disabled","");
+        $(SITE_MAP_TRAINING_PATH_SEL).removeAttr("disabled","");
+      } else {
+        $(SITE_MAP_TRAINING_PATH_SEL).find("input[is='coral-textfield']").attr("disabled","");
+        $(SITE_MAP_TRAINING_PATH_SEL).attr("disabled","");
+      }
+  }
+
   $(document).on('foundation-contentloaded', () => {
     usageTypeSelectElem = $(USAGE_TYPE_SELECT_ID_SEL).get(0);
 
@@ -196,6 +212,15 @@
       hideUnselectedUsageOptions();
       usageTypeSelectElem.on('change', hideUnselectedUsageOptions);
     });
+
+    let siteMapCheckboxElem = $(SITE_MAP_SEL).get(0);
+    if (siteMapCheckboxElem) {
+      Coral.commons.ready(siteMapCheckboxElem, function() {
+        renderSitemapTrainingPath();
+        siteMapCheckboxElem.on('change', renderSitemapTrainingPath);
+      });
+    }
+
 
     $(CONFIG_FORM_DONE_ACT_SEL).off("click", handleSubmit).on("click", handleSubmit);
     $(CONFIG_FORM_SAVE_ACT_SEL).off("click", handleSubmit).on("click", handleSubmit);

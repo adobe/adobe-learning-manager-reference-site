@@ -1,7 +1,7 @@
 # Include customer defined variables
 Include conf.d/variables/custom.vars
 
-<IfDefine ${ALM_COMMERCE_ENABLED}>
+<IfDefine ALM_COMMERCE_ENDPOINT>
     SSLProxyEngine on
     <IfDefine HTTP_EGRESS_PROXY>
             ProxyRemote ${ALM_COMMERCE_ENDPOINT} "http://${AEM_HTTP_PROXY_HOST}:${AEM_HTTP_PROXY_PORT}"

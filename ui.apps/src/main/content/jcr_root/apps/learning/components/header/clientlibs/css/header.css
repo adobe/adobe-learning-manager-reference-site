@@ -223,7 +223,7 @@
 .alm-header-profile-options {
   display: none;
   width: 117px;
-  height: 92px;
+  height: auto;
   position: absolute;
   z-index: 1;
   background: #ffffff 0% 0% no-repeat padding-box;
@@ -237,6 +237,7 @@
 .alm-header-profile-options ul {
   list-style-type: none;
   padding-left: 22px;
+  margin-bottom: 20px;
 }
 
 .alm-header-profile-options a {

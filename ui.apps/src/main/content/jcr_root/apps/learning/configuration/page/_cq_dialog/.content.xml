@@ -165,10 +165,9 @@
                     <siteMap
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                        checked="true"
+                        value="true"
                         name="./siteMap"
                         text="Create site map"
-                        value="true"
                         granite:rel="aem-commerce aem-es"
                         cq:showOnCreate="{Boolean}true"/>
                     <sitemapTrainingPath
@@ -178,6 +177,7 @@
                         fieldDescription="SiteMap training page path"
                         name="./sitemapTrainingPath"
                         granite:rel="aem-commerce aem-es"
+                        required="{Boolean}true"
                         cq:showOnCreate="{Boolean}true"/>
 
                     <nomenclatureData

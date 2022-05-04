@@ -2,7 +2,7 @@
 
 .activeFields {
   margin: 0 auto;
-  padding: 40px 0;
+  padding: 10px 0;
 }
 
 .title {
@@ -20,9 +20,25 @@
   width: 20%;
 }
 
+.multiValueLabelText {
+    font-style: italic;
+    font-weight: normal;
+    font-size: 16px;
+    clear: both;
+    display: inline-block;
+    width: 100%;
+}
+
 .textFieldAlign{
-  width: 100%;
-  height: 38px;
+    max-width: 100%;
+    width: var(--spectrum-global-dimension-size-2400); 
+    min-width: var(--spectrum-global-dimension-size-600);
+    min-width: var(--spectrum-dropdown-min-width,var(--spectrum-global-dimension-size-600));
+    display: inline-block;
+    position: relative;
+    /* width: 348px; */
+    height: 60px;
+
 }
 .switch{
   width: 50px;
@@ -36,7 +52,7 @@
 
 
 .activeFieldSectionBottom {
-  margin-bottom: 30px;
+  margin-bottom: 40px;
   display: flex;
 }
 

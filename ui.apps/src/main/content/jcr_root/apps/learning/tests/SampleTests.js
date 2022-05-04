@@ -13,16 +13,4 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-new hobs.TestSuite("Learning Tests", {path:"/apps/learning/tests/SampleTests.js", register: true})
-
-    .addTestCase(new hobs.TestCase("Hello World component on english page")
-        .navigateTo("/content/learning/en.html")
-        .asserts.location("/content/learning/en.html", true)
-        .asserts.visible(".helloworld", true)
-    )
-
-    .addTestCase(new hobs.TestCase("Hello World component on french page")
-        .navigateTo("/content/learning/fr.html")
-        .asserts.location("/content/learning/fr.html", true)
-        .asserts.visible(".helloworld", true)
-    );
+new hobs.TestSuite("Learning Tests", {path:"/apps/learning/tests/SampleTests.js", register: true});
