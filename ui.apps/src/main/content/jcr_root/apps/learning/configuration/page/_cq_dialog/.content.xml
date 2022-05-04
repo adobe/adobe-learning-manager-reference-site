@@ -42,7 +42,7 @@
 
                             <es
                                 jcr:primaryType="nt:unstructured"
-                                text="For showcasing products to customers & partners without account creation (AEM + Learning Manager + Training Metadata)"
+                                text="For showcasing products to customers &amp; partners without account creation (AEM + Learning Manager + Training Metadata)"
                                 value="aem-es"/>
                         </items>
                     </usage>
