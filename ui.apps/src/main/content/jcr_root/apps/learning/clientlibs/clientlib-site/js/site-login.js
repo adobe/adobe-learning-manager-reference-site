@@ -305,10 +305,14 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   }
 
   function handleLogOut() {
-    document.cookie = ACCESS_TOKEN_COOKIE_NAME + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    document.cookie =
+      ACCESS_TOKEN_COOKIE_NAME +
+      "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
     window.sessionStorage.removeItem("user");
     window.ALM.storage.removeItem("CART_ID");
     window.ALM.storage.removeItem("TOKEN");
+    window.ALM.storage.removeItem("PRIME_CATALOG_FILTER");
+    window.ALM.storage.removeItem("COMMERCE_FILTERS");
 
     switch (CURRENT_USAGE_TYPE) {
       case PRIME_USAGE_TYPE:
