@@ -126,6 +126,10 @@ const PrimeTrainingPageMetaData: React.FC<{
   };
 
   const onPressHandler = async () => {
+    if (!getALMObject().isPrimeUserLoggedIn()) {
+      getALMObject().handleLogIn();
+      return;
+    }
     try {
       await enrollmentHandler();
       launchPlayerHandler();
@@ -134,7 +138,7 @@ const PrimeTrainingPageMetaData: React.FC<{
 
   const addToCart = async (redirectPathName = "") => {
     if (!getALMObject().isPrimeUserLoggedIn()) {
-      getALMObject().navigateToCommerceSignInPage();
+      getALMObject().handleLogIn();
       return;
     }
     try {
