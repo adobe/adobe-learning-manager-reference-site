@@ -18,7 +18,5 @@
         usageType="aem-sites"
         theme.background="transparent"
         theme.primaryColor="rgb(38,118,255)"
-        theme.secondaryColor="rgb(0,145,255)"
-        commonConfig.emitPageLinkEvents="true"
-        commonConfig.disableLinks="true"/>
+        theme.secondaryColor="rgb(0,145,255)"/>
 </jcr:root>

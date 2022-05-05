@@ -30,9 +30,16 @@ public class Constants {
 	public final class EmbeddableWidgetConfig {
 		public static final String WIDGET_REF = "widgetRef";
 		public static final String SELECTED_WIDGET_REF = "widgetRefSelected";
+		public static final String SOCIAL_WIDGET_REF = "com.adobe.captivateprime.social";
+		public static final String LEADERBOARD_WIDGET_REF = "com.adobe.captivateprime.leaderboard";
 		public static final String CP_HOST_NAME_PROP = "commonConfig.captivateHostName";
 		public static final String CP_EMIT_PLAYER_EVENT_PROP = "commonConfig.emitPlayerLaunchEvent";
 		public static final boolean CP_EMIT_PLAYER_EVENT_PROP_VALUE = true;
+		public static final String CP_DISABLE_LINKS_PROP = "commonConfig.disableLinks";
+		public static final boolean CP_DISABLE_LINKS_PROP_DEFAULT_VALUE = false;
+		public static final boolean CP_DISABLE_LINKS_PROP_VALUE_TRUE = true;
+		public static final String CP_EMIT_PAGELINK_EVENT_PROP = "commonConfig.emitPageLinkEvents";
+		public static final boolean CP_EMIT_PAGELINK_EVENT_PROP_VALUE = true;
 		public static final String CONFIG_TYPE_KEY = "type";
 		public static final String CONFIG_TYPE_VALUE = "acapConfig";
 		public static final String AUTH_ACCESS_TOKEN_KEY = "auth.accessToken";

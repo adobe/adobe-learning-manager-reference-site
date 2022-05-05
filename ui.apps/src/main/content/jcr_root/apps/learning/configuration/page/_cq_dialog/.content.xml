@@ -248,36 +248,12 @@
                         value="rgb(0,145,255)"
                         cq:showOnCreate="{Boolean}true"/>
 
-
-
-
                     <background
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/foundation/form/hidden"
                         name="./theme.background"
                         value="transparent"
                         cq:showOnCreate="{Boolean}true"/>
-
-                    <disableLinks
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/foundation/form/hidden"
-                        name="./commonConfig.disableLinks"
-                        value="true"
-                        cq:showOnCreate="{Boolean}true"/>
-                     <disableLinksType
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/foundation/form/hidden"
-                        name="./commonConfig.disableLinks@TypeHint"
-                        value="Boolean"
-                        cq:showOnCreate="{Boolean}true"/>
-
-                    <emitPageLinkEvents
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/foundation/form/hidden"
-                        name="./commonConfig.emitPageLinkEvents"
-                        value="true"
-                        cq:showOnCreate="{Boolean}true" />
-
                 </items>
             </column>
         </items>

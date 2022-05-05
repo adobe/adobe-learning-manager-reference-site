@@ -18,8 +18,6 @@
         commerceURL="https://aemsites-mfabl2i-i6chtryvajcii.ap-4.magentosite.cloud"
         graphqlProxyPath="https://aemsites-mfabl2i-i6chtryvajcii.ap-4.magentosite.cloud/graphql"
         commerceStoreName="default"
-        commonConfig.disableLinks="{Boolean}true"
-        commonConfig.emitPageLinkEvents="true"
         siteMap="false"
         theme.background="transparent"
         theme.primaryColor="rgb(38,118,255)"

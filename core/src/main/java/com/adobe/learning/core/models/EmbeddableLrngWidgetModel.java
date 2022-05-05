@@ -129,7 +129,17 @@ public class EmbeddableLrngWidgetModel {
 		widgetObject.put(Constants.EmbeddableWidgetConfig.AUTH_ACCESS_TOKEN_KEY, "");
 		widgetObject.put(Constants.EmbeddableWidgetConfig.CP_HOST_NAME_PROP, adminConfigsObj.get(Constants.Config.ALM_BASE_URL).getAsString());
 		widgetObject.put(Constants.EmbeddableWidgetConfig.CP_EMIT_PLAYER_EVENT_PROP, Constants.EmbeddableWidgetConfig.CP_EMIT_PLAYER_EVENT_PROP_VALUE);
+		widgetObject.put(Constants.EmbeddableWidgetConfig.CP_EMIT_PAGELINK_EVENT_PROP, Constants.EmbeddableWidgetConfig.CP_EMIT_PAGELINK_EVENT_PROP_VALUE);
 
+		if (Constants.EmbeddableWidgetConfig.SOCIAL_WIDGET_REF.equals(selectedWidgetRef) || Constants.EmbeddableWidgetConfig.LEADERBOARD_WIDGET_REF.equals(selectedWidgetRef))
+		{
+			widgetObject.put(Constants.EmbeddableWidgetConfig.CP_DISABLE_LINKS_PROP, Constants.EmbeddableWidgetConfig.CP_DISABLE_LINKS_PROP_VALUE_TRUE);
+		}
+		else
+		{
+			widgetObject.put(Constants.EmbeddableWidgetConfig.CP_DISABLE_LINKS_PROP, Constants.EmbeddableWidgetConfig.CP_DISABLE_LINKS_PROP_DEFAULT_VALUE);
+		}
+		
 		for (Entry<String, JsonElement> e : adminConfigsObj.entrySet())
 		{
 			widgetObject.put(e.getKey(), e.getValue().getAsString());

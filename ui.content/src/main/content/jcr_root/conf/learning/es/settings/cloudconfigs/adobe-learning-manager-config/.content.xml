@@ -16,8 +16,6 @@
         clientSecret="a8221fe8-e961-4d74-b65c-10e1ee0c62be"
         almCdnBaseUrl="https://cpcontentsqe.adobe.com/public/guest/qe/api/a75477eb-2a4c-4f6e-b897-a6506da18e3f/7110"
         esBaseUrl="https://primeapps-stage.adobe.com/almsearch/api/v1/qe/7110/a75477eb-2a4c-4f6e-b897-a6506da18e3f"
-        commonConfig.disableLinks="{Boolean}true"
-        commonConfig.emitPageLinkEvents="true"
         siteMap="false"
         theme.background="transparent"
         theme.primaryColor="rgb(38,118,255)"

@@ -20,14 +20,14 @@
     .set("coursePageLink", ["loOverview", "course", new RegExp(/course\/(\d+)\/overview/i)])
     .set("certPageLink", ["loOverview", "certification", new RegExp(/certification\/(\d+)\/overview/i)])
     .set("lpPageLink", ["loOverview", "learningProgram", new RegExp(/learningProgram\/(\d+)\/overview/i)])
+    .set("ciPageLink", ["loOverview", "course", new RegExp(/courseInstance\/(\d+)/i)])
+    .set("lpiPageLink", ["loOverview", "learningProgram", new RegExp(/lpInstance\/(\d+)/i)])
     .set("catalogOverviewPageLink", ["catalogOverview", "catalog", new RegExp(/selectedListableCatalogIds=(\d+)/i)])
     .set("courseInstancePreviewPageLink", ["loInstance", "course", new RegExp(/course\/(\d+)\/instance\/(\d+)\/preview/i)])
     .set("catalogPageLink", ["catalogPage"])
     .set("myLearningPageLink", ["myLearningPage"])
     .set("postsLink", ["boardsPage"])
-    .set("allboardsPageLink", ["boardsPage"])
-    .set("ciPageLink", ["course", new RegExp(/courseInstance\/(\d+)/i), "instance"])
-    .set("lpiPageLink", ["course", new RegExp(/lpInstance\/(\d+)/i), "instance"]);
+    .set("allboardsPageLink", ["boardsPage"]);
 
   const WIDET_CONFIG_DATA = "data-cp-widget-configs",
     WIDGET_REF_DATA = "cp-widget-ref",
@@ -83,36 +83,41 @@
     if (e.changeType === "primelink") {
       let almLinksMapObj = ALM_LINKS_MAP.get(e.path);
       let pageType = almLinksMapObj[0];
+      let loType, loId;
 
-      if (pageType === "loOverview")
-      {
-        let loType = almLinksMapObj[1];
-        let loId = e.route.match(almLinksMapObj[2])[1];
-        window.ALM.navigateToTrainingOverviewPage(loType + ":" + loId);
-      }
-      else if (pageType === "loInstance")
-      {
-        let loType = almLinksMapObj[1];
-        let loId = e.route.match(almLinksMapObj[2])[1];
-        let instanceId = e.route.match(almLinksMapObj[2])[2];
-        window.ALM.navigateToTrainingOverviewPage(loType + ":" + loId, loType + ":" + loId + "_" + instanceId);
-      }
-      else if (pageType === "catalogOverview")
-      {
-        let catalogIds = e.route.match(almLinksMapObj[2])[1];
-        window.ALM.navigateToCatalogPage(catalogIds);
-      }
-      else if (pageType === "catalogPage")
-      {
-        window.ALM.navigateToExplorePage();
-      }
-      else if (pageType === "myLearningPage")
-      {
-        window.ALM.navigateToCatalogPageForStates("enrolled");
-      }
-      else if (pageType === "boardsPage")
-      {
-        window.ALM.navigateToBoardsPage();
+      switch (pageType) {
+        case "loOverview":
+          loType = almLinksMapObj[1];
+          loId = e.route.match(almLinksMapObj[2])[1];
+          window.ALM.navigateToTrainingOverviewPage(loType + ":" + loId);
+          break;
+
+        case "loInstance":
+          loType = almLinksMapObj[1];
+          loId = e.route.match(almLinksMapObj[2])[1];
+          let instanceId = e.route.match(almLinksMapObj[2])[2];
+          window.ALM.navigateToTrainingOverviewPage(loType + ":" + loId, loType + ":" + loId + "_" + instanceId);
+          break;
+
+        case "catalogOverview":
+          let catalogIds = e.route.match(almLinksMapObj[2])[1];
+          window.ALM.navigateToCatalogPage(catalogIds);
+          break;
+
+        case "catalogPage":
+          window.ALM.navigateToExplorePage();
+          break;
+
+        case "myLearningPage":
+          window.ALM.navigateToCatalogPageForStates("enrolled");
+          break;
+
+        case "boardsPage":
+          window.ALM.navigateToBoardsPage();
+          break;
+          
+        default:
+          break;
       }
     }
   }
