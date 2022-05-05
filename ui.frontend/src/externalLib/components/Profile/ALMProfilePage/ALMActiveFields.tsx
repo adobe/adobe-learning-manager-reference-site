@@ -46,6 +46,10 @@ const ALMActiveFields: React.FC<{
             const isMultiValuedTextField = isMultiValue && showTextField;
             const hasPredefinedMultiValues =
               isMultiValue && allowedValuesPresent;
+            let textFieldValues =   JSON.stringify(userFieldData?.fields) === "{}" ||
+            userFieldData?.fields == undefined
+              ? null
+              : userFieldData?.fields[activeField.name];
             interface dropDown {
               id: string;
               name: string;
@@ -62,7 +66,6 @@ const ALMActiveFields: React.FC<{
                 return options;
               }
             };
-
             return (
               <React.Fragment key={activeField.name}>
                 <div className={styles.activeFieldSectionBottom}>
@@ -82,7 +85,7 @@ const ALMActiveFields: React.FC<{
                   <div>
                     {showTextField && !isMultiValue && (
                       <TextField
-                        value={userFieldData.fields[activeField.name]}
+                        value={textFieldValues}
                         placeholder="Type here..."
                         onChange={(value) => {
                           onActiveFieldUpdate(value, activeField.name);
@@ -96,14 +99,19 @@ const ALMActiveFields: React.FC<{
                         onSelectionChange={(value) => {
                           onActiveFieldUpdate(value, activeField.name);
                         }}
-                        selectedKey={userFieldData.fields[activeField.name]}
+                        selectedKey={
+                          JSON.stringify(userFieldData?.fields) === "{}" ||
+                          userFieldData?.fields == undefined
+                            ? null
+                            : userFieldData?.fields[activeField.name]
+                        }
                       >
                         {(item) => <Item>{item.name}</Item>}
                       </Picker>
                     )}
                     {isMultiValuedTextField && (
                       <TextField
-                        value={userFieldData.fields[activeField.name]}
+                        value={textFieldValues}
                         placeholder="Use comma to separate multiple values"
                         onChange={(value) => {
                           onActiveFieldUpdate(value, activeField.name);
@@ -118,8 +126,15 @@ const ALMActiveFields: React.FC<{
                             <span className={styles.allowedActiveFieldValues}>
                               {allowedValue}
                             </span>
-                            <span style={predefinedMultiValues?.get(
-                                allowedValue) ? { fontWeight: "normal"} : { fontWeight: "bold"}}>No</span>
+                            <span
+                              style={
+                                predefinedMultiValues?.get(allowedValue)
+                                  ? { fontWeight: "normal" }
+                                  : { fontWeight: "bold" }
+                              }
+                            >
+                              No
+                            </span>
                             <Switch
                               isEmphasized
                               UNSAFE_className={styles.switch}
@@ -127,7 +142,7 @@ const ALMActiveFields: React.FC<{
                                 allowedValue
                               )}
                               onChange={(value) => {
-                                updateSelectedMultiValues(allowedValue,value);
+                                updateSelectedMultiValues(allowedValue, value);
                                 onSwitchValueUpdate(
                                   allowedValue,
                                   value,
@@ -135,8 +150,15 @@ const ALMActiveFields: React.FC<{
                                 );
                               }}
                             ></Switch>
-                            <span style={predefinedMultiValues?.get(
-                                allowedValue) ? { fontWeight: "bold"} : { fontWeight: "normal"}}>Yes</span>
+                            <span
+                              style={
+                                predefinedMultiValues?.get(allowedValue)
+                                  ? { fontWeight: "bold" }
+                                  : { fontWeight: "normal" }
+                              }
+                            >
+                              Yes
+                            </span>
                           </div>
                         );
                       })}
