@@ -54,6 +54,11 @@ const ALMActiveFields: React.FC<{
             const isMultiValuedTextField = isMultiValue && showTextField;
             const hasPredefinedMultiValues =
               isMultiValue && allowedValuesPresent;
+            let textFieldValues =
+              JSON.stringify(userFieldData?.fields) === "{}" ||
+              userFieldData?.fields == undefined
+                ? null
+                : userFieldData?.fields[activeField.name];
             interface dropDown {
               id: string;
               name: string;
@@ -75,7 +80,6 @@ const ALMActiveFields: React.FC<{
                 return options;
               }
             };
-
             return (
               <React.Fragment key={activeField.name}>
                 <div className={styles.activeFieldSectionBottom}>
@@ -95,7 +99,7 @@ const ALMActiveFields: React.FC<{
                   <div>
                     {showTextField && !isMultiValue && (
                       <TextField
-                        value={fieldValue}
+                        value={textFieldValues}
                         placeholder="Type here..."
                         onChange={(value) => {
                           onActiveFieldUpdate(value, activeField.name);
@@ -109,14 +113,19 @@ const ALMActiveFields: React.FC<{
                         onSelectionChange={(value) => {
                           onActiveFieldUpdate(value, activeField.name);
                         }}
-                        selectedKey={fieldValue}
+                        selectedKey={
+                          JSON.stringify(userFieldData?.fields) === "{}" ||
+                          userFieldData?.fields == undefined
+                            ? null
+                            : userFieldData?.fields[activeField.name]
+                        }
                       >
                         {(item) => <Item>{item.name}</Item>}
                       </Picker>
                     )}
                     {isMultiValuedTextField && (
                       <TextField
-                        value={fieldValue}
+                        value={textFieldValues}
                         placeholder="Use comma to separate multiple values"
                         onChange={(value) => {
                           onActiveFieldUpdate(value, activeField.name);

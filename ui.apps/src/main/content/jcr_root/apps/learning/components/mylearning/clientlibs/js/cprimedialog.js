@@ -9,7 +9,7 @@
  * limitations under the License.
  */
 
-(function (document, window, $, Coral) {
+(function (document, window, $) {
     "use strict";
     
     var CP_DIALOG_REL = ".cp-dialog-form-rel";
@@ -62,4 +62,4 @@
         });
     });
 
-})(document, window, jQuery, Coral);
+})(document, window, jQuery);

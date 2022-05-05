@@ -25,15 +25,13 @@
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="learning/components/container"
                     layout="simple">
-                    <container
-                        jcr:created="{Date}2022-03-13T13:43:45.178+05:30"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2022-03-13T14:31:28.707+05:30"
+                    <container_1
+                        jcr:lastModified="{Date}2022-03-13T14:30:46.826+05:30"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="learning/components/container"
-                        id="home-catalog-container"
-                        layout="responsiveGrid">
+                        id="home-categories-parent-container"
+                        layout="simple">
                         <container
                             jcr:created="{Date}2022-03-13T13:43:45.178+05:30"
                             jcr:createdBy="admin"
@@ -122,6 +120,16 @@
                                 </categories>
                             </categories_151943519>
                         </container>
+                    </container_1>
+                    <container_2
+                        jcr:created="{Date}2022-03-13T13:43:45.178+05:30"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2022-03-13T14:31:28.707+05:30"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="learning/components/container"
+                        id="home-catalog-container"
+                        layout="responsiveGrid">
                         <text
                             jcr:created="{Date}2022-03-13T13:44:23.200+05:30"
                             jcr:createdBy="admin"
@@ -204,7 +212,7 @@
                             skillsLevelFilter="true"
                             statusFilter="false"
                             typeFilter="true"/>
-                    </container>
+                    </container_2>
                 </container>
             </container>
         </root>

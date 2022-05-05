@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.http.HttpStatus;
 import org.apache.http.ParseException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -53,10 +54,12 @@ public final class EmbeddableLrngWidgetUtils {
 
 			try (CloseableHttpClient httpClient = HttpClients.createDefault(); CloseableHttpResponse response = httpClient.execute(getCall))
 			{
-				String configResponse = EntityUtils.toString(response.getEntity());
-				setLastUpdated(currentTime + UPDATE_EVERY_MILLI);
-				setResponse(configResponse);
-				return configResponse;
+				if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
+					String configResponse = EntityUtils.toString(response.getEntity());
+					setLastUpdated(currentTime + UPDATE_EVERY_MILLI);
+					setResponse(configResponse);
+					return configResponse;
+				}
 			} catch (ParseException pe)
 			{
 				LOGGER.error("ParseException while fetching widget config", pe);

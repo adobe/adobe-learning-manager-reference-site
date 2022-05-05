@@ -5,6 +5,10 @@
     margin-bottom: 20px;
     flex-wrap: wrap;
   }
+
+  .news-section-author {
+    font: normal normal 400 16px/22px Source Sans Pro;
+  }
   
   .news-section .news-section-newsItem {
     position: relative;
@@ -39,6 +43,7 @@
     color: #306eb5;
     text-decoration: none;
   }
+ 
   
 .news-section-cont
 {
@@ -52,4 +57,11 @@
     overflow: auto;
     display: inline-block;
     height: 110px;
+}
+
+@media screen and (max-width: 414px) {
+  .news-section .news-section-newsItem {
+    width: 100%;
+    margin: 5px 0;
+  }
 }
