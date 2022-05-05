@@ -41,17 +41,26 @@ const ALMProfilePage = () => {
     let multiValues: any;
     let selectedMultiValues = new Map();
     const userFields: any = user.fields;
-    accountActiveFields?.fields?.map((activeField) => {
-      if (activeField.allowedValues.length > 0 && activeField.isMultiValue) {
-        multiValues = userFields[activeField.name].filter(
-          (value: string) => activeField.allowedValues.includes(value)
-        );
-      }
-      multiValues?.map((filteredArrayTemp1: any) => {
-        selectedMultiValues.set(filteredArrayTemp1, true);
+    if (userFields == undefined) {
+      accountActiveFields?.fields?.map((filteredArrayTemp1: any) => {
+        selectedMultiValues.set(filteredArrayTemp1, false);
       });
-    });
-    setPredefinedMultiValues(selectedMultiValues);
+      setPredefinedMultiValues(selectedMultiValues);
+    } else {
+      accountActiveFields?.fields?.map((activeField) => {
+        if (activeField.allowedValues.length > 0 && activeField.isMultiValue) {
+          if (userFields[activeField.name] != undefined) {
+            multiValues = userFields[activeField.name].filter((value: string) =>
+              activeField.allowedValues.includes(value)
+            );
+          }
+          multiValues?.map((filteredArrayTemp1: any) => {
+            selectedMultiValues.set(filteredArrayTemp1, true);
+          });
+        }
+      });
+      setPredefinedMultiValues(selectedMultiValues);
+    }
   }, [user]);
 
   const updateSelectedMultiValues = (allowedValue: any, value: boolean) => {
@@ -75,6 +84,10 @@ const ALMProfilePage = () => {
 
   const onActiveFieldUpdate= (value: any,name:any)=> {
     let fields: any = userFieldData.fields;
+    if(fields == undefined || fields == null) {
+      userFieldData.fields = {};
+      fields = userFieldData.fields;
+    }
     fields[name] = value;
     let userField: any = {};
     userField.fields = userFieldData.fields;
@@ -83,6 +96,10 @@ const ALMProfilePage = () => {
 
   const onSwitchValueUpdate=(attrName:any ,attrValue:any, fieldName:any)=>{
     let fields: any = userFieldData.fields;
+    if(fields == undefined || fields == null) {
+      userFieldData.fields = {};
+      fields = userFieldData.fields;
+    }
     if (attrValue) {
       if (fields[fieldName] == undefined) {
         fields[fieldName] = [];
