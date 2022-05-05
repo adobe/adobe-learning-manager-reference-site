@@ -11,73 +11,74 @@
         <items jcr:primaryType="nt:unstructured">
             <column
                 jcr:primaryType="nt:unstructured"
+                granite:rel="news-section-author"
                 sling:resourceType="granite/ui/components/coral/foundation/container">
                 <items jcr:primaryType="nt:unstructured">
                     <section1
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/text"
-                        text="Configure News Section 1"
+                        text="Configure news section 1"
                         granite:rel="news-section-cont"/>
                     <sec1Title
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="News Title"
+                        fieldLabel="News title"
                         name="./section1Title"
                         value="SecurFinancial Educational Resources"/>
                     <sec1Description
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="News Description"
+                        fieldLabel="News description"
                         name="./section1Description"
                         value="Videos, webinars, and educational programs to upgrade your skills and knowledge."/>
                     <sec1Link
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="News Link"
+                        fieldLabel="News link"
                         name="./section1Link"/>
                     <section2
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/text"
-                        text="Configure News Section 2"
+                        text="Configure news section 2"
                         granite:rel="news-section-cont"/>
                     <sec2Title
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="News Title"
+                        fieldLabel="News title"
                         name="./section2Title"
                         value="Collection of Courses, Certificates…"/>
                     <sec2Description
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="News Description"
+                        fieldLabel="News description"
                         name="./section2Description"
                         value="Hundreds of courses covering every feature of SecurFinancial products ensure that you learn well and make the most of our products."/>
                     <sec2Link
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="News Link"
+                        fieldLabel="News link"
                         name="./section2Link"/>
                     <section3
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/text"
-                        text="Configure News Section 3"
+                        text="Configure news section 3"
                         granite:rel="news-section-cont"/>
                     <sec3Title
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="News Title"
+                        fieldLabel="News title"
                         name="./section3Title"
                         value="SecurFinancial Academy, Our Journey"/>
                     <sec3Description
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="News Description"
+                        fieldLabel="News description"
                         name="./section3Description"
                         value="Read on to know more about how we started and how the academy empowers millions to succeed in what they do every day."/>
                     <sec3Link
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="News Link"
+                        fieldLabel="News link"
                         name="./section3Link"
                         value="https://www.adobe.com"/>
                 </items>
