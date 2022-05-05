@@ -193,6 +193,10 @@
         }
       };
 
+      function handleLogOut() {
+        console.log("logout");
+      }
+
       window.ALM = window.ALM || {};
       window.ALM.ALMConfig = ALMConfig; //window.ALM.ALMConfig || primeConfig;
       window.ALM.getALMConfig = getALMConfig;
@@ -202,6 +206,7 @@
       window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
       window.ALM.getAccessToken = getAccessToken;
       window.ALM.getALMUser = getALMUser;
+      window.ALM.handleLogOut = handleLogOut;
       window.ALM.getAccountActiveFields = getAccountActiveFields;
       window.ALM.updateALMUser = updateALMUser;
       window.ALM.navigateToExplorePage = navigateToExplorePage;

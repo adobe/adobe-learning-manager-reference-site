@@ -95,6 +95,7 @@ export const useAlmSignIn = (props) => {
       } catch (exception) {
         setIsLoading(false);
         setIsloggedIn(false);
+        getALMObject().handleLogOut();
       }
     },
     [signIn]

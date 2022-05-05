@@ -1,5 +1,9 @@
 import { CatalogFilterState } from "../store/reducers/catalog";
-import { getALMConfig, getALMObject, handleLogin } from "../utils/global";
+import {
+  getALMConfig,
+  getALMObject,
+  redirectToLoginAndAbort,
+} from "../utils/global";
 import { QueryParams } from "../utils/restAdapter";
 import ALMCustomHooks from "./ALMCustomHooks";
 import CommerceCustomHooks from "./CommerceCustomHooks";
@@ -72,14 +76,12 @@ class APIService {
     );
   }
   public async loadMore(url: string) {
-    handleLogin();
+    if (redirectToLoginAndAbort()) {
+      return;
+    }
     if (this.isUserLoggedIn()) {
-      //this.customHooks = new ALMCustomHooks();
       return new ALMCustomHooks().loadMore(url);
     }
-    //this.customHooks = new ESCustomHooks();
-    // return this.customHooks.getTrainings(filterState,sort);
-    // return new ESCustomHooks().loadMore(url);
   }
 
   public async getTraining(id: string, params: QueryParams) {
@@ -119,7 +121,9 @@ class APIService {
     }
   }
   public async enrollToTraining(params: QueryParams = {}) {
-    handleLogin();
+    if (redirectToLoginAndAbort()) {
+      return;
+    }
     if (this.isUserLoggedIn()) {
       return new ALMCustomHooks().enrollToTraining(params);
     }
@@ -145,11 +149,14 @@ class APIService {
   public async addProductToCart(
     sku: string
   ): Promise<{ items: any; totalQuantity: Number; error: any }> {
-    handleLogin();
+    const defaultCartValues = { items: [], totalQuantity: 0, error: null };
+    if (redirectToLoginAndAbort()) {
+      return { ...defaultCartValues, error: true };
+    }
     if (this.isUserLoggedIn() && getALMConfig().usageType === ADOBE_COMMERCE) {
       return new CommerceCustomHooks().addProductToCart(sku);
     }
-    return { items: [], totalQuantity: 0, error: null };
+    return defaultCartValues;
   }
 }
 
