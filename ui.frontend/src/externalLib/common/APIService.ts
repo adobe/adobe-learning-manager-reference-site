@@ -1,5 +1,5 @@
 import { CatalogFilterState } from "../store/reducers/catalog";
-import { getALMConfig, getALMObject } from "../utils/global";
+import { getALMConfig, getALMObject, handleLogin } from "../utils/global";
 import { QueryParams } from "../utils/restAdapter";
 import ALMCustomHooks from "./ALMCustomHooks";
 import CommerceCustomHooks from "./CommerceCustomHooks";
@@ -72,6 +72,7 @@ class APIService {
     );
   }
   public async loadMore(url: string) {
+    handleLogin();
     if (this.isUserLoggedIn()) {
       //this.customHooks = new ALMCustomHooks();
       return new ALMCustomHooks().loadMore(url);
@@ -118,10 +119,9 @@ class APIService {
     }
   }
   public async enrollToTraining(params: QueryParams = {}) {
+    handleLogin();
     if (this.isUserLoggedIn()) {
       return new ALMCustomHooks().enrollToTraining(params);
-    } else {
-      //redirect to login page
     }
   }
   public async unenrollFromTraining(enrollmentId: string = "") {
@@ -145,6 +145,7 @@ class APIService {
   public async addProductToCart(
     sku: string
   ): Promise<{ items: any; totalQuantity: Number; error: any }> {
+    handleLogin();
     if (this.isUserLoggedIn() && getALMConfig().usageType === ADOBE_COMMERCE) {
       return new CommerceCustomHooks().addProductToCart(sku);
     }

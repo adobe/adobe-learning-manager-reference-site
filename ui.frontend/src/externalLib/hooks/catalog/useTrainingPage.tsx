@@ -154,8 +154,8 @@ export const useTrainingPage = (
       const refreshTraining = () => {
         setRefreshTraining((prevState) => !prevState);
       };
-      let test = id || trainingId;
-      LaunchPlayer({ trainingId: test, callBackFn: refreshTraining, moduleId });
+      const loId = id || trainingId;
+      LaunchPlayer({ trainingId: loId, callBackFn: refreshTraining, moduleId });
     },
     [trainingId]
   );

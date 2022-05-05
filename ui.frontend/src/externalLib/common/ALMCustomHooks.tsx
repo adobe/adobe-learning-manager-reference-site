@@ -1,8 +1,8 @@
 import { PrimeLearningObject } from "..";
 import { CatalogFilterState } from "../store/reducers/catalog";
 import {
-  getParamsForCatalogApi,
   getOrUpdateCatalogFilters,
+  getParamsForCatalogApi,
 } from "../utils/catalog";
 import { getDefaultFiltersState, updateFilterList } from "../utils/filters";
 import {
@@ -34,6 +34,7 @@ export default class ALMCustomHooks implements ICustomHooks {
     params["sort"] = sort;
     params["page[limit]"] = DEFAULT_PAGE_LIMIT;
     params["include"] = DEFUALT_LO_INCLUDE;
+    params["filter.ignoreEnhancedLP"] = false;
 
     let url = `${this.primeApiURL}/learningObjects`;
     if (searchText && catalogAttributes?.showSearch === "true") {
@@ -74,12 +75,6 @@ export default class ALMCustomHooks implements ICustomHooks {
     id: string,
     params: QueryParams
   ): Promise<PrimeLearningObject> {
-    // const INCLUDES_FOR_COURSE =
-    //   "authors,enrollment,instances.loResources.resources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
-
-    // const INCLUDES_FOR_LP_CERT =
-    //   "authors,enrollment,subLOs.instances,instances.badge, skills.skillLevel.badge";
-    // params["include"] params.include || INCLUDES_FOR_COURSE;
     const response = await RestAdapter.get({
       url: `${this.primeApiURL}learningObjects/${id}`,
       params: params,

@@ -11,8 +11,8 @@ import {
 import ALMBackButton from "../../Common/ALMBackButton/ALMBackButton";
 import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 import ALMActiveFields from "./ALMActiveFields";
-import ALMSkillComponent from "./ALMSkillComponent";
 import styles from "./ALMProfilePage.module.css";
+import ALMSkillComponent from "./ALMSkillComponent";
 
 const getActiveFieldAttributes = (config: PrimeConfig) => {
   let cssSelector = config.mountingPoints.profilePageContainer;
@@ -23,7 +23,13 @@ const getActiveFieldAttributes = (config: PrimeConfig) => {
 const ALMProfilePage = () => {
   const { formatMessage } = useIntl();
   const config = getALMConfig();
-  const { profileAttributes, updateProfileImage, updateAccountActiveFields, userFieldData, setUserFieldData} = useProfile();
+  const {
+    profileAttributes,
+    updateProfileImage,
+    updateAccountActiveFields,
+    userFieldData,
+    setUserFieldData,
+  } = useProfile();
   const { user, accountActiveFields } = profileAttributes;
   const [predefinedMultiValues, setPredefinedMultiValues] = useState(new Map());
   console.log("Active fields :: " + accountActiveFields);
@@ -41,24 +47,27 @@ const ALMProfilePage = () => {
     let multiValues: any;
     let selectedMultiValues = new Map();
     const userFields: any = user.fields;
+    //  if (userFields) {
     accountActiveFields?.fields?.map((activeField) => {
       if (activeField.allowedValues.length > 0 && activeField.isMultiValue) {
-        multiValues = userFields[activeField.name].filter(
-          (value: string) => activeField.allowedValues.includes(value)
+        multiValues = userFields[activeField.name]?.filter((value: string) =>
+          activeField.allowedValues.includes(value)
         );
       }
       multiValues?.map((filteredArrayTemp1: any) => {
         selectedMultiValues.set(filteredArrayTemp1, true);
       });
     });
+    // }
+
     setPredefinedMultiValues(selectedMultiValues);
   }, [user]);
 
   const updateSelectedMultiValues = (allowedValue: any, value: boolean) => {
     let selectedMultiValues = new Map(predefinedMultiValues);
-    selectedMultiValues.set(allowedValue,value);
+    selectedMultiValues.set(allowedValue, value);
     setPredefinedMultiValues(selectedMultiValues);
-  }
+  };
 
   const inputRef = useRef<null | HTMLInputElement>(null);
   const imageUploaded = async (event: any) => {
@@ -73,15 +82,19 @@ const ALMProfilePage = () => {
     await updateProfileImage(file.name, file);
   };
 
-  const onActiveFieldUpdate= (value: any,name:any)=> {
+  const onActiveFieldUpdate = (value: any, name: any) => {
     let fields: any = userFieldData.fields;
     fields[name] = value;
     let userField: any = {};
     userField.fields = userFieldData.fields;
     setUserFieldData(userField);
-  }
+  };
 
-  const onSwitchValueUpdate=(attrName:any ,attrValue:any, fieldName:any)=>{
+  const onSwitchValueUpdate = (
+    attrName: any,
+    attrValue: any,
+    fieldName: any
+  ) => {
     let fields: any = userFieldData.fields;
     if (attrValue) {
       if (fields[fieldName] == undefined) {
@@ -96,12 +109,12 @@ const ALMProfilePage = () => {
       data.fields = userFieldData.fields;
       setUserFieldData(data);
     }
-  }
+  };
 
-  const UpdateAccountActiveFields= async ()=>{
+  const UpdateAccountActiveFields = async () => {
     let data: any = userFieldData.fields;
     await updateAccountActiveFields(data, user?.id);
-  }
+  };
 
   const startFileUpload = () => {
     (inputRef?.current as HTMLInputElement)?.click();
@@ -183,11 +196,14 @@ const ALMProfilePage = () => {
             predefinedMultiValues={predefinedMultiValues}
           />
           <section>
-            <></><hr style={{ width: "1100px" }} />
+            <></>
+            <hr style={{ width: "1100px" }} />
             <div className={styles.activeFieldButtonContainer}>
               <Button
                 UNSAFE_className={styles.activeFieldsSaveOption}
-                variant="cta" onPress={UpdateAccountActiveFields}>
+                variant="cta"
+                onPress={UpdateAccountActiveFields}
+              >
                 {formatMessage({
                   id: "alm.profile.fields.saveProfileChanges",
                   defaultMessage: "Save Changes",

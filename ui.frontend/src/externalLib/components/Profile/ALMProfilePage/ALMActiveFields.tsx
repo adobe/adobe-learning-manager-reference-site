@@ -1,8 +1,5 @@
 import { Item, Picker, Switch, TextField } from "@adobe/react-spectrum";
-import { maxHeaderSize } from "http";
-import React, { useEffect, useState } from "react";
-import { useIntl } from "react-intl";
-import { PrimeDropdown } from "../..";
+import React from "react";
 import { AccountActiveFields, PrimeUser } from "../../../models";
 import styles from "./ALMActiveFields.module.css";
 
@@ -15,14 +12,25 @@ const ALMActiveFields: React.FC<{
   onActiveFieldUpdate: Function;
   onSwitchValueUpdate: Function;
   updateSelectedMultiValues: Function;
-  userFieldData: any
-  predefinedMultiValues: any
+  userFieldData: any;
+  predefinedMultiValues: any;
 }> = (props) => {
   // const { formatMessage } = useIntl();
   // const config = getALMConfig();
 
-  const { activeFields, description, title, user, accountActiveFields, onActiveFieldUpdate, onSwitchValueUpdate,updateSelectedMultiValues, userFieldData, predefinedMultiValues } = props;
- 
+  const {
+    activeFields,
+    description,
+    title,
+    user,
+    accountActiveFields,
+    onActiveFieldUpdate,
+    onSwitchValueUpdate,
+    updateSelectedMultiValues,
+    userFieldData,
+    predefinedMultiValues,
+  } = props;
+
   const configuredActiveFields = activeFields
     ? activeFields.split(",").map((item) => item.trim())
     : [];
@@ -49,6 +57,11 @@ const ALMActiveFields: React.FC<{
             interface dropDown {
               id: string;
               name: string;
+            }
+            const fields = userFieldData.fields;
+            let fieldValue = "";
+            if (fields) {
+              fieldValue = fields[activeField.name];
             }
             const dropDownValue = () => {
               if (showDropdown) {
@@ -82,7 +95,7 @@ const ALMActiveFields: React.FC<{
                   <div>
                     {showTextField && !isMultiValue && (
                       <TextField
-                        value={userFieldData.fields[activeField.name]}
+                        value={fieldValue}
                         placeholder="Type here..."
                         onChange={(value) => {
                           onActiveFieldUpdate(value, activeField.name);
@@ -96,14 +109,14 @@ const ALMActiveFields: React.FC<{
                         onSelectionChange={(value) => {
                           onActiveFieldUpdate(value, activeField.name);
                         }}
-                        selectedKey={userFieldData.fields[activeField.name]}
+                        selectedKey={fieldValue}
                       >
                         {(item) => <Item>{item.name}</Item>}
                       </Picker>
                     )}
                     {isMultiValuedTextField && (
                       <TextField
-                        value={userFieldData.fields[activeField.name]}
+                        value={fieldValue}
                         placeholder="Use comma to separate multiple values"
                         onChange={(value) => {
                           onActiveFieldUpdate(value, activeField.name);
@@ -118,8 +131,15 @@ const ALMActiveFields: React.FC<{
                             <span className={styles.allowedActiveFieldValues}>
                               {allowedValue}
                             </span>
-                            <span style={predefinedMultiValues?.get(
-                                allowedValue) ? { fontWeight: "normal"} : { fontWeight: "bold"}}>No</span>
+                            <span
+                              style={
+                                predefinedMultiValues?.get(allowedValue)
+                                  ? { fontWeight: "normal" }
+                                  : { fontWeight: "bold" }
+                              }
+                            >
+                              No
+                            </span>
                             <Switch
                               isEmphasized
                               UNSAFE_className={styles.switch}
@@ -127,7 +147,7 @@ const ALMActiveFields: React.FC<{
                                 allowedValue
                               )}
                               onChange={(value) => {
-                                updateSelectedMultiValues(allowedValue,value);
+                                updateSelectedMultiValues(allowedValue, value);
                                 onSwitchValueUpdate(
                                   allowedValue,
                                   value,
@@ -135,8 +155,15 @@ const ALMActiveFields: React.FC<{
                                 );
                               }}
                             ></Switch>
-                            <span style={predefinedMultiValues?.get(
-                                allowedValue) ? { fontWeight: "bold"} : { fontWeight: "normal"}}>Yes</span>
+                            <span
+                              style={
+                                predefinedMultiValues?.get(allowedValue)
+                                  ? { fontWeight: "bold" }
+                                  : { fontWeight: "normal" }
+                              }
+                            >
+                              Yes
+                            </span>
                           </div>
                         );
                       })}

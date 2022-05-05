@@ -107,7 +107,7 @@
         "jcr:created": "2022-03-02T22:19:50.386+05:30",
         "cq:lastModified": "2022-03-03T13:57:24.962+05:30",
         refreshToken: "1",
-        usageType: "aem-es",
+        usageType: "aem-commerce",
         clientId: "eb391052-1a8e-472a-a6c5-227156f37229",
         "sling:resourceType": "learning/configuration/page",
         primeBaseUrl: "1",
@@ -144,7 +144,7 @@
       };
 
       const getAccessToken = () => {
-        return "74578edc16b215c5c00f72a75727830a";
+        return "1d3bb267efc289b3c2c1c284fc4bc2c5";
       };
 
       const getALMConfig = () => {
@@ -306,6 +306,8 @@
       }
 
       function handleLogIn() {
+        let { commerceSignInPath } = getALMConfig();
+        window.location.pathname = commerceSignInPath;
         switch (CURRENT_USAGE_TYPE) {
           case PRIME_USAGE_TYPE:
           case ES_USAGE_TYPE:
@@ -364,8 +366,8 @@
       data-tag-name="true"
       data-skill-level="true"
     ></div> */-->
-
-    <!--/* <div
+    <!--/* 
+    <div
       class="profile__container"
       data-section1-title="Organization"
       data-section1-description="Section 1 description"
