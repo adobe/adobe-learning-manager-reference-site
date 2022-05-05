@@ -120,10 +120,12 @@ export const getConfigurableAttributes = (cssSelector: string) => {
   return (document.querySelector(cssSelector) as any)?.dataset;
 };
 
-export const handleLogin = () => {
+export const redirectToLoginAndAbort = () => {
   if (!getALMObject().isPrimeUserLoggedIn()) {
     getALMObject().handleLogIn();
+    return true;
   }
+  return false;
 };
 
 const init = async () => {

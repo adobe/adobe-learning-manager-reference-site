@@ -123,21 +123,13 @@ const PrimeTrainingPageMetaData: React.FC<{
   };
 
   const onPressHandler = async () => {
-    // if (!getALMObject().isPrimeUserLoggedIn()) {
-    //   getALMObject().handleLogIn();
-    //   return;
-    // }
     try {
-      await enrollmentHandler();
+      enrollmentHandler();
       launchPlayerHandler();
     } catch (e) {}
   };
 
   const addToCart = async (redirectPathName = "") => {
-    // if (!getALMObject().isPrimeUserLoggedIn()) {
-    //   getALMObject().handleLogIn();
-    //   return;
-    // }
     try {
       const { error } = await addToCartHandler();
       if (error && error[0]?.message) {

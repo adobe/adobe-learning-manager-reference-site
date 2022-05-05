@@ -2,13 +2,14 @@ import {
   getAccessToken,
   getALMConfig,
   getWindowObject,
-  handleLogin,
+  redirectToLoginAndAbort,
 } from "./global";
 // let currenttrainingId = "";
 
 export function LaunchPlayer(props: any) {
-  handleLogin();
-  console.log("Inside player");
+  if (redirectToLoginAndAbort()) {
+    return;
+  }
   const ClosePlayer = (event: MessageEvent) => {
     if (event.data === "status:close") {
       getWindowObject().removeEventListener("message", ClosePlayer);
