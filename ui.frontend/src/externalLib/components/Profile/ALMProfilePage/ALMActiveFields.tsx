@@ -1,8 +1,5 @@
 import { Item, Picker, Switch, TextField } from "@adobe/react-spectrum";
-import { maxHeaderSize } from "http";
-import React, { useEffect, useState } from "react";
-import { useIntl } from "react-intl";
-import { PrimeDropdown } from "../..";
+import React from "react";
 import { AccountActiveFields, PrimeUser } from "../../../models";
 import styles from "./ALMActiveFields.module.css";
 
@@ -15,14 +12,25 @@ const ALMActiveFields: React.FC<{
   onActiveFieldUpdate: Function;
   onSwitchValueUpdate: Function;
   updateSelectedMultiValues: Function;
-  userFieldData: any
-  predefinedMultiValues: any
+  userFieldData: any;
+  predefinedMultiValues: any;
 }> = (props) => {
   // const { formatMessage } = useIntl();
   // const config = getALMConfig();
 
-  const { activeFields, description, title, user, accountActiveFields, onActiveFieldUpdate, onSwitchValueUpdate,updateSelectedMultiValues, userFieldData, predefinedMultiValues } = props;
- 
+  const {
+    activeFields,
+    description,
+    title,
+    user,
+    accountActiveFields,
+    onActiveFieldUpdate,
+    onSwitchValueUpdate,
+    updateSelectedMultiValues,
+    userFieldData,
+    predefinedMultiValues,
+  } = props;
+
   const configuredActiveFields = activeFields
     ? activeFields.split(",").map((item) => item.trim())
     : [];
@@ -46,13 +54,19 @@ const ALMActiveFields: React.FC<{
             const isMultiValuedTextField = isMultiValue && showTextField;
             const hasPredefinedMultiValues =
               isMultiValue && allowedValuesPresent;
-            let textFieldValues =   JSON.stringify(userFieldData?.fields) === "{}" ||
-            userFieldData?.fields == undefined
-              ? null
-              : userFieldData?.fields[activeField.name];
+            let textFieldValues =
+              JSON.stringify(userFieldData?.fields) === "{}" ||
+              userFieldData?.fields == undefined
+                ? null
+                : userFieldData?.fields[activeField.name];
             interface dropDown {
               id: string;
               name: string;
+            }
+            const fields = userFieldData.fields;
+            let fieldValue = "";
+            if (fields) {
+              fieldValue = fields[activeField.name];
             }
             const dropDownValue = () => {
               if (showDropdown) {

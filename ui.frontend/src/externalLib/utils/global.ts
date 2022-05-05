@@ -120,6 +120,12 @@ export const getConfigurableAttributes = (cssSelector: string) => {
   return (document.querySelector(cssSelector) as any)?.dataset;
 };
 
+export const handleLogin = () => {
+  if (!getALMObject().isPrimeUserLoggedIn()) {
+    getALMObject().handleLogIn();
+  }
+};
+
 const init = async () => {
   if (!getALMObject().isPrimeUserLoggedIn()) {
     const nomenclatureStr = getALMConfig().nomenclatureData;

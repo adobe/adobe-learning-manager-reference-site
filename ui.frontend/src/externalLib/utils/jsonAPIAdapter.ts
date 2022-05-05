@@ -1,83 +1,106 @@
 import { ALMToCommerceTypes } from "../common/CommerceCustomHooks";
-import { CommercePrimeLearningObject, ESPrimeLearningObject, ESPrimeLearningObjectInstance, JsonApiResponse, PrimeLearningObject, PrimeLearningObjectInstance, PrimeLocalizationMetadata, PrimeRating } from "../models";
+import {
+  CommercePrimeLearningObject,
+  ESPrimeLearningObject,
+  ESPrimeLearningObjectInstance,
+  JsonApiResponse,
+  PrimeLearningObject,
+  PrimeLearningObjectInstance,
+  PrimeLocalizationMetadata,
+  PrimeRating,
+} from "../models";
 import { getALMConfig } from "./global";
 
 let store: Store | undefined;
 export function GetStore(): Store {
-    if (!store) {
-        store = new Store();
-    }
-    return store;
+  if (!store) {
+    store = new Store();
+  }
+  return store;
 }
 
 export class Store {
-    private cache: any = {};
+  private cache: any = {};
 
-    public put(obj: any): void {
-        if (!this.cache[obj["type"]]) {
-            this.cache[obj["type"]] = {};
-        }
-        this.cache[obj["type"]][obj["id"]] = obj;
+  public put(obj: any): void {
+    if (!this.cache[obj["type"]]) {
+      this.cache[obj["type"]] = {};
     }
-    public get(type: string, id: string): any {
-        if (!this.cache[type]) {
-            this.cache[type] = {};
-        }
-        return this.cache[type][id];
+    this.cache[obj["type"]][obj["id"]] = obj;
+  }
+  public get(type: string, id: string): any {
+    if (!this.cache[type]) {
+      this.cache[type] = {};
     }
+    return this.cache[type][id];
+  }
 }
 
 function filterResponse(data: any, type: string) {
-    return data.included?.filter((item: { type: any }) => item.type === type);
+  return data.included?.filter((item: { type: any }) => item.type === type);
 }
 
 export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
-    const storeToUse: Store = GetStore();
-    if (typeof jsonApiResponse === "string") jsonApiResponse = JSON.parse(jsonApiResponse);
+  const storeToUse: Store = GetStore();
+  if (typeof jsonApiResponse === "string")
+    jsonApiResponse = JSON.parse(jsonApiResponse);
 
-    if (Array.isArray(jsonApiResponse.included)) {
-        for (let j = 0; j < jsonApiResponse.included.length; ++j) {
-            storeToUse.put(jsonApiResponse.included[j]);
-        }
+  if (Array.isArray(jsonApiResponse.included)) {
+    for (let j = 0; j < jsonApiResponse.included.length; ++j) {
+      storeToUse.put(jsonApiResponse.included[j]);
     }
-    let dataType = undefined;
-    let isList = false;
+  }
+  let dataType = undefined;
+  let isList = false;
 
-    let result;
-    let data = jsonApiResponse["data"];
-    if (Array.isArray(data)) {
-        if (data.length && data[0]["type"] === "searchResult") {
-            data = filterResponse(jsonApiResponse, "learningObject");
-            if (data?.length === 0) {
-                data = filterResponse(jsonApiResponse, "post");
-            }
-        }
-        result = [];
-        let oneObj;
-        for (let j = 0; j < data.length; ++j) {
-            oneObj = data[j];
-            storeToUse.put(oneObj);
-            result.push(ObjectWrapper.GetWrapper(oneObj["type"], oneObj["id"], storeToUse, oneObj));
-            if (!dataType) {
-                dataType = oneObj["type"];
-                isList = true;
-            }
-        }
-    } else {
-        if (data["type"] === "searchResult") {
-            data = jsonApiResponse.included.filter((item: { type: any }) => item.type === "learningObject");
-        }
-        dataType = data["type"];
-        storeToUse.put(data);
-        result = ObjectWrapper.GetWrapper(data["type"], data["id"], storeToUse);
+  let result;
+  let data = jsonApiResponse["data"];
+  if (Array.isArray(data)) {
+    if (data.length && data[0]["type"] === "searchResult") {
+      data = filterResponse(jsonApiResponse, "learningObject");
+      if (data?.length === 0) {
+        data = filterResponse(jsonApiResponse, "post");
+      }
     }
-    const retval: any = {};
-    if (dataType) {
-        retval[`${dataType === "searchResult" ? "learningObject" : dataType}${isList ? "List" : ""}`] = result;
+    result = [];
+    let oneObj;
+    for (let j = 0; j < data.length; ++j) {
+      oneObj = data[j];
+      storeToUse.put(oneObj);
+      result.push(
+        ObjectWrapper.GetWrapper(
+          oneObj["type"],
+          oneObj["id"],
+          storeToUse,
+          oneObj
+        )
+      );
+      if (!dataType) {
+        dataType = oneObj["type"];
+        isList = true;
+      }
     }
-    retval.links = jsonApiResponse["links"];
-    retval.meta = jsonApiResponse["meta"];
-    return retval;
+  } else {
+    if (data["type"] === "searchResult") {
+      data = jsonApiResponse.included.filter(
+        (item: { type: any }) => item.type === "learningObject"
+      );
+    }
+    dataType = data["type"];
+    storeToUse.put(data);
+    result = ObjectWrapper.GetWrapper(data["type"], data["id"], storeToUse);
+  }
+  const retval: any = {};
+  if (dataType) {
+    retval[
+      `${dataType === "searchResult" ? "learningObject" : dataType}${
+        isList ? "List" : ""
+      }`
+    ] = result;
+  }
+  retval.links = jsonApiResponse["links"];
+  retval.meta = jsonApiResponse["meta"];
+  return retval;
 }
 
 // export function JsonApiRelationshipUpdate(baseObj: JsonApiDataRef, relationRefToUpdate: JsonApiDataRef, relName: string, storeType: WidgetType) {
@@ -90,87 +113,108 @@ export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
 // }
 
 export class ObjectWrapper {
-    private id_lxpv: string;
-    private type_lxpv: string;
-    private dataObject: any;
-    private ALMStore: Store;
+  private id_lxpv: string;
+  private type_lxpv: string;
+  private dataObject: any;
+  private ALMStore: Store;
 
-    constructor(type: string, id: string, storeToUse: Store, dataObj: any) {
-        this.id_lxpv = id;
-        this.type_lxpv = type;
-        this.ALMStore = storeToUse;
-        //We can think of falling back to COMMON store - might be helpful in cases like user account
-        //not sideloaded in widget specific api calls, but can be accessed through fallback
-        this.dataObject = dataObj ? dataObj : storeToUse.get(type, id);
-        //this.dataObject = dataObj;
-        if (this.dataObject !== undefined && !this.dataObject._transient) {
-            this.dataObject._transient = {};
-        }
+  constructor(type: string, id: string, storeToUse: Store, dataObj: any) {
+    this.id_lxpv = id;
+    this.type_lxpv = type;
+    this.ALMStore = storeToUse;
+    //We can think of falling back to COMMON store - might be helpful in cases like user account
+    //not sideloaded in widget specific api calls, but can be accessed through fallback
+    this.dataObject = dataObj ? dataObj : storeToUse.get(type, id);
+    //this.dataObject = dataObj;
+    if (this.dataObject !== undefined && !this.dataObject._transient) {
+      this.dataObject._transient = {};
     }
-    public get(attr: string) {
-        if (attr === "id") return this.id_lxpv;
-        if (attr === "type") return this.type_lxpv;
-        if (attr === "__storedataobj") return this.dataObject;
-        if (attr === "_transient") return this.dataObject._transient;
+  }
+  public get(attr: string) {
+    if (attr === "id") return this.id_lxpv;
+    if (attr === "type") return this.type_lxpv;
+    if (attr === "__storedataobj") return this.dataObject;
+    if (attr === "_transient") return this.dataObject._transient;
 
-        if (this.dataObject === undefined) return;
+    if (this.dataObject === undefined) return;
 
-        let retval;
-        if (this.dataObject.hasOwnProperty("attributes")) {
-            //check in attributes
-            retval = this.dataObject["attributes"].hasOwnProperty(attr) ? this.dataObject["attributes"][attr] : undefined;
-        }
-        if (retval === undefined && this.dataObject.hasOwnProperty("relationships")) {
-            //check in relationships
-            retval = this.dataObject["relationships"][attr];
-            if (retval !== undefined) {
-                const relData = retval["data"];
-                if (Array.isArray(relData)) {
-                    retval = [];
-                    let oneObj;
-                    for (let ii = 0; ii < relData.length; ++ii) {
-                        oneObj = relData[ii];
-                        retval.push(ObjectWrapper.GetWrapper(oneObj["type"], oneObj["id"], this.ALMStore));
-                    }
-                } else retval = relData ? ObjectWrapper.GetWrapper(relData["type"], relData["id"], this.ALMStore) : undefined;
-            }
-        }
-        return retval;
+    let retval;
+    if (this.dataObject.hasOwnProperty("attributes")) {
+      //check in attributes
+      retval = this.dataObject["attributes"].hasOwnProperty(attr)
+        ? this.dataObject["attributes"][attr]
+        : undefined;
     }
-
-    public set(attr: string, value: any) {
-
-        if (this.dataObject === undefined) return;
-        if (this.dataObject.hasOwnProperty("attributes")) {
-            //check in attributes
-            if (this.dataObject["attributes"].hasOwnProperty(attr)) {
-                this.dataObject["attributes"][attr] = value;
-                return;
-            }
-        }
-        if (this.dataObject.hasOwnProperty("relationships")) {
-            //check in relationships
-            let propToUpdate = this.dataObject["relationships"][attr];
-            if (propToUpdate) {
-                this.dataObject["relationships"][attr] = value;
-            }
-        }
-
+    if (
+      retval === undefined &&
+      this.dataObject.hasOwnProperty("relationships")
+    ) {
+      //check in relationships
+      retval = this.dataObject["relationships"][attr];
+      if (retval !== undefined) {
+        const relData = retval["data"];
+        if (Array.isArray(relData)) {
+          retval = [];
+          let oneObj;
+          for (let ii = 0; ii < relData.length; ++ii) {
+            oneObj = relData[ii];
+            retval.push(
+              ObjectWrapper.GetWrapper(
+                oneObj["type"],
+                oneObj["id"],
+                this.ALMStore
+              )
+            );
+          }
+        } else
+          retval = relData
+            ? ObjectWrapper.GetWrapper(
+                relData["type"],
+                relData["id"],
+                this.ALMStore
+              )
+            : undefined;
+      }
     }
+    return retval;
+  }
 
-    public static GetWrapper(type: string, id: string, storeToUse: Store, dataObj?: any): ObjectWrapper {
-        let objWrapper = new ObjectWrapper(type, id, storeToUse, dataObj);
-        objWrapper = new Proxy(objWrapper, {
-            get: function (target: any, attr: string) {
-                return target.get(attr);
-            },
-            set: function (target, attr, value, receiver) {
-                target.set(attr, value);
-                return true;
-            }
-        });
-        return objWrapper;
+  public set(attr: string, value: any) {
+    if (this.dataObject === undefined) return;
+    if (this.dataObject.hasOwnProperty("attributes")) {
+      //check in attributes
+      if (this.dataObject["attributes"].hasOwnProperty(attr)) {
+        this.dataObject["attributes"][attr] = value;
+        return;
+      }
     }
+    if (this.dataObject.hasOwnProperty("relationships")) {
+      //check in relationships
+      let propToUpdate = this.dataObject["relationships"][attr];
+      if (propToUpdate) {
+        this.dataObject["relationships"][attr] = value;
+      }
+    }
+  }
+
+  public static GetWrapper(
+    type: string,
+    id: string,
+    storeToUse: Store,
+    dataObj?: any
+  ): ObjectWrapper {
+    let objWrapper = new ObjectWrapper(type, id, storeToUse, dataObj);
+    objWrapper = new Proxy(objWrapper, {
+      get: function (target: any, attr: string) {
+        return target.get(attr);
+      },
+      set: function (target, attr, value, receiver) {
+        target.set(attr, value);
+        return true;
+      },
+    });
+    return objWrapper;
+  }
 }
 
 // export interface IJsonApiPaginatee {
@@ -263,154 +307,161 @@ export class ObjectWrapper {
 //     }
 // }
 
-export function parseESResponse(response: ESPrimeLearningObject[]): PrimeLearningObject[] {
-    let loResponse: PrimeLearningObject[] = [];
-    response.forEach((item) => {
-        const locale = getALMConfig().locale;
-        let lo: Partial<PrimeLearningObject> = {};
-        let rating: PrimeRating;
-        let localizedData: PrimeLocalizationMetadata;
+export function parseESResponse(
+  response: ESPrimeLearningObject[]
+): PrimeLearningObject[] {
+  let loResponse: PrimeLearningObject[] = [];
+  response.forEach((item) => {
+    const locale = getALMConfig().locale;
+    let lo: Partial<PrimeLearningObject> = {};
+    let rating: PrimeRating;
+    let localizedData: PrimeLocalizationMetadata;
 
-        lo.id = item.loId;
-        lo.loFormat = item.deliveryType;
-        lo.loType = item.loType;
-        lo.duration = item.duration;
-        lo.authorNames = item.authors;
-        lo.dateCreated = item.dateCreated;
-        lo.datePublished = item.publishDate;
-        lo.tags = item.tags;
+    lo.id = item.loId;
+    lo.loFormat = item.deliveryType;
+    lo.loType = item.loType;
+    lo.duration = item.duration;
+    lo.authorNames = item.authors;
+    lo.dateCreated = item.dateCreated;
+    lo.datePublished = item.publishDate;
+    lo.tags = item.tags;
 
-        localizedData = {
-            _transient: "",
-            description: item.description,
-            id: "",
-            locale,
-            name: item.name,
-            overview: "",
-            richTextOverview: "",
-            type: ""
-        }
-        lo.localizedMetadata = [localizedData]
+    localizedData = {
+      _transient: "",
+      description: item.description,
+      id: "",
+      locale,
+      name: item.name,
+      overview: "",
+      richTextOverview: "",
+      type: "",
+    };
+    lo.localizedMetadata = [localizedData];
 
-        rating = {
-            averageRating: item.averageRating,
-            ratingsCount: item.ratingsCount,
-            id: "",
-            _transient: ""
-        }
-        lo.rating = rating;
-        lo.skills = [];
-        lo.skillNames = item.loSkillNames;
-        lo.instances = [];
-        item.loInstances?.forEach((instanceItem: ESPrimeLearningObjectInstance) => {
-            let localizedMetadata: PrimeLocalizationMetadata;
-            localizedMetadata = {
-                _transient: "",
-                description: "",
-                id: "",
-                locale,
-                name: instanceItem.name,
-                overview: "",
-                richTextOverview: "",
-                type: ""
-            }
-            let instance: Partial<PrimeLearningObjectInstance> = {
-                localizedMetadata: [localizedMetadata],
-                state: instanceItem.status,
-                completionDeadline: instanceItem.completionDeadline,
-                id: instanceItem.id
-            }
-            lo.instances?.push(instance as PrimeLearningObjectInstance)
-        })
+    rating = {
+      averageRating: item.averageRating,
+      ratingsCount: item.ratingsCount,
+      id: "",
+      _transient: "",
+    };
+    lo.rating = rating;
+    lo.skills = [];
+    lo.skillNames = item.loSkillNames;
+    lo.instances = [];
+    item.loInstances?.forEach((instanceItem: ESPrimeLearningObjectInstance) => {
+      let localizedMetadata: PrimeLocalizationMetadata;
+      localizedMetadata = {
+        _transient: "",
+        description: "",
+        id: "",
+        locale,
+        name: instanceItem.name,
+        overview: "",
+        richTextOverview: "",
+        type: "",
+      };
+      let instance: Partial<PrimeLearningObjectInstance> = {
+        localizedMetadata: [localizedMetadata],
+        state: instanceItem.status,
+        completionDeadline: instanceItem.completionDeadline,
+        id: instanceItem.id,
+      };
+      lo.instances?.push(instance as PrimeLearningObjectInstance);
+    });
 
-        loResponse.push(lo as PrimeLearningObject);
-    })
-    return loResponse;
+    loResponse.push(lo as PrimeLearningObject);
+  });
+  return loResponse;
 }
 
-export function parseCommerceResponse(response: CommercePrimeLearningObject[], filtersFromStorage: any = []): PrimeLearningObject[] {
-    let loResponse: PrimeLearningObject[] = [];
+export function parseCommerceResponse(
+  response: CommercePrimeLearningObject[],
+  filtersFromStorage: any = []
+): PrimeLearningObject[] {
+  let loResponse: PrimeLearningObject[] = [];
 
-    const filterMap = new Map();
-    filtersFromStorage.forEach(
-        (filter: { attribute_code: string | number; attribute_options: any }) => {
-            if (!filterMap.has(filter.attribute_code)) {
-                filterMap.set(filter.attribute_code, filter.attribute_options);
-            }
-        }
-    );
+  const filterMap = new Map();
+  filtersFromStorage.forEach(
+    (filter: { attribute_code: string | number; attribute_options: any }) => {
+      if (!filterMap.has(filter.attribute_code)) {
+        filterMap.set(filter.attribute_code, filter.attribute_options);
+      }
+    }
+  );
 
-    response.forEach((item) => {
-        let lo: Partial<PrimeLearningObject> = {};
-        let rating: PrimeRating;
-        let localizedData: PrimeLocalizationMetadata;
+  response.forEach((item) => {
+    let lo: Partial<PrimeLearningObject> = {};
+    let rating: PrimeRating;
+    let localizedData: PrimeLocalizationMetadata;
 
-        lo.id = item.sku;
-        lo.duration = item.almduration;
-        lo.authorNames = item.almauthor;
-        lo.datePublished = item.almpublishdate;
-        lo.tags = item.almtags;
-        localizedData = {
-            _transient: "",
-            description: item.description.html,
-            id: "",
-            locale: getALMConfig().locale, //need to get from locale
-            name: item.name,
-            overview: "",
-            richTextOverview: "",
-            type: ""
-        }
-        lo.localizedMetadata = [localizedData];
+    lo.id = item.sku;
+    lo.duration = item.almduration;
+    lo.authorNames = item.almauthor;
+    lo.datePublished = item.almpublishdate;
+    lo.tags = item.almtags;
+    localizedData = {
+      _transient: "",
+      description: item.description.html,
+      id: "",
+      locale: getALMConfig().locale, //need to get from locale
+      name: item.name,
+      overview: "",
+      richTextOverview: "",
+      type: "",
+    };
+    lo.localizedMetadata = [localizedData];
 
-        rating = {
-            averageRating: item.almavgrating,
-            ratingsCount: item.almratingscount,
-            id: "",
-            _transient: ""
+    rating = {
+      averageRating: item.almavgrating,
+      ratingsCount: item.almratingscount,
+      id: "",
+      _transient: "",
+    };
+    lo.rating = rating;
+    lo.skills = [];
+    let skillValues = item.almskill?.split(",");
+    lo.skillNames = [];
+    if (skillValues?.length) {
+      const options = filterMap.get(ALMToCommerceTypes["skillName"]) || [];
+      const optionsMap: any = {};
+      options?.forEach((element: { label: any; value: any }) => {
+        if (!optionsMap[element.value]) {
+          optionsMap[element.value] = element.label;
         }
-        lo.rating = rating;
-        lo.skills = [];
-        let skillValues = item.almskill?.split(",");
-        lo.skillNames = [];
-        if (skillValues?.length) {
-            const options = filterMap.get(ALMToCommerceTypes["skillName"]) || [];
-            const optionsMap: any = {};
-            options?.forEach((element: { label: any; value: any }) => {
-                if (!optionsMap[element.value]) {
-                    optionsMap[element.value] = element.label;
-                }
-            });
-            skillValues.forEach((skill) => {
-                if (optionsMap[skill]) {
-                    debugger;
-                    lo.skillNames?.push(optionsMap[skill]);
-                }
-            })
+      });
+      skillValues.forEach((skill) => {
+        if (optionsMap[skill]) {
+          debugger;
+          lo.skillNames?.push(optionsMap[skill]);
         }
-        if (item.almdeliverytype) {
-            const loFormatOptions = filterMap.get(ALMToCommerceTypes["loFormat"]) || [];
-            loFormatOptions?.forEach((element: { label: any; value: any }) => {
-                if (element.value == item.almdeliverytype) {
-                    lo.loFormat = element.label;
-                }
-            });
+      });
+    }
+    if (item.almdeliverytype) {
+      const loFormatOptions =
+        filterMap.get(ALMToCommerceTypes["loFormat"]) || [];
+      loFormatOptions?.forEach((element: { label: any; value: any }) => {
+        if (element.value === item.almdeliverytype) {
+          lo.loFormat = element.label;
         }
-        if (item.almlotype) {
-            const loTypesOptions = filterMap.get(ALMToCommerceTypes["loTypes"]) || [];
-            loTypesOptions?.forEach((element: { label: any; value: any }) => {
-                if (element.value == item.almlotype) {
-                    lo.loType = element.label;
-                }
-            });
+      });
+    }
+    if (item.almlotype) {
+      const loTypesOptions = filterMap.get(ALMToCommerceTypes["loTypes"]) || [];
+      loTypesOptions?.forEach((element: { label: any; value: any }) => {
+        if (element.value === item.almlotype) {
+          lo.loType = element.label;
+        }
+      });
+    }
+    // lo.price = {
+    //   value: item.price_range?.maximum_price?.final_price?.value,
+    //   currency: item.price_range?.maximum_price?.final_price?.currency,
+    // };
 
-        }
-        lo.price = {
-            value: item.price_range?.maximum_price?.final_price?.value,
-            currency: item.price_range?.maximum_price?.final_price?.currency
-        }
+    lo.price = item.price_range?.maximum_price?.final_price?.value || lo.price;
 
-        loResponse.push(lo as PrimeLearningObject);
-    })
-    return loResponse;
+    loResponse.push(lo as PrimeLearningObject);
+  });
+  return loResponse;
 }
-export { };
+export {};

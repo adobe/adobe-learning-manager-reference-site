@@ -64,8 +64,6 @@ const PrimeTrainingPageMetaData: React.FC<{
     training.hasPreview &&
     (!enrollment || enrollment.state === PENDING_APPROVAL);
   const action: string = useMemo(() => {
-    // if(trainingInstance.seatLimit)
-
     if (enrollment) {
       if (enrollment.state === PENDING_APPROVAL) {
         return "pendingApproval";
@@ -77,12 +75,12 @@ const PrimeTrainingPageMetaData: React.FC<{
       return "continue";
     } else if (trainingInstance.state === "Retired") {
       return "registerInterest";
-    } else if (training.price && getALMConfig().usageType == "aem-commerce") {
+    } else if (training.price && getALMConfig().usageType === "aem-commerce") {
       return "buyNow";
     } else {
       return "enroll";
     }
-  }, [trainingInstance.state, trainingInstance.learningObject]);
+  }, [trainingInstance.state, training.price, enrollment]);
 
   const seatsAvailableText =
     trainingInstance.seatLimit > -1 ? (
@@ -97,7 +95,7 @@ const PrimeTrainingPageMetaData: React.FC<{
     );
 
   const actionText = useMemo(() => {
-    if (action == "buyNow") {
+    if (action === "buyNow") {
       return formatMessage(
         { id: "alm.training.buyNow" },
         { x: training.price }
@@ -106,7 +104,7 @@ const PrimeTrainingPageMetaData: React.FC<{
     return formatMessage({
       id: `alm.overview.button.${action}`,
     });
-  }, [action, formatMessage]);
+  }, [action, formatMessage, training.price]);
 
   const filteredSkills: Skill[] = useMemo(() => {
     let map: any = {};
@@ -125,10 +123,10 @@ const PrimeTrainingPageMetaData: React.FC<{
   };
 
   const onPressHandler = async () => {
-    if (!getALMObject().isPrimeUserLoggedIn()) {
-      getALMObject().handleLogIn();
-      return;
-    }
+    // if (!getALMObject().isPrimeUserLoggedIn()) {
+    //   getALMObject().handleLogIn();
+    //   return;
+    // }
     try {
       await enrollmentHandler();
       launchPlayerHandler();
@@ -136,27 +134,28 @@ const PrimeTrainingPageMetaData: React.FC<{
   };
 
   const addToCart = async (redirectPathName = "") => {
-    if (!getALMObject().isPrimeUserLoggedIn()) {
-      getALMObject().handleLogIn();
-      return;
-    }
+    // if (!getALMObject().isPrimeUserLoggedIn()) {
+    //   getALMObject().handleLogIn();
+    //   return;
+    // }
     try {
-      const { items, totalQuantity, error } = await addToCartHandler();
+      const { error } = await addToCartHandler();
       if (error && error[0]?.message) {
         console.error(error[0].message);
-      } else {
-        getALMObject().updateCart(totalQuantity);
-        if (redirectPathName) {
-          window.location.pathname = `${redirectPathName}`;
-        }
       }
+      //  else {
+      //   getALMObject().updateCart(totalQuantity);
+      //   if (redirectPathName) {
+      //     window.location.pathname = `${redirectPathName}`;
+      //   }
+      // }
     } catch (e) {}
   };
 
-  const buyNowHandler = async () => {
-    const redirectPathName = getALMConfig().commerceBasePath + "/cart";
-    await addToCart(redirectPathName);
-  };
+  // const buyNowHandler = async () => {
+  //   const redirectPathName = getALMConfig().commerceBasePath + "/cart";
+  //   await addToCart(redirectPathName);
+  // };
 
   const addProductToCart = async () => {
     await addToCart();
@@ -171,8 +170,6 @@ const PrimeTrainingPageMetaData: React.FC<{
 
   const showBadges =
     !trainingInstance.learningObject.enrollment && badge?.badgeUrl;
-
-  // const showModulesCompleted = trainingInstance.learningObject.enrollment;
 
   const showAuthors =
     showAuthorInfo === "true" &&
@@ -190,9 +187,9 @@ const PrimeTrainingPageMetaData: React.FC<{
   const showResource = training.supplementaryResources?.length;
   const showUnenrollButton =
     training.enrollment && training.unenrollmentAllowed;
-	const showCertificationDeadline =  
-    training.enrollment && training.enrollment.completionDeadline;  
-  const isCertification = loType == "certification";
+  const showCertificationDeadline =
+    training.enrollment && training.enrollment.completionDeadline;
+  const isCertification = loType === "certification";
 
   return (
     <section className={styles.container}>
@@ -341,15 +338,17 @@ const PrimeTrainingPageMetaData: React.FC<{
               })}
             </label>
             <div>
-              {loType == "certification" ? showCertificationDeadline == undefined
-                ? formatMessage(
-                    {
-                      id: "alm.overview.certification.deadline",
-                    },
-                    {
-                      0: trainingInstance?.completionDeadline?.slice(0, -1),
-                    }
-                  ) : modifyTime(showCertificationDeadline, locale)?.slice(0, -10)
+              {loType === "certification"
+                ? showCertificationDeadline == undefined
+                  ? formatMessage(
+                      {
+                        id: "alm.overview.certification.deadline",
+                      },
+                      {
+                        0: trainingInstance?.completionDeadline?.slice(0, -1),
+                      }
+                    )
+                  : modifyTime(showCertificationDeadline, locale)?.slice(0, -10)
                 : modifyTime(trainingInstance.completionDeadline, locale)}
             </div>
           </div>

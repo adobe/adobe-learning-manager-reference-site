@@ -76,13 +76,16 @@ const PrimeTrainingCard: React.FC<{
     return type ? GetTranslation(`alm.catalog.card.${type}`, true) : "";
   }, [type]);
   let priceLabel = "";
-  if (training.price?.value) {
+  const price = training.price;
+  // if (training.price?.value) {
+  if (price) {
     const formatter = new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: training.price?.currency,
+      // currency: training.price?.currency,
+      currency: "USD",
     });
 
-    priceLabel = formatter.format(training.price?.value!);
+    priceLabel = formatter.format(price);
   }
 
   const extraIconHtml = (
@@ -142,10 +145,7 @@ const PrimeTrainingCard: React.FC<{
                   {skillsAsString ? (
                     <div className={styles.skillsContainer}>
                       <span className={styles.skiillsLabel}>
-                        {GetTranslation(
-                          "alm.catalog.card.skills.label",
-                          true
-                        )}
+                        {GetTranslation("alm.catalog.card.skills.label", true)}
                       </span>
                       <span className={styles.skillsValue}>
                         {skillsAsString}

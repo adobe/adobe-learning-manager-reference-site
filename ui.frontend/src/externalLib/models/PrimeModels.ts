@@ -361,10 +361,11 @@ export interface PrimeLearningObject {
   supplementaryResources: PrimeResource[];
   skillNames?: string[];
   hasPreview: boolean;
-  price?: {
-    currency: string;
-    value: number;
-  };
+  price: number;
+  // price?: {
+  //   currency: string;
+  //   value: number;
+  // };
 }
 
 export interface PrimeLearningObjectInstance {
@@ -661,13 +662,13 @@ export interface PrimeReplyMetaData {
 export interface PrimeReplyCreationAttributes {
   resource?: {
     contentType:
-    | "VIDEO"
-    | "URL"
-    | "IMAGE"
-    | "TEXT"
-    | "FILE"
-    | "AUDIO"
-    | "OTHER";
+      | "VIDEO"
+      | "URL"
+      | "IMAGE"
+      | "TEXT"
+      | "FILE"
+      | "AUDIO"
+      | "OTHER";
     data: string;
   };
   state: "ACTIVE";
@@ -735,13 +736,13 @@ export interface PrimeSearchResult {
   type: string;
   snippets: PrimeSearchSnippet[];
   model:
-  | PrimeLearningObject
-  | PrimeCatalog
-  | PrimeSkill
-  | PrimeBadge
-  | PrimeBoard
-  | PrimePost
-  | PrimeUser;
+    | PrimeLearningObject
+    | PrimeCatalog
+    | PrimeSkill
+    | PrimeBadge
+    | PrimeBoard
+    | PrimePost
+    | PrimeUser;
 }
 
 export interface PrimeSearchSnippet {
