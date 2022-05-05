@@ -63,7 +63,6 @@ const PrimeTrainingPageMetaData: React.FC<{
   let showPreviewButton =
     training.hasPreview &&
     (!enrollment || enrollment.state === PENDING_APPROVAL);
-
   const action: string = useMemo(() => {
     // if(trainingInstance.seatLimit)
 
@@ -191,6 +190,8 @@ const PrimeTrainingPageMetaData: React.FC<{
   const showResource = training.supplementaryResources?.length;
   const showUnenrollButton =
     training.enrollment && training.unenrollmentAllowed;
+	const showCertificationDeadline =  
+    training.enrollment && training.enrollment.completionDeadline;  
   const isCertification = loType == "certification";
 
   return (
@@ -340,7 +341,7 @@ const PrimeTrainingPageMetaData: React.FC<{
               })}
             </label>
             <div>
-              {loType == "certification"
+              {loType == "certification" ? showCertificationDeadline == undefined
                 ? formatMessage(
                     {
                       id: "alm.overview.certification.deadline",
@@ -348,7 +349,7 @@ const PrimeTrainingPageMetaData: React.FC<{
                     {
                       0: trainingInstance?.completionDeadline?.slice(0, -1),
                     }
-                  )
+                  ) : modifyTime(showCertificationDeadline, locale)?.slice(0, -10)
                 : modifyTime(trainingInstance.completionDeadline, locale)}
             </div>
           </div>
