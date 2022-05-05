@@ -58,3 +58,10 @@
     display: inline-block;
     height: 110px;
 }
+
+@media screen and (max-width: 414px) {
+  .news-section .news-section-newsItem {
+    width: 100%;
+    margin: 5px 0;
+  }
+}

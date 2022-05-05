@@ -162,7 +162,8 @@
 /* CSS for MyLearning Page*/
 
 #learning-parent-container,
-#home-catalog-container {
+#home-catalog-container,
+#home-categories-container {
   width: 100%;
   margin: 0 auto;
   margin-top: 5px;
@@ -356,8 +357,8 @@
 
 @media screen and (min-width: 1024px) {
   #learning-parent-container,
-  #home-catalog-container {
-    /* width: 930px; */
+  #home-catalog-container,
+  #home-categories-container {
     margin: 0 auto;
     margin-top: 30px;
   }
@@ -425,10 +426,6 @@
     height: 350px;
   }
 
-  .news-section .news-section-newsItem {
-    /* width: 290px; */
-  }
-
   #alm-support-header
   {
     height: 150px;
@@ -448,12 +445,11 @@
 
 @media screen and (min-width: 1366px) {
   #learning-parent-container {
-    /* width: 1180px; */
     margin: 0 auto;
     margin-top: 60px;
   }
-  #home-catalog-container {
-    /* width: 1180px; */
+  #home-catalog-container,
+  #home-categories-container {
     margin: 0 auto;
     margin-top: 60px;
   }
@@ -468,24 +464,15 @@
     height: 500px;
   }
 
-  .news-section .news-section-newsItem {
-    /* width: 348px; */
-  }
-
   #alm-support-header .text
   {
       width: 1084px;
       margin: 0 auto;
   }
 }
-/* 
-
-#home-catalog-container {
-  margin-left: 30px;
-  margin-right: 30px;
-} */
 
 #home-catalog-container,
+#home-categories-container,
 #learning-parent-container {
   max-width: var(--prime-container-max-width-desktop);
   width: var(--prime-container-width);
@@ -503,6 +490,7 @@
 
 @media screen and (max-width: 1024px) {
   #home-catalog-container,
+  #home-categories-container,
   #learning-parent-container {
     max-width: var(--prime-container-max-width-tablet);
     width: var(--prime-container-width);
@@ -524,6 +512,7 @@
 
 @media screen and (max-width: 414px) {
   #home-catalog-container,
+  #home-categories-container,
   #learning-parent-container {
     width: 100%;
     max-width: 100%;
@@ -537,11 +526,6 @@
 
   .news-section {
     padding: 20px;
-  }
-
-  .news-section .news-section-newsItem {
-    width: 100%;
-    margin: 5px 0;
   }
 
   #alm-support-header .text
@@ -625,7 +609,8 @@
 #alm-footer-scrollTop img {
   border: 1px white solid;
   border-radius: 50%;
-  width: 20px;
+  width: 16px;
+  height: 16px;
   position: absolute;
   top: 0;
   right: 0;
