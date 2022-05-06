@@ -37,7 +37,7 @@
     const STORAGE_CART_ID_KEY = "CART_ID";
     const STORAGE_COMMERCE_TOKEN_KEY = "TOKEN";
     const GRAPHQL_CART_QUERY = `{
-        cart(cart_id: {cart_id}) {
+        cart(cart_id: "{cart_id}") {
           total_quantity
         }
       }`;
@@ -48,9 +48,8 @@
         && window.ALM.storage.getItem(STORAGE_COMMERCE_TOKEN_KEY))
         {
             try {
-                const cartID = JSON.parse(window.ALM.storage.getItem(STORAGE_CART_ID_KEY)).value;
-                let commerceToken = JSON.parse(window.ALM.storage.getItem(STORAGE_COMMERCE_TOKEN_KEY)).value;
-                commerceToken = commerceToken.replace(/\"/g, '');
+                const cartID = window.ALM.storage.getItem(STORAGE_CART_ID_KEY);
+                const commerceToken = window.ALM.storage.getItem(STORAGE_COMMERCE_TOKEN_KEY);
                 const graphqlCartQuery = GRAPHQL_CART_QUERY.replace("{cart_id}", cartID);
                 const graphqlProxyURL = window.ALM.ALMConfig.graphqlProxyPath + "?query=" + encodeURIComponent(graphqlCartQuery);
                 const response = await fetch(graphqlProxyURL, {
