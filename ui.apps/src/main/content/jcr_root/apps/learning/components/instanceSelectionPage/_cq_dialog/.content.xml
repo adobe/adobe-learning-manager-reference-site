@@ -3,7 +3,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Instance Selection"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    trackingFeature="learning:instance-selection">
+    trackingFeature="learning:instanceSelection">
     <content
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/container">

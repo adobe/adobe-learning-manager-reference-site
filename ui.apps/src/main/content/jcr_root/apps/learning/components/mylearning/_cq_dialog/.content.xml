@@ -4,6 +4,7 @@
         xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
         jcr:primaryType="nt:unstructured"
         jcr:title="Properties"
+        trackingFeature="learning:embwidget"
         sling:resourceType="cq/gui/components/authoring/dialog">
     <content
             jcr:primaryType="nt:unstructured"

@@ -3,7 +3,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Properties"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    trackingFeature="learning:newssection"
+    trackingFeature="learning:news"
     extraClientlibs="[apps.alm.components.newssection]">
     <content
         jcr:primaryType="nt:unstructured"
