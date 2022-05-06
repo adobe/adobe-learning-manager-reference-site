@@ -44,7 +44,7 @@
     async function updateCart() {
         if (typeof window !== 'undefined' && window.localStorage 
         && window.ALM.storage.getItem(STORAGE_CART_ID_KEY)
-        && window.ALM.getCommerceToken() !== "")
+        && window.ALM.getCommerceToken())
         {
             try {
                 const cartID = window.ALM.storage.getItem(STORAGE_CART_ID_KEY);
