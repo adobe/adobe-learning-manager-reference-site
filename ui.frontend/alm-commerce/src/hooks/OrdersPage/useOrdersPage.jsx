@@ -2,9 +2,9 @@ import { useLazyQuery } from "@apollo/client";
 import { useEffect, useMemo } from "react";
 import { CREATE_CART } from "../SignIn/signIn.gql";
 import storageInstance from "../../utils/storage";
-import { postMethod } from "../../utils/global";
+import { postMethod, getCommerceToken } from "../../utils/global";
 import { useNavigate } from "react-router-dom";
-import { TOKEN, SIGN_IN_PATH, PURCHASE_COMPLETED_PATH } from "../../utils/constants";
+import { SIGN_IN_PATH, PURCHASE_COMPLETED_PATH } from "../../utils/constants";
 
 
 import {
@@ -22,7 +22,7 @@ export const useOrdersPage = (props) => {
     const [fetchCartId] = useLazyQuery(CREATE_CART);
 
     useEffect(() => {
-        if (!storageInstance.getItem(TOKEN)) {
+        if (!getCommerceToken()) {
             navigate(SIGN_IN_PATH);
         }
     }, [navigate])

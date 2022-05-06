@@ -6,15 +6,14 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import React from "react";
-import { getALMConfig } from "../utils/global";
-import storageInstance from "../utils/storage";
+import { getALMConfig, getCommerceToken } from "../utils/global";
 
 const uri = getALMConfig().graphqlProxyPath || getALMConfig().commerceURL;
 const httpLink = createHttpLink({
   uri: uri,
 });
 const authLink = setContext((_, { headers }) => {
-  const signInToken = storageInstance.getItem("TOKEN");
+  const signInToken = getCommerceToken();
   return {
     headers: {
       ...headers,

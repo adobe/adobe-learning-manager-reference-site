@@ -18,6 +18,10 @@ export function getAccessToken() {
   return getALMObject().getAccessToken();
 }
 
+export function getCommerceToken() {
+  return getALMObject().getCommerceToken();
+}
+
 export const getAccountActiveFields = async () => {
   return await getALMObject().getAccountActiveFields();
 };

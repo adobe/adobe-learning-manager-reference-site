@@ -1,7 +1,7 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getALMObject } from "../../utils/global";
+import { getALMObject, getCommerceToken } from "../../utils/global";
 import storageInstance from "../../utils/storage";
 import {
   CREATE_ACCOUNT,
@@ -17,7 +17,7 @@ export const useAlmSignIn = (props) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsloggedIn] = useState(() => {
-    const token = storageInstance.getItem("TOKEN");
+    const token = getCommerceToken();
     return Boolean(token);
   });
   const [signIn, { error: signInError }] = useMutation(SIGN_IN, {
@@ -83,7 +83,6 @@ export const useAlmSignIn = (props) => {
           },
         });
         const token = signInResponse.data.generateCustomerToken.token;
-        storageInstance.setItem("TOKEN", token, 3600);
 
         setIsLoading(false);
         if (process.env.NODE_ENV === "production") {

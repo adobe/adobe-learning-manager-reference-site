@@ -7,7 +7,7 @@ import {
 import { setContext } from "@apollo/client/link/context";
 import { CartContextProvider } from "./CartContextProvider";
 
-import { getALMConfig } from "../utils/global";
+import { getALMConfig, getCommerceToken } from "../utils/global";
 import storageInstance from "../utils/storage";
 import {
   BrowserRouter
@@ -19,7 +19,7 @@ const httpLink = createHttpLink({
 
 const authLink = setContext((_, { headers }) => {
 
-  const signInToken = storageInstance.getItem("TOKEN");
+  const signInToken = getCommerceToken();
   return {
     headers: {
       ...headers,

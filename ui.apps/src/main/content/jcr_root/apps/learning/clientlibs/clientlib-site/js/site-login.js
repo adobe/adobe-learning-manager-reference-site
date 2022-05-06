@@ -364,6 +364,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
   window.ALM.getAccessToken = getAccessToken;
+  window.ALM.getCommerceToken = getCommerceToken;
   window.ALM.getALMUser = getALMUser;
   window.ALM.updateAccountActiveFieldsDetails = updateAccountActiveFieldsDetails;
   window.ALM.updateALMUser = updateALMUser;
