@@ -74,6 +74,17 @@ export function modifyTime(dateToModify: string, locale: string) {
 
   return local;
 }
+
+export function modifyTimeDDMMYY(dateToModify: string, locale: string) {
+  const local = new Date(dateToModify).toLocaleDateString(locale, {
+    day: "numeric",
+    month: "short",
+    year: "numeric"
+  });
+
+  return local;
+}
+
 // const DEFAULT_DATE_OPTIONS: any = {
 //   year: "numeric",
 //   month: "short",
