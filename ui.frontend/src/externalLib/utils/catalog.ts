@@ -1,14 +1,13 @@
-
 import {
   PrimeCatalog,
   PrimeLearningObject,
   PrimeLearningObjectInstance,
 } from "../models/PrimeModels";
 import { CatalogFilterState } from "../store/reducers/catalog";
+import BrowserPersistence from "../utils/storage";
 import { getALMAttribute, getALMConfig, getWindowObject } from "./global";
 import { JsonApiParse } from "./jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "./restAdapter";
-import BrowserPersistence from "../utils/storage";
 
 const PRIME_CATALOG_FILTER = "PRIME_CATALOG_FILTER";
 
@@ -68,7 +67,9 @@ export function debounce(fn: Function, time = 250) {
   };
 }
 
-export const getOrUpdateCatalogFilters = async (): Promise<PrimeCatalog[] | undefined> => {
+export const getOrUpdateCatalogFilters = async (): Promise<
+  PrimeCatalog[] | undefined
+> => {
   try {
     const filterItems = BrowserPersistence.getItem(PRIME_CATALOG_FILTER);
     if (filterItems) {
@@ -80,10 +81,12 @@ export const getOrUpdateCatalogFilters = async (): Promise<PrimeCatalog[] | unde
     });
     BrowserPersistence.setItem(PRIME_CATALOG_FILTER, catalogPromise);
     return JsonApiParse(catalogPromise)?.catalogList;
-  } catch (e) { }
+  } catch (e) {}
 };
 
-const getCatalogParamsForAPi = async (catalogState: string): Promise<string> => {
+const getCatalogParamsForAPi = async (
+  catalogState: string
+): Promise<string> => {
   const catalogFilterFromStorage = await getOrUpdateCatalogFilters();
   const catalogFilterFromState = catalogState.split(",");
   let returnValue = "";
@@ -91,10 +94,10 @@ const getCatalogParamsForAPi = async (catalogState: string): Promise<string> => 
     if (catalogFilterFromState.indexOf(item.name) > -1) {
       returnValue += returnValue ? "," + item.id : item.id;
     }
-  })
+  });
 
   return returnValue;
-}
+};
 
 export async function getParamsForCatalogApi(filterState: CatalogFilterState) {
   const params: QueryParams = {};
@@ -127,12 +130,13 @@ export async function getParamsForCatalogApi(filterState: CatalogFilterState) {
       params["filter.skill.level"] = filterState.skillLevel;
     }
     if (filterState.catalogs && catalogAttributes?.catalogs === "true") {
-      params["filter.catalogIds"] = await getCatalogParamsForAPi(filterState.catalogs);
+      params["filter.catalogIds"] = await getCatalogParamsForAPi(
+        filterState.catalogs
+      );
     }
   }
   return params;
 }
-
 
 interface DurationFilter {
   lte: number;
@@ -140,8 +144,15 @@ interface DurationFilter {
 }
 
 export function getFiltersObjectForESApi(filterState: CatalogFilterState) {
-  const { duration, loFormat, loTypes, skillLevel, skillName, tagName, catalogs } =
-    filterState;
+  const {
+    duration,
+    loFormat,
+    loTypes,
+    skillLevel,
+    skillName,
+    tagName,
+    catalogs,
+  } = filterState;
   let filters: any = {
     terms: {
       loSkillLevels: skillLevel ? filterState.skillLevel.split(",") : null,
@@ -149,7 +160,7 @@ export function getFiltersObjectForESApi(filterState: CatalogFilterState) {
       deliveryType: loFormat ? filterState.loFormat.split(",") : null,
       loSkillNames: skillName ? filterState.skillName.split(",") : null,
       tags: tagName ? filterState.tagName.split(",") : null,
-      catalogNames: catalogs ? catalogs.split(",") : null
+      catalogNames: catalogs ? catalogs.split(",") : null,
     },
     range: {},
   };
@@ -185,9 +196,7 @@ export function getRequestObjectForESApi(
   return requestObject;
 }
 
-
-
-export function getIndividiualtFiltersForCommerce(
+export function getIndividualFiltersForCommerce(
   options: any[],
   filterState: CatalogFilterState,
   type: string
@@ -207,5 +216,5 @@ export function getIndividiualtFiltersForCommerce(
     }
   });
 
-  return value
+  return value;
 }

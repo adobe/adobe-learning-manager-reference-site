@@ -7,7 +7,6 @@ const useAlert = (
   const [show, setShow] = useState<boolean>(showAlert);
   const [message, setMessage] = useState<string>(alertMessage);
   const [alertIcon, setAlertIcon] = useState<string>(icon);
-  debugger;
   const alert = (
     show: boolean,
     timeOut: number,

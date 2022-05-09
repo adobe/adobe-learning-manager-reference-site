@@ -53,11 +53,9 @@
           );
         }
         getRawItem(name) {
-          debugger;
           return this.storage.getItem(name);
         }
         getItem(name) {
-          debugger;
           const now = Date.now();
           const item = this.storage.getItem(name);
           if (!item) {
@@ -121,10 +119,14 @@
       };
 
       const isPrimeUserLoggedIn = () => {
-        return false;
+        return true;
       };
 
       const getAccessToken = () => {
+        return "be0dd24674aac75b4fcb553e8928c2f7";
+      };
+
+      const getCommerceToken = () => {
         return "1d3bb267efc289b3c2c1c284fc4bc2c5";
       };
 
@@ -314,6 +316,7 @@
       window.ALM.navigateToCommerceSignInPage = navigateToCommerceSignInPage;
       window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
       window.ALM.getAccessToken = getAccessToken;
+      window.ALM.getCommerceToken = getCommerceToken;
       window.ALM.getALMUser = getALMUser;
       window.ALM.getAccountActiveFields = getAccountActiveFields;
       window.ALM.updateAccountActiveFieldsDetails = updateAccountActiveFieldsDetails;
@@ -331,8 +334,8 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <!-- /* <div class="instance__container"></div> */ -->
-    <!--/* 
-    <div
+
+    <!--/* <div
       class="catalog__container"
       data-show-filters="true"
       data-show-search="true"

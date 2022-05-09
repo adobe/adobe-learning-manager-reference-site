@@ -5,7 +5,7 @@ import {
 } from "../commerce";
 import { apolloClient } from "../contextProviders";
 import { CatalogFilterState } from "../store/reducers/catalog";
-import { getIndividiualtFiltersForCommerce } from "../utils/catalog";
+import { getIndividualFiltersForCommerce } from "../utils/catalog";
 import {
   FilterState,
   getDefaultFiltersState,
@@ -71,8 +71,8 @@ const transformFilters = (
   item: FilterItem,
   filterType: string
 ) => {
-  let defaultFilters =
-    defaultFiltersState[filterType as keyof FilterState].list!;
+  let defaultFilters = defaultFiltersState[filterType as keyof FilterState]
+    .list!;
   item.attribute_options.forEach((attributeOption) => {
     const { label } = attributeOption;
     const index = defaultFilters?.findIndex((type) => type.value === label);
@@ -98,7 +98,7 @@ const getTransformedFilter = async (filterState: CatalogFilterState) => {
   if (filterState.catalogs) {
     const catalogOptions = filterMap.get(ALMToCommerceTypes["catalogs"]) || [];
     filter[ALM_CATALOG] = {
-      in: getIndividiualtFiltersForCommerce(
+      in: getIndividualFiltersForCommerce(
         catalogOptions,
         filterState,
         "catalogs"
@@ -109,7 +109,7 @@ const getTransformedFilter = async (filterState: CatalogFilterState) => {
   if (filterState.loTypes) {
     const loTypesOptions = filterMap.get(ALMToCommerceTypes["loTypes"]) || [];
     filter[ALM_LO] = {
-      in: getIndividiualtFiltersForCommerce(
+      in: getIndividualFiltersForCommerce(
         loTypesOptions,
         filterState,
         "loTypes"
@@ -119,7 +119,7 @@ const getTransformedFilter = async (filterState: CatalogFilterState) => {
   if (filterState.loFormat) {
     const loFormatOptions = filterMap.get(ALMToCommerceTypes["loFormat"]) || [];
     filter[ALM_DELIVERY] = {
-      in: getIndividiualtFiltersForCommerce(
+      in: getIndividualFiltersForCommerce(
         loFormatOptions,
         filterState,
         "loFormat"
@@ -129,7 +129,7 @@ const getTransformedFilter = async (filterState: CatalogFilterState) => {
   if (filterState.duration) {
     const durationOptions = filterMap.get(ALMToCommerceTypes["duration"]) || [];
     filter[ALM_DURATION] = {
-      in: getIndividiualtFiltersForCommerce(
+      in: getIndividualFiltersForCommerce(
         durationOptions,
         filterState,
         "duration"
@@ -140,14 +140,14 @@ const getTransformedFilter = async (filterState: CatalogFilterState) => {
   if (filterState.skillName) {
     const options = filterMap.get(ALMToCommerceTypes["skillName"]) || [];
     filter[ALM_SKILLS] = {
-      in: getIndividiualtFiltersForCommerce(options, filterState, "skillName"),
+      in: getIndividualFiltersForCommerce(options, filterState, "skillName"),
     };
   }
   if (filterState.skillLevel) {
     const skillLevelOptions =
       filterMap.get(ALMToCommerceTypes["skillLevel"]) || [];
     filter[ALM_SKILL_LEVELS] = {
-      in: getIndividiualtFiltersForCommerce(
+      in: getIndividualFiltersForCommerce(
         skillLevelOptions,
         filterState,
         "skillLevel"
@@ -160,7 +160,7 @@ const getTransformedFilter = async (filterState: CatalogFilterState) => {
   if (filterState.tagName) {
     const tagNameOptions = filterMap.get(ALMToCommerceTypes["tagName"]) || [];
     filter[ALM_TAGS] = {
-      in: getIndividiualtFiltersForCommerce(
+      in: getIndividualFiltersForCommerce(
         tagNameOptions,
         filterState,
         "tagName"
@@ -184,7 +184,9 @@ const getOrUpdateFilters = async () => {
     const items = response.data.customAttributeMetadata.items;
     BrowserPersistence.setItem(COMMERCE_FILTERS, items);
     return items;
-  } catch (e) {}
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 export default class CommerceCustomHooks implements ICustomHooks {
@@ -290,9 +292,10 @@ export default class CommerceCustomHooks implements ICustomHooks {
 
   async getFilters() {
     const queryParams = getQueryParamsIObjectFromUrl();
+
     try {
       const items = await getOrUpdateFilters();
-      const defaultFiltersState = getDefaultFiltersState();
+      let defaultFiltersState = getDefaultFiltersState();
       if (items) {
         items.forEach(
           (item: {
@@ -303,6 +306,10 @@ export default class CommerceCustomHooks implements ICustomHooks {
 
             switch (attributeCode) {
               case ALM_LO: {
+                let defaultFilters = defaultFiltersState["loTypes"].list;
+                defaultFiltersState["loTypes"].list = defaultFilters?.filter(
+                  (item) => item.value != "jobAid"
+                );
                 transformFilters(defaultFiltersState, item, "loTypes");
                 break;
               }
@@ -335,7 +342,6 @@ export default class CommerceCustomHooks implements ICustomHooks {
                   "skillName"
                 );
                 defaultFiltersState.skillName.list = skillsList;
-                // debugger;
                 break;
               }
 

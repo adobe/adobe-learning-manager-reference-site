@@ -431,7 +431,6 @@ export function parseCommerceResponse(
       });
       skillValues.forEach((skill) => {
         if (optionsMap[skill]) {
-          debugger;
           lo.skillNames?.push(optionsMap[skill]);
         }
       });

@@ -133,6 +133,11 @@ export const redirectToLoginAndAbort = () => {
   return false;
 };
 
+export const getALMAccount = async () => {
+  const response = await getALMUser();
+  return response.user.account;
+};
+
 const init = async () => {
   if (!getALMObject().isPrimeUserLoggedIn()) {
     const nomenclatureStr = getALMConfig().nomenclatureData;

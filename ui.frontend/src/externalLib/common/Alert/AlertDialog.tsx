@@ -7,7 +7,6 @@ const AlertDialog: React.FC<{
   show: boolean;
   message: string;
 }> = ({ icon, show, message }) => {
-  debugger;
   return (
     <>
       {show && (

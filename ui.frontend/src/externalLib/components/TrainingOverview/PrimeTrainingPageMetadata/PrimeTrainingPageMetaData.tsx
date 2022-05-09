@@ -8,7 +8,7 @@ import Download from "@spectrum-icons/workflow/Download";
 import PinOff from "@spectrum-icons/workflow/PinOff";
 import Send from "@spectrum-icons/workflow/Send";
 import UserGroup from "@spectrum-icons/workflow/UserGroup";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { InstanceBadge, Skill } from "../../../models/custom";
 import {
@@ -17,7 +17,11 @@ import {
   PrimeLoInstanceSummary,
 } from "../../../models/PrimeModels";
 import { modifyTime } from "../../../utils/dateTime";
-import { getALMConfig, getALMObject } from "../../../utils/global";
+import {
+  getALMAccount,
+  getALMConfig,
+  getALMObject,
+} from "../../../utils/global";
 import { DEFAULT_USER_SVG, LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
 import { GetTranslation } from "../../../utils/translationService";
 import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJobAids";
@@ -60,6 +64,8 @@ const PrimeTrainingPageMetaData: React.FC<{
   const locale = config.locale;
   const enrollment = training.enrollment;
   const loType = training.loType;
+
+  const [isTrainingNotSynced, setIsTrainingNotSynced] = useState(false);
   let showPreviewButton =
     training.hasPreview &&
     (!enrollment || enrollment.state === PENDING_APPROVAL);
@@ -183,6 +189,34 @@ const PrimeTrainingPageMetaData: React.FC<{
     training.enrollment && training.enrollment.completionDeadline;
   const isCertification = loType === "certification";
 
+  useEffect(() => {
+    const computeIsSynced = async () => {
+      const account = await getALMAccount();
+      if (
+        new Date(training.dateCreated) >
+        new Date(account.lastSyncedDateCreatedForMagento)
+      ) {
+        setIsTrainingNotSynced(true);
+      } else {
+        setIsTrainingNotSynced(false);
+      }
+    };
+    computeIsSynced();
+  }, [training.price]);
+
+  const trainingNotAvailableForPurchaseText = isTrainingNotSynced ? (
+    <p style={{ textAlign: "center" }} className={styles.label}>
+      {formatMessage(
+        {
+          id: "alm.training.overview.not.available",
+        },
+        { training: GetTranslation(`alm.training.${loType}`, true) }
+      )}
+    </p>
+  ) : (
+    ""
+  );
+
   return (
     <section className={styles.container}>
       {showPreviewButton && (
@@ -239,8 +273,8 @@ const PrimeTrainingPageMetaData: React.FC<{
         )}
         {action === "buyNow" && (
           <>
-            <div className={styles.buyNowContainer}>
-              {/* <Button
+            {/* <div className={styles.buyNowContainer}> */}
+            {/* <Button
                 variant="primary"
                 UNSAFE_className={`${styles.buyNowButton} ${styles.commonButton}`}
                 onPress={buyNowHandler}
@@ -248,19 +282,21 @@ const PrimeTrainingPageMetaData: React.FC<{
                 {actionText}
               </Button> */}
 
-              <Button
-                variant="primary"
-                UNSAFE_className={`${styles.addToCartButton} ${styles.commonButton}`}
-                onPress={addProductToCart}
-              >
-                {formatMessage(
-                  {
-                    id: `alm.addToCart`,
-                  },
-                  { x: training.price }
-                )}
-              </Button>
-            </div>
+            <Button
+              variant="primary"
+              UNSAFE_className={`${styles.addToCartButton} ${styles.commonButton}`}
+              onPress={addProductToCart}
+              isDisabled={isTrainingNotSynced}
+            >
+              {formatMessage(
+                {
+                  id: `alm.addToCart`,
+                },
+                { x: training.price }
+              )}
+            </Button>
+            {/* </div> */}
+            {trainingNotAvailableForPurchaseText}
             {seatsAvailableText}
           </>
         )}
@@ -505,7 +541,7 @@ const PrimeTrainingPageMetaData: React.FC<{
           </span>
           <div className={styles.innerContainer}>
             <label className={styles.label}>
-              {GetTranslation("alm.catalog.card.jobAid", true)}
+              {GetTranslation("alm.training.jobAid", true)}
             </label>
             <div>
               {training.supplementaryLOs.map((item) => {
