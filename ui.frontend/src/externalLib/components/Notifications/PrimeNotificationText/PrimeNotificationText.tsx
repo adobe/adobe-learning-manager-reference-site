@@ -1,4 +1,4 @@
-import { modifyTime } from "../../../utils/dateTime";
+import { modifyTimeDDMMYY } from "../../../utils/dateTime";
 import { getALMConfig } from "../../../utils/global";
 import styles from "./PrimeNotificationText.module.css";
 
@@ -90,7 +90,7 @@ const PrimeNotificationText = (props: any) => {
     <div>
       {subStrPart1}
       {dateTimeStr.includes(str1Type) ? (
-        modifyTime(loStr1, config.locale)
+        modifyTimeDDMMYY(loStr1, config.locale)
       ) : (
         <span
           className={styles.loLink}
@@ -104,7 +104,7 @@ const PrimeNotificationText = (props: any) => {
       {subStrPart2}
       {name1 > 0 ? (
         dateTimeStr.includes(str2Type) ? (
-          modifyTime(loStr2, config.locale)
+          modifyTimeDDMMYY(loStr2, config.locale)
         ) : (
           <span
             className={styles.loLink}
