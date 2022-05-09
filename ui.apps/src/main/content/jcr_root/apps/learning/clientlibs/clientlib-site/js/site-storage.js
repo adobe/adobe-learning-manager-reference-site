@@ -31,7 +31,6 @@
       return this.storage.getItem(name);
     }
     getItem(name) {
-      debugger;
       const now = Date.now();
       const item = this.storage.getItem(name);
       if (!item) {

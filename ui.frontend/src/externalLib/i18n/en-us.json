@@ -33,10 +33,10 @@
   "alm.catalog.card.skills.label": "|||SKILL|||",
   "alm.catalog.card.catalogs.label": "||CATALOG||",
   "alm.catalog.card.catalogs.label.plural": "|||CATALOG|||",
-  "alm.catalog.card.course": "||COURSE||",
-  "alm.catalog.card.jobAid": "||JOB_AID||",
-  "alm.catalog.card.learningProgram": "||LEARNING_PATH||",
-  "alm.catalog.card.certification": "||CERTIFICATION||",
+  "alm.training.course": "||COURSE||",
+  "alm.training.jobAid": "||JOB_AID||",
+  "alm.training.learningProgram": "||LEARNING_PATH||",
+  "alm.training.certification": "||CERTIFICATION||",
   "alm.catalog.card.course.plural": "|||COURSE|||",
   "alm.catalog.card.jobAid.plural": "|||JOB_AID|||",
   "alm.catalog.card.learningProgram.plural": "|||LEARNING_PATH|||",
@@ -158,5 +158,6 @@
   "alm.profile.fields.saveProfileChanges": "Save Changes",
   "alm.profile.skills.cancel": "Cancel",
   "alm.training.buyNow": "Buy Now for ${x}",
-  "alm.addToCart": "Add to cart for ${x}"
+  "alm.addToCart": "Add to cart for ${x}",
+  "alm.training.overview.not.available": "{training} is not yet available for purchase"
 }
