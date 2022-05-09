@@ -46,11 +46,15 @@ public class FetchCommerceAccessTokenServlet extends SlingAllMethodsServlet {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(FetchCommerceAccessTokenServlet.class);
 
-	private final static String ACCESS_TOKEN_COOKIE_NAME = "alm-cp-token";
+	private final static String ACCESS_TOKEN_COOKIE_NAME = "alm_cp_token";
+	
+	private final static String CUSTOMER_TOKEN_COOKIE_NAME = "alm_commerce_token";
 
 	private static final String COMMERCE_EMAIL_QUERY = "{\"query\":\"query {\\n customer {\\n firstname \\n lastname \\n email\\n}\\n}\"}";
 
 	private static final String ALM_CREATE_USER_BODY = "{\"data\": { \"type\": \"user\", \"attributes\": {\"email\":\"{email}\",\"name\": \"{name}\",\"userType\":\"INTERNAL\"}}}";
+	
+	private static final Integer TOKEN_BUFFER_SECS = 60;
 
 	@Reference
 	private transient GlobalConfigurationService configService;
@@ -80,6 +84,7 @@ public class FetchCommerceAccessTokenServlet extends SlingAllMethodsServlet {
 					clientSecret = jsonConfigs.get(Constants.Config.CLIENT_SECRET).getAsString(),
 					refreshToken = jsonConfigs.get(Constants.Config.COMMERCE_ADMIN_REFRESH_TOKEN).getAsString(),
 					commerceURL = jsonConfigs.get(Constants.Config.COMMERCE_URL).getAsString();
+			Integer customerTokenLifetime = Integer.valueOf(jsonConfigs.get(Constants.Config.COMMERCE_CUSTOMER_TOKEN_LIFETIME).getAsString());
 
 			CustomerCommerceEntity customer = getCustomerFromCommerce(customerToken, commerceURL);
 
@@ -93,7 +98,7 @@ public class FetchCommerceAccessTokenServlet extends SlingAllMethodsServlet {
 				if(containValidAccessToken(accessTokenResp))
 				{
 					accessTokenWithExpiry = getAccessTokenWithExpiry(accessTokenResp);
-					setAccessTokenCookie(request, response, accessTokenWithExpiry.getLeft(), accessTokenWithExpiry.getRight());
+					setAccessTokenCookie(request, response, accessTokenWithExpiry.getLeft(), accessTokenWithExpiry.getRight(), customerToken, customerTokenLifetime);
 					return;
 				} else if (userNotPresent(accessTokenResp))
 				{
@@ -104,7 +109,7 @@ public class FetchCommerceAccessTokenServlet extends SlingAllMethodsServlet {
 						if(containValidAccessToken(accessTokenResp))
 						{
 							accessTokenWithExpiry = getAccessTokenWithExpiry(accessTokenResp);
-							setAccessTokenCookie(request, response, accessTokenWithExpiry.getLeft(), accessTokenWithExpiry.getRight());
+							setAccessTokenCookie(request, response, accessTokenWithExpiry.getLeft(), accessTokenWithExpiry.getRight(), customerToken, customerTokenLifetime);
 							return;
 						}
 					}
@@ -217,13 +222,21 @@ public class FetchCommerceAccessTokenServlet extends SlingAllMethodsServlet {
 		return null;
 	}
 
-	private void setAccessTokenCookie(SlingHttpServletRequest request, SlingHttpServletResponse response, String accessToken, Integer maxAge)
+	private void setAccessTokenCookie(SlingHttpServletRequest request, SlingHttpServletResponse response, String accessToken, Integer cpTokenTimeout, String commerceToken, Integer commerceTimeout)
 	{
 		final Cookie tokenCookie = new Cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken);
+		final Cookie customerTokenCookie = new Cookie(CUSTOMER_TOKEN_COOKIE_NAME, commerceToken);
+		Integer age = Math.min(cpTokenTimeout, commerceTimeout) - TOKEN_BUFFER_SECS;
+		
 		tokenCookie.setSecure(request.isSecure());
-		tokenCookie.setMaxAge(maxAge);
+		tokenCookie.setMaxAge(age);
 		tokenCookie.setPath("/");
 		response.addCookie(tokenCookie);
+		
+		customerTokenCookie.setSecure(request.isSecure());
+		customerTokenCookie.setMaxAge(age);
+		customerTokenCookie.setPath("/");
+		response.addCookie(customerTokenCookie);
 	}
 
 

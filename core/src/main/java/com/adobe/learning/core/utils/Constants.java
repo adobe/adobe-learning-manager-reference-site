@@ -19,6 +19,7 @@ public class Constants {
 		public static final String PAGE_LOCALE = "pageLocale";
 		public static final String COMMERCE_ADMIN_REFRESH_TOKEN = "refreshToken";
 		public static final String COMMERCE_URL = "commerceURL";
+		public static final String COMMERCE_CUSTOMER_TOKEN_LIFETIME = "customerTokenLifetime";
 		public static final String SITE_MAP = "siteMap";
 		public static final String SITE_MAP_TRAINING_PATH = "sitemapTrainingPath";
 		public static final String ES_BASE_URL_NAME = "esBaseUrl";

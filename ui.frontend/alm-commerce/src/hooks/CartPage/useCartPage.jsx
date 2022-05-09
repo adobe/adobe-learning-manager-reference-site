@@ -2,7 +2,8 @@ import { useQuery } from "@apollo/client";
 import { useCallback, useEffect, useMemo } from "react";
 import { GET_CART_DETAILS } from "./cartPage.gql";
 import storageInstance from "../../utils/storage";
-import {CART_ID, TOKEN, SIGN_IN_PATH} from "../../utils/constants";
+import { getCommerceToken } from "../../utils/global";
+import {CART_ID, SIGN_IN_PATH} from "../../utils/constants";
 import { useNavigate } from "react-router-dom";
 
 
@@ -21,7 +22,7 @@ export const useCartPage = (props = {}) => {
     });
 
     useEffect(()=>{
-      if(!storageInstance.getItem(TOKEN)){
+      if(!getCommerceToken()){
         navigate(SIGN_IN_PATH);
       }
     },[navigate]);

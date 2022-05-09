@@ -36,6 +36,7 @@ export interface ALM {
   isPrimeUserLoggedIn: Function;
   getALMUser: Function;
   getAccessToken: Function;
+  getCommerceToken: Function;
   setALMAttribute: Function;
   getALMAttribute: Function;
   updateALMUser: Function;
@@ -67,6 +68,10 @@ export function getALMConfig(): PrimeConfig {
 
 export function getAccessToken(): string {
   return getALMObject().getAccessToken();
+}
+
+export function getCommerceToken(): string {
+  return getALMObject().getCommerceToken();
 }
 
 export const getPathParams = (pagePath: string, pathParams: string[] = []) => {

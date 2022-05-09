@@ -123,6 +123,7 @@
                         value="/alm/graphql"
                         required="{Boolean}true"
                         cq:showOnCreate="{Boolean}true"/>
+
                     <commerceStoreName 
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
@@ -133,6 +134,18 @@
                         granite:rel="aem-commerce"
                         required="{Boolean}true"
                         cq:showOnCreate="{Boolean}true"/>
+
+                    <customerTokenLifetime
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Adobe Commerce customer token lifetime (in secs)"
+                        fieldDescription="Adobe Commerce customer token lifetime (in secs)"
+                        name="./customerTokenLifetime"
+                        value="3600"
+                        granite:rel="aem-commerce"
+                        required="{Boolean}true"
+                        cq:showOnCreate="{Boolean}true"/>
+
                     <refreshToken 
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"

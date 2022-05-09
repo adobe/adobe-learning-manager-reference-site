@@ -18,10 +18,10 @@
         if (currentURL)
         {
             let route = currentURL.searchParams.get("route");
-            if (route)
+            if (route && route.length > 1)
             {
                 let routeParams = route.split("/");
-                if (routeParams && routeParams.length == 2)
+                if (routeParams)
                 {
                     window.ALM.navigateToTrainingOverviewPage(routeParams[0] + ":" + routeParams[1]);
                 }

@@ -4,7 +4,8 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 (function (window, document, Granite, $) {
   "use strict";
 
-  const ACCESS_TOKEN_COOKIE_NAME = "alm-cp-token";
+  const ACCESS_TOKEN_COOKIE_NAME = "alm_cp_token";
+  const COMMERCE_TOKEN_COOKIE_NAME = "alm_commerce_token";
   const CP_OAUTH_URL =
     "{almBaseURL}/oauth/o/authorize?account={accountId}&client_id={clientId}&redirect_uri={redirectUri}&state={state}&scope=learner:read,learner:write&response_type=CODE&client_identifier=aemsite&logoutAfterAuthorize=true";
   const ES_REGISTER_URL =
@@ -23,7 +24,16 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   const CURRENT_USAGE_TYPE = window.ALM.ALMConfig.usageType || PRIME_USAGE_TYPE;
 
-  function handleCommerceLogIn() {
+  const cleanUpUserData = () => {
+    document.cookie = ACCESS_TOKEN_COOKIE_NAME + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    document.cookie = COMMERCE_TOKEN_COOKIE_NAME + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    window.ALM.storage.removeItem("user");
+    window.ALM.storage.removeItem("CART_ID");
+    window.ALM.storage.removeItem("PRIME_CATALOG_FILTER");
+    window.ALM.storage.removeItem("COMMERCE_FILTERS");
+  };
+
+  const handleCommerceLogIn = () => {
     if (isAuthor()) {
       // for Author mode, behavior should be same as AEM+ALM
       handlePrimeLogIn();
@@ -34,9 +44,9 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
         window.ALM.navigateToCommerceSignInPage();
       }
     }
-  }
+  };
 
-  function handleESLogIn() {
+  const handleESLogIn = () => {
     const currentUrl = new URL(window.location.href);
     const state = currentUrl.searchParams.get("state");
     const code = currentUrl.searchParams.get("code");
@@ -66,9 +76,9 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
         }
       }
     }
-  }
+  };
 
-  function handlePrimeLogIn() {
+  const handlePrimeLogIn = () => {
     if (!isPrimeUserLoggedIn()) {
       const currentUrl = new URL(window.location.href);
       const pathName = currentUrl.pathname;
@@ -96,33 +106,22 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
         }
       }
     }
-  }
+  };
 
-  function isSignOutPage() {
-    return window.location.pathname === window.ALM.getALMConfig().signOutPath;
-  }
+  const isSignOutPage = () => window.location.pathname === window.ALM.getALMConfig().signOutPath;
 
-  function isCommunityPage() {
-    return window.location.pathname === window.ALM.getALMConfig().communityPath;
-  }
+  const isCommunityPage = () => window.location.pathname === window.ALM.getALMConfig().communityPath;
 
-  function isCommerceSignInPage() {
-    return (
-      window.location.pathname === window.ALM.getALMConfig().commerceSignInPath
-    );
-  }
+  const isCommerceSignInPage = () => window.location.pathname === window.ALM.getALMConfig().commerceSignInPath;
 
-  function isLearningPage() {
-    return window.location.pathname === window.ALM.getALMConfig().learningPath;
-  }
+  const isLearningPage = () => window.location.pathname === window.ALM.getALMConfig().learningPath;
 
-  function isEmailRedirectPage() {
-    return (
-      window.location.pathname === window.ALM.getALMConfig().emailRedirectPath
-    );
-  }
+  const isEmailRedirectPage = () => window.location.pathname === window.ALM.getALMConfig().emailRedirectPath;
 
-  function handlePageLoad() {
+  const handlePageLoad = () => {
+    if ((!isPrimeUserLoggedIn()) || ((CURRENT_USAGE_TYPE === COMMERCE_USAGE_TYPE) && !isCommerceLoggedIn())) {
+      cleanUpUserData();
+    }
     // If sign-out or sign-in Page do nothing
     if (isSignOutPage() || isCommerceSignInPage() || isEmailRedirectPage()) {
       return;
@@ -144,11 +143,9 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
       default:
         break;
     }
-  }
+  };
 
-  function isAuthor() {
-    return window.ALM.ALMConfig.authorMode == true;
-  }
+  const isAuthor = () =>  window.ALM.ALMConfig.authorMode == true;
 
   function getCpOauthUrl() {
     const almBaseURL = window.ALM.ALMConfig.almBaseURL;
@@ -173,7 +170,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   }
 
   // fetch access_token from AEM
-  function fetchAccessToken(data) {
+  const fetchAccessToken = (data) => {
     const ACCESS_TOKEN_URL = Granite.HTTP.externalize(CP_ACCESS_TOKEN_URL);
 
     $.ajax({
@@ -197,7 +194,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
         alert("Failed to authenticate");
       },
     });
-  }
+  };
 
   async function getALMUser() {
     if (!window.ALM.isPrimeUserLoggedIn()) {
@@ -292,28 +289,26 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     }
   };
 
-  function getAccessToken() {
+  const getAccessToken = () => {
     let cookieValues = document.cookie.match(
       `(^|[^;]+)\\s*${ACCESS_TOKEN_COOKIE_NAME}\\s*=\\s*([^;]+)`
     );
     return cookieValues ? cookieValues.pop() : "";
-  }
+  };
 
-  function isPrimeUserLoggedIn() {
-    let cookieValue = getAccessToken();
-    return cookieValue == "" ? false : true;
-  }
+  const getCommerceToken = () => {
+    let cookieValues = document.cookie.match(
+      `(^|[^;]+)\\s*${COMMERCE_TOKEN_COOKIE_NAME}\\s*=\\s*([^;]+)`
+    );
+    return cookieValues ? cookieValues.pop() : "";
+  };
 
-  function handleLogOut() {
-    document.cookie =
-      ACCESS_TOKEN_COOKIE_NAME +
-      "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-    window.sessionStorage.removeItem("user");
-    window.ALM.storage.removeItem("CART_ID");
-    window.ALM.storage.removeItem("TOKEN");
-    window.ALM.storage.removeItem("PRIME_CATALOG_FILTER");
-    window.ALM.storage.removeItem("COMMERCE_FILTERS");
+  const isCommerceLoggedIn = () => (getCommerceToken() === "") ? false : true;
 
+  const isPrimeUserLoggedIn = () => (getAccessToken() === "") ? false : true;
+
+  const handleLogOut = () => {
+    cleanUpUserData();
     switch (CURRENT_USAGE_TYPE) {
       case PRIME_USAGE_TYPE:
         window.ALM.navigateToSignOutPage();
@@ -327,9 +322,9 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
       default:
         break;
     }
-  }
+  };
 
-  function handleLogIn() {
+  const handleLogIn = () => {
     switch (CURRENT_USAGE_TYPE) {
       case PRIME_USAGE_TYPE:
       case ES_USAGE_TYPE:
@@ -343,14 +338,14 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
       default:
         break;
     }
-  }
+  };
 
-  function handleESRegister() {
+  const handleESRegister = () => {
     const registerUrl = getESRegisterUrl();
     document.location.href = registerUrl;
-  }
+  };
 
-  function handleRegister() {
+  const handleRegister = () => {
     switch (CURRENT_USAGE_TYPE) {
       case ES_USAGE_TYPE:
         handleESRegister();
@@ -363,12 +358,13 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
       default:
         break;
     }
-  }
+  };
 
   handlePageLoad();
 
   window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
   window.ALM.getAccessToken = getAccessToken;
+  window.ALM.getCommerceToken = getCommerceToken;
   window.ALM.getALMUser = getALMUser;
   window.ALM.updateAccountActiveFieldsDetails = updateAccountActiveFieldsDetails;
   window.ALM.updateALMUser = updateALMUser;

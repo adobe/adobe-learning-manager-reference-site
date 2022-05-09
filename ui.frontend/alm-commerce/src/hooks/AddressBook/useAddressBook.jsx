@@ -7,8 +7,8 @@ import {
     ADD_DEFAULT_BILLING_ADDRESS, GET_ADDRESSES,
     SET_BILLING_ADDRESS
 } from './addressBook.gql';
-import storageInstance from "../../utils/storage";
-import { TOKEN, SIGN_IN_PATH } from "../../utils/constants";
+import { SIGN_IN_PATH } from "../../utils/constants";
+import { getCommerceToken } from "../../utils/global";
 
 
 
@@ -38,7 +38,7 @@ export const useAddressBook = (props) => {
 
 
     useEffect(() => {
-        if (!storageInstance.getItem(TOKEN)) {
+        if (!getCommerceToken()) {
             navigate(SIGN_IN_PATH);
         }
     }, [navigate])

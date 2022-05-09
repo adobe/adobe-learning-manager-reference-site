@@ -42,9 +42,11 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(FetchCpAccessTokenServlet.class);
 
-	private final static String ACCESS_TOKEN_COOKIE_NAME = "alm-cp-token";
+	private final static String ACCESS_TOKEN_COOKIE_NAME = "alm_cp_token";
 
 	private final static String AUTHOR_MODE = "author";
+	
+	private static final Integer TOKEN_BUFFER_SECS = 60;
 
 	@Reference
 	private transient GlobalConfigurationService configService;
@@ -173,7 +175,7 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
 	{
 		final Cookie tokenCookie = new Cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken);
 		tokenCookie.setSecure(request.isSecure());
-		tokenCookie.setMaxAge(maxAge);
+		tokenCookie.setMaxAge(maxAge-TOKEN_BUFFER_SECS);
 		tokenCookie.setPath("/");
 		response.addCookie(tokenCookie);
 	}

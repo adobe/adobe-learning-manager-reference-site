@@ -5,9 +5,8 @@ import {
   CART_ID,
   PURCHASE_INITIATED_PATH,
   SIGN_IN_PATH,
-  TOKEN,
 } from "../../utils/constants";
-import { postMethod } from "../../utils/global";
+import { postMethod, getCommerceToken } from "../../utils/global";
 import storageInstance from "../../utils/storage";
 import {
   GET_PAYMENTS_MODE,
@@ -20,7 +19,7 @@ export const useCheckoutPage = (props) => {
   const [cartId] = useState(() => storageInstance.getItem(CART_ID));
 
   const [isLoggedIn] = useState(() => {
-    const token = storageInstance.getItem(TOKEN);
+    const token = getCommerceToken();
     return Boolean(token);
   });
   const [
