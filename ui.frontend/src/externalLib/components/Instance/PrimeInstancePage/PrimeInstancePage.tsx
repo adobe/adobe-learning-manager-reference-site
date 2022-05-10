@@ -35,6 +35,9 @@ import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 import { ALMBackButton } from "../../Common/ALMBackButton";
 //TO-DO move training id str to common
 const TRAINING_ID_STR = "trainingId";
+const CLASSROOM = "Classroom";
+const VIRTUAL_CLASSROOM = "Virtual Classroom";
+
 const PrimeInstancePage = () => {
   const [trainingId] = useState(() => {
     let { instancePath } = getALMConfig();
@@ -227,20 +230,37 @@ const getStartDateforInstance = (
   return dateArray.sort((a, b) => a - b)[0];
 };
 
+const isClassroomOrVC = (loResource : any ) => {
+  return loResource.resourceType === CLASSROOM ||
+   loResource.resourceType === VIRTUAL_CLASSROOM; 
+ }
+
 const getInstanceLocationAndInstructorsName = (
   loResources: PrimeLearningObjectResource[],
   locale: string
 ): string[] => {
-  let location: string[] = [];
-  let instructorNames: string[] = [];
+  var location = new Set();
+  var instructorNames = new Set();
   loResources?.forEach((loResource) => {
+    if (!isClassroomOrVC(loResource)) {
+      return "";
+    }
     const resource = getResourceBasedOnLocale(loResource, locale);
 
-    if (resource.location) location.push(resource.location);
-    if (resource.instructorNames?.length)
-      instructorNames.push(resource.instructorNames.join(", "));
+    if (resource.room) {
+      location.add(resource.room.roomName);
+    } else if (resource.location) {
+      location.add(resource.location);
+    }
+
+    if (resource.instructorNames?.length) {
+      instructorNames.add(resource.instructorNames.join(", "));
+    }
   });
-  return [location.join(", "), instructorNames.join(", ")];
+  return [
+    Array.from(location).join(", "),
+    Array.from(instructorNames).join(", "),
+  ];
 };
 
 const sortList = (list: any[], sortParam: string, sortOrder: any) => {
