@@ -15,10 +15,11 @@ import { render } from "react-dom";
 import { AlertDialog, AlertType } from "./AlertDialog";
 
 let alertMesssage: string = "Unknown Error";
-let alertType : AlertType = AlertType.success;
+let alertType: AlertType = AlertType.success;
 
-const useAlert = (): [(show:boolean,timeOut:number,messsage:string,type:AlertType)=>void] => {
-
+const useAlert = (): [
+  (show: boolean, timeOut: number, messsage: string, type: AlertType) => void
+] => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const alert = (
     show: boolean,
@@ -35,7 +36,11 @@ const useAlert = (): [(show:boolean,timeOut:number,messsage:string,type:AlertTyp
   };
   const alert_template = (type: string, show: boolean, message: string) => {
     return (
-      <AlertDialog type={alertType} show={show} message={alertMesssage}></AlertDialog>
+      <AlertDialog
+        type={alertType}
+        show={show}
+        message={alertMesssage}
+      ></AlertDialog>
     );
   };
 
@@ -49,4 +54,3 @@ const useAlert = (): [(show:boolean,timeOut:number,messsage:string,type:AlertTyp
 };
 
 export { useAlert };
-
