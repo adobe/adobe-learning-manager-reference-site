@@ -15,6 +15,8 @@ package com.adobe.learning.core.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.day.cq.commons.jcr.JcrConstants;
+
 public class Constants {
 	
 	public static final String[] AEM_NODE_PROP_PREFIXES = {"jcr:", "cq:", "sling:"};
@@ -38,6 +40,11 @@ public class Constants {
 		public static final String COMMERCE_URL_NAME = "commerceURL";
 		public static final String LEARNER_TOKEN_URL = "/oauth/o/learnerToken?learner_email={email}&min_validity_sec={min_validity_sec}";
 		public static final long LEARNER_TOKEN_MIN_VALIDITY_SEC = 518400; // 24 Hr
+		public static final String CONF_PROP_NAME = "cq:conf";
+		public static final String CLOUD_CONFIG_SETTINGS = "settings";
+		public static final String ALM_CONFIGURATION_NAME = "cloudconfigs/adobe-learning-manager-config";
+		public static final String ALM_SUB_CONFIG_PATH =
+		        "/" + CLOUD_CONFIG_SETTINGS + "/" + ALM_CONFIGURATION_NAME + "/" + JcrConstants.JCR_CONTENT;
 	}
 
 	public final class EmbeddableWidgetConfig {

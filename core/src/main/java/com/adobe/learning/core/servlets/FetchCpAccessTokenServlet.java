@@ -71,7 +71,6 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
 	{
 		try {
 			String pagePath = request.getParameter("pagePath");
-
 			Page currentPage = getCurrentPage(request, pagePath);
 			if (currentPage == null)
 			{
@@ -81,7 +80,6 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
 			}
 
 			JsonObject jsonConfigs = configService.getAdminConfigs(currentPage);
-
 			String almURL = jsonConfigs.get(Constants.Config.ALM_BASE_URL).getAsString(),
 					clientId = jsonConfigs.get(Constants.Config.CLIENT_ID).getAsString(),
 					clientSecret = jsonConfigs.get(Constants.Config.CLIENT_SECRET).getAsString();
