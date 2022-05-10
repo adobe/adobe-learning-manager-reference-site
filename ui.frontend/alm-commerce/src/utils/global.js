@@ -1,3 +1,5 @@
+const CART_ID = "CART_ID";
+
 export function getALMObject() {
   return window.ALM;
 }
@@ -35,16 +37,22 @@ export const getRelativePath = (urlString) => {
   }
 };
 
-
 export const postMethod = async (path) => {
   const primeApiURL = getALMConfig().primeApiURL;
   const url = `${primeApiURL}${path}`;
   await fetch(url, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Authorization': `oauth ${getAccessToken()}`
+      Authorization: `oauth ${getAccessToken()}`,
     },
-    body: JSON.stringify({})
+    body: JSON.stringify({}),
   });
-}
-  
+};
+
+export const getCartId = () => {
+  return getALMObject().storage.getItem(CART_ID);
+};
+
+export const setCartId = (data, ttl = 10800) => {
+  return getALMObject().storage.setItem(CART_ID, data, ttl);
+};

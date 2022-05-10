@@ -1,30 +1,32 @@
+import { Button } from "@adobe/react-spectrum";
 import React, { useState } from "react";
 import { useCartPage } from "../../hooks/CartPage/useCartPage";
 import { useCheckoutPage } from "../../hooks/CheckoutPage/useCheckoutPage";
-import ProductList from "../CartPage/productList";
-import AddressBook from "../AddressBook/addressBook";
-import { lightTheme, Provider } from '@adobe/react-spectrum';
-import styles from "./CheckoutPage.module.css";
-import { Button } from '@adobe/react-spectrum';
 import { formatPrice } from "../../utils/price";
-import CommerceLoader from "../Common/Loader"
+import AddressBook from "../AddressBook/addressBook";
+import ProductList from "../CartPage/productList";
+import CommerceLoader from "../Common/Loader";
+import styles from "./CheckoutPage.module.css";
 
 export default function CheckoutPage() {
   const {
     cartItems,
     hasItems,
-    isCartUpdating,
+    // isCartUpdating,
     shouldShowLoadingIndicator: cartLoading,
-    totalQuantity,
+    // totalQuantity,
     prices = {},
   } = useCartPage();
 
-  const totalPrice = prices["grand_total"]?.value || 0;
+  // const totalPrice = prices["grand_total"]?.value || 0;
 
-  const { error, paymentModes, createOrder, orderData, navigateToOrdersSuccessPage, shouldShowLoadingIndicator } = useCheckoutPage();
+  const {
+    paymentModes,
+    createOrder,
+    shouldShowLoadingIndicator,
+  } = useCheckoutPage();
 
   const paymentMethods = paymentModes?.cart?.available_payment_methods || [];
-  console.log("Checkout page");
 
   const [selectedPaymentMode, setSelectedPaymentMode] = useState("checkmo");
 
@@ -37,10 +39,14 @@ export default function CheckoutPage() {
   };
 
   if (cartLoading) {
-    return <CommerceLoader size="L" />
+    return <CommerceLoader size="L" />;
   }
   if (!hasItems) {
-    return <h1 style={{ display: "flex", justifyContent: "center" }}>No Items in your cart! </h1>
+    return (
+      <h1 style={{ display: "flex", justifyContent: "center" }}>
+        No Items in your cart!
+      </h1>
+    );
   }
 
   return (
@@ -52,36 +58,46 @@ export default function CheckoutPage() {
         <h2>Grand Total</h2>
         <span>{formatPrice(prices["grand_total"])}</span>
       </div>
-      {/* <Button variant="cta" type="button" onPress={placeOrder}>
-        Place Order
-      </Button> */}
+
       <h2 className={styles.paymentHeading}>Payment Method</h2>
       {paymentMethods.slice(0, 1).map((paymentMethod) => {
         return (
           <>
             <div className={styles.paymentContainer}>
-
-              <div key={paymentMethod.code} className={styles.paymentModeContainer}>
+              <div
+                key={paymentMethod.code}
+                className={styles.paymentModeContainer}
+              >
                 <input
                   id={paymentMethod.code}
                   type="radio"
                   defaultChecked={selectedPaymentMode === paymentMethod.code}
                   name="paymentMethod"
                   value={paymentMethod.code}
-                  onChange={() => handlePaymentModeSelection(paymentMethod.code)}
+                  onChange={() =>
+                    handlePaymentModeSelection(paymentMethod.code)
+                  }
                 />
-                <label htmlFor={paymentMethod.code}>{paymentMethod.title}</label>
+                <label htmlFor={paymentMethod.code}>
+                  {paymentMethod.title}
+                </label>
               </div>
-
             </div>
           </>
         );
       })}
       <div className={styles.buttonContainer}>
-        <Button variant="cta" type="button" onPress={placeOrder} isDisabled={shouldShowLoadingIndicator}>
-          {
-            shouldShowLoadingIndicator ? <CommerceLoader size="S" /> : "Proceed to Checkout"
-          }
+        <Button
+          variant="cta"
+          type="button"
+          onPress={placeOrder}
+          isDisabled={shouldShowLoadingIndicator}
+        >
+          {shouldShowLoadingIndicator ? (
+            <CommerceLoader size="S" />
+          ) : (
+            "Proceed to Checkout"
+          )}
         </Button>
       </div>
     </>

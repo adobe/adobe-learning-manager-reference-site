@@ -1,3 +1,5 @@
+@import "../../styles/variables.css";
+
 .itemContainer {
   display: flex;
   padding: 10px 0;
@@ -18,6 +20,21 @@
   flex: 4 0 0;
 }
 
-.name{
+.name {
   padding-right: 20px;
+}
+
+.removeItem {
+  display: flex;
+  justify-content: flex-end;
+  float: right;
+}
+
+.removeItem svg {
+  fill: var(--prime-color-black);
+}
+
+.priceLabel {
+  display: flex;
+  justify-content: flex-end;
 }

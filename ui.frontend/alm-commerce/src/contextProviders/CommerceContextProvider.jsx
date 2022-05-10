@@ -5,20 +5,14 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { CartContextProvider } from "./CartContextProvider";
-
 import { getALMConfig, getCommerceToken } from "../utils/global";
-import storageInstance from "../utils/storage";
-import {
-  BrowserRouter
-} from "react-router-dom";
+
 const uri = getALMConfig().graphqlProxyPath || getALMConfig().commerceURL;
 const httpLink = createHttpLink({
   uri,
 });
 
 const authLink = setContext((_, { headers }) => {
-
   const signInToken = getCommerceToken();
   return {
     headers: {
@@ -32,7 +26,6 @@ export const apolloClient = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
-
 
 const contextProviders = [];
 

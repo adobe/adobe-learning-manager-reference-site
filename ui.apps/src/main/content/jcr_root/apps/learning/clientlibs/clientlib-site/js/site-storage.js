@@ -1,29 +1,29 @@
 (function (window) {
   "use strict";
-  class NamespacedLocalStorage {
-    constructor(localStorage, key) {
-      this.localStorage = localStorage;
+  class NamespacedSessionStorage {
+    constructor(sessionStorage, key) {
+      this.sessionStorage = sessionStorage;
       this.key = key;
     }
     _makeKey(key) {
       return `${this.key}__${key}`;
     }
     getItem(name) {
-      return this.localStorage.getItem(this._makeKey(name));
+      return this.sessionStorage.getItem(this._makeKey(name));
     }
     setItem(name, value) {
-      return this.localStorage.setItem(this._makeKey(name), value);
+      return this.sessionStorage.setItem(this._makeKey(name), value);
     }
     removeItem(name) {
-      return this.localStorage.removeItem(this._makeKey(name));
+      return this.sessionStorage.removeItem(this._makeKey(name));
     }
   }
 
   class BrowserPersistence {
     static KEY = "ALM_BROWSER_PERSISTENCE";
     constructor() {
-      this.storage = new NamespacedLocalStorage(
-        localStorage,
+      this.storage = new NamespacedSessionStorage(
+        sessionStorage,
         BrowserPersistence.KEY
       );
     }
