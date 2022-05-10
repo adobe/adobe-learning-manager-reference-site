@@ -102,8 +102,8 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
         };
         fetchAccessToken(data);
       } else {
-        var oauthState = currentUrl.searchParams.get("state");
-        var code = currentUrl.searchParams.get("code");
+        const oauthState = currentUrl.searchParams.get("state");
+        const code = currentUrl.searchParams.get("code");
         if (CP_OAUTH_STATE == oauthState && code) {
           let data = {
             _charset_: "UTF-8",

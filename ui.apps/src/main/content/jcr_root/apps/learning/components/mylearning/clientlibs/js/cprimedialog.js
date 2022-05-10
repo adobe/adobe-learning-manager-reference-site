@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 (function (document, window, $) {
     "use strict";
     
-    var CP_DIALOG_REL = ".cp-dialog-form-rel";
+    const CP_DIALOG_REL = ".cp-dialog-form-rel";
 
     function handleHiddenOptions()
     {

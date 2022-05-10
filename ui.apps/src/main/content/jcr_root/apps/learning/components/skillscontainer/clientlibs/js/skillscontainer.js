@@ -13,11 +13,11 @@ governing permissions and limitations under the License.
 (function (document, window, $) {
     "use strict";
     
-    var CP_DIALOG_REL = ".alm-skills-container .cmp-image";
+    const CP_DIALOG_REL = ".alm-skills-container .cmp-image";
 
    $(document).ready(function (e) {
          $(document).on("click", CP_DIALOG_REL, function(e) {
-            var skillName = $(this).attr("data-title");
+            const skillName = $(this).attr("data-title");
             window.ALM.navigateToBoardsPage(skillName);
    		 });
     });

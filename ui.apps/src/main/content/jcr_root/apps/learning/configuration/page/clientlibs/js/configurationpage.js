@@ -36,7 +36,7 @@ governing permissions and limitations under the License.
 
   function hideUnselectedUsageOptions()
   {
-    var selectedUsageOption = $(USAGE_TYPE_INPUT_VALUE_SEL).attr("value");
+    const selectedUsageOption = $(USAGE_TYPE_INPUT_VALUE_SEL).attr("value");
     USAGE_OPTIONS.forEach((usageOption) => {
       if (usageOption !== selectedUsageOption)
       {
