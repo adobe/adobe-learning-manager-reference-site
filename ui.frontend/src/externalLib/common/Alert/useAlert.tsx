@@ -34,7 +34,7 @@ const useAlert = (): [
       setShowAlert(false);
     }, timeOut);
   };
-  const alert_template = (type: string, show: boolean, message: string) => {
+  const alert_Template = (type: string, show: boolean, message: string) => {
     return (
       <AlertDialog
         type={alertType}
@@ -46,7 +46,7 @@ const useAlert = (): [
 
   useEffect(() => {
     render(
-      alert_template(alertType, showAlert, alertMesssage),
+      alert_Template(alertType, showAlert, alertMesssage),
       document.getElementById("alertDialog")
     );
   }, [showAlert]);

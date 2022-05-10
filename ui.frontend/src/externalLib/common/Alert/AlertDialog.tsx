@@ -14,6 +14,9 @@ import styles from "./AlertDialog.module.css";
 import Alert from "@spectrum-icons/workflow/Alert";
 import CheckmarkCircleOutline from "@spectrum-icons/workflow/CheckmarkCircleOutline";
 
+const success = "success";
+const error = "error";
+
 export enum AlertType {
   success = "success",
   error = "error",
@@ -21,13 +24,13 @@ export enum AlertType {
 
 export const renderAlert = (type: AlertType) => {
   switch (AlertType[type]) {
-    case "success":
+    case success:
       return (
-        <CheckmarkCircleOutline UNSAFE_className={styles.alertIconSuccess} />
+        <CheckmarkCircleOutline UNSAFE_className={`${styles.alertIcon} ${styles.success}`} />
       );
       break;
-    case "error":
-      return <Alert UNSAFE_className={styles.alertIconError} />;
+    case error:
+      return <Alert UNSAFE_className={`${styles.alertIcon} ${styles.error}`} />;
       break;
   }
 };

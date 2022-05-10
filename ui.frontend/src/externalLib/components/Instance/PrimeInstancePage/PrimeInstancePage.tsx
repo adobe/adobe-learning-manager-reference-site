@@ -228,8 +228,8 @@ const getInstanceLocationAndInstructorsName = (
   loResources: PrimeLearningObjectResource[],
   locale: string
 ): string[] => {
-  var location = new Set();
-  var instructorNames = new Set();
+  let location = new Set();
+  let instructorNames = new Set();
   loResources?.forEach((loResource) => {
     if (!isClassroomOrVC(loResource)) {
       return "";
