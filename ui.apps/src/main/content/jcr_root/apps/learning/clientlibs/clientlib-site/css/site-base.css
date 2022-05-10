@@ -1,3 +1,15 @@
+/*
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+
 .cmp-title--right {
   align-content: center;
 }
@@ -54,7 +66,6 @@
   margin-top: 14px;
 }
 
-/* css for rest screen size */
 .cmp-experiencefragment--header
   .aem-Grid.aem-Grid--default--12
   .image.cmp-image--logo {
@@ -148,6 +159,10 @@
 
 #carousel-container .cmp-teaser__image .cmp-image .cmp-image__image {
   height: 300px;
+}
+
+.training__page__container, .instance__container, .commerce__container, .catalog__container {
+  min-height: calc(100vh - 180px);
 }
 
 /* CSS for Home Catalog Page*/
@@ -1768,186 +1783,6 @@ body {
 @media (max-width: 1024px) {
   .cmp-layout-container--modal {
     padding: 1rem 0.5rem;
-  }
-}
-
-.cmp-languagenavigation--default .cmp-languagenavigation {
-  text-align: left;
-  width: 360px;
-}
-
-.cmp-languagenavigation--default .cmp-languagenavigation__group {
-  list-style: none;
-  margin: 0;
-  float: left;
-  padding: 0;
-}
-
-.cmp-languagenavigation--default .cmp-languagenavigation__item {
-  text-transform: uppercase;
-  display: block;
-  float: left;
-}
-
-.cmp-languagenavigation--default .cmp-languagenavigation__item-title {
-  font-size: 9pt;
-  float: left;
-  width: 100%;
-  margin-bottom: -5px;
-  padding-left: 2px;
-}
-
-.cmp-languagenavigation--default .cmp-languagenavigation__item-link {
-  font-size: 14px;
-}
-
-.cmp-languagenavigation--default .cmp-languagenavigation__item-link:hover {
-  text-decoration: underline;
-}
-
-.cmp-languagenavigation--default .cmp-languagenavigation__item--level-0 {
-  background-repeat: no-repeat;
-  background-size: 25px;
-  padding: 8px 0 15px 45px;
-  background-position-y: center;
-  background-position-x: 9pt;
-  border-bottom: 0.25px solid;
-  width: calc(100% - 45px);
-}
-
-.cmp-languagenavigation--default
-  .cmp-languagenavigation__item--level-0.cmp-languagenavigation__item--countrycode-CA {
-  background-image: url(../resources/images/country-flags/CA.svg);
-}
-
-.cmp-languagenavigation--default
-  .cmp-languagenavigation__item--level-0.cmp-languagenavigation__item--countrycode-CH {
-  background-image: url(../resources/images/country-flags/CH.svg);
-}
-
-.cmp-languagenavigation--default
-  .cmp-languagenavigation__item--level-0.cmp-languagenavigation__item--countrycode-DE {
-  background-image: url(../resources/images/country-flags/DE.svg);
-}
-
-.cmp-languagenavigation--default
-  .cmp-languagenavigation__item--level-0.cmp-languagenavigation__item--countrycode-ES {
-  background-image: url(../resources/images/country-flags/ES.svg);
-}
-
-.cmp-languagenavigation--default
-  .cmp-languagenavigation__item--level-0.cmp-languagenavigation__item--countrycode-FR {
-  background-image: url(../resources/images/country-flags/FR.svg);
-}
-
-.cmp-languagenavigation--default
-  .cmp-languagenavigation__item--level-0.cmp-languagenavigation__item--countrycode-IT {
-  background-image: url(../resources/images/country-flags/IT.svg);
-}
-
-.cmp-languagenavigation--default
-  .cmp-languagenavigation__item--level-0.cmp-languagenavigation__item--countrycode-US {
-  background-image: url(../resources/images/country-flags/US.svg);
-}
-
-.cmp-languagenavigation--default
-  .cmp-languagenavigation__item--level-0:last-child {
-  border-bottom: none;
-}
-
-.cmp-languagenavigation--default .cmp-languagenavigation__item--level-1 {
-  padding-top: 2px;
-  padding-left: 2px;
-}
-
-.cmp-languagenavigation--default
-  .cmp-languagenavigation__item--level-1.cmp-languagenavigation__item--active
-  .cmp-languagenavigation__item-link {
-  text-decoration: underline;
-}
-
-.cmp-languagenavigation--default
-  .cmp-languagenavigation__item--level-1
-  .cmp-languagenavigation__item-link {
-  border-right: 1px solid;
-  padding-right: 5px;
-  margin-right: 5px;
-}
-
-.cmp-languagenavigation--default
-  .cmp-languagenavigation__item--level-1:last-child
-  .cmp-languagenavigation__item-link {
-  border-right: none;
-}
-
-.cmp-languagenavigation--dark .cmp-languagenavigation {
-  background: #202020;
-  float: left;
-  color: #ebebeb;
-}
-
-.cmp-languagenavigation--dark .cmp-languagenavigation__item-title {
-  color: #ebebeb;
-}
-
-.cmp-languagenavigation--dark .cmp-languagenavigation__item-link {
-  color: #f7f7f7;
-}
-
-.cmp-languagenavigation--dark .cmp-languagenavigation__item--level-0 {
-  border-bottom-color: #696969;
-}
-
-.cmp-languagenavigation--header .cmp-languagenavigation {
-  position: fixed;
-  top: 38px;
-  z-index: 999;
-  width: 360px;
-  right: 0;
-  display: none;
-  -webkit-box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.25);
-  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.25);
-}
-
-.cmp-languagenavigation--header .cmp-languagenavigation.showMenu {
-  display: block;
-}
-
-.cmp-languagenavigation--header .cmp-languagenavigation--langnavtoggle a {
-  padding-right: 14px;
-  background-repeat: no-repeat;
-  background-size: 25px;
-  padding-left: 35px;
-  background-position-x: 0;
-  background-position-y: -1px;
-}
-
-.cmp-languagenavigation--header .cmp-languagenavigation--langnavtoggle a:after {
-  border-style: solid;
-  border-width: 0.1em 0.1em 0 0;
-  content: "";
-  display: inline-block;
-  height: 0.45em;
-  left: 0.45em;
-  position: relative;
-  top: 0.35em;
-  -webkit-transform: rotate(135deg);
-  transform: rotate(135deg);
-  vertical-align: top;
-  width: 0.45em;
-}
-
-.cmp-languagenavigation--header
-  .cmp-languagenavigation--langnavtoggle
-  a.open:after {
-  top: 0.65em;
-  -webkit-transform: rotate(-45deg);
-  transform: rotate(-45deg);
-}
-
-@media (max-width: 1024px) {
-  .cmp-languagenavigation--header .cmp-languagenavigation--langnavtoggle {
-    text-align: right;
   }
 }
 

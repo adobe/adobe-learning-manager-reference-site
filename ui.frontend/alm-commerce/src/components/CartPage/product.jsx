@@ -11,7 +11,7 @@ export default function Product(props) {
   let finalPrice = price_range?.maximum_price?.final_price;
   let priceLabel = formatPrice(finalPrice);
 
-  const { error, removeItemFromCart, loading } = useProduct();
+  const { removeItemFromCart, loading } = useProduct();
 
   const removeItemHandler = () => {
     removeItemFromCart(Number(props.itemId));

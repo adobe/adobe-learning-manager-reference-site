@@ -53,10 +53,6 @@
                             cq:policy="learning/components/languagenavigation/policy_1568591782049"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="wcm/core/components/policies/mapping"/>
-                        <navigation
-                            cq:policy="learning/components/navigation/policy_126213313123863"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="wcm/core/components/policies/mapping"/>
                         <search
                             cq:policy="learning/components/search/policy_1555431088440"
                             jcr:primaryType="nt:unstructured"

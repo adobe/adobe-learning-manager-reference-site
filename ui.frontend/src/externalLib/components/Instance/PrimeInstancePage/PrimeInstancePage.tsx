@@ -1,3 +1,14 @@
+/**
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { lightTheme, Provider } from "@adobe/react-spectrum";
@@ -24,6 +35,9 @@ import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 import { ALMBackButton } from "../../Common/ALMBackButton";
 //TO-DO move training id str to common
 const TRAINING_ID_STR = "trainingId";
+const CLASSROOM = "Classroom";
+const VIRTUAL_CLASSROOM = "Virtual Classroom";
+
 const PrimeInstancePage = () => {
   const [trainingId] = useState(() => {
     let { instancePath } = getALMConfig();
@@ -216,20 +230,37 @@ const getStartDateforInstance = (
   return dateArray.sort((a, b) => a - b)[0];
 };
 
+const isClassroomOrVC = (loResource : any ) => {
+  return loResource.resourceType === CLASSROOM ||
+   loResource.resourceType === VIRTUAL_CLASSROOM; 
+ }
+
 const getInstanceLocationAndInstructorsName = (
   loResources: PrimeLearningObjectResource[],
   locale: string
 ): string[] => {
-  let location: string[] = [];
-  let instructorNames: string[] = [];
+  var location = new Set();
+  var instructorNames = new Set();
   loResources?.forEach((loResource) => {
+    if (!isClassroomOrVC(loResource)) {
+      return "";
+    }
     const resource = getResourceBasedOnLocale(loResource, locale);
 
-    if (resource.location) location.push(resource.location);
-    if (resource.instructorNames?.length)
-      instructorNames.push(resource.instructorNames.join(", "));
+    if (resource.room) {
+      location.add(resource.room.roomName);
+    } else if (resource.location) {
+      location.add(resource.location);
+    }
+
+    if (resource.instructorNames?.length) {
+      instructorNames.add(resource.instructorNames.join(", "));
+    }
   });
-  return [location.join(", "), instructorNames.join(", ")];
+  return [
+    Array.from(location).join(", "),
+    Array.from(instructorNames).join(", "),
+  ];
 };
 
 const sortList = (list: any[], sortParam: string, sortOrder: any) => {

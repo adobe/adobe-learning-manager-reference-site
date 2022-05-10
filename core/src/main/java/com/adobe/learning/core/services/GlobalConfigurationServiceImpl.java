@@ -1,3 +1,15 @@
+/*
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+ */
+
 package com.adobe.learning.core.services;
 
 import java.util.Map;
@@ -15,6 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.learning.core.utils.Constants;
+import com.day.cq.commons.inherit.HierarchyNodeInheritanceValueMap;
+import com.day.cq.commons.inherit.InheritanceValueMap;
 import com.day.cq.wcm.api.Page;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
@@ -29,8 +43,6 @@ public class GlobalConfigurationServiceImpl implements GlobalConfigurationServic
 	private static final Map<String, Object> authInfo = ImmutableMap.of(ResourceResolverFactory.SUBSERVICE,
 			SUBSERVICE_NAME);
 
-	private static final String CONFIGURATION_NAME = "cloudconfigs/adobe-learning-manager-config";
-
 	@Reference
 	private ResourceResolverFactory resolverFactory;
 
@@ -42,20 +54,26 @@ public class GlobalConfigurationServiceImpl implements GlobalConfigurationServic
 		try (ResourceResolver serviceResolver = resolverFactory.getServiceResourceResolver(authInfo)) {
 			String resourcePath = currentPage.getContentResource().getPath();
 			Resource resource = serviceResolver.getResource(resourcePath);
-
 			if (resource == null) {
 				LOGGER.error("Service user permissions of {} are not sufficient to view resource at {}",
 						serviceResolver.getUserID(), resourcePath);
 			} else {
 				ConfigurationBuilder cfgBuilder = resource.adaptTo(ConfigurationBuilder.class);
-				adminConfigs = cfgBuilder.name(CONFIGURATION_NAME).asValueMap();
-
+				adminConfigs = cfgBuilder.name(Constants.Config.ALM_CONFIGURATION_NAME).asValueMap();
+				if (adminConfigs == null || adminConfigs.size() == 0) {
+					InheritanceValueMap inheritedVM = new HierarchyNodeInheritanceValueMap(resource);
+					String cpConfPath = inheritedVM.getInherited(Constants.Config.CONF_PROP_NAME, String.class);
+					if (cpConfPath != null) {
+						String configNodePath = cpConfPath + Constants.Config.ALM_SUB_CONFIG_PATH;
+						adminConfigs = serviceResolver.getResource(configNodePath).getValueMap();
+					}
+				}
+				
 				if (adminConfigs != null) {
 					for (String key : adminConfigs.keySet()) {
 						if (!StringUtils.startsWithAny(key, Constants.AEM_NODE_PROP_PREFIXES))
 							globalConfig.addProperty(key, adminConfigs.get(key, ""));
 					}
-					
 					String pageLocale = currentPage.getLanguage(false).toString();
 					globalConfig.addProperty(Constants.Config.PAGE_LOCALE, pageLocale);
 				}
