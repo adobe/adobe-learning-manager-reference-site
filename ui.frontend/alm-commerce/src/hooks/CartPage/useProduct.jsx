@@ -43,6 +43,7 @@ export const useProduct = (props) => {
             cart_item_id: itemId,
           },
         });
+        window.location.reload(false);
       } catch (e) {
         console.log(e);
       }
