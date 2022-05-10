@@ -49,18 +49,18 @@ const SignIn = () => {
 
   let firstname, lastname, email, password;
 
-  if (view == CREATE_ACCOUNT) {
+  if (view === CREATE_ACCOUNT) {
     ({ firstname, lastname, email, password } = createAccountForm);
-  } else if (view == LOGIN) {
+  } else if (view === LOGIN) {
     ({ email, password } = signInForm);
   } else {
     ({ email } = forgotPasswordForm);
   }
 
   const submitHandler = (event) => {
-    if (view == CREATE_ACCOUNT) {
+    if (view === CREATE_ACCOUNT) {
       createAccountHandler(createAccountForm);
-    } else if (view == LOGIN) {
+    } else if (view === LOGIN) {
       signInHandler(signInForm);
     } else {
       try {
@@ -73,11 +73,11 @@ const SignIn = () => {
   };
 
   const setValue = (key, value) => {
-    if (view == CREATE_ACCOUNT) {
+    if (view === CREATE_ACCOUNT) {
       setCreateAccountForm((prevState) => {
         return { ...prevState, [key]: value };
       });
-    } else if (view == LOGIN) {
+    } else if (view === LOGIN) {
       setSignInForm((prevState) => {
         return { ...prevState, [key]: value };
       });
@@ -90,7 +90,7 @@ const SignIn = () => {
 
   return (
     <div className={styles.signInContainer}>
-      {view != RESET_PASSWORD ? (
+      {view !== RESET_PASSWORD ? (
         <Form
           maxWidth="size-3600"
           aria-labelledby="label-3"
@@ -182,7 +182,7 @@ const SignIn = () => {
                 isDisabled={isLoading}
                 UNSAFE_className={styles.createAccountButton}
               >
-                {view == CREATE_ACCOUNT ? "CREATE AN ACCOUNT" : "SUBMIT"}
+                {view === CREATE_ACCOUNT ? "CREATE AN ACCOUNT" : "SUBMIT"}
               </Button>
 
               <Button

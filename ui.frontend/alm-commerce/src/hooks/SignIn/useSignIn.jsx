@@ -12,16 +12,13 @@ governing permissions and limitations under the License.
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getALMObject, getCommerceToken } from "../../utils/global";
-import storageInstance from "../../utils/storage";
+import { getALMObject, getCommerceToken, setCartId } from "../../utils/global";
 import {
   CREATE_ACCOUNT,
   CREATE_CART,
   REQUEST_PASSWORD_RESET_EMAIL,
   SIGN_IN,
 } from "./signIn.gql";
-
-const CART_ID = "CART_ID";
 
 export const useAlmSignIn = (props) => {
   let navigate = useNavigate();
@@ -53,11 +50,7 @@ export const useAlmSignIn = (props) => {
   useEffect(() => {
     const getCart = async () => {
       const cartResponse = await fetchCartId();
-      storageInstance.setItem(
-        CART_ID,
-        cartResponse?.data?.customerCart.id,
-        10800
-      );
+      setCartId(cartResponse?.data?.customerCart.id);
       getALMObject().updateCart(
         cartResponse?.data?.customerCart?.total_quantity
       );
@@ -94,6 +87,13 @@ export const useAlmSignIn = (props) => {
           },
         });
         const token = signInResponse.data.generateCustomerToken.token;
+        if (process.env.NODE_ENV !== "production") {
+          let date = new Date();
+          date.setTime(date.getTime() + 60 * 60 * 1000);
+          const expires = "; expires=" + date.toUTCString();
+          document.cookie =
+            "alm_commerce_token=" + (token || "") + expires + "; path=/";
+        }
 
         setIsLoading(false);
         if (process.env.NODE_ENV === "production") {
@@ -130,7 +130,7 @@ export const useAlmSignIn = (props) => {
         setIsloggedIn(false);
       }
     },
-    [createAccount]
+    [createAccount, signInHandler]
   );
 
   const forgotPasswordHandler = useCallback(
@@ -148,7 +148,7 @@ export const useAlmSignIn = (props) => {
         throw e;
       }
     },
-    [createAccount]
+    [forgotPassword]
   );
 
   const error = useMemo(() => {
@@ -157,7 +157,7 @@ export const useAlmSignIn = (props) => {
       createAccountError: createAccountError?.message,
       forgotPasswordError: forgotPasswordError?.message,
     };
-  }, [signInError, createAccountError]);
+  }, [signInError, createAccountError, forgotPasswordError]);
   return {
     signInHandler,
     createAccountHandler,

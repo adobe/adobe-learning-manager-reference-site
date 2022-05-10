@@ -12,13 +12,8 @@ governing permissions and limitations under the License.
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createSearchParams, useNavigate } from "react-router-dom";
-import {
-  CART_ID,
-  PURCHASE_INITIATED_PATH,
-  SIGN_IN_PATH,
-} from "../../utils/constants";
-import { postMethod, getCommerceToken } from "../../utils/global";
-import storageInstance from "../../utils/storage";
+import { PURCHASE_INITIATED_PATH, SIGN_IN_PATH } from "../../utils/constants";
+import { getCartId, getCommerceToken, postMethod } from "../../utils/global";
 import {
   GET_PAYMENTS_MODE,
   PROCESS_ORDER,
@@ -27,7 +22,7 @@ import {
 
 export const useCheckoutPage = (props) => {
   let navigate = useNavigate();
-  const [cartId] = useState(() => storageInstance.getItem(CART_ID));
+  const [cartId] = useState(() => getCartId());
 
   const [isLoggedIn] = useState(() => {
     const token = getCommerceToken();

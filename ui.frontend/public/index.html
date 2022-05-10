@@ -25,30 +25,30 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <script>
-      class NamespacedLocalStorage {
-        constructor(localStorage, key) {
-          this.localStorage = localStorage;
+      class NamespacedSessionStorage {
+        constructor(sessiontorage, key) {
+          this.sessiontorage = sessiontorage;
           this.key = key;
         }
         _makeKey(key) {
           return `${this.key}__${key}`;
         }
         getItem(name) {
-          return this.localStorage.getItem(this._makeKey(name));
+          return this.sessiontorage.getItem(this._makeKey(name));
         }
         setItem(name, value) {
-          return this.localStorage.setItem(this._makeKey(name), value);
+          return this.sessiontorage.setItem(this._makeKey(name), value);
         }
         removeItem(name) {
-          return this.localStorage.removeItem(this._makeKey(name));
+          return this.sessiontorage.removeItem(this._makeKey(name));
         }
       }
 
       class BrowserPersistence {
         static KEY = "ALM_BROWSER_PERSISTENCE";
         constructor() {
-          this.storage = new NamespacedLocalStorage(
-            localStorage,
+          this.storage = new NamespacedSessionStorage(
+            sessiontorage,
             BrowserPersistence.KEY
           );
         }
@@ -119,11 +119,11 @@
       };
 
       const isPrimeUserLoggedIn = () => {
-        return true;
+        return false;
       };
 
       const getAccessToken = () => {
-        return "be0dd24674aac75b4fcb553e8928c2f7";
+        return "940f0f761aa8ab9d50e7b65e59cdbb25";
       };
 
       const getCommerceToken = () => {
