@@ -148,12 +148,15 @@ const PrimeTrainingPageMetaData: React.FC<{
 
   const addToCart = async (redirectPathName = "") => {
     try {
-      const { error } = await addToCartHandler();
+      const { error, totalQuantity } = await addToCartHandler();
       if (error && error[0]?.message) {
         console.error(error[0].message);
+      } else {
+        getALMObject().updateCart(totalQuantity);
       }
+
       //  else {
-      //   getALMObject().updateCart(totalQuantity);
+      //
       //   if (redirectPathName) {
       //     window.location.pathname = `${redirectPathName}`;
       //   }
