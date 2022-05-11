@@ -22,10 +22,14 @@ import {
   getDefaultFiltersState,
   updateFilterList,
 } from "../utils/filters";
-import { getALMConfig, getQueryParamsIObjectFromUrl } from "../utils/global";
+import {
+  getALMConfig,
+  getItemFromStorage,
+  getQueryParamsIObjectFromUrl,
+  setItemToStorage,
+} from "../utils/global";
 import { JsonApiParse, parseCommerceResponse } from "../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
-import BrowserPersistence from "../utils/storage";
 import { DEFAULT_PAGE_LIMIT } from "./ALMCustomHooks";
 import ICustomHooks from "./ICustomHooks";
 
@@ -182,7 +186,7 @@ const getTransformedFilter = async (filterState: CatalogFilterState) => {
 };
 
 const getOrUpdateFilters = async () => {
-  const filterItems = BrowserPersistence.getItem(COMMERCE_FILTERS);
+  const filterItems = getItemFromStorage(COMMERCE_FILTERS);
   if (filterItems) {
     return filterItems;
   }
@@ -193,7 +197,7 @@ const getOrUpdateFilters = async () => {
     });
 
     const items = response.data.customAttributeMetadata.items;
-    BrowserPersistence.setItem(COMMERCE_FILTERS, items);
+    setItemToStorage(COMMERCE_FILTERS, items);
     return items;
   } catch (e) {
     console.error(e);
@@ -395,7 +399,7 @@ export default class CommerceCustomHooks implements ICustomHooks {
   async addProductToCart(sku: string) {
     try {
       sku = sku.replace("_", ":"); // Magento SKU has a colon; Public API training instance id is of the format course:1234_12345
-      const cartId = BrowserPersistence.getItem(CART_ID);
+      const cartId = getItemFromStorage(CART_ID);
       if (!cartId) {
         //TO-DO redirect to sign in or fetch cart id
       }

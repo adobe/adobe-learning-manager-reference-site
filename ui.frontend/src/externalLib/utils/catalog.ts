@@ -15,8 +15,13 @@ import {
   PrimeLearningObjectInstance,
 } from "../models/PrimeModels";
 import { CatalogFilterState } from "../store/reducers/catalog";
-import BrowserPersistence from "../utils/storage";
-import { getALMAttribute, getALMConfig, getWindowObject } from "./global";
+import {
+  getALMAttribute,
+  getALMConfig,
+  getItemFromStorage,
+  getWindowObject,
+  setItemToStorage,
+} from "./global";
 import { JsonApiParse } from "./jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "./restAdapter";
 
@@ -82,7 +87,7 @@ export const getOrUpdateCatalogFilters = async (): Promise<
   PrimeCatalog[] | undefined
 > => {
   try {
-    const filterItems = BrowserPersistence.getItem(PRIME_CATALOG_FILTER);
+    const filterItems = getItemFromStorage(PRIME_CATALOG_FILTER);
     if (filterItems) {
       return JsonApiParse(filterItems)?.catalogList;
     }
@@ -90,7 +95,7 @@ export const getOrUpdateCatalogFilters = async (): Promise<
     const catalogPromise = await RestAdapter.get({
       url: `${config.primeApiURL}catalogs`,
     });
-    BrowserPersistence.setItem(PRIME_CATALOG_FILTER, catalogPromise);
+    setItemToStorage(PRIME_CATALOG_FILTER, catalogPromise);
     return JsonApiParse(catalogPromise)?.catalogList;
   } catch (e) {}
 };
