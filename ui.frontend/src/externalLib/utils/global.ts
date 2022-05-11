@@ -55,6 +55,7 @@ export interface ALM {
   getAccountActiveFields: Function;
   updateAccountActiveFieldsDetails: Function;
   handleLogIn: Function;
+  storage: any;
 }
 
 export function getWindowObject() {
@@ -172,4 +173,20 @@ init();
 export const isCommerceEnabledOnAccount = async () => {
   const response = await getALMUser();
   return response.account.enableECommerce;
+};
+
+// export const getCartId = () => {
+//   return getALMObject().storage.getItem(CART_ID);
+// };
+
+// export const setCartId = (data: any, ttl = 10800) => {
+//   return getALMObject().storage.setItem(CART_ID, data, ttl);
+// };
+
+export const getItemFromStorage = (key: string) => {
+  return getALMObject().storage.getItem(key);
+};
+
+export const setItemToStorage = (key: string, data: any, ttl = 10800) => {
+  return getALMObject().storage.setItem(key, data, ttl);
 };

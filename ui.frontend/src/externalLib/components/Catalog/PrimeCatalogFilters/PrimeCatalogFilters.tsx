@@ -9,13 +9,8 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { ADOBE_COMMERCE } from "../../../common/APIService";
 import { UpdateFiltersEvent } from "../../../utils/filters";
-import {
-  getALMConfig,
-  getALMObject,
-  isCommerceEnabledOnAccount,
-} from "../../../utils/global";
+import { getALMObject } from "../../../utils/global";
 import { GetTranslation } from "../../../utils/translationService";
 import { ALMLoader } from "../../Common/ALMLoader";
 import styles from "./PrimeCatalogFilters.module.css";

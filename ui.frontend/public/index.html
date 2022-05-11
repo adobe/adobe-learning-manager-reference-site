@@ -26,21 +26,21 @@
     -->
     <script>
       class NamespacedSessionStorage {
-        constructor(sessiontorage, key) {
-          this.sessiontorage = sessiontorage;
+        constructor(sessionStorage, key) {
+          this.sessionStorage = sessionStorage;
           this.key = key;
         }
         _makeKey(key) {
           return `${this.key}__${key}`;
         }
         getItem(name) {
-          return this.sessiontorage.getItem(this._makeKey(name));
+          return this.sessionStorage.getItem(this._makeKey(name));
         }
         setItem(name, value) {
-          return this.sessiontorage.setItem(this._makeKey(name), value);
+          return this.sessionStorage.setItem(this._makeKey(name), value);
         }
         removeItem(name) {
-          return this.sessiontorage.removeItem(this._makeKey(name));
+          return this.sessionStorage.removeItem(this._makeKey(name));
         }
       }
 
@@ -48,7 +48,7 @@
         static KEY = "ALM_BROWSER_PERSISTENCE";
         constructor() {
           this.storage = new NamespacedSessionStorage(
-            sessiontorage,
+            sessionStorage,
             BrowserPersistence.KEY
           );
         }
@@ -119,15 +119,19 @@
       };
 
       const isPrimeUserLoggedIn = () => {
-        return false;
+        return true;
       };
 
       const getAccessToken = () => {
-        return "940f0f761aa8ab9d50e7b65e59cdbb25";
+        return "af68bc9a813ec5bf9042219d8a82a0b0";
       };
+      const COMMERCE_TOKEN_COOKIE_NAME = "alm_commerce_token";
 
       const getCommerceToken = () => {
-        return "1d3bb267efc289b3c2c1c284fc4bc2c5";
+        let cookieValues = document.cookie.match(
+          `(^|[^;]+)\\s*${COMMERCE_TOKEN_COOKIE_NAME}\\s*=\\s*([^;]+)`
+        );
+        return cookieValues ? cookieValues.pop() : "";
       };
 
       const getALMConfig = () => {
