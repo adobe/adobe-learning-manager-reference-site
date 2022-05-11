@@ -51,6 +51,7 @@ export interface ALM {
   setALMAttribute: Function;
   getALMAttribute: Function;
   updateALMUser: Function;
+  updateUserProfileImage: Function;
   updateCart: Function;
   getAccountActiveFields: Function;
   updateAccountActiveFieldsDetails: Function;
@@ -130,6 +131,10 @@ export const updateAccountActiveFieldsDetails = async (
 
 export const updateALMUser = async () => {
   return JsonApiParse(await getALMObject().updateALMUser());
+};
+
+export const updateUserProfileImage = async (imageUrl: any) => {
+  return JsonApiParse(await getALMObject().updateUserProfileImage(imageUrl));
 };
 
 export const getConfigurableAttributes = (cssSelector: string) => {
