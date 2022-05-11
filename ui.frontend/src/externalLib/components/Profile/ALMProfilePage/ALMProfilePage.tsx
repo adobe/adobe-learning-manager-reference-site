@@ -9,7 +9,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { Button, lightTheme, Provider } from "@adobe/react-spectrum";
+import { Button, lightTheme, Provider, ProgressBar } from "@adobe/react-spectrum";
 import Edit from "@spectrum-icons/workflow/Edit";
 import { useEffect, useRef, useState } from "react";
 import { useIntl } from "react-intl";
@@ -24,6 +24,11 @@ import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 import ALMActiveFields from "./ALMActiveFields";
 import styles from "./ALMProfilePage.module.css";
 import ALMSkillComponent from "./ALMSkillComponent";
+import store from "../../../../store/APIStore";
+import {
+  SOCIAL_CANCEL_SVG,
+} from "../../../utils/inline_svg";
+import { cancelUploadFile } from "../../../utils/uploadUtils";
 
 const getActiveFieldAttributes = (config: PrimeConfig) => {
   let cssSelector = config.mountingPoints.profilePageContainer;
@@ -43,6 +48,11 @@ const ALMProfilePage = () => {
   } = useProfile();
   const { user, accountActiveFields } = profileAttributes;
   const [predefinedMultiValues, setPredefinedMultiValues] = useState(new Map());
+  const [ isUploading, setIsUploading] = useState(false);
+  const state = store.getState();
+  const [fileUploadProgress, setFileUploadProgress] = useState(
+    state.fileUpload.uploadProgress
+  );
   console.log("Active fields :: " + accountActiveFields);
   const activeFieldAttributes = getActiveFieldAttributes(config);
   const {
@@ -87,6 +97,11 @@ const ALMProfilePage = () => {
   };
 
   const inputRef = useRef<null | HTMLInputElement>(null);
+
+  const updateFileUpdateProgress = () => {
+    setFileUploadProgress(store.getState().fileUpload.uploadProgress);
+  };
+
   const imageUploaded = async (event: any) => {
     let file: any;
     const fileList = (event.target as HTMLInputElement).files;
@@ -96,7 +111,14 @@ const ALMProfilePage = () => {
         break;
       }
     }
+    setFileUploadProgress(0);
+    setIsUploading(true);
+    const progressCheck = setInterval(() => {
+      updateFileUpdateProgress();
+    }, 500);
     await updateProfileImage(file.name, file);
+    clearInterval(progressCheck);
+    setIsUploading(false);
   };
 
   const onActiveFieldUpdate = (value: any, name: any) => {
@@ -145,6 +167,11 @@ const ALMProfilePage = () => {
     (inputRef?.current as HTMLInputElement)?.click();
   };
 
+  const cancelClickHandler = () => {
+    cancelUploadFile(store.getState().fileUpload.fileName);
+    setIsUploading(false);
+  };
+
   return (
     <ALMErrorBoundary>
       <Provider theme={lightTheme} colorScheme={"light"}>
@@ -167,25 +194,65 @@ const ALMProfilePage = () => {
                     src={user.avatarUrl}
                     alt="profile"
                   />
-                  <Button
-                    variant="primary"
-                    isQuiet
-                    UNSAFE_className={styles.button}
-                    onPress={startFileUpload}
-                  >
-                    {formatMessage({
-                      id: "alm.profile.change.image",
-                      defaultMessage: "Change image",
-                    })}
-                  </Button>
-                  <Button
-                    variant="cta"
-                    isQuiet
-                    UNSAFE_className={styles.editIcon}
-                    onPress={startFileUpload}
-                  >
-                    <Edit />
-                  </Button>
+                  {!isUploading &&
+                    <Button
+                      variant="primary"
+                      isQuiet
+                      UNSAFE_className={styles.button}
+                      onPress={startFileUpload}
+                    >
+                      {formatMessage({
+                        id: "alm.profile.change.image",
+                        defaultMessage: "Change image",
+                      })}
+                    </Button>
+                  }
+                    <Button
+                      variant="cta"
+                      isQuiet
+                      UNSAFE_className={styles.editIcon}
+                      onPress={startFileUpload}
+                    >
+                      <Edit />
+                    </Button>
+                  {isUploading && (
+                    <div className={styles.progressArea}>
+                      <ProgressBar
+                        label={formatMessage({
+                          id: "alm.community.uploading.label",
+                          defaultMessage: "Uploading...",
+                        })}
+                        value={fileUploadProgress}
+                      />
+                      <button
+                        className={styles.primeStatusSvg}
+                        title={formatMessage({
+                          id: "alm.community.removeUpload.label",
+                          defaultMessage: "Remove upload",
+                        })}
+                      onClick={cancelClickHandler}
+                      >
+                        {SOCIAL_CANCEL_SVG()}
+                      </button>
+                    </div>
+                  )}
+                  {isUploading && (
+                    <div className={styles.progressAreaMobile}>
+                      <ProgressBar
+                        value={fileUploadProgress}
+                      />
+                      <button
+                        className={styles.primeStatusSvg}
+                        title={formatMessage({
+                          id: "alm.community.removeUpload.label",
+                          defaultMessage: "Remove upload",
+                        })}
+                      onClick={cancelClickHandler}
+                      >
+                        {SOCIAL_CANCEL_SVG()}
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <div className={styles.details}>
                   <h2 className={styles.name}>{user.name}</h2>

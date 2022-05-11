@@ -18,6 +18,7 @@ import {
   getALMUser,
   updateAccountActiveFieldsDetails,
   updateALMUser,
+  updateUserProfileImage
 } from "../../utils/global";
 import { RestAdapter } from "../../utils/restAdapter";
 import { getUploadInfo, uploadFile } from "../../utils/uploadUtils";
@@ -82,6 +83,7 @@ export const useProfile = () => {
         accountActiveFields: prevState.accountActiveFields,
         user: response.user,
       }));
+      await updateUserProfileImage(response.user.avatarUrl);
       setErrorCode("");
     } catch (error: any) {
       setErrorCode(error.status);
