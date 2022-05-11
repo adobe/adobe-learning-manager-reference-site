@@ -32,6 +32,8 @@ import { useIntl } from "react-intl";
 import { useBoardOptions } from "../../../hooks/community";
 import { PrimeCommunityObjectBody } from "../PrimeCommunityObjectBody";
 import styles from "./PrimeCommunityBoard.module.css";
+import { AlertType } from "../../../common/Alert/AlertDialog";
+import { useAlert } from "../../../common/Alert/useAlert";
 
 const PrimeCommunityBoard  = (props: any) => {
   const { formatMessage } = useIntl();
@@ -40,6 +42,7 @@ const PrimeCommunityBoard  = (props: any) => {
   const [isBoardOptionsOpen, setIsBoardOptionsOpen] = useState(showBoardOptions);
   const { reportBoard } = useBoardOptions();
   const [ showConfirmation, setShowConfirmation ] = useState(false);
+  const [alert] = useAlert();
   
   const boardSkills = board.skills?.map((skill: any, index: any) => {
     return (index ? ', ': '') + skill.name;
@@ -55,6 +58,10 @@ const PrimeCommunityBoard  = (props: any) => {
 
   const reportBoardHandler = () => {
     setShowConfirmation(true);
+  }
+
+  const copyBoardUrlHandler = () => {
+    alert(true, formatMessage({id: "alm.community.board.copyUrlSuccess", defaultMessage: "URL copied successfully"}), AlertType.success);
   }
 
   const callReportBoard = async() => {
@@ -77,7 +84,12 @@ const PrimeCommunityBoard  = (props: any) => {
           <button className={styles.primeBoardOptions} onClick={toggleBoardOptionsHandler} id={"prime-board-options-" + board.id}>
             {SOCIAL_MORE_OPTIONS_SVG()}
             {isBoardOptionsOpen && 
-              <PrimeCommunityBoardOptions board={board} boardOptionsHandler={toggleBoardOptionsHandler} reportBoardHandler={reportBoardHandler}></PrimeCommunityBoardOptions>
+              <PrimeCommunityBoardOptions 
+                board={board} 
+                boardOptionsHandler={toggleBoardOptionsHandler} 
+                reportBoardHandler={reportBoardHandler} 
+                copyBoardUrlHandler={copyBoardUrlHandler}
+              ></PrimeCommunityBoardOptions>
             }  
           </button>
           {showConfirmation &&

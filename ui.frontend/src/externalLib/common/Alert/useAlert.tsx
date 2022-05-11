@@ -6,14 +6,14 @@ let alertMesssage: string = "Unknown Error";
 let alertType: AlertType = AlertType.success;
 
 const useAlert = (): [
-  (show: boolean, timeOut: number, messsage: string, type: AlertType) => void
+  (show: boolean, messsage: string, type: AlertType, timeOut?: number) => void
 ] => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const alert = (
     show: boolean,
-    timeOut: number = 2000,
     messsage: string,
-    type: AlertType
+    type: AlertType,
+    timeOut: number = 2000,
   ) => {
     alertType = type;
     alertMesssage = messsage;

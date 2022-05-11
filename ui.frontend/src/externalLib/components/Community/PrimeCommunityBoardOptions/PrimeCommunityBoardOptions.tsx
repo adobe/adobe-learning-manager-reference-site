@@ -50,11 +50,14 @@ const PrimeCommunityBoardOptions = (props: any) => {
     navigator.clipboard.writeText(url); //to-do need to check in all browsers
   };
 
-  const copyUrlHandler = () => {
+  const copyBoardUrlHandler = () => {
     const primeConfig = getALMConfig();
     const hostUrl = primeConfig.almBaseURL;
-    const boardUrl = hostUrl + "/app/learner/#/social/board/" + boardId;
+    const boardUrl = hostUrl + "/community.html/boardId/" + boardId;
     copyUrl(boardUrl);
+    if (typeof props.copyBoardUrlHandler === "function") {
+      props.copyBoardUrlHandler();
+    }
   };
 
   const reportBoardHandler = () => {
@@ -87,7 +90,7 @@ const PrimeCommunityBoardOptions = (props: any) => {
             })}
           </div>
         )} */}
-        <div className={styles.primeBoardOption} onClick={copyUrlHandler}>
+        <div className={styles.primeBoardOption} onClick={copyBoardUrlHandler}>
           {formatMessage({
             id: "alm.community.board.copyUrl",
             defaultMessage: "Copy URL",
