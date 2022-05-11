@@ -16,22 +16,12 @@ governing permissions and limitations under the License.
     function handlePageRedirect()
     {
         const currentURL = new URL(window.location.href);
-        if (currentURL)
+        if (currentURL && currentURL.hash)
         {
-            let route = currentURL.searchParams.get("route");
-            if (route && route.length > 1)
+            let params = currentURL.hash.match(/([A-Za-z]+)\/(\d+)(.*)/);
+            if (params && params.length >= 3)
             {
-                let routeParams = route.split("/");
-                if (routeParams)
-                {
-                    window.ALM.navigateToTrainingOverviewPage(routeParams[0] + ":" + routeParams[1]);
-                }
-            }
-
-            let certificationId =  currentURL.searchParams.get("certificationId");
-            if (certificationId)
-            {
-                window.ALM.navigateToTrainingOverviewPage("certification:" + certificationId);
+                window.ALM.navigateToTrainingOverviewPage(params[1] + ":" + params[2]);
             }
         }
     }

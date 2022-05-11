@@ -87,6 +87,11 @@ governing permissions and limitations under the License.
         }
     }
 
+    function updateUserProfileImage(imageURL) {
+        $(HEADER_PROFILE_PIC_SEL).attr("src", imageURL);
+        $(VERT_NAV_PROFILE_PIC_SEL).attr("src", imageURL);
+    }
+
     function isAuthor() {
         return window.ALM.ALMConfig.authorMode == true;
     }
@@ -185,10 +190,8 @@ governing permissions and limitations under the License.
         window.ALM.getALMUser().then(function (user) {
         try {
             const userAttrs = JSON.parse(user).data.attributes;
-            $(HEADER_PROFILE_PIC_SEL).attr("src", userAttrs.avatarUrl);
+            updateUserProfileImage(userAttrs.avatarUrl);
             $(VERT_NAV_PROFILE_NAME_SEL).text(userAttrs.name);
-
-            $(VERT_NAV_PROFILE_PIC_SEL).attr("src", userAttrs.avatarUrl);
         } catch (e) {
             console.error("Unable to fetch user avatar.");
         }
@@ -235,8 +238,11 @@ governing permissions and limitations under the License.
         if (window.ALM.isPrimeUserLoggedIn()) {
             fetchProfileDetails();
         } else {
-            $(HEADER_PROFILE_PIC_SEL).attr("src", DEFAULT_USER_AVATAR);
-            $(VERT_NAV_PROFILE_PIC_SEL).attr("src", DEFAULT_USER_AVATAR);
+            updateUserProfileImage(DEFAULT_USER_AVATAR);
         }
     });
+
+    window.ALM = window.ALM || {};
+    window.ALM.updateUserProfileImage = updateUserProfileImage;
+    
     })(document, window, jQuery);

@@ -18,6 +18,7 @@
   "alm.community.board.delete": "Delete",
   "alm.community.board.report": "Report",
   "alm.community.board.sortBy": "Sort by",
+  "alm.community.board.copyUrlSuccess": "URL copied successfully",
   "alm.notification.icon": "User Notifications",
   "alm.catalog.header": "Repository of |||COURSE|||, |||CERTIFICATION||| and |||LEARNING_PATH|||",
   "alm.catalog.search.placeholder": "Enter text and press enter",

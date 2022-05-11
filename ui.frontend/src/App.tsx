@@ -30,6 +30,7 @@ const App = (props: any) => {
   //store.subscribe(() => console.log(store.getState()));
   return (
     <IntlProvider locale={props.locale} messages={props.messages}>
+      <div id="alertDialog"></div>
       <CommerceContextProvider>
         <AppContextProvider>
           <Portal selector={mountingPoints.notificationContainer}>
