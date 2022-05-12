@@ -56,11 +56,17 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     bannerUrl = "",
   } = useCardIcon(training);
 
-  skillNames =
-    skillNames!?.length > 0
-      ? // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        skillNames
-      : skills?.map((item) => item.skillLevel?.skill?.name);
+  const computedSkillsName = useMemo(() => {
+    if (skillNames!?.length > 0) {
+      return skillNames?.join(", ");
+    }
+    let tempSkillNames = new Set();
+    skills?.forEach((item) => {
+      tempSkillNames.add(item.skillLevel?.skill?.name);
+    });
+    return Array.from(tempSkillNames).join(", ");
+    // return skills?.map((item) => item.skillLevel?.skill?.name)
+  }, [skillNames, skills]);
   const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
 
   const cardClickHandler = useCallback(async () => {
@@ -122,7 +128,7 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     id,
     format,
     type,
-    skillNames,
+    skillNames: computedSkillsName,
     rating,
     state,
     tags,
