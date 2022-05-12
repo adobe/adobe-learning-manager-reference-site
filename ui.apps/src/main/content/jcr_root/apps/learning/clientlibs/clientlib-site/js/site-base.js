@@ -86,7 +86,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     if (skillNames)
       catalogUrl += "skillName=" + encodeURIComponent(skillNames) + "&";
     if (tagNames)
-      catalogUrl += "tags=" + encodeURIComponent(tagNames) + "&";
+      catalogUrl += "tagName=" + encodeURIComponent(tagNames) + "&";
       
     catalogUrl = catalogUrl.slice(0, -1);
     
