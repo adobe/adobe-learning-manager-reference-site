@@ -16,7 +16,7 @@ import styles from "./productList.module.css";
 
 export default function ProductList({ cartItems = [] }) {
   if (cartItems?.length === 0) {
-    return <h2>Ther are no items in your cart.</h2>;
+    return <h2>There are no items in your cart.</h2>;
   }
 
   const productList = cartItems.map((training) => {
