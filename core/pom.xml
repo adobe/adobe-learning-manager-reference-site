@@ -159,6 +159,11 @@ Import-Package: javax.annotation;version=0.0.0,*
 	  </dependency>
         <!-- Testing -->
         <dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>

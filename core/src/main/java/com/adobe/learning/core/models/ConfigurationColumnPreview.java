@@ -79,7 +79,7 @@ public class ConfigurationColumnPreview {
             properties = jcrContent != null ? jcrContent.getValueMap() : itemResource.getValueMap();
         }
 
-        // modifiedTime = properties.get("cq:lastModified", Calendar.class);
+        modifiedTime = properties.get("cq:lastModified", Calendar.class);
         // ReplicationStatus replicationStatus = itemResource.adaptTo(ReplicationStatus.class);
         // if (replicationStatus != null && !replicationStatus.isDeactivated()) {
         //     publishedTime = replicationStatus.getLastPublished();
