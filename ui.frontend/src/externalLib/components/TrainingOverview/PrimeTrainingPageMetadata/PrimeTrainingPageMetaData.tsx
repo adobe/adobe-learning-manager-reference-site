@@ -216,7 +216,7 @@ const PrimeTrainingPageMetaData: React.FC<{
       }
     };
     computeIsSynced();
-  }, [training.price]);
+  }, [training.dateCreated, training.price]);
 
   const trainingNotAvailableForPurchaseText = isTrainingNotSynced ? (
     <p style={{ textAlign: "center" }} className={styles.label}>
@@ -347,6 +347,27 @@ const PrimeTrainingPageMetaData: React.FC<{
           Add to cart
         </Button>
       </div> */}
+
+      {/* Minimum Completion Criteria container */}
+
+      {training.loResourceCompletionCount !==
+        trainingInstance.loResources.length && (
+        <div className={styles.commonContainer}>
+          <span aria-hidden="true" className={styles.minimumCriteria}>
+            {training.loResourceCompletionCount}/
+            {trainingInstance.loResources.length}
+          </span>
+          <div className={styles.innerContainer}>
+            <label className={styles.minimumCriteriaLabel}>
+              {formatMessage({
+                id: "alm.overview.minimum.completion.criteria",
+                defaultMessage: "Minimum Completion Criteria",
+              })}
+            </label>
+          </div>
+        </div>
+      )}
+
       {/* Enrollment Deadline container */}
 
       {showEnrollmentDeadline && (

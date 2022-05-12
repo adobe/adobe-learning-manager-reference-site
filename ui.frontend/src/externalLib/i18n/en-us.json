@@ -120,6 +120,7 @@
   "alm.overview.skills.achieve.level.learningProgram": "What levels will I achieve after the ||LEARNING_PATH||?",
   "alm.overview.skills.achieve.level.certification": "What levels will I achieve after the ||CERTIFICATION||?",
   "alm.overview.total.duration": "Duration : {0}",
+  "alm.overview.minimum.completion.criteria": "Minimum Completion Criteria",
   "alm.catalog.filter.enrolled": "Enrolled",
   "alm.catalog.filter.completed": "Completed",
   "alm.catalog.filter.started": "Started",
