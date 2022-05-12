@@ -128,7 +128,7 @@ export async function getParamsForCatalogApi(filterState: CatalogFilterState) {
       params["filter.skillName"] = filterState.skillName;
     }
     if (filterState.tagName && catalogAttributes?.tagName === "true") {
-      params["filter.tags"] = filterState.tagName;
+      params["filter.tagName"] = filterState.tagName;
     }
     if (
       filterState.learnerState &&
