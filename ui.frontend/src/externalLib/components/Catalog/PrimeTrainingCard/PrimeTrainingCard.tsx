@@ -84,7 +84,7 @@ const PrimeTrainingCard: React.FC<{
     return format ? GetTranslation(`${formatMap[format]}`, true) : "";
   }, [format]);
   const trainingTypeLabel = useMemo(() => {
-    return type ? GetTranslation(`alm.catalog.card.${type}`, true) : "";
+    return type ? GetTranslation(`alm.training.${type}`, true) : "";
   }, [type]);
   let priceLabel = "";
   const price = training.price;
@@ -109,7 +109,7 @@ const PrimeTrainingCard: React.FC<{
         <a
           className={cardClass}
           onMouseLeave={onMouseLeaveHandler}
-          href={"#"}
+          href={"javascript:void(0)"}
           onClick={cardClickHandler}
         >
           <div style={{ ...cardBgStyle }} className={styles.thumbnail}></div>
