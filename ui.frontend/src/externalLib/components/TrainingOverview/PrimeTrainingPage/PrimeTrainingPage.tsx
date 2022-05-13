@@ -74,7 +74,7 @@ const PrimeTrainingPage = () => {
     unEnrollmentHandler,
     jobAidClickHandler,
     addToCartHandler,
-    cardBgStyle,
+    isPreviewEnabled,
   } = useTrainingPage(trainingId, trainingInstanceId);
   const locale = config.locale;
   const { formatMessage } = useIntl();
@@ -106,11 +106,11 @@ const PrimeTrainingPage = () => {
           <div className={styles.left}>
             {showDescription === "true" && (
               <div
-              dangerouslySetInnerHTML={{
-                __html: richTextOverview || overview || description,
-              }}
-              className={styles.overview}
-            ></div>
+                dangerouslySetInnerHTML={{
+                  __html: richTextOverview || overview || description,
+                }}
+                className={styles.overview}
+              ></div>
             )}
             <span className={styles.duration}>
               {formatMessage(
@@ -140,12 +140,11 @@ const PrimeTrainingPage = () => {
 
               let showMandatoryLabel = false;
               let instance = prerequisiteLO.instances[0];
-              prequisiteConstraints?.filter((prequisiteConstraints) => {
+              prequisiteConstraints?.forEach((prequisiteConstraints) => {
                 if (
                   prequisiteConstraints.prerequisiteLOId === prerequisiteLO.id
                 ) {
                   showMandatoryLabel = prequisiteConstraints.mandatory;
-                  return;
                 }
               });
               return (
@@ -170,12 +169,14 @@ const PrimeTrainingPage = () => {
                 training={training}
                 launchPlayerHandler={launchPlayerHandler}
                 trainingInstance={trainingInstance}
+                isPreviewEnabled={isPreviewEnabled}
               />
             )}
             {loType === CERTIFICATION && (
               <PrimeTrainingOverview
                 trainings={training.subLOs}
                 launchPlayerHandler={launchPlayerHandler}
+                isPreviewEnabled={isPreviewEnabled}
               />
             )}
             {loType === LEARNING_PROGRAM &&
@@ -237,6 +238,7 @@ const PrimeTrainingPage = () => {
                         section.mandatory &&
                         section.mandatoryLOCount === section.loIds?.length
                       }
+                      isPreviewEnabled={isPreviewEnabled}
                     />
                   </section>
                 );
@@ -256,6 +258,7 @@ const PrimeTrainingPage = () => {
               unEnrollmentHandler={unEnrollmentHandler}
               addToCartHandler={addToCartHandler}
               jobAidClickHandler={jobAidClickHandler}
+              isPreviewEnabled={isPreviewEnabled}
             />
           </div>
         </div>

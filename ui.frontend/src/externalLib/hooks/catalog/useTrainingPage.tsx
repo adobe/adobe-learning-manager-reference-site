@@ -17,7 +17,7 @@ import {
   PrimeLoInstanceSummary,
 } from "../../models/PrimeModels";
 import { getJobaidUrl, isJobaidContentTypeUrl } from "../../utils/catalog";
-import { getALMConfig } from "../../utils/global";
+import { getALMAccount, getALMConfig } from "../../utils/global";
 import {
   filterTrainingInstance,
   useBadge,
@@ -39,12 +39,18 @@ export const useTrainingPage = (
   const { locale } = getALMConfig();
   const [currentState, setCurrentState] = useState({
     trainingInstance: {} as PrimeLearningObjectInstance,
+    isPreviewEnabled: false,
     isLoading: true,
     errorCode: "",
   });
 
   //const [error, setError] = useState(null);
-  const { trainingInstance, isLoading, errorCode } = currentState;
+  const {
+    trainingInstance,
+    isPreviewEnabled,
+    isLoading,
+    errorCode,
+  } = currentState;
   const [instanceSummary, setInstanceSummary] = useState(
     {} as PrimeLoInstanceSummary
   );
@@ -58,14 +64,17 @@ export const useTrainingPage = (
         queryParam["include"] = params.include || DEFAULT_INCLUDE_LO_OVERVIEW;
         queryParam["useCache"] = true;
         queryParam["filter.ignoreEnhancedLP"] = false;
-        const response = await APIServiceInstance.getTraining(
-          trainingId,
-          queryParam
-        );
+
+        const [account, response] = await Promise.all([
+          getALMAccount(),
+          APIServiceInstance.getTraining(trainingId, queryParam),
+        ]);
+
         if (response) {
           const trainingInstance = filterTrainingInstance(response, instanceId);
           setCurrentState({
             trainingInstance,
+            isPreviewEnabled: account.enableModulePreview,
             isLoading: false,
             errorCode: "",
           });
@@ -74,6 +83,7 @@ export const useTrainingPage = (
         console.log("Error while loading training " + error);
         setCurrentState({
           trainingInstance: {} as PrimeLearningObjectInstance,
+          isPreviewEnabled: false,
           isLoading: false,
           errorCode: error.status,
         });
@@ -198,6 +208,7 @@ export const useTrainingPage = (
     isLoading,
     instanceBadge,
     instanceSummary,
+    isPreviewEnabled,
     enrollmentHandler,
     launchPlayerHandler,
     unEnrollmentHandler,

@@ -14,7 +14,7 @@ import React from "react";
 import Product from "./product";
 import styles from "./productList.module.css";
 
-export default function ProductList({ cartItems = [] }) {
+export default function ProductList({ cartItems = [], refreshCartHandler }) {
   if (cartItems?.length === 0) {
     return <h2>There are no items in your cart.</h2>;
   }
@@ -25,6 +25,7 @@ export default function ProductList({ cartItems = [] }) {
         training={training.product}
         key={training.id}
         itemId={training.id}
+        refreshCartHandler={refreshCartHandler}
       />
     );
   });

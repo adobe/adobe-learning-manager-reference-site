@@ -25,6 +25,7 @@ const PrimeModuleList: React.FC<{
   loResources: PrimeLearningObjectResource[];
   isPartOfLP?: boolean;
   isContent?: boolean;
+  isPreviewEnabled: boolean;
 }> = (props) => {
   const {
     loResources,
@@ -33,29 +34,8 @@ const PrimeModuleList: React.FC<{
     trainingInstance,
     isPartOfLP,
     isContent,
+    isPreviewEnabled,
   } = props;
-
-  // chkIfPriorModulesAreStarted() {
-  //   var z = this.get("course.moduleIndexOfFirstContentModule");
-  //   const courseId = this.get("model.courseId");
-  //   var course = this.get("store").peekRecord("course", courseId);
-  //   var modulesArray = course.get("courseModule").slice();
-  //   var currModuleOrderInCourse = this.get("module.moduleOrderInCourse");
-  //   if (modulesArray) {
-  //       for (var x = z; x < modulesArray.length; x++){
-  //           if (modulesArray[x].get("moduleOrderInCourse") < currModuleOrderInCourse)
-  //               return false;
-  //       }
-  //   }
-  //   return true;
-  // },
-  // isLocked : Ember.computed("course.moduleIndexOfFirstContentModule","course.sequential","model.modulesDataArray","module.moduleOrderInCourse", function(){
-  //   var course = this.get("course.model");
-  //   var sequenceEnforced = course.get("sequential");
-  //   if (sequenceEnforced == "true" && !this.chkIfPriorModulesAreStarted())
-  //      return true;
-  //   return false;
-  // }),
 
   return (
     <ul
@@ -70,8 +50,8 @@ const PrimeModuleList: React.FC<{
           launchPlayerHandler={launchPlayerHandler}
           training={training}
           trainingInstance={trainingInstance}
-          isPartOfLP={isPartOfLP}
           isContent={isContent}
+          isPreviewEnabled={isPreviewEnabled}
         ></PrimeModuleItem>
       ))}
     </ul>

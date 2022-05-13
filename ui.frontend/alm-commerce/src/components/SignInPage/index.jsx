@@ -154,7 +154,7 @@ const SignIn = () => {
               <br />
               <Button
                 variant="cta"
-                type="button"
+                type="submit"
                 onPress={submitHandler}
                 isDisabled={isLoading}
                 UNSAFE_className={styles.button}

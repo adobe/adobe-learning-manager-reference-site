@@ -35,16 +35,16 @@ import { useResource } from "../../../utils/hooks";
 import {
   ACTIVITY_SVG,
   AUDIO_SVG,
+  CAPTIVATE_SVG,
   CLASSROOM_SVG,
   DOC_SVG,
   PDF_SVG,
   PPT_SVG,
+  PRESENTER_SVG,
   SCORM_SVG,
   VIDEO_SVG,
   VIRTUAL_CLASSROOM_SVG,
   XLS_SVG,
-  CAPTIVATE_SVG,
-  PRESENTER_SVG,
 } from "../../../utils/inline_svg";
 import {
   getPreferredLocalizedMetadata,
@@ -71,8 +71,8 @@ const moduleIconMap = {
   PDF: PDF_SVG(),
   XLS: XLS_SVG(),
   AUDIO: AUDIO_SVG(),
-  CP:CAPTIVATE_SVG(),
-  PR:PRESENTER_SVG(),
+  CP: CAPTIVATE_SVG(),
+  PR: PRESENTER_SVG(),
 };
 
 const PrimeModuleItem: React.FC<{
@@ -80,16 +80,16 @@ const PrimeModuleItem: React.FC<{
   trainingInstance: PrimeLearningObjectInstance;
   launchPlayerHandler: Function;
   loResource: PrimeLearningObjectResource;
-  isPartOfLP?: boolean;
   isContent?: boolean;
+  isPreviewEnabled: boolean;
 }> = (props) => {
   const {
     training,
     trainingInstance,
     launchPlayerHandler,
     loResource,
-    isPartOfLP,
     isContent,
+    isPreviewEnabled,
   } = props;
   const { formatMessage } = useIntl();
 
@@ -105,6 +105,7 @@ const PrimeModuleItem: React.FC<{
   const resource = useResource(loResource, locale);
   const enrollment = training.enrollment;
   const isModulePreviewAble =
+    isPreviewEnabled &&
     (!enrollment || enrollment?.state === "PENDING_APPROVAL") &&
     loResource.previewEnabled;
 
@@ -159,9 +160,9 @@ const PrimeModuleItem: React.FC<{
     loResource.resourceType === VIRTUAL_CLASSROOM;
 
   const isModuleClicable: boolean = enrollment
-    ? enrollment.state != "PENDING_APPROVAL"
+    ? enrollment.state !== "PENDING_APPROVAL"
     : isModulePreviewAble;
- 
+
   const isVC = loResource.resourceType === VIRTUAL_CLASSROOM;
 
   const isElearning = loResource.resourceType === ELEARNING;
