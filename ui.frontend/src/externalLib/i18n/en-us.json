@@ -162,6 +162,7 @@
   "alm.profile.skills.cancel": "Cancel",
   "alm.training.buyNow": "Buy Now for ${x}",
   "alm.addToCart": "Add to cart - ${x}",
+  "alm.addToCart.Error": "An error occurred while adding {loType}.",
   "alm.training.overview.not.available": "{training} is not yet available for purchase",
   "alm.overview.certification.minimum.criteria.label": "Learners must complete ${x} of ${y} |||COURSE||| to achieve ||CERTIFICATION||",
   "alm.overview.course.minimum.criteria.label": "Learners must complete ${x} of ${y} ||MODULE|| to achieve ||COURSE||",

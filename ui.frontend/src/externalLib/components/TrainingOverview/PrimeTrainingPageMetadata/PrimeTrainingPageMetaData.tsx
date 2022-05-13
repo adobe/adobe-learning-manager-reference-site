@@ -22,6 +22,8 @@ import UserGroup from "@spectrum-icons/workflow/UserGroup";
 import { useEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { InstanceBadge, Skill } from "../../../models/custom";
+import { AlertType } from "../../../common/Alert/AlertDialog";
+import { useAlert } from "../../../common/Alert/useAlert";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
@@ -75,6 +77,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   jobAidClickHandler,
   isPreviewEnabled,
 }) => {
+  const [alert] = useAlert();
   const { formatMessage } = useIntl();
   const config = getALMConfig();
   const locale = config.locale;
@@ -157,7 +160,11 @@ const PrimeTrainingPageMetaData: React.FC<{
     try {
       const { error, totalQuantity } = await addToCartHandler();
       if (error && error[0]?.message) {
-        console.error(error[0].message);
+        alert(
+          true,
+          formatMessage({ id: "alm.addToCart.Error" }, { loType: loType }),
+          AlertType.error
+        );
       } else {
         getALMObject().updateCart(totalQuantity);
       }

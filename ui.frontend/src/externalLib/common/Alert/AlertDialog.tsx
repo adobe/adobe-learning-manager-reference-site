@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./AlertDialog.module.css";
 import Alert from "@spectrum-icons/workflow/Alert";
 import CheckmarkCircleOutline from "@spectrum-icons/workflow/CheckmarkCircleOutline";
+import { lightTheme, Provider} from "@adobe/react-spectrum";
 
 const success = "success";
 const error = "error";
@@ -29,7 +30,7 @@ const AlertDialog: React.FC<{
   message: string;
 }> = ({ type, show, message }) => {
   return (
-    <>
+    <Provider theme={lightTheme} colorScheme={"light"}>
       {show && (
         <div className={styles.alertbackdrop}>
           <div className={`${styles.alert} ${styles.dialog}`}>
@@ -45,7 +46,7 @@ const AlertDialog: React.FC<{
           </div>
         </div>
       )}
-    </>
+    </Provider>
   );
 };
 export { AlertDialog };
