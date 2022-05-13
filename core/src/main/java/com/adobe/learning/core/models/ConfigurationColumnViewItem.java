@@ -78,8 +78,8 @@ public class ConfigurationColumnViewItem {
         boolean hasChildren = resource.hasChildren();
         boolean hasMoreChildren = getChildCount(resource) > 1;
         boolean hasSettings = resource.getChild("settings") != null;
-        return isContainer && (hasALMSetting || hasMoreChildren) ||
-            !isContainer && !hasALMSetting && (hasChildren && !hasSettings || hasMoreChildren && hasSettings);
+        return (isContainer && (hasALMSetting || hasMoreChildren) ||
+            !isContainer && !hasALMSetting && (hasChildren && !hasSettings || hasMoreChildren && hasSettings));
     }
 
     private boolean isALMBucket() {
