@@ -33,9 +33,9 @@ governing permissions and limitations under the License.
   const WIDET_CONFIG_DATA = "data-cp-widget-configs",
     WIDGET_REF_DATA = "cp-widget-ref",
     DATA_RUN_MODE = "cp-runmode",
-    WIDGET_SRC_URL_DATA = "cp-widget-src-url",
     WIDGET_WRAPPER_DIV = ".cpWidgetWrapperDiv",
-    WIDGET_COMMUNICATOR_URL = "cp-widget-communicator-url";
+    WIDGET_COMMUNICATOR_URL = "cp-widget-communicator-url",
+    AOI_WIDGET_REF = "com.adobe.captivateprime.lostrip.myinterestLayout";
 
   let scriptLoaded = false;
 
@@ -54,6 +54,11 @@ governing permissions and limitations under the License.
         let widgetConfigs = configsDivWrapper.attr(WIDET_CONFIG_DATA);
         if (widgetConfigs) {
           widgetConfigObj = JSON.parse(widgetConfigs);
+        }
+
+        if ((AOI_WIDGET_REF !== widgetConfigObj.widgetRefSelected) && (widgetConfigObj.widgetConfig)
+            && (widgetConfigObj.widgetConfig.attributes)) {
+          delete widgetConfigObj.widgetConfig.attributes.layoutConfig;
         }
 
         widgetConfigObj.auth.accessToken = ALM.getAccessToken();

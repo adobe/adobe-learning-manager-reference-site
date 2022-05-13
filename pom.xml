@@ -756,12 +756,6 @@ Bundle-DocURL:
                 <version>2.3.4</version>
                 <scope>test</scope>
             </dependency>
-            <dependency>
-                <groupId>uk.org.lidalia</groupId>
-                <artifactId>slf4j-test</artifactId>
-                <version>1.0.1</version>
-                <scope>test</scope>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 

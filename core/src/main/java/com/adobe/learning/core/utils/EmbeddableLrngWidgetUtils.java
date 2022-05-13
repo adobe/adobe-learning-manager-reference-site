@@ -56,33 +56,6 @@ public final class EmbeddableLrngWidgetUtils {
 		return null;
 	}
 
-	private static String getWidgetsConfig(String url)
-	{
-		long currentTime = currentTimeMillis();
-		LOGGER.trace("EmbeddableWidgetConfigUtils getWidgetsConfig:: lastUpdated {} currentTime {} ", lastUpdated, currentTime);
-		if (currentTime > lastUpdated)
-		{
-			HttpGet getCall = new HttpGet(url);
-
-			try (CloseableHttpClient httpClient = HttpClients.createDefault(); CloseableHttpResponse response = httpClient.execute(getCall))
-			{
-				if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
-					String configResponse = EntityUtils.toString(response.getEntity());
-					setLastUpdated(currentTime + UPDATE_EVERY_MILLI);
-					setResponse(configResponse);
-					return configResponse;
-				}
-			} catch (ParseException pe)
-			{
-				LOGGER.error("ParseException while fetching widget config", pe);
-			} catch (IOException ioe)
-			{
-				LOGGER.error("IOException while fetching widget config", ioe);
-			}
-		}
-		return widgetsConfigResponse;
-	}
-
 	public static JsonObject getWidgetConfig(final Map<String, Object> configMap)
 	{
 		JsonObject widgetConfigObject = new JsonObject();
@@ -133,6 +106,33 @@ public final class EmbeddableLrngWidgetUtils {
 		return widgetConfigObject;
 	}
 
+	private static String getWidgetsConfig(String url)
+	{
+		long currentTime = currentTimeMillis();
+		LOGGER.trace("EmbeddableWidgetConfigUtils getWidgetsConfig:: lastUpdated {} currentTime {} ", lastUpdated, currentTime);
+		if (currentTime > lastUpdated)
+		{
+			HttpGet getCall = new HttpGet(url);
+
+			try (CloseableHttpClient httpClient = HttpClients.createDefault(); CloseableHttpResponse response = httpClient.execute(getCall))
+			{
+				if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
+					String configResponse = EntityUtils.toString(response.getEntity());
+					setLastUpdated(currentTime + UPDATE_EVERY_MILLI);
+					setResponse(configResponse);
+					return configResponse;
+				}
+			} catch (ParseException pe)
+			{
+				LOGGER.error("ParseException while fetching widget config", pe);
+			} catch (IOException ioe)
+			{
+				LOGGER.error("IOException while fetching widget config", ioe);
+			}
+		}
+		return widgetsConfigResponse;
+	}
+	
 	private static void addPropertyWithType(JsonObject obj, String key, Object value)
 	{
 		String objectType = value.getClass().getSimpleName();

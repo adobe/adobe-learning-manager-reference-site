@@ -94,6 +94,7 @@
   "alm.overview.enrollment.deadline": "Enrollment Deadline",
   "alm.overview.completion.deadline": "Completion Deadline",
   "alm.jobaid": "Job Aid",
+  "alm.jobaid.added":"Job aid has been added to your list",
   "alm.overview.vc.url": "||VIRTUAL_CLASSROOM|| URL",
   "alm.overview.seat.limit": "{0} Seat Limit",
   "alm.overview.certification.deadline": "{0} days from enrollment",
@@ -162,6 +163,7 @@
   "alm.training.buyNow": "Buy Now for ${x}",
   "alm.addToCart": "Add to cart - ${x}",
   "alm.training.overview.not.available": "{training} is not yet available for purchase",
-  "alm.overview.certification.minimum.criteria.label": "Learners must complete {0} of {1} |||COURSE||| to achieve ||CERTIFICATION||",
-  "alm.overview.course.minimum.criteria.label": "Learners must complete {0} of {1} ||MODULE|| to achieve ||COURSE||"
+  "alm.overview.certification.minimum.criteria.label": "Learners must complete ${x} of ${y} |||COURSE||| to achieve ||CERTIFICATION||",
+  "alm.overview.course.minimum.criteria.label": "Learners must complete ${x} of ${y} ||MODULE|| to achieve ||COURSE||",
+  "alm.overview.cannot.skip.ordered.module":"Cannot skip ||MODULE|| in an ordered ||COURSE||"
 }

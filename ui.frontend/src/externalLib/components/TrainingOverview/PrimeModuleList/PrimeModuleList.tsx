@@ -37,6 +37,45 @@ const PrimeModuleList: React.FC<{
     isPreviewEnabled,
   } = props;
 
+  const isModuleLocked = (
+    loResource: PrimeLearningObjectResource,
+    index: number
+  ): boolean => {
+    if (
+      training.prerequisiteLOs &&
+      training.isPrerequisiteEnforced &&
+      training.prerequisiteLOs.some(
+        (l) => !l.enrollment || l.enrollment.state !== "COMPLETED"
+      )
+    ) {
+      // prerequisite enforced and not completed
+      return true;
+    }
+    if (!training.isSubLoOrderEnforced) {
+      return false;
+    }
+    if (!training.enrollment) {
+      return true;
+    }
+
+    const loResourceGrades = training.enrollment.loResourceGrades;
+    if (index === 0) {
+      return false;
+    }
+    const previousResourceId = loResources[index - 1]?.id;
+    const filteredPreviousResourceGrade = loResourceGrades.filter(
+      (loResourceGrade) => loResourceGrade.id.search(previousResourceId) > -1
+    );
+    if (
+      filteredPreviousResourceGrade.length &&
+      !filteredPreviousResourceGrade[0].hasPassed
+    ) {
+      return true;
+    }
+
+    return false;
+  };
+
   return (
     <ul
       className={`${styles.moduleListContainer} ${
@@ -52,6 +91,7 @@ const PrimeModuleList: React.FC<{
           trainingInstance={trainingInstance}
           isContent={isContent}
           isPreviewEnabled={isPreviewEnabled}
+          canPlay={!isModuleLocked(loResource, index)}
         ></PrimeModuleItem>
       ))}
     </ul>

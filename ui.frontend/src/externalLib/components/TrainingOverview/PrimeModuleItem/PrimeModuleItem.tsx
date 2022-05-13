@@ -10,6 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import Calendar from "@spectrum-icons/workflow/Calendar";
+import CheckmarkCircle from "@spectrum-icons/workflow/CheckmarkCircle";
 import Clock from "@spectrum-icons/workflow/Clock";
 import Link from "@spectrum-icons/workflow/Link";
 import Location from "@spectrum-icons/workflow/Location";
@@ -17,7 +18,7 @@ import LockClosed from "@spectrum-icons/workflow/LockClosed";
 import Seat from "@spectrum-icons/workflow/Seat";
 import User from "@spectrum-icons/workflow/User";
 import Visibility from "@spectrum-icons/workflow/Visibility";
-import React from "react";
+import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import {
   PrimeLearningObject,
@@ -51,6 +52,7 @@ import {
   GetTranslation,
 } from "../../../utils/translationService";
 import { formatMap } from "../../Catalog/PrimeTrainingCard/PrimeTrainingCard";
+import { PrimeAlertDialog } from "../../Community/PrimeAlertDialog";
 import styles from "./PrimeModuleItem.module.css";
 
 const CLASSROOM = "Classroom";
@@ -82,6 +84,7 @@ const PrimeModuleItem: React.FC<{
   loResource: PrimeLearningObjectResource;
   isContent?: boolean;
   isPreviewEnabled: boolean;
+  canPlay?: boolean;
 }> = (props) => {
   const {
     training,
@@ -90,8 +93,11 @@ const PrimeModuleItem: React.FC<{
     loResource,
     isContent,
     isPreviewEnabled,
+    canPlay,
   } = props;
   const { formatMessage } = useIntl();
+
+  const [showCannotSkipDialog, setShowCannotSkipDialog] = useState(false);
 
   const config = getALMConfig();
   const locale = config.locale;
@@ -108,52 +114,6 @@ const PrimeModuleItem: React.FC<{
     isPreviewEnabled &&
     (!enrollment || enrollment?.state === "PENDING_APPROVAL") &&
     loResource.previewEnabled;
-
-  const isModuleLocked = (): boolean => {
-    if (!isContent) {
-      return false;
-    }
-    const id = loResource.id;
-
-    if (
-      training.prerequisiteLOs &&
-      training.isPrerequisiteEnforced &&
-      training.prerequisiteLOs.some(
-        (prerequisiteLO) =>
-          !prerequisiteLO.enrollment ||
-          prerequisiteLO.enrollment.state !== "COMPLETED"
-      )
-    ) {
-      return true;
-    }
-
-    if (training.isSubLoOrderEnforced) {
-      for (const res of trainingInstance.loResources) {
-        if (id === res.id) {
-          break;
-        }
-
-        const loResourceGrades = enrollment
-          ? enrollment.loResourceGrades
-          : ([] as PrimeLearningObjectResourceGrade[]);
-        const filteredResourceGrades = loResourceGrades.filter(
-          (loResourceGrade) => loResourceGrade.id.search(loResource.id)
-        );
-        const loResourceGrade = filteredResourceGrades.length
-          ? filteredResourceGrades[0]
-          : ({} as PrimeLearningObjectResourceGrade);
-
-        if (enrollment && loResourceGrades) {
-          if (loResourceGrade && !loResourceGrade.hasPassed) {
-            return true;
-          }
-        } else {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
 
   const isClassroomOrVC =
     loResource.resourceType === CLASSROOM ||
@@ -197,6 +157,14 @@ const PrimeModuleItem: React.FC<{
   );
 
   const itemClickHandler = () => {
+    if (!canPlay) {
+      //show popup
+      // alert("Module ios locked");
+      setShowCannotSkipDialog(true);
+      setTimeout(() => setShowCannotSkipDialog(false), 3000);
+
+      return;
+    }
     const enrollment = loResource?.learningObject?.enrollment;
     if (
       (enrollment && !isClassroomOrVC) ||
@@ -221,46 +189,93 @@ const PrimeModuleItem: React.FC<{
     loResource.resourceType && formatMap[loResource.resourceType]
       ? GetTranslation(`${formatMap[loResource.resourceType]}`, true)
       : "";
+
+  const gradeHasPassed = (): boolean => {
+    if (!enrollment || !training.isSubLoOrderEnforced) {
+      return false;
+    }
+
+    const loResourceGrades = enrollment.loResourceGrades;
+
+    const filteredResourceGrades = loResourceGrades.filter(
+      (loResourceGrade) => loResourceGrade.id.search(loResource.id) > -1
+    );
+
+    const loResourceGrade = filteredResourceGrades.length
+      ? filteredResourceGrades[0]
+      : ({} as PrimeLearningObjectResourceGrade);
+
+    var hasPassed = false;
+
+    if (loResourceGrade) {
+      if (loResourceGrade && loResourceGrade.hasPassed) {
+        hasPassed = true;
+      }
+    }
+    // else {
+    //   hasPassed = true;
+    // }
+    return hasPassed;
+  };
   return (
-    <li className={styles.container}>
-      <div
-        className={`${styles.headerContainer} ${
-          isModuleClicable ? styles.cursor : ""
-        }`}
-        tabIndex={0}
-        data-test={loResource.id}
-        onClick={itemClickHandler}
-        onKeyDown={keyDownHandler}
-        role="button"
-      >
-        <div className={styles.icon} aria-hidden="true">
-          {moduleIcon}
-          {isModuleLocked() && (
-            <span className={styles.moduleLocked}>
-              <LockClosed aria-hidden="true" />
-            </span>
+    <>
+      {showCannotSkipDialog && (
+        <PrimeAlertDialog
+          variant="warning"
+          title={GetTranslation(
+            "alm.overview.cannot.skip.ordered.module",
+            true
           )}
-        </div>
-        <div className={styles.headerWrapper}>
-          <div className={styles.titleContainer}>
-            <span className={styles.title}>{name}</span>
-            {isModulePreviewAble && (
-              <span className={styles.previewable}>
-                Preview <Visibility aria-hidden="true" />
+          primaryActionLabel="Ok"
+          classes={styles.warningDialog}
+        ></PrimeAlertDialog>
+      )}
+      <li className={styles.container}>
+        <div
+          className={`${styles.headerContainer} ${
+            isModuleClicable ? styles.cursor : ""
+          }`}
+          tabIndex={0}
+          data-test={loResource.id}
+          onClick={itemClickHandler}
+          onKeyDown={keyDownHandler}
+          role="button"
+        >
+          <div className={styles.icon} aria-hidden="true">
+            {moduleIcon}
+            {gradeHasPassed() ? (
+              <span className={styles.modulePassed}>
+                <CheckmarkCircle aria-hidden="true" />
               </span>
+            ) : !canPlay ? (
+              <span className={styles.moduleLocked}>
+                <LockClosed aria-hidden="true" />
+              </span>
+            ) : (
+              ""
             )}
           </div>
-          <div className={styles.resourceAndDuration}>
-            <span className={styles.resourceType}>{formatLabel}</span>
-            <span>{durationText}</span>
+          <div className={styles.headerWrapper}>
+            <div className={styles.titleContainer}>
+              <span className={styles.title}>{name}</span>
+              {isModulePreviewAble && (
+                <span className={styles.previewable}>
+                  Preview <Visibility aria-hidden="true" />
+                </span>
+              )}
+            </div>
+            <div className={styles.resourceAndDuration}>
+              <span className={styles.resourceType}>{formatLabel}</span>
+              <span>{durationText}</span>
+            </div>
           </div>
         </div>
-      </div>
-      <div className={styles.wrapperContainer}>
-        {descriptionTextHTML}
-        {sessionsTemplate}
-      </div>
-    </li>
+        <div className={styles.wrapperContainer}>
+          {descriptionTextHTML}
+          {sessionsTemplate}
+        </div>
+      </li>
+    </>
   );
 };
 

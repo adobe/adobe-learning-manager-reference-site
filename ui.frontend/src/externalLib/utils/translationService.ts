@@ -63,26 +63,27 @@ export function GetTranslationReplaced(
   return val.replace(/\{{(.+)\}}/g, repVal);
 }
 
-// export function interpolateTemplateAndMap(
-//   template: string,
-//   params: Record<string, string | number | boolean>
-// ): any {
-//   const names = Object.keys(params);
-//   const vals = Object.values(params);
-//   return new Function(...names, `return \`${template}\`;`)(...vals);
-// }
+export function interpolateTemplateAndMap(
+  template: string,
+  params: Record<string, string | number | boolean>
+): any {
+  const names = Object.keys(params);
+  const vals = Object.values(params);
+  // eslint-disable-next-line no-new-func
+  return new Function(...names, `return \`${template}\`;`)(...vals);
+}
 
-// export function GetTranslationsReplaced(
-//   key: string,
-//   paramMap: Record<string, string | number | boolean>,
-//   replaceAccountTerminology = false
-// ): string {
-//   let val = _translations[key];
-//   if (replaceAccountTerminology) {
-//     val = ReplaceAccountTerminology(val);
-//   }
-//   return interpolateTemplateAndMap(val, paramMap);
-// }
+export function GetTranslationsReplaced(
+  key: string,
+  paramMap: Record<string, string | number | boolean>,
+  replaceAccountTerminology = false
+): string {
+  let val = _translations[key];
+  if (replaceAccountTerminology) {
+    val = ReplaceAccountTerminology(val);
+  }
+  return interpolateTemplateAndMap(val, paramMap);
+}
 
 export function ReplaceAccountTerminology(translation: string): string {
   if (!accountTerminologyMap || !translation) {
