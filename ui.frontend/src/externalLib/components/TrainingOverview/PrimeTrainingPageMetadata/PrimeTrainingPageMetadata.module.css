@@ -109,6 +109,8 @@ governing permissions and limitations under the License.
 .minimumCriteria {
   font-size: 16px;
   margin-right: 10px;
+  color: var(--prime-icon-color);
+
 }
 .innerContainer {
   margin-left: 10px;
