@@ -10,6 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import Calendar from "@spectrum-icons/workflow/Calendar";
+import CheckmarkCircle from "@spectrum-icons/workflow/CheckmarkCircle";
 import Clock from "@spectrum-icons/workflow/Clock";
 import Link from "@spectrum-icons/workflow/Link";
 import Location from "@spectrum-icons/workflow/Location";
@@ -17,7 +18,6 @@ import LockClosed from "@spectrum-icons/workflow/LockClosed";
 import Seat from "@spectrum-icons/workflow/Seat";
 import User from "@spectrum-icons/workflow/User";
 import Visibility from "@spectrum-icons/workflow/Visibility";
-import CheckmarkCircle from "@spectrum-icons/workflow/CheckmarkCircle";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import {
@@ -36,24 +36,24 @@ import { useResource } from "../../../utils/hooks";
 import {
   ACTIVITY_SVG,
   AUDIO_SVG,
+  CAPTIVATE_SVG,
   CLASSROOM_SVG,
   DOC_SVG,
   PDF_SVG,
   PPT_SVG,
+  PRESENTER_SVG,
   SCORM_SVG,
   VIDEO_SVG,
   VIRTUAL_CLASSROOM_SVG,
   XLS_SVG,
-  CAPTIVATE_SVG,
-  PRESENTER_SVG,
 } from "../../../utils/inline_svg";
 import {
   getPreferredLocalizedMetadata,
   GetTranslation,
 } from "../../../utils/translationService";
 import { formatMap } from "../../Catalog/PrimeTrainingCard/PrimeTrainingCard";
-import styles from "./PrimeModuleItem.module.css";
 import { PrimeAlertDialog } from "../../Community/PrimeAlertDialog";
+import styles from "./PrimeModuleItem.module.css";
 
 const CLASSROOM = "Classroom";
 const VIRTUAL_CLASSROOM = "Virtual Classroom";
@@ -82,8 +82,8 @@ const PrimeModuleItem: React.FC<{
   trainingInstance: PrimeLearningObjectInstance;
   launchPlayerHandler: Function;
   loResource: PrimeLearningObjectResource;
-  isPartOfLP?: boolean;
   isContent?: boolean;
+  isPreviewEnabled: boolean;
   canPlay?: boolean;
 }> = (props) => {
   const {
@@ -91,8 +91,8 @@ const PrimeModuleItem: React.FC<{
     trainingInstance,
     launchPlayerHandler,
     loResource,
-    isPartOfLP,
     isContent,
+    isPreviewEnabled,
     canPlay,
   } = props;
   const { formatMessage } = useIntl();
@@ -111,6 +111,7 @@ const PrimeModuleItem: React.FC<{
   const resource = useResource(loResource, locale);
   const enrollment = training.enrollment;
   const isModulePreviewAble =
+    isPreviewEnabled &&
     (!enrollment || enrollment?.state === "PENDING_APPROVAL") &&
     loResource.previewEnabled;
 
@@ -119,7 +120,7 @@ const PrimeModuleItem: React.FC<{
     loResource.resourceType === VIRTUAL_CLASSROOM;
 
   const isModuleClicable: boolean = enrollment
-    ? enrollment.state != "PENDING_APPROVAL"
+    ? enrollment.state !== "PENDING_APPROVAL"
     : isModulePreviewAble;
 
   const isVC = loResource.resourceType === VIRTUAL_CLASSROOM;
@@ -221,7 +222,10 @@ const PrimeModuleItem: React.FC<{
       {showCannotSkipDialog && (
         <PrimeAlertDialog
           variant="warning"
-          title={GetTranslation("alm.overview.cannot.skip.ordered.module", true)}
+          title={GetTranslation(
+            "alm.overview.cannot.skip.ordered.module",
+            true
+          )}
           primaryActionLabel="Ok"
           classes={styles.warningDialog}
         ></PrimeAlertDialog>

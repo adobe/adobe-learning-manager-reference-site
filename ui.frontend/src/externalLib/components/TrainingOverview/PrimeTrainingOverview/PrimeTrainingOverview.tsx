@@ -20,12 +20,14 @@ const PrimeTrainingOverview: React.FC<{
   launchPlayerHandler: Function;
   isPartOfLP?: boolean;
   showMandatoryLabel?: boolean;
+  isPreviewEnabled: boolean;
 }> = (props) => {
   const {
     trainings,
     launchPlayerHandler,
     isPartOfLP = false,
     showMandatoryLabel = false,
+    isPreviewEnabled = false,
   } = props;
   return (
     <>
@@ -39,6 +41,7 @@ const PrimeTrainingOverview: React.FC<{
               launchPlayerHandler={launchPlayerHandler}
               isPartOfLP={isPartOfLP}
               showMandatoryLabel={showMandatoryLabel}
+              isPreviewEnabled={isPreviewEnabled}
             ></PrimeCourseItemContainer>
           );
         } else if (loType === LEARNING_PROGRAM) {
@@ -49,6 +52,7 @@ const PrimeTrainingOverview: React.FC<{
               launchPlayerHandler={launchPlayerHandler}
               isPartOfLP={isPartOfLP}
               showMandatoryLabel={showMandatoryLabel}
+              isPreviewEnabled={isPreviewEnabled}
             ></PrimeLPItemContainer>
           );
         }

@@ -25,6 +25,7 @@ const PrimeModuleList: React.FC<{
   loResources: PrimeLearningObjectResource[];
   isPartOfLP?: boolean;
   isContent?: boolean;
+  isPreviewEnabled: boolean;
 }> = (props) => {
   const {
     loResources,
@@ -33,6 +34,7 @@ const PrimeModuleList: React.FC<{
     trainingInstance,
     isPartOfLP,
     isContent,
+    isPreviewEnabled,
   } = props;
 
   const isModuleLocked = (
@@ -87,8 +89,8 @@ const PrimeModuleList: React.FC<{
           launchPlayerHandler={launchPlayerHandler}
           training={training}
           trainingInstance={trainingInstance}
-          isPartOfLP={isPartOfLP}
           isContent={isContent}
+          isPreviewEnabled={isPreviewEnabled}
           canPlay={!isModuleLocked(loResource, index)}
         ></PrimeModuleItem>
       ))}

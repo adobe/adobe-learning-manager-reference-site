@@ -11,43 +11,52 @@ governing permissions and limitations under the License.
 */
 
 import React from "react";
-import ProductList from "./productList";
 import { useCartPage } from "../../hooks/CartPage/useCartPage";
+import CommerceLoader from "../Common/Loader";
 import styles from "./cartPage.module.css";
 import OrderSummary from "./orderSummary";
-import CommerceLoader from "../Common/Loader";
-
+import ProductList from "./productList";
 
 const CartPage = (props) => {
-  const { cartItems,
+  const {
+    cartItems,
     hasItems,
-    shouldShowLoadingIndicator, prices = {}, proceedToCheckout } = useCartPage();
+    shouldShowLoadingIndicator,
+    prices = {},
+    proceedToCheckout,
+    refreshCartHandler,
+  } = useCartPage();
 
   const totalPrice = prices["grand_total"] || {};
 
   if (shouldShowLoadingIndicator) {
-    return (<CommerceLoader size="L"></CommerceLoader>)
+    return <CommerceLoader size="L"></CommerceLoader>;
   }
   return (
     <div className={styles.pageContainer}>
       <h1>Shopping Cart</h1>
       <div className={styles.cartPageContainer}>
         <div className={styles.productList}>
-          <ProductList cartItems={cartItems} />
+          <ProductList
+            cartItems={cartItems}
+            refreshCartHandler={refreshCartHandler}
+          />
         </div>
-        {
-          hasItems && <div className={styles.orderSummary}>
-            <OrderSummary buttonLabel={"Proceed to Checkout"} clickHandler={proceedToCheckout} totalPrice={totalPrice} />
+        {hasItems && (
+          <div className={styles.orderSummary}>
+            <OrderSummary
+              buttonLabel={"Proceed to Checkout"}
+              clickHandler={proceedToCheckout}
+              totalPrice={totalPrice}
+            />
           </div>
-        }
+        )}
       </div>
     </div>
-  )
+  );
 };
 
 export default CartPage;
-
-
 
 /**
  * 

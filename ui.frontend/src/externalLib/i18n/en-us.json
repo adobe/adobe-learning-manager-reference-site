@@ -161,7 +161,7 @@
   "alm.profile.fields.saveProfileChanges": "Save Changes",
   "alm.profile.skills.cancel": "Cancel",
   "alm.training.buyNow": "Buy Now for ${x}",
-  "alm.addToCart": "Add to cart for ${x}",
+  "alm.addToCart": "Add to cart - ${x}",
   "alm.training.overview.not.available": "{training} is not yet available for purchase",
   "alm.overview.certification.minimum.criteria.label": "Learners must complete ${x} of ${y} |||COURSE||| to achieve ||CERTIFICATION||",
   "alm.overview.course.minimum.criteria.label": "Learners must complete ${x} of ${y} ||MODULE|| to achieve ||COURSE||",

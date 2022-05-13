@@ -9,7 +9,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { useCallback, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { SIGN_IN_PATH } from "../../utils/constants";
@@ -22,21 +22,23 @@ export const useCartPage = (props = {}) => {
 
   // const [isCartUpdating, setIsCartUpdating] = useState(false);
 
-  const { loading, error: cartDetailsError, data } = useQuery(
-    GET_CART_DETAILS,
-    {
-      variables: { cartId },
-      fetchPolicy: "network-only",
-      nextFetchPolicy: "network-only",
-      errorPolicy: "all",
-    }
-  );
+  const [
+    fetchCartDetails,
+    { loading, error: cartDetailsError, data },
+  ] = useLazyQuery(GET_CART_DETAILS, {
+    variables: { cartId },
+    fetchPolicy: "network-only",
+    nextFetchPolicy: "network-only",
+    errorPolicy: "all",
+  });
 
   useEffect(() => {
     if (!getCommerceToken()) {
       navigate(SIGN_IN_PATH);
+    } else {
+      fetchCartDetails();
     }
-  }, [navigate]);
+  }, [navigate, fetchCartDetails]);
 
   const hasItems = !!data?.cart?.total_quantity;
   const shouldShowLoadingIndicator = loading && !hasItems;
@@ -57,6 +59,10 @@ export const useCartPage = (props = {}) => {
     navigate(`/checkout`);
   }, [navigate]);
 
+  const refreshCartHandler = useCallback(() => {
+    fetchCartDetails();
+  }, [fetchCartDetails]);
+
   return {
     hasItems,
     shouldShowLoadingIndicator,
@@ -65,17 +71,6 @@ export const useCartPage = (props = {}) => {
     totalQuantity: data?.cart?.total_quantity || 0,
     error,
     proceedToCheckout,
-    // isCartUpdating,
+    refreshCartHandler,
   };
 };
-
-// useEffect(() => {
-//   if (!called && cartId) {
-//     console.log("inside fetchcart in usecart")
-//     fetchCartDetails({ variables: { cartId } });
-//   }
-
-//   // Let the cart page know it is updating while we're waiting on network data.
-//   setIsCartUpdating(loading);
-//   // eslint-disable-next-line react-hooks/exhaustive-deps
-// }, [fetchCartDetails, cartId]);

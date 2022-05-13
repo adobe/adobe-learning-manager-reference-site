@@ -31,6 +31,7 @@ const PrimeCourseOverview: React.FC<{
   isPartOfLP?: boolean;
   showDuration?: boolean;
   showNotes?: boolean;
+  isPreviewEnabled: boolean;
 }> = (props: any) => {
   const {
     training,
@@ -39,6 +40,7 @@ const PrimeCourseOverview: React.FC<{
     showNotes = false,
     launchPlayerHandler,
     isPartOfLP = false,
+    isPreviewEnabled = false,
   } = props;
 
   const config = getALMConfig();
@@ -69,7 +71,7 @@ const PrimeCourseOverview: React.FC<{
       });
       setPreWorkDuration(duration);
     }
-  }, []);
+  }, [locale, preWorkResources]);
 
   const showTestout = testOutResources.length !== 0;
   const showTabs = showTestout || showNotes;
@@ -103,6 +105,7 @@ const PrimeCourseOverview: React.FC<{
                 training={training}
                 isPartOfLP={isPartOfLP}
                 trainingInstance={trainingInstance}
+                isPreviewEnabled={isPreviewEnabled}
               ></PrimeModuleList>
             </>
           )}
@@ -124,6 +127,7 @@ const PrimeCourseOverview: React.FC<{
             isPartOfLP={isPartOfLP}
             trainingInstance={trainingInstance}
             isContent={true}
+            isPreviewEnabled={isPreviewEnabled}
           ></PrimeModuleList>
         </Item>
         {showTestout && (
@@ -133,6 +137,7 @@ const PrimeCourseOverview: React.FC<{
               loResources={testOutResources}
               training={training}
               trainingInstance={trainingInstance}
+              isPreviewEnabled={isPreviewEnabled}
             ></PrimeModuleList>
           </Item>
         )}

@@ -21,8 +21,6 @@ import { getALMConfig } from "../../../utils/global";
 import {
   filterLoReourcesBasedOnResourceType,
   filterTrainingInstance,
-  useCardBackgroundStyle,
-  useCardIcon,
 } from "../../../utils/hooks";
 import { getPreferredLocalizedMetadata } from "../../../utils/translationService";
 import { PrimeCourseOverview } from "../PrimeCourseOverview";
@@ -33,12 +31,14 @@ const PrimeCourseItemContainer: React.FC<{
   launchPlayerHandler: Function;
   isPartOfLP?: boolean;
   showMandatoryLabel?: boolean;
+  isPreviewEnabled: boolean;
 }> = (props) => {
   const {
     training,
     launchPlayerHandler,
     isPartOfLP = false,
     showMandatoryLabel = false,
+    isPreviewEnabled = false,
   } = props;
 
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -58,9 +58,6 @@ const PrimeCourseItemContainer: React.FC<{
   } = useMemo((): PrimeLocalizationMetadata => {
     return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
   }, [training.localizedMetadata, locale]);
-
-  const { cardIconUrl, color } = useCardIcon(training);
-  const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
 
   const noOfModules = filterLoReourcesBasedOnResourceType(
     trainingInstance,
@@ -88,6 +85,7 @@ const PrimeCourseItemContainer: React.FC<{
           showNotes={false}
           launchPlayerHandler={launchPlayerHandler}
           isPartOfLP={isPartOfLP}
+          isPreviewEnabled={isPreviewEnabled}
         />
       )}
 

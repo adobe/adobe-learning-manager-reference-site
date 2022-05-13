@@ -17,7 +17,7 @@ import { SIGN_IN_PATH } from "../../utils/constants";
 import { getCartId, getCommerceToken } from "../../utils/global";
 import { REMOVE_ITEM_FROM_CART } from "./product.gql";
 
-export const useProduct = (props) => {
+export const useProduct = (refreshCartHandler) => {
   let navigate = useNavigate();
   const [cartId] = useState(() => getCartId());
 
@@ -43,12 +43,12 @@ export const useProduct = (props) => {
             cart_item_id: itemId,
           },
         });
-        window.location.reload(false);
+        refreshCartHandler();
       } catch (e) {
         console.log(e);
       }
     },
-    [cartId, removeItem]
+    [cartId, removeItem, refreshCartHandler]
   );
 
   return {

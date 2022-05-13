@@ -24,6 +24,7 @@ export interface PrimeAccount {
   enableSidebar: boolean;
   enableSocialAsHome: boolean;
   enableSocialLearning: boolean;
+  enableModulePreview: boolean;
   exploreSkills: boolean;
   gamificationEnabled: boolean;
   hideRetiredTrainings: boolean;

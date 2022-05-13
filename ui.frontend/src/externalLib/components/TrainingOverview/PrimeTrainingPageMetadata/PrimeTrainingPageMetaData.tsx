@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { Button } from "@adobe/react-spectrum";
+import { Button, Content, ContextualHelp, Text } from "@adobe/react-spectrum";
 import Calendar from "@spectrum-icons/workflow/Calendar";
 import Clock from "@spectrum-icons/workflow/Clock";
 import ClockCheck from "@spectrum-icons/workflow/ClockCheck";
@@ -40,7 +40,6 @@ import {
 } from "../../../utils/translationService";
 import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJobAids";
 import styles from "./PrimeTrainingPageMetadata.module.css";
-import { ContextualHelp, Content, Text } from "@adobe/react-spectrum";
 
 const PENDING_APPROVAL = "PENDING_APPROVAL";
 const PrimeTrainingPageMetaData: React.FC<{
@@ -60,6 +59,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   }>;
   unEnrollmentHandler: Function;
   jobAidClickHandler: Function;
+  isPreviewEnabled: boolean;
 }> = ({
   trainingInstance,
   skills,
@@ -73,6 +73,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   addToCartHandler,
   unEnrollmentHandler,
   jobAidClickHandler,
+  isPreviewEnabled,
 }) => {
   const { formatMessage } = useIntl();
   const config = getALMConfig();
@@ -82,8 +83,10 @@ const PrimeTrainingPageMetaData: React.FC<{
 
   const [isTrainingNotSynced, setIsTrainingNotSynced] = useState(false);
   let showPreviewButton =
+    isPreviewEnabled &&
     training.hasPreview &&
     (!enrollment || enrollment.state === PENDING_APPROVAL);
+
   const action: string = useMemo(() => {
     if (enrollment) {
       if (enrollment.state === PENDING_APPROVAL) {

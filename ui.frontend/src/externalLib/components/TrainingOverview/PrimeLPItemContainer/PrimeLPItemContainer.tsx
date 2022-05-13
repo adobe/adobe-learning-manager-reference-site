@@ -18,11 +18,7 @@ import {
   PrimeLocalizationMetadata,
 } from "../../../models";
 import { getALMConfig } from "../../../utils/global";
-import {
-  filterTrainingInstance,
-  useCardBackgroundStyle,
-  useCardIcon,
-} from "../../../utils/hooks";
+import { filterTrainingInstance } from "../../../utils/hooks";
 import { getPreferredLocalizedMetadata } from "../../../utils/translationService";
 import { PrimeCourseItemContainer } from "../PrimeCourseItemContainer";
 import { PrimeTrainingItemContainerHeader } from "../PrimeTrainingItemContainerHeader";
@@ -32,12 +28,14 @@ const PrimeLPItemContainer: React.FC<{
   launchPlayerHandler: Function;
   isPartOfLP: boolean;
   showMandatoryLabel?: boolean;
+  isPreviewEnabled: boolean;
 }> = (props) => {
   const {
     training,
     launchPlayerHandler,
     isPartOfLP = false,
     showMandatoryLabel = false,
+    isPreviewEnabled = false,
   } = props;
 
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -53,9 +51,6 @@ const PrimeLPItemContainer: React.FC<{
   } = useMemo((): PrimeLocalizationMetadata => {
     return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
   }, [training.localizedMetadata, locale]);
-
-  const { cardIconUrl, color } = useCardIcon(training);
-  const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
 
   const clickHandler = () => {
     setIsCollapsed((prevState) => !prevState);
@@ -91,6 +86,7 @@ const PrimeLPItemContainer: React.FC<{
                   training={subLo}
                   launchPlayerHandler={launchPlayerHandler}
                   isPartOfLP={isPartOfLP}
+                  isPreviewEnabled={isPreviewEnabled}
                 ></PrimeCourseItemContainer>
               </div>
             );
