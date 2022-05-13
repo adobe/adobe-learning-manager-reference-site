@@ -15,14 +15,19 @@ governing permissions and limitations under the License.
 
     function handlePageRedirect()
     {
+        let foundRedirect = false;
         const currentURL = new URL(window.location.href);
         if (currentURL && currentURL.hash)
         {
             let params = currentURL.hash.match(/([A-Za-z]+)\/(\d+)(.*)/);
             if (params && params.length >= 3)
             {
+                foundRedirect = true;
                 window.ALM.navigateToTrainingOverviewPage(params[1] + ":" + params[2]);
             }
+        }
+        if (!foundRedirect) {
+            window.ALM.navigateToHomePage();
         }
     }
     

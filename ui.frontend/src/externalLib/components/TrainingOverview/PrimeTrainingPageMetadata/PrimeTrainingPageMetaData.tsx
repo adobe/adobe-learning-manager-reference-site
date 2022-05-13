@@ -34,9 +34,15 @@ import {
   getALMObject,
 } from "../../../utils/global";
 import { DEFAULT_USER_SVG, LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
-import { GetTranslation } from "../../../utils/translationService";
+import {
+  GetTranslation,
+  GetTranslationReplaced,
+  GetTranslationsReplaced,
+} from "../../../utils/translationService";
 import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJobAids";
 import styles from "./PrimeTrainingPageMetadata.module.css";
+import { ContextualHelp, Heading, Content, Text } from "@adobe/react-spectrum";
+import { isGeneratorObject } from "util/types";
 
 const PENDING_APPROVAL = "PENDING_APPROVAL";
 const PrimeTrainingPageMetaData: React.FC<{
@@ -173,6 +179,38 @@ const PrimeTrainingPageMetaData: React.FC<{
     await addToCart();
   };
 
+  const minimumCriteria = useMemo(() => {
+    let label = "";
+    let value = "";
+    let completionCount = training.loResourceCompletionCount;
+
+    if (training.loType === "course") {
+      label = GetTranslation(
+        "alm.overview.course.minimum.criteria.label",
+        true
+      );
+      let totalCount = trainingInstance?.loResources?.length;
+      label = label.replace("{0}", completionCount?.toString());
+      label = totalCount ? label.replace("{1}", totalCount.toString()) : label;
+      value = `${completionCount}/${totalCount}`;
+    } else if (training.loType === "certification") {
+      label = GetTranslation(
+        "alm.overview.certification.minimum.criteria.label",
+        true
+      );
+      let totalCount = training.subLOs.length;
+      label = label.replace("{0}", completionCount?.toString());
+      label = totalCount ? label.replace("{1}", totalCount.toString()) : label;
+      value = `${completionCount}/${totalCount}`;
+    }
+    return { label, value };
+  }, [
+    training.loResourceCompletionCount,
+    training.loType,
+    training.subLOs?.length,
+    trainingInstance?.loResources?.length,
+  ]);
+
   //show only if not enrolled
   const showEnrollmentCount =
     !trainingInstance.learningObject.enrollment &&
@@ -216,7 +254,7 @@ const PrimeTrainingPageMetaData: React.FC<{
       }
     };
     computeIsSynced();
-  }, [training.price]);
+  }, [training.dateCreated, training.price]);
 
   const trainingNotAvailableForPurchaseText = isTrainingNotSynced ? (
     <p style={{ textAlign: "center" }} className={styles.label}>
@@ -347,6 +385,31 @@ const PrimeTrainingPageMetaData: React.FC<{
           Add to cart
         </Button>
       </div> */}
+
+      {/* Minimum Completion Criteria container */}
+
+      {training.loResourceCompletionCount !==
+        trainingInstance.loResources?.length && (
+        <div className={styles.commonContainer}>
+          <span aria-hidden="true" className={styles.minimumCriteria}>
+            {minimumCriteria.value}
+          </span>
+          <div className={styles.innerContainer}>
+            <label className={styles.minimumCriteriaLabel}>
+              {formatMessage({
+                id: "alm.overview.minimum.completion.criteria",
+                defaultMessage: "Minimum Completion Criteria",
+              })}
+            </label>
+            <ContextualHelp variant="help">
+              <Content>
+                <Text>{minimumCriteria.label}</Text>
+              </Content>
+            </ContextualHelp>
+          </div>
+        </div>
+      )}
+
       {/* Enrollment Deadline container */}
 
       {showEnrollmentDeadline && (
