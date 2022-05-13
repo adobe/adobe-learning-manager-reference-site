@@ -373,6 +373,7 @@ export interface PrimeLearningObject {
   skillNames?: string[];
   hasPreview: boolean;
   price: number;
+  loResourceCompletionCount: number;
   // price?: {
   //   currency: string;
   //   value: number;

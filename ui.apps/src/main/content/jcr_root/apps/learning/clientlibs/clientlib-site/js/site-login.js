@@ -236,6 +236,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
         return userStr;
       } else {
         console.error("User call failed!!");
+        window.sessionStorage.removeItem("user");
       }
     } catch (e) {
       window.sessionStorage.removeItem("user");
