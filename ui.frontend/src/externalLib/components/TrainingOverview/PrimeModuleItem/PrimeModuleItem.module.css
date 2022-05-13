@@ -122,20 +122,25 @@ a.details {
   font-size: var(--prime-font-size-12);
 }
 
-.moduleLocked {
+.moduleLocked,
+.modulePassed {
   background-size: contain;
-  width: 45%;
-  height: 45%;
   border-radius: 30px;
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 10px;
+  right: 10px;
   line-height: 40%;
-  background-color: #fff;
+  background-color: var(--prime-color-white);
 }
 
 .moduleLocked svg {
   fill: var(--prime-color-nc3);
+  width: 16px;
+  height: 16px;
+}
+
+.modulePassed svg {
+  fill: var(--prime-success-color);
   width: 16px;
   height: 16px;
 }
@@ -178,4 +183,22 @@ a.details {
   .headerWrapper {
     width: 100%;
   }
+}
+.warningDialog [class^="spectrum-ButtonGroup"] {
+  display: none !important;
+}
+
+.warningDialog [class^="spectrum-Dialog-heading"] {
+  padding-right: 15px !important;
+}
+
+.warningDialog svg[class^="spectrum-Dialog-typeIcon"] {
+  transform: scale(1.4);
+}
+.warningDialog [class^="spectrum-Dialog-content"] {
+  display: none;
+}
+
+.warningDialog hr {
+  display: none;
 }
