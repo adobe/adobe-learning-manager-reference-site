@@ -162,7 +162,7 @@ governing permissions and limitations under the License.
 }
 
 .training__page__container, .instance__container, .commerce__container, .catalog__container {
-  min-height: calc(100vh - 180px);
+  min-height: 100vh;
 }
 
 /* CSS for Home Catalog Page*/

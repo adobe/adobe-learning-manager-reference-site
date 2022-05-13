@@ -80,6 +80,7 @@
                             jcr:lastModified="{Date}2022-03-13T10:51:11.502+05:30"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
+                            widgetConfig.attributes.layoutConfig="\{&quot;layoutMode&quot;:&quot;row&quot;,&quot;widgets&quot;:[[{&quot;widgetRef&quot;:&quot;com.adobe.captivateprime.lostrip.myinterest&quot;,&quot;attributes&quot;:{&quot;view&quot;:&quot;individual&quot;,&quot;stripNum&quot;:1}}],[{&quot;widgetRef&quot;:&quot;com.adobe.captivateprime.lostrip.myinterest&quot;,&quot;attributes&quot;:{&quot;view&quot;:&quot;individual&quot;,&quot;stripNum&quot;:2}}]]}"
                             sling:resourceType="learning/components/mylearning"
                             widgetRefSelected="com.adobe.captivateprime.calendar">
                             <cq:responsive jcr:primaryType="nt:unstructured">
@@ -95,6 +96,7 @@
                             jcr:lastModified="{Date}2022-03-19T08:39:22.694+05:30"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
+                            widgetConfig.attributes.layoutConfig="\{&quot;layoutMode&quot;:&quot;row&quot;,&quot;widgets&quot;:[[{&quot;widgetRef&quot;:&quot;com.adobe.captivateprime.lostrip.myinterest&quot;,&quot;attributes&quot;:{&quot;view&quot;:&quot;individual&quot;,&quot;stripNum&quot;:1}}],[{&quot;widgetRef&quot;:&quot;com.adobe.captivateprime.lostrip.myinterest&quot;,&quot;attributes&quot;:{&quot;view&quot;:&quot;individual&quot;,&quot;stripNum&quot;:2}}]]}"
                             sling:resourceType="learning/components/mylearning"
                             widgetRefSelected="com.adobe.captivateprime.social">
                             <cq:responsive jcr:primaryType="nt:unstructured">
@@ -111,6 +113,7 @@
                         jcr:lastModified="{Date}2022-03-19T08:39:46.773+05:30"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
+                        widgetConfig.attributes.layoutConfig="\{&quot;layoutMode&quot;:&quot;row&quot;,&quot;widgets&quot;:[[{&quot;widgetRef&quot;:&quot;com.adobe.captivateprime.lostrip.myinterest&quot;,&quot;attributes&quot;:{&quot;view&quot;:&quot;individual&quot;,&quot;stripNum&quot;:1}}],[{&quot;widgetRef&quot;:&quot;com.adobe.captivateprime.lostrip.myinterest&quot;,&quot;attributes&quot;:{&quot;view&quot;:&quot;individual&quot;,&quot;stripNum&quot;:2}}]]}"
                         sling:resourceType="learning/components/mylearning"            
                         widgetRefSelected="com.adobe.captivateprime.lostrip.mylearning"/>
                     <mylearning_2139124957
@@ -119,6 +122,7 @@
                         jcr:lastModified="{Date}2022-03-19T08:39:56.087+05:30"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
+                        widgetConfig.attributes.layoutConfig="\{&quot;layoutMode&quot;:&quot;row&quot;,&quot;widgets&quot;:[[{&quot;widgetRef&quot;:&quot;com.adobe.captivateprime.lostrip.myinterest&quot;,&quot;attributes&quot;:{&quot;view&quot;:&quot;individual&quot;,&quot;stripNum&quot;:1}}],[{&quot;widgetRef&quot;:&quot;com.adobe.captivateprime.lostrip.myinterest&quot;,&quot;attributes&quot;:{&quot;view&quot;:&quot;individual&quot;,&quot;stripNum&quot;:2}}]]}"
                         sling:resourceType="learning/components/mylearning"
                         widgetRefSelected="com.adobe.captivateprime.lostrip.adminreco"/>
                     <carousel
@@ -182,13 +186,14 @@
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="learning/components/mylearning"
                         widgetConfig.attributes.layoutConfig="\{&quot;layoutMode&quot;:&quot;row&quot;,&quot;widgets&quot;:[[{&quot;widgetRef&quot;:&quot;com.adobe.captivateprime.lostrip.myinterest&quot;,&quot;attributes&quot;:{&quot;view&quot;:&quot;individual&quot;,&quot;stripNum&quot;:1}}],[{&quot;widgetRef&quot;:&quot;com.adobe.captivateprime.lostrip.myinterest&quot;,&quot;attributes&quot;:{&quot;view&quot;:&quot;individual&quot;,&quot;stripNum&quot;:2}}]]}"
-                        widgetRefSelected="com.adobe.captivateprime.lostrip.myinterest"/>
+                        widgetRefSelected="com.adobe.captivateprime.lostrip.myinterestLayout"/>
                     <mylearning_1434331568
                         jcr:created="{Date}2022-03-19T08:40:29.583+05:30"
                         jcr:createdBy="admin"
                         jcr:lastModified="{Date}2022-03-19T08:40:41.084+05:30"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
+                        widgetConfig.attributes.layoutConfig="\{&quot;layoutMode&quot;:&quot;row&quot;,&quot;widgets&quot;:[[{&quot;widgetRef&quot;:&quot;com.adobe.captivateprime.lostrip.myinterest&quot;,&quot;attributes&quot;:{&quot;view&quot;:&quot;individual&quot;,&quot;stripNum&quot;:1}}],[{&quot;widgetRef&quot;:&quot;com.adobe.captivateprime.lostrip.myinterest&quot;,&quot;attributes&quot;:{&quot;view&quot;:&quot;individual&quot;,&quot;stripNum&quot;:2}}]]}"
                         sling:resourceType="learning/components/mylearning"
                         widgetConfig.attributes.numRows="1"
                         widgetRefSelected="com.adobe.captivateprime.lostrip.trending"/>
