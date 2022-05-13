@@ -63,7 +63,8 @@ public class GlobalConfigurationServiceImplTest {
 		JsonObject j = globalConfigService.getAdminConfigs(ctx.currentPage());
 		assertTrue("test1".equals(j.get("testConfig").getAsString()));
 		assertTrue("clientId".equals(j.get("clientId").getAsString()));
-		assertTrue("en_IN".equals(j.get("pageLocale").getAsString()));
+		assertTrue("clientSecret".equals(j.get("clientSecret").getAsString()));
+		assertTrue("transparent".equals(j.get("theme.background").getAsString()));
 	}
 
 }

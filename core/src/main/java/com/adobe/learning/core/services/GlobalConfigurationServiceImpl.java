@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 
 package com.adobe.learning.core.services;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -51,6 +52,7 @@ public class GlobalConfigurationServiceImpl implements GlobalConfigurationServic
 	@Override
 	public JsonObject getAdminConfigs(Page currentPage) {
 		JsonObject globalConfig = new JsonObject();
+		List<String> aemNodePrefixes = Constants.Config.AEM_NODE_PROP_PREFIXES;
 		try (ResourceResolver serviceResolver = resolverFactory.getServiceResourceResolver(authInfo)) {
 			String resourcePath = currentPage.getContentResource().getPath();
 			Resource resource = serviceResolver.getResource(resourcePath);
@@ -71,7 +73,7 @@ public class GlobalConfigurationServiceImpl implements GlobalConfigurationServic
 				
 				if (adminConfigs != null) {
 					for (String key : adminConfigs.keySet()) {
-						if (!StringUtils.startsWithAny(key, Constants.AEM_NODE_PROP_PREFIXES))
+						if (!StringUtils.startsWithAny(key, aemNodePrefixes.toArray(new CharSequence[aemNodePrefixes.size()])))
 							globalConfig.addProperty(key, adminConfigs.get(key, ""));
 					}
 					String pageLocale = currentPage.getLanguage(false).toString();

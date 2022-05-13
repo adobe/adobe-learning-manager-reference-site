@@ -78,7 +78,7 @@ public class GlobalConfigurationModel {
 	{
 		String parentPagePath = (currentPage.getParent() != null) ? currentPage.getParent().getPath() : "";
 		String navigationPath = parentPagePath + "/";
-		Constants.NAVIGATION_PATHS.forEach((key, value) -> jsonConfigs.addProperty(key, navigationPath + value));
+		Constants.Config.NAVIGATION_PATHS.forEach((key, value) -> jsonConfigs.addProperty(key, navigationPath + value));
 	}
 
 }
