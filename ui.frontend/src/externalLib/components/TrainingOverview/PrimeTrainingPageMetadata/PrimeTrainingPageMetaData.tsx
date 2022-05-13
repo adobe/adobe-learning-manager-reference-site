@@ -36,8 +36,6 @@ import {
 import { DEFAULT_USER_SVG, LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
 import {
   GetTranslation,
-  GetTranslationReplaced,
-  GetTranslationsReplaced,
 } from "../../../utils/translationService";
 import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJobAids";
 import styles from "./PrimeTrainingPageMetadata.module.css";
