@@ -35,27 +35,44 @@ const PrimeModuleList: React.FC<{
     isContent,
   } = props;
 
-  // chkIfPriorModulesAreStarted() {
-  //   var z = this.get("course.moduleIndexOfFirstContentModule");
-  //   const courseId = this.get("model.courseId");
-  //   var course = this.get("store").peekRecord("course", courseId);
-  //   var modulesArray = course.get("courseModule").slice();
-  //   var currModuleOrderInCourse = this.get("module.moduleOrderInCourse");
-  //   if (modulesArray) {
-  //       for (var x = z; x < modulesArray.length; x++){
-  //           if (modulesArray[x].get("moduleOrderInCourse") < currModuleOrderInCourse)
-  //               return false;
-  //       }
-  //   }
-  //   return true;
-  // },
-  // isLocked : Ember.computed("course.moduleIndexOfFirstContentModule","course.sequential","model.modulesDataArray","module.moduleOrderInCourse", function(){
-  //   var course = this.get("course.model");
-  //   var sequenceEnforced = course.get("sequential");
-  //   if (sequenceEnforced == "true" && !this.chkIfPriorModulesAreStarted())
-  //      return true;
-  //   return false;
-  // }),
+  const isModuleLocked = (
+    loResource: PrimeLearningObjectResource,
+    index: number
+  ): boolean => {
+    if (
+      training.prerequisiteLOs &&
+      training.isPrerequisiteEnforced &&
+      training.prerequisiteLOs.some(
+        (l) => !l.enrollment || l.enrollment.state !== "COMPLETED"
+      )
+    ) {
+      // prerequisite enforced and not completed
+      return true;
+    }
+    if (!training.isSubLoOrderEnforced) {
+      return false;
+    }
+    if (!training.enrollment) {
+      return true;
+    }
+
+    const loResourceGrades = training.enrollment.loResourceGrades;
+    if (index === 0) {
+      return false;
+    }
+    const previousResourceId = loResources[index - 1]?.id;
+    const filteredPreviousResourceGrade = loResourceGrades.filter(
+      (loResourceGrade) => loResourceGrade.id.search(previousResourceId) > -1
+    );
+    if (
+      filteredPreviousResourceGrade.length &&
+      !filteredPreviousResourceGrade[0].hasPassed
+    ) {
+      return true;
+    }
+
+    return false;
+  };
 
   return (
     <ul
@@ -72,6 +89,7 @@ const PrimeModuleList: React.FC<{
           trainingInstance={trainingInstance}
           isPartOfLP={isPartOfLP}
           isContent={isContent}
+          canPlay={!isModuleLocked(loResource, index)}
         ></PrimeModuleItem>
       ))}
     </ul>

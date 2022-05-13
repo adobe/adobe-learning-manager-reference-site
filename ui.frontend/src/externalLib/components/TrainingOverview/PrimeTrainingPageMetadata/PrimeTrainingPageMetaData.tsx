@@ -36,13 +36,11 @@ import {
 import { DEFAULT_USER_SVG, LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
 import {
   GetTranslation,
-  GetTranslationReplaced,
   GetTranslationsReplaced,
 } from "../../../utils/translationService";
 import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJobAids";
 import styles from "./PrimeTrainingPageMetadata.module.css";
-import { ContextualHelp, Heading, Content, Text } from "@adobe/react-spectrum";
-import { isGeneratorObject } from "util/types";
+import { ContextualHelp, Content, Text } from "@adobe/react-spectrum";
 
 const PENDING_APPROVAL = "PENDING_APPROVAL";
 const PrimeTrainingPageMetaData: React.FC<{
@@ -185,22 +183,26 @@ const PrimeTrainingPageMetaData: React.FC<{
     let completionCount = training.loResourceCompletionCount;
 
     if (training.loType === "course") {
-      label = GetTranslation(
+      let totalCount = trainingInstance?.loResources?.length;
+      label = GetTranslationsReplaced(
         "alm.overview.course.minimum.criteria.label",
+        {
+          x: completionCount,
+          y: totalCount,
+        },
         true
       );
-      let totalCount = trainingInstance?.loResources?.length;
-      label = label.replace("{0}", completionCount?.toString());
-      label = totalCount ? label.replace("{1}", totalCount.toString()) : label;
       value = `${completionCount}/${totalCount}`;
     } else if (training.loType === "certification") {
-      label = GetTranslation(
+      let totalCount = training.subLOs.length;
+      label = GetTranslationsReplaced(
         "alm.overview.certification.minimum.criteria.label",
+        {
+          x: completionCount,
+          y: totalCount,
+        },
         true
       );
-      let totalCount = training.subLOs.length;
-      label = label.replace("{0}", completionCount?.toString());
-      label = totalCount ? label.replace("{1}", totalCount.toString()) : label;
       value = `${completionCount}/${totalCount}`;
     }
     return { label, value };
@@ -236,7 +238,9 @@ const PrimeTrainingPageMetaData: React.FC<{
   const showJobAids = training.enrollment && training.supplementaryLOs?.length;
   const showResource = training.supplementaryResources?.length;
   const showUnenrollButton =
-    training.enrollment && training.unenrollmentAllowed;
+    training.enrollment &&
+    training.unenrollmentAllowed &&
+    !(enrollment.progressPercent === 100);
   const showCertificationDeadline =
     training.enrollment && training.enrollment.completionDeadline;
   const isCertification = loType === "certification";
