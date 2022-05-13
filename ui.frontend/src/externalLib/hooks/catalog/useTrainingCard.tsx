@@ -10,6 +10,8 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { useCallback, useMemo } from "react";
+import { AlertType } from "../../common/Alert/AlertDialog";
+import { useAlert } from "../../common/Alert/useAlert";
 import APIServiceInstance from "../../common/APIService";
 import {
   PrimeLearningObject,
@@ -26,9 +28,10 @@ import { getALMConfig, getALMObject } from "../../utils/global";
 import { useCardBackgroundStyle, useCardIcon } from "../../utils/hooks";
 import { LaunchPlayer } from "../../utils/playback-utils";
 import { QueryParams } from "../../utils/restAdapter";
-import { getPreferredLocalizedMetadata } from "../../utils/translationService";
+import { getPreferredLocalizedMetadata, GetTranslation } from "../../utils/translationService";
 
 export const useTrainingCard = (training: PrimeLearningObject) => {
+  const [alert] = useAlert();
   const { locale } = getALMConfig();
 
   let {
@@ -92,6 +95,7 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
             loInstanceId: training.instances[0].id,
           };
           await APIServiceInstance.enrollToTraining(queryParam);
+          alert(true, GetTranslation("alm.jobaid.added"), AlertType.success);
         }
         //if user logged in, then enroll if not already enrolled.
         //need to enroll silently here and then do the following

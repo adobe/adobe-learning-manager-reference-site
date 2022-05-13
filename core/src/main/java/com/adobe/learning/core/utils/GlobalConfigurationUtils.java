@@ -22,5 +22,4 @@ public final class GlobalConfigurationUtils {
 		globalConfig.remove(Constants.Config.SITES_AUTHOR_REFRESH_TOKEN_NAME);
 		globalConfig.remove(Constants.Config.COMMERCE_ADMIN_REFRESH_TOKEN);
 	}
-
 }

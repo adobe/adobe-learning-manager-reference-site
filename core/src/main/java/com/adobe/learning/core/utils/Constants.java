@@ -8,20 +8,23 @@ Unless required by applicable law or agreed to in writing, software distributed 
 the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
-*/
+ */
 
 package com.adobe.learning.core.utils;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.day.cq.commons.jcr.JcrConstants;
 
 public class Constants {
-	
-	public static final String[] AEM_NODE_PROP_PREFIXES = {"jcr:", "cq:", "sling:"};
 
-	public final class Config {
+	public static final class Config {
+		public static final List<String> AEM_NODE_PROP_PREFIXES = 
+				Collections.unmodifiableList(Arrays.asList("jcr:", "cq:", "sling:"));
 		public static final String USAGE_TYPE_NAME = "usageType";
 		public static final String SITES_USAGE = "aem-sites";
 		public static final String ES_USAGE = "aem-es";
@@ -44,10 +47,30 @@ public class Constants {
 		public static final String CLOUD_CONFIG_SETTINGS = "settings";
 		public static final String ALM_CONFIGURATION_NAME = "cloudconfigs/adobe-learning-manager-config";
 		public static final String ALM_SUB_CONFIG_PATH =
-		        "/" + CLOUD_CONFIG_SETTINGS + "/" + ALM_CONFIGURATION_NAME + "/" + JcrConstants.JCR_CONTENT;
+				"/" + CLOUD_CONFIG_SETTINGS + "/" + ALM_CONFIGURATION_NAME + "/" + JcrConstants.JCR_CONTENT;
+		private static final Map<String, String> MUTABLE_NAVIGATION_PATHS = new HashMap<String, String>();
+		static
+		{
+			MUTABLE_NAVIGATION_PATHS.put("trainingOverviewPath", "overview.html");
+			MUTABLE_NAVIGATION_PATHS.put("catalogPath", "explore.html");
+			MUTABLE_NAVIGATION_PATHS.put("communityPath", "skills.html");
+			MUTABLE_NAVIGATION_PATHS.put("communityBoardsPath", "boards.html");
+			MUTABLE_NAVIGATION_PATHS.put("communityBoardDetailsPath", "board.html");
+			MUTABLE_NAVIGATION_PATHS.put("instancePath", "instance.html");
+			MUTABLE_NAVIGATION_PATHS.put("profilePath", "profile.html");
+			MUTABLE_NAVIGATION_PATHS.put("homePath", "home.html");
+			MUTABLE_NAVIGATION_PATHS.put("learningPath", "learning.html");
+			MUTABLE_NAVIGATION_PATHS.put("supportPath", "support.html");
+			MUTABLE_NAVIGATION_PATHS.put("emailRedirectPath", "email-redirect.html");
+			MUTABLE_NAVIGATION_PATHS.put("signOutPath", "sign-out.html");
+			MUTABLE_NAVIGATION_PATHS.put("commerceSignInPath", "commerce.html");
+			MUTABLE_NAVIGATION_PATHS.put("commerceCartPath", "commerce.html");
+			MUTABLE_NAVIGATION_PATHS.put("commerceBasePath", "commerce.html");
+		}
+		public static final Map<String, String> NAVIGATION_PATHS = Collections.unmodifiableMap(MUTABLE_NAVIGATION_PATHS);
 	}
 
-	public final class EmbeddableWidgetConfig {
+	public static final class EmbeddableWidgetConfig {
 		public static final String WIDGET_REF = "widgetRef";
 		public static final String SELECTED_WIDGET_REF = "widgetRefSelected";
 		public static final String SOCIAL_WIDGET_REF = "com.adobe.captivateprime.social";
@@ -65,29 +88,10 @@ public class Constants {
 		public static final String AUTH_ACCESS_TOKEN_KEY = "auth.accessToken";
 	}
 
-	public final class CPUrl {
+	public static final class CPUrl {
 		public static final String CONFIG_URL = "/app/embeddablewidget?widgetRef=widgets-aem";
 		public static final String WIDGET_CONFIG_URL = "/app/embeddablewidget?widgetRef=widgets-aem";
 		public static final String WIDGET_SRC_URL = "{hostName}/app/embeddablewidget?widgetRef={widgetRef}&resourceType=html";
 		public static final String WIDGET_COMMUNICATOR_URL = "{hostName}/app/embeddablewidget?widgetRef=com.adobe.captivateprime.widgetcommunicator";
-	}
-	
-	public static Map<String, String> NAVIGATION_PATHS = new HashMap<String, String>();
-	static {
-		NAVIGATION_PATHS.put("trainingOverviewPath", "overview.html");
-		NAVIGATION_PATHS.put("catalogPath", "explore.html");
-		NAVIGATION_PATHS.put("communityPath", "skills.html");
-		NAVIGATION_PATHS.put("communityBoardsPath", "boards.html");
-		NAVIGATION_PATHS.put("communityBoardDetailsPath", "board.html");
-		NAVIGATION_PATHS.put("instancePath", "instance.html");
-		NAVIGATION_PATHS.put("profilePath", "profile.html");
-		NAVIGATION_PATHS.put("homePath", "home.html");
-		NAVIGATION_PATHS.put("learningPath", "learning.html");
-		NAVIGATION_PATHS.put("supportPath", "support.html");
-		NAVIGATION_PATHS.put("emailRedirectPath", "email-redirect.html");
-		NAVIGATION_PATHS.put("signOutPath", "sign-out.html");
-		NAVIGATION_PATHS.put("commerceSignInPath", "commerce.html");
-		NAVIGATION_PATHS.put("commerceCartPath", "commerce.html");
-		NAVIGATION_PATHS.put("commerceBasePath", "commerce.html");
 	}
 }

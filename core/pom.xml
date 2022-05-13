@@ -78,11 +78,6 @@ Import-Package: javax.annotation;version=0.0.0,*
 
     <dependencies>
         <dependency>
-            <groupId>uk.org.lidalia</groupId>
-            <artifactId>slf4j-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.sitemap</artifactId>
         </dependency>
@@ -158,6 +153,11 @@ Import-Package: javax.annotation;version=0.0.0,*
 		<version>2.8.6</version>
 	  </dependency>
         <!-- Testing -->
+        <dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>

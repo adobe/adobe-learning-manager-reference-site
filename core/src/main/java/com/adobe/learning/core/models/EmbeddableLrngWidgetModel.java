@@ -112,13 +112,13 @@ public class EmbeddableLrngWidgetModel {
 
 	private String getWidgetConfig(Map<String, Object> valueMap, String selectedWidgetRef, JsonObject adminConfigsObj)
 	{
+		List<String> aemNodePrefixes = Constants.Config.AEM_NODE_PROP_PREFIXES;
 		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 		Map<String, Object> widgetObject = new HashMap<>();
 		for (Entry<String, Object> e : valueMap.entrySet())
 		{
 			String key = e.getKey();
-
-			if (!StringUtils.startsWithAny(key, Constants.AEM_NODE_PROP_PREFIXES))
+			if (!StringUtils.startsWithAny(key, aemNodePrefixes.toArray(new CharSequence[aemNodePrefixes.size()])))
 			{
 				Object value = e.getValue();
 				if (value instanceof String)

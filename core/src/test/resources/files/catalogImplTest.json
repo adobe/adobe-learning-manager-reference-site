@@ -1,0 +1,18 @@
+ {
+     "catalog": {
+       "jcr:primaryType": "nt:unstructured",
+       "sling:resourceType": "learning/components/catalog",
+       "name": "Catalog",
+       "showFilters": "true",
+       "showSearch": "false",
+       "showCatalogFilter": "true",
+       "typeFilter":"false",
+       "skillsFilter": "true",
+       "formatFilter": "false",
+       "durationFilter": "true",
+       "priceFilter": "false",
+       "skillsLevelFilter": "true",
+       "tagsFilter": "false",
+       "statusFilter": "true"
+       }
+}
