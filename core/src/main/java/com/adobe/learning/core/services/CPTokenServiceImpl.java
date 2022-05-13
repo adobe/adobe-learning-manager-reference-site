@@ -73,10 +73,7 @@ public class CPTokenServiceImpl implements CPTokenService {
 		}
 		else
 		{
-			JsonObject jsonObject = new Gson().fromJson(responseStr, JsonObject.class);
-			String accessToken = jsonObject.get("access_token").getAsString();
-			Integer expirySecond = jsonObject.get("expires_in").getAsInt();
-			return new ImmutablePair<String, Integer>(accessToken, expirySecond);
+			return getTokenAndExpiry(responseStr);
 		}
 	}
 
@@ -105,10 +102,7 @@ public class CPTokenServiceImpl implements CPTokenService {
 		}
 		else
 		{
-			JsonObject jsonObject = new Gson().fromJson(responseStr, JsonObject.class);
-			String accessToken = jsonObject.get("access_token").getAsString();
-			Integer expirySecond = jsonObject.get("expires_in").getAsInt();
-			return new ImmutablePair<String, Integer>(accessToken, expirySecond);
+			return getTokenAndExpiry(responseStr);
 		}
 	}
 
@@ -142,6 +136,7 @@ public class CPTokenServiceImpl implements CPTokenService {
 		}
 		return null;
 	}
+	
 	private String doCPPost(String url, List<NameValuePair> params)
 	{
 		HttpPost post = new HttpPost(url);
@@ -154,5 +149,12 @@ public class CPTokenServiceImpl implements CPTokenService {
 			LOGGER.error("CPPrime:: Exception in http call while fetching refresh-token", e);
 		}
 		return null;
+	}
+	
+	private ImmutablePair<String, Integer> getTokenAndExpiry(String responseStr) {
+		JsonObject jsonObject = new Gson().fromJson(responseStr, JsonObject.class);
+		String accessToken = jsonObject.get("access_token").getAsString();
+		Integer expirySecond = jsonObject.get("expires_in").getAsInt();
+		return new ImmutablePair<String, Integer>(accessToken, expirySecond);
 	}
 }

@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import javax.servlet.Servlet;
@@ -43,7 +41,6 @@ import com.adobe.learning.core.utils.EmbeddableLrngWidgetUtils;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 @Component(service = Servlet.class, property = {"sling.servlet.methods=GET", "sling.servlet.resourceTypes=" + EmbeddableLrngWidgetDatasource.RESOURCE_TYPE})

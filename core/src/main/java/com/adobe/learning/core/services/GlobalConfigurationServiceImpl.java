@@ -59,7 +59,7 @@ public class GlobalConfigurationServiceImpl implements GlobalConfigurationServic
 						serviceResolver.getUserID(), resourcePath);
 			} else {
 				ConfigurationBuilder cfgBuilder = resource.adaptTo(ConfigurationBuilder.class);
-				adminConfigs = cfgBuilder.name(Constants.Config.ALM_CONFIGURATION_NAME).asValueMap();
+				adminConfigs = (cfgBuilder != null) ? cfgBuilder.name(Constants.Config.ALM_CONFIGURATION_NAME).asValueMap() : null;
 				if (adminConfigs == null || adminConfigs.size() == 0) {
 					InheritanceValueMap inheritedVM = new HierarchyNodeInheritanceValueMap(resource);
 					String cpConfPath = inheritedVM.getInherited(Constants.Config.CONF_PROP_NAME, String.class);

@@ -14,7 +14,6 @@ package com.adobe.learning.core.models;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
@@ -26,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.sightly.SightlyWCMMode;
-import com.adobe.learning.core.services.CPTokenService;
 import com.adobe.learning.core.services.GlobalConfigurationService;
 import com.adobe.learning.core.utils.Constants;
 import com.adobe.learning.core.utils.GlobalConfigurationUtils;
@@ -47,9 +45,6 @@ public class GlobalConfigurationModel {
 	@OSGiService
 	private GlobalConfigurationService configService;
 
-	@OSGiService
-	private CPTokenService tokenService;
-
 	@ScriptVariable(name = "wcmmode", injectionStrategy = InjectionStrategy.OPTIONAL)
 	private SightlyWCMMode wcmMode;
 
@@ -58,6 +53,7 @@ public class GlobalConfigurationModel {
 
 	@PostConstruct
 	protected void init() {
+		LOG.debug("GlobalConfigurationModel currentPagePath {}", currentPage.getPath());
 		JsonObject jsonConfigs = configService.getAdminConfigs(currentPage);
 		GlobalConfigurationUtils.filterAdminConfigs(jsonConfigs);
 	

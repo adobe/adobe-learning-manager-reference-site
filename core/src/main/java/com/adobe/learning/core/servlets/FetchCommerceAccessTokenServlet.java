@@ -143,7 +143,7 @@ public class FetchCommerceAccessTokenServlet extends SlingAllMethodsServlet {
 		}
 	}
 
-	Pair<String, Integer> getAccessTokenWithExpiry(String responseStr)
+	private Pair<String, Integer> getAccessTokenWithExpiry(String responseStr)
 	{
 		JsonObject jsonObject = new Gson().fromJson(responseStr, JsonObject.class);
 		String accessToken = jsonObject.get("access_token").getAsString();
