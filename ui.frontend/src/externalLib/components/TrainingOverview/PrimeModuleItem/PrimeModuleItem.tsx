@@ -21,6 +21,7 @@ import Visibility from "@spectrum-icons/workflow/Visibility";
 import React, {useState, useRef, useEffect} from "react";
 import store from "../../../../store/APIStore";
 import { useIntl } from "react-intl";
+import { AlertDialog, AlertType } from "../../../common/Alert/AlertDialog";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
@@ -285,17 +286,15 @@ const PrimeModuleItem: React.FC<{
 
   return (
     <>
-      {showCannotSkipDialog && (
-        <PrimeAlertDialog
-          variant="warning"
-          title={GetTranslation(
-            "alm.overview.cannot.skip.ordered.module",
-            true
-          )}
-          primaryActionLabel="Ok"
-          classes={styles.warningDialog}
-        ></PrimeAlertDialog>
-      )}
+      <AlertDialog
+        type={AlertType.error}
+        message={GetTranslation(
+          "alm.overview.cannot.skip.ordered.module",
+          true
+        )}
+        show={showCannotSkipDialog}
+        // classes={styles.warningDialog}
+      ></AlertDialog>
       <li className={styles.container}>
         <div
           className={`${styles.headerContainer} ${

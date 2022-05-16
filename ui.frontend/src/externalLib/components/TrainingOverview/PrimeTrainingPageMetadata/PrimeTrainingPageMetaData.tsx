@@ -77,7 +77,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   jobAidClickHandler,
   isPreviewEnabled,
 }) => {
-  const [alert] = useAlert();
+  const [almAlert] = useAlert();
   const { formatMessage } = useIntl();
   const config = getALMConfig();
   const locale = config.locale;
@@ -160,7 +160,7 @@ const PrimeTrainingPageMetaData: React.FC<{
     try {
       const { error, totalQuantity } = await addToCartHandler();
       if (error && error[0]?.message) {
-        alert(
+        almAlert(
           true,
           formatMessage({ id: "alm.addToCart.Error" }, { loType: loType }),
           AlertType.error

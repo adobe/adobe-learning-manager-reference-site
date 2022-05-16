@@ -60,7 +60,7 @@ const App = (props: any) => {
         </AppContextProvider>
       </CommerceContextProvider>
     </IntlProvider>
-  );
-};
+  )
+}
 
 export default App;
