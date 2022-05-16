@@ -10,7 +10,9 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import ReactDOM from "react-dom";
-import React, { Suspense } from "react";
+import { Suspense } from "react";
+import 'react-quill/dist/quill.snow.css';
+
 
 const withSuspense = (Component: any) => {
   let WithSuspense: any = (props: any) => {
