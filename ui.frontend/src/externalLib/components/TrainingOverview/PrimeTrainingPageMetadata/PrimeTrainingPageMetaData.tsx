@@ -16,14 +16,15 @@ import Calendar from "@spectrum-icons/workflow/Calendar";
 import Clock from "@spectrum-icons/workflow/Clock";
 import ClockCheck from "@spectrum-icons/workflow/ClockCheck";
 import Download from "@spectrum-icons/workflow/Download";
+import Money from "@spectrum-icons/workflow/Money";
 import PinOff from "@spectrum-icons/workflow/PinOff";
 import Send from "@spectrum-icons/workflow/Send";
 import UserGroup from "@spectrum-icons/workflow/UserGroup";
 import { useEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
-import { InstanceBadge, Skill } from "../../../models/custom";
 import { AlertType } from "../../../common/Alert/AlertDialog";
 import { useAlert } from "../../../common/Alert/useAlert";
+import { InstanceBadge, Skill } from "../../../models/custom";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
@@ -36,6 +37,7 @@ import {
   getALMObject,
 } from "../../../utils/global";
 import { DEFAULT_USER_SVG, LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
+import { getFormattedPrice } from "../../../utils/price";
 import {
   GetTranslation,
   GetTranslationsReplaced,
@@ -84,11 +86,16 @@ const PrimeTrainingPageMetaData: React.FC<{
   const enrollment = training.enrollment;
   const loType = training.loType;
 
+  const isPricingEnabled =
+    training.price && getALMConfig().usageType === "aem-commerce";
+
   const [isTrainingNotSynced, setIsTrainingNotSynced] = useState(false);
   let showPreviewButton =
     isPreviewEnabled &&
     training.hasPreview &&
     (!enrollment || enrollment.state === PENDING_APPROVAL);
+
+  const showPriceDetails = isPricingEnabled && enrollment;
 
   const action: string = useMemo(() => {
     if (enrollment) {
@@ -102,7 +109,7 @@ const PrimeTrainingPageMetaData: React.FC<{
       return "continue";
     } else if (trainingInstance.state === "Retired") {
       return "registerInterest";
-    } else if (training.price && getALMConfig().usageType === "aem-commerce") {
+    } else if (isPricingEnabled) {
       return "buyNow";
     } else {
       return "enroll";
@@ -156,32 +163,25 @@ const PrimeTrainingPageMetaData: React.FC<{
     } catch (e) {}
   };
 
-  const addToCart = async (redirectPathName = "") => {
+  const addToCart = async () => {
     try {
       const { error, totalQuantity } = await addToCartHandler();
       if (error && error[0]?.message) {
         almAlert(
           true,
-          formatMessage({ id: "alm.addToCart.Error" }, { loType: loType }),
+          formatMessage({ id: "alm.addToCart.error" }, { loType: loType }),
           AlertType.error
         );
       } else {
         getALMObject().updateCart(totalQuantity);
+        almAlert(
+          true,
+          formatMessage({ id: "alm.addedToCart" }),
+          AlertType.success
+        );
       }
-
-      //  else {
-      //
-      //   if (redirectPathName) {
-      //     window.location.pathname = `${redirectPathName}`;
-      //   }
-      // }
     } catch (e) {}
   };
-
-  // const buyNowHandler = async () => {
-  //   const redirectPathName = getALMConfig().commerceBasePath + "/cart";
-  //   await addToCart(redirectPathName);
-  // };
 
   const addProductToCart = async () => {
     await addToCart();
@@ -337,17 +337,9 @@ const PrimeTrainingPageMetaData: React.FC<{
             {actionText}
           </Button>
         )}
+
         {action === "buyNow" && (
           <>
-            {/* <div className={styles.buyNowContainer}> */}
-            {/* <Button
-                variant="primary"
-                UNSAFE_className={`${styles.buyNowButton} ${styles.commonButton}`}
-                onPress={buyNowHandler}
-              >
-                {actionText}
-              </Button> */}
-
             <Button
               variant="primary"
               UNSAFE_className={`${styles.addToCartButton} ${styles.commonButton}`}
@@ -358,7 +350,7 @@ const PrimeTrainingPageMetaData: React.FC<{
                 {
                   id: `alm.addToCart`,
                 },
-                { x: training.price }
+                { x: getFormattedPrice(training.price) }
               )}
             </Button>
             {/* </div> */}
@@ -401,6 +393,32 @@ const PrimeTrainingPageMetaData: React.FC<{
       </div> */}
 
       {/* Minimum Completion Criteria container */}
+
+      {showPriceDetails && (
+        <div className={styles.commonContainer}>
+          <span aria-hidden="true" className={styles.icon}>
+            <Money />
+          </span>
+          <div className={styles.innerContainer}>
+            <div>
+              {formatMessage({
+                id: "alm.purchase.details",
+                defaultMessage: "Purchase Details",
+              })}
+            </div>
+            <div>
+              {formatMessage(
+                {
+                  id: "alm.training.price",
+                  defaultMessage: "Price",
+                },
+                { amount: getFormattedPrice(training.price) }
+              )}
+            </div>
+            <div>{modifyTime(enrollment.dateEnrolled, locale)}</div>
+          </div>
+        </div>
+      )}
 
       {training.loResourceCompletionCount !==
         trainingInstance.loResources?.length && (

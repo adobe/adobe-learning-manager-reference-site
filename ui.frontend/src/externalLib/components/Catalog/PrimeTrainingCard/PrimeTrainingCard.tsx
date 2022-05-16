@@ -17,6 +17,7 @@ import { useIntl } from "react-intl";
 import { useTrainingCard } from "../../../hooks/catalog/useTrainingCard";
 import { PrimeLearningObject } from "../../../models/PrimeModels";
 import { SEND_SVG, THREE_DOTS_MENU_SVG } from "../../../utils/inline_svg";
+import { getFormattedPrice } from "../../../utils/price";
 import { GetTranslation } from "../../../utils/translationService";
 import styles from "./PrimeTrainingCard.module.css";
 
@@ -88,15 +89,9 @@ const PrimeTrainingCard: React.FC<{
   }, [type]);
   let priceLabel = "";
   const price = training.price;
-  // if (training.price?.value) {
-  if (price) {
-    const formatter = new Intl.NumberFormat("en-US", {
-      style: "currency",
-      // currency: training.price?.currency,
-      currency: "USD",
-    });
 
-    priceLabel = formatter.format(price);
+  if (price) {
+    priceLabel = getFormattedPrice(price);
   }
 
   const extraIconHtml = (

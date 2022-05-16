@@ -35,15 +35,6 @@ import ICustomHooks from "./ICustomHooks";
 
 const CART_ID = "CART_ID";
 const COMMERCE_FILTERS = "COMMERCE_FILTERS";
-interface CommerceTypes {
-  almlotype: string;
-  almdeliverytype: string;
-  almduration: string;
-  almcatalog: string;
-  almskills: string;
-  almskilllevel: string;
-  almtags: string;
-}
 
 interface CommerceItem {
   value: string;
@@ -58,15 +49,6 @@ const ALM_SKILLS = "almskill";
 const ALM_SKILL_LEVELS = "almskilllevel";
 const ALM_TAGS = "almtags";
 
-const commerceTypesToALMMap = {
-  almlotype: "loTypes",
-  almdeliverytype: "loFormat",
-  almduration: "duration",
-  almcatalog: "catalogs",
-  almskills: "skillName",
-  almskilllevel: "skillLevel",
-  almtags: "tagName",
-};
 export const ALMToCommerceTypes = {
   loTypes: "almlotype",
   loFormat: "almdeliverytype",
@@ -323,7 +305,7 @@ export default class CommerceCustomHooks implements ICustomHooks {
               case ALM_LO: {
                 let defaultFilters = defaultFiltersState["loTypes"].list;
                 defaultFiltersState["loTypes"].list = defaultFilters?.filter(
-                  (item) => item.value != "jobAid"
+                  (item) => item.value !== "jobAid"
                 );
                 transformFilters(defaultFiltersState, item, "loTypes");
                 break;
