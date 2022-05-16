@@ -142,7 +142,8 @@ governing permissions and limitations under the License.
 
 .experiencefragment.cmp-experiencefragment--footer
 {
-  margin-top: 50px;
+  position: absolute;
+  bottom: -80px;
 }
 
 .experiencefragment.cmp-experiencefragment--footer a {
@@ -159,10 +160,6 @@ governing permissions and limitations under the License.
 
 #carousel-container .cmp-teaser__image .cmp-image .cmp-image__image {
   height: 300px;
-}
-
-.training__page__container, .instance__container, .commerce__container, .catalog__container {
-  min-height: 100vh;
 }
 
 /* CSS for Home Catalog Page*/
@@ -1006,6 +1003,12 @@ body {
   text-align: left;
   color: #202020;
   line-height: 1.5;
+  min-height: 100%;
+  position: relative;
+}
+
+html {
+  height: 100%;
 }
 
 .cmp-accordion .cmp-accordion__button {
