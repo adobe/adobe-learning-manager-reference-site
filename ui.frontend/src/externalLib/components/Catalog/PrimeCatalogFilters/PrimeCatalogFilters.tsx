@@ -9,8 +9,11 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
+import { RangeSlider } from "@adobe/react-spectrum";
+import { useState } from "react";
 import { UpdateFiltersEvent } from "../../../utils/filters";
 import { getALMObject } from "../../../utils/global";
+import { isCommerceEnabled } from "../../../utils/price";
 import { GetTranslation } from "../../../utils/translationService";
 import { ALMLoader } from "../../Common/ALMLoader";
 import styles from "./PrimeCatalogFilters.module.css";
@@ -36,6 +39,7 @@ const PrimeCatalogFilters = (props: any) => {
     updateFilters(data);
   };
 
+  let [value, setValue] = useState({ start: 25, end: 75 });
   if (isLoading) {
     return <ALMLoader />;
   }
@@ -105,14 +109,15 @@ const PrimeCatalogFilters = (props: any) => {
         {/* learnerState Filter ends */}
 
         {/* Price Filter start */}
-        {/* {!isLoggedIn &&
-          getALMConfig().usageType === ADOBE_COMMERCE &&
-          renderFilterList(learnerState)}
-
-        {isLoggedIn &&
-          getALMConfig().usageType === ADOBE_COMMERCE &&
-          isCommerceEnabledOnAccount() &&
-          renderFilterList(price)} */}
+        {isCommerceEnabled() && (
+          <div>
+            <RangeSlider
+              label="Range (controlled)"
+              value={value}
+              onChange={setValue}
+            />
+          </div>
+        )}
         {/* Price Filter ends */}
       </div>
     </>

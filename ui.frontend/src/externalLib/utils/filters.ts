@@ -159,18 +159,13 @@ export const filtersDefaultState: FilterState = {
     label: "alm.catalog.filter.duration.label",
     list: [
       {
-        value: "10",
-        label: "alm.catalog.filter.lessThan30Minutes",
+        value: "0",
+        label: "",
         checked: false,
       },
       {
-        value: "10-1000",
-        label: "alm.catalog.filter.30minutesTo2Hours",
-        checked: false,
-      },
-      {
-        value: "1001",
-        label: "alm.catalog.filter.moreThan2Hours",
+        value: "0",
+        label: "",
         checked: false,
       },
     ],
@@ -190,6 +185,13 @@ export interface FilterType {
   isListDynamic?: boolean;
 }
 
+// export interface PriceFilterType {
+//   maxPrice: number;
+//   minPrice: number;
+//   label?: string;
+//   type?: string;
+// }
+
 export interface ActionMap {
   loTypes: Function;
 }
@@ -202,7 +204,6 @@ export const ACTION_MAP = {
   skillLevel: updateSkillLevelFilter,
   duration: updateDurationFilter,
   catalogs: updateCatalogsFilter,
-  //price
 };
 
 export interface UpdateFiltersEvent {

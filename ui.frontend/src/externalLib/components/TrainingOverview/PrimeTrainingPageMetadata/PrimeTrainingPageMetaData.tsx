@@ -30,6 +30,7 @@ import {
   PrimeLearningObjectInstance,
   PrimeLoInstanceSummary,
 } from "../../../models/PrimeModels";
+import { ADOBE_COMMERCE } from "../../../utils/constants";
 import { modifyTime } from "../../../utils/dateTime";
 import {
   getALMAccount,
@@ -87,7 +88,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   const loType = training.loType;
 
   const isPricingEnabled =
-    training.price && getALMConfig().usageType === "aem-commerce";
+    training.price && getALMConfig().usageType === ADOBE_COMMERCE;
 
   const [isTrainingNotSynced, setIsTrainingNotSynced] = useState(false);
   let showPreviewButton =
