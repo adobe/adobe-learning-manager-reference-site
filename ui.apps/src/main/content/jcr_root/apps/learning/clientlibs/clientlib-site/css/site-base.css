@@ -672,7 +672,7 @@ governing permissions and limitations under the License.
 }
 
 div#root {
-  display: none;
+  height: 0;
 }
 /* CSS for FOOTER */
 

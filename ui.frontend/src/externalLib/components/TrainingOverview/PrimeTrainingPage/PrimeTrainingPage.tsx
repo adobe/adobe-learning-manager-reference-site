@@ -32,6 +32,7 @@ import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
 import { PrimeTrainingPageMetadata } from "../PrimeTrainingPageMetadata";
 import styles from "./PrimeTrainingPage.module.css";
 
+
 const COURSE = "course";
 const LEARNING_PROGRAM = "learningProgram";
 const CERTIFICATION = "certification";
@@ -109,7 +110,7 @@ const PrimeTrainingPage = () => {
                 dangerouslySetInnerHTML={{
                   __html: richTextOverview || overview || description,
                 }}
-                className={styles.overview}
+                className={`${styles.overview} ql-editor`}
               ></div>
             )}
             <span className={styles.duration}>

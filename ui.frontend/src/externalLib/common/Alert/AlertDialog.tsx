@@ -2,30 +2,27 @@ import React from "react";
 import styles from "./AlertDialog.module.css";
 import Alert from "@spectrum-icons/workflow/Alert";
 import CheckmarkCircleOutline from "@spectrum-icons/workflow/CheckmarkCircleOutline";
-import { lightTheme, Provider} from "@adobe/react-spectrum";
-
-const success = "success";
-const error = "error";
+import { lightTheme, Provider } from "@adobe/react-spectrum";
 
 export enum AlertType {
   success = "success",
   error = "error",
 }
 
-export const renderAlert = (type: AlertType) => {
+export const renderAlert = (type: "success" | "error") => {
   switch (AlertType[type]) {
-    case success:
+    case AlertType.success:
       return (
-        <CheckmarkCircleOutline UNSAFE_className={`${styles.alertIcon} ${styles.success}`} />
+        <CheckmarkCircleOutline
+          UNSAFE_className={`${styles.alertIcon} ${styles.success}`}
+        />
       );
-      break;
-    case error:
+    case AlertType.error:
       return <Alert UNSAFE_className={`${styles.alertIcon} ${styles.error}`} />;
-      break;
   }
 };
 const AlertDialog: React.FC<{
-  type: AlertType;
+  type: "success" | "error";
   show: boolean;
   message: string;
 }> = ({ type, show, message }) => {
