@@ -51,9 +51,10 @@ const PrimeCommunityBoardOptions = (props: any) => {
   };
 
   const copyBoardUrlHandler = () => {
-    const primeConfig = getALMConfig();
-    const hostUrl = primeConfig.almBaseURL;
-    const boardUrl = hostUrl + "/community.html/boardId/" + boardId;
+    let { communityBoardDetailsPath } = getALMConfig()
+    let domain = (new URL(window.location.href));
+    let hostUrl = domain.protocol + "//" + domain.hostname + (domain.port ? ":" + domain.port : "") + communityBoardDetailsPath;
+    const boardUrl = hostUrl + "/boardId/" + boardId;
     copyUrl(boardUrl);
     if (typeof props.copyBoardUrlHandler === "function") {
       props.copyBoardUrlHandler();
