@@ -124,7 +124,8 @@ export default class ALMCustomHooks implements ICustomHooks {
     //
     // }),
     let maxPrice = 0;
-    if (isCommerceEnabled()) {
+    const isCommerceEnabledOnAccount = await isCommerceEnabled();
+    if (isCommerceEnabledOnAccount) {
       try {
         const response = await RestAdapter.get({
           url: `${config.primeApiURL}ecommerce/maxPrice?filter.loTypes=course%2ClearningProgram%2Ccertification`,

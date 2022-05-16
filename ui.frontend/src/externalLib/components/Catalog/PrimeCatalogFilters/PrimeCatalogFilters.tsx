@@ -10,10 +10,9 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { RangeSlider } from "@adobe/react-spectrum";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UpdateFiltersEvent } from "../../../utils/filters";
 import { getALMObject } from "../../../utils/global";
-import { isCommerceEnabled } from "../../../utils/price";
 import { GetTranslation } from "../../../utils/translationService";
 import { ALMLoader } from "../../Common/ALMLoader";
 import styles from "./PrimeCatalogFilters.module.css";
@@ -39,7 +38,14 @@ const PrimeCatalogFilters = (props: any) => {
     updateFilters(data);
   };
 
-  let [value, setValue] = useState({ start: 25, end: 75 });
+  let [trainingPrice, setTrainingPrice] = useState({ start: 0, end: 100 });
+  useEffect(() => {
+    //await isCommerceEnabled();
+    if (price) {
+      setTrainingPrice({ start: 0, end: price.list[1].value });
+    }
+  }, [price]);
+
   if (isLoading) {
     return <ALMLoader />;
   }
@@ -77,47 +83,47 @@ const PrimeCatalogFilters = (props: any) => {
       <div className={styles.primeFilterContainer}>
         <h3 className={styles.filtersLabel}>Filters</h3>
         {/* catalog Filter start */}
-        {renderFilterList(catalogs)}
+        {/* {renderFilterList(catalogs)} */}
         {/* catalog Filter ends */}
 
         {/* loTypes Filter start */}
-        {renderFilterList(loTypes)}
+        {/* {renderFilterList(loTypes)} */}
         {/* loTypes Filter ends */}
 
         {/* loFormat Filter start */}
-        {renderFilterList(loFormat)}
+        {/* {renderFilterList(loFormat)} */}
         {/* loFormat Filter ends */}
 
         {/* duration Filter start */}
-        {renderFilterList(duration)}
+        {/* {renderFilterList(duration)} */}
         {/* duration Filter ends */}
 
         {/* skillName Filter start */}
-        {renderFilterList(skillName)}
+        {/* {renderFilterList(skillName)} */}
         {/* skillName Filter ends */}
 
         {/* skillLevel Filter start */}
-        {renderFilterList(skillLevel)}
+        {/* {renderFilterList(skillLevel)} */}
         {/* skillLevel Filter ends */}
 
         {/* tagName Filter start */}
-        {renderFilterList(tagName)}
+        {/* {renderFilterList(tagName)} */}
         {/* tagName Filter ends */}
 
         {/* learnerState Filter start */}
-        {isLoggedIn && renderFilterList(learnerState)}
+        {/* {isLoggedIn && renderFilterList(learnerState)} */}
         {/* learnerState Filter ends */}
 
         {/* Price Filter start */}
-        {isCommerceEnabled() && (
+        {
           <div>
             <RangeSlider
-              label="Range (controlled)"
-              value={value}
-              onChange={setValue}
+              label="Range"
+              value={trainingPrice}
+              onChange={setTrainingPrice}
             />
           </div>
-        )}
+        }
         {/* Price Filter ends */}
       </div>
     </>
