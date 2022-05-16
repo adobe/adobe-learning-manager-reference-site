@@ -219,7 +219,7 @@ const ALMProfilePage = () => {
                     <div className={styles.progressArea}>
                       <ProgressBar
                         label={formatMessage({
-                          id: "alm.community.uploading.label",
+                          id: "alm.uploading.label",
                           defaultMessage: "Uploading...",
                         })}
                         value={fileUploadProgress}
@@ -227,7 +227,7 @@ const ALMProfilePage = () => {
                       <button
                         className={styles.primeStatusSvg}
                         title={formatMessage({
-                          id: "alm.community.removeUpload.label",
+                          id: "alm.removeUpload.label",
                           defaultMessage: "Remove upload",
                         })}
                       onClick={cancelClickHandler}
@@ -244,7 +244,7 @@ const ALMProfilePage = () => {
                       <button
                         className={styles.primeStatusSvg}
                         title={formatMessage({
-                          id: "alm.community.removeUpload.label",
+                          id: "alm.removeUpload.label",
                           defaultMessage: "Remove upload",
                         })}
                       onClick={cancelClickHandler}

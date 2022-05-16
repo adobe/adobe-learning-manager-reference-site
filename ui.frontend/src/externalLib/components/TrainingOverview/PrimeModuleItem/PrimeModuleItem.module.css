@@ -51,6 +51,7 @@ governing permissions and limitations under the License.
 }
 .resourceType {
   text-transform: uppercase;
+  display: flex;
 }
 .headerIcon {
   display: flex;
@@ -165,6 +166,20 @@ a.details {
   justify-content: space-between;
 }
 
+.progressArea {
+  display: flex;
+  width: 200px;
+  margin-left:20px;
+}
+
+.primeStatusSvg {
+  background: none;
+  border: none;
+  width: 35px;
+  fill: currentColor;
+  padding-left: 10px;
+}
+
 @media screen and (max-width: 414px) {
   .metaDataContainer {
     display: flex;
@@ -183,7 +198,53 @@ a.details {
   .headerWrapper {
     width: 100%;
   }
+
+  .progressArea {
+    width: 175px;
+  }
+  
+  .primeStatusSvg {
+    width: 45px
+  }
 }
+
+.fileSubmissionContainer {
+  text-transform: none;
+  color: #e6a000;
+  font-weight: 700;
+  margin-left: 15px;
+}
+
+.fileSubmissionContainer:hover {
+  cursor: default;
+}
+
+.uploadFileSubmission {
+  display: none;
+}
+
+.uploadButton{
+  background: none;
+  border: none;
+  padding-bottom: 12px;
+  font-size: 11px;
+  color: #4283d0
+}
+
+.uploadButton:hover {
+  border: none;
+  cursor: pointer;
+}
+
+.submissionLink {
+  color: #4283d0;
+  text-decoration: none;
+}
+
+.fileApproved {
+  color: #0f870f;
+}
+
 .warningDialog [class^="spectrum-ButtonGroup"] {
   display: none !important;
 }

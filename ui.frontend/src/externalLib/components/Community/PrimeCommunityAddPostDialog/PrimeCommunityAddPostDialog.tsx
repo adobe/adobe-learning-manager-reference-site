@@ -354,7 +354,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
           <div>
             <ProgressBar
               label={formatMessage({
-                id: "alm.community.uploading.label",
+                id: "alm.uploading.label",
                 defaultMessage: "Uploading...",
               })}
               value={fileUploadProgress}
@@ -369,7 +369,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
             <button
               className={styles.primeStatusSvg}
               title={formatMessage({
-                id: "alm.community.removeUpload.label",
+                id: "alm.removeUpload.label",
                 defaultMessage: "Remove upload",
               })}
               onClick={cancelClickHandler}

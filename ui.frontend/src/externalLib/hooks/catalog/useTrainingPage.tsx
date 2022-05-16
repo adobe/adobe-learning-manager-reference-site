@@ -27,7 +27,9 @@ import {
   useSkills,
 } from "../../utils/hooks";
 import { LaunchPlayer } from "../../utils/playback-utils";
-import { QueryParams } from "../../utils/restAdapter";
+import { QueryParams, RestAdapter } from "../../utils/restAdapter";
+import { useDispatch } from "react-redux";
+import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 
 const DEFAULT_INCLUDE_LO_OVERVIEW =
   "enrollment.loInstance.loResources.resources,prerequisiteLOs,subLOs.prerequisiteLOs,subLOs.subLOs.prerequisiteLOs,authors,enrollment.loResourceGrades,subLOs.enrollment.loResourceGrades, subLOs.subLOs.enrollment.loResourceGrades, subLOs.subLOs.instances.loResources.resources, subLOs.instances.loResources.resources,instances.loResources.resources,supplementaryLOs.instances.loResources.resources,supplementaryResources,subLOs.enrollment,instances.badge, skills.skillLevel.badge,skills.skillLevel.skill";
@@ -56,6 +58,7 @@ export const useTrainingPage = (
   );
   const [refreshTraining, setRefreshTraining] = useState(false);
   const training = trainingInstance.learningObject;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getTrainingInstance = async () => {
@@ -193,6 +196,49 @@ export const useTrainingPage = (
   const skills = useSkills(training);
   const instanceBadge = useBadge(trainingInstance);
 
+  const updateFileSubmissionUrl = useCallback(async (fileUrl: any, loId: any, loInstanceId: any, loResourceId: any) => {
+    const baseApiUrl = getALMConfig().primeApiURL;
+    const body = {
+      data: {
+        id: loResourceId,
+        type: "learningObjectResource",
+        attributes: {
+          submissionUrl: fileUrl
+        },
+      }
+    };
+    const headers = { "content-type": "application/json" };
+
+    try {
+      await RestAdapter.ajax({
+        url: `${baseApiUrl}/learningObjects/${loId}/loResources/${loResourceId}`,
+        method: "PATCH",
+        body: JSON.stringify(body),  
+        headers: headers,
+      });
+      const params: QueryParams = {};
+      params["include"] = "enrollment.loInstance.loResources.resources";
+
+      let response = await RestAdapter.ajax({
+        url: `${baseApiUrl}/learningObjects/${loId}`,
+        method: "GET",
+        headers: headers,
+        params: params
+      });
+
+      const parsedResponse = JsonApiParse(response);
+      const loInstance = parsedResponse.learningObject.instances?.filter((instance) => {
+        return instance.id === loInstanceId
+      });
+      const loResource = loInstance[0].loResources?.filter((resource) => {
+        return resource.id === loResourceId
+      });
+      return loResource[0].submissionUrl;
+    } catch (e) {
+      console.log(e);
+    }
+   },[dispatch]);
+
   return {
     name,
     description,
@@ -215,6 +261,7 @@ export const useTrainingPage = (
     jobAidClickHandler,
     addToCartHandler,
     errorCode,
+    updateFileSubmissionUrl,
   };
   //date create, published, duration
 };
