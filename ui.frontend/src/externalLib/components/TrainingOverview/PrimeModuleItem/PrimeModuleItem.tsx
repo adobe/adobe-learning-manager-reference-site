@@ -18,7 +18,8 @@ import LockClosed from "@spectrum-icons/workflow/LockClosed";
 import Seat from "@spectrum-icons/workflow/Seat";
 import User from "@spectrum-icons/workflow/User";
 import Visibility from "@spectrum-icons/workflow/Visibility";
-import React, { useState } from "react";
+import React, {useState, useRef, useEffect} from "react";
+import store from "../../../../store/APIStore";
 import { useIntl } from "react-intl";
 import {
   PrimeLearningObject,
@@ -53,6 +54,12 @@ import {
 } from "../../../utils/translationService";
 import { formatMap } from "../../Catalog/PrimeTrainingCard/PrimeTrainingCard";
 import { PrimeAlertDialog } from "../../Community/PrimeAlertDialog";
+import { ProgressBar } from "@adobe/react-spectrum";
+import { getUploadInfo, uploadFile, cancelUploadFile } from "../../../utils/uploadUtils";
+import { useTrainingPage } from "../../../hooks";
+import {
+  SOCIAL_CANCEL_SVG,
+} from "../../../utils/inline_svg";
 import styles from "./PrimeModuleItem.module.css";
 
 const CLASSROOM = "Classroom";
@@ -156,7 +163,7 @@ const PrimeModuleItem: React.FC<{
     hasSessionDetails
   );
 
-  const itemClickHandler = () => {
+  const itemClickHandler = (event: any) => {
     if (!canPlay) {
       //show popup
       // alert("Module ios locked");
@@ -172,12 +179,18 @@ const PrimeModuleItem: React.FC<{
         loResource.previewEnabled &&
         getALMObject().isPrimeUserLoggedIn())
     ) {
-      launchPlayerHandler({ id: training.id, moduleId: loResource.id });
+      let fileSubmissionComponents = ["uploadButton", "submissionLink", "fileSubmissionContainer", "fileApproved"];
+      const matchArray = fileSubmissionComponents.filter((element) => {return event.target.className.includes(element)});
+      if ((inputRef.current && inputRef.current.contains(event.target)) || matchArray.length > 0) {
+        return;
+      } else {
+        launchPlayerHandler({ id: training.id, moduleId: loResource.id });
+      }
     }
   };
   const keyDownHandler = (event: any) => {
     if (event.key === "Enter") {
-      itemClickHandler();
+      itemClickHandler(event);
     }
   };
   // const formatLabel = useMemo(() => {
@@ -217,6 +230,59 @@ const PrimeModuleItem: React.FC<{
     // }
     return hasPassed;
   };
+
+  const state = store.getState();
+  const [ isUploading, setIsUploading] = useState(false);
+  const [ submissionState, setSubmissionState ] = useState(loResource.submissionState);
+  const [ submissionUrl, setSubmissionUrl ] = useState(loResource.submissionUrl);
+  const [fileUploadProgress, setFileUploadProgress] = useState(
+    state.fileUpload.uploadProgress
+  );
+  
+  const inputRef = useRef<null | HTMLInputElement>(null);
+  const startFileUpload = () => {
+    (inputRef?.current as HTMLInputElement)?.click();
+  };
+
+  const updateFileUpdateProgress = () => {
+    setFileUploadProgress(store.getState().fileUpload.uploadProgress);
+  };
+
+  const inputElementId = loResource.id + "-uploadFileSubmission";
+  const {updateFileSubmissionUrl} = useTrainingPage(training.id, trainingInstance.id);
+  
+  const fileSelected = async (event: any) => {
+    const inputElement = document.getElementById(inputElementId) as HTMLInputElement;
+    setFileUploadProgress(0);
+    setIsUploading(true);
+    const progressCheck = setInterval(() => {
+      updateFileUpdateProgress();
+    }, 500);
+    await getUploadInfo();
+    const fileUrl = await uploadFile(
+      inputElement!.files!.item(0)!.name,
+      inputElement!.files!.item(0)!
+    );
+    let blFileUrl = await updateFileSubmissionUrl(fileUrl, training.id, trainingInstance.id, loResource.id) || "";
+    if(blFileUrl.length > 0) {
+      setSubmissionState("PENDING_APPROVAL");
+      setSubmissionUrl(blFileUrl);
+    }
+    clearInterval(progressCheck);
+    setIsUploading(false);
+  };
+
+  const cancelClickHandler = () => {
+    cancelUploadFile(store.getState().fileUpload.fileName);
+    setIsUploading(false);
+  };
+
+  const getSubmissionFileName = (url: any) => {
+    const urlWithoutParams = url?.split("?")[0];
+    let urlParts = urlWithoutParams?.split("/");
+    return urlParts?.length > 0 ? urlParts[urlParts?.length - 1] : "";
+  }
+
   return (
     <>
       {showCannotSkipDialog && (
@@ -265,7 +331,88 @@ const PrimeModuleItem: React.FC<{
               )}
             </div>
             <div className={styles.resourceAndDuration}>
-              <span className={styles.resourceType}>{formatLabel}</span>
+              <span className={styles.resourceType}>
+                {formatLabel}
+                {isUploading && (
+                  <div className={styles.progressArea}>
+                    <ProgressBar
+                      label={formatMessage({
+                        id: "alm.uploading.label",
+                        defaultMessage: "Uploading...",
+                      })}
+                      value={fileUploadProgress}
+                    />
+                    <button
+                      className={styles.primeStatusSvg}
+                      title={formatMessage({
+                        id: "alm.removeUpload.label",
+                        defaultMessage: "Remove upload",
+                      })}
+                      onClick={cancelClickHandler}
+                    >
+                      {SOCIAL_CANCEL_SVG()}
+                    </button>
+                  </div>
+                )}
+                {!isUploading && loResource?.learningObject?.enrollment && loResource.submissionEnabled && (submissionState === "PENDING_SUBMISSION" || !submissionState) &&
+                  <span className={styles.fileSubmissionContainer}>
+                    {formatMessage({
+                      id: "alm.overview.submissionPending.label",
+                      defaultMessage: "Submission Pending",
+                    })}:
+                    <button
+                      onClick={startFileUpload}
+                      className={styles.uploadButton}
+                    >
+                      ({formatMessage({
+                        id: "alm.overview.module.uploadFile",
+                        defaultMessage: "Upload File",
+                      })})
+                    </button>
+                    <input
+                      type="file"
+                      id={inputElementId}
+                      className={styles.uploadFileSubmission}
+                      onChange={(event: any) => fileSelected(event)}
+                      ref={inputRef}
+                    />
+                  </span>
+                }
+                {!isUploading && loResource?.learningObject?.enrollment && loResource.submissionEnabled && submissionState === "PENDING_APPROVAL" &&
+                  <span className={styles.fileSubmissionContainer}>
+                    {formatMessage({
+                      id: "alm.overview.submissionAwaitingApproval.label",
+                      defaultMessage: "Submission Awaiting Approval",
+                    })}: <a className={styles.submissionLink} href={submissionUrl} target="_blank" rel="noreferrer">{getSubmissionFileName(submissionUrl)}</a>
+                    <button
+                      onClick={startFileUpload}
+                      className={styles.uploadButton}
+                    >
+                      ({formatMessage({
+                        id: "alm.module.change",
+                        defaultMessage: "Change",
+                      })})
+                    </button>
+                    <input
+                      type="file"
+                      id={inputElementId}
+                      className={styles.uploadFileSubmission}
+                      onChange={(event: any) => fileSelected(event)}
+                      ref={inputRef}
+                    />
+                  </span>
+                }
+                {!isUploading && loResource?.learningObject?.enrollment && loResource.submissionEnabled && submissionState === "APPROVED" &&
+                  <span className={styles.fileSubmissionContainer}>
+                    <span className={styles.fileApproved}>
+                      {formatMessage({
+                      id: "alm.overview.submissionApproved.label",
+                      defaultMessage: "Submission Approved",
+                    })}: </span>
+                    <a className={styles.submissionLink} href={submissionUrl} target="_blank" rel="noreferrer">{getSubmissionFileName(submissionUrl)}</a>
+                  </span>
+                }
+              </span>
               <span>{durationText}</span>
             </div>
           </div>
