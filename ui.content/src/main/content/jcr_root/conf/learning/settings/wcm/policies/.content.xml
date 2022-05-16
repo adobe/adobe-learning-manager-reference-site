@@ -73,11 +73,6 @@
                                 assetMimetype="[text/html,application/vnd.adobe.contentfragment]"
                                 droptarget="contentfragment"
                                 resourceType="learning/components/contentfragment"/>
-                            <mapping_1575030271082
-                                jcr:primaryType="nt:unstructured"
-                                assetGroup="product"
-                                droptarget="product-data-reference"
-                                resourceType="learning/components/commerce/productteaser"/>
                         </assetToComponentMapping>
                     </cq:authoring>
                 </policy_1574695586800>
