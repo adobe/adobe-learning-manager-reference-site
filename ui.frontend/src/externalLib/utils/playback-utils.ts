@@ -43,7 +43,7 @@ export function LaunchPlayer(props: any) {
   overlay.style.left = "0";
   overlay.style.right = "0";
   overlay.style.bottom = "0";
-  overlay.style.backgroundColor = "rgba(0,0,0,0.95)";
+  // overlay.style.backgroundColor = "rgba(0,0,0,0.95)";
   overlay.style.zIndex = "100";
   document.body.appendChild(overlay);
   document.body.style.overflow = "hidden";

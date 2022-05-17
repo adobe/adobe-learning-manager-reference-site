@@ -52,7 +52,7 @@ public class EmbeddableLrngWidgetDatasource extends SlingAllMethodsServlet
 	@Reference
 	private transient GlobalConfigurationService configService;
 
-	final static String RESOURCE_TYPE = "cpPrime/widgets/datasource/widgetsdatasource";
+	final static String RESOURCE_TYPE = "alm/widgets/datasource/widgetsdatasource";
 
 	@Override
 	protected void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response)

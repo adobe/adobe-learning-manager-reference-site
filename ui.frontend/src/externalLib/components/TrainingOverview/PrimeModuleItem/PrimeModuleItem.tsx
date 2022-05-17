@@ -66,6 +66,7 @@ import styles from "./PrimeModuleItem.module.css";
 const CLASSROOM = "Classroom";
 const VIRTUAL_CLASSROOM = "Virtual Classroom";
 const ELEARNING = "Elearning";
+const PENDING_APPROVAL = "PENDING_APPROVAL";
 
 interface ActionMap {
   Classroom: string;
@@ -175,7 +176,7 @@ const PrimeModuleItem: React.FC<{
     }
     const enrollment = loResource?.learningObject?.enrollment;
     if (
-      (enrollment && !isClassroomOrVC) ||
+      (enrollment && !isClassroomOrVC && enrollment.state != PENDING_APPROVAL) ||
       (!enrollment &&
         loResource.previewEnabled &&
         getALMObject().isPrimeUserLoggedIn())

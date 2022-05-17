@@ -42,6 +42,7 @@ const ALMProfilePage = () => {
   const {
     profileAttributes,
     updateProfileImage,
+    deleteProfileImage,
     updateAccountActiveFields,
     userFieldData,
     setUserFieldData,
@@ -167,6 +168,10 @@ const ALMProfilePage = () => {
     (inputRef?.current as HTMLInputElement)?.click();
   };
 
+  const deleteImage = async () => {
+    await deleteProfileImage();
+  };
+
   const cancelClickHandler = () => {
     cancelUploadFile(store.getState().fileUpload.fileName);
     setIsUploading(false);
@@ -189,11 +194,26 @@ const ALMProfilePage = () => {
               <ALMBackButton />
               <div className={styles.detailsContainer}>
                 <div className={styles.image}>
+                  <div className={styles.imageWrapper}>
                   <img
                     className={styles.profileImage}
                     src={user.avatarUrl}
                     alt="profile"
                   />
+                  <div className={styles.deleteImage}>
+                    <Button
+                      variant="primary"
+                      isQuiet
+                      UNSAFE_className={styles.button}
+                      onPress={deleteImage}
+                    >
+                      {formatMessage({
+                        id: "alm.profile.delete.image",
+                        defaultMessage: "Delete image",
+                      })}
+                    </Button>
+                  </div>
+                  </div>
                   {!isUploading &&
                     <Button
                       variant="primary"

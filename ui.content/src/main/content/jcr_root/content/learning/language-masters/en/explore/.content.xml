@@ -6,6 +6,7 @@
         cq:lastModifiedBy="admin"
         cq:template="/conf/learning/settings/wcm/templates/page-content1"
         jcr:primaryType="cq:PageContent"
+        id="learning-body"
         jcr:title="Explore"
         sling:resourceType="learning/components/page">
         <root

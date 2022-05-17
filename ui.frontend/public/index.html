@@ -182,10 +182,10 @@
 
       async function getALMUser() {
         if (!window.ALM.isPrimeUserLoggedIn()) {
-          window.sessionStorage.removeItem("user");
+          window.ALM.storage.removeItem("user");
           return;
         }
-        let user = window.sessionStorage.getItem("user");
+        let user = window.ALM.storage.getItem("user");
         if (user) {
           return user;
         }
@@ -204,19 +204,20 @@
           if (userResponse && userResponse.status == 200) {
             user = await userResponse.json();
             const userStr = JSON.stringify(user);
-            window.sessionStorage.setItem("user", userStr);
+            window.ALM.storage.setItem("user", userStr, 1800);
             return userStr;
           } else {
             console.error("User call failed!!");
+            window.ALM.storage.removeItem("user");
           }
         } catch (e) {
-          window.sessionStorage.removeItem("user");
+          window.ALM.storage.removeItem("user");
           throw e;
         }
       }
 
       const updateALMUser = async () => {
-        window.sessionStorage.removeItem("user");
+        window.ALM.storage.removeItem("user");
         return getALMUser();
       };
 

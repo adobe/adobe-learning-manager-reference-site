@@ -14,7 +14,7 @@ import { Provider as ReduxProvider } from "react-redux"; //
 import store from "../store/APIStore";
 
 /**
- * List of context providers that are required to run Venia
+ * List of context providers that are required to run Learning
  *
  * @property {React.Component[]} contextProviders
  */

@@ -16,6 +16,16 @@ governing permissions and limitations under the License.
   const FOOTER_TOP_SCROLL_SEL = "#alm-footer-scrollTop";
   const SIGNOUT_PAGE_LOGIN_BTN_SEL = "#signout-page-login-btn";
   const DIV_NEW_PAR_SEL = "div.new.newpar.section.aem-Grid-newComponent";
+  const PAGE_BODY_SEL = "#learning-body";
+
+  const adjustFooterLayout = () => {
+    const curWindowHeight = $(window).height();
+    const pageBodyHeight = $(PAGE_BODY_SEL).height();
+    if (pageBodyHeight < curWindowHeight) {
+      const minHeight = curWindowHeight + "px";
+      $(PAGE_BODY_SEL).css({'min-height' : minHeight, 'bottom': 0});
+    }
+  };
 
   const handleFooterScrollToTop = () => {
     $(FOOTER_TOP_SCROLL_SEL).on("click", () => window.scrollTo({
@@ -32,6 +42,8 @@ governing permissions and limitations under the License.
       // Extra div is added after each component causing extra space.
       $(DIV_NEW_PAR_SEL).remove();
     }
+
+    adjustFooterLayout();
   });
 
 })(window, document, Granite, jQuery);

@@ -13,7 +13,7 @@ import { useLazyQuery } from "@apollo/client";
 import { useCallback, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { SIGN_IN_PATH } from "../../utils/constants";
-import { getCartId, getCommerceToken } from "../../utils/global";
+import { getALMObject, getCartId, getCommerceToken } from "../../utils/global";
 import { GET_CART_DETAILS } from "./cartPage.gql";
 
 export const useCartPage = (props = {}) => {
@@ -41,6 +41,9 @@ export const useCartPage = (props = {}) => {
   }, [navigate, fetchCartDetails]);
 
   const hasItems = !!data?.cart?.total_quantity;
+  if (hasItems) {
+    getALMObject().updateCart(data?.cart?.total_quantity);
+  }
   const shouldShowLoadingIndicator = loading && !hasItems;
 
   const cartItems = useMemo(() => {
