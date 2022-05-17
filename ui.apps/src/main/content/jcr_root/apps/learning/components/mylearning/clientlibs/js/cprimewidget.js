@@ -25,6 +25,7 @@ governing permissions and limitations under the License.
     .set("lpiPageLink", ["loInstance", "learningProgram", new RegExp(/lpInstance\/(\d+)/i)])
     .set("catalogOverviewPageLink", ["catalogOverview", "catalog", new RegExp(/selectedListableCatalogIds=(\d+)/i)])
     .set("courseInstancePreviewPageLink", ["loInstancePreview", "course", new RegExp(/course\/(\d+)\/instance\/(\d+)\/preview/i)])
+    .set("courseInstancePreviewPageShowLink", ["loInstancePreview", "course", new RegExp(/course\/(\d+)\/instance\/(\d+)\/preview/i)])
     .set("catalogPageLink", ["catalogPage"])
     .set("myLearningPageLink", ["myLearningPage"])
     .set("postsLink", ["boardsPage"])
