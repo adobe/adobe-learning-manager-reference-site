@@ -22,6 +22,7 @@ import {
   UPDATE_LEARNERSTATE_FILTERS,
   UPDATE_LOFORMAT_FILTERS,
   UPDATE_LOTYPES_FILTERS,
+  UPDATE_PRICE_FILTERS,
   UPDATE_SEARCH_TEXT,
   UPDATE_SKILLLEVEL_FILTERS,
   UPDATE_SKILLNAME_FILTERS,
@@ -192,7 +193,7 @@ const price: Reducer<string, AnyAction> = (
   action: AnyAction
 ) => {
   switch (action.type) {
-    case UPDATE_DURATION_FILTERS:
+    case UPDATE_PRICE_FILTERS:
       return action.payload;
     case UPDATE_FILTERS_ON_LOAD:
       return action.payload.price;

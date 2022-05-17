@@ -123,7 +123,7 @@
       };
 
       const getAccessToken = () => {
-        return "aab9aa806a51d85e166caf024bfdcfa7";
+        return "26ee90d0fe737ee7fa29d2bfb5a26d22";
       };
       const COMMERCE_TOKEN_COOKIE_NAME = "alm_commerce_token";
 
@@ -182,10 +182,10 @@
 
       async function getALMUser() {
         if (!window.ALM.isPrimeUserLoggedIn()) {
-          window.sessionStorage.removeItem("user");
+          window.ALM.storage.removeItem("user");
           return;
         }
-        let user = window.sessionStorage.getItem("user");
+        let user = window.ALM.storage.getItem("user");
         if (user) {
           return user;
         }
@@ -204,19 +204,20 @@
           if (userResponse && userResponse.status == 200) {
             user = await userResponse.json();
             const userStr = JSON.stringify(user);
-            window.sessionStorage.setItem("user", userStr);
+            window.ALM.storage.setItem("user", userStr, 1800);
             return userStr;
           } else {
             console.error("User call failed!!");
+            window.ALM.storage.removeItem("user");
           }
         } catch (e) {
-          window.sessionStorage.removeItem("user");
+          window.ALM.storage.removeItem("user");
           throw e;
         }
       }
 
       const updateALMUser = async () => {
-        window.sessionStorage.removeItem("user");
+        window.ALM.storage.removeItem("user");
         return getALMUser();
       };
 
@@ -339,7 +340,7 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <!-- /* <div class="instance__container"></div> */ -->
 
-    <!--/* <div
+    <div
       class="catalog__container"
       data-show-filters="true"
       data-show-search="true"
@@ -353,7 +354,7 @@
       data-learner-state="true"
       data-tag-name="true"
       data-skill-level="true"
-    ></div> */-->
+    ></div>
     <!--/* 
     <div
       class="profile__container"
@@ -364,12 +365,12 @@
       data-section2-description="Section 2 description"
       data-section2-active-fields="hobby, new location"
     ></div> */-->
-    <div
+    <!--/* <div
       class="training__page__container"
       data-show-description="true"
       data-show-author-info="true"
       data-show-enroll-deadline="true"
-    ></div>
+    ></div> */-->
 
     <!--/* <div class="notification__container"></div> */-->
     <!--/* <div class="boards__container"></div> */-->
