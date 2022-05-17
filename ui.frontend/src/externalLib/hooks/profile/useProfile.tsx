@@ -90,6 +90,28 @@ export const useProfile = () => {
     }
   }, []);
 
+  const deleteProfileImage = useCallback(async () => {
+    try {
+      const baseApiUrl = getALMConfig().primeApiURL;
+      await RestAdapter.delete({
+        url: `${baseApiUrl}avatar`,
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/vnd.api+json;charset=UTF-8",
+        },
+      });
+      const response = await updateALMUser();
+      setProfileAttributes((prevState) => ({
+        accountActiveFields: prevState.accountActiveFields,
+        user: response.user,
+      }));
+      await updateUserProfileImage(response.user.avatarUrl);
+      setErrorCode("");
+    } catch (error: any) {
+      setErrorCode(error.status);
+    }
+  }, []);
+
   const updateAccountActiveFields = useCallback(
     async (accountActiveFields: any, userId: any) => {
       try {
@@ -102,6 +124,7 @@ export const useProfile = () => {
   return {
     profileAttributes,
     updateProfileImage,
+    deleteProfileImage,
     errorCode,
     updateAccountActiveFields,
     userFieldData,

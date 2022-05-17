@@ -63,6 +63,22 @@ governing permissions and limitations under the License.
   margin-bottom: 10px;
   object-fit: cover;
 }
+.imageWrapper {
+  position: relative;
+}
+
+.imageWrapper:hover .deleteImage {
+  display: block;
+  opacity: 1;
+}
+
+.deleteImage {
+    display: none;
+    text-align: center;
+    line-height: 20px;
+    cursor: pointer;
+}
+
 .details {
   flex-direction: column;
   height: 164px;
