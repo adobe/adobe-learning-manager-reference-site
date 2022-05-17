@@ -63,3 +63,18 @@ governing permissions and limitations under the License.
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+.priceFilterContainer {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-around;
+  align-content: center;
+}
+.priceToLabel {
+  margin: 5px 10px;
+}
+.listContainer .customSlider {
+  display: inline-block;
+}
+.customSlider label[class^="spectrum-Slider-label"] {
+  display: none;
+}
