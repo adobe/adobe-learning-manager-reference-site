@@ -296,7 +296,7 @@ const PrimeTrainingPageMetaData: React.FC<{
         <>
           <Button
             variant="primary"
-            UNSAFE_className={`${styles.previewButton} ${styles.commonButton}`}
+            UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
             onPress={launchPlayerHandler}
           >
             {formatMessage({
@@ -316,7 +316,7 @@ const PrimeTrainingPageMetaData: React.FC<{
         {action === "registerInterest" && (
           <Button
             variant="primary"
-            UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
+            UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
           >
             {actionText}
           </Button>
@@ -325,7 +325,7 @@ const PrimeTrainingPageMetaData: React.FC<{
           <>
             <Button
               variant="primary"
-              UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
+              UNSAFE_className={`${styles.primaryButton} ${styles.commonButton}`}
               onPress={onPressHandler}
             >
               {actionText}
@@ -338,7 +338,7 @@ const PrimeTrainingPageMetaData: React.FC<{
           action === "revisit") && (
           <Button
             variant="primary"
-            UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
+            UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
             onPress={launchPlayerHandler}
           >
             {actionText}
@@ -349,7 +349,7 @@ const PrimeTrainingPageMetaData: React.FC<{
           <>
             <Button
               variant="primary"
-              UNSAFE_className={`${styles.addToCartButton} ${styles.commonButton}`}
+              UNSAFE_className={`${styles.primaryButton} ${styles.commonButton}`}
               onPress={addProductToCart}
               isDisabled={isTrainingNotSynced}
             >
@@ -369,7 +369,7 @@ const PrimeTrainingPageMetaData: React.FC<{
           <>
             <Button
               variant="secondary"
-              UNSAFE_className={`${styles.pendingButton} ${styles.commonButton}`}
+              UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
               isDisabled={true}
             >
               {actionText}
@@ -393,7 +393,7 @@ const PrimeTrainingPageMetaData: React.FC<{
 
         <Button
           variant="primary"
-          UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
+          UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
         >
           Add to cart
         </Button>
