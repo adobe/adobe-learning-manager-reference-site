@@ -36,6 +36,7 @@ const PrimeCatalogContainer = () => {
     catalogAttributes,
     isLoading,
     hasMoreItems,
+    updatePriceFilter,
   } = useCatalog();
   const { formatMessage } = useIntl();
   const [showFiltersOnMobile, setShowFiltersOnMobile] = useState(false);
@@ -81,6 +82,7 @@ const PrimeCatalogContainer = () => {
           filterState={filterState}
           updateFilters={updateFilters}
           catalogAttributes={catalogAttributes}
+          updatePriceFilter={updatePriceFilter}
         ></PrimeCatalogFilters>
       </div>
     ) : (

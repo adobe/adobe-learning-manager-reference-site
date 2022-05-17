@@ -48,7 +48,8 @@ export const useCatalog = () => {
     (state: State) => state.catalog
   );
   const { query, handleSearch, resetSearch } = useSearch();
-  const { filters, filterState, updateFilters } = useFilter();
+  const { filters, filterState, updateFilters, updatePriceFilter } =
+    useFilter();
   const dispatch = useDispatch();
 
   const fetchTrainings = useCallback(async () => {
@@ -77,6 +78,7 @@ export const useCatalog = () => {
     filters.skillLevel,
     filters.duration,
     filters.catalogs,
+    filters.price,
     query,
     sort,
   ]);
@@ -137,5 +139,6 @@ export const useCatalog = () => {
     isLoading,
     errorCode,
     hasMoreItems: Boolean(next),
+    updatePriceFilter,
   };
 };

@@ -169,7 +169,6 @@ export default class ALMCustomHooks implements ICustomHooks {
     }));
     catalogList = updateFilterList(catalogList, queryParams, "catalogs");
     const defaultFiltersState = getDefaultFiltersState();
-
     return {
       ...defaultFiltersState,
       skillName: {

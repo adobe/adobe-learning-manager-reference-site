@@ -52,6 +52,20 @@ export const useFilter = () => {
     if (action && action instanceof Function) dispatch(action(payload));
   };
 
+  const updatePriceFilter = (data: UpdateFiltersEvent) => {
+    const filters = filterState[data.filterType as keyof FilterState]!;
+    let payload = `${data.data.start}-${data.data.end}`;
+    if (filters.list?.length) {
+      filters.list[0].value = data.data.start;
+      filters.list[1].value = data.data.end;
+    }
+    locationUpdate({ [data.filterType as string]: payload });
+    setFilterState({ ...filterState, [data.filterType]: { ...filters } });
+    const action = ACTION_MAP[data.filterType as keyof ActionMap];
+
+    if (action && action instanceof Function) dispatch(action(payload));
+  };
+
   useEffect(() => {
     const queryParams = getQueryParamsIObjectFromUrl();
     const getFilters = async () => {
@@ -80,5 +94,6 @@ export const useFilter = () => {
     updateFilters,
     isLoading,
     filters: computedFilters,
+    updatePriceFilter,
   };
 };

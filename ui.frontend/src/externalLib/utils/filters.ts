@@ -15,6 +15,7 @@ import {
   updateLearnerStateFilter,
   updateLoFormatFilter,
   updateLoTypesFilter,
+  updatePriceFilter,
   updateSkillLevelFilter,
   updateSkillNameFilter,
   updateTagsFilter,
@@ -159,12 +160,12 @@ export const filtersDefaultState: FilterState = {
     label: "alm.catalog.filter.duration.label",
     list: [
       {
-        value: "0",
+        value: 0,
         label: "",
         checked: false,
       },
       {
-        value: "0",
+        value: 0,
         label: "",
         checked: false,
       },
@@ -173,7 +174,7 @@ export const filtersDefaultState: FilterState = {
 };
 
 export interface FilterListObject {
-  value: string;
+  value: string | number;
   label: string;
   checked: boolean;
 }
@@ -183,6 +184,7 @@ export interface FilterType {
   show?: boolean;
   list?: Array<FilterListObject>;
   isListDynamic?: boolean;
+  maxPrice?: number;
 }
 
 // export interface PriceFilterType {
@@ -204,12 +206,14 @@ export const ACTION_MAP = {
   skillLevel: updateSkillLevelFilter,
   duration: updateDurationFilter,
   catalogs: updateCatalogsFilter,
+  price: updatePriceFilter,
 };
 
 export interface UpdateFiltersEvent {
   filterType: string;
-  checked: boolean;
-  label: string;
+  checked?: boolean;
+  label?: string;
+  data?: any;
 }
 
 export interface FilterState {
@@ -238,6 +242,22 @@ export const updateFilterList = (
       item.checked = true;
     }
   });
+  return list || [];
+};
+
+export const updatePriceFilterList = (
+  list: any,
+  filtersFromUrl: any,
+  type: string
+) => {
+  let filtersFromUrlTypeSplitArray = filtersFromUrl[type]
+    ? filtersFromUrl[type].split("-")
+    : [];
+
+  if (list.length && filtersFromUrlTypeSplitArray.length) {
+    list[0].value = filtersFromUrlTypeSplitArray[0];
+    list[1].value = filtersFromUrlTypeSplitArray[1];
+  }
   return list || [];
 };
 
@@ -270,6 +290,12 @@ export const getDefaultFiltersState = () => {
     filtersDefault.duration.list,
     filtersFromUrl,
     "duration"
+  );
+
+  filtersDefault.price.list = updatePriceFilterList(
+    filtersDefault.price.list,
+    filtersFromUrl,
+    "price"
   );
   return filtersDefault;
 };

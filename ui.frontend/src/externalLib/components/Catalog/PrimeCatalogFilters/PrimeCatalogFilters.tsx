@@ -32,17 +32,26 @@ const PrimeCatalogFilters = (props: any) => {
     catalogs,
     price,
   } = props.filterState;
-  const { updateFilters, catalogAttributes } = props;
+  const { updateFilters, catalogAttributes, updatePriceFilter } = props;
   const isLoggedIn = getALMObject().isPrimeUserLoggedIn();
   const onChangeHandler = (data: UpdateFiltersEvent) => {
     updateFilters(data);
   };
 
+  const priceChangeHandler = (data: any) => {
+    updatePriceFilter({
+      filterType: "price",
+      data,
+    });
+  };
   let [trainingPrice, setTrainingPrice] = useState({ start: 0, end: 100 });
   useEffect(() => {
     //await isCommerceEnabled();
     if (price) {
-      setTrainingPrice({ start: 0, end: price.list[1].value });
+      setTrainingPrice({
+        start: price.list[0].value,
+        end: price.list[1].value || price.maxPrice,
+      });
     }
   }, [price]);
 
@@ -78,6 +87,12 @@ const PrimeCatalogFilters = (props: any) => {
     );
   };
 
+  const changeTrainingPriceHandle = (type: string, event: any) => {
+    setTrainingPrice((price) => {
+      return { ...price, [type]: event?.target?.value };
+    });
+  };
+
   return (
     <>
       <div className={styles.primeFilterContainer}>
@@ -87,7 +102,7 @@ const PrimeCatalogFilters = (props: any) => {
         {/* catalog Filter ends */}
 
         {/* loTypes Filter start */}
-        {/* {renderFilterList(loTypes)} */}
+        {renderFilterList(loTypes)}
         {/* loTypes Filter ends */}
 
         {/* loFormat Filter start */}
@@ -115,15 +130,42 @@ const PrimeCatalogFilters = (props: any) => {
         {/* learnerState Filter ends */}
 
         {/* Price Filter start */}
-        {
-          <div>
-            <RangeSlider
-              label="Range"
-              value={trainingPrice}
-              onChange={setTrainingPrice}
-            />
+        {catalogAttributes["price"] === "true" && price && price.maxPrice && (
+          <div key={"price"} className={styles.container}>
+            <h3 className={styles.typeLabel}>
+              {GetTranslation("alm.catalog.filter.price.label", true)}
+            </h3>
+            <div>
+              <RangeSlider
+                label="Range"
+                value={trainingPrice}
+                onChange={setTrainingPrice}
+                onChangeEnd={priceChangeHandler}
+                maxValue={price && price.maxPrice}
+                showValueLabel={false}
+              />
+              <div>
+                <input
+                  value={trainingPrice.start}
+                  onChange={(event) =>
+                    changeTrainingPriceHandle("start", event)
+                  }
+                  max={price && price.maxPrice}
+                  type="number"
+                  min={0}
+                />
+                <input
+                  value={trainingPrice.end}
+                  onChange={(event) => changeTrainingPriceHandle("end", event)}
+                  max={price && price.maxPrice}
+                  type="number"
+                  min={0}
+
+                />
+              </div>
+            </div>
           </div>
-        }
+        )}
         {/* Price Filter ends */}
       </div>
     </>
