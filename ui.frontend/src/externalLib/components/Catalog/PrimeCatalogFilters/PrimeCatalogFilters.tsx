@@ -156,7 +156,7 @@ const PrimeCatalogFilters = (props: any) => {
             <h3 className={styles.typeLabel}>
               {GetTranslation("alm.catalog.filter.price.label", true)}
             </h3>
-            <div>
+            <div className={styles.listContainer}>
               <RangeSlider
                 label="Range"
                 value={trainingPrice}
@@ -165,39 +165,32 @@ const PrimeCatalogFilters = (props: any) => {
                 maxValue={price && price.maxPrice}
                 showValueLabel={false}
                 width={"100%"}
+                UNSAFE_className={styles.customSlider}
               />
-              <div>
-                <NumberField
-                  value={trainingPrice.start}
-                  onChange={(event) =>
-                    changeTrainingPriceHandle("start", event)
-                  }
-                  minValue={0}
-                  maxValue={price && price.maxPrice}
-                ></NumberField>
-                {/* <input
-                  value={trainingPrice.start}
-                  onChange={(event) =>
-                    changeTrainingPriceHandle("start", event)
-                  }
-                  max={price && price.maxPrice}
-                  type="number"
-                  min={0}
-                /> */}
-
-                <NumberField
-                  value={trainingPrice.end}
-                  onChange={(event) => changeTrainingPriceHandle("end", event)}
-                  minValue={0}
-                  maxValue={price && price.maxPrice}
-                ></NumberField>
-                {/* <input
-                  value={trainingPrice.end}
-                  onChange={(event) => changeTrainingPriceHandle("end", event)}
-                  max={price && price.maxPrice}
-                  type="number"
-                  min={0}
-                /> */}
+              <div className={styles.priceFilterContainer}>
+                <div>
+                  <NumberField
+                    value={trainingPrice.start}
+                    onChange={(event) =>
+                      changeTrainingPriceHandle("start", event)
+                    }
+                    minValue={0}
+                    maxValue={price && price.maxPrice}
+                    width={"100%"}
+                  ></NumberField>
+                </div>
+                <div className={styles.priceToLabel}>To</div>
+                <div>
+                  <NumberField
+                    value={trainingPrice.end}
+                    onChange={(event) =>
+                      changeTrainingPriceHandle("end", event)
+                    }
+                    minValue={0}
+                    maxValue={price && price.maxPrice}
+                    width={"100%"}
+                  ></NumberField>
+                </div>
               </div>
             </div>
           </div>
