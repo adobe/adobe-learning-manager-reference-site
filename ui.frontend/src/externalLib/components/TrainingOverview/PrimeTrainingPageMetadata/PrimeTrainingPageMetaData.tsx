@@ -115,7 +115,7 @@ const PrimeTrainingPageMetaData: React.FC<{
     } else {
       return "enroll";
     }
-  }, [trainingInstance.state, training.price, enrollment]);
+  }, [enrollment, trainingInstance.state, isPricingEnabled]);
 
   const seatsAvailableText =
     trainingInstance.seatLimit > -1 ? (
@@ -284,6 +284,10 @@ const PrimeTrainingPageMetaData: React.FC<{
     ""
   );
 
+  const showMinimumCompletion =
+    training.loResourceCompletionCount &&
+    training.loResourceCompletionCount !== trainingInstance.loResources?.length;
+
   return (
     <section className={styles.container}>
       {showPreviewButton && (
@@ -421,8 +425,7 @@ const PrimeTrainingPageMetaData: React.FC<{
         </div>
       )}
 
-      {training.loResourceCompletionCount !==
-        trainingInstance.loResources?.length && (
+      {showMinimumCompletion && (
         <div className={styles.commonContainer}>
           <span aria-hidden="true" className={styles.minimumCriteria}>
             {minimumCriteria.value}
