@@ -152,7 +152,9 @@ const PrimeTrainingPageMetaData: React.FC<{
   const onPressHandler = async () => {
     try {
       enrollmentHandler();
-      launchPlayerHandler();
+      if(enrollment.state != PENDING_APPROVAL) {
+          launchPlayerHandler();
+      }
     } catch (e) {}
   };
 
