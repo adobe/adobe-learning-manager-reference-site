@@ -17,7 +17,8 @@ import {
   PrimeLoInstanceSummary,
 } from "../../models/PrimeModels";
 import { getJobaidUrl, isJobaidContentTypeUrl } from "../../utils/catalog";
-import { getALMAccount, getALMConfig } from "../../utils/global";
+import { getALMAccount, getALMConfig, getALMUser } from "../../utils/global";
+
 import {
   filterTrainingInstance,
   useBadge,
@@ -61,6 +62,7 @@ export const useTrainingPage = (
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if(!trainingId) return;
     const getTrainingInstance = async () => {
       try {
         let queryParam: QueryParams = {};
@@ -239,6 +241,44 @@ export const useTrainingPage = (
     }
    },[dispatch]);
 
+  const updateCertificationProofUrl = useCallback(async (fileUrl: any, loId: any, loInstanceId: any) => {
+    const baseApiUrl = getALMConfig().primeApiURL;    
+    const userResponse = await getALMUser();
+
+    const body = {
+      data: {
+        id: loInstanceId + "_" + userResponse.user.id,
+        type: "learningObjectInstanceEnrollment",
+        attributes: {
+          url: fileUrl
+        },
+      }
+    };
+    const headers = { "content-type": "application/json" };
+
+    try {
+      await RestAdapter.ajax({
+        url: `${baseApiUrl}/enrollments/${loInstanceId + "_" + userResponse.user.id}`,
+        method: "PATCH",
+        body: JSON.stringify(body),  
+        headers: headers,
+      });
+      const params: QueryParams = {};
+      params["include"] = "enrollment.loInstance";
+
+      let response = await RestAdapter.ajax({
+        url: `${baseApiUrl}/learningObjects/${loId}`,
+        method: "GET",
+        headers: headers,
+        params: params
+      });
+      const parsedResponse = JsonApiParse(response);
+      return parsedResponse.learningObject.enrollment.url || "";
+    } catch (e) {
+      console.log(e);
+    }
+  },[dispatch]);
+
   return {
     name,
     description,
@@ -262,6 +302,7 @@ export const useTrainingPage = (
     addToCartHandler,
     errorCode,
     updateFileSubmissionUrl,
+    updateCertificationProofUrl
   };
   //date create, published, duration
 };
