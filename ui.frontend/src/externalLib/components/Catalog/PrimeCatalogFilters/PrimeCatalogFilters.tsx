@@ -9,7 +9,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { RangeSlider } from "@adobe/react-spectrum";
+import { RangeSlider, NumberField } from "@adobe/react-spectrum";
 import { useEffect, useState } from "react";
 import { UpdateFiltersEvent } from "../../../utils/filters";
 import { getALMObject } from "../../../utils/global";
@@ -88,8 +88,29 @@ const PrimeCatalogFilters = (props: any) => {
   };
 
   const changeTrainingPriceHandle = (type: string, event: any) => {
+    let value = parseInt(event || 0);
+
+    if (type === "start") {
+      if (value < 0) {
+        value = 0;
+      } else if (value > trainingPrice.end) {
+        value = trainingPrice.end;
+      }
+    } else {
+      if (value > price.maxPrice) {
+        value = price.maxPrice;
+      } else if (value < trainingPrice.start) {
+        value = trainingPrice.start;
+      }
+    }
+
     setTrainingPrice((price) => {
-      return { ...price, [type]: event?.target?.value };
+      let data = { ...price, [type]: value };
+      updatePriceFilter({
+        filterType: "price",
+        data,
+      });
+      return data;
     });
   };
 
@@ -143,9 +164,18 @@ const PrimeCatalogFilters = (props: any) => {
                 onChangeEnd={priceChangeHandler}
                 maxValue={price && price.maxPrice}
                 showValueLabel={false}
+                width={"100%"}
               />
               <div>
-                <input
+                <NumberField
+                  value={trainingPrice.start}
+                  onChange={(event) =>
+                    changeTrainingPriceHandle("start", event)
+                  }
+                  minValue={0}
+                  maxValue={price && price.maxPrice}
+                ></NumberField>
+                {/* <input
                   value={trainingPrice.start}
                   onChange={(event) =>
                     changeTrainingPriceHandle("start", event)
@@ -153,15 +183,21 @@ const PrimeCatalogFilters = (props: any) => {
                   max={price && price.maxPrice}
                   type="number"
                   min={0}
-                />
-                <input
+                /> */}
+
+                <NumberField
+                  value={trainingPrice.end}
+                  onChange={(event) => changeTrainingPriceHandle("end", event)}
+                  minValue={0}
+                  maxValue={price && price.maxPrice}
+                ></NumberField>
+                {/* <input
                   value={trainingPrice.end}
                   onChange={(event) => changeTrainingPriceHandle("end", event)}
                   max={price && price.maxPrice}
                   type="number"
                   min={0}
-
-                />
+                /> */}
               </div>
             </div>
           </div>
