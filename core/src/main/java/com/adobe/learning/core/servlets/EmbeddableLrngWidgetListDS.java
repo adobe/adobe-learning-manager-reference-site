@@ -44,7 +44,7 @@ public class EmbeddableLrngWidgetListDS extends SlingAllMethodsServlet {
 
 	private static final long serialVersionUID = 6208632688001248037L;
 
-	final static String RESOURCE_TYPE = "cpPrime/widgets/datasource/widgetsSelectDatasource";
+	final static String RESOURCE_TYPE = "alm/widgets/datasource/widgetsSelectDatasource";
 
 	@Reference
 	private transient GlobalConfigurationService configService;
