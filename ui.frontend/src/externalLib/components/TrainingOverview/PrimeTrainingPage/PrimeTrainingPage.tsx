@@ -81,6 +81,7 @@ const PrimeTrainingPage = () => {
     jobAidClickHandler,
     addToCartHandler,
     isPreviewEnabled,
+    alternateLanguages,
   } = useTrainingPage(trainingId, trainingInstanceId);
   const locale = config.locale;
   const { formatMessage } = useIntl();
@@ -408,6 +409,7 @@ const PrimeTrainingPage = () => {
               addToCartHandler={addToCartHandler}
               jobAidClickHandler={jobAidClickHandler}
               isPreviewEnabled={isPreviewEnabled}
+              alternateLanguages={alternateLanguages}
             />
           </div>
         </div>
