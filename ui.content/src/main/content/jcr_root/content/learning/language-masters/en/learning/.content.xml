@@ -57,7 +57,9 @@
                             jcr:primaryType="nt:unstructured"
                             jcr:title="Explore"
                             sling:resourceType="learning/components/button"
-                            link="/content/learning/language-masters/en/explore">
+                            link="/content/learning/language-masters/en/explore"
+                            linkURL="/content/learning/language-masters/en/explore"
+                            linkTarget="_self">
                             <cq:responsive jcr:primaryType="nt:unstructured">
                                 <default
                                     jcr:primaryType="nt:unstructured"
