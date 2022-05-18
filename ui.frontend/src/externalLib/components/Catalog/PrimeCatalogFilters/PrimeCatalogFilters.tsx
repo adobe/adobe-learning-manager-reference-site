@@ -46,7 +46,6 @@ const PrimeCatalogFilters = (props: any) => {
   };
   let [trainingPrice, setTrainingPrice] = useState({ start: 0, end: 100 });
   useEffect(() => {
-    //await isCommerceEnabled();
     if (price) {
       setTrainingPrice({
         start: price.list[0].value,
