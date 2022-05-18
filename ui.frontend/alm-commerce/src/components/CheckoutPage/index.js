@@ -31,6 +31,8 @@ export default function CheckoutPage() {
   } = useCartPage();
 
   // const totalPrice = prices["grand_total"]?.value || 0;
+  const [canPlaceOrder, setCanPlaceOrder] = useState(false);
+
 
   const {
     paymentModes,
@@ -63,8 +65,8 @@ export default function CheckoutPage() {
 
   return (
     <>
-      <AddressBook />
-      <ProductList cartItems={cartItems} />
+      <AddressBook setCanPlaceOrder={setCanPlaceOrder} />
+      <ProductList cartItems={cartItems} canDeleteProduct={false} />
       <hr />
       <div className={styles.totalPrice}>
         <h2>Grand Total</h2>
@@ -103,7 +105,7 @@ export default function CheckoutPage() {
           variant="cta"
           type="button"
           onPress={placeOrder}
-          isDisabled={shouldShowLoadingIndicator}
+          isDisabled={shouldShowLoadingIndicator || !canPlaceOrder}
         >
           {shouldShowLoadingIndicator ? (
             <CommerceLoader size="S" />
