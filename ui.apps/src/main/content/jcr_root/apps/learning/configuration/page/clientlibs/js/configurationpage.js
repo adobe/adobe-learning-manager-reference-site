@@ -152,8 +152,12 @@ governing permissions and limitations under the License.
           .done(function (response, textStatus, jqXHR) {
             if (response.data && response.data.attributes && response.data.attributes.accountTerminologies)
             {
-              let accountTerminologies = response.data.attributes.accountTerminologies;
-              $("input[name='./nomenclatureData']").val(JSON.stringify(accountTerminologies));
+              let accountData = response.data.attributes;
+              delete accountData.uiLocales;
+              delete accountData.timeZones;
+              delete accountData.learnerHelpLinks;
+              $("input[name='./accountData']").val(JSON.stringify(response));
+              $("input[name='./nomenclatureData']").val(JSON.stringify(accountData.accountTerminologies));
               showPopup("Nomenclature Data fetched successfully.", "success", "Success");
             }
             else
