@@ -164,3 +164,13 @@ governing permissions and limitations under the License.
     var(--spectrum-global-color-red-600)
   );
 }
+
+.mandatory > label > svg {
+  fill: red;
+  display: block !important;
+}
+.label > svg {
+  fill: red;
+  padding-left: 3px;
+  display: block !important;
+}

@@ -24,14 +24,16 @@ export default function Product(props) {
         <div className={styles.name}>{name}</div>
         <div>
           <div className={styles.priceLabel}>{priceLabel}</div>
-          <Button
-            variant="overBackground"
-            type="button"
-            onPress={removeItemHandler}
-            UNSAFE_className={styles.removeItem}
-          >
-            {loading ? <CommerceLoader size="S" /> : <Delete> </Delete>}
-          </Button>
+          {props.canDeleteProduct &&
+            <Button
+              variant="overBackground"
+              type="button"
+              onPress={removeItemHandler}
+              UNSAFE_className={styles.removeItem}
+            >
+              {loading ? <CommerceLoader size="S" /> : <Delete> </Delete>}
+            </Button>
+          }
         </div>
       </div>
     </div>
