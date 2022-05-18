@@ -41,9 +41,7 @@ export const useCartPage = (props = {}) => {
   }, [navigate, fetchCartDetails]);
 
   const hasItems = !!data?.cart?.total_quantity;
-  if (hasItems) {
-    getALMObject().updateCart(data?.cart?.total_quantity);
-  }
+  getALMObject().updateCart(data?.cart?.total_quantity || 0);
   const shouldShowLoadingIndicator = loading && !hasItems;
 
   const cartItems = useMemo(() => {
