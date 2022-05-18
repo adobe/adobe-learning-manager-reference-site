@@ -385,8 +385,6 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     }
   };
 
-  handlePageLoad();
-
   window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
   window.ALM.getAccessToken = getAccessToken;
   window.ALM.getCommerceToken = getCommerceToken;
@@ -397,4 +395,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.handleLogOut = handleLogOut;
   window.ALM.handleRegister = handleRegister;
   window.ALM.getAccountActiveFields = getAccountActiveFields;
+
+  handlePageLoad();
+  
 })(window, document, Granite, jQuery);
