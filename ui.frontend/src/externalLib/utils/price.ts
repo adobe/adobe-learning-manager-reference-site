@@ -21,7 +21,6 @@ export const getFormattedPrice = (price: number) => {
   return price % 1 === 0 ? fraction.format(price) : formatter.format(price);
 };
 
-export const isCommerceEnabled = async () => {
-  // const isCommerceEnabled = await isCommerceEnabledOnAccount();
-  return getALMConfig().usageType === ADOBE_COMMERCE; //&& isCommerceEnabled;
+export const isCommerceEnabled = () => {
+  return getALMConfig().usageType === ADOBE_COMMERCE;
 };

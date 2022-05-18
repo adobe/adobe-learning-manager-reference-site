@@ -120,12 +120,8 @@ export default class ALMCustomHooks implements ICustomHooks {
     const config = getALMConfig();
     const queryParams = getQueryParamsIObjectFromUrl();
 
-    // RestAdapter.get({
-    //
-    // }),
     let maxPrice = 0;
-    const isCommerceEnabledOnAccount = await isCommerceEnabled();
-    if (isCommerceEnabledOnAccount) {
+    if (isCommerceEnabled()) {
       try {
         const response = await RestAdapter.get({
           url: `${config.primeApiURL}ecommerce/maxPrice?filter.loTypes=course%2ClearningProgram%2Ccertification`,

@@ -175,10 +175,6 @@ const init = async () => {
 
 init();
 
-export const isCommerceEnabledOnAccount = async () => {
-  const response = await getALMUser();
-  return response.account.enableECommerce;
-};
 
 // export const getCartId = () => {
 //   return getALMObject().storage.getItem(CART_ID);
