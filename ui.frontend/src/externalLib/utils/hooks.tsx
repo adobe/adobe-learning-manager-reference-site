@@ -74,7 +74,7 @@ const useCardBackgroundStyle = (
   }, [cardIconUrl, color, training]);
 };
 
-const useSkills = (training: PrimeLearningObject): Skill[] => {
+const useTrainingSkills = (training: PrimeLearningObject): Skill[] => {
   return useMemo(() => {
     const trainingSkills = training?.skills.map((skill) => {
       const skillLevel = skill.skillLevel;
@@ -174,7 +174,7 @@ const useResource = (
 export {
   useCardIcon,
   useCardBackgroundStyle,
-  useSkills,
+  useTrainingSkills,
   useBadge,
   useLocalizedMetaData,
   filterTrainingInstance,

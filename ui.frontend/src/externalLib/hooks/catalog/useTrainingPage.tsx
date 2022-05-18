@@ -10,27 +10,32 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import APIServiceInstance from "../../common/APIService";
 import {
+  PrimeAccount,
   PrimeLearningObject,
   PrimeLearningObjectInstance,
   PrimeLoInstanceSummary,
 } from "../../models/PrimeModels";
 import { getJobaidUrl, isJobaidContentTypeUrl } from "../../utils/catalog";
-import { getALMAccount, getALMConfig, getALMUser } from "../../utils/global";
-
+import {
+  getALMAccount,
+  getALMConfig,
+  getALMObject,
+  getALMUser,
+} from "../../utils/global";
 import {
   filterTrainingInstance,
   useBadge,
   useCardBackgroundStyle,
   useCardIcon,
   useLocalizedMetaData,
-  useSkills,
+  useTrainingSkills,
 } from "../../utils/hooks";
+import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { LaunchPlayer } from "../../utils/playback-utils";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
-import { useDispatch } from "react-redux";
-import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 
 const DEFAULT_INCLUDE_LO_OVERVIEW =
   "enrollment.loInstance.loResources.resources,prerequisiteLOs,subLOs.prerequisiteLOs,subLOs.subLOs.prerequisiteLOs,authors,enrollment.loResourceGrades,subLOs.enrollment.loResourceGrades, subLOs.subLOs.enrollment.loResourceGrades, subLOs.subLOs.instances.loResources.resources, subLOs.instances.loResources.resources,instances.loResources.resources,supplementaryLOs.instances.loResources.resources,supplementaryResources,subLOs.enrollment,instances.badge, skills.skillLevel.badge,skills.skillLevel.skill";
@@ -62,24 +67,27 @@ export const useTrainingPage = (
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if(!trainingId) return;
+    if (!trainingId) return;
     const getTrainingInstance = async () => {
       try {
         let queryParam: QueryParams = {};
         queryParam["include"] = params.include || DEFAULT_INCLUDE_LO_OVERVIEW;
         queryParam["useCache"] = true;
         queryParam["filter.ignoreEnhancedLP"] = false;
-
-        const [account, response] = await Promise.all([
-          getALMAccount(),
-          APIServiceInstance.getTraining(trainingId, queryParam),
-        ]);
+        let account = {} as PrimeAccount;
+        if (getALMObject().isPrimeUserLoggedIn()) {
+          account = await getALMAccount();
+        }
+        const response = await APIServiceInstance.getTraining(
+          trainingId,
+          queryParam
+        );
 
         if (response) {
           const trainingInstance = filterTrainingInstance(response, instanceId);
           setCurrentState({
             trainingInstance,
-            isPreviewEnabled: account.enableModulePreview,
+            isPreviewEnabled: account.enableModulePreview || false,
             isLoading: false,
             errorCode: "",
           });
@@ -195,89 +203,99 @@ export const useTrainingPage = (
 
   const { cardIconUrl, color, bannerUrl } = useCardIcon(training);
   const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
-  const skills = useSkills(training);
+  const skills = useTrainingSkills(training);
   const instanceBadge = useBadge(trainingInstance);
 
-  const updateFileSubmissionUrl = useCallback(async (fileUrl: any, loId: any, loInstanceId: any, loResourceId: any) => {
-    const baseApiUrl = getALMConfig().primeApiURL;
-    const body = {
-      data: {
-        id: loResourceId,
-        type: "learningObjectResource",
-        attributes: {
-          submissionUrl: fileUrl
+  const updateFileSubmissionUrl = useCallback(
+    async (fileUrl: any, loId: any, loInstanceId: any, loResourceId: any) => {
+      const baseApiUrl = getALMConfig().primeApiURL;
+      const body = {
+        data: {
+          id: loResourceId,
+          type: "learningObjectResource",
+          attributes: {
+            submissionUrl: fileUrl,
+          },
         },
+      };
+      const headers = { "content-type": "application/json" };
+
+      try {
+        await RestAdapter.ajax({
+          url: `${baseApiUrl}/learningObjects/${loId}/loResources/${loResourceId}`,
+          method: "PATCH",
+          body: JSON.stringify(body),
+          headers: headers,
+        });
+        const params: QueryParams = {};
+        params["include"] = "enrollment.loInstance.loResources.resources";
+
+        let response = await RestAdapter.ajax({
+          url: `${baseApiUrl}/learningObjects/${loId}`,
+          method: "GET",
+          headers: headers,
+          params: params,
+        });
+
+        const parsedResponse = JsonApiParse(response);
+        const loInstance = parsedResponse.learningObject.instances?.filter(
+          (instance) => {
+            return instance.id === loInstanceId;
+          }
+        );
+        const loResource = loInstance[0].loResources?.filter((resource) => {
+          return resource.id === loResourceId;
+        });
+        return loResource[0].submissionUrl;
+      } catch (e) {
+        console.log(e);
       }
-    };
-    const headers = { "content-type": "application/json" };
+    },
+    [dispatch]
+  );
 
-    try {
-      await RestAdapter.ajax({
-        url: `${baseApiUrl}/learningObjects/${loId}/loResources/${loResourceId}`,
-        method: "PATCH",
-        body: JSON.stringify(body),  
-        headers: headers,
-      });
-      const params: QueryParams = {};
-      params["include"] = "enrollment.loInstance.loResources.resources";
+  const updateCertificationProofUrl = useCallback(
+    async (fileUrl: any, loId: any, loInstanceId: any) => {
+      const baseApiUrl = getALMConfig().primeApiURL;
+      const userResponse = await getALMUser();
 
-      let response = await RestAdapter.ajax({
-        url: `${baseApiUrl}/learningObjects/${loId}`,
-        method: "GET",
-        headers: headers,
-        params: params
-      });
-
-      const parsedResponse = JsonApiParse(response);
-      const loInstance = parsedResponse.learningObject.instances?.filter((instance) => {
-        return instance.id === loInstanceId
-      });
-      const loResource = loInstance[0].loResources?.filter((resource) => {
-        return resource.id === loResourceId
-      });
-      return loResource[0].submissionUrl;
-    } catch (e) {
-      console.log(e);
-    }
-   },[dispatch]);
-
-  const updateCertificationProofUrl = useCallback(async (fileUrl: any, loId: any, loInstanceId: any) => {
-    const baseApiUrl = getALMConfig().primeApiURL;    
-    const userResponse = await getALMUser();
-
-    const body = {
-      data: {
-        id: loInstanceId + "_" + userResponse.user.id,
-        type: "learningObjectInstanceEnrollment",
-        attributes: {
-          url: fileUrl
+      const body = {
+        data: {
+          id: loInstanceId + "_" + userResponse.user.id,
+          type: "learningObjectInstanceEnrollment",
+          attributes: {
+            url: fileUrl,
+          },
         },
+      };
+      const headers = { "content-type": "application/json" };
+
+      try {
+        await RestAdapter.ajax({
+          url: `${baseApiUrl}/enrollments/${
+            loInstanceId + "_" + userResponse.user.id
+          }`,
+          method: "PATCH",
+          body: JSON.stringify(body),
+          headers: headers,
+        });
+        const params: QueryParams = {};
+        params["include"] = "enrollment.loInstance";
+
+        let response = await RestAdapter.ajax({
+          url: `${baseApiUrl}/learningObjects/${loId}`,
+          method: "GET",
+          headers: headers,
+          params: params,
+        });
+        const parsedResponse = JsonApiParse(response);
+        return parsedResponse.learningObject.enrollment.url || "";
+      } catch (e) {
+        console.log(e);
       }
-    };
-    const headers = { "content-type": "application/json" };
-
-    try {
-      await RestAdapter.ajax({
-        url: `${baseApiUrl}/enrollments/${loInstanceId + "_" + userResponse.user.id}`,
-        method: "PATCH",
-        body: JSON.stringify(body),  
-        headers: headers,
-      });
-      const params: QueryParams = {};
-      params["include"] = "enrollment.loInstance";
-
-      let response = await RestAdapter.ajax({
-        url: `${baseApiUrl}/learningObjects/${loId}`,
-        method: "GET",
-        headers: headers,
-        params: params
-      });
-      const parsedResponse = JsonApiParse(response);
-      return parsedResponse.learningObject.enrollment.url || "";
-    } catch (e) {
-      console.log(e);
-    }
-  },[dispatch]);
+    },
+    [dispatch]
+  );
 
   return {
     name,
@@ -302,7 +320,7 @@ export const useTrainingPage = (
     addToCartHandler,
     errorCode,
     updateFileSubmissionUrl,
-    updateCertificationProofUrl
+    updateCertificationProofUrl,
   };
   //date create, published, duration
 };
