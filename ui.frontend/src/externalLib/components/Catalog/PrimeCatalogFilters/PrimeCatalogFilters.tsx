@@ -119,7 +119,7 @@ const PrimeCatalogFilters = (props: any) => {
       <div className={styles.primeFilterContainer}>
         <h3 className={styles.filtersLabel}>Filters</h3>
         {/* catalog Filter start */}
-        {/* {renderFilterList(catalogs)} */}
+        {renderFilterList(catalogs)}
         {/* catalog Filter ends */}
 
         {/* loTypes Filter start */}
@@ -127,27 +127,27 @@ const PrimeCatalogFilters = (props: any) => {
         {/* loTypes Filter ends */}
 
         {/* loFormat Filter start */}
-        {/* {renderFilterList(loFormat)} */}
+        {renderFilterList(loFormat)}
         {/* loFormat Filter ends */}
 
         {/* duration Filter start */}
-        {/* {renderFilterList(duration)} */}
+        {renderFilterList(duration)}
         {/* duration Filter ends */}
 
         {/* skillName Filter start */}
-        {/* {renderFilterList(skillName)} */}
+        {renderFilterList(skillName)}
         {/* skillName Filter ends */}
 
         {/* skillLevel Filter start */}
-        {/* {renderFilterList(skillLevel)} */}
+        {renderFilterList(skillLevel)}
         {/* skillLevel Filter ends */}
 
         {/* tagName Filter start */}
-        {/* {renderFilterList(tagName)} */}
+        {renderFilterList(tagName)}
         {/* tagName Filter ends */}
 
         {/* learnerState Filter start */}
-        {/* {isLoggedIn && renderFilterList(learnerState)} */}
+        {isLoggedIn && renderFilterList(learnerState)}
         {/* learnerState Filter ends */}
 
         {/* Price Filter start */}

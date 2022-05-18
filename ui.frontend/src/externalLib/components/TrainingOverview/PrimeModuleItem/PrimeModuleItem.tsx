@@ -14,6 +14,7 @@ import CheckmarkCircle from "@spectrum-icons/workflow/CheckmarkCircle";
 import Clock from "@spectrum-icons/workflow/Clock";
 import Link from "@spectrum-icons/workflow/Link";
 import Location from "@spectrum-icons/workflow/Location";
+import Asterisk from "@spectrum-icons/workflow/Asterisk";
 import LockClosed from "@spectrum-icons/workflow/LockClosed";
 import Seat from "@spectrum-icons/workflow/Seat";
 import User from "@spectrum-icons/workflow/User";
@@ -165,6 +166,13 @@ const PrimeModuleItem: React.FC<{
     hasSessionDetails
   );
 
+  const loResourceMandatory = (): boolean => {
+    if (loResource && loResource.mandatory) {
+      return true;
+    }
+    return false;
+  };
+
   const itemClickHandler = (event: any) => {
     if (!canPlay) {
       //show popup
@@ -308,6 +316,13 @@ const PrimeModuleItem: React.FC<{
           role="button"
         >
           <div className={styles.icon} aria-hidden="true">
+            {loResourceMandatory() ? (
+              <span className={styles.mandatoryModule}>
+                <Asterisk />
+              </span>
+            ) : (
+              ""
+            )}
             {moduleIcon}
             {gradeHasPassed() ? (
               <span className={styles.modulePassed}>

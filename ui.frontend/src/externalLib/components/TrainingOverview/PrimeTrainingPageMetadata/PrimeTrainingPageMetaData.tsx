@@ -160,8 +160,8 @@ const PrimeTrainingPageMetaData: React.FC<{
   const onPressHandler = async () => {
     try {
       enrollmentHandler();
-      if(enrollment.state != PENDING_APPROVAL) {
-          launchPlayerHandler();
+      if (enrollment.state != PENDING_APPROVAL) {
+        launchPlayerHandler();
       }
     } catch (e) {}
   };
@@ -290,13 +290,17 @@ const PrimeTrainingPageMetaData: React.FC<{
     training.loResourceCompletionCount &&
     training.loResourceCompletionCount !== trainingInstance.loResources?.length;
 
+  const isSeatAvailable = trainingInstance.seatLimit
+    ? trainingInstance.seatLimit > 0
+    : true;
+
   return (
     <section className={styles.container}>
       {showPreviewButton && (
         <>
           <Button
             variant="primary"
-            UNSAFE_className={`${styles.previewButton} ${styles.commonButton}`}
+            UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
             onPress={launchPlayerHandler}
           >
             {formatMessage({
@@ -316,7 +320,7 @@ const PrimeTrainingPageMetaData: React.FC<{
         {action === "registerInterest" && (
           <Button
             variant="primary"
-            UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
+            UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
           >
             {actionText}
           </Button>
@@ -325,8 +329,9 @@ const PrimeTrainingPageMetaData: React.FC<{
           <>
             <Button
               variant="primary"
-              UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
+              UNSAFE_className={`${styles.primaryButton} ${styles.commonButton}`}
               onPress={onPressHandler}
+              isDisabled={!isSeatAvailable}
             >
               {actionText}
             </Button>
@@ -338,7 +343,7 @@ const PrimeTrainingPageMetaData: React.FC<{
           action === "revisit") && (
           <Button
             variant="primary"
-            UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
+            UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
             onPress={launchPlayerHandler}
           >
             {actionText}
@@ -349,9 +354,9 @@ const PrimeTrainingPageMetaData: React.FC<{
           <>
             <Button
               variant="primary"
-              UNSAFE_className={`${styles.addToCartButton} ${styles.commonButton}`}
+              UNSAFE_className={`${styles.primaryButton} ${styles.commonButton}`}
               onPress={addProductToCart}
-              isDisabled={isTrainingNotSynced}
+              isDisabled={isTrainingNotSynced || !isSeatAvailable}
             >
               {formatMessage(
                 {
@@ -360,7 +365,6 @@ const PrimeTrainingPageMetaData: React.FC<{
                 { x: getFormattedPrice(training.price) }
               )}
             </Button>
-            {/* </div> */}
             {trainingNotAvailableForPurchaseText}
             {seatsAvailableText}
           </>
@@ -369,7 +373,7 @@ const PrimeTrainingPageMetaData: React.FC<{
           <>
             <Button
               variant="secondary"
-              UNSAFE_className={`${styles.pendingButton} ${styles.commonButton}`}
+              UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
               isDisabled={true}
             >
               {actionText}
@@ -393,7 +397,7 @@ const PrimeTrainingPageMetaData: React.FC<{
 
         <Button
           variant="primary"
-          UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
+          UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
         >
           Add to cart
         </Button>

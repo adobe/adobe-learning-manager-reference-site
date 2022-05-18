@@ -161,6 +161,22 @@ a.details {
   margin-left: 3px;
 }
 
+.mandatoryModule {
+  background-size: contain;
+  border-radius: 30px;
+  position: absolute;
+  margin-top: 5px;
+	margin-left: 3px;
+  line-height: 40%;
+  background-color: var(--prime-color-white);
+}
+
+.mandatoryModule svg {
+  fill: var(--prime-error-color);
+  width: 10px;
+  height: 10px;
+}
+
 .titleContainer {
   display: flex;
   justify-content: space-between;
