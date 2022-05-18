@@ -160,8 +160,8 @@ const PrimeTrainingPageMetaData: React.FC<{
   const onPressHandler = async () => {
     try {
       enrollmentHandler();
-      if(enrollment.state != PENDING_APPROVAL) {
-          launchPlayerHandler();
+      if (enrollment.state != PENDING_APPROVAL) {
+        launchPlayerHandler();
       }
     } catch (e) {}
   };
@@ -290,6 +290,10 @@ const PrimeTrainingPageMetaData: React.FC<{
     training.loResourceCompletionCount &&
     training.loResourceCompletionCount !== trainingInstance.loResources?.length;
 
+  const isSeatAvailable = trainingInstance.seatLimit
+    ? trainingInstance.seatLimit > 0
+    : true;
+
   return (
     <section className={styles.container}>
       {showPreviewButton && (
@@ -327,6 +331,7 @@ const PrimeTrainingPageMetaData: React.FC<{
               variant="primary"
               UNSAFE_className={`${styles.primaryButton} ${styles.commonButton}`}
               onPress={onPressHandler}
+              isDisabled={!isSeatAvailable}
             >
               {actionText}
             </Button>
@@ -351,7 +356,7 @@ const PrimeTrainingPageMetaData: React.FC<{
               variant="primary"
               UNSAFE_className={`${styles.primaryButton} ${styles.commonButton}`}
               onPress={addProductToCart}
-              isDisabled={isTrainingNotSynced}
+              isDisabled={isTrainingNotSynced || !isSeatAvailable}
             >
               {formatMessage(
                 {
@@ -360,7 +365,6 @@ const PrimeTrainingPageMetaData: React.FC<{
                 { x: getFormattedPrice(training.price) }
               )}
             </Button>
-            {/* </div> */}
             {trainingNotAvailableForPurchaseText}
             {seatsAvailableText}
           </>
