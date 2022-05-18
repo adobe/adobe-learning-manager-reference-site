@@ -141,7 +141,7 @@ public class FetchCommerceAccessTokenServletTest {
 		Method method = FetchCommerceAccessTokenServlet.class.getDeclaredMethod("getCustomerFromCommerce", args);
 		method.setAccessible(true);
 		// token and commerce_url is invalid, so response will be null.
-		CustomerCommerceEntity result = (CustomerCommerceEntity) method.invoke(commerceServlet, "token1234", "https://commerceurl.com");
+		CustomerCommerceEntity result = (CustomerCommerceEntity) method.invoke(commerceServlet, "token1234", "https://learningmanagerqe.com");
 		assertNull(result);
 	}
 
