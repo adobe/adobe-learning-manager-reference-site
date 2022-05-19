@@ -294,7 +294,7 @@ const PrimeTrainingPageMetaData: React.FC<{
     let completionCount = training.loResourceCompletionCount;
 
     if (training.loType === COURSE) {
-      let totalCount = coreContentModules.length;
+      const totalCount = coreContentModules.length;
       label = GetTranslationsReplaced(
         "alm.overview.course.minimum.criteria.label",
         {
@@ -305,7 +305,7 @@ const PrimeTrainingPageMetaData: React.FC<{
       );
       value = `${completionCount}/${totalCount}`;
     } else if (training.loType === CERTIFICATION) {
-      let totalCount = training.subLOs.length;
+      const totalCount = training.subLOs.length;
       label = GetTranslationsReplaced(
         "alm.overview.certification.minimum.criteria.label",
         {
@@ -332,12 +332,11 @@ const PrimeTrainingPageMetaData: React.FC<{
       return value;
     }
     if (training.loType === COURSE) {
-      let totalCount = coreContentModules.length;
+      const totalCount = coreContentModules.length;
       let completionCount = 0;
       training.enrollment?.loResourceGrades.forEach(
         (item: PrimeLearningObjectResourceGrade) => {
           if (item.hasPassed) {
-            debugger;
             completionCount += 1;
           }
         }
