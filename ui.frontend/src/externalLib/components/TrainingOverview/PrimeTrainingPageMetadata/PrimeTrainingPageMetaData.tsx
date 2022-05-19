@@ -15,8 +15,8 @@ import { Button, Content, ContextualHelp, Text } from "@adobe/react-spectrum";
 import Calendar from "@spectrum-icons/workflow/Calendar";
 import Clock from "@spectrum-icons/workflow/Clock";
 import ClockCheck from "@spectrum-icons/workflow/ClockCheck";
-import GlobeGrid from "@spectrum-icons/workflow/GlobeGrid";
 import Download from "@spectrum-icons/workflow/Download";
+import GlobeGrid from "@spectrum-icons/workflow/GlobeGrid";
 import Money from "@spectrum-icons/workflow/Money";
 import PinOff from "@spectrum-icons/workflow/PinOff";
 import Send from "@spectrum-icons/workflow/Send";
@@ -94,8 +94,10 @@ const PrimeTrainingPageMetaData: React.FC<{
     training.price && getALMConfig().usageType === ADOBE_COMMERCE;
 
   const [isTrainingNotSynced, setIsTrainingNotSynced] = useState(false);
- 
-  const [alternativesLangAvailable, setAlternativesLangAvailable] = useState<string[]>([]);
+
+  const [alternativesLangAvailable, setAlternativesLangAvailable] = useState<
+    string[]
+  >([]);
 
   let showPreviewButton =
     isPreviewEnabled &&
@@ -185,7 +187,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   const addToCart = async () => {
     try {
       const { error, totalQuantity } = await addToCartHandler();
-      if (error && error[0]?.message) { 
+      if (error && error[0]?.message) {
         if (isPrimeUserLoggedIn) {
           almAlert(
             true,
@@ -662,7 +664,11 @@ const PrimeTrainingPageMetaData: React.FC<{
           {filteredSkills.map((skill) => {
             return (
               <div key={skill.name}>
-                {skill.name} - {skill.levelName}
+                {skill.name} - {skill.levelName}{" "}
+                {formatMessage(
+                  { id: "alm.training.skill.credits" },
+                  { x: skill.credits }
+                )}
               </div>
             );
           })}
