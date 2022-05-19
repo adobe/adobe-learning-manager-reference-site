@@ -10,6 +10,8 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { useCallback, useEffect, useState } from "react";
+import { AlertType } from "../../common/Alert/AlertDialog";
+import { useAlert } from "../../common/Alert/useAlert";
 import { AccountActiveFields } from "../../models/custom";
 import { PrimeUser } from "../../models/PrimeModels";
 import {
@@ -21,6 +23,7 @@ import {
   updateUserProfileImage
 } from "../../utils/global";
 import { RestAdapter } from "../../utils/restAdapter";
+import { GetTranslation } from "../../utils/translationService";
 import { getUploadInfo, uploadFile } from "../../utils/uploadUtils";
 
 interface ProfileAttributes {
@@ -37,7 +40,7 @@ export const useProfile = () => {
   // const [errorMessage, setErrorMessage] = useState("");
 
   const [errorCode, setErrorCode] = useState("");
-
+  const [almAlert] = useAlert();
   useEffect(() => {
     const setupProfile = async () => {
       try {
@@ -116,7 +119,10 @@ export const useProfile = () => {
     async (accountActiveFields: any, userId: any) => {
       try {
         await updateAccountActiveFieldsDetails(accountActiveFields, userId);
-      } catch (error: any) {}
+        almAlert(true, GetTranslation("alm.text.activeFieldsSuccess"), AlertType.success);
+      } catch (error: any) {
+        almAlert(true, GetTranslation("alm.text.activeFieldsFailure"), AlertType.error);
+      }
     },
     []
   );

@@ -96,6 +96,8 @@
   "alm.overview.completion.deadline": "Completion Deadline",
   "alm.jobaid": "Job Aid",
   "alm.jobaid.added": "Job aid has been added to your list",
+  "alm.text.activeFieldsSuccess": "Active Fields saved successfully",
+  "alm.text.activeFieldsFailure": "Active Fields could not be saved",
   "alm.overview.vc.url": "||VIRTUAL_CLASSROOM|| URL",
   "alm.overview.seat.limit": "{0} Seat Limit",
   "alm.overview.certification.deadline": "{0} days from enrollment",
