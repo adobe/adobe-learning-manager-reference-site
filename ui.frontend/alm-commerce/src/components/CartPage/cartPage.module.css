@@ -26,6 +26,10 @@ governing permissions and limitations under the License.
 .cartPageContainer {
   display: flex;
 }
+h1 {
+  font-size: var(--prime-font-size-28);
+  color: var(--prime-color-black);
+}
 
 .orderSummary {
   width: 30%;

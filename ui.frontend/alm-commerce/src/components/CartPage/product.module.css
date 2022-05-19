@@ -34,6 +34,9 @@ governing permissions and limitations under the License.
 
 .name {
   padding-right: 20px;
+  font-size: var(--prime-font-size-16);
+  color: var(--prime-color-black);
+  font-weight: 600;
 }
 
 .removeItem {
@@ -43,10 +46,12 @@ governing permissions and limitations under the License.
 }
 
 .removeItem svg {
-  fill: var(--prime-color-black);
+  fill: var(  --prime-color-nc4);
 }
 
 .priceLabel {
   display: flex;
   justify-content: flex-end;
+  font-size: var(--prime-font-size-16);
+  color: var(--prime-color-black);
 }

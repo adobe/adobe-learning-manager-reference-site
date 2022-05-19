@@ -36,3 +36,7 @@ h2 {
   align-items: center;
   margin-top: 40px;
 }
+.actionContainer button{
+  width: 100%;
+  font-size: var(--prime-font-size-16);
+}

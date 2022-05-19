@@ -92,6 +92,7 @@ const SignIn = () => {
     <div className={styles.signInContainer}>
       {view !== RESET_PASSWORD ? (
         <Form
+        maxWidth="size-3600"
           UNSAFE_className={styles.form}
         >
           <span className={styles.error}>
