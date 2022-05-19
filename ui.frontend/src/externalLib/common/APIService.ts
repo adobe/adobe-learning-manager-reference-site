@@ -10,6 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { CatalogFilterState } from "../store/reducers/catalog";
+import { ADOBE_COMMERCE } from "../utils/constants";
 import {
   getALMConfig,
   getALMObject,
@@ -20,7 +21,6 @@ import ALMCustomHooks from "./ALMCustomHooks";
 import CommerceCustomHooks from "./CommerceCustomHooks";
 import ESCustomHooks from "./ESCustomHooks";
 
-export const ADOBE_COMMERCE = "aem-commerce";
 class APIService {
   //customHooks: ICustomHooks;
   //services: {key: value[ICustomHooks]};

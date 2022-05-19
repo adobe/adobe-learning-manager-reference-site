@@ -6,6 +6,7 @@
         cq:lastModifiedBy="admin"
         cq:template="/conf/learning/settings/wcm/templates/page-content1"
         jcr:primaryType="cq:PageContent"
+        id="learning-body"
         jcr:title="My Learning"
         sling:resourceType="learning/components/page">
         <root
@@ -56,7 +57,9 @@
                             jcr:primaryType="nt:unstructured"
                             jcr:title="Explore"
                             sling:resourceType="learning/components/button"
-                            link="/content/learning/language-masters/en/explore">
+                            link="/content/learning/language-masters/en/explore"
+                            linkURL="/content/learning/language-masters/en/explore"
+                            linkTarget="_self">
                             <cq:responsive jcr:primaryType="nt:unstructured">
                                 <default
                                     jcr:primaryType="nt:unstructured"

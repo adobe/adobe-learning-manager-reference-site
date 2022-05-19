@@ -21,14 +21,16 @@ governing permissions and limitations under the License.
     .set("coursePageLink", ["loOverview", "course", new RegExp(/course\/(\d+)\/overview/i)])
     .set("certPageLink", ["loOverview", "certification", new RegExp(/certification\/(\d+)\/overview/i)])
     .set("lpPageLink", ["loOverview", "learningProgram", new RegExp(/learningProgram\/(\d+)\/overview/i)])
-    .set("ciPageLink", ["loOverview", "course", new RegExp(/courseInstance\/(\d+)/i)])
-    .set("lpiPageLink", ["loOverview", "learningProgram", new RegExp(/lpInstance\/(\d+)/i)])
+    .set("ciPageLink", ["loInstance", "course", new RegExp(/courseInstance\/(\d+)/i)])
+    .set("lpiPageLink", ["loInstance", "learningProgram", new RegExp(/lpInstance\/(\d+)/i)])
     .set("catalogOverviewPageLink", ["catalogOverview", "catalog", new RegExp(/selectedListableCatalogIds=(\d+)/i)])
-    .set("courseInstancePreviewPageLink", ["loInstance", "course", new RegExp(/course\/(\d+)\/instance\/(\d+)\/preview/i)])
+    .set("courseInstancePreviewPageLink", ["loInstancePreview", "course", new RegExp(/course\/(\d+)\/instance\/(\d+)\/preview\??(.*)/i)])
+    .set("courseInstancePreviewPageShowLink", ["loInstancePreview", "course", new RegExp(/course\/(\d+)\/instance\/(\d+)\/preview\??(.*)/i)])
     .set("catalogPageLink", ["catalogPage"])
     .set("myLearningPageLink", ["myLearningPage"])
     .set("postsLink", ["boardsPage"])
-    .set("allboardsPageLink", ["boardsPage"]);
+    .set("allboardsPageLink", ["boardsPage"])
+    .set("skillsPageLink", ["profilePage"]);
 
   const WIDET_CONFIG_DATA = "data-cp-widget-configs",
     WIDGET_REF_DATA = "cp-widget-ref",
@@ -101,8 +103,16 @@ governing permissions and limitations under the License.
         case "loInstance":
           loType = almLinksMapObj[1];
           loId = e.route.match(almLinksMapObj[2])[1];
-          let instanceId = e.route.match(almLinksMapObj[2])[2];
-          window.ALM.navigateToTrainingOverviewPage(loType + ":" + loId, loType + ":" + loId + "_" + instanceId);
+          window.ALM.navigateToInstancePage(loType + ":" + loId);
+          break;
+
+        case "loInstancePreview":
+          loType = almLinksMapObj[1];
+          const match = e.route.match(almLinksMapObj[2]);
+          loId = match[1];
+          const instanceId = match[2];
+          const queryParams = match[3];
+          window.ALM.navigateToTrainingOverviewPage(loType + ":" + loId, loType + ":" + loId + "_" + instanceId, queryParams);
           break;
 
         case "catalogOverview":
@@ -120,6 +130,10 @@ governing permissions and limitations under the License.
 
         case "boardsPage":
           window.ALM.navigateToBoardsPage();
+          break;
+
+        case "profilePage":
+          window.ALM.navigateToProfilePage();
           break;
           
         default:

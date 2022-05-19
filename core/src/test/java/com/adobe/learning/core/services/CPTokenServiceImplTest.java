@@ -39,9 +39,8 @@ public class CPTokenServiceImplTest {
 	
 	@Test
 	public void testFetchLearnerToken() {
-		String expectedResponse = "{\"status\":\"UNAUTHORIZED\",\"title\":\"Execution Error\",\"source\":{\"info\":\"Unauthorized\"}}";
 		String response = cpTokenService.fetchLearnerToken(almURL, clientId, clientSecret, refreshToken, email);
-		assertTrue(expectedResponse.equals(response));
+		assertTrue(response.contains("UNAUTHORIZED"));
 	}
 	
 	@Test

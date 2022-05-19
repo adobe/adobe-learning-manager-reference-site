@@ -15,20 +15,23 @@ import { Button, Content, ContextualHelp, Text } from "@adobe/react-spectrum";
 import Calendar from "@spectrum-icons/workflow/Calendar";
 import Clock from "@spectrum-icons/workflow/Clock";
 import ClockCheck from "@spectrum-icons/workflow/ClockCheck";
+import GlobeGrid from "@spectrum-icons/workflow/GlobeGrid";
 import Download from "@spectrum-icons/workflow/Download";
+import Money from "@spectrum-icons/workflow/Money";
 import PinOff from "@spectrum-icons/workflow/PinOff";
 import Send from "@spectrum-icons/workflow/Send";
 import UserGroup from "@spectrum-icons/workflow/UserGroup";
 import { useEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
-import { InstanceBadge, Skill } from "../../../models/custom";
 import { AlertType } from "../../../common/Alert/AlertDialog";
 import { useAlert } from "../../../common/Alert/useAlert";
+import { InstanceBadge, Skill } from "../../../models/custom";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
   PrimeLoInstanceSummary,
 } from "../../../models/PrimeModels";
+import { ADOBE_COMMERCE } from "../../../utils/constants";
 import { modifyTime } from "../../../utils/dateTime";
 import {
   getALMAccount,
@@ -36,6 +39,7 @@ import {
   getALMObject,
 } from "../../../utils/global";
 import { DEFAULT_USER_SVG, LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
+import { getFormattedPrice } from "../../../utils/price";
 import {
   GetTranslation,
   GetTranslationsReplaced,
@@ -53,6 +57,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   showAuthorInfo: string;
   showEnrollDeadline: string;
   enrollmentHandler: () => void;
+  alternateLanguages: Promise<string[]>;
   launchPlayerHandler: () => void;
   addToCartHandler: () => Promise<{
     items: any;
@@ -76,19 +81,28 @@ const PrimeTrainingPageMetaData: React.FC<{
   unEnrollmentHandler,
   jobAidClickHandler,
   isPreviewEnabled,
+  alternateLanguages,
 }) => {
-  const [alert] = useAlert();
+  const [almAlert] = useAlert();
   const { formatMessage } = useIntl();
   const config = getALMConfig();
   const locale = config.locale;
   const enrollment = training.enrollment;
   const loType = training.loType;
+  const isPrimeUserLoggedIn = getALMObject().isPrimeUserLoggedIn();
+  const isPricingEnabled =
+    training.price && getALMConfig().usageType === ADOBE_COMMERCE;
 
   const [isTrainingNotSynced, setIsTrainingNotSynced] = useState(false);
+ 
+  const [alternativesLangAvailable, setAlternativesLangAvailable] = useState<string[]>([]);
+
   let showPreviewButton =
     isPreviewEnabled &&
     training.hasPreview &&
     (!enrollment || enrollment.state === PENDING_APPROVAL);
+
+  const showPriceDetails = isPricingEnabled && enrollment;
 
   const action: string = useMemo(() => {
     if (enrollment) {
@@ -102,12 +116,12 @@ const PrimeTrainingPageMetaData: React.FC<{
       return "continue";
     } else if (trainingInstance.state === "Retired") {
       return "registerInterest";
-    } else if (training.price && getALMConfig().usageType === "aem-commerce") {
+    } else if (isPricingEnabled) {
       return "buyNow";
     } else {
       return "enroll";
     }
-  }, [trainingInstance.state, training.price, enrollment]);
+  }, [enrollment, trainingInstance.state, isPricingEnabled]);
 
   const seatsAvailableText =
     trainingInstance.seatLimit > -1 ? (
@@ -152,36 +166,45 @@ const PrimeTrainingPageMetaData: React.FC<{
   const onPressHandler = async () => {
     try {
       enrollmentHandler();
-      launchPlayerHandler();
+      if (enrollment.state != PENDING_APPROVAL) {
+        launchPlayerHandler();
+      }
     } catch (e) {}
   };
 
-  const addToCart = async (redirectPathName = "") => {
+  useEffect(() => {
+    getAlternateLanguages();
+  }, [alternateLanguages]);
+
+  const getAlternateLanguages = async () => {
+    try {
+      setAlternativesLangAvailable(await alternateLanguages);
+    } catch (e) {}
+  };
+
+  const addToCart = async () => {
     try {
       const { error, totalQuantity } = await addToCartHandler();
-      if (error && error[0]?.message) {
-        alert(
-          true,
-          formatMessage({ id: "alm.addToCart.Error" }, { loType: loType }),
-          AlertType.error
-        );
+      if (error && error[0]?.message) { 
+        if (isPrimeUserLoggedIn) {
+          almAlert(
+            true,
+            formatMessage({ id: "alm.addToCart.error" }, { loType: loType }),
+            AlertType.error
+          );
+        }
       } else {
         getALMObject().updateCart(totalQuantity);
+        if (isPrimeUserLoggedIn) {
+          almAlert(
+            true,
+            formatMessage({ id: "alm.addedToCart" }),
+            AlertType.success
+          );
+        }
       }
-
-      //  else {
-      //
-      //   if (redirectPathName) {
-      //     window.location.pathname = `${redirectPathName}`;
-      //   }
-      // }
     } catch (e) {}
   };
-
-  // const buyNowHandler = async () => {
-  //   const redirectPathName = getALMConfig().commerceBasePath + "/cart";
-  //   await addToCart(redirectPathName);
-  // };
 
   const addProductToCart = async () => {
     await addToCart();
@@ -283,13 +306,21 @@ const PrimeTrainingPageMetaData: React.FC<{
     ""
   );
 
+  const showMinimumCompletion =
+    training.loResourceCompletionCount &&
+    training.loResourceCompletionCount !== trainingInstance.loResources?.length;
+
+  const isSeatAvailable = trainingInstance.seatLimit
+    ? trainingInstance.seatLimit > 0
+    : true;
+
   return (
     <section className={styles.container}>
       {showPreviewButton && (
         <>
           <Button
             variant="primary"
-            UNSAFE_className={`${styles.previewButton} ${styles.commonButton}`}
+            UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
             onPress={launchPlayerHandler}
           >
             {formatMessage({
@@ -309,7 +340,7 @@ const PrimeTrainingPageMetaData: React.FC<{
         {action === "registerInterest" && (
           <Button
             variant="primary"
-            UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
+            UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
           >
             {actionText}
           </Button>
@@ -318,8 +349,9 @@ const PrimeTrainingPageMetaData: React.FC<{
           <>
             <Button
               variant="primary"
-              UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
+              UNSAFE_className={`${styles.primaryButton} ${styles.commonButton}`}
               onPress={onPressHandler}
+              isDisabled={!isSeatAvailable}
             >
               {actionText}
             </Button>
@@ -331,37 +363,28 @@ const PrimeTrainingPageMetaData: React.FC<{
           action === "revisit") && (
           <Button
             variant="primary"
-            UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
+            UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
             onPress={launchPlayerHandler}
           >
             {actionText}
           </Button>
         )}
+
         {action === "buyNow" && (
           <>
-            {/* <div className={styles.buyNowContainer}> */}
-            {/* <Button
-                variant="primary"
-                UNSAFE_className={`${styles.buyNowButton} ${styles.commonButton}`}
-                onPress={buyNowHandler}
-              >
-                {actionText}
-              </Button> */}
-
             <Button
               variant="primary"
-              UNSAFE_className={`${styles.addToCartButton} ${styles.commonButton}`}
+              UNSAFE_className={`${styles.primaryButton} ${styles.commonButton}`}
               onPress={addProductToCart}
-              isDisabled={isTrainingNotSynced}
+              isDisabled={isTrainingNotSynced || !isSeatAvailable}
             >
               {formatMessage(
                 {
                   id: `alm.addToCart`,
                 },
-                { x: training.price }
+                { x: getFormattedPrice(training.price) }
               )}
             </Button>
-            {/* </div> */}
             {trainingNotAvailableForPurchaseText}
             {seatsAvailableText}
           </>
@@ -370,7 +393,7 @@ const PrimeTrainingPageMetaData: React.FC<{
           <>
             <Button
               variant="secondary"
-              UNSAFE_className={`${styles.pendingButton} ${styles.commonButton}`}
+              UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
               isDisabled={true}
             >
               {actionText}
@@ -394,7 +417,7 @@ const PrimeTrainingPageMetaData: React.FC<{
 
         <Button
           variant="primary"
-          UNSAFE_className={`${styles.actionButton} ${styles.commonButton}`}
+          UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
         >
           Add to cart
         </Button>
@@ -402,8 +425,33 @@ const PrimeTrainingPageMetaData: React.FC<{
 
       {/* Minimum Completion Criteria container */}
 
-      {training.loResourceCompletionCount !==
-        trainingInstance.loResources?.length && (
+      {showPriceDetails && (
+        <div className={styles.commonContainer}>
+          <span aria-hidden="true" className={styles.icon}>
+            <Money />
+          </span>
+          <div className={styles.innerContainer}>
+            <div>
+              {formatMessage({
+                id: "alm.purchase.details",
+                defaultMessage: "Purchase Details",
+              })}
+            </div>
+            <div>
+              {formatMessage(
+                {
+                  id: "alm.training.price",
+                  defaultMessage: "Price",
+                },
+                { amount: getFormattedPrice(training.price) }
+              )}
+            </div>
+            <div>{modifyTime(enrollment.dateEnrolled, locale)}</div>
+          </div>
+        </div>
+      )}
+
+      {showMinimumCompletion && (
         <div className={styles.commonContainer}>
           <span aria-hidden="true" className={styles.minimumCriteria}>
             {minimumCriteria.value}
@@ -473,6 +521,38 @@ const PrimeTrainingPageMetaData: React.FC<{
           </div>
         </div>
       )}
+
+      {/* Alternate Languages */}
+      {alternativesLangAvailable.length > 0 && (
+        <div className={styles.commonContainer}>
+          <span aria-hidden="true" className={styles.icon}>
+            <GlobeGrid />
+          </span>
+          <div className={styles.innerContainer}>
+            <label className={styles.alternativesAvailable}>
+              {formatMessage({
+                id: "alm.overview.alternativesAvailable",
+                defaultMessage: "Alternatives Available",
+              })}
+            </label>
+            <ContextualHelp variant="help">
+              <Content>
+                <Text>
+                  {formatMessage({
+                    id: "alm.overview.alternativesAvailable.toolTip",
+                    defaultMessage:
+                      "You can change the language or the format of the content in the player.",
+                  })}
+                </Text>
+              </Content>
+            </ContextualHelp>
+            {alternativesLangAvailable?.map((language) => {
+              return <div>{language}</div>;
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Certificate Type container */}
       {isCertification && (
         <div className={styles.commonContainer}>

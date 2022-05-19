@@ -31,7 +31,7 @@ import { QueryParams } from "../../utils/restAdapter";
 import { getPreferredLocalizedMetadata, GetTranslation } from "../../utils/translationService";
 
 export const useTrainingCard = (training: PrimeLearningObject) => {
-  const [alert] = useAlert();
+  const [almAlert] = useAlert();
   const { locale } = getALMConfig();
 
   let {
@@ -95,7 +95,7 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
             loInstanceId: training.instances[0].id,
           };
           await APIServiceInstance.enrollToTraining(queryParam);
-          alert(true, GetTranslation("alm.jobaid.added"), AlertType.success);
+          almAlert(true, GetTranslation("alm.jobaid.added"), AlertType.success);
         }
         //if user logged in, then enroll if not already enrolled.
         //need to enroll silently here and then do the following

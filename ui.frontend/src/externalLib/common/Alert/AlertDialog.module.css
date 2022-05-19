@@ -1,6 +1,8 @@
 @import "../../styles/variables.css";
 
 .alertbackdrop {
+  display: flex;   
+  justify-content: center;
   position: fixed;
   width: 100%;
   height: 100%;
@@ -15,6 +17,8 @@
 }
 
 .alert {
+  display: flex;
+  justify-content: start;
   left: 0;
   right: 0;
   margin: 0;
@@ -28,13 +32,12 @@
   border-radius: 0;
   max-width: 60rem;
   min-height: 7rem;
-  width: 400px;
+  min-width: 18.75rem;
   height: 7rem;  
   padding: 1rem;
   position: relative;
   top: 18rem;
   font-size: var(----prime-font-size-16);
-  display: inline-block;  
 }
 
 .error {
@@ -44,6 +47,7 @@
 .alertIcon {
   width: 50px;
   height: 65px;
+  margin: 0px 20px;
 }
 
 .success {
@@ -53,7 +57,8 @@
 .alertIconType {
   background-repeat: no-repeat;
   float: left;
-  margin-top: 2px;
+  display: flex;
+  align-items: center;
 }
 
 .alertMessage {
@@ -62,5 +67,8 @@
   max-width: 400px;
   text-align: center;
   margin-top: 20px;
+  margin: 0px 20px;
+  display: flex;
+  align-items: center;
 }
 

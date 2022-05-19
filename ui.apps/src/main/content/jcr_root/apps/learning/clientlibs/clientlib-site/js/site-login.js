@@ -37,8 +37,12 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   const CURRENT_USAGE_TYPE = window.ALM.ALMConfig.usageType || PRIME_USAGE_TYPE;
 
   const cleanUpUserData = () => {
-    document.cookie = ACCESS_TOKEN_COOKIE_NAME + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-    document.cookie = COMMERCE_TOKEN_COOKIE_NAME + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    document.cookie =
+      ACCESS_TOKEN_COOKIE_NAME +
+      "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    document.cookie =
+      COMMERCE_TOKEN_COOKIE_NAME +
+      "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
     window.ALM.storage.removeItem("user");
     window.ALM.storage.removeItem("CART_ID");
     window.ALM.storage.removeItem("PRIME_CATALOG_FILTER");
@@ -120,18 +124,24 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     }
   };
 
-  const isSignOutPage = () => window.location.pathname === window.ALM.getALMConfig().signOutPath;
+  const isSignOutPage = () =>
+    window.location.pathname === window.ALM.getALMConfig().signOutPath;
 
-  const isCommunityPage = () => window.location.pathname === window.ALM.getALMConfig().communityPath;
+  const isCommunityPage = () =>
+    window.location.pathname === window.ALM.getALMConfig().communityPath;
 
-  const isCommerceSignInPage = () => window.location.pathname === window.ALM.getALMConfig().commerceSignInPath;
+  const isCommerceSignInPage = () =>
+    window.location.pathname === window.ALM.getALMConfig().commerceSignInPath;
 
-  const isLearningPage = () => window.location.pathname === window.ALM.getALMConfig().learningPath;
+  const isLearningPage = () =>
+    window.location.pathname === window.ALM.getALMConfig().learningPath;
 
-  const isEmailRedirectPage = () => window.location.pathname === window.ALM.getALMConfig().emailRedirectPath;
+  const isEmailRedirectPage = () =>
+    window.location.pathname === window.ALM.getALMConfig().emailRedirectPath;
 
   const handlePageLoad = () => {
-    if ((!isPrimeUserLoggedIn()) || ((CURRENT_USAGE_TYPE === COMMERCE_USAGE_TYPE) && !isCommerceLoggedIn())) {
+    if (!isPrimeUserLoggedIn() || 
+        (!isAuthor() && CURRENT_USAGE_TYPE === COMMERCE_USAGE_TYPE && !isCommerceLoggedIn())) {
       cleanUpUserData();
     }
     // If sign-out or sign-in Page do nothing
@@ -157,7 +167,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     }
   };
 
-  const isAuthor = () =>  window.ALM.ALMConfig.authorMode == true;
+  const isAuthor = () => window.ALM.ALMConfig.authorMode == true;
 
   function getCpOauthUrl() {
     const almBaseURL = window.ALM.ALMConfig.almBaseURL;
@@ -210,10 +220,10 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   async function getALMUser() {
     if (!window.ALM.isPrimeUserLoggedIn()) {
-      window.sessionStorage.removeItem("user");
+      window.ALM.storage.removeItem("user");
       return;
     }
-    let user = window.sessionStorage.getItem("user");
+    let user = window.ALM.storage.getItem("user");
     if (user) {
       return user;
     }
@@ -232,14 +242,14 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
       if (userResponse && userResponse.status == 200) {
         user = await userResponse.json();
         const userStr = JSON.stringify(user);
-        window.sessionStorage.setItem("user", userStr);
+        window.ALM.storage.setItem("user", userStr, 1800);
         return userStr;
       } else {
         console.error("User call failed!!");
-        window.sessionStorage.removeItem("user");
+        window.ALM.storage.removeItem("user");
       }
     } catch (e) {
-      window.sessionStorage.removeItem("user");
+      window.ALM.storage.removeItem("user");
       throw e;
     }
   }
@@ -268,7 +278,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   };
 
   async function updateALMUser() {
-    window.sessionStorage.removeItem("user");
+    window.ALM.storage.removeItem("user");
     return getALMUser();
   }
 
@@ -316,9 +326,9 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     return cookieValues ? cookieValues.pop() : "";
   };
 
-  const isCommerceLoggedIn = () => (getCommerceToken() === "") ? false : true;
+  const isCommerceLoggedIn = () => (getCommerceToken() === "" ? false : true);
 
-  const isPrimeUserLoggedIn = () => (getAccessToken() === "") ? false : true;
+  const isPrimeUserLoggedIn = () => (getAccessToken() === "" ? false : true);
 
   const handleLogOut = () => {
     cleanUpUserData();
@@ -373,8 +383,6 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     }
   };
 
-  handlePageLoad();
-
   window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
   window.ALM.getAccessToken = getAccessToken;
   window.ALM.getCommerceToken = getCommerceToken;
@@ -385,4 +393,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.handleLogOut = handleLogOut;
   window.ALM.handleRegister = handleRegister;
   window.ALM.getAccountActiveFields = getAccountActiveFields;
+
+  handlePageLoad();
+  
 })(window, document, Granite, jQuery);

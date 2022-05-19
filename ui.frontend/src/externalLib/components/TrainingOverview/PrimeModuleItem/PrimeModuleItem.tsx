@@ -14,6 +14,7 @@ import CheckmarkCircle from "@spectrum-icons/workflow/CheckmarkCircle";
 import Clock from "@spectrum-icons/workflow/Clock";
 import Link from "@spectrum-icons/workflow/Link";
 import Location from "@spectrum-icons/workflow/Location";
+import Asterisk from "@spectrum-icons/workflow/Asterisk";
 import LockClosed from "@spectrum-icons/workflow/LockClosed";
 import Seat from "@spectrum-icons/workflow/Seat";
 import User from "@spectrum-icons/workflow/User";
@@ -21,6 +22,7 @@ import Visibility from "@spectrum-icons/workflow/Visibility";
 import React, {useState, useRef, useEffect} from "react";
 import store from "../../../../store/APIStore";
 import { useIntl } from "react-intl";
+import { AlertDialog, AlertType } from "../../../common/Alert/AlertDialog";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
@@ -65,6 +67,7 @@ import styles from "./PrimeModuleItem.module.css";
 const CLASSROOM = "Classroom";
 const VIRTUAL_CLASSROOM = "Virtual Classroom";
 const ELEARNING = "Elearning";
+const PENDING_APPROVAL = "PENDING_APPROVAL";
 
 interface ActionMap {
   Classroom: string;
@@ -163,6 +166,13 @@ const PrimeModuleItem: React.FC<{
     hasSessionDetails
   );
 
+  const loResourceMandatory = (): boolean => {
+    if (loResource && loResource.mandatory) {
+      return true;
+    }
+    return false;
+  };
+
   const itemClickHandler = (event: any) => {
     if (!canPlay) {
       //show popup
@@ -174,7 +184,7 @@ const PrimeModuleItem: React.FC<{
     }
     const enrollment = loResource?.learningObject?.enrollment;
     if (
-      (enrollment && !isClassroomOrVC) ||
+      (enrollment && !isClassroomOrVC && enrollment.state != PENDING_APPROVAL) ||
       (!enrollment &&
         loResource.previewEnabled &&
         getALMObject().isPrimeUserLoggedIn())
@@ -285,17 +295,15 @@ const PrimeModuleItem: React.FC<{
 
   return (
     <>
-      {showCannotSkipDialog && (
-        <PrimeAlertDialog
-          variant="warning"
-          title={GetTranslation(
-            "alm.overview.cannot.skip.ordered.module",
-            true
-          )}
-          primaryActionLabel="Ok"
-          classes={styles.warningDialog}
-        ></PrimeAlertDialog>
-      )}
+      <AlertDialog
+        type={AlertType.error}
+        message={GetTranslation(
+          "alm.overview.cannot.skip.ordered.module",
+          true
+        )}
+        show={showCannotSkipDialog}
+        // classes={styles.warningDialog}
+      ></AlertDialog>
       <li className={styles.container}>
         <div
           className={`${styles.headerContainer} ${
@@ -308,6 +316,13 @@ const PrimeModuleItem: React.FC<{
           role="button"
         >
           <div className={styles.icon} aria-hidden="true">
+            {loResourceMandatory() ? (
+              <span className={styles.mandatoryModule}>
+                <Asterisk />
+              </span>
+            ) : (
+              ""
+            )}
             {moduleIcon}
             {gradeHasPassed() ? (
               <span className={styles.modulePassed}>

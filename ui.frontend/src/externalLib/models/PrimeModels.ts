@@ -1148,3 +1148,9 @@ export interface PrimeFileUpload {
   fileName: string;
   uploadProgress: number;
 }
+
+export interface MaxPrice {
+  course: number;
+  learningProgram: number;
+  certification: number;
+}

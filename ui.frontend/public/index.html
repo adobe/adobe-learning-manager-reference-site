@@ -93,9 +93,10 @@
         magentoGraphqlEndpoint: "/magento/graphql",
         locale: "en-US",
         cdnBaseUrl: "https://cpcontentsqe.adobe.com",
-        usageType: "aem-commerce",
+        usageType: "aem-es",
         esBaseUrl:
-          "https://primeapps-stage.adobe.com/almsearch/api/v1/qe/7110/a75477eb-2a4c-4f6e-b897-a6506da18e3f",
+          "https://primeapps-stage.adobe.com/almsearch/api/v1/qe/8814/3453b894-e38e-40c9-ad0c-82b3932e3deb/search",
+        /* "https://primeapps-stage.adobe.com/almsearch/api/v1/qe/7110/a75477eb-2a4c-4f6e-b897-a6506da18e3f", */
         instancePath: "/instance.html",
         catalogPath: "/explore.html",
         trainingOverviewPath: "/trainingOverview.html",
@@ -105,7 +106,8 @@
         commerceBasePath: "",
         //almCdnBaseUrl: "https://cpcontentsqe.adobe.com",
         almCdnBaseUrl:
-          "https://cpcontentsqe.adobe.com/public/guest/qe/api/21135923-b63f-4a0a-801e-023c9e5bf72f/7110",
+          "https://cpcontentsqe.adobe.com/public/guest/qe/api/3453b894-e38e-40c9-ad0c-82b3932e3deb/8814",
+        /* "https://cpcontentsqe.adobe.com/public/guest/qe/api/21135923-b63f-4a0a-801e-023c9e5bf72f/7110", */
         /* "https://cpcontentsqe.adobe.com/public/guest/qe/api/c6caced3-3750-4647-8868-08aa7317726a/8722", */
         primeTileColors: {
           0: "#00000",
@@ -123,7 +125,7 @@
       };
 
       const getAccessToken = () => {
-        return "15f526dd272ce02ec74115793dd42635";
+        return "446ef868aad65e6e647c49542c4620bc";
       };
       const COMMERCE_TOKEN_COOKIE_NAME = "alm_commerce_token";
 
@@ -182,13 +184,15 @@
 
       async function getALMUser() {
         if (!window.ALM.isPrimeUserLoggedIn()) {
-          window.sessionStorage.removeItem("user");
+          window.ALM.storage.removeItem("user");
           return;
         }
-        let user = window.sessionStorage.getItem("user");
+
+        let user = window.ALM.storage.getItem("user");
         if (user) {
           return user;
         }
+        console.log("Fetch user");
         const primeApiURL = window.ALM.ALMConfig.primeApiURL;
         const userUrl = `${primeApiURL}/user?include=account`;
         const headers = {
@@ -204,19 +208,22 @@
           if (userResponse && userResponse.status == 200) {
             user = await userResponse.json();
             const userStr = JSON.stringify(user);
-            window.sessionStorage.setItem("user", userStr);
+            console.log("set user");
+            window.ALM.storage.setItem("user", userStr, 1800);
             return userStr;
           } else {
             console.error("User call failed!!");
+            window.ALM.storage.removeItem("user");
           }
         } catch (e) {
-          window.sessionStorage.removeItem("user");
+          window.ALM.storage.removeItem("user");
+          console.log("Fetch user exception " + e);
           throw e;
         }
       }
 
       const updateALMUser = async () => {
-        window.sessionStorage.removeItem("user");
+        window.ALM.storage.removeItem("user");
         return getALMUser();
       };
 
@@ -325,13 +332,13 @@
       window.ALM.getAccountActiveFields = getAccountActiveFields;
       window.ALM.updateAccountActiveFieldsDetails = updateAccountActiveFieldsDetails;
       window.ALM.updateALMUser = updateALMUser;
+      window.ALM.storage = window.ALM.storage || new BrowserPersistence();
       window.ALM.updateCart = function (value) {
         console.log(value);
       };
       if (isPrimeUserLoggedIn()) {
         getALMUser();
       }
-      window.ALM.storage = window.ALM.storage || new BrowserPersistence();
     </script>
     <title>React App</title>
   </head>

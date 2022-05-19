@@ -97,7 +97,7 @@ export const getOrUpdateCatalogFilters = async (): Promise<
     });
     setItemToStorage(PRIME_CATALOG_FILTER, catalogPromise);
     return JsonApiParse(catalogPromise)?.catalogList;
-  } catch (e) {}
+  } catch (e) { }
 };
 
 const getCatalogParamsForAPi = async (
@@ -149,6 +149,9 @@ export async function getParamsForCatalogApi(filterState: CatalogFilterState) {
       params["filter.catalogIds"] = await getCatalogParamsForAPi(
         filterState.catalogs
       );
+    }
+    if (filterState.price && catalogAttributes?.price === "true") {
+      params["filter.priceRange"] = filterState.price
     }
   }
   return params;

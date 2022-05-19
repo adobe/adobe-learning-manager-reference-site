@@ -9,23 +9,18 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import APIServiceInstance from "../../common/APIService";
 import { PrimeSkill } from "../../models/PrimeModels";
-import {
-  loadSkills,
-  paginateSkills,
-} from "../../store/actions/user/action";
+import { loadSkills, paginateSkills } from "../../store/actions/user/action";
 import { State } from "../../store/state";
 import { getALMConfig } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
 
 export const useSkills = () => {
-  const { items, next } = useSelector(
-    (state: State) => state.skill
-  );
+  const { items, next } = useSelector((state: State) => state.skill);
   const dispatch = useDispatch();
   const fetchSkills = useCallback(async () => {
     try {

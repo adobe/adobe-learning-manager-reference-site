@@ -74,7 +74,7 @@ const useCardBackgroundStyle = (
   }, [cardIconUrl, color, training]);
 };
 
-const useSkills = (training: PrimeLearningObject): Skill[] => {
+const useTrainingSkills = (training: PrimeLearningObject): Skill[] => {
   return useMemo(() => {
     const trainingSkills = training?.skills.map((skill) => {
       const skillLevel = skill.skillLevel;
@@ -117,6 +117,22 @@ const useLocalizedMetaData = (
     }
     return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
   }, [training, locale]);
+};
+
+const getLocale = (
+  trainingInstance: PrimeLearningObjectInstance,
+  locale: Set<string>,
+  currentLocale: string
+) => {
+  if (trainingInstance && trainingInstance.loResources) {
+    trainingInstance.loResources.forEach((loResource) => {
+      loResource.resources?.forEach((resource) => {
+        if (resource?.locale != currentLocale) {
+          locale.add(resource?.locale);
+        }
+      });
+    });
+  }
 };
 
 const filterTrainingInstance = (
@@ -174,11 +190,12 @@ const useResource = (
 export {
   useCardIcon,
   useCardBackgroundStyle,
-  useSkills,
+  useTrainingSkills,
   useBadge,
   useLocalizedMetaData,
   filterTrainingInstance,
   filterLoReourcesBasedOnResourceType,
   useResource,
   filteredResource,
+  getLocale,
 };

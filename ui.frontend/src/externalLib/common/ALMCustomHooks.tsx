@@ -9,7 +9,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { PrimeLearningObject } from "..";
+import { MaxPrice, PrimeLearningObject } from "..";
 import { CatalogFilterState } from "../store/reducers/catalog";
 import {
   getOrUpdateCatalogFilters,
@@ -22,6 +22,7 @@ import {
   getQueryParamsIObjectFromUrl,
 } from "../utils/global";
 import { JsonApiParse } from "../utils/jsonAPIAdapter";
+import { isCommerceEnabled } from "../utils/price";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
 import ICustomHooks from "./ICustomHooks";
 
@@ -119,6 +120,19 @@ export default class ALMCustomHooks implements ICustomHooks {
     const config = getALMConfig();
     const queryParams = getQueryParamsIObjectFromUrl();
 
+    let maxPrice = 0;
+    if (isCommerceEnabled()) {
+      try {
+        const response = await RestAdapter.get({
+          url: `${config.primeApiURL}ecommerce/maxPrice?filter.loTypes=course%2ClearningProgram%2Ccertification`,
+        });
+        const parsedResponse: MaxPrice = JSON.parse(response as string);
+        maxPrice = Math.max(...Object.values(parsedResponse));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
     const [skillsPromise, tagsPromise, catalogPromise] = await Promise.all([
       RestAdapter.get({
         url: `${config.primeApiURL}data?filter.skillName=true`,
@@ -151,7 +165,6 @@ export default class ALMCustomHooks implements ICustomHooks {
     }));
     catalogList = updateFilterList(catalogList, queryParams, "catalogs");
     const defaultFiltersState = getDefaultFiltersState();
-
     return {
       ...defaultFiltersState,
       skillName: {
@@ -165,6 +178,10 @@ export default class ALMCustomHooks implements ICustomHooks {
       catalogs: {
         ...defaultFiltersState.catalogs,
         list: catalogList,
+      },
+      price: {
+        ...defaultFiltersState.price,
+        maxPrice: maxPrice,
       },
     };
     // return { skillsList, tagsList, catalogList };

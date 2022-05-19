@@ -24,7 +24,8 @@ import {
   RESET_SEARCH_TEXT,
   UPDATE_SKILLLEVEL_FILTERS,
   UPDATE_DURATION_FILTERS,
-  UPDATE_CATALOGS_FILTERS
+  UPDATE_CATALOGS_FILTERS,
+  UPDATE_PRICE_FILTERS
 } from "./actionTypes";
 
 export const loadTrainings = (payload: any): AnyAction => ({
@@ -94,5 +95,11 @@ export const paginateTrainings = (payload: {
   next: string;
 }): AnyAction => ({
   type: PAGINATE_TRAININGS,
+  payload,
+});
+
+
+export const updatePriceFilter = (payload: any): AnyAction => ({
+  type: UPDATE_PRICE_FILTERS,
   payload,
 });

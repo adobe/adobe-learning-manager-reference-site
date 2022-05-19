@@ -14,7 +14,7 @@ import { Provider as ReduxProvider } from "react-redux"; //
 import store from "../store/APIStore";
 
 /**
- * List of context providers that are required to run Venia
+ * List of context providers that are required to run Learning
  *
  * @property {React.Component[]} contextProviders
  */
@@ -23,9 +23,6 @@ import store from "../store/APIStore";
 export const AppContextProvider = (props: React.PropsWithChildren<{}>) => {
   return (
     <ReduxProvider store={store}>
-      {/* {contextProviders.reduceRight((child, Provider) => {
-        return <Provider>{child}</Provider>;
-      }, props.children)} */}
       {props.children}
     </ReduxProvider>
   );
