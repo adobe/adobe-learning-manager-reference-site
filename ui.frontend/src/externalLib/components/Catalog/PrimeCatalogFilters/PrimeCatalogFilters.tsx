@@ -52,7 +52,8 @@ const PrimeCatalogFilters = (props: any) => {
         end: price.list[1].value || price.maxPrice,
       });
     }
-  }, [price]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ price?.maxPrice]);
 
   if (isLoading) {
     return <ALMLoader />;
