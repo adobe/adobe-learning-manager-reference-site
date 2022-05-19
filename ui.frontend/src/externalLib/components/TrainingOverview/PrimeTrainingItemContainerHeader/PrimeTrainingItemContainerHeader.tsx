@@ -12,7 +12,6 @@ governing permissions and limitations under the License.
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useIntl } from "react-intl";
-import { CardBgStyle } from "../../../models/custom";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
@@ -33,7 +32,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
   launchPlayerHandler?: Function;
   isPartOfLP?: boolean;
   showMandatoryLabel?: boolean;
-  isprerequisiteLO?: boolean
+  isprerequisiteLO?: boolean;
 }> = (props) => {
   const {
     name,
@@ -51,7 +50,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
     ? training.authorNames.join(", ")
     : "";
 
-  const { cardIconUrl, color } = useCardIcon(training);         
+  const { cardIconUrl, color } = useCardIcon(training);
   const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
   let loType = training.loType;
 
@@ -60,7 +59,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
 
     // For prerequisiteLOs never open the Launch Player.
     if (event.target?.tagName !== "A" && !isprerequisiteLO) {
-      if (training.enrollment && launchPlayerHandler!=undefined) {
+      if (training.enrollment && launchPlayerHandler != undefined) {
         launchPlayerHandler({ id: training.id });
       }
     } else {
@@ -90,8 +89,10 @@ const PrimeTrainingItemContainerHeader: React.FC<{
       {/* <h2 className={styles.courseInfoHeader}>{name} </h2> */}
       <div className={styles.metadata}>
         <div className={styles.metadataContents}>
-          <div>{GetTranslation(`alm.catalog.card.${loType}`, true)}</div>
-          {(isprerequisiteLO && !loType) ? "":authorNames.length ? (
+          <div>{GetTranslation(`alm.training.${loType}`, true)}</div>
+          {isprerequisiteLO && !loType ? (
+            ""
+          ) : authorNames.length ? (
             <>
               <div className={styles.metadata__separator}></div>
               <div className={styles.authorNames}>{authorNames}</div>
@@ -99,7 +100,9 @@ const PrimeTrainingItemContainerHeader: React.FC<{
           ) : (
             ""
           )}
-          {isprerequisiteLO? "" : training.duration ? (
+          {isprerequisiteLO ? (
+            ""
+          ) : training.duration ? (
             <>
               <div className={styles.metadata__separator}></div>
               <div>{convertSecondsToTimeText(training.duration)}</div>
