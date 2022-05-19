@@ -328,10 +328,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   const isCommerceLoggedIn = () => (getCommerceToken() === "" ? false : true);
 
-  const isPrimeUserLoggedIn = () => {
-    const accessToken = getAccessToken();
-    return (accessToken && accessToken !== "");
-  };
+  const isPrimeUserLoggedIn = () => (getAccessToken() === "" ? false : true);
 
   const handleLogOut = () => {
     cleanUpUserData();

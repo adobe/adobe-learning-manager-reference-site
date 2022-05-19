@@ -29,7 +29,8 @@ governing permissions and limitations under the License.
     .set("catalogPageLink", ["catalogPage"])
     .set("myLearningPageLink", ["myLearningPage"])
     .set("postsLink", ["boardsPage"])
-    .set("allboardsPageLink", ["boardsPage"]);
+    .set("allboardsPageLink", ["boardsPage"])
+    .set("skillsPageLink", ["profilePage"]);
 
   const WIDET_CONFIG_DATA = "data-cp-widget-configs",
     WIDGET_REF_DATA = "cp-widget-ref",
@@ -129,6 +130,10 @@ governing permissions and limitations under the License.
 
         case "boardsPage":
           window.ALM.navigateToBoardsPage();
+          break;
+
+        case "profilePage":
+          window.ALM.navigateToProfilePage();
           break;
           
         default:
