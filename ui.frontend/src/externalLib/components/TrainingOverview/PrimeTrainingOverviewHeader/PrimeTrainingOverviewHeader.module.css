@@ -60,7 +60,11 @@ governing permissions and limitations under the License.
   text-shadow: var(--prime-text-shadow);
 }
 .progressBar div[class^="spectrum-BarLoader-fill"] {
-  background: linear-gradient(90deg, #55b36f, #0f870f);
+  background: #eaeaea;
+}
+
+.progressBar div[class^="spectrum-BarLoader-track"] {
+  background: #9d9d9d;
 }
 
 .headingContainer {
