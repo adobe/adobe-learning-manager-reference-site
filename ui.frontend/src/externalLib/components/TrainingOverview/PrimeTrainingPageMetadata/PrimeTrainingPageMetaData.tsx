@@ -89,7 +89,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   const locale = config.locale;
   const enrollment = training.enrollment;
   const loType = training.loType;
-
+  const isPrimeUserLoggedIn = getALMObject().isPrimeUserLoggedIn();
   const isPricingEnabled =
     training.price && getALMConfig().usageType === ADOBE_COMMERCE;
 
@@ -185,19 +185,23 @@ const PrimeTrainingPageMetaData: React.FC<{
   const addToCart = async () => {
     try {
       const { error, totalQuantity } = await addToCartHandler();
-      if (error && error[0]?.message) {
-        almAlert(
-          true,
-          formatMessage({ id: "alm.addToCart.error" }, { loType: loType }),
-          AlertType.error
-        );
+      if (error && error[0]?.message) { 
+        if (isPrimeUserLoggedIn) {
+          almAlert(
+            true,
+            formatMessage({ id: "alm.addToCart.error" }, { loType: loType }),
+            AlertType.error
+          );
+        }
       } else {
         getALMObject().updateCart(totalQuantity);
-        almAlert(
-          true,
-          formatMessage({ id: "alm.addedToCart" }),
-          AlertType.success
-        );
+        if (isPrimeUserLoggedIn) {
+          almAlert(
+            true,
+            formatMessage({ id: "alm.addedToCart" }),
+            AlertType.success
+          );
+        }
       }
     } catch (e) {}
   };
