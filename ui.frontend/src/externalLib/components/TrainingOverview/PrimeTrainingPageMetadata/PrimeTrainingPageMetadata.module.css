@@ -24,7 +24,43 @@ governing permissions and limitations under the License.
   min-width: 70px;
   display: block;
   border-radius: 2px;
+  border-radius: 20px;
 }
+
+.secondaryButton {
+  border: 2px solid var(--prime-color-primary);
+  color: var(--prime-color-primary);
+  background-color: var(--prime-color-white);
+}
+
+.secondaryButton:hover,
+.secondaryButton:focus,
+.secondaryButton:focus-visible {
+  color: var(--prime-color-white);
+  background-color: var(--prime-color-primary);
+  border-color: var(--prime-color-primary);
+  outline: none;
+}
+/* .primaryButton::after {
+  border-radius: 0;
+} */
+
+.primaryButton {
+  background-color: var(--prime-color-primary);
+  border: 2px solid var(--prime-color-primary) !important;
+  color: var(--prime-color-white);
+}
+.primaryButton:hover,
+.primaryButton:focus,
+.primaryButton:focus-visible {
+  background-color: var(--prime-color-primary);
+  border: 2px solid var(--prime-color-primary) !important;
+  color: var(--prime-color-white);
+  outline: none;
+}
+/* .secondaryButton::after {
+  border-radius: 0;
+} */
 
 .pendingButton {
   background-color: var(--prime-color-nc2) !important;
@@ -33,35 +69,6 @@ governing permissions and limitations under the License.
   border: none;
 }
 
-.previewButton {
-  border: 2px solid var(--prime-color-primary);
-  color: var(--prime-color-primary);
-}
-
-.previewButton:hover,
-.previewButton:focus,
-.previewButton:focus-visible {
-  background-color: var(--prime-color-primary);
-  border: 2px solid var(--prime-color-primary) !important;
-  color: var(--prime-color-white);
-}
-
-.actionButton {
-  border: 2px solid var(--prime-color-primary);
-  color: var(--prime-color-primary);
-  background-color: var(--prime-color-white);
-}
-.actionButton:hover,
-.actionButton:focus,
-.actionButton:focus-visible {
-  color: var(--prime-color-white);
-  background-color: var(--prime-color-primary);
-  border-color: var(--prime-color-primary);
-  outline: none;
-}
-.actionButton::after {
-  border-radius: 0;
-}
 
 .buyNowContainer {
   background: var(--prime-color-nc5);
@@ -69,27 +76,7 @@ governing permissions and limitations under the License.
   padding: 20px;
   margin-bottom: 20px;
 }
-.addToCartButton {
-  border-radius: 20px;
-  color: var(--prime-color-black);
-}
-.buyNowButton {
-  background: #ffc80f;
-  border: 2px solid #ffc80f;
-  border-radius: 20px;
-  color: var(--prime-color-black);
-  border: none;
-  margin-bottom: 10px;
-}
 
-.buyNowButton:hover,
-.buyNowButton:focus,
-.buyNowButton:focus-visible {
-  color: #ffc80f;
-  background-color: var(--prime-color-black);
-  border-color: var(--prime-color-black);
-  outline: none;
-}
 
 .commonContainer {
   padding-bottom: 20px;

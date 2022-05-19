@@ -32,6 +32,7 @@ governing permissions and limitations under the License.
   max-height: 175px;
   padding-bottom: 20px;
   border-bottom: 2px solid var(--prime-color-nc5);
+  overflow-x: hidden;
 }
 .filtersLabel {
   font-size: var(--prime-font-size-16);
@@ -62,4 +63,25 @@ governing permissions and limitations under the License.
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+.priceFilterContainer {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-around;
+  align-content: center;
+}
+.priceToLabel {
+  margin: 5px 10px;
+}
+.listContainer .customSlider {
+  display: inline-block;
+}
+.customSlider label[class^="spectrum-Slider-label"] {
+  display: none;
+}
+
+@media screen and (max-width: 414px) {
+  .priceFilterContainer div[class^="spectrum-Stepper-button"] {
+    width: 30px!important;
+  }
 }

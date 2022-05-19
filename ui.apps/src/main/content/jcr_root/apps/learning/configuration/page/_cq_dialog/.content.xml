@@ -210,6 +210,13 @@
                         name="./nomenclatureData"
                         value=""
                         cq:showOnCreate="{Boolean}true"/>
+                    
+                    <accountData
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/foundation/form/hidden"
+                        name="./accountData"
+                        value=""
+                        cq:showOnCreate="{Boolean}true"/>
 
                     <nomenclature
                         granite:id="fetch-nomenclature-button"

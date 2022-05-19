@@ -6,6 +6,7 @@
         cq:lastModifiedBy="admin"
         cq:template="/conf/learning/settings/wcm/templates/commerce-page"
         jcr:primaryType="cq:PageContent"
+        id="learning-body"
         jcr:title="Commerce"
         sling:resourceType="learning/components/page">
         <root

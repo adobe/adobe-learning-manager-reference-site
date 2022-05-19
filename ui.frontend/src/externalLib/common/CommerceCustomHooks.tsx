@@ -14,6 +14,7 @@ import {
   GET_COMMERCE_FILTERS,
   GET_COMMERCE_TRAININGS,
 } from "../commerce";
+import { GET_MAX_PRICE } from "../commerce/commerce.gql";
 import { apolloClient } from "../contextProviders";
 import { CatalogFilterState } from "../store/reducers/catalog";
 import { getIndividualFiltersForCommerce } from "../utils/catalog";
@@ -48,6 +49,7 @@ const ALM_CATALOG = "almcatalog";
 const ALM_SKILLS = "almskill";
 const ALM_SKILL_LEVELS = "almskilllevel";
 const ALM_TAGS = "almtags";
+const ALM_PRICE = "price";
 
 export const ALMToCommerceTypes = {
   loTypes: "almlotype",
@@ -68,8 +70,8 @@ const transformFilters = (
   item: FilterItem,
   filterType: string
 ) => {
-  let defaultFilters = defaultFiltersState[filterType as keyof FilterState]
-    .list!;
+  let defaultFilters =
+    defaultFiltersState[filterType as keyof FilterState].list!;
   item.attribute_options.forEach((attributeOption) => {
     const { label } = attributeOption;
     const index = defaultFilters?.findIndex((type) => type.value === label);
@@ -162,6 +164,14 @@ const getTransformedFilter = async (filterState: CatalogFilterState) => {
         filterState,
         "tagName"
       ),
+    };
+  }
+
+  if (filterState.price) {
+    const pricesArray = filterState.price.split("-");
+    filter[ALM_PRICE] = {
+      from: pricesArray[0],
+      to: pricesArray[1],
     };
   }
   return filter;
@@ -371,6 +381,15 @@ export default class CommerceCustomHooks implements ICustomHooks {
             }
           }
         );
+        const response = await apolloClient.query({
+          query: GET_MAX_PRICE,
+        });
+        let maxPrice =
+          response.data?.products?.items[0]?.price_range?.maximum_price
+            ?.regular_price?.value || 0;
+        if (defaultFiltersState.price.list) {
+          defaultFiltersState.price.maxPrice = maxPrice;
+        }
         return defaultFiltersState;
       }
     } catch (e) {

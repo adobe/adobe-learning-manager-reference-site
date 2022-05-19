@@ -724,7 +724,7 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="LRNG Commerce Page"
                     sling:resourceType="wcm/core/components/policy/policy"
-                    clientlibs="[learning.dependencies,learning.site, learning.ui, commerce.ui]">
+                    clientlibs="[learning.site, learning.ui, commerce.ui]">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_654239029509197>
                 <policy
@@ -732,8 +732,7 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Generic Page"
                     sling:resourceType="wcm/core/components/policy/policy"
-                    clientlibs="[learning.dependencies,learning.site, learning.ui]"
-                    clientlibsJsHead="learning.dependencies">
+                    clientlibs="[learning.site, learning.ui]">
                     <jcr:content
                         jcr:mixinTypes="[]"
                         jcr:primaryType="nt:unstructured"/>
@@ -746,8 +745,7 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Experience Fragment Web"
                     sling:resourceType="wcm/core/components/policy/policy"
-                    clientlibs="[learning.dependencies,learning.site, learning.ui]"
-                    clientlibsJsHead="learning.dependencies">
+                    clientlibs="[learning.site, learning.ui]">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_1572461714642>
             </xfpage>

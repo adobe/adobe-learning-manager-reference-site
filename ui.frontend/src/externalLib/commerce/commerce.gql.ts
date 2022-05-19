@@ -172,3 +172,27 @@ export const ADD_PRODUCTS_TO_CART = gql`
     }
   }
 `;
+export const GET_MAX_PRICE = gql`
+query getMaxPrice {
+  products(
+    pageSize: 1
+    currentPage: 1
+    search: ""
+    sort:{
+      price: DESC
+    }
+  ) {
+    items {
+    	price_range{
+        maximum_price {
+          regular_price {
+            currency
+            value
+          }
+        }
+      }
+    }
+  }
+}
+`;
+

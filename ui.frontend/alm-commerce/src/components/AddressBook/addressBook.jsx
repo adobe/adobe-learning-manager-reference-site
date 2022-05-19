@@ -10,15 +10,17 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-import { Button, TextField } from "@adobe/react-spectrum";
+import { Button, TextField, Form } from "@adobe/react-spectrum";
 import React, { useEffect, useState } from "react";
 import { useAddressBook } from "../../hooks/AddressBook/useAddressBook";
 import { getCartId } from "../../utils/global";
 import CommerceLoader from "../Common/Loader";
 import styles from "./addressBook.module.css";
 
+const mandatorySvg = (<svg class="spectrum-Icon_368b34 spectrum-UIIcon-Asterisk_368b34 spectrum-FieldLabel-requiredIcon_d2db1f" focusable="false" aria-hidden="true" role="img"><path d="M6.573 6.558c.056.055.092.13 0 .204l-1.148.74c-.093.056-.13.02-.167-.073L3.832 4.947l-1.87 2.055c-.02.037-.075.074-.13 0l-.889-.926c-.092-.055-.074-.111 0-.167l2.111-1.76-2.408-.906c-.037 0-.092-.074-.055-.167l.63-1.259a.097.097 0 0 1 .166-.036l2.111 1.37.13-2.704a.097.097 0 0 1 .111-.11L5.277.54c.092 0 .11.037.092.13l-.722 2.647 2.444-.74c.056-.038.111-.038.148.073l.241 1.37c.019.093 0 .13-.074.13l-2.556.204z"></path></svg>)
+
 const REQUIRED_ERROR_MESSAGE = "Is required";
-function AddressBook({ props }) {
+function AddressBook({ setCanPlaceOrder }) {
   const [state, setState] = useState({
     firstName: { value: "", error: REQUIRED_ERROR_MESSAGE },
     middleName: { value: "", error: REQUIRED_ERROR_MESSAGE },
@@ -32,6 +34,7 @@ function AddressBook({ props }) {
     telephone: { value: "", error: REQUIRED_ERROR_MESSAGE },
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isAddressAvailable, setIsAddressAvailable] = useState(false);
 
   const {
     firstName,
@@ -86,12 +89,15 @@ function AddressBook({ props }) {
           telephone: { value: defaultBillingAddress.telephone },
         };
       });
+      setIsAddressAvailable(true)
     }
   }, [defaultBillingAddress]);
 
-  // useEffect(() => {
-  //     if(doeCartHasBillingAddress)
-  // }, [doeCartHasBillingAddress])
+  useEffect(() => {
+    if (doeCartHasBillingAddress) {
+      setCanPlaceOrder && setCanPlaceOrder(doeCartHasBillingAddress)
+    }
+  }, [doeCartHasBillingAddress, setCanPlaceOrder])
 
   const changeHandler = (key, value) => {
     setState((prevState) => {
@@ -111,7 +117,7 @@ function AddressBook({ props }) {
         region: region.value,
         country_code: country_code.value,
         streetAddress: streetAddress.value,
-        streetAddress2: streetAddress2.value,
+        streetAddress2: streetAddress2.value || "",
         telephone: telephone.value,
         postcode: postcode.value,
         city: city.value,
@@ -142,7 +148,7 @@ function AddressBook({ props }) {
   return (
     <section className={styles.addressContainer}>
       <h1 className={styles.heading}>Add Billing Address</h1>
-      <form className={styles.formContainer}>
+      <Form className={styles.formContainer}>
         <div className={styles.row}>
           <div className={styles.half}>
             <TextField
@@ -152,6 +158,9 @@ function AddressBook({ props }) {
               onChange={(value) => changeHandler("firstName", value)}
               validationState={getValidationState(firstName.value)}
               errorMessage={firstName.error}
+              isRequired={true}
+              UNSAFE_className={styles.mandatory}
+
             />
           </div>
           <div className={styles.half}>
@@ -172,11 +181,13 @@ function AddressBook({ props }) {
               onChange={(value) => changeHandler("lastName", value)}
               validationState={getValidationState(lastName.value)}
               errorMessage={lastName.error}
+              isRequired={true}
+              UNSAFE_className={styles.mandatory}
             />
           </div>
           <div className={styles.half}>
             <label htmlFor="country" className={styles.label}>
-              Country
+              Country {mandatorySvg}
             </label>
             <select
               id="country"
@@ -185,6 +196,8 @@ function AddressBook({ props }) {
               onChange={(event) =>
                 changeHandler("country_code", event.target.value)
               }
+              isRequired={true}
+              UNSAFE_className={styles.mandatory}
             >
               {/* <option>--Select a Country--</option> */}
               {countries.map((item) => (
@@ -205,6 +218,8 @@ function AddressBook({ props }) {
               onChange={(value) => changeHandler("streetAddress", value)}
               validationState={getValidationState(streetAddress.value)}
               errorMessage={streetAddress.error}
+              isRequired={true}
+              UNSAFE_className={styles.mandatory}
             />
           </div>
           <div className={styles.half}>
@@ -226,11 +241,14 @@ function AddressBook({ props }) {
               onChange={(value) => changeHandler("city", value)}
               validationState={getValidationState(city.value)}
               errorMessage={city.error}
+              isRequired={true}
+              UNSAFE_className={styles.mandatory}
             />
           </div>
           <div className={styles.half}>
             <label htmlFor="region" className={styles.label}>
               State
+              {mandatorySvg}
             </label>
             <select
               id="region"
@@ -260,6 +278,8 @@ function AddressBook({ props }) {
               onChange={(value) => changeHandler("postcode", value)}
               validationState={getValidationState(postcode.value)}
               errorMessage={postcode.error}
+              isRequired={true}
+              UNSAFE_className={styles.mandatory}
             />
           </div>
           <div className={styles.half}>
@@ -270,42 +290,31 @@ function AddressBook({ props }) {
               validationState={getValidationState(telephone.value)}
               errorMessage={telephone.error}
               onChange={(value) => changeHandler("telephone", value)}
+              isRequired={true}
+              UNSAFE_className={styles.mandatory}
             />
           </div>
         </div>
 
-        {/* <div className={styles.row}>
-                    <div className={styles.half}>
-                        <Checkbox value={save_in_address_book} onChange={(value) => changeHandler('save_in_address_book', value)}>
-                            Save Address in Profile
-                        </Checkbox>
-                    </div>
-                </div> */}
-
         <div className={styles.row}>
           <div className={styles.half}></div>
           <div className={`${styles.half} ${styles.actionButton}`}>
-            {!doeCartHasBillingAddress ? (
-              <Button
-                variant="cta"
-                type="button"
-                onPress={submitHandler}
-                isDisabled={addBillingAddressLoading}
-              >
-                {addBillingAddressLoading ? (
-                  <CommerceLoader size="S" />
-                ) : (
-                  "Add Billing Address"
-                )}
-              </Button>
-            ) : (
-              <Button variant="cta" type="button" isDisabled={true}>
-                Billing Address added
-              </Button>
-            )}
+
+            <Button
+              variant="cta"
+              type="button"
+              onPress={submitHandler}
+              isDisabled={addBillingAddressLoading}
+            >
+              {addBillingAddressLoading ? (
+                <CommerceLoader size="S" />
+              ) : (
+                isAddressAvailable ? "Confirm Billing Address" : "Add Billing Address"
+              )}
+            </Button>
           </div>
         </div>
-      </form>
+      </Form>
     </section>
   );
 }

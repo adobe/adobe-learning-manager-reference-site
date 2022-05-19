@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { PURCHASE_COMPLETED_PATH, SIGN_IN_PATH } from "../../utils/constants";
 import { getCommerceToken, postMethod, setCartId } from "../../utils/global";
 import { CREATE_CART } from "../SignIn/signIn.gql";
+import { getALMObject } from "../../utils/global";
 import { GET_ORDERS } from "./ordersPage.gql";
 
 export const useOrdersPage = (props) => {
@@ -40,6 +41,7 @@ export const useOrdersPage = (props) => {
         const cartResponse = await fetchCartId();
         setCartId(cartResponse?.data?.customerCart.id);
         await postMethod(PURCHASE_COMPLETED_PATH);
+        getALMObject().updateCart(0);
       } catch (e) {
         if (process.env.NODE_ENV !== "production") {
           console.error(e);
