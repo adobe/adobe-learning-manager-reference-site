@@ -31,7 +31,11 @@ import {
   PrimeLearningObjectInstance,
   PrimeLoInstanceSummary,
 } from "../../../models/PrimeModels";
-import { ADOBE_COMMERCE } from "../../../utils/constants";
+import {
+  ADOBE_COMMERCE,
+  PENDING_ACCEPTANCE,
+  PENDING_APPROVAL,
+} from "../../../utils/constants";
 import { modifyTime } from "../../../utils/dateTime";
 import {
   getALMAccount,
@@ -47,7 +51,6 @@ import {
 import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJobAids";
 import styles from "./PrimeTrainingPageMetadata.module.css";
 
-const PENDING_APPROVAL = "PENDING_APPROVAL";
 const PrimeTrainingPageMetaData: React.FC<{
   trainingInstance: PrimeLearningObjectInstance;
   skills: Skill[];
@@ -99,17 +102,21 @@ const PrimeTrainingPageMetaData: React.FC<{
     string[]
   >([]);
 
-  let showPreviewButton =
-    isPreviewEnabled &&
-    training.hasPreview &&
-    (!enrollment || enrollment.state === PENDING_APPROVAL);
+  const isEnrolled =
+    enrollment &&
+    enrollment?.state !== PENDING_APPROVAL &&
+    enrollment?.state !== PENDING_ACCEPTANCE;
 
+  let showPreviewButton =
+    isPreviewEnabled && training.hasPreview && !isEnrolled;
   const showPriceDetails = isPricingEnabled && enrollment;
 
   const action: string = useMemo(() => {
     if (enrollment) {
       if (enrollment.state === PENDING_APPROVAL) {
         return "pendingApproval";
+      } else if (enrollment.state === PENDING_ACCEPTANCE) {
+        return "pendingAcceptance";
       } else if (enrollment.progressPercent === 0) {
         return "start";
       } else if (enrollment.progressPercent === 100) {
@@ -408,22 +415,21 @@ const PrimeTrainingPageMetaData: React.FC<{
             {seatsAvailableText}
           </>
         )}
-      </div>
-      {/* <div className={styles.buyNowContainer}>
-        <Button
-          variant="primary"
-          UNSAFE_className={`${styles.buyNowButton} ${styles.commonButton}`}
-        >
-          Buy Now for $99
-        </Button>
 
-        <Button
-          variant="primary"
-          UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
-        >
-          Add to cart
-        </Button>
-      </div> */}
+        {action === "pendingAcceptance" && (
+          <>
+            <Button
+              variant="secondary"
+              UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
+              isDisabled={true}
+            >
+              {actionText}
+            </Button>
+
+            {seatsAvailableText}
+          </>
+        )}
+      </div>
 
       {/* Minimum Completion Criteria container */}
 
