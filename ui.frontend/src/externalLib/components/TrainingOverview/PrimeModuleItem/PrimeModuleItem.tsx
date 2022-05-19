@@ -378,12 +378,23 @@ const PrimeModuleItem: React.FC<{
                     />
                   </span>
                 }
-                {!isUploading && loResource?.learningObject?.enrollment && loResource.submissionEnabled && submissionState === "PENDING_APPROVAL" &&
+                {!isUploading && loResource?.learningObject?.enrollment && loResource.submissionEnabled && (submissionState === "PENDING_APPROVAL" || submissionState === "REJECTED") &&
                   <span className={styles.fileSubmissionContainer}>
-                    {formatMessage({
-                      id: "alm.overview.submissionAwaitingApproval.label",
-                      defaultMessage: "Submission Awaiting Approval",
-                    })}: <a className={styles.submissionLink} href={submissionUrl} target="_blank" rel="noreferrer">{getSubmissionFileName(submissionUrl)}</a>
+                    {submissionState === "REJECTED" ?
+                      <span className={styles.fileRejected}>
+                        {formatMessage({
+                          id: "alm.overview.rejected.label",
+                          defaultMessage: "Submission Rejected",
+                        })}
+                      </span>
+                      :
+                      <span className={styles.fileAwaitingApproval}>
+                        {formatMessage({
+                          id: "alm.overview.submissionAwaitingApproval.label",
+                          defaultMessage: "Submission Awaiting Approval",
+                        })}
+                      </span>
+                    }: <a className={styles.submissionLink} href={submissionUrl} target="_blank" rel="noreferrer">{getSubmissionFileName(submissionUrl)}</a>
                     <button
                       onClick={startFileUpload}
                       className={styles.uploadButton}
@@ -406,7 +417,7 @@ const PrimeModuleItem: React.FC<{
                   <span className={styles.fileSubmissionContainer}>
                     <span className={styles.fileApproved}>
                       {formatMessage({
-                      id: "alm.overview.submissionApproved.label",
+                      id: "alm.overview.approved.label",
                       defaultMessage: "Submission Approved",
                     })}: </span>
                     <a className={styles.submissionLink} href={submissionUrl} target="_blank" rel="noreferrer">{getSubmissionFileName(submissionUrl)}</a>
