@@ -28,7 +28,6 @@ import { useTrainingPage } from "../../../hooks";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
-  PrimeLearningObjectInstanceEnrollment,
   PrimeLearningObjectResource,
   PrimeLearningObjectResourceGrade,
   PrimeResource,
@@ -119,20 +118,23 @@ const PrimeModuleItem: React.FC<{
     localizedMetadata,
     locale
   );
+  const enrollment = training.enrollment;
+  const isEnrolled =
+    enrollment &&
+    enrollment?.state !== "PENDING_APPROVAL" &&
+    enrollment?.state !== "PENDING_ACCEPTANCE";
 
   const resource = useResource(loResource, locale);
-  const enrollment = training.enrollment;
+
   const isModulePreviewAble =
-    isPreviewEnabled &&
-    (!enrollment || enrollment?.state === "PENDING_APPROVAL") &&
-    loResource.previewEnabled;
+    isPreviewEnabled && !isEnrolled && loResource.previewEnabled;
 
   const isClassroomOrVC =
     loResource.resourceType === CLASSROOM ||
     loResource.resourceType === VIRTUAL_CLASSROOM;
 
   const isModuleClicable: boolean = enrollment
-    ? enrollment.state !== "PENDING_APPROVAL"
+    ? isEnrolled
     : isModulePreviewAble;
 
   const isVC = loResource.resourceType === VIRTUAL_CLASSROOM;
@@ -156,7 +158,7 @@ const PrimeModuleItem: React.FC<{
     hasSessionDetails,
     durationText,
     isVC,
-    enrollment,
+    isEnrolled,
     formatMessage
   );
 
@@ -554,7 +556,7 @@ const getSessionsTemplate = (
   hasSessionDetails: boolean,
   durationText: string,
   isVC: boolean = false,
-  enrollment: PrimeLearningObjectInstanceEnrollment,
+  isEnrolled: boolean,
   formatMessage: Function
 ) => {
   if (!isClassroomOrVC || (isClassroomOrVC && !hasSessionDetails)) {
@@ -615,7 +617,7 @@ const getSessionsTemplate = (
         </div>
       </div>
 
-      {isVC && enrollment && (
+      {isVC && isEnrolled && (
         <div className={styles.metadata}>
           <div className={styles.spectrumIcon}>
             <Link aria-hidden="true" />

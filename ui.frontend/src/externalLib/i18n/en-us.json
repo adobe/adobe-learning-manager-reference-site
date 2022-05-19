@@ -87,6 +87,7 @@
   "alm.overview.button.enroll": "Enroll",
   "alm.overview.button.pendingApproval": "Pending",
   "alm.overview.manager.approval.pending": "Manager approval pending",
+  "alm.overview.button.pendingAcceptance": "Awaiting Acceptance",
   "alm.overview.text.or": "OR",
   "alm.overview.button.preview": "Preview",
   "alm.overview.enrollment.count": "{0} enrollment(s)",
