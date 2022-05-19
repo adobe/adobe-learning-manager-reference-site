@@ -31,7 +31,11 @@ import {
   PrimeLearningObjectInstance,
   PrimeLoInstanceSummary,
 } from "../../../models/PrimeModels";
-import { ADOBE_COMMERCE } from "../../../utils/constants";
+import {
+  ADOBE_COMMERCE,
+  PENDING_ACCEPTANCE,
+  PENDING_APPROVAL,
+} from "../../../utils/constants";
 import { modifyTime } from "../../../utils/dateTime";
 import {
   getALMAccount,
@@ -46,9 +50,6 @@ import {
 } from "../../../utils/translationService";
 import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJobAids";
 import styles from "./PrimeTrainingPageMetadata.module.css";
-
-const PENDING_APPROVAL = "PENDING_APPROVAL";
-const PENDING_ACCEPTANCE = "PENDING_ACCEPTANCE";
 
 const PrimeTrainingPageMetaData: React.FC<{
   trainingInstance: PrimeLearningObjectInstance;

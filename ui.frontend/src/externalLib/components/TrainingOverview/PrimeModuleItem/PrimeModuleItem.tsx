@@ -33,6 +33,13 @@ import {
   PrimeResource,
 } from "../../../models/PrimeModels";
 import {
+  CLASSROOM,
+  ELEARNING,
+  PENDING_ACCEPTANCE,
+  PENDING_APPROVAL,
+  VIRTUAL_CLASSROOM,
+} from "../../../utils/constants";
+import {
   convertSecondsToTimeText,
   GetFormattedDate,
 } from "../../../utils/dateTime";
@@ -65,17 +72,12 @@ import {
 import { formatMap } from "../../Catalog/PrimeTrainingCard/PrimeTrainingCard";
 import styles from "./PrimeModuleItem.module.css";
 
-const CLASSROOM = "Classroom";
-const VIRTUAL_CLASSROOM = "Virtual Classroom";
-const ELEARNING = "Elearning";
-const PENDING_APPROVAL = "PENDING_APPROVAL";
-
 interface ActionMap {
   Classroom: string;
 }
 const moduleIconMap = {
   Classroom: CLASSROOM_SVG(),
-  "Virtual Classroom": VIRTUAL_CLASSROOM_SVG(),
+  VIRTUAL_CLASSROOM: VIRTUAL_CLASSROOM_SVG(),
   Elearning: SCORM_SVG(),
   Activity: ACTIVITY_SVG(),
   VIDEO: VIDEO_SVG(),
@@ -121,8 +123,8 @@ const PrimeModuleItem: React.FC<{
   const enrollment = training.enrollment;
   const isEnrolled =
     enrollment &&
-    enrollment?.state !== "PENDING_APPROVAL" &&
-    enrollment?.state !== "PENDING_ACCEPTANCE";
+    enrollment?.state !== PENDING_APPROVAL &&
+    enrollment?.state !== PENDING_ACCEPTANCE;
 
   const resource = useResource(loResource, locale);
 
@@ -133,9 +135,7 @@ const PrimeModuleItem: React.FC<{
     loResource.resourceType === CLASSROOM ||
     loResource.resourceType === VIRTUAL_CLASSROOM;
 
-  const isModuleClicable: boolean = enrollment
-    ? isEnrolled
-    : isModulePreviewAble;
+  const isModuleClicable: boolean = isEnrolled || isModulePreviewAble;
 
   const isVC = loResource.resourceType === VIRTUAL_CLASSROOM;
 
@@ -187,12 +187,9 @@ const PrimeModuleItem: React.FC<{
 
       return;
     }
-    const enrollment = loResource?.learningObject?.enrollment;
     if (
-      (enrollment &&
-        !isClassroomOrVC &&
-        enrollment.state != PENDING_APPROVAL) ||
-      (!enrollment &&
+      (isEnrolled && !isClassroomOrVC) ||
+      (!isEnrolled &&
         loResource.previewEnabled &&
         getALMObject().isPrimeUserLoggedIn())
     ) {
@@ -220,11 +217,7 @@ const PrimeModuleItem: React.FC<{
       itemClickHandler(event);
     }
   };
-  // const formatLabel = useMemo(() => {
-  //   return loResource.resourceType && formatMap[loResource.resourceType]
-  //     ? GetTranslation(`${formatMap[loResource.resourceType]}`, true)
-  //     : "";
-  // }, [loResource.resourceType]);
+
   const formatLabel =
     loResource.resourceType && formatMap[loResource.resourceType]
       ? GetTranslation(`${formatMap[loResource.resourceType]}`, true)
@@ -252,9 +245,7 @@ const PrimeModuleItem: React.FC<{
         hasPassed = true;
       }
     }
-    // else {
-    //   hasPassed = true;
-    // }
+
     return hasPassed;
   };
 
@@ -400,7 +391,7 @@ const PrimeModuleItem: React.FC<{
                   </div>
                 )}
                 {!isUploading &&
-                  loResource?.learningObject?.enrollment &&
+                  isEnrolled &&
                   loResource.submissionEnabled &&
                   (submissionState === "PENDING_SUBMISSION" ||
                     !submissionState) && (
@@ -431,7 +422,7 @@ const PrimeModuleItem: React.FC<{
                     </span>
                   )}
                 {!isUploading &&
-                  loResource?.learningObject?.enrollment &&
+                  isEnrolled &&
                   loResource.submissionEnabled &&
                   (submissionState === "PENDING_APPROVAL" ||
                     submissionState === "REJECTED") && (
@@ -481,7 +472,7 @@ const PrimeModuleItem: React.FC<{
                     </span>
                   )}
                 {!isUploading &&
-                  loResource?.learningObject?.enrollment &&
+                  isEnrolled &&
                   loResource.submissionEnabled &&
                   submissionState === "APPROVED" && (
                     <span className={styles.fileSubmissionContainer}>
