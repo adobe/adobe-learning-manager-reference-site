@@ -176,7 +176,7 @@
   "alm.purchase.details": "Purchase details",
   "alm.training.price": "Price {amount}",
   "alm.overview.externalCertInfo":"This is an external Certification. Please upload the proof of completion for Manager approval. Contact your platform Administrator or your Manager in case of queries.",
-  "alm.overview.uploadProof.label":"Upload Proof of Completion,",
+  "alm.overview.uploadProof.label":"Upload Proof of Completion",
   "alm.overview.uploadedProof.label": "Uploaded Proof of Completion",
   "alm.overview.approved.label": "Submission Approved",
   "alm.overview.rejected.label": "Submission Rejected"

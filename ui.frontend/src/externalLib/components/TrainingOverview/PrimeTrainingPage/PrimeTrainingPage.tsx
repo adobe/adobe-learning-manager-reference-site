@@ -214,7 +214,7 @@ const PrimeTrainingPage = () => {
               </div>
             )}
 
-            {!isUploading && training.loType && training.isExternal && training.enrollment && training.enrollment.state === "ENROLLED" &&
+            {!isUploading && training.loType && training.isExternal && training.enrollment && (training.enrollment.state === "ENROLLED" || training.enrollment.state === "REJECTED") &&
               <span className={styles.fileSubmissionContainer}>
                {formatMessage({
                  id: "alm.overview.uploadProof.label",
