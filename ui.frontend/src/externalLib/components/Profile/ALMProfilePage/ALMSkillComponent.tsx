@@ -63,9 +63,14 @@ const ALMSkillComponent = (props: any) => {
     }
   };
 
+  const scrollToSkillsSection = () => {
+    document.getElementById("skills-section")?.scrollIntoView();
+  }
+
   const editSkillInterest = async () => {
     await fetchSkills();
     setMode("edit");
+    scrollToSkillsSection();
   };
 
   const saveSkillInterest = async () => {
@@ -74,11 +79,13 @@ const ALMSkillComponent = (props: any) => {
       await fetchUserSkillInterest();
     }
     setMode("view");
+    scrollToSkillsSection();
   };
 
   const discardSelection = () => {
     selectedSkills = [];
     setMode("view");
+    scrollToSkillsSection();
   };
 
   const noSkillInterestPresent = () => {
@@ -169,7 +176,7 @@ const ALMSkillComponent = (props: any) => {
 
   return (
     <>
-      <section className={styles.skillsArea}>
+      <section id="skills-section" className={styles.skillsArea}>
         <div className={styles.skillsHeading}>
           {formatMessage({
             id: "alm.profile.skills.areasOfInterest",

@@ -140,10 +140,8 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     window.location.pathname === window.ALM.getALMConfig().emailRedirectPath;
 
   const handlePageLoad = () => {
-    if (
-      !isPrimeUserLoggedIn() ||
-      (CURRENT_USAGE_TYPE === COMMERCE_USAGE_TYPE && !isCommerceLoggedIn())
-    ) {
+    if (!isPrimeUserLoggedIn() || 
+        (!isAuthor() && CURRENT_USAGE_TYPE === COMMERCE_USAGE_TYPE && !isCommerceLoggedIn())) {
       cleanUpUserData();
     }
     // If sign-out or sign-in Page do nothing
@@ -385,8 +383,6 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     }
   };
 
-  handlePageLoad();
-
   window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
   window.ALM.getAccessToken = getAccessToken;
   window.ALM.getCommerceToken = getCommerceToken;
@@ -397,4 +393,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.handleLogOut = handleLogOut;
   window.ALM.handleRegister = handleRegister;
   window.ALM.getAccountActiveFields = getAccountActiveFields;
+
+  handlePageLoad();
+  
 })(window, document, Granite, jQuery);

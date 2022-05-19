@@ -9,7 +9,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import APIServiceInstance from "../../common/APIService";
 import {
@@ -32,6 +32,7 @@ import {
   useCardIcon,
   useLocalizedMetaData,
   useTrainingSkills,
+  getLocale,
 } from "../../utils/hooks";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { LaunchPlayer } from "../../utils/playback-utils";
@@ -172,6 +173,12 @@ export const useTrainingPage = (
     }
   }, [trainingInstance]);
 
+  const getContentLocales = async () => {
+    var response = await getALMUser();
+    var contentLocales = response.user.account.contentLocales;
+    return contentLocales;
+  };
+
   const jobAidClickHandler = useCallback(
     (supplymentaryLo: PrimeLearningObject) => {
       if (isJobaidContentTypeUrl(supplymentaryLo)) {
@@ -193,6 +200,38 @@ export const useTrainingPage = (
     },
     [trainingId]
   );
+  
+  const alternateLanguages = useMemo(async () => {
+    let alternateLanguages = new Set<string>();
+    getLocale(trainingInstance, alternateLanguages, locale);
+    if (training && training.subLOs) {
+      training.subLOs.forEach((subLo) => {
+        subLo.instances?.forEach((instance) => {
+          getLocale(instance, alternateLanguages, locale);
+        });
+      });
+    }
+    if (training && training.subLOs) {
+      training.subLOs.forEach((subLo) =>
+        subLo.subLOs?.forEach((subLo) => {
+          subLo.instances?.forEach((instances) => {
+            getLocale(instances, alternateLanguages, locale);
+          });
+        })
+      );
+    }
+    let alternateLocales: string[] = [];
+    var contentLocale = await getContentLocales();
+
+    if (alternateLanguages && alternateLanguages.size) {
+      contentLocale?.forEach((contentLocale) => {
+        if (alternateLanguages.has(contentLocale.locale)) {
+          alternateLocales.push(contentLocale.name);
+        }
+      });
+    }
+    return alternateLocales;
+  }, [training]);
 
   const {
     name = "",
@@ -321,6 +360,7 @@ export const useTrainingPage = (
     errorCode,
     updateFileSubmissionUrl,
     updateCertificationProofUrl,
+    alternateLanguages,
   };
   //date create, published, duration
 };

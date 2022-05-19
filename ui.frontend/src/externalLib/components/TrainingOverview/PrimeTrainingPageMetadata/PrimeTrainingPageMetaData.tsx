@@ -15,6 +15,7 @@ import { Button, Content, ContextualHelp, Text } from "@adobe/react-spectrum";
 import Calendar from "@spectrum-icons/workflow/Calendar";
 import Clock from "@spectrum-icons/workflow/Clock";
 import ClockCheck from "@spectrum-icons/workflow/ClockCheck";
+import GlobeGrid from "@spectrum-icons/workflow/GlobeGrid";
 import Download from "@spectrum-icons/workflow/Download";
 import Money from "@spectrum-icons/workflow/Money";
 import PinOff from "@spectrum-icons/workflow/PinOff";
@@ -56,6 +57,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   showAuthorInfo: string;
   showEnrollDeadline: string;
   enrollmentHandler: () => void;
+  alternateLanguages: Promise<string[]>;
   launchPlayerHandler: () => void;
   addToCartHandler: () => Promise<{
     items: any;
@@ -79,6 +81,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   unEnrollmentHandler,
   jobAidClickHandler,
   isPreviewEnabled,
+  alternateLanguages,
 }) => {
   const [almAlert] = useAlert();
   const { formatMessage } = useIntl();
@@ -86,11 +89,14 @@ const PrimeTrainingPageMetaData: React.FC<{
   const locale = config.locale;
   const enrollment = training.enrollment;
   const loType = training.loType;
-
+  const isPrimeUserLoggedIn = getALMObject().isPrimeUserLoggedIn();
   const isPricingEnabled =
     training.price && getALMConfig().usageType === ADOBE_COMMERCE;
 
   const [isTrainingNotSynced, setIsTrainingNotSynced] = useState(false);
+ 
+  const [alternativesLangAvailable, setAlternativesLangAvailable] = useState<string[]>([]);
+
   let showPreviewButton =
     isPreviewEnabled &&
     training.hasPreview &&
@@ -166,22 +172,36 @@ const PrimeTrainingPageMetaData: React.FC<{
     } catch (e) {}
   };
 
+  useEffect(() => {
+    getAlternateLanguages();
+  }, [alternateLanguages]);
+
+  const getAlternateLanguages = async () => {
+    try {
+      setAlternativesLangAvailable(await alternateLanguages);
+    } catch (e) {}
+  };
+
   const addToCart = async () => {
     try {
       const { error, totalQuantity } = await addToCartHandler();
-      if (error && error[0]?.message) {
-        almAlert(
-          true,
-          formatMessage({ id: "alm.addToCart.error" }, { loType: loType }),
-          AlertType.error
-        );
+      if (error && error[0]?.message) { 
+        if (isPrimeUserLoggedIn) {
+          almAlert(
+            true,
+            formatMessage({ id: "alm.addToCart.error" }, { loType: loType }),
+            AlertType.error
+          );
+        }
       } else {
         getALMObject().updateCart(totalQuantity);
-        almAlert(
-          true,
-          formatMessage({ id: "alm.addedToCart" }),
-          AlertType.success
-        );
+        if (isPrimeUserLoggedIn) {
+          almAlert(
+            true,
+            formatMessage({ id: "alm.addedToCart" }),
+            AlertType.success
+          );
+        }
       }
     } catch (e) {}
   };
@@ -501,6 +521,38 @@ const PrimeTrainingPageMetaData: React.FC<{
           </div>
         </div>
       )}
+
+      {/* Alternate Languages */}
+      {alternativesLangAvailable.length > 0 && (
+        <div className={styles.commonContainer}>
+          <span aria-hidden="true" className={styles.icon}>
+            <GlobeGrid />
+          </span>
+          <div className={styles.innerContainer}>
+            <label className={styles.alternativesAvailable}>
+              {formatMessage({
+                id: "alm.overview.alternativesAvailable",
+                defaultMessage: "Alternatives Available",
+              })}
+            </label>
+            <ContextualHelp variant="help">
+              <Content>
+                <Text>
+                  {formatMessage({
+                    id: "alm.overview.alternativesAvailable.toolTip",
+                    defaultMessage:
+                      "You can change the language or the format of the content in the player.",
+                  })}
+                </Text>
+              </Content>
+            </ContextualHelp>
+            {alternativesLangAvailable?.map((language) => {
+              return <div>{language}</div>;
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Certificate Type container */}
       {isCertification && (
         <div className={styles.commonContainer}>

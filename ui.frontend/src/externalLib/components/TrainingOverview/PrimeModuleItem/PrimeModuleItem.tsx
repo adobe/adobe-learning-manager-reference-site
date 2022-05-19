@@ -9,23 +9,26 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
+import { ProgressBar } from "@adobe/react-spectrum";
+import Asterisk from "@spectrum-icons/workflow/Asterisk";
 import Calendar from "@spectrum-icons/workflow/Calendar";
 import CheckmarkCircle from "@spectrum-icons/workflow/CheckmarkCircle";
 import Clock from "@spectrum-icons/workflow/Clock";
 import Link from "@spectrum-icons/workflow/Link";
 import Location from "@spectrum-icons/workflow/Location";
-import Asterisk from "@spectrum-icons/workflow/Asterisk";
 import LockClosed from "@spectrum-icons/workflow/LockClosed";
 import Seat from "@spectrum-icons/workflow/Seat";
 import User from "@spectrum-icons/workflow/User";
 import Visibility from "@spectrum-icons/workflow/Visibility";
-import React, {useState, useRef, useEffect} from "react";
-import store from "../../../../store/APIStore";
+import React, { useRef, useState } from "react";
 import { useIntl } from "react-intl";
+import store from "../../../../store/APIStore";
 import { AlertDialog, AlertType } from "../../../common/Alert/AlertDialog";
+import { useTrainingPage } from "../../../hooks";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
+  PrimeLearningObjectInstanceEnrollment,
   PrimeLearningObjectResource,
   PrimeLearningObjectResourceGrade,
   PrimeResource,
@@ -46,6 +49,7 @@ import {
   PPT_SVG,
   PRESENTER_SVG,
   SCORM_SVG,
+  SOCIAL_CANCEL_SVG,
   VIDEO_SVG,
   VIRTUAL_CLASSROOM_SVG,
   XLS_SVG,
@@ -54,14 +58,12 @@ import {
   getPreferredLocalizedMetadata,
   GetTranslation,
 } from "../../../utils/translationService";
-import { formatMap } from "../../Catalog/PrimeTrainingCard/PrimeTrainingCard";
-import { PrimeAlertDialog } from "../../Community/PrimeAlertDialog";
-import { ProgressBar } from "@adobe/react-spectrum";
-import { getUploadInfo, uploadFile, cancelUploadFile } from "../../../utils/uploadUtils";
-import { useTrainingPage } from "../../../hooks";
 import {
-  SOCIAL_CANCEL_SVG,
-} from "../../../utils/inline_svg";
+  cancelUploadFile,
+  getUploadInfo,
+  uploadFile,
+} from "../../../utils/uploadUtils";
+import { formatMap } from "../../Catalog/PrimeTrainingCard/PrimeTrainingCard";
 import styles from "./PrimeModuleItem.module.css";
 
 const CLASSROOM = "Classroom";
@@ -154,6 +156,7 @@ const PrimeModuleItem: React.FC<{
     hasSessionDetails,
     durationText,
     isVC,
+    enrollment,
     formatMessage
   );
 
@@ -184,14 +187,26 @@ const PrimeModuleItem: React.FC<{
     }
     const enrollment = loResource?.learningObject?.enrollment;
     if (
-      (enrollment && !isClassroomOrVC && enrollment.state != PENDING_APPROVAL) ||
+      (enrollment &&
+        !isClassroomOrVC &&
+        enrollment.state != PENDING_APPROVAL) ||
       (!enrollment &&
         loResource.previewEnabled &&
         getALMObject().isPrimeUserLoggedIn())
     ) {
-      let fileSubmissionComponents = ["uploadButton", "submissionLink", "fileSubmissionContainer", "fileApproved"];
-      const matchArray = fileSubmissionComponents.filter((element) => {return event.target.className.includes(element)});
-      if ((inputRef.current && inputRef.current.contains(event.target)) || matchArray.length > 0) {
+      let fileSubmissionComponents = [
+        "uploadButton",
+        "submissionLink",
+        "fileSubmissionContainer",
+        "fileApproved",
+      ];
+      const matchArray = fileSubmissionComponents.filter((element) => {
+        return event.target.className.includes(element);
+      });
+      if (
+        (inputRef.current && inputRef.current.contains(event.target)) ||
+        matchArray.length > 0
+      ) {
         return;
       } else {
         launchPlayerHandler({ id: training.id, moduleId: loResource.id });
@@ -242,13 +257,15 @@ const PrimeModuleItem: React.FC<{
   };
 
   const state = store.getState();
-  const [ isUploading, setIsUploading] = useState(false);
-  const [ submissionState, setSubmissionState ] = useState(loResource.submissionState);
-  const [ submissionUrl, setSubmissionUrl ] = useState(loResource.submissionUrl);
+  const [isUploading, setIsUploading] = useState(false);
+  const [submissionState, setSubmissionState] = useState(
+    loResource.submissionState
+  );
+  const [submissionUrl, setSubmissionUrl] = useState(loResource.submissionUrl);
   const [fileUploadProgress, setFileUploadProgress] = useState(
     state.fileUpload.uploadProgress
   );
-  
+
   const inputRef = useRef<null | HTMLInputElement>(null);
   const startFileUpload = () => {
     (inputRef?.current as HTMLInputElement)?.click();
@@ -259,10 +276,15 @@ const PrimeModuleItem: React.FC<{
   };
 
   const inputElementId = loResource.id + "-uploadFileSubmission";
-  const {updateFileSubmissionUrl} = useTrainingPage(training.id, trainingInstance.id);
-  
+  const { updateFileSubmissionUrl } = useTrainingPage(
+    training.id,
+    trainingInstance.id
+  );
+
   const fileSelected = async (event: any) => {
-    const inputElement = document.getElementById(inputElementId) as HTMLInputElement;
+    const inputElement = document.getElementById(
+      inputElementId
+    ) as HTMLInputElement;
     setFileUploadProgress(0);
     setIsUploading(true);
     const progressCheck = setInterval(() => {
@@ -273,8 +295,14 @@ const PrimeModuleItem: React.FC<{
       inputElement!.files!.item(0)!.name,
       inputElement!.files!.item(0)!
     );
-    let blFileUrl = await updateFileSubmissionUrl(fileUrl, training.id, trainingInstance.id, loResource.id) || "";
-    if(blFileUrl.length > 0) {
+    let blFileUrl =
+      (await updateFileSubmissionUrl(
+        fileUrl,
+        training.id,
+        trainingInstance.id,
+        loResource.id
+      )) || "";
+    if (blFileUrl.length > 0) {
       setSubmissionState("PENDING_APPROVAL");
       setSubmissionUrl(blFileUrl);
     }
@@ -291,7 +319,7 @@ const PrimeModuleItem: React.FC<{
     const urlWithoutParams = url?.split("?")[0];
     let urlParts = urlWithoutParams?.split("/");
     return urlParts?.length > 0 ? urlParts[urlParts?.length - 1] : "";
-  }
+  };
 
   return (
     <>
@@ -369,64 +397,109 @@ const PrimeModuleItem: React.FC<{
                     </button>
                   </div>
                 )}
-                {!isUploading && loResource?.learningObject?.enrollment && loResource.submissionEnabled && (submissionState === "PENDING_SUBMISSION" || !submissionState) &&
-                  <span className={styles.fileSubmissionContainer}>
-                    {formatMessage({
-                      id: "alm.overview.submissionPending.label",
-                      defaultMessage: "Submission Pending",
-                    })}:
-                    <button
-                      onClick={startFileUpload}
-                      className={styles.uploadButton}
-                    >
-                      ({formatMessage({
-                        id: "alm.overview.module.uploadFile",
-                        defaultMessage: "Upload File",
-                      })})
-                    </button>
-                    <input
-                      type="file"
-                      id={inputElementId}
-                      className={styles.uploadFileSubmission}
-                      onChange={(event: any) => fileSelected(event)}
-                      ref={inputRef}
-                    />
-                  </span>
-                }
-                {!isUploading && loResource?.learningObject?.enrollment && loResource.submissionEnabled && submissionState === "PENDING_APPROVAL" &&
-                  <span className={styles.fileSubmissionContainer}>
-                    {formatMessage({
-                      id: "alm.overview.submissionAwaitingApproval.label",
-                      defaultMessage: "Submission Awaiting Approval",
-                    })}: <a className={styles.submissionLink} href={submissionUrl} target="_blank" rel="noreferrer">{getSubmissionFileName(submissionUrl)}</a>
-                    <button
-                      onClick={startFileUpload}
-                      className={styles.uploadButton}
-                    >
-                      ({formatMessage({
-                        id: "alm.module.change",
-                        defaultMessage: "Change",
-                      })})
-                    </button>
-                    <input
-                      type="file"
-                      id={inputElementId}
-                      className={styles.uploadFileSubmission}
-                      onChange={(event: any) => fileSelected(event)}
-                      ref={inputRef}
-                    />
-                  </span>
-                }
-                {!isUploading && loResource?.learningObject?.enrollment && loResource.submissionEnabled && submissionState === "APPROVED" &&
-                  <span className={styles.fileSubmissionContainer}>
-                    <span className={styles.fileApproved}>
+                {!isUploading &&
+                  loResource?.learningObject?.enrollment &&
+                  loResource.submissionEnabled &&
+                  (submissionState === "PENDING_SUBMISSION" ||
+                    !submissionState) && (
+                    <span className={styles.fileSubmissionContainer}>
                       {formatMessage({
-                      id: "alm.overview.submissionApproved.label",
-                      defaultMessage: "Submission Approved",
-                    })}: </span>
-                    <a className={styles.submissionLink} href={submissionUrl} target="_blank" rel="noreferrer">{getSubmissionFileName(submissionUrl)}</a>
-                  </span>
-                }
+                        id: "alm.overview.submissionPending.label",
+                        defaultMessage: "Submission Pending",
+                      })}
+                      :
+                      <button
+                        onClick={startFileUpload}
+                        className={styles.uploadButton}
+                      >
+                        (
+                        {formatMessage({
+                          id: "alm.overview.module.uploadFile",
+                          defaultMessage: "Upload File",
+                        })}
+                        )
+                      </button>
+                      <input
+                        type="file"
+                        id={inputElementId}
+                        className={styles.uploadFileSubmission}
+                        onChange={(event: any) => fileSelected(event)}
+                        ref={inputRef}
+                      />
+                    </span>
+                  )}
+                {!isUploading &&
+                  loResource?.learningObject?.enrollment &&
+                  loResource.submissionEnabled &&
+                  (submissionState === "PENDING_APPROVAL" ||
+                    submissionState === "REJECTED") && (
+                    <span className={styles.fileSubmissionContainer}>
+                      {submissionState === "REJECTED" ? (
+                        <span className={styles.fileRejected}>
+                          {formatMessage({
+                            id: "alm.overview.rejected.label",
+                            defaultMessage: "Submission Rejected",
+                          })}
+                        </span>
+                      ) : (
+                        <span className={styles.fileAwaitingApproval}>
+                          {formatMessage({
+                            id: "alm.overview.submissionAwaitingApproval.label",
+                            defaultMessage: "Submission Awaiting Approval",
+                          })}
+                        </span>
+                      )}
+                      :{" "}
+                      <a
+                        className={styles.submissionLink}
+                        href={submissionUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {getSubmissionFileName(submissionUrl)}
+                      </a>
+                      <button
+                        onClick={startFileUpload}
+                        className={styles.uploadButton}
+                      >
+                        (
+                        {formatMessage({
+                          id: "alm.module.change",
+                          defaultMessage: "Change",
+                        })}
+                        )
+                      </button>
+                      <input
+                        type="file"
+                        id={inputElementId}
+                        className={styles.uploadFileSubmission}
+                        onChange={(event: any) => fileSelected(event)}
+                        ref={inputRef}
+                      />
+                    </span>
+                  )}
+                {!isUploading &&
+                  loResource?.learningObject?.enrollment &&
+                  loResource.submissionEnabled &&
+                  submissionState === "APPROVED" && (
+                    <span className={styles.fileSubmissionContainer}>
+                      <span className={styles.fileApproved}>
+                        {formatMessage({
+                          id: "alm.overview.approved.label",
+                          defaultMessage: "Submission Approved",
+                        })}
+                        :{" "}
+                      </span>
+                      <a
+                        className={styles.submissionLink}
+                        href={submissionUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {getSubmissionFileName(submissionUrl)}
+                      </a>
+                    </span>
+                  )}
               </span>
               <span>{durationText}</span>
             </div>
@@ -481,6 +554,7 @@ const getSessionsTemplate = (
   hasSessionDetails: boolean,
   durationText: string,
   isVC: boolean = false,
+  enrollment: PrimeLearningObjectInstanceEnrollment,
   formatMessage: Function
 ) => {
   if (!isClassroomOrVC || (isClassroomOrVC && !hasSessionDetails)) {
@@ -541,7 +615,7 @@ const getSessionsTemplate = (
         </div>
       </div>
 
-      {isVC && (
+      {isVC && enrollment && (
         <div className={styles.metadata}>
           <div className={styles.spectrumIcon}>
             <Link aria-hidden="true" />

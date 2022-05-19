@@ -119,6 +119,22 @@ const useLocalizedMetaData = (
   }, [training, locale]);
 };
 
+const getLocale = (
+  trainingInstance: PrimeLearningObjectInstance,
+  locale: Set<string>,
+  currentLocale: string
+) => {
+  if (trainingInstance && trainingInstance.loResources) {
+    trainingInstance.loResources.forEach((loResource) => {
+      loResource.resources?.forEach((resource) => {
+        if (resource?.locale != currentLocale) {
+          locale.add(resource?.locale);
+        }
+      });
+    });
+  }
+};
+
 const filterTrainingInstance = (
   training: PrimeLearningObject,
   instanceId: string = ""
@@ -181,4 +197,5 @@ export {
   filterLoReourcesBasedOnResourceType,
   useResource,
   filteredResource,
+  getLocale,
 };

@@ -21,7 +21,7 @@
   "alm.community.board.copyUrlSuccess": "URL copied successfully",
   "alm.notification.icon": "User Notifications",
   "alm.catalog.header": "Repository of |||COURSE|||, |||CERTIFICATION||| and |||LEARNING_PATH|||",
-  "alm.catalog.search.placeholder": "Enter text and press enter",
+  "alm.catalog.search.placeholder": "Search",
   "active.filed.placeholder": "Use comma to seperate multiple values",
   "alm.catalog.filter.loType.label": "Type",
   "alm.catalog.filter.status.label": "Status",
@@ -173,11 +173,11 @@
   "alm.overview.module.uploadFile": "Upload File",
   "alm.overview.submissionAwaitingApproval.label": "Submission Awaiting Approval",
   "alm.module.change": "Change",
-  "alm.overview.submissionApproved.label": "Submission Approved",
   "alm.purchase.details": "Purchase details",
   "alm.training.price": "Price {amount}",
-  "alm.overview.externalCertInfo":"This is an external Certification. Please upload the proof of completion for Manager approval. Contact your platform Administrator or your Manager in case of queries.",
-  "alm.overview.uploadProof.label":"Upload Proof of Completion,",
+  "alm.overview.externalCertInfo": "This is an external Certification. Please upload the proof of completion for Manager approval. Contact your platform Administrator or your Manager in case of queries.",
+  "alm.overview.uploadProof.label": "Upload Proof of Completion",
   "alm.overview.uploadedProof.label": "Uploaded Proof of Completion",
-  "alm.overview.approved.label": "Submission Approved"
+  "alm.overview.approved.label": "Submission Approved",
+  "alm.overview.rejected.label": "Submission Rejected"
 }
