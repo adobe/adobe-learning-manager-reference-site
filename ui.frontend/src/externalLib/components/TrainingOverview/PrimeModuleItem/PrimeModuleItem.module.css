@@ -226,7 +226,6 @@ a.details {
 
 .fileSubmissionContainer {
   text-transform: none;
-  color: #e6a000;
   font-weight: 700;
   margin-left: 15px;
 }
@@ -259,6 +258,14 @@ a.details {
 
 .fileApproved {
   color: #0f870f;
+}
+
+.fileRejected {
+  color: #e61414;
+}
+
+.fileAwaitingApproval {
+  color: #e6a000;
 }
 
 .warningDialog [class^="spectrum-ButtonGroup"] {
