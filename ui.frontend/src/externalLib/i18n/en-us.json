@@ -166,7 +166,7 @@
   "alm.profile.fields.saveProfileChanges": "Save Changes",
   "alm.profile.skills.cancel": "Cancel",
   "alm.addToCart": "Add to cart - {x}",
-  "alm.addToCart.Error": "An error occurred while adding {loType}.",
+  "alm.addToCart.error": "An error occurred while adding {loType}.",
   "alm.addedToCart": "Added to cart",
   "alm.training.overview.not.available": "{training} is not yet available for purchase",
   "alm.overview.certification.minimum.criteria.label": "Learners must complete ${x} of ${y} |||COURSE||| to achieve ||CERTIFICATION||",

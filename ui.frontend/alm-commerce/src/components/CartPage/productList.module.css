@@ -18,7 +18,7 @@ governing permissions and limitations under the License.
   border-bottom: 1px solid var(--prime-color-black);
 }
 .headerLabel {
-  font-size: var(--prime-font-size-14);
-  color: var(--prime-color-black);
+  font-size: var(--prime-font-size-18);
+  color: var(--prime-color-nc3);
 }
 

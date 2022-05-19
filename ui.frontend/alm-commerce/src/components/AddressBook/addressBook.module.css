@@ -22,8 +22,9 @@ governing permissions and limitations under the License.
   margin: 0;
 }
 
-.formContainer {
+.row label{
   /* padding: 10px 20px; */
+  font-size: var(--prime-font-size-14)!important;
 }
 .row {
   width: 100%;
