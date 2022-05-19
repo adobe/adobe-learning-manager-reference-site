@@ -41,16 +41,18 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   const navigateToTrainingOverviewPage = (
     trainingId,
-    trainingInstanceId = ""
+    trainingInstanceId = "",
+    queryParams = ""
   ) => {
     let { trainingOverviewPath } = getALMConfig();
 
     trainingOverviewPath = getUrl(trainingOverviewPath, {
       trainingId: trainingId,
     });
-    window.location = trainingInstanceId
+    trainingOverviewPath = trainingInstanceId
       ? getUrl(trainingOverviewPath, { trainingInstanceId: trainingInstanceId })
       : trainingOverviewPath;
+    window.location = queryParams ? (trainingOverviewPath + "?" + queryParams) : trainingOverviewPath;
   };
 
   const navigateToInstancePage = (trainingId) => {

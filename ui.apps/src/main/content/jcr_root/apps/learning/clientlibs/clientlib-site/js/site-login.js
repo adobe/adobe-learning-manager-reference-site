@@ -140,10 +140,8 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     window.location.pathname === window.ALM.getALMConfig().emailRedirectPath;
 
   const handlePageLoad = () => {
-    if (
-      !isPrimeUserLoggedIn() ||
-      (CURRENT_USAGE_TYPE === COMMERCE_USAGE_TYPE && !isCommerceLoggedIn())
-    ) {
+    if (!isPrimeUserLoggedIn() || 
+        (!isAuthor() && CURRENT_USAGE_TYPE === COMMERCE_USAGE_TYPE && !isCommerceLoggedIn())) {
       cleanUpUserData();
     }
     // If sign-out or sign-in Page do nothing
@@ -330,7 +328,10 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   const isCommerceLoggedIn = () => (getCommerceToken() === "" ? false : true);
 
-  const isPrimeUserLoggedIn = () => (getAccessToken() === "" ? false : true);
+  const isPrimeUserLoggedIn = () => {
+    const accessToken = getAccessToken();
+    return (accessToken && accessToken !== "");
+  };
 
   const handleLogOut = () => {
     cleanUpUserData();
