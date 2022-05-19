@@ -31,7 +31,7 @@ import com.adobe.learning.core.utils.GlobalConfigurationUtils;
 import com.day.cq.wcm.api.Page;
 import com.google.gson.JsonObject;
 
-@Model(adaptables = {SlingHttpServletRequest.class, Resource.class}, cache=true)
+@Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class GlobalConfigurationModel {
 
 	private static final Logger LOG = LoggerFactory.getLogger(GlobalConfigurationModel.class);

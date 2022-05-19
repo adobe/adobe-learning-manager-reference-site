@@ -15,8 +15,8 @@ import { Button, Content, ContextualHelp, Text } from "@adobe/react-spectrum";
 import Calendar from "@spectrum-icons/workflow/Calendar";
 import Clock from "@spectrum-icons/workflow/Clock";
 import ClockCheck from "@spectrum-icons/workflow/ClockCheck";
-import GlobeGrid from "@spectrum-icons/workflow/GlobeGrid";
 import Download from "@spectrum-icons/workflow/Download";
+import GlobeGrid from "@spectrum-icons/workflow/GlobeGrid";
 import Money from "@spectrum-icons/workflow/Money";
 import PinOff from "@spectrum-icons/workflow/PinOff";
 import Send from "@spectrum-icons/workflow/Send";
@@ -31,7 +31,11 @@ import {
   PrimeLearningObjectInstance,
   PrimeLoInstanceSummary,
 } from "../../../models/PrimeModels";
-import { ADOBE_COMMERCE } from "../../../utils/constants";
+import {
+  ADOBE_COMMERCE,
+  PENDING_ACCEPTANCE,
+  PENDING_APPROVAL,
+} from "../../../utils/constants";
 import { modifyTime } from "../../../utils/dateTime";
 import {
   getALMAccount,
@@ -47,7 +51,6 @@ import {
 import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJobAids";
 import styles from "./PrimeTrainingPageMetadata.module.css";
 
-const PENDING_APPROVAL = "PENDING_APPROVAL";
 const PrimeTrainingPageMetaData: React.FC<{
   trainingInstance: PrimeLearningObjectInstance;
   skills: Skill[];
@@ -94,20 +97,26 @@ const PrimeTrainingPageMetaData: React.FC<{
     training.price && getALMConfig().usageType === ADOBE_COMMERCE;
 
   const [isTrainingNotSynced, setIsTrainingNotSynced] = useState(false);
- 
-  const [alternativesLangAvailable, setAlternativesLangAvailable] = useState<string[]>([]);
+
+  const [alternativesLangAvailable, setAlternativesLangAvailable] = useState<
+    string[]
+  >([]);
+
+  const isEnrolled =
+    enrollment &&
+    enrollment?.state !== PENDING_APPROVAL &&
+    enrollment?.state !== PENDING_ACCEPTANCE;
 
   let showPreviewButton =
-    isPreviewEnabled &&
-    training.hasPreview &&
-    (!enrollment || enrollment.state === PENDING_APPROVAL);
-
+    isPreviewEnabled && training.hasPreview && !isEnrolled;
   const showPriceDetails = isPricingEnabled && enrollment;
 
   const action: string = useMemo(() => {
     if (enrollment) {
       if (enrollment.state === PENDING_APPROVAL) {
         return "pendingApproval";
+      } else if (enrollment.state === PENDING_ACCEPTANCE) {
+        return "pendingAcceptance";
       } else if (enrollment.progressPercent === 0) {
         return "start";
       } else if (enrollment.progressPercent === 100) {
@@ -406,22 +415,21 @@ const PrimeTrainingPageMetaData: React.FC<{
             {seatsAvailableText}
           </>
         )}
-      </div>
-      {/* <div className={styles.buyNowContainer}>
-        <Button
-          variant="primary"
-          UNSAFE_className={`${styles.buyNowButton} ${styles.commonButton}`}
-        >
-          Buy Now for $99
-        </Button>
 
-        <Button
-          variant="primary"
-          UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
-        >
-          Add to cart
-        </Button>
-      </div> */}
+        {action === "pendingAcceptance" && (
+          <>
+            <Button
+              variant="secondary"
+              UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
+              isDisabled={true}
+            >
+              {actionText}
+            </Button>
+
+            {seatsAvailableText}
+          </>
+        )}
+      </div>
 
       {/* Minimum Completion Criteria container */}
 
@@ -662,7 +670,11 @@ const PrimeTrainingPageMetaData: React.FC<{
           {filteredSkills.map((skill) => {
             return (
               <div key={skill.name}>
-                {skill.name} - {skill.levelName}
+                {skill.name} - {skill.levelName}{" "}
+                {formatMessage(
+                  { id: "alm.training.skill.credits" },
+                  { x: skill.credits }
+                )}
               </div>
             );
           })}
