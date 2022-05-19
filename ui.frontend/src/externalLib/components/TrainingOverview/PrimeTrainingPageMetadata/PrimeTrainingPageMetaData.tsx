@@ -29,10 +29,13 @@ import { InstanceBadge, Skill } from "../../../models/custom";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
+  PrimeLearningObjectResourceGrade,
   PrimeLoInstanceSummary,
 } from "../../../models/PrimeModels";
 import {
   ADOBE_COMMERCE,
+  CERTIFICATION,
+  COURSE,
   PENDING_ACCEPTANCE,
   PENDING_APPROVAL,
 } from "../../../utils/constants";
@@ -42,7 +45,9 @@ import {
   getALMConfig,
   getALMObject,
 } from "../../../utils/global";
+import { filterLoReourcesBasedOnResourceType } from "../../../utils/hooks";
 import { DEFAULT_USER_SVG, LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
+import { checkIsEnrolled } from "../../../utils/overview";
 import { getFormattedPrice } from "../../../utils/price";
 import {
   GetTranslation,
@@ -102,10 +107,7 @@ const PrimeTrainingPageMetaData: React.FC<{
     string[]
   >([]);
 
-  const isEnrolled =
-    enrollment &&
-    enrollment?.state !== PENDING_APPROVAL &&
-    enrollment?.state !== PENDING_ACCEPTANCE;
+  const isEnrolled = checkIsEnrolled(enrollment);
 
   let showPreviewButton =
     isPreviewEnabled && training.hasPreview && !isEnrolled;
@@ -194,7 +196,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   const addToCart = async () => {
     try {
       const { error, totalQuantity } = await addToCartHandler();
-      if (error) { 
+      if (error) {
         if (isPrimeUserLoggedIn) {
           almAlert(
             true,
@@ -218,42 +220,6 @@ const PrimeTrainingPageMetaData: React.FC<{
   const addProductToCart = async () => {
     await addToCart();
   };
-
-  const minimumCriteria = useMemo(() => {
-    let label = "";
-    let value = "";
-    let completionCount = training.loResourceCompletionCount;
-
-    if (training.loType === "course") {
-      let totalCount = trainingInstance?.loResources?.length;
-      label = GetTranslationsReplaced(
-        "alm.overview.course.minimum.criteria.label",
-        {
-          x: completionCount,
-          y: totalCount,
-        },
-        true
-      );
-      value = `${completionCount}/${totalCount}`;
-    } else if (training.loType === "certification") {
-      let totalCount = training.subLOs.length;
-      label = GetTranslationsReplaced(
-        "alm.overview.certification.minimum.criteria.label",
-        {
-          x: completionCount,
-          y: totalCount,
-        },
-        true
-      );
-      value = `${completionCount}/${totalCount}`;
-    }
-    return { label, value };
-  }, [
-    training.loResourceCompletionCount,
-    training.loType,
-    training.subLOs?.length,
-    trainingInstance?.loResources?.length,
-  ]);
 
   //show only if not enrolled
   const showEnrollmentCount =
@@ -318,6 +284,73 @@ const PrimeTrainingPageMetaData: React.FC<{
   const showMinimumCompletion =
     training.loResourceCompletionCount &&
     training.loResourceCompletionCount !== trainingInstance.loResources?.length;
+  const coreContentModules = filterLoReourcesBasedOnResourceType(
+    trainingInstance,
+    "Content"
+  );
+  const minimumCriteria = useMemo(() => {
+    let label = "";
+    let value = "";
+    let completionCount = training.loResourceCompletionCount;
+
+    if (training.loType === COURSE) {
+      const totalCount = coreContentModules.length;
+      label = GetTranslationsReplaced(
+        "alm.overview.course.minimum.criteria.label",
+        {
+          x: completionCount,
+          y: totalCount,
+        },
+        true
+      );
+      value = `${completionCount}/${totalCount}`;
+    } else if (training.loType === CERTIFICATION) {
+      const totalCount = training.subLOs.length;
+      label = GetTranslationsReplaced(
+        "alm.overview.certification.minimum.criteria.label",
+        {
+          x: completionCount,
+          y: totalCount,
+        },
+        true
+      );
+      value = `${completionCount}/${totalCount}`;
+    }
+    return { label, value };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    training.loResourceCompletionCount,
+    training.loType,
+    training.subLOs?.length,
+    trainingInstance,
+  ]);
+
+  const coreContentCompleted = useMemo(() => {
+    let value = "";
+    //shown only for courses in classic
+    if (!isEnrolled || training.loType !== COURSE) {
+      return value;
+    }
+    if (training.loType === COURSE) {
+      const totalCount = coreContentModules.length;
+      let completionCount = 0;
+      training.enrollment?.loResourceGrades.forEach(
+        (item: PrimeLearningObjectResourceGrade) => {
+          if (item.hasPassed) {
+            completionCount += 1;
+          }
+        }
+      );
+
+      value = `${completionCount}/${totalCount}`;
+    }
+    return value;
+  }, [
+    coreContentModules?.length,
+    isEnrolled,
+    training.enrollment?.loResourceGrades,
+    training.loType,
+  ]);
 
   const isSeatAvailable = trainingInstance.seatLimit
     ? trainingInstance.seatLimit > 0
@@ -344,7 +377,6 @@ const PrimeTrainingPageMetaData: React.FC<{
           </div>
         </>
       )}
-
       <div className={styles.actionContainer}>
         {action === "registerInterest" && (
           <Button
@@ -430,9 +462,6 @@ const PrimeTrainingPageMetaData: React.FC<{
           </>
         )}
       </div>
-
-      {/* Minimum Completion Criteria container */}
-
       {showPriceDetails && (
         <div className={styles.commonContainer}>
           <span aria-hidden="true" className={styles.icon}>
@@ -458,78 +487,6 @@ const PrimeTrainingPageMetaData: React.FC<{
           </div>
         </div>
       )}
-
-      {showMinimumCompletion && (
-        <div className={styles.commonContainer}>
-          <span aria-hidden="true" className={styles.minimumCriteria}>
-            {minimumCriteria.value}
-          </span>
-          <div className={styles.innerContainer}>
-            <label className={styles.minimumCriteriaLabel}>
-              {formatMessage({
-                id: "alm.overview.minimum.completion.criteria",
-                defaultMessage: "Minimum Completion Criteria",
-              })}
-            </label>
-            <ContextualHelp variant="help">
-              <Content>
-                <Text>{minimumCriteria.label}</Text>
-              </Content>
-            </ContextualHelp>
-          </div>
-        </div>
-      )}
-
-      {/* Enrollment Deadline container */}
-
-      {showEnrollmentDeadline && (
-        <div className={styles.commonContainer}>
-          <span aria-hidden="true" className={styles.icon}>
-            <Calendar />
-          </span>
-          <div className={styles.innerContainer}>
-            <label className={styles.label}>
-              {formatMessage({
-                id: "alm.overview.enrollment.deadline",
-                defaultMessage: "Enrollment Deadline",
-              })}
-            </label>
-            <div>{modifyTime(trainingInstance.enrollmentDeadline, locale)}</div>
-          </div>
-        </div>
-      )}
-
-      {/* Completion Deadline container */}
-      {showCompletionDeadline && (
-        <div className={styles.commonContainer}>
-          <span aria-hidden="true" className={styles.icon}>
-            <Calendar />
-          </span>
-          <div className={styles.innerContainer}>
-            <label className={styles.label}>
-              {formatMessage({
-                id: "alm.overview.completion.deadline",
-                defaultMessage: "Completion Deadline",
-              })}
-            </label>
-            <div>
-              {loType === "certification"
-                ? showCertificationDeadline == undefined
-                  ? formatMessage(
-                      {
-                        id: "alm.overview.certification.deadline",
-                      },
-                      {
-                        0: trainingInstance?.completionDeadline?.slice(0, -1),
-                      }
-                    )
-                  : modifyTime(showCertificationDeadline, locale)?.slice(0, -10)
-                : modifyTime(trainingInstance.completionDeadline, locale)}
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Alternate Languages */}
       {alternativesLangAvailable.length > 0 && (
         <div className={styles.commonContainer}>
@@ -557,6 +514,90 @@ const PrimeTrainingPageMetaData: React.FC<{
             {alternativesLangAvailable?.map((language) => {
               return <div>{language}</div>;
             })}
+          </div>
+        </div>
+      )}
+      {/* Minimum Completion Criteria container */}
+      {showMinimumCompletion && (
+        <div className={styles.commonContainer}>
+          <span aria-hidden="true" className={styles.minimumCriteria}>
+            {minimumCriteria.value}
+          </span>
+          <div className={styles.innerContainer}>
+            <label className={styles.minimumCriteriaLabel}>
+              {formatMessage({
+                id: "alm.overview.minimum.completion.criteria",
+                defaultMessage: "Minimum Completion Criteria",
+              })}
+            </label>
+            <ContextualHelp variant="help">
+              <Content>
+                <Text>{minimumCriteria.label}</Text>
+              </Content>
+            </ContextualHelp>
+          </div>
+        </div>
+      )}
+      {/* CORE content completed container */}
+      {isEnrolled && coreContentCompleted && (
+        <div className={styles.commonContainer}>
+          <span aria-hidden="true" className={styles.minimumCriteria}>
+            {coreContentCompleted}
+          </span>
+          <div className={styles.innerContainer}>
+            <label className={styles.minimumCriteriaLabel}>
+              {formatMessage({
+                id: "alm.overview.course.core.completed",
+                defaultMessage: "Core Content Completed",
+              })}
+            </label>
+          </div>
+        </div>
+      )}
+      {/* Enrollment Deadline container */}
+      {showEnrollmentDeadline && (
+        <div className={styles.commonContainer}>
+          <span aria-hidden="true" className={styles.icon}>
+            <Calendar />
+          </span>
+          <div className={styles.innerContainer}>
+            <label className={styles.label}>
+              {formatMessage({
+                id: "alm.overview.enrollment.deadline",
+                defaultMessage: "Enrollment Deadline",
+              })}
+            </label>
+            <div>{modifyTime(trainingInstance.enrollmentDeadline, locale)}</div>
+          </div>
+        </div>
+      )}
+      {/* Completion Deadline container */}
+      {showCompletionDeadline && (
+        <div className={styles.commonContainer}>
+          <span aria-hidden="true" className={styles.icon}>
+            <Calendar />
+          </span>
+          <div className={styles.innerContainer}>
+            <label className={styles.label}>
+              {formatMessage({
+                id: "alm.overview.completion.deadline",
+                defaultMessage: "Completion Deadline",
+              })}
+            </label>
+            <div>
+              {loType === "certification"
+                ? showCertificationDeadline == undefined
+                  ? formatMessage(
+                      {
+                        id: "alm.overview.certification.deadline",
+                      },
+                      {
+                        0: trainingInstance?.completionDeadline?.slice(0, -1),
+                      }
+                    )
+                  : modifyTime(showCertificationDeadline, locale)?.slice(0, -10)
+                : modifyTime(trainingInstance.completionDeadline, locale)}
+            </div>
           </div>
         </div>
       )}
@@ -601,7 +642,6 @@ const PrimeTrainingPageMetaData: React.FC<{
           </div>
         </div>
       )}
-
       {/* enrollment container */}
       {showEnrollmentCount && (
         <div className={styles.commonContainer}>
@@ -622,7 +662,6 @@ const PrimeTrainingPageMetaData: React.FC<{
           </div>
         </div>
       )}
-
       {/* Badge Container */}
       {showBadges && (
         <div className={styles.commonContainer}>
@@ -644,7 +683,6 @@ const PrimeTrainingPageMetaData: React.FC<{
           </div>
         </div>
       )}
-
       {/* Modules Completed container */}
       {/* {showModulesCompleted && (
         <div className={styles.commonContainer}>
@@ -654,7 +692,6 @@ const PrimeTrainingPageMetaData: React.FC<{
           </div>
         </div>
       )} */}
-
       {/* Skills Container */}
       <div className={styles.commonContainer}>
         <span aria-hidden="true" className={styles.icon}>
@@ -680,7 +717,6 @@ const PrimeTrainingPageMetaData: React.FC<{
           })}
         </div>
       </div>
-
       {/* Author */}
       {showAuthors && (
         <div className={styles.authorContainer}>
@@ -715,7 +751,6 @@ const PrimeTrainingPageMetaData: React.FC<{
           })}
         </div>
       )}
-
       {/* JOB Aid container */}
       {showJobAids && (
         <div className={styles.commonContainer}>
@@ -745,7 +780,6 @@ const PrimeTrainingPageMetaData: React.FC<{
           </div>
         </div>
       )}
-
       {/* Resources container */}
       {showResource && (
         <div className={styles.commonContainer}>
@@ -780,7 +814,6 @@ const PrimeTrainingPageMetaData: React.FC<{
           </div>
         </div>
       )}
-
       {/* UnEnroll button container */}
       {showUnenrollButton && (
         <div className={styles.commonContainer}>

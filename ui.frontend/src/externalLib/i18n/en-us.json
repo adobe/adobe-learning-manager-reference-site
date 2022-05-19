@@ -183,5 +183,6 @@
   "alm.overview.uploadedProof.label": "Uploaded Proof of Completion",
   "alm.overview.approved.label": "Submission Approved",
   "alm.overview.rejected.label": "Submission Rejected",
-  "alm.training.skill.credits": "({x} Credits)"
+  "alm.training.skill.credits": "({x} Credits)",
+  "alm.overview.course.core.completed": "Core Content Completed"
 }
