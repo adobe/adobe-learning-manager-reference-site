@@ -185,7 +185,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   const addToCart = async () => {
     try {
       const { error, totalQuantity } = await addToCartHandler();
-      if (error && error[0]?.message) { 
+      if (error) { 
         if (isPrimeUserLoggedIn) {
           almAlert(
             true,
