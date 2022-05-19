@@ -60,6 +60,7 @@ import {
   VIRTUAL_CLASSROOM_SVG,
   XLS_SVG,
 } from "../../../utils/inline_svg";
+import { checkIsEnrolled } from "../../../utils/overview";
 import {
   getPreferredLocalizedMetadata,
   GetTranslation,
@@ -121,10 +122,7 @@ const PrimeModuleItem: React.FC<{
     locale
   );
   const enrollment = training.enrollment;
-  const isEnrolled =
-    enrollment &&
-    enrollment?.state !== PENDING_APPROVAL &&
-    enrollment?.state !== PENDING_ACCEPTANCE;
+  const isEnrolled = checkIsEnrolled(enrollment);
 
   const resource = useResource(loResource, locale);
 
