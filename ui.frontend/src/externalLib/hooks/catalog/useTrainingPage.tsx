@@ -11,6 +11,8 @@ governing permissions and limitations under the License.
 */
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
+import { AlertType } from "../../common/Alert/AlertDialog";
+import { useAlert } from "../../common/Alert/useAlert";
 import APIServiceInstance from "../../common/APIService";
 import {
   PrimeAccount,
@@ -37,6 +39,7 @@ import {
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { LaunchPlayer } from "../../utils/playback-utils";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
+import { GetTranslation } from "../../utils/translationService";
 
 const DEFAULT_INCLUDE_LO_OVERVIEW =
   "enrollment.loInstance.loResources.resources,prerequisiteLOs,subLOs.prerequisiteLOs,subLOs.subLOs.prerequisiteLOs,authors,enrollment.loResourceGrades,subLOs.enrollment.loResourceGrades, subLOs.subLOs.enrollment.loResourceGrades, subLOs.subLOs.instances.loResources.resources, subLOs.instances.loResources.resources,instances.loResources.resources,supplementaryLOs.instances.loResources.resources,supplementaryResources,subLOs.enrollment,instances.badge, skills.skillLevel.badge,skills.skillLevel.skill";
@@ -46,6 +49,8 @@ export const useTrainingPage = (
   params: QueryParams = {}
 ) => {
   const { locale } = getALMConfig();
+  const [almAlert] = useAlert();
+  
   const [currentState, setCurrentState] = useState({
     trainingInstance: {} as PrimeLearningObjectInstance,
     isPreviewEnabled: false,
@@ -137,7 +142,7 @@ export const useTrainingPage = (
           setRefreshTraining((prevState) => !prevState);
         }
       } catch (error) {
-        throw error;
+          almAlert(true, GetTranslation("alm.enrollment.error"), AlertType.error);
         //TODO : handle error
       }
     },
