@@ -177,7 +177,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   const onPressHandler = async () => {
     try {
       enrollmentHandler();
-      if (enrollment.state != PENDING_APPROVAL) {
+      if (isEnrolled) {
         launchPlayerHandler();
       }
     } catch (e) {}
@@ -636,8 +636,14 @@ const PrimeTrainingPageMetaData: React.FC<{
             </label>
             <div>
               {trainingInstance?.validity
-                ? trainingInstance?.validity?.slice(0, -1) + " " + "months"
-                : "Perpetual"}
+                ? formatMessage(
+                    { id: "alm.overview.certification.durationTime" },
+                    { 0: trainingInstance?.validity?.slice(0, -1) }
+                  )
+                : formatMessage({
+                    id: "alm.certification.type",
+                    defaultMessage: "Perpetual",
+                  })}
             </div>
           </div>
         </div>

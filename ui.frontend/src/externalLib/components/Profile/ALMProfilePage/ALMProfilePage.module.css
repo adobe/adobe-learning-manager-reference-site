@@ -184,7 +184,7 @@ governing permissions and limitations under the License.
     padding: 0;
   }
   .detailsContainer {
-    padding: 20px;
+    padding: 20px 20px 50px 20px;
     border-top: 2px solid var(--prime-color-nc6);
     border-bottom: 2px solid var(--prime-color-nc6);
   }
@@ -238,7 +238,7 @@ governing permissions and limitations under the License.
   .primeStatusSvg {
     background: none;
     border: none;
-    width: 50px;
+    width: 100px;
     fill: currentColor;
     padding-left: 5px;
   }
@@ -248,7 +248,7 @@ governing permissions and limitations under the License.
   .progressAreaMobile{
     display: flex;
     width: 80px;
-    margin-left:20px;
+    margin-left: 25px;
     margin-top: 10px;
   }
 }
