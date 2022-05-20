@@ -21,6 +21,10 @@ governing permissions and limitations under the License.
   transform: translateX(-100%);
   z-index: 4;
   visibility: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .alm-header-vertical-nav.open {
@@ -103,7 +107,7 @@ governing permissions and limitations under the License.
   justify-content: space-between;
 }
 
-#alm-header .alm-profile__text
+#alm-header .alm-header-cont .alm-profile__text
 {
   cursor: pointer;
 }
