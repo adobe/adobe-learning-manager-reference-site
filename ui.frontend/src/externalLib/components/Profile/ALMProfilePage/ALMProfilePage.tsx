@@ -309,7 +309,6 @@ const ALMProfilePage = () => {
           />
           <section>
             <></>
-            <hr style={{ width: "1100px" }} />
             <div className={styles.activeFieldButtonContainer}>
               <Button
                 UNSAFE_className={styles.activeFieldsSaveOption}
