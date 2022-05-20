@@ -41,7 +41,7 @@ export const apolloClient = new ApolloClient({
 const CommerceContextProviders = (props: React.PropsWithChildren<{}>) => {
   return (
     <React.Fragment>
-      <ApolloProvider client={apolloClient}>{props.children}</ApolloProvider>;
+      <ApolloProvider client={apolloClient}>{props.children}</ApolloProvider>
     </React.Fragment>
   );
 };
