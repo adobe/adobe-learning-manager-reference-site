@@ -166,7 +166,8 @@ const PrimeModuleItem: React.FC<{
     overview,
     isClassroomOrVC,
     isElearning,
-    hasSessionDetails
+    hasSessionDetails,
+    formatMessage
   );
 
   const loResourceMandatory = (): boolean => {
@@ -360,7 +361,10 @@ const PrimeModuleItem: React.FC<{
               <span className={styles.title}>{name}</span>
               {isModulePreviewAble && (
                 <span className={styles.previewable}>
-                  Preview <Visibility aria-hidden="true" />
+                  {formatMessage({
+                    id: "alm.module.session.preview",
+                    defaultMessage: "Preview",
+                  })} <Visibility aria-hidden="true" />
                 </span>
               )}
             </div>
@@ -513,7 +517,8 @@ const getDescriptionTemplate = (
   overview: string,
   isClassroomOrVC: boolean,
   isElearning: boolean,
-  hasSessionDetails: boolean
+  hasSessionDetails: boolean,
+  formatMessage: Function
 ) => {
   if (isElearning) {
     return "";
@@ -521,7 +526,10 @@ const getDescriptionTemplate = (
   if (isClassroomOrVC && !hasSessionDetails) {
     return (
       <div className={styles.moduleDescription}>
-        No session details have been updated.
+        {formatMessage({
+          id: "alm.module.session.detail",
+          defaultMessage: "No session details have been updated",
+        })}
       </div>
     );
   }
@@ -530,7 +538,7 @@ const getDescriptionTemplate = (
   ) : (
     overview && (
       <div className={styles.moduleDescription}>
-        hi {description || overview}
+         {description || overview}
       </div>
     )
   );
@@ -553,7 +561,10 @@ const getSessionsTemplate = (
   }
   const instructorNames = resource.instructorNames?.length
     ? resource.instructorNames.join(", ")
-    : "Not Available";
+    : formatMessage(
+      { id: "alm.module.instructorName.NotAvailable" },
+      { defaultMessage: "Not Available" }
+    );
 
   const timeInfo = getTimeInfo(resource, formatMessage);
   return (

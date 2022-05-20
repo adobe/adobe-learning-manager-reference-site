@@ -185,6 +185,9 @@
   "alm.overview.uploadProof.label": "Upload Proof of Completion",
   "alm.overview.uploadedProof.label": "Uploaded Proof of Completion",
   "alm.overview.approved.label": "Submission Approved",
+  "alm.module.session.detail": "No session details have been updated",
+  "alm.module.session.preview": "Preview",
+  "alm.module.instructorName.NotAvailable": "Not Available",
   "alm.overview.rejected.label": "Submission Rejected",
   "alm.training.skill.credits": "({x} Credits)",
   "alm.overview.course.core.completed": "Core Content Completed"
