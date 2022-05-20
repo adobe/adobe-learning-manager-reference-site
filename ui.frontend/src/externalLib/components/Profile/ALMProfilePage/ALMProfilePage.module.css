@@ -184,7 +184,7 @@ governing permissions and limitations under the License.
     padding: 0;
   }
   .detailsContainer {
-    padding: 20px;
+    padding: 20px 20px 50px 20px;
     border-top: 2px solid var(--prime-color-nc6);
     border-bottom: 2px solid var(--prime-color-nc6);
   }
