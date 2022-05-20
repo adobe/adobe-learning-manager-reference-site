@@ -238,7 +238,7 @@ governing permissions and limitations under the License.
   .primeStatusSvg {
     background: none;
     border: none;
-    width: 50px;
+    width: 100px;
     fill: currentColor;
     padding-left: 5px;
   }
@@ -248,7 +248,7 @@ governing permissions and limitations under the License.
   .progressAreaMobile{
     display: flex;
     width: 80px;
-    margin-left:20px;
+    margin-left: 25px;
     margin-top: 10px;
   }
 }
