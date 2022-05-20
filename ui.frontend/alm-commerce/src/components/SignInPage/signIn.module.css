@@ -67,3 +67,11 @@ governing permissions and limitations under the License.
   color: var(--prime-color-nc1);
   font-size: var(--prime-font-size-14);
 }
+
+@media screen and (max-width: 414px) {
+  .signInContainer {
+    width: 100%;
+    box-shadow: none;
+  }
+}
+
