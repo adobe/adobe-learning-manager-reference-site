@@ -189,12 +189,9 @@ const PrimeModuleItem: React.FC<{
   };
 
   const itemClickHandler = (event: any) => {
-    if (!canPlay) {
-      //show popup
-      // alert("Module ios locked");
+    if (isEnrolled && !canPlay) {
       setShowCannotSkipDialog(true);
       setTimeout(() => setShowCannotSkipDialog(false), 3000);
-
       return;
     }
     if (
