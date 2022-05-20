@@ -442,7 +442,7 @@ governing permissions and limitations under the License.
 
   .alm-header-icons .notification__container {
     display: block;
-    z-index: 99;
+    /* z-index: 99; */
   }
 
   #alm-support-header .text

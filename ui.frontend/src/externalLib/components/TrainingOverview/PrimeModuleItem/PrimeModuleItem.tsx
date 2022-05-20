@@ -20,10 +20,11 @@ import LockClosed from "@spectrum-icons/workflow/LockClosed";
 import Seat from "@spectrum-icons/workflow/Seat";
 import User from "@spectrum-icons/workflow/User";
 import Visibility from "@spectrum-icons/workflow/Visibility";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import store from "../../../../store/APIStore";
-import { AlertDialog, AlertType } from "../../../common/Alert/AlertDialog";
+import { AlertType } from "../../../common/Alert/AlertDialog";
+import { useAlert } from "../../../common/Alert/useAlert";
 import { useTrainingPage } from "../../../hooks";
 import {
   PrimeLearningObject,
@@ -35,8 +36,6 @@ import {
 import {
   CLASSROOM,
   ELEARNING,
-  PENDING_ACCEPTANCE,
-  PENDING_APPROVAL,
   VIRTUAL_CLASSROOM,
 } from "../../../utils/constants";
 import {
@@ -111,7 +110,19 @@ const PrimeModuleItem: React.FC<{
   } = props;
   const { formatMessage } = useIntl();
 
+  const [almAlert] = useAlert();
+
   const [showCannotSkipDialog, setShowCannotSkipDialog] = useState(false);
+
+  useEffect(() => {
+    if (showCannotSkipDialog) {
+      almAlert(
+        true,
+        GetTranslation("alm.overview.cannot.skip.ordered.module", true),
+        AlertType.error
+      );
+    }
+  }, [almAlert, showCannotSkipDialog]);
 
   const config = getALMConfig();
   const locale = config.locale;
@@ -315,15 +326,6 @@ const PrimeModuleItem: React.FC<{
 
   return (
     <>
-      <AlertDialog
-        type={AlertType.error}
-        message={GetTranslation(
-          "alm.overview.cannot.skip.ordered.module",
-          true
-        )}
-        show={showCannotSkipDialog}
-        // classes={styles.warningDialog}
-      ></AlertDialog>
       <li className={styles.container}>
         <div
           className={`${styles.headerContainer} ${
