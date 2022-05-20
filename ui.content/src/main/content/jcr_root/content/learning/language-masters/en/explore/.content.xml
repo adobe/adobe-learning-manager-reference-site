@@ -23,6 +23,7 @@
                 <container
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="learning/components/container"
+                    id="catalog-page-container"
                     layout="responsiveGrid">
                     <catalog
                         jcr:created="{Date}2022-03-07T17:05:44.833+05:30"

@@ -177,14 +177,6 @@ governing permissions and limitations under the License.
 
 /* CSS for MyLearning Page*/
 
-#learning-parent-container,
-#home-catalog-container,
-#home-categories-container {
-  width: 100%;
-  margin: 0 auto;
-  margin-top: 5px;
-}
-
 #learning-parent-container .cmp-teaser .cmp-teaser__title
 ,#home-catalog-container .cmp-teaser .cmp-teaser__title
 {
@@ -373,6 +365,7 @@ governing permissions and limitations under the License.
 
 @media screen and (min-width: 1024px) {
   #learning-parent-container,
+  #catalog-page-container,
   #home-catalog-container,
   #home-categories-container {
     margin: 0 auto;
@@ -460,10 +453,8 @@ governing permissions and limitations under the License.
 }
 
 @media screen and (min-width: 1366px) {
-  #learning-parent-container {
-    margin: 0 auto;
-    margin-top: 60px;
-  }
+  #learning-parent-container,
+  #catalog-page-container,
   #home-catalog-container,
   #home-categories-container {
     margin: 0 auto;
@@ -489,6 +480,7 @@ governing permissions and limitations under the License.
 
 #home-catalog-container,
 #home-categories-container,
+#catalog-page-container,
 #learning-parent-container {
   max-width: var(--prime-container-max-width-desktop);
   width: var(--prime-container-width);
@@ -506,6 +498,7 @@ governing permissions and limitations under the License.
 
 @media screen and (max-width: 1024px) {
   #home-catalog-container,
+  #catalog-page-container,
   #home-categories-container,
   #learning-parent-container {
     max-width: var(--prime-container-max-width-tablet);
@@ -528,6 +521,7 @@ governing permissions and limitations under the License.
 
 @media screen and (max-width: 414px) {
   #home-catalog-container,
+  #catalog-page-container,
   #home-categories-container,
   #learning-parent-container {
     width: 100%;
