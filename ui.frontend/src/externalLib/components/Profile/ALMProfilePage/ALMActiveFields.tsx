@@ -9,7 +9,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { Item, Picker, Switch, TextField } from "@adobe/react-spectrum";
+import { Item, lightTheme, Picker, Provider, Switch, TextField } from "@adobe/react-spectrum";
 import React from "react";
 import { AccountActiveFields, PrimeUser } from "../../../models";
 import styles from "./ALMActiveFields.module.css";
@@ -93,6 +93,7 @@ const ALMActiveFields: React.FC<{
             };
             return (
               <React.Fragment key={activeField.name}>
+                <Provider theme={lightTheme} colorScheme={"light"}>
                 <div className={styles.activeFieldSectionBottom}>
                   <div className={styles.activeFieldName}>
                     {activeField.name}
@@ -189,6 +190,7 @@ const ALMActiveFields: React.FC<{
                       })}
                   </div>
                 </div>
+              </Provider>
               </React.Fragment>
             );
           })}
