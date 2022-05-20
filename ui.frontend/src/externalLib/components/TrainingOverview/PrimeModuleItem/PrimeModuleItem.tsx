@@ -366,7 +366,8 @@ const PrimeModuleItem: React.FC<{
                   {formatMessage({
                     id: "alm.module.session.preview",
                     defaultMessage: "Preview",
-                  })} <Visibility aria-hidden="true" />
+                  })}{" "}
+                  <Visibility aria-hidden="true" />
                 </span>
               )}
             </div>
@@ -539,9 +540,7 @@ const getDescriptionTemplate = (
     <div className={styles.moduleDescription}>{description}</div>
   ) : (
     overview && (
-      <div className={styles.moduleDescription}>
-         {description || overview}
-      </div>
+      <div className={styles.moduleDescription}>{description || overview}</div>
     )
   );
 };
@@ -564,11 +563,12 @@ const getSessionsTemplate = (
   const instructorNames = resource.instructorNames?.length
     ? resource.instructorNames.join(", ")
     : formatMessage(
-      { id: "alm.module.instructorName.NotAvailable" },
-      { defaultMessage: "Not Available" }
-    );
+        { id: "alm.module.instructorName.NotAvailable" },
+        { defaultMessage: "Not Available" }
+      );
 
   const timeInfo = getTimeInfo(resource, formatMessage);
+  const showSeatLimit = Boolean(resource.seatLimit);
   return (
     <div className={styles.metaDataContainer}>
       <div className={styles.metadata}>
@@ -580,8 +580,7 @@ const getSessionsTemplate = (
           <span>{timeInfo.timeText}</span>
         </div>
       </div>
-
-      {resource.seatLimit && (
+      {showSeatLimit && (
         <div className={styles.metadata}>
           <div className={styles.spectrumIcon}>
             <Seat aria-hidden="true" />
@@ -603,7 +602,6 @@ const getSessionsTemplate = (
           <div className={styles.details}>{resource.location}</div>
         </div>
       )}
-
       <div className={styles.metadata}>
         <div className={styles.spectrumIcon}>
           <User aria-hidden="true" />
@@ -618,7 +616,6 @@ const getSessionsTemplate = (
           {formatMessage({ id: "alm.overview.duration" }, { 0: durationText })}
         </div>
       </div>
-
       {isVC && isEnrolled && (
         <div className={styles.metadata}>
           <div className={styles.spectrumIcon}>
