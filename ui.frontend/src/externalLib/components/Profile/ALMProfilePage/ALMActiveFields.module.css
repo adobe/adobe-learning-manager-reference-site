@@ -14,6 +14,7 @@ governing permissions and limitations under the License.
 .activeFields {
   margin: 0 auto;
   padding: 10px 0;
+  min-width: 500px;
 }
 
 .title {
@@ -89,5 +90,11 @@ governing permissions and limitations under the License.
 @media screen and (min-width: 1366px) {
   .activeFields {
     width: 1084px;
+  }
+}
+
+@media (max-width: 414px) {
+  .activeFields {
+    padding-left: 20px;
   }
 }
