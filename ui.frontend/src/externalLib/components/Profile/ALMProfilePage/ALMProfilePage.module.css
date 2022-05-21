@@ -43,11 +43,12 @@ governing permissions and limitations under the License.
   display: flex;
   justify-content: flex-end;
 }
-
-.activeFields {
+.saveActiveFieldButton {
   margin: 0 auto;
-  padding: 40px 0;
+  padding: 10px 0;
+  min-width: 500px;
 }
+
 .image {
   width: 164px;
   display: flex;
@@ -121,10 +122,18 @@ governing permissions and limitations under the License.
   .activeFields {
     width: 930px;
   }
+
+  .saveActiveFieldButton {
+    width: 930px;
+  }
 }
 @media screen and (min-width: 1366px) {
   .userProfile,
   .activeFields {
+    width: 1084px;
+  }
+
+  .saveActiveFieldButton {
     width: 1084px;
   }
 }
@@ -150,7 +159,6 @@ governing permissions and limitations under the License.
   border: none;
   margin-top: 20px;
   font-weight: normal;
-  margin-right: 300px;
   margin-top: 50px;
   margin-bottom: 50px;
 }
@@ -174,6 +182,11 @@ governing permissions and limitations under the License.
   .profileHeader {
     display: none;
   }
+
+  .saveActiveFieldButton {
+    padding-left: 20px;
+  }
+
   .button .activeFieldsSaveOption {
     display: none;
   }
