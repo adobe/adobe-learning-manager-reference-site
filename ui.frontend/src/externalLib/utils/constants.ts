@@ -12,3 +12,6 @@ export const TRAINING_INSTANCE_ID_STR = "trainingInstanceId";
 export const ENROLLED = "ENROLLED";
 export const REJECTED = "REJECTED";
 export const COMPLETED = "COMPLETED";
+export const PENDING_SUBMISSION = "PENDING_SUBMISSION";
+export const CHANGE = "CHANGE";
+export const APPROVED = "APPROVED";
