@@ -190,5 +190,6 @@
   "alm.module.instructorName.NotAvailable": "Not Available",
   "alm.overview.rejected.label": "Submission Rejected",
   "alm.training.skill.credits": "({x} Credits)",
-  "alm.overview.course.core.completed": "Core Content Completed"
+  "alm.overview.course.core.completed": "Core Content Completed",
+  "alm.overview.certUploadNote": "Note: Only one document can be uploaded as a proof."
 }
