@@ -6,4 +6,9 @@ export const PENDING_APPROVAL = "PENDING_APPROVAL";
 export const PENDING_ACCEPTANCE = "PENDING_ACCEPTANCE";
 export const COURSE = "course";
 export const CERTIFICATION = "certification";
-
+export const LEARNING_PROGRAM = "learningProgram";
+export const TRAINING_ID_STR = "trainingId";
+export const TRAINING_INSTANCE_ID_STR = "trainingInstanceId";
+export const ENROLLED = "ENROLLED";
+export const REJECTED = "REJECTED";
+export const COMPLETED = "COMPLETED";
