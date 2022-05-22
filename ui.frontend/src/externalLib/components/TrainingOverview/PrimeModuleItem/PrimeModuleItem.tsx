@@ -330,7 +330,7 @@ const PrimeModuleItem: React.FC<{
     return isEnrolled && loResource.submissionEnabled;
   };
 
-  const getFileUploadSection = (state: any) => {
+  const getFileUploadSection = (hasSession: Boolean, state: String) => {
     const allowFileUpdate = true;
     switch (state) {
       case REJECTED:
@@ -342,7 +342,7 @@ const PrimeModuleItem: React.FC<{
                 defaultMessage: "Submission Rejected",
               })}
             </span>
-            : {getUploadedFileSection(allowFileUpdate)}
+            : {getUploadedFileSection(hasSession, allowFileUpdate)}
           </span>
         );
 
@@ -355,7 +355,7 @@ const PrimeModuleItem: React.FC<{
                 defaultMessage: "Submission Awaiting Approval",
               })}
             </span>
-            : {getUploadedFileSection(allowFileUpdate)}
+            : {getUploadedFileSection(hasSession, allowFileUpdate)}
           </span>
         );
       case APPROVED:
@@ -367,7 +367,7 @@ const PrimeModuleItem: React.FC<{
                 defaultMessage: "Submission Approved",
               })}
             </span>
-            : {getUploadedFileSection(!allowFileUpdate)}
+            : {getUploadedFileSection(hasSession, !allowFileUpdate)}
           </span>
         );
       case PENDING_SUBMISSION:
@@ -378,40 +378,51 @@ const PrimeModuleItem: React.FC<{
               id: "alm.overview.submissionPending.label",
               defaultMessage: "Submission Pending",
             })}
-            : {getUploadFileSection()}
+            : {getUploadFileSection(hasSession)}
           </span>
         );
     }
   };
 
-  const getUploadFileSection = (state?: String) => {
+  const showUpload = (hasSession: Boolean) => {
+    if (hasSession) {
+      return new Date(resource.dateStart) < new Date();
+    }
+    return true;
+  };
+  const getUploadFileSection = (hasSession: Boolean, state?: String) => {
     return (
-      <span>
-        <button onClick={startFileUpload} className={styles.uploadButton}>
-          (
-          {state === CHANGE
-            ? formatMessage({
-                id: "alm.module.change",
-                defaultMessage: "Change",
-              })
-            : formatMessage({
-                id: "alm.overview.module.uploadFile",
-                defaultMessage: "Upload File",
-              })}
-          )
-        </button>
-        <input
-          type="file"
-          id={inputElementId}
-          className={styles.uploadFileSubmission}
-          onChange={(event: any) => fileSelected(event)}
-          ref={inputRef}
-        />
-      </span>
+      showUpload(hasSession) && (
+        <span>
+          <button onClick={startFileUpload} className={styles.uploadButton}>
+            (
+            {state === CHANGE
+              ? formatMessage({
+                  id: "alm.module.change",
+                  defaultMessage: "Change",
+                })
+              : formatMessage({
+                  id: "alm.overview.module.uploadFile",
+                  defaultMessage: "Upload File",
+                })}
+            )
+          </button>
+          <input
+            type="file"
+            id={inputElementId}
+            className={styles.uploadFileSubmission}
+            onChange={(event: any) => fileSelected(event)}
+            ref={inputRef}
+          />
+        </span>
+      )
     );
   };
 
-  const getUploadedFileSection = (changeAllowed: boolean) => {
+  const getUploadedFileSection = (
+    hasSession: Boolean,
+    changeAllowed: Boolean
+  ) => {
     return (
       <>
         <a
@@ -422,7 +433,7 @@ const PrimeModuleItem: React.FC<{
         >
           {getSubmissionFileName(submissionUrl)}
         </a>
-        {changeAllowed && getUploadFileSection(CHANGE)}
+        {changeAllowed && getUploadFileSection(hasSession, CHANGE)}
       </>
     );
   };
@@ -500,7 +511,7 @@ const PrimeModuleItem: React.FC<{
                 )}
                 {!isUploading &&
                   showFileSubmission() &&
-                  getFileUploadSection(submissionState)}
+                  getFileUploadSection(isClassroomOrVC, submissionState)}
               </span>
               <span>{durationText}</span>
             </div>
