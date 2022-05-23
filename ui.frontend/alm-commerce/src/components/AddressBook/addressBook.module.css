@@ -22,9 +22,9 @@ governing permissions and limitations under the License.
   margin: 0;
 }
 
-.row label{
+.row label {
   /* padding: 10px 20px; */
-  font-size: var(--prime-font-size-16)!important;
+  font-size: var(--prime-font-size-16) !important;
   color: var(--prime-color-nc1);
 }
 .row {
@@ -32,6 +32,10 @@ governing permissions and limitations under the License.
   display: flex;
   gap: 20px;
   margin: 10px 0;
+}
+.row label svg {
+  width: 16px;
+  height: 16px;
 }
 
 .half {

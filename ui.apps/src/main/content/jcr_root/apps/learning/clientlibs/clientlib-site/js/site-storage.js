@@ -32,12 +32,9 @@ governing permissions and limitations under the License.
   }
 
   class BrowserPersistence {
-    static KEY = "ALM_BROWSER_PERSISTENCE";
     constructor() {
-      this.storage = new NamespacedSessionStorage(
-        sessionStorage,
-        BrowserPersistence.KEY
-      );
+      this.key = "ALM_BROWSER_PERSISTENCE";
+      this.storage = new NamespacedSessionStorage(sessionStorage, this.key);
     }
     getRawItem(name) {
       return this.storage.getItem(name);

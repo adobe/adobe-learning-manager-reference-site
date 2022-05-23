@@ -44,7 +44,7 @@ module.exports = {
   libs: {
     name: "clientlib-alm-commerce",
     allowProxy: true,
-    categories: ["commerce.ui"],
+    categories: ["learning.commerce"],
     serializationFormat: "xml",
     cssProcessor: ["default:none", "min:none"],
     jsProcessor: ["default:none", "min:none"],

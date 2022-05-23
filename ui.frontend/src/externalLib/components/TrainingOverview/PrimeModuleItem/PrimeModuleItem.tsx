@@ -34,8 +34,13 @@ import {
   PrimeResource,
 } from "../../../models/PrimeModels";
 import {
+  APPROVED,
+  CHANGE,
   CLASSROOM,
   ELEARNING,
+  PENDING_APPROVAL,
+  PENDING_SUBMISSION,
+  REJECTED,
   VIRTUAL_CLASSROOM,
 } from "../../../utils/constants";
 import {
@@ -321,6 +326,118 @@ const PrimeModuleItem: React.FC<{
     return urlParts?.length > 0 ? urlParts[urlParts?.length - 1] : "";
   };
 
+  const showFileSubmission = () => {
+    return isEnrolled && loResource.submissionEnabled;
+  };
+
+  const getFileUploadSection = (hasSession: Boolean, state: String) => {
+    const allowFileUpdate = true;
+    switch (state) {
+      case REJECTED:
+        return (
+          <span className={styles.fileSubmissionContainer}>
+            <span className={styles.fileRejected}>
+              {formatMessage({
+                id: "alm.overview.rejected.label",
+                defaultMessage: "Submission Rejected",
+              })}
+            </span>
+            : {getUploadedFileSection(hasSession, allowFileUpdate)}
+          </span>
+        );
+
+      case PENDING_APPROVAL:
+        return (
+          <span className={styles.fileSubmissionContainer}>
+            <span className={styles.fileAwaitingApproval}>
+              {formatMessage({
+                id: "alm.overview.submissionAwaitingApproval.label",
+                defaultMessage: "Submission Awaiting Approval",
+              })}
+            </span>
+            : {getUploadedFileSection(hasSession, allowFileUpdate)}
+          </span>
+        );
+      case APPROVED:
+        return (
+          <span className={styles.fileSubmissionContainer}>
+            <span className={styles.fileApproved}>
+              {formatMessage({
+                id: "alm.overview.approved.label",
+                defaultMessage: "Submission Approved",
+              })}
+            </span>
+            : {getUploadedFileSection(hasSession, !allowFileUpdate)}
+          </span>
+        );
+      case PENDING_SUBMISSION:
+      default:
+        return (
+          <span className={styles.fileSubmissionContainer}>
+            {formatMessage({
+              id: "alm.overview.submissionPending.label",
+              defaultMessage: "Submission Pending",
+            })}
+            : {getUploadFileSection(hasSession)}
+          </span>
+        );
+    }
+  };
+
+  const showUpload = (hasSession: Boolean) => {
+    if (hasSession) {
+      return new Date(resource.dateStart) < new Date();
+    }
+    return true;
+  };
+  const getUploadFileSection = (hasSession: Boolean, state?: String) => {
+    return (
+      showUpload(hasSession) && (
+        <span>
+          <button onClick={startFileUpload} className={styles.uploadButton}>
+            (
+            {state === CHANGE
+              ? formatMessage({
+                  id: "alm.module.change",
+                  defaultMessage: "Change",
+                })
+              : formatMessage({
+                  id: "alm.overview.module.uploadFile",
+                  defaultMessage: "Upload File",
+                })}
+            )
+          </button>
+          <input
+            type="file"
+            id={inputElementId}
+            className={styles.uploadFileSubmission}
+            onChange={(event: any) => fileSelected(event)}
+            ref={inputRef}
+          />
+        </span>
+      )
+    );
+  };
+
+  const getUploadedFileSection = (
+    hasSession: Boolean,
+    changeAllowed: Boolean
+  ) => {
+    return (
+      <>
+        <a
+          className={styles.submissionLink}
+          href={submissionUrl}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {getSubmissionFileName(submissionUrl)}
+        </a>
+        {changeAllowed && getUploadFileSection(hasSession, CHANGE)}
+      </>
+    );
+  };
+
   return (
     <>
       <li className={styles.container}>
@@ -393,108 +510,8 @@ const PrimeModuleItem: React.FC<{
                   </div>
                 )}
                 {!isUploading &&
-                  isEnrolled &&
-                  loResource.submissionEnabled &&
-                  (submissionState === "PENDING_SUBMISSION" ||
-                    !submissionState) && (
-                    <span className={styles.fileSubmissionContainer}>
-                      {formatMessage({
-                        id: "alm.overview.submissionPending.label",
-                        defaultMessage: "Submission Pending",
-                      })}
-                      :
-                      <button
-                        onClick={startFileUpload}
-                        className={styles.uploadButton}
-                      >
-                        (
-                        {formatMessage({
-                          id: "alm.overview.module.uploadFile",
-                          defaultMessage: "Upload File",
-                        })}
-                        )
-                      </button>
-                      <input
-                        type="file"
-                        id={inputElementId}
-                        className={styles.uploadFileSubmission}
-                        onChange={(event: any) => fileSelected(event)}
-                        ref={inputRef}
-                      />
-                    </span>
-                  )}
-                {!isUploading &&
-                  isEnrolled &&
-                  loResource.submissionEnabled &&
-                  (submissionState === "PENDING_APPROVAL" ||
-                    submissionState === "REJECTED") && (
-                    <span className={styles.fileSubmissionContainer}>
-                      {submissionState === "REJECTED" ? (
-                        <span className={styles.fileRejected}>
-                          {formatMessage({
-                            id: "alm.overview.rejected.label",
-                            defaultMessage: "Submission Rejected",
-                          })}
-                        </span>
-                      ) : (
-                        <span className={styles.fileAwaitingApproval}>
-                          {formatMessage({
-                            id: "alm.overview.submissionAwaitingApproval.label",
-                            defaultMessage: "Submission Awaiting Approval",
-                          })}
-                        </span>
-                      )}
-                      :{" "}
-                      <a
-                        className={styles.submissionLink}
-                        href={submissionUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {getSubmissionFileName(submissionUrl)}
-                      </a>
-                      <button
-                        onClick={startFileUpload}
-                        className={styles.uploadButton}
-                      >
-                        (
-                        {formatMessage({
-                          id: "alm.module.change",
-                          defaultMessage: "Change",
-                        })}
-                        )
-                      </button>
-                      <input
-                        type="file"
-                        id={inputElementId}
-                        className={styles.uploadFileSubmission}
-                        onChange={(event: any) => fileSelected(event)}
-                        ref={inputRef}
-                      />
-                    </span>
-                  )}
-                {!isUploading &&
-                  isEnrolled &&
-                  loResource.submissionEnabled &&
-                  submissionState === "APPROVED" && (
-                    <span className={styles.fileSubmissionContainer}>
-                      <span className={styles.fileApproved}>
-                        {formatMessage({
-                          id: "alm.overview.approved.label",
-                          defaultMessage: "Submission Approved",
-                        })}
-                        :{" "}
-                      </span>
-                      <a
-                        className={styles.submissionLink}
-                        href={submissionUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {getSubmissionFileName(submissionUrl)}
-                      </a>
-                    </span>
-                  )}
+                  showFileSubmission() &&
+                  getFileUploadSection(isClassroomOrVC, submissionState)}
               </span>
               <span>{durationText}</span>
             </div>

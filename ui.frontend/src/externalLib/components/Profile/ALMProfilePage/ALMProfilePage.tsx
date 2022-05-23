@@ -307,9 +307,9 @@ const ALMProfilePage = () => {
             updateSelectedMultiValues={updateSelectedMultiValues}
             predefinedMultiValues={predefinedMultiValues}
           />
-          <section>
+          <section className={styles.saveActiveFieldButton}>
             <></>
-            <hr style={{ width: "1100px" }} />
+            <hr />
             <div className={styles.activeFieldButtonContainer}>
               <Button
                 UNSAFE_className={styles.activeFieldsSaveOption}

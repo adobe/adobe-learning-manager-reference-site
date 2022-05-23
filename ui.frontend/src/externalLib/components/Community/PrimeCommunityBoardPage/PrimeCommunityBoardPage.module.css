@@ -11,61 +11,61 @@ governing permissions and limitations under the License.
 */
 @import "../../../styles/variables.css";
 .primeBoardParent {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
 }
 
 .primeCommunitySearchContainer {
-    display: flex;
-    margin-bottom:20px;
-    margin-top: 25px;
-    margin-left: auto;
-    justify-content: center;
+  display: flex;
+  margin-bottom: 20px;
+  margin-top: 25px;
+  margin-left: auto;
+  justify-content: center;
 }
 
 @media (max-width: 414px) {
-    .primeCommunitySearchContainer {
-        padding: 5px 20px;
-        width: 100%
-    }
+  .primeCommunitySearchContainer {
+    padding: 5px 20px;
+    width: 100%;
+  }
 }
 
 .primeLoaderWrapper {
-    margin-bottom: 20px;
-    height:20px;
-    display: flex;
-    justify-content: center;
+  margin-bottom: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .primeCommunitySearchStatus {
-    display: flex;
-    font-size: var(--prime-font-size-14);
-    width: 716px;
-    margin: auto;
-    margin-bottom: 25px;
-    padding-left: 20px;
+  display: flex;
+  font-size: var(--prime-font-size-14);
+  width: 716px;
+  margin: auto;
+  margin-bottom: 25px;
+  padding-left: 20px;
 }
 
 .primeCommunitySearchClear {
-    border: none;
-    background-color: transparent;
-    color: #306EB5;
+  border: none;
+  background-color: transparent;
+  color: #306eb5;
 }
 
 .primeCommunitySearchClear:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .primeCommunitySearchWrapper {
-    width: 716px;
-    display: flex;
-    justify-content: right;
+  width: 716px;
+  display: flex;
+  justify-content: flex-end;
 }
-  
+
 @media (max-width: 414px) {
-    .primeCommunitySearchWrapper {
-        width: 100%;
-        height: 40px;
-    }
+  .primeCommunitySearchWrapper {
+    width: 100%;
+    height: 40px;
+  }
 }
