@@ -20,7 +20,7 @@ import {
   updateSkillNameFilter,
   updateTagsFilter,
 } from "../store/actions/catalog/action";
-import { getQueryParamsIObjectFromUrl } from "./global";
+import { getQueryParamsFromUrl } from "./global";
 export const filtersDefaultState: FilterState = {
   loTypes: {
     type: "loTypes",
@@ -262,7 +262,7 @@ export const updatePriceFilterList = (
 };
 
 export const getDefaultFiltersState = () => {
-  const filtersFromUrl = getQueryParamsIObjectFromUrl();
+  const filtersFromUrl = getQueryParamsFromUrl();
   let filtersDefault = filtersDefaultState;
   filtersDefault.loTypes.list = updateFilterList(
     filtersDefault.loTypes.list,

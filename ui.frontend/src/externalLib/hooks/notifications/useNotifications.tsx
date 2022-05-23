@@ -78,7 +78,7 @@ export const useNotifications = () => {
       return;
     }
     const userResponse = await getALMUser();
-    return userResponse.user.id;
+    return userResponse?.user?.id;
   };
 
   const pageLimit = 6;
