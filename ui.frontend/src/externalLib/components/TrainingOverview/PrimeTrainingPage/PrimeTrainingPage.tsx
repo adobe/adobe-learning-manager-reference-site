@@ -9,9 +9,10 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { lightTheme, Provider } from "@adobe/react-spectrum";
-import { useState, useRef } from "react";
+import { lightTheme, ProgressBar, Provider } from "@adobe/react-spectrum";
+import { useRef, useState } from "react";
 import { useIntl } from "react-intl";
+import store from "../../../../store/APIStore";
 import { useTrainingPage } from "../../../hooks/catalog/useTrainingPage";
 import { convertSecondsToTimeText } from "../../../utils/dateTime";
 import {
@@ -21,7 +22,13 @@ import {
   PrimeConfig,
   setALMAttribute,
 } from "../../../utils/global";
+import { SOCIAL_CANCEL_SVG } from "../../../utils/inline_svg";
 import { getPreferredLocalizedMetadata } from "../../../utils/translationService";
+import {
+  cancelUploadFile,
+  getUploadInfo,
+  uploadFile,
+} from "../../../utils/uploadUtils";
 import { ALMBackButton } from "../../Common/ALMBackButton";
 import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 import { ALMLoader } from "../../Common/ALMLoader";
@@ -30,12 +37,6 @@ import { PrimeTrainingItemContainerHeader } from "../PrimeTrainingItemContainerH
 import { PrimeTrainingOverview } from "../PrimeTrainingOverview";
 import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
 import { PrimeTrainingPageMetadata } from "../PrimeTrainingPageMetadata";
-import { ProgressBar } from "@adobe/react-spectrum";
-import { getUploadInfo, uploadFile, cancelUploadFile } from "../../../utils/uploadUtils";
-import store from "../../../../store/APIStore";
-import {
-  SOCIAL_CANCEL_SVG,
-} from "../../../utils/inline_svg";
 import styles from "./PrimeTrainingPage.module.css";
 
 const COURSE = "course";
@@ -91,13 +92,13 @@ const PrimeTrainingPage = () => {
 
   const inputRef = useRef<null | HTMLInputElement>(null);
   const state = store.getState();
-  const [ isUploading, setIsUploading] = useState(false);
-  const [ submissionState, setSubmissionState ] = useState("");
-  const [ submissionUrl, setSubmissionUrl ] = useState("");
-  const [ fileUploadProgress, setFileUploadProgress ] = useState(
+  const [isUploading, setIsUploading] = useState(false);
+  const [submissionState, setSubmissionState] = useState("");
+  const [submissionUrl, setSubmissionUrl] = useState("");
+  const [fileUploadProgress, setFileUploadProgress] = useState(
     state.fileUpload.uploadProgress
   );
-  const {updateCertificationProofUrl} = useTrainingPage("", "");
+  const { updateCertificationProofUrl } = useTrainingPage("", "");
 
   if (isLoading || !training) {
     return <ALMLoader classes={styles.loader} />;
@@ -116,9 +117,11 @@ const PrimeTrainingPage = () => {
   };
 
   const inputElementId = training.id + "-uploadFileSubmission";
-  
+
   const fileSelected = async (event: any) => {
-    const inputElement = document.getElementById(inputElementId) as HTMLInputElement;
+    const inputElement = document.getElementById(
+      inputElementId
+    ) as HTMLInputElement;
     setFileUploadProgress(0);
     setIsUploading(true);
     const progressCheck = setInterval(() => {
@@ -129,8 +132,13 @@ const PrimeTrainingPage = () => {
       inputElement!.files!.item(0)!.name,
       inputElement!.files!.item(0)!
     );
-    let blFileUrl = await updateCertificationProofUrl(fileUrl, training.id, trainingInstance.id) || "";
-    if(blFileUrl.length > 0) {
+    let blFileUrl =
+      (await updateCertificationProofUrl(
+        fileUrl,
+        training.id,
+        trainingInstance.id
+      )) || "";
+    if (blFileUrl.length > 0) {
       setSubmissionState("PENDING_APPROVAL");
       setSubmissionUrl(blFileUrl);
     }
@@ -147,7 +155,7 @@ const PrimeTrainingPage = () => {
     const urlWithoutParams = url?.split("?")[0];
     let urlParts = urlWithoutParams?.split("/");
     return urlParts?.length > 0 ? urlParts[urlParts?.length - 1] : "";
-  }
+  };
 
   return (
     <ALMErrorBoundary>
@@ -178,19 +186,17 @@ const PrimeTrainingPage = () => {
               )}
             </span>
 
-            {training.loType && training.isExternal && training.enrollment &&
+            {training.loType && training.isExternal && training.enrollment && (
               <div className={styles.externalCertUploadInfo}>
                 <span className={styles.externalCertUploadMessage}>
-                  {formatMessage(
-                    { id: "alm.overview.externalCertInfo"}
-                  )}
+                  {formatMessage({ id: "alm.overview.externalCertInfo" })}
                 </span>
               </div>
-            }
+            )}
 
-            {training.loType && training.isExternal && training.enrollment &&
-              <hr className={styles.uploadUpperSeperator}/>
-            }
+            {training.loType && training.isExternal && training.enrollment && (
+              <hr className={styles.uploadUpperSeperator} />
+            )}
 
             {isUploading && (
               <div className={styles.progressArea}>
@@ -214,60 +220,113 @@ const PrimeTrainingPage = () => {
               </div>
             )}
 
-            {!isUploading && training.loType && training.isExternal && training.enrollment && (training.enrollment.state === "ENROLLED" || training.enrollment.state === "REJECTED") &&
-              <span className={styles.fileSubmissionContainer}>
-               {formatMessage({
-                 id: "alm.overview.uploadProof.label",
-                 defaultMessage: "Upload Proof of Completion",
-               })}:
-               <button
-                 onClick={startFileUpload}
-                 className={styles.uploadButton}
-               >
-                 ({formatMessage({
-                   id: "alm.overview.module.uploadFile",
-                   defaultMessage: "Upload File",
-                 })})
-               </button>
-               <input
-                 type="file"
-                 id={inputElementId}
-                 className={styles.uploadFileSubmission}
-                 onChange={(event: any) => fileSelected(event)}
-                 ref={inputRef}
-               />
-             </span>
-            }
-
-            {!isUploading && training.loType && training.isExternal && training.enrollment && (training.enrollment.state === "PENDING_APPROVAL" || submissionState === "PENDING_APPROVAL") &&
-              <div className={styles.fileSubmissionContainer}>
-                <span className={styles.awaitingApproval}>
+            {!isUploading &&
+              training.loType &&
+              training.isExternal &&
+              training.enrollment &&
+              (training.enrollment.state === "ENROLLED" ||
+                training.enrollment.state === "REJECTED") && (
+                <span className={styles.fileSubmissionContainer}>
                   {formatMessage({
-                    id: "alm.overview.uploadedProof.label",
-                    defaultMessage: "Uploaded Proof of Completion",
-                  })}: 
+                    id: "alm.overview.uploadProof.label",
+                    defaultMessage: "Upload Proof of Completion",
+                  })}
+                  :
+                  <button
+                    onClick={startFileUpload}
+                    className={styles.uploadButton}
+                  >
+                    (
+                    {formatMessage({
+                      id: "alm.overview.module.uploadFile",
+                      defaultMessage: "Upload File",
+                    })}
+                    )
+                  </button>
+                  <input
+                    type="file"
+                    id={inputElementId}
+                    className={styles.uploadFileSubmission}
+                    onChange={(event: any) => fileSelected(event)}
+                    ref={inputRef}
+                  />
                 </span>
-                <a className={styles.submissionLink} href={submissionUrl !== "" ? submissionUrl : training.enrollment.url} target="_blank" rel="noreferrer">{getSubmissionFileName(submissionUrl !== "" ? submissionUrl : training.enrollment.url)}</a>
-              </div>
-            }
+              )}
 
-            {!isUploading && training.loType && training.isExternal && training.enrollment && (training.enrollment.state === "COMPLETED" || submissionState === "COMPLETED") &&
-              <div className={styles.fileSubmissionContainer}>
-                <span className={styles.fileApproved}>
-                  {formatMessage({
-                  id: "alm.overview.approved.label",
-                  defaultMessage: "Submission Approved",
-                })}: </span>
-                <a className={styles.submissionLink} href={submissionUrl !== "" ? submissionUrl : training.enrollment.url} target="_blank" rel="noreferrer">{getSubmissionFileName(submissionUrl !== "" ? submissionUrl : training.enrollment.url)}</a>
-              </div>
-            }
+            {!isUploading &&
+              training.loType &&
+              training.isExternal &&
+              training.enrollment &&
+              (training.enrollment.state === "PENDING_APPROVAL" ||
+                submissionState === "PENDING_APPROVAL") && (
+                <div className={styles.fileSubmissionContainer}>
+                  <span className={styles.awaitingApproval}>
+                    {formatMessage({
+                      id: "alm.overview.uploadedProof.label",
+                      defaultMessage: "Uploaded Proof of Completion",
+                    })}
+                    :
+                  </span>
+                  <a
+                    className={styles.submissionLink}
+                    href={
+                      submissionUrl !== ""
+                        ? submissionUrl
+                        : training.enrollment.url
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {getSubmissionFileName(
+                      submissionUrl !== ""
+                        ? submissionUrl
+                        : training.enrollment.url
+                    )}
+                  </a>
+                </div>
+              )}
 
-            {training.loType && training.isExternal && training.enrollment &&
-              <hr className={styles.uploadLowerSeperator}/>
-            }
-            {training.loType && training.isExternal && training.enrollment &&
-              <div className={styles.fileUploadNote}>Note: Only one document can be uploaded as a proof.</div>
-            }
+            {!isUploading &&
+              training.loType &&
+              training.isExternal &&
+              training.enrollment &&
+              (training.enrollment.state === "COMPLETED" ||
+                submissionState === "COMPLETED") && (
+                <div className={styles.fileSubmissionContainer}>
+                  <span className={styles.fileApproved}>
+                    {formatMessage({
+                      id: "alm.overview.approved.label",
+                      defaultMessage: "Submission Approved",
+                    })}
+                    :{" "}
+                  </span>
+                  <a
+                    className={styles.submissionLink}
+                    href={
+                      submissionUrl !== ""
+                        ? submissionUrl
+                        : training.enrollment.url
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {getSubmissionFileName(
+                      submissionUrl !== ""
+                        ? submissionUrl
+                        : training.enrollment.url
+                    )}
+                  </a>
+                </div>
+              )}
+
+            {training.loType && training.isExternal && training.enrollment && (
+              <hr className={styles.uploadLowerSeperator} />
+            )}
+            {training.loType && training.isExternal && training.enrollment && (
+              <div className={styles.fileUploadNote}>
+                Note: Only one document can be uploaded as a proof.
+              </div>
+            )}
             {prerequisiteLOs ? (
               <div className={styles.trainingPrequisiteLabel}>
                 {formatMessage({

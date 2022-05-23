@@ -251,12 +251,6 @@
         </dependency>
         <dependency>
             <groupId>com.adobe.learning</groupId>
-            <artifactId>aem-learning.ui.apps</artifactId>
-            <version>${project.version}</version>
-            <type>zip</type>
-        </dependency>
-        <dependency>
-            <groupId>com.adobe.learning</groupId>
             <artifactId>aem-learning.ui.content</artifactId>
             <version>${project.version}</version>
             <type>zip</type>

@@ -9,6 +9,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
+import { PrimeAccount, PrimeAccountTerminology } from "../models/PrimeModels";
 import { JsonApiParse } from "../utils/jsonAPIAdapter";
 import { SetupAccountTerminologies } from "./translationService";
 const _fontLoading = require("./fontLoading");
@@ -32,7 +33,7 @@ export interface PrimeConfig {
   commerceURL: string;
   graphqlProxyPath: string;
   usageType: "aem-sites" | "aem-es" | "aem-commerce";
-  nomenclatureData: string;
+  accountData: string;
   mountingPoints: {
     [key: string]: string;
   };
@@ -104,7 +105,7 @@ export const getPathParams = (pagePath: string, pathParams: string[] = []) => {
   return paramsMap;
 };
 
-export function getQueryParamsIObjectFromUrl() {
+export function getQueryParamsFromUrl() {
   const location = getWindowObject().location;
   const params: URLSearchParams = new URLSearchParams(
     decodeURI(location.search)
@@ -113,7 +114,11 @@ export function getQueryParamsIObjectFromUrl() {
 }
 
 export const getALMUser = async () => {
-  return JsonApiParse(await getALMObject().getALMUser());
+  const response = await getALMObject().getALMUser();
+  if (response) {
+    return JsonApiParse(response);
+  }
+  return null;
 };
 
 export const getAccountActiveFields = async () => {
@@ -150,39 +155,54 @@ export const redirectToLoginAndAbort = () => {
   return false;
 };
 
+export function updateURLParams(params: any) {
+  const location = getWindowObject().location;
+  const existingQueryParams = new URLSearchParams(decodeURI(location.search));
+  for (let key in params) {
+    if (params[key]) {
+      existingQueryParams.set(key, params[key]);
+    } else {
+      existingQueryParams.delete(key);
+    }
+  }
+  const newurl =
+    window.location.protocol +
+    "//" +
+    window.location.host +
+    window.location.pathname +
+    "?" +
+    encodeURI(existingQueryParams.toString()) +
+    window.location.hash;
+  window.history.replaceState({ path: newurl }, "", newurl);
+}
+
 export const getALMAccount = async () => {
-  const response = await getALMUser();
-  return response.user.account;
+  if (getALMObject().isPrimeUserLoggedIn()) {
+    const response = await getALMUser();
+    return response?.user?.account || ({} as PrimeAccount);
+  }
+
+  const accountDataStr = getALMConfig().accountData;
+  const accountData = accountDataStr ? JSON.parse(accountDataStr) : null;
+  const account = (accountData?.data?.attributes || {}) as PrimeAccount;
+  return account;
 };
 
 const init = async () => {
   if (!getALMObject().isPrimeUserLoggedIn()) {
-    const nomenclatureStr = getALMConfig().nomenclatureData;
-    const nomenclatureData = nomenclatureStr
-      ? JSON.parse(nomenclatureStr)
-      : null;
-    if (nomenclatureData) {
-      SetupAccountTerminologies(nomenclatureData);
-    } else {
-      SetupAccountTerminologies();
-    }
+    const account = await getALMAccount();
+    const accountTerminologies = account.accountTerminologies;
+    SetupAccountTerminologies(
+      accountTerminologies as PrimeAccountTerminology[]
+    );
     return;
   }
   const response = await getALMUser();
-  const account = response.user.account;
-  SetupAccountTerminologies(account.accountTerminologies);
+  const account = response?.user?.account;
+  SetupAccountTerminologies(account?.accountTerminologies);
 };
 
 init();
-
-
-// export const getCartId = () => {
-//   return getALMObject().storage.getItem(CART_ID);
-// };
-
-// export const setCartId = (data: any, ttl = 10800) => {
-//   return getALMObject().storage.setItem(CART_ID, data, ttl);
-// };
 
 export const getItemFromStorage = (key: string) => {
   return getALMObject().storage.getItem(key);

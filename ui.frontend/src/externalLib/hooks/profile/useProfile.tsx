@@ -20,7 +20,7 @@ import {
   getALMUser,
   updateAccountActiveFieldsDetails,
   updateALMUser,
-  updateUserProfileImage
+  updateUserProfileImage,
 } from "../../utils/global";
 import { RestAdapter } from "../../utils/restAdapter";
 import { GetTranslation } from "../../utils/translationService";
@@ -49,11 +49,11 @@ export const useProfile = () => {
           getAccountActiveFields(),
         ]);
         setProfileAttributes({
-          user: userResponse.user,
+          user: userResponse?.user || ({} as PrimeUser),
           accountActiveFields: response,
         });
-        const userFields : any = {};
-        userFields.fields =  userResponse.user.fields;
+        const userFields: any = {};
+        userFields.fields = userResponse?.user.fields;
         setUserFieldData(userFields);
         setErrorCode("");
       } catch (error: any) {
@@ -119,9 +119,17 @@ export const useProfile = () => {
     async (accountActiveFields: any, userId: any) => {
       try {
         await updateAccountActiveFieldsDetails(accountActiveFields, userId);
-        almAlert(true, GetTranslation("alm.text.activeFieldsSuccess"), AlertType.success);
+        almAlert(
+          true,
+          GetTranslation("alm.text.activeFieldsSuccess"),
+          AlertType.success
+        );
       } catch (error: any) {
-        almAlert(true, GetTranslation("alm.text.activeFieldsFailure"), AlertType.error);
+        almAlert(
+          true,
+          GetTranslation("alm.text.activeFieldsFailure"),
+          AlertType.error
+        );
       }
     },
     []

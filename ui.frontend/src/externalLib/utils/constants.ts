@@ -6,4 +6,6 @@ export const PENDING_APPROVAL = "PENDING_APPROVAL";
 export const PENDING_ACCEPTANCE = "PENDING_ACCEPTANCE";
 export const COURSE = "course";
 export const CERTIFICATION = "certification";
-
+export const PREVIEW = "PREVIEW";
+export const ENROLL = "ENROLL";
+export const ADD_TO_CART = "ADD_TO_CART";
