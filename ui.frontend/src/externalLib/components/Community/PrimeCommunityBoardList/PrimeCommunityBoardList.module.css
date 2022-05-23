@@ -11,90 +11,91 @@ governing permissions and limitations under the License.
 */
 @import "../../../styles/variables.css";
 .primeCommunityHeaderRow {
-    display: flex;
-    max-width: 716px;
-    font-weight: 500;
-    margin-left: auto;
-    margin-right: auto;
+  display: flex;
+  max-width: 716px;
+  font-weight: 500;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media (max-width: 414px) {
-    .primeCommunityHeaderRow {
-        display: block;
-        margin-bottom: 30px;
-        margin-left: 20px;
-        font-weight: 500;
-        padding-left: 0px;
-    }
+  .primeCommunityHeaderRow {
+    display: block;
+    margin-bottom: 30px;
+    margin-left: 20px;
+    font-weight: 500;
+    padding-left: 0px;
+  }
 }
 
 .primeCommunitySearchContainer {
-    display: flex;
-    margin-left: auto;
-    margin-right: 25px;
-    margin-top: 45px;
-    margin-bottom: 20px;
-    height: 40px;
+  display: flex;
+  margin-left: auto;
+  margin-right: 25px;
+  margin-top: 45px;
+  margin-bottom: 20px;
+  height: 40px;
 }
 
 @media (max-width: 414px) {
-    .primeCommunitySearchContainer {
-      width: 100%;
-      margin-top: 15px;
-    }
+  .primeCommunitySearchContainer {
+    width: 100%;
+    margin-top: 15px;
+  }
 }
 
 .primeLoaderWrapper {
-    margin-bottom: 20px;
-    height:20px;
-    display: flex;
-    justify-content: center;
+  margin-bottom: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .primeCommunitySearchStatus {
-    display: flex;
-    font-size: var(--prime-font-size-14);
-    margin: auto;
-    width: 716px;
-    margin-bottom: 25px;
+  display: flex;
+  font-size: var(--prime-font-size-14);
+  margin: auto;
+  width: 716px;
+  margin-bottom: 25px;
 }
 
 .primeCommunitySearchClear {
-    border: none;
-    background-color: transparent;
-    color: #306EB5;
+  border: none;
+  background-color: transparent;
+  color: #306eb5;
 }
 
 .primeCommunitySearchClear:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .primeCommunityNoBoardFound {
-    font-size: var(--prime-font-size-14);
-    max-width: 716px;
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
+  font-size: var(--prime-font-size-14);
+  max-width: 716px;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .primeCommunitySearchWrapper {
-    width: 316px;
-    display: flex;
-    justify-content: right;
+  width: 316px;
+  display: flex;
+  justify-content: flex-end;
 }
-  
-@media (max-width: 414px) {
-    .primeCommunitySearchWrapper {
-        width: 100%;
-        height: 40px;
-        margin-right: 20px;
-    }
 
-    .primeCommunitySearchStatus, .primeCommunityNoBoardFound {
-        padding-left: 20px;
-    }
+@media (max-width: 414px) {
+  .primeCommunitySearchWrapper {
+    width: 100%;
+    height: 40px;
+    margin-right: 20px;
+  }
+
+  .primeCommunitySearchStatus,
+  .primeCommunityNoBoardFound {
+    padding-left: 20px;
+  }
 }
 
 .primeCommunitySearchResultContainer {
-    padding: 0px 20px;
+  padding: 0px 20px;
 }
