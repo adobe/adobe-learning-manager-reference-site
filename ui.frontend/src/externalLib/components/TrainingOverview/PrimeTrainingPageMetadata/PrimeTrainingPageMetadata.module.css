@@ -33,9 +33,9 @@ governing permissions and limitations under the License.
   background-color: var(--prime-color-white);
 }
 
-.secondaryButton:hover,
-.secondaryButton:focus,
-.secondaryButton:focus-visible {
+.secondaryButton:enabled:hover,
+.secondaryButton:enabled:focus,
+.secondaryButton:enabled:focus-visible {
   color: var(--prime-color-white);
   background-color: var(--prime-color-primary);
   border-color: var(--prime-color-primary);
@@ -50,14 +50,22 @@ governing permissions and limitations under the License.
   border: 2px solid var(--prime-color-primary) !important;
   color: var(--prime-color-white);
 }
-.primaryButton:hover,
-.primaryButton:focus,
-.primaryButton:focus-visible {
+.primaryButton:enabled:hover,
+.primaryButton:enabled:focus,
+.primaryButton:enabled:focus-visible {
   background-color: var(--prime-color-primary);
   border: 2px solid var(--prime-color-primary) !important;
   color: var(--prime-color-white);
   outline: none;
 }
+.commonButton:disabled {
+  outline: none;
+  opacity: 0.9;
+  cursor: default;
+  pointer-events: none;
+  border: none!important;
+}
+
 /* .secondaryButton::after {
   border-radius: 0;
 } */
@@ -69,14 +77,12 @@ governing permissions and limitations under the License.
   border: none;
 }
 
-
 .buyNowContainer {
   background: var(--prime-color-nc5);
   border-radius: 2px;
   padding: 20px;
   margin-bottom: 20px;
 }
-
 
 .commonContainer {
   padding-bottom: 20px;
