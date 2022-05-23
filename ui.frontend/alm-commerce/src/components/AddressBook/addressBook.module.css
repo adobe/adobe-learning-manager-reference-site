@@ -169,6 +169,7 @@ governing permissions and limitations under the License.
     --spectrum-semantic-negative-color-text-small,
     var(--spectrum-global-color-red-600)
   );
+  font-size: var(--prime-font-size-12);
 }
 
 .mandatory > label > svg {
