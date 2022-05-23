@@ -7,3 +7,4 @@ export const PENDING_ACCEPTANCE = "PENDING_ACCEPTANCE";
 export const COURSE = "course";
 export const CERTIFICATION = "certification";
 
+export const REQUIRED_ERROR_MESSAGE = "Is required";
