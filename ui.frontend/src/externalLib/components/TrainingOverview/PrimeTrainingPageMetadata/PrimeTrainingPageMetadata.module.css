@@ -63,7 +63,7 @@ governing permissions and limitations under the License.
   opacity: 0.9;
   cursor: default;
   pointer-events: none;
-  border: none!important;
+  border: none !important;
 }
 
 /* .secondaryButton::after {
@@ -119,6 +119,14 @@ governing permissions and limitations under the License.
   overflow: hidden;
   padding-bottom: 5px;
 }
+
+.errorText {
+  font-size: var(--prime-font-size-12);
+  color: var(--prime-error-color);
+  font-weight: var(--prime-font-weight-600);
+  padding-bottom: 5px;
+}
+
 .minimumCriteriaLabel {
   font-size: var(--prime-font-size-14);
   color: var(--prime-color-nc3);

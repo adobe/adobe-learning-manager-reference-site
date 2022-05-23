@@ -191,5 +191,6 @@
   "alm.overview.rejected.label": "Submission Rejected",
   "alm.training.skill.credits": "({x} Credits)",
   "alm.overview.course.core.completed": "Core Content Completed",
-  "alm.overview.certUploadNote": "Note: Only one document can be uploaded as a proof."
+  "alm.overview.certUploadNote": "Note: Only one document can be uploaded as a proof.",
+  "alm.training.overview.enrollmentDeadline.passed": "Enrollment deadline has passed"
 }
