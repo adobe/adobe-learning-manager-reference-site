@@ -157,7 +157,6 @@ governing permissions and limitations under the License.
               delete accountData.timeZones;
               delete accountData.learnerHelpLinks;
               $("input[name='./accountData']").val(JSON.stringify(response));
-              $("input[name='./nomenclatureData']").val(JSON.stringify(accountData.accountTerminologies));
               showPopup("Nomenclature Data fetched successfully.", "success", "Success");
             }
             else
