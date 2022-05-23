@@ -77,16 +77,16 @@ function AddressBook({ setCanPlaceOrder }) {
             : "";
         return {
           ...prevState,
-          city: { value: defaultBillingAddress.city },
-          firstName: { value: defaultBillingAddress.firstname },
-          middleName: { value: defaultBillingAddress.middleName || "" },
-          lastName: { value: defaultBillingAddress.lastname },
-          country_code: { value: defaultBillingAddress.country_code },
-          streetAddress: { value: street1 },
-          streetAddress2: { value: street2 },
-          region: { value: defaultBillingAddress.region?.region_id },
-          postcode: { value: defaultBillingAddress.postcode },
-          telephone: { value: defaultBillingAddress.telephone },
+          city: { ...prevState.city, value: defaultBillingAddress.city },
+          firstName: { ...prevState.firstName, value: defaultBillingAddress.firstname },
+          middleName: { ...prevState.middleName, value: defaultBillingAddress.middleName || "" },
+          lastName: { ...prevState.lastName, value: defaultBillingAddress.lastname },
+          country_code: { ...prevState.country_code, value: defaultBillingAddress.country_code },
+          streetAddress: { ...prevState.streetAddress, value: street1 },
+          streetAddress2: { ...prevState.streetAddress2, value: street2 },
+          region: { ...prevState.region, value: defaultBillingAddress.region?.region_id },
+          postcode: { ...prevState.postcode, value: defaultBillingAddress.postcode },
+          telephone: { ...prevState.telephone, value: defaultBillingAddress.telephone },
         };
       });
       setIsAddressAvailable(true)
@@ -144,7 +144,6 @@ function AddressBook({ setCanPlaceOrder }) {
   if (adressLoading) {
     <CommerceLoader size="L" />;
   }
-
   return (
     <section className={styles.addressContainer}>
       <h1 className={styles.heading}>Add Billing Address</h1>

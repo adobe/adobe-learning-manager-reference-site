@@ -69,7 +69,7 @@ export default function CheckoutPage() {
       <ProductList cartItems={cartItems} canDeleteProduct={false} />
       <hr />
       <div className={styles.totalPrice}>
-        <h2>Grand Total</h2>
+        <h2>Total</h2>
         <span>{formatPrice(prices["grand_total"])}</span>
       </div>
 

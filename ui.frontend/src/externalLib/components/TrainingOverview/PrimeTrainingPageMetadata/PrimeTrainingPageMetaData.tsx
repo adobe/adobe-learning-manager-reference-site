@@ -257,8 +257,15 @@ const PrimeTrainingPageMetaData: React.FC<{
   });
   const showCompletionDeadline =
     showEnrollDeadline === "true" && trainingInstance.completionDeadline;
+
+  const enrollmentDeadline = trainingInstance.enrollmentDeadline;
   const showEnrollmentDeadline =
     !training.enrollment && trainingInstance.enrollmentDeadline;
+
+  const hasEnrollmentDeadlinePassed = enrollmentDeadline
+    ? new Date(enrollmentDeadline) < new Date()
+    : false;
+
   const showJobAids = training.enrollment && training.supplementaryLOs?.length;
   const showResource = training.supplementaryResources?.length;
   const showUnenrollButton =
@@ -292,6 +299,16 @@ const PrimeTrainingPageMetaData: React.FC<{
         },
         { training: GetTranslation(`alm.training.${loType}`, true) }
       )}
+    </p>
+  ) : (
+    ""
+  );
+
+  const enrollmentDeadlinePassedText = hasEnrollmentDeadlinePassed ? (
+    <p style={{ textAlign: "center" }} className={styles.errorText}>
+      {formatMessage({
+        id: "alm.training.overview.enrollmentDeadline.passed",
+      })}
     </p>
   ) : (
     ""
@@ -431,10 +448,11 @@ const PrimeTrainingPageMetaData: React.FC<{
               variant="primary"
               UNSAFE_className={`${styles.primaryButton} ${styles.commonButton}`}
               onPress={handleEnrollment}
-              isDisabled={!isSeatAvailable}
+              isDisabled={!isSeatAvailable || hasEnrollmentDeadlinePassed}
             >
               {actionText}
             </Button>
+            {enrollmentDeadlinePassedText}
             {seatsAvailableText}
           </>
         )}
@@ -456,11 +474,16 @@ const PrimeTrainingPageMetaData: React.FC<{
               variant="primary"
               UNSAFE_className={`${styles.primaryButton} ${styles.commonButton}`}
               onPress={addToCart}
-              isDisabled={isTrainingNotSynced || !isSeatAvailable}
+              isDisabled={
+                isTrainingNotSynced ||
+                !isSeatAvailable ||
+                hasEnrollmentDeadlinePassed
+              }
             >
               {actionText}
             </Button>
             {trainingNotAvailableForPurchaseText}
+            {enrollmentDeadlinePassedText}
             {seatsAvailableText}
           </>
         )}
