@@ -9,22 +9,22 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
+import { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
+import { useBoards, usePosts } from "../../../hooks/community";
+import { getQueryParamsFromUrl } from "../../../utils/global";
+import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
+import { ALMLoader } from "../../Common/ALMLoader";
 import { PrimeCommunityBoardFilters } from "../PrimeCommunityBoardFilters";
+import { PrimeCommunityBoardsContainer } from "../PrimeCommunityBoardsContainer";
 import { PrimeCommunityMobileBackBanner } from "../PrimeCommunityMobileBackBanner";
 import { PrimeCommunityMobileScrollToTop } from "../PrimeCommunityMobileScrollToTop";
-import { useBoards, usePosts } from "../../../hooks/community";
-import { useEffect, useState } from "react";
-import { PrimeCommunitySearch } from "../PrimeCommunitySearch";
 import { PrimeCommunityPost } from "../PrimeCommunityPost";
-import { getQueryParamsIObjectFromUrl } from "../../../utils/global";
-import { useIntl } from "react-intl";
+import { PrimeCommunitySearch } from "../PrimeCommunitySearch";
 import styles from "./PrimeCommunityBoardList.module.css";
-import { ALMLoader } from "../../Common/ALMLoader";
-import { PrimeCommunityBoardsContainer } from "../PrimeCommunityBoardsContainer";
-import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 
 const PrimeCommunityBoardList = () => {
-  const queryParams = getQueryParamsIObjectFromUrl();
+  const queryParams = getQueryParamsFromUrl();
   const DEFAULT_SORT_VALUE = "dateUpdated";
   const DEFAULT_SKILL = queryParams ? queryParams.skill : "";
   const {
@@ -37,8 +37,9 @@ const PrimeCommunityBoardList = () => {
   } = useBoards(DEFAULT_SORT_VALUE, DEFAULT_SKILL);
   const { posts } = usePosts();
   const { formatMessage } = useIntl();
-  const [selectedSortFilter, setSelectedSortFilter] =
-    useState(DEFAULT_SORT_VALUE);
+  const [selectedSortFilter, setSelectedSortFilter] = useState(
+    DEFAULT_SORT_VALUE
+  );
   const [selectedSkill, setSelectedSkill] = useState(currentSkill);
   const [showLoader, setShowLoader] = useState(true);
   const [isSearchMode, setIsSearchMode] = useState(false);

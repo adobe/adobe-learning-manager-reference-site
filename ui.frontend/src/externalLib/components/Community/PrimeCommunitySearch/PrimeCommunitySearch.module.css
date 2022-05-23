@@ -53,7 +53,7 @@ input:placeholder-shown {
 .primeCommunitySearchWrapper {
   width: 316px;
   display: flex;
-  justify-content: right;
+  justify-content: flex-end;
 }
 
 .primeCommunitySearchParent {
@@ -70,6 +70,6 @@ input:placeholder-shown {
   }
 
   .primeCommunitySearchParent {
-    width:100%;
+    width: 100%;
   }
 }

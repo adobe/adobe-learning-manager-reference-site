@@ -52,14 +52,15 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     trainingOverviewPath = trainingInstanceId
       ? getUrl(trainingOverviewPath, { trainingInstanceId: trainingInstanceId })
       : trainingOverviewPath;
-    window.location = queryParams ? (trainingOverviewPath + "?" + queryParams) : trainingOverviewPath;
+    window.location = queryParams
+      ? trainingOverviewPath + "?" + queryParams
+      : trainingOverviewPath;
   };
 
   const navigateToInstancePage = (trainingId) => {
     let { instancePath } = getALMConfig();
     window.location = getUrl(instancePath, { trainingId: trainingId });
   };
-
 
   const navigateToBoardDetailsPage = (boardId) => {
     let { communityBoardDetailsPath } = getALMConfig();
@@ -78,7 +79,11 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     window.location = catalogUrl;
   };
 
-  const navigateToCatalogPageFromCategory = (catalogNames, skillNames, tagNames) => {
+  const navigateToCatalogPageFromCategory = (
+    catalogNames,
+    skillNames,
+    tagNames
+  ) => {
     let { catalogPath } = getALMConfig();
     let catalogUrl = catalogPath;
 
@@ -87,11 +92,10 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
       catalogUrl += "catalogs=" + encodeURIComponent(catalogNames) + "&";
     if (skillNames)
       catalogUrl += "skillName=" + encodeURIComponent(skillNames) + "&";
-    if (tagNames)
-      catalogUrl += "tagName=" + encodeURIComponent(tagNames) + "&";
-      
+    if (tagNames) catalogUrl += "tagName=" + encodeURIComponent(tagNames) + "&";
+
     catalogUrl = catalogUrl.slice(0, -1);
-    
+
     window.location = catalogUrl;
   };
 
@@ -101,50 +105,52 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   };
 
   const navigateToBoardsPage = (skillNames) => {
-    let {communityBoardsPath} = getALMConfig();
+    let { communityBoardsPath } = getALMConfig();
     let boardsUrl = communityBoardsPath;
-    if (skillNames)
-      boardsUrl += "?skill=" + skillNames;
+    if (skillNames) boardsUrl += "?skill=" + skillNames;
     window.location = boardsUrl;
-  }
+  };
 
   const navigateToHomePage = () => {
-    let {homePath} = getALMConfig();
+    let { homePath } = getALMConfig();
     window.location = homePath;
-  }
+  };
 
   const navigateToLearningPage = () => {
-    let {learningPath} = getALMConfig();
+    let { learningPath } = getALMConfig();
     window.location = learningPath;
-  }
+  };
 
   const navigateToCommunityPage = () => {
-    let {communityPath} = getALMConfig();
+    let { communityPath } = getALMConfig();
     window.location = communityPath;
-  }
+  };
 
   const navigateToSupportPage = () => {
-    let {supportPath} = getALMConfig();
+    let { supportPath } = getALMConfig();
     window.location = supportPath;
-  }
+  };
 
   const navigateToCommerceSignInPage = () => {
-    let {commerceSignInPath} = getALMConfig();
-    window.location = commerceSignInPath + "?redirectPath=" + encodeURIComponent(window.location.pathname);
+    let { commerceSignInPath } = getALMConfig();
+    window.location =
+      commerceSignInPath +
+      "?redirectPath=" +
+      encodeURIComponent(window.location.href);
   };
 
   const navigateToCommerceCartPage = () => {
-    let {commerceCartPath} = getALMConfig();
+    let { commerceCartPath } = getALMConfig();
     window.location = commerceCartPath + "/cart";
   };
 
   const navigateToProfilePage = () => {
-    let {profilePath} = getALMConfig();
+    let { profilePath } = getALMConfig();
     window.location = profilePath;
   };
 
   const navigateToSignOutPage = () => {
-    let {signOutPath} = getALMConfig();
+    let { signOutPath } = getALMConfig();
     window.location = signOutPath;
   };
 
@@ -156,14 +162,11 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   };
 
   const updateCart = (counter) => {
-    if (counter > 0)
-    {
+    if (counter > 0) {
       let counterElem = $(COMMERCE_CART_COUNTER_REL);
       counterElem.show();
       counterElem.text(counter);
-    }
-    else
-    {
+    } else {
       $(COMMERCE_CART_COUNTER_REL).hide();
     }
   };

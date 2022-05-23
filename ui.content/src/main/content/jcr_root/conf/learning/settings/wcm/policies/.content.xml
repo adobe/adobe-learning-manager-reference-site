@@ -724,7 +724,7 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="LRNG Commerce Page"
                     sling:resourceType="wcm/core/components/policy/policy"
-                    clientlibs="[learning.site, learning.ui, commerce.ui]">
+                    clientlibs="[learning.site, learning.ui, learning.commerce]">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_654239029509197>
                 <policy

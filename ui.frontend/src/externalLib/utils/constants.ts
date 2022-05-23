@@ -8,3 +8,15 @@ export const COURSE = "course";
 export const CERTIFICATION = "certification";
 
 export const REQUIRED_ERROR_MESSAGE = "Is required";
+export const PREVIEW = "PREVIEW";
+export const ENROLL = "ENROLL";
+export const ADD_TO_CART = "ADD_TO_CART";
+export const LEARNING_PROGRAM = "learningProgram";
+export const TRAINING_ID_STR = "trainingId";
+export const TRAINING_INSTANCE_ID_STR = "trainingInstanceId";
+export const ENROLLED = "ENROLLED";
+export const REJECTED = "REJECTED";
+export const COMPLETED = "COMPLETED";
+export const PENDING_SUBMISSION = "PENDING_SUBMISSION";
+export const CHANGE = "CHANGE";
+export const APPROVED = "APPROVED";

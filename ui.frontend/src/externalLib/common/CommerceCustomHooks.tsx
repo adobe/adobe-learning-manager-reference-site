@@ -26,7 +26,7 @@ import {
 import {
   getALMConfig,
   getItemFromStorage,
-  getQueryParamsIObjectFromUrl,
+  getQueryParamsFromUrl,
   setItemToStorage,
 } from "../utils/global";
 import { JsonApiParse, parseCommerceResponse } from "../utils/jsonAPIAdapter";
@@ -70,8 +70,8 @@ const transformFilters = (
   item: FilterItem,
   filterType: string
 ) => {
-  let defaultFilters =
-    defaultFiltersState[filterType as keyof FilterState].list!;
+  let defaultFilters = defaultFiltersState[filterType as keyof FilterState]
+    .list!;
   item.attribute_options.forEach((attributeOption) => {
     const { label } = attributeOption;
     const index = defaultFilters?.findIndex((type) => type.value === label);
@@ -182,7 +182,7 @@ const getOrUpdateFilters = async () => {
   if (filterItems) {
     return filterItems;
   }
-  // const queryParams = getQueryParamsIObjectFromUrl();
+  // const queryParams = getQueryParamsFromUrl();
   try {
     const response = await apolloClient.query({
       query: GET_COMMERCE_FILTERS,
@@ -298,7 +298,7 @@ export default class CommerceCustomHooks implements ICustomHooks {
   }
 
   async getFilters() {
-    const queryParams = getQueryParamsIObjectFromUrl();
+    const queryParams = getQueryParamsFromUrl();
 
     try {
       const items = await getOrUpdateFilters();

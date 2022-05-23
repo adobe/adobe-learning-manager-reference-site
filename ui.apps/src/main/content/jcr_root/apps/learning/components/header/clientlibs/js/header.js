@@ -32,6 +32,7 @@ governing permissions and limitations under the License.
     const LOGIN_NAVIGATE_SEL = ".alm-login-navigate";
     const REGISTER_NAVIGATE_SEL = ".alm-register-navigate";
     const NAV_NAVIGATE_HIGHLIGHT_SEL = ".nav-highlight";
+    const NAV_NAVIGATE_HIGHLIGHT_REL = "nav-highlight";
     const HEADER_CART_SEL = ".alm-header-cart";
 
     const HEADER_LOG_IN_REL = ".alm-log-in";
@@ -103,24 +104,29 @@ governing permissions and limitations under the License.
         .set(ALM_CONFIG.homePath, [
             HOME_NAVIGATE_SEL + "+" + NAV_NAVIGATE_HIGHLIGHT_SEL,
             "size__XS",
+            VERT_NAV_CONTAINER_SEL + " " + HOME_NAVIGATE_SEL,
         ])
         .set(ALM_CONFIG.learningPath, [
             LEARNING_NAVIGATE_SEL + "+" + NAV_NAVIGATE_HIGHLIGHT_SEL,
             "size__S",
+            VERT_NAV_CONTAINER_SEL + " " +  LEARNING_NAVIGATE_SEL,
         ])
         .set(ALM_CONFIG.communityPath, [
             COMMUNITY_NAVIGATE_SEL + "+" + NAV_NAVIGATE_HIGHLIGHT_SEL,
             "size__M",
+            VERT_NAV_CONTAINER_SEL + " " + COMMUNITY_NAVIGATE_SEL,
         ])
         .set(ALM_CONFIG.supportPath, [
             SUPPORT_NAVIGATE_SEL + "+" + NAV_NAVIGATE_HIGHLIGHT_SEL,
             "size__S",
+            VERT_NAV_CONTAINER_SEL + " " + SUPPORT_NAVIGATE_SEL,
         ]);
 
         const CURRENT_NAV_OBJ = ALM_LINKS_MAP.get(CURRENT_PATH_NAME);
         if (CURRENT_NAV_OBJ) {
         $(CURRENT_NAV_OBJ[0]).show();
         $(CURRENT_NAV_OBJ[0]).addClass(CURRENT_NAV_OBJ[1]);
+        $(CURRENT_NAV_OBJ[2]).addClass(NAV_NAVIGATE_HIGHLIGHT_REL);
         }
     }
 

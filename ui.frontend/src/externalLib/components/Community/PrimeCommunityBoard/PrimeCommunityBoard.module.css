@@ -47,8 +47,6 @@ governing permissions and limitations under the License.
 .primeBoardOptions {
   border: none;
   background: transparent;
-  width: 28px;
-  height: 28px;
   margin-top: -10px;
   float: right;
   fill: #306eb5;
@@ -77,15 +75,16 @@ governing permissions and limitations under the License.
   margin-bottom: 10px;
 }
 
-@media (max-width:414px) {
-    .primeBoardItem, .primeBoardDescription {
-        height: auto;
-        width: 100%;
-    }
+@media (max-width: 414px) {
+  .primeBoardItem,
+  .primeBoardDescription {
+    height: auto;
+    width: 100%;
+  }
 
-    .primeBoardSkillNames {
-      max-width: 330px;
-    }
+  .primeBoardSkillNames {
+    max-width: 330px;
+  }
 }
 
 .primeBoardIcon {
@@ -117,7 +116,7 @@ governing permissions and limitations under the License.
   width: 20px;
   color: var(--prime-color-nc3);
   margin-top: 2px;
-  margin-right:5px;
+  margin-right: 5px;
 }
 
 .primeActivityInfoIcon {
@@ -154,5 +153,4 @@ governing permissions and limitations under the License.
   .primeActivityStatsText {
     margin-right: 15px;
   }
-
 }
