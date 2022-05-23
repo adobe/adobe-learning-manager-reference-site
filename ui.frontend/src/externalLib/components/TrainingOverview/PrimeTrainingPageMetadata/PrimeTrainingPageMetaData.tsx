@@ -153,11 +153,6 @@ const PrimeTrainingPageMetaData: React.FC<{
 
   const actionText = useMemo(() => {
     if (action === "addToCart") {
-      // return formatMessage(
-      //   { id: "alm.training.buyNow" },
-      //   { x: training.price }
-      // );
-
       return formatMessage(
         {
           id: `alm.addToCart`,

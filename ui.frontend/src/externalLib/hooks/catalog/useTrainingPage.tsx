@@ -15,7 +15,6 @@ import { AlertType } from "../../common/Alert/AlertDialog";
 import { useAlert } from "../../common/Alert/useAlert";
 import APIServiceInstance from "../../common/APIService";
 import {
-  PrimeAccount,
   PrimeLearningObject,
   PrimeLearningObjectInstance,
   PrimeLoInstanceSummary,
@@ -75,8 +74,7 @@ export const useTrainingPage = (
         queryParam["include"] = params.include || DEFAULT_INCLUDE_LO_OVERVIEW;
         queryParam["useCache"] = true;
         queryParam["filter.ignoreEnhancedLP"] = false;
-        let account = {} as PrimeAccount;
-        account = await getALMAccount();
+        const account = await getALMAccount();
 
         const response = await APIServiceInstance.getTraining(
           trainingId,
