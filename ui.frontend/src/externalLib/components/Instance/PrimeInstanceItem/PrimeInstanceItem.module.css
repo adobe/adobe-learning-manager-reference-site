@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 @import "../../../styles/variables.css";
 
 .instanceNameWrapper {
-  width: 50%;
+  width: 45%;
 }
 .dateWrapper {
   width: 15%;
@@ -26,6 +26,10 @@ governing permissions and limitations under the License.
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
+}
+
+.priceWrapper {
+  width: 5%;
 }
 
 .instanceListItem {
@@ -111,6 +115,9 @@ governing permissions and limitations under the License.
     width: 100%;
   }
   .locationWrapper {
+    width: 100%;
+  }
+  .priceWrapper {
     width: 100%;
   }
   .actionWrapper {

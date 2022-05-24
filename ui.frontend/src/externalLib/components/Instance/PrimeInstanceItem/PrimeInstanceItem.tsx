@@ -14,10 +14,12 @@ governing permissions and limitations under the License.
 import { Button } from "@adobe/react-spectrum";
 import Calendar from "@spectrum-icons/workflow/Calendar";
 import Location from "@spectrum-icons/workflow/Location";
+import Money from "@spectrum-icons/workflow/Money";
 import User from "@spectrum-icons/workflow/User";
 import { useMemo } from "react";
 import { useIntl } from "react-intl";
 import { GetFormattedDate } from "../../../utils/dateTime";
+import { getFormattedPrice } from "../../../utils/price";
 import { GetTranslation } from "../../../utils/translationService";
 import { formatMap } from "../../Catalog/PrimeTrainingCard/PrimeTrainingCard";
 import styles from "./PrimeInstanceItem.module.css";
@@ -32,6 +34,7 @@ const PrimeInstanceItem = (props: any) => {
     instructorsName,
     selectInstanceHandler,
     locale,
+    price,
   } = props;
   const { formatMessage } = useIntl();
 
@@ -93,6 +96,20 @@ const PrimeInstanceItem = (props: any) => {
               <Location />
             </span>
             {location}
+          </p>
+        )}
+      </div>
+      <div className={styles.priceWrapper}>
+        {price && (
+          <p className={styles.startDate}>
+            <span
+              className={`${styles.mobileOnly} ${styles.icon}`}
+              aria-hidden="true"
+            >
+              <Money />
+
+            </span>
+            {getFormattedPrice(price)}
           </p>
         )}
       </div>
