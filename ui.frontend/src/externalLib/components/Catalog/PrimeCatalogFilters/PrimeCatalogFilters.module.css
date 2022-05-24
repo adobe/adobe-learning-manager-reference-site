@@ -25,6 +25,9 @@ governing permissions and limitations under the License.
   opacity: 1;
   margin: 15px 0;
 }
+.typeLabel.price{
+  margin-bottom: 10px;
+}
 .listContainer {
   padding: 0;
   margin: 0;
@@ -76,7 +79,7 @@ governing permissions and limitations under the License.
 .listContainer .customSlider {
   display: inline-block;
 }
-.customSlider label[class^="spectrum-Slider-label"] {
+.customSlider div[class^="spectrum-Slider-labelContainer"] {
   display: none;
 }
 

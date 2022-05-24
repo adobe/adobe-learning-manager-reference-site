@@ -161,7 +161,7 @@ const PrimeCatalogFilters = (props: any) => {
         {/* Price Filter start */}
         {catalogAttributes["price"] === "true" && price && price.maxPrice ? (
           <div key={"price"} className={styles.container}>
-            <h3 className={styles.typeLabel}>
+            <h3 className={`${styles.typeLabel} ${styles.price}`}>
               {GetTranslation("alm.catalog.filter.price.label", true)}
             </h3>
             <div className={styles.listContainer}>
