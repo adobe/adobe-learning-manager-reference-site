@@ -190,6 +190,14 @@ const PrimeInstancePage = () => {
                     </span>
                   </div>
                   <div
+                    className={`${styles.priceWrapper} ${styles.commonHeader}`}
+                  >
+                    {formatMessage({
+                      id: "alm.instance.price",
+                      defaultMessage: "Price",
+                    })}
+                  </div>
+                  <div
                     className={`${styles.action} ${styles.commonHeader}`}
                   ></div>
                 </div>
@@ -206,6 +214,7 @@ const PrimeInstancePage = () => {
                     id={item.id}
                     selectInstanceHandler={selectInstanceHandler}
                     locale={locale}
+                    price={training.price}
                   />
                 ))}
               </ul>
@@ -230,10 +239,12 @@ const getStartDateforInstance = (
   return dateArray.sort((a, b) => a - b)[0];
 };
 
-const isClassroomOrVC = (loResource : any ) => {
-  return loResource.resourceType === CLASSROOM ||
-   loResource.resourceType === VIRTUAL_CLASSROOM; 
- }
+const isClassroomOrVC = (loResource: any) => {
+  return (
+    loResource.resourceType === CLASSROOM ||
+    loResource.resourceType === VIRTUAL_CLASSROOM
+  );
+};
 
 const getInstanceLocationAndInstructorsName = (
   loResources: PrimeLearningObjectResource[],
