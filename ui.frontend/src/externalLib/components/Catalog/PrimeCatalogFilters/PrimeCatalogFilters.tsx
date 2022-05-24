@@ -89,10 +89,9 @@ const PrimeCatalogFilters = (props: any) => {
 
   const inputEnterKeyHandler = (event: any, type: string) => {
     if (event.key === "Enter") {
-      changeTrainingPriceHandle(
-        type,
-        (event.target as HTMLInputElement)?.value
-      );
+      let value = (event.target as HTMLInputElement)?.value;
+      value = value.replaceAll(",", "");
+      changeTrainingPriceHandle(type, value);
     }
   };
 
