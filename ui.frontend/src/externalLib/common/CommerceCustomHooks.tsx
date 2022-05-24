@@ -70,8 +70,8 @@ const transformFilters = (
   item: FilterItem,
   filterType: string
 ) => {
-  let defaultFilters = defaultFiltersState[filterType as keyof FilterState]
-    .list!;
+  let defaultFilters =
+    defaultFiltersState[filterType as keyof FilterState].list!;
   item.attribute_options.forEach((attributeOption) => {
     const { label } = attributeOption;
     const index = defaultFilters?.findIndex((type) => type.value === label);
@@ -411,18 +411,21 @@ export default class CommerceCustomHooks implements ICustomHooks {
           cartId: cartId,
         },
       });
-      const addProductsToCart = response?.data?.addProductsToCart?.cart;
-      const items = addProductsToCart.items;
-      const totalQuantity = addProductsToCart.total_quantity;
-      const error = addProductsToCart.user_errors;
+      const addProductsToCart = response?.data?.addProductsToCart;
+      const error = addProductsToCart?.user_errors;
+      const items = addProductsToCart?.cart?.items;
+      const totalQuantity = addProductsToCart?.cart?.total_quantity;
       return {
         items,
         totalQuantity,
         error,
       };
-    } catch (error) {
-      console.log(error);
-      return { items: [], totalQuantity: 0, error };
+    } catch (error: any) {
+      return {
+        items: [],
+        totalQuantity: 0,
+        error: [error?.message],
+      };
     }
   }
 }
