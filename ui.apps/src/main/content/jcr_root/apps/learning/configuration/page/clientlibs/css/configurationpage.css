@@ -10,6 +10,11 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+#admin-configs-cont {
+    font: normal normal normal 13px/30px Source Sans Pro;
+    width: 35rem; 
+}
+
 #emb-widget-config-section {
     border-top: 1px solid black;
     margin-top: 40px;
@@ -20,4 +25,56 @@ governing permissions and limitations under the License.
 #fetch-nomenclature-button
 {
     margin-top: 10px;
+    width: 120px;
+    height: 35px;
+    border-radius: 24px;
+}
+
+.coral-Form-fieldwrapper.account-config-heading {
+    font: normal normal normal 24px/30px Source Sans Pro;
+    color: #707070;
+    margin-top: 60px;
+    margin-bottom: 15px;
+}
+
+.coral-Form-fieldwrapper.account-config-heading2 {
+    font: normal normal 600 14px/20px Source Sans Pro;
+    display: inline-block;
+    width: 90%;
+    margin-bottom: 30px;
+}
+
+.coral-Form-fieldwrapper.config-help-btn {
+    display: inline-block;
+    float: right;
+    margin-bottom: 30px;
+}
+
+.config-help-btn .coral-Form-fieldlabel {
+    color: #3471DE;
+    cursor: pointer;
+}
+
+.coral-Form-fieldwrapper.account-higherorder-enroll-heading {
+    width: 90%;
+    display: inline-block;
+    float: right;
+    top: 7px;
+}
+
+.account-widget-config-heading {
+    font: normal normal normal 20px/30px Source Sans Pro;
+    border-top: 1px solid black;
+    margin-top: 40px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.account-widget-config-heading2 {
+    font: normal normal 600 14px/20px Source Sans Pro;
+    margin-bottom: 40px;
+}
+
+.nomenclature-config-section {
+    margin-top: 30px;
 }

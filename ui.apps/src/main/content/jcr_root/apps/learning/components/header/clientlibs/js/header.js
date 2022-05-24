@@ -55,8 +55,7 @@ governing permissions and limitations under the License.
       }`;
 
     async function updateCart() {
-        if (typeof window !== 'undefined' && window.localStorage 
-        && window.ALM.storage.getItem(STORAGE_CART_ID_KEY)
+        if (typeof window !== 'undefined' && window.ALM.storage.getItem(STORAGE_CART_ID_KEY)
         && window.ALM.getCommerceToken())
         {
             try {
