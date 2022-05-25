@@ -119,9 +119,7 @@ const PrimeTrainingCard: React.FC<{
             <div className={styles.bottomBar}>
               {priceLabel && <span className={styles.price}>{priceLabel}</span>}
               <div className={styles.title}>{name}</div>
-              <div className={styles.trainingType}>
-                {trainingTypeLabel} {fomatLabel ? `- ${fomatLabel}` : ""}
-              </div>
+              <div className={styles.trainingType}>{trainingTypeLabel}</div>
               <div
                 className={styles.descriptionContainer}
                 onMouseEnter={onMouseEnterHandler}
