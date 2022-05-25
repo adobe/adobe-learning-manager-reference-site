@@ -62,13 +62,6 @@ governing permissions and limitations under the License.
     cursor: pointer;
 }
 
-.coral-Form-fieldwrapper.account-higherorder-enroll-heading {
-    width: 90%;
-    display: inline-block;
-    float: right;
-    top: 0.3rem;
-}
-
 #admin-configs-cont .account-widget-config-heading .coral-Form-fieldlabel {
     font: normal normal normal 20px/30px Source Sans Pro;
     border-top: 1px solid black;

@@ -256,11 +256,12 @@
                     <higherOrderEnroll
                         cq:showOnCreate="{Boolean}true"
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/switch"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                        fieldDescription="If disabled, the results will hide courses which are part of the enrolled learning path/ certification. Refer help section to learn more."
                         wrapperClass="account-higher-order-enroll"
                         checked="false"
                         name="./commonConfig.ignoreHigherOrderLOEnrollment"
-                        text="Show courses from an enrolled learning path/certification in results"
+                        text="Show courses from an enrolled learning path/ certification in results"
                         value="false"/>
                     <higherOrderEnrollType
                         cq:showOnCreate="{Boolean}true"
@@ -268,13 +269,6 @@
                         sling:resourceType="granite/ui/components/foundation/form/hidden"
                         name="./commonConfig.ignoreHigherOrderLOEnrollment@TypeHint"
                         value="Boolean"/>
-                    <higherOrderEnrollLabel
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/field"
-                        fieldLabel="Show courses from an enrolled learning path/ certification in results"
-                        fieldDescription="If disabled, the results will hide courses which are part of the enrolled learning path/ certification. Refer help section to learn more."
-                        wrapperClass="account-higherorder-enroll-heading"
-                        cq:showOnCreate="{Boolean}true"/>
                     <background
                         cq:showOnCreate="{Boolean}true"
                         jcr:primaryType="nt:unstructured"
