@@ -216,17 +216,15 @@ const PrimeTrainingPageMetaData: React.FC<{
     try {
       storeActionInNonLoggedMode(ADD_TO_CART);
       const { error, totalQuantity } = await addToCartHandler();
-      if (error) {
-        if (isPrimeUserLoggedIn) {
+      if (isPrimeUserLoggedIn) {
+        if (error && error.length) {
           almAlert(
             true,
             formatMessage({ id: "alm.addToCart.error" }, { loType: loType }),
             AlertType.error
           );
-        }
-      } else {
-        getALMObject().updateCart(totalQuantity);
-        if (isPrimeUserLoggedIn) {
+        } else {
+          getALMObject().updateCart(totalQuantity);
           almAlert(
             true,
             formatMessage({ id: "alm.addedToCart" }),

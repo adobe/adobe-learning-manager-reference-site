@@ -110,7 +110,7 @@ export default function CheckoutPage() {
           {shouldShowLoadingIndicator ? (
             <CommerceLoader size="S" />
           ) : (
-            "Proceed to Checkout"
+            "Place Order"
           )}
         </Button>
       </div>

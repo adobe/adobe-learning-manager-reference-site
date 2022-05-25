@@ -25,6 +25,7 @@ governing permissions and limitations under the License.
   const DX_SKU_VALIDATION_ERROR_ID = "alm-dx-sku-validator";
   const SITE_MAP_SEL = "coral-checkbox[name='./siteMap']";
   const SITE_MAP_TRAINING_PATH_SEL = "foundation-autocomplete[name='./sitemapTrainingPath']";
+  const CONFIG_HELP_BTN_SEL = ".config-help-btn";
 
   const SKU_URL = "{almURL}/primeapi/v2/account/{accountId}/connectorConfig?connectorName=aemReferenceSites";
   const NOMENCLAURE_URL = "{almURL}/primeapi/v2/account";
@@ -157,7 +158,6 @@ governing permissions and limitations under the License.
               delete accountData.timeZones;
               delete accountData.learnerHelpLinks;
               $("input[name='./accountData']").val(JSON.stringify(response));
-              $("input[name='./nomenclatureData']").val(JSON.stringify(accountData.accountTerminologies));
               showPopup("Nomenclature Data fetched successfully.", "success", "Success");
             }
             else
@@ -220,6 +220,14 @@ governing permissions and limitations under the License.
         $(SITE_MAP_TRAINING_PATH_SEL).attr("disabled","");
       }
   }
+  
+  function openHelpxPage() {
+    const helpxURL = $("input[name='./configHelpURL']").val();
+    if (helpxURL) {
+      const newWindow = window.open(helpxURL, "_blank");
+      window.focus();
+    }
+  }
 
   $(document).on('foundation-contentloaded', () => {
     usageTypeSelectElem = $(USAGE_TYPE_SELECT_ID_SEL).get(0);
@@ -242,6 +250,7 @@ governing permissions and limitations under the License.
     $(CONFIG_FORM_SAVE_ACT_SEL).off("click", handleSubmit).on("click", handleSubmit);
     $(CONFIG_FORM_CREATE_SEL).filter("button[type='submit']").off("click", handleSubmit).on("click", handleSubmit);
     $(NOMENCLATURE_BUTTON_SEL).on("click", () => fetchNomenclatureData());
+    $(CONFIG_HELP_BTN_SEL).on("click", () => openHelpxPage());
   });
 
 })(window, document, jQuery);

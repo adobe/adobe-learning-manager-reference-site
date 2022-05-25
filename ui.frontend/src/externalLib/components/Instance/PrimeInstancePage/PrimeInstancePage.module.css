@@ -83,10 +83,13 @@ governing permissions and limitations under the License.
   font-weight: bold;
 }
 .instanceNameWrapper {
-  width: 50%;
+  width: 45%;
 }
 .dateWrapper {
   width: 15%;
+}
+.priceWrapper {
+  width: 5%;
 }
 .locationWrapper {
   width: 15%;
