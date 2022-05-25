@@ -11,8 +11,13 @@ governing permissions and limitations under the License.
 */
 
 #admin-configs-cont {
-    font: normal normal normal 13px/30px Source Sans Pro;
+    font: normal normal normal 14px/30px Source Sans Pro;
     width: 35rem; 
+}
+
+.coral-Form--aligned #admin-configs-cont .coral-Form-fieldlabel,
+.coral-Form--vertical #admin-configs-cont .coral-Form-fieldlabel {
+    font: normal normal normal 14px/30px Source Sans Pro;
 }
 
 #emb-widget-config-section {
@@ -30,14 +35,16 @@ governing permissions and limitations under the License.
     border-radius: 24px;
 }
 
-.coral-Form-fieldwrapper.account-config-heading {
+#admin-configs-cont .coral-Form-fieldwrapper.account-config-heading,
+#admin-configs-cont .account-config-heading .coral-Form-fieldlabel {
     font: normal normal normal 24px/30px Source Sans Pro;
     color: #707070;
     margin-top: 60px;
     margin-bottom: 15px;
 }
 
-.coral-Form-fieldwrapper.account-config-heading2 {
+#admin-configs-cont .coral-Form-fieldwrapper.account-config-heading2,
+#admin-configs-cont .account-config-heading2 .coral-Form-fieldlabel {
     font: normal normal 600 14px/20px Source Sans Pro;
     display: inline-block;
     width: 90%;
@@ -59,10 +66,10 @@ governing permissions and limitations under the License.
     width: 90%;
     display: inline-block;
     float: right;
-    top: 7px;
+    top: 0.3rem;
 }
 
-.account-widget-config-heading {
+#admin-configs-cont .account-widget-config-heading .coral-Form-fieldlabel {
     font: normal normal normal 20px/30px Source Sans Pro;
     border-top: 1px solid black;
     margin-top: 40px;
@@ -70,11 +77,19 @@ governing permissions and limitations under the License.
     padding-bottom: 10px;
 }
 
-.account-widget-config-heading2 {
+#admin-configs-cont .account-widget-config-heading2 .coral-Form-fieldlabel {
     font: normal normal 600 14px/20px Source Sans Pro;
     margin-bottom: 40px;
 }
 
 .nomenclature-config-section {
     margin-top: 30px;
+}
+
+.coral-Form--vertical .coral-Form-fieldwrapper .coral-Form-fielderror, .coral-Form--vertical .coral-Form-fieldwrapper .coral-Form-fieldinfo {
+    top: 8px;
+}
+
+#admin-configs-cont coral-switch {
+    top: 5px;
 }
