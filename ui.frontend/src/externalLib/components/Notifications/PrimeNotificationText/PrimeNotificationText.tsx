@@ -26,6 +26,7 @@ const name0Var2Brace: String = "{{name0}}";
 
 
 const dateTimeStr : any = ["date", "time"];
+const learningObjType: any = "learningObject";
 
 
 const PrimeNotificationText = (props: any) => {
@@ -80,52 +81,54 @@ const PrimeNotificationText = (props: any) => {
 
   if (name1 > name0 || name1 === -1) {
     subStrPart1 = name0 > 0 ? message.substring(0, name0) : null;
-    loStr1 = notif.modelNames[0]; 
+    loStr1 = notif.modelNames[0] + " "; 
     str1Type =  notif.modelTypes[0] ;
     subStrPart2 = message.substring(endname0, name1 > 0 ? name1 : message.length);
-    loStr2 = notif.modelNames[1]; 
+    loStr2 = notif.modelNames[1] + " "; 
     str2Type = notif.modelTypes[1];
     subStrPart3 = name1 !== -1 ? message.substring(endname1, message.length) : "";
   } else {
     subStrPart1 = name1 > 0 ? message.substring(0, name1) : "";
-    loStr1 = notif.modelNames[1];
+    loStr1 = notif.modelNames[1] + " ";
     str1Type = notif.modelTypes[1]
     subStrPart2 = message.substring(endname1, name0 > 0 ? name0 : message.length);
-    loStr2 = notif.modelNames[0];
+    loStr2 = notif.modelNames[0] + " ";
     str2Type = notif.modelTypes[0] 
     subStrPart3 = name0 !== -1 ? message.substring(endname0, message.length) : "";
+  }
+
+  const getLearningObjClass  = (value: string) => {
+    let className = styles.loLink;
+    return value === learningObjType
+      ? className
+      : '';
+  }
+
+  const formattedNotificationText = (strType : string, loStr: string) => {
+    return (  
+    dateTimeStr.includes(strType) ? (
+        modifyTimeDDMMYY(loStr, config.locale)
+      ) : (
+        <span role="link"
+          className={getLearningObjClass(strType)}
+          onClick={() => {
+            redirectOverviewPage(notif);
+          }}
+        >
+          {loStr}
+        </span>
+      )
+    );
   }
 
 
   return (
     <div>
       {subStrPart1}
-      {dateTimeStr.includes(str1Type) ? (
-        modifyTimeDDMMYY(loStr1, config.locale)
-      ) : (
-        <span
-          className={styles.loLink}
-          onClick={() => {
-            redirectOverviewPage(notif);
-          }}
-        >
-          {loStr1}
-        </span>
-      )}
+      {formattedNotificationText(str1Type, loStr1)}     
       {subStrPart2}
       {name1 > 0 ? (
-        dateTimeStr.includes(str2Type) ? (
-          modifyTimeDDMMYY(loStr2, config.locale)
-        ) : (
-          <span
-            className={styles.loLink}
-            onClick={() => {
-              redirectOverviewPage(notif);
-            }}
-          >
-            {loStr2}
-          </span>
-        )
+      formattedNotificationText(str2Type, loStr2)
       ) : null}
       {subStrPart3}
     </div>
