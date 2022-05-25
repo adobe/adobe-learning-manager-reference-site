@@ -18,6 +18,7 @@ import {
   TextField,
 } from "@adobe/react-spectrum";
 import React from "react";
+import { useIntl } from "react-intl";
 import { AccountActiveFields, PrimeUser } from "../../../models";
 import styles from "./ALMActiveFields.module.css";
 
@@ -44,7 +45,7 @@ const ALMActiveFields: React.FC<{
     userFieldData,
     predefinedMultiValues,
   } = props;
-
+  const { formatMessage } = useIntl();
   const configuredActiveFields = activeFields
     ? activeFields.split(",").map((item) => item.trim())
     : [];
@@ -141,7 +142,10 @@ const ALMActiveFields: React.FC<{
                       {isMultiValuedTextField && (
                         <TextField
                           value={textFieldValues}
-                          placeholder="Use comma to separate multiple values"
+                          placeholder= {formatMessage({
+                            id: "alm.profile.isMultiValuedTextField.Placeholder",
+                            defaultMessage: "Use comma to separate multiple values",
+                          })}
                           onChange={(value) => {
                             onActiveFieldUpdate(value, activeField.name);
                           }}
@@ -165,7 +169,10 @@ const ALMActiveFields: React.FC<{
                                       : { fontWeight: "bold" }
                                   }
                                 >
-                                  No
+                                  {formatMessage({
+                                    id: "alm.profile.hasPredefinedMultiValues.OptionNo",
+                                    defaultMessage: "No",
+                                  })}
                                 </span>
                                 <Switch
                                   isEmphasized
@@ -192,7 +199,10 @@ const ALMActiveFields: React.FC<{
                                       : { fontWeight: "normal" }
                                   }
                                 >
-                                  Yes
+                                  {formatMessage({
+                                    id: "alm.profile.hasPredefinedMultiValues.OptionYes",
+                                    defaultMessage: "Yes",
+                                  })}
                                 </span>
                               </div>
                             );
