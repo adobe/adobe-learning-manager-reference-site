@@ -39,8 +39,8 @@ governing permissions and limitations under the License.
 #admin-configs-cont .account-config-heading .coral-Form-fieldlabel {
     font: normal normal normal 24px/30px Source Sans Pro;
     color: #707070;
-    margin-top: 60px;
-    margin-bottom: 15px;
+    margin-top: 30px;
+    margin-bottom: 5px;
 }
 
 #admin-configs-cont .coral-Form-fieldwrapper.account-config-heading2,
@@ -48,7 +48,7 @@ governing permissions and limitations under the License.
     font: normal normal 600 14px/20px Source Sans Pro;
     display: inline-block;
     width: 90%;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 
 .coral-Form-fieldwrapper.config-help-btn {
@@ -79,7 +79,7 @@ governing permissions and limitations under the License.
 
 #admin-configs-cont .account-widget-config-heading2 .coral-Form-fieldlabel {
     font: normal normal 600 14px/20px Source Sans Pro;
-    margin-bottom: 40px;
+    margin-bottom: 15px;
 }
 
 .nomenclature-config-section {
