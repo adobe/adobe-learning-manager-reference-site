@@ -25,7 +25,6 @@ import { useIntl } from "react-intl";
 import store from "../../../../store/APIStore";
 import { AlertType } from "../../../common/Alert/AlertDialog";
 import { useAlert } from "../../../common/Alert/useAlert";
-import { useTrainingPage } from "../../../hooks";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
@@ -107,6 +106,7 @@ const PrimeModuleItem: React.FC<{
   isContent?: boolean;
   isPreviewEnabled: boolean;
   canPlay?: boolean;
+  updateFileSubmissionUrl: Function;
 }> = (props) => {
   const {
     training,
@@ -116,6 +116,7 @@ const PrimeModuleItem: React.FC<{
     isContent,
     isPreviewEnabled,
     canPlay,
+    updateFileSubmissionUrl,
   } = props;
   const { formatMessage } = useIntl();
 
@@ -273,10 +274,6 @@ const PrimeModuleItem: React.FC<{
   };
 
   const inputElementId = loResource.id + "-uploadFileSubmission";
-  const { updateFileSubmissionUrl } = useTrainingPage(
-    training.id,
-    trainingInstance.id
-  );
 
   const fileSelected = async (event: any) => {
     const inputElement = document.getElementById(
