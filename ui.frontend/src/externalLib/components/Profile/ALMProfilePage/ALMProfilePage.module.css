@@ -68,13 +68,8 @@ governing permissions and limitations under the License.
   position: relative;
 }
 
-.imageWrapper:hover .deleteImage {
-  display: block;
-  opacity: 1;
-}
 
 .deleteImage {
-    display: none;
     text-align: center;
     line-height: 20px;
     cursor: pointer;
@@ -178,6 +173,12 @@ governing permissions and limitations under the License.
 .progressAreaMobile{
   display: none;
 }
+@media screen and (max-width: 1024px) {
+  .userProfileContainer {
+    padding-left: 20px;
+  }
+}
+
 @media screen and (max-width: 414px) {
   .profileHeader {
     display: none;
