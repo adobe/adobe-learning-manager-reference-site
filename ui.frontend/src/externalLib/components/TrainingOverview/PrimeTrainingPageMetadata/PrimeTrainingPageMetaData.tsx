@@ -52,7 +52,10 @@ import {
 } from "../../../utils/global";
 import { filterLoReourcesBasedOnResourceType } from "../../../utils/hooks";
 import { DEFAULT_USER_SVG, LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
-import { checkIsEnrolled } from "../../../utils/overview";
+import {
+  checkIsEnrolled,
+  storeActionInNonLoggedMode,
+} from "../../../utils/overview";
 import { getFormattedPrice } from "../../../utils/price";
 import {
   GetTranslation,
@@ -139,13 +142,18 @@ const PrimeTrainingPageMetaData: React.FC<{
     }
   }, [enrollment, trainingInstance.state, isPricingEnabled]);
 
+  const enrollmentCount = instanceSummary.enrollmentCount;
+  const seatLimit = instanceSummary.seatLimit;
+  const seatsAvailable =
+    seatLimit !== undefined ? seatLimit - (enrollmentCount || 0) : -1;
+
   const seatsAvailableText =
-    trainingInstance.seatLimit > -1 ? (
+    seatsAvailable > -1 ? (
       <p style={{ textAlign: "center" }} className={styles.label}>
         {formatMessage({
           id: `alm.overview.seatsAvailable`,
         })}
-        {trainingInstance.seatLimit}
+        {seatsAvailable}
       </p>
     ) : (
       ""
@@ -183,6 +191,7 @@ const PrimeTrainingPageMetaData: React.FC<{
 
   const handleEnrollment = async () => {
     storeActionInNonLoggedMode(ENROLL);
+
     try {
       enrollmentHandler();
       if (isEnrolled) {
@@ -204,12 +213,6 @@ const PrimeTrainingPageMetaData: React.FC<{
     try {
       setAlternativesLangAvailable(await alternateLanguages);
     } catch (e) {}
-  };
-
-  const storeActionInNonLoggedMode = (actionType: string) => {
-    if (!isPrimeUserLoggedIn) {
-      updateURLParams({ action: actionType });
-    }
   };
 
   const addToCart = async () => {
@@ -237,8 +240,7 @@ const PrimeTrainingPageMetaData: React.FC<{
 
   //show only if not enrolled
   const showEnrollmentCount =
-    !trainingInstance.learningObject.enrollment &&
-    instanceSummary.enrollmentCount !== undefined
+    !trainingInstance.learningObject.enrollment && enrollmentCount !== undefined
       ? true
       : false;
 
@@ -716,7 +718,7 @@ const PrimeTrainingPageMetaData: React.FC<{
                   id: "alm.overview.enrollment.count",
                 },
                 {
-                  0: instanceSummary.enrollmentCount,
+                  0: enrollmentCount,
                 }
               )}
             </label>

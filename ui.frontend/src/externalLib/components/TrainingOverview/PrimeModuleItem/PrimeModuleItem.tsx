@@ -40,6 +40,7 @@ import {
   ELEARNING,
   PENDING_APPROVAL,
   PENDING_SUBMISSION,
+  PREVIEW,
   REJECTED,
   VIRTUAL_CLASSROOM,
 } from "../../../utils/constants";
@@ -64,7 +65,10 @@ import {
   VIRTUAL_CLASSROOM_SVG,
   XLS_SVG,
 } from "../../../utils/inline_svg";
-import { checkIsEnrolled } from "../../../utils/overview";
+import {
+  checkIsEnrolled,
+  storeActionInNonLoggedMode,
+} from "../../../utils/overview";
 import {
   getPreferredLocalizedMetadata,
   GetTranslation,
@@ -199,29 +203,17 @@ const PrimeModuleItem: React.FC<{
       setTimeout(() => setShowCannotSkipDialog(false), 3000);
       return;
     }
+    const isPrimeUserLoggedIn = getALMObject().isPrimeUserLoggedIn();
+    if (isModulePreviewAble && !isPrimeUserLoggedIn) {
+      storeActionInNonLoggedMode(PREVIEW);
+      launchPlayerHandler();
+      return;
+    }
     if (
       (isEnrolled && !isClassroomOrVC) ||
-      (!isEnrolled &&
-        loResource.previewEnabled &&
-        getALMObject().isPrimeUserLoggedIn())
+      (isModulePreviewAble && isPrimeUserLoggedIn)
     ) {
-      let fileSubmissionComponents = [
-        "uploadButton",
-        "submissionLink",
-        "fileSubmissionContainer",
-        "fileApproved",
-      ];
-      const matchArray = fileSubmissionComponents.filter((element) => {
-        return event.target.className.includes(element);
-      });
-      if (
-        (inputRef.current && inputRef.current.contains(event.target)) ||
-        matchArray.length > 0
-      ) {
-        return;
-      } else {
-        launchPlayerHandler({ id: training.id, moduleId: loResource.id });
-      }
+      launchPlayerHandler({ id: training.id, moduleId: loResource.id });
     }
   };
   const keyDownHandler = (event: any) => {
