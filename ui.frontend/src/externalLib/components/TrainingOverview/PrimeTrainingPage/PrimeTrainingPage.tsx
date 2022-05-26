@@ -88,12 +88,13 @@ const PrimeTrainingPage = () => {
     addToCartHandler,
     isPreviewEnabled,
     alternateLanguages,
+    updateFileSubmissionUrl,
   } = useTrainingPage(trainingId, trainingInstanceId);
   const locale = config.locale;
   const { formatMessage } = useIntl();
-  const [
-    { showAuthorInfo, showDescription, showEnrollDeadline },
-  ] = useState(() => getTrainingOverviewAttributes(config));
+  const [{ showAuthorInfo, showDescription, showEnrollDeadline }] = useState(
+    () => getTrainingOverviewAttributes(config)
+  );
 
   const inputRef = useRef<null | HTMLInputElement>(null);
   const state = store.getState();
@@ -321,15 +322,11 @@ const PrimeTrainingPage = () => {
               ""
             )}
             {prerequisiteLOs?.map((prerequisiteLO) => {
-              const {
-                name,
-                description,
-                overview,
-                richTextOverview,
-              } = getPreferredLocalizedMetadata(
-                prerequisiteLO.localizedMetadata,
-                locale
-              );
+              const { name, description, overview, richTextOverview } =
+                getPreferredLocalizedMetadata(
+                  prerequisiteLO.localizedMetadata,
+                  locale
+                );
 
               let showMandatoryLabel = false;
               let instance = prerequisiteLO.instances[0];
@@ -363,6 +360,7 @@ const PrimeTrainingPage = () => {
                 launchPlayerHandler={launchPlayerHandler}
                 trainingInstance={trainingInstance}
                 isPreviewEnabled={isPreviewEnabled}
+                updateFileSubmissionUrl={updateFileSubmissionUrl}
               />
             )}
             {loType === CERTIFICATION && (
@@ -370,6 +368,7 @@ const PrimeTrainingPage = () => {
                 trainings={training.subLOs}
                 launchPlayerHandler={launchPlayerHandler}
                 isPreviewEnabled={isPreviewEnabled}
+                updateFileSubmissionUrl={updateFileSubmissionUrl}
               />
             )}
             {loType === LEARNING_PROGRAM &&
@@ -432,6 +431,7 @@ const PrimeTrainingPage = () => {
                         section.mandatoryLOCount === section.loIds?.length
                       }
                       isPreviewEnabled={isPreviewEnabled}
+                      updateFileSubmissionUrl={updateFileSubmissionUrl}
                     />
                   </section>
                 );

@@ -29,6 +29,7 @@ const PrimeLPItemContainer: React.FC<{
   isPartOfLP: boolean;
   showMandatoryLabel?: boolean;
   isPreviewEnabled: boolean;
+  updateFileSubmissionUrl: Function;
 }> = (props) => {
   const {
     training,
@@ -36,6 +37,7 @@ const PrimeLPItemContainer: React.FC<{
     isPartOfLP = false,
     showMandatoryLabel = false,
     isPreviewEnabled = false,
+    updateFileSubmissionUrl,
   } = props;
 
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -43,14 +45,10 @@ const PrimeLPItemContainer: React.FC<{
   const { locale } = getALMConfig();
 
   const trainingInstance = filterTrainingInstance(training);
-  const {
-    name,
-    description,
-    overview,
-    richTextOverview,
-  } = useMemo((): PrimeLocalizationMetadata => {
-    return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
-  }, [training.localizedMetadata, locale]);
+  const { name, description, overview, richTextOverview } =
+    useMemo((): PrimeLocalizationMetadata => {
+      return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
+    }, [training.localizedMetadata, locale]);
 
   const clickHandler = () => {
     setIsCollapsed((prevState) => !prevState);
@@ -87,6 +85,7 @@ const PrimeLPItemContainer: React.FC<{
                   launchPlayerHandler={launchPlayerHandler}
                   isPartOfLP={isPartOfLP}
                   isPreviewEnabled={isPreviewEnabled}
+                  updateFileSubmissionUrl={updateFileSubmissionUrl}
                 ></PrimeCourseItemContainer>
               </div>
             );
