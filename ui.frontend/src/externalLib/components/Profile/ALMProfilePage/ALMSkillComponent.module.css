@@ -34,6 +34,14 @@ governing permissions and limitations under the License.
     padding-left: 20px;
   }
 }
+
+@media screen and (max-width: 1024px) {
+  .skillsArea,
+  .skillsContainer {
+    padding-left: 20px;
+  }
+}
+
 .skillsHeading {
   font-size: var(--prime-font-size-18);
   font: normal normal bold 21px/27px Source Sans Pro;

@@ -11,5 +11,5 @@
  |   governing permissions and limitations under the License.
 -->
 <workspaceFilter version="1.0">
-    <filter root="/apps/learning/config"/>
+    <filter root="/apps/learning/osgiconfig"/>
 </workspaceFilter>

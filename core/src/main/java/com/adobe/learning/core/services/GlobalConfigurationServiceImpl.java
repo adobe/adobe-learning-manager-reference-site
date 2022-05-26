@@ -67,6 +67,7 @@ public class GlobalConfigurationServiceImpl implements GlobalConfigurationServic
 					String cpConfPath = inheritedVM.getInherited(Constants.Config.CONF_PROP_NAME, String.class);
 					if (cpConfPath != null) {
 						String configNodePath = cpConfPath + Constants.Config.ALM_SUB_CONFIG_PATH;
+						globalConfig.addProperty("configNodePath", configNodePath);
 						adminConfigs = serviceResolver.getResource(configNodePath).getValueMap();
 					}
 				}
