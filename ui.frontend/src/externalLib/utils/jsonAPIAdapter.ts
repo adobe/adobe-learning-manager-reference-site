@@ -104,8 +104,7 @@ export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
   const retval: any = {};
   if (dataType) {
     retval[
-      `${dataType === "searchResult" ? "learningObject" : dataType}${
-        isList ? "List" : ""
+      `${dataType === "searchResult" ? "learningObject" : dataType}${isList ? "List" : ""
       }`
     ] = result;
   }
@@ -180,10 +179,10 @@ export class ObjectWrapper {
         } else
           retval = relData
             ? ObjectWrapper.GetWrapper(
-                relData["type"],
-                relData["id"],
-                this.ALMStore
-              )
+              relData["type"],
+              relData["id"],
+              this.ALMStore
+            )
             : undefined;
       }
     }
@@ -336,7 +335,7 @@ export function parseESResponse(
     lo.dateCreated = item.dateCreated;
     lo.datePublished = item.publishDate;
     lo.tags = item.tags;
-
+    lo.imageUrl = item.thumbnailImageUrl;
     localizedData = {
       _transient: "",
       description: item.description,
@@ -410,6 +409,7 @@ export function parseCommerceResponse(
     lo.authorNames = item.almauthor;
     lo.datePublished = item.almpublishdate;
     lo.tags = item.almtags;
+    lo.imageUrl = item.almthumbnailurl;
     localizedData = {
       _transient: "",
       description: item.description.html,
@@ -474,4 +474,4 @@ export function parseCommerceResponse(
   });
   return loResponse;
 }
-export {};
+export { };
