@@ -23,7 +23,7 @@ const PrimeCommunityObjectOptions = (props: any) => {
   useEffect(() => {
     (async () => {
       const response = await getALMUser();
-      setUser(response.user);
+      setUser(response?.user || ({} as PrimeUser));
     })();
   }, []);
 
@@ -67,55 +67,72 @@ const PrimeCommunityObjectOptions = (props: any) => {
   return (
     <>
       <div ref={ref} className={styles.primeObjectOptionsList}>
-        {props.object.createdBy.id === user.id && Object.keys(props.object.myPoll).length === 0 &&
-          <div className={styles.primeObjectRegularOption} onClick={editObjectHandler}>
-            {
-              formatMessage({
+        {props.object.createdBy.id === user.id &&
+          (!props.object.myPoll ||
+            Object.keys(props.object.myPoll).length === 0) && (
+            <div
+              className={styles.primeObjectRegularOption}
+              onClick={editObjectHandler}
+            >
+              {formatMessage({
                 id: "alm.community.board.edit",
                 defaultMessage: "Edit",
-              })
-            }
-          </div> 
-        }
-        {props.parentPost && props.parentPost.createdBy.id === user.id && props.parentPost.postingType === "QUESTION" && props.object.id !== props.answerCommentId &&
-          <div className={styles.primeObjectRegularOption} onClick={() => {updateRightAnswerHandler(true)}}>
-            {
-              formatMessage({
+              })}
+            </div>
+          )}
+        {props.parentPost &&
+          props.parentPost.createdBy.id === user.id &&
+          props.parentPost.postingType === "QUESTION" &&
+          props.object.id !== props.answerCommentId && (
+            <div
+              className={styles.primeObjectRegularOption}
+              onClick={() => {
+                updateRightAnswerHandler(true);
+              }}
+            >
+              {formatMessage({
                 id: "alm.community.board.markAsRightAnswer",
                 defaultMessage: "Mark as Right answer",
-              })
-            }
-          </div> 
-        }
+              })}
+            </div>
+          )}
 
-        {props.parentPost && props.parentPost.createdBy.id === user.id && props.parentPost.postingType === "QUESTION" && props.object.id === props.answerCommentId &&
-          <div className={styles.primeObjectRegularOption} onClick={() => {updateRightAnswerHandler(false)}}>
-            {
-              formatMessage({
+        {props.parentPost &&
+          props.parentPost.createdBy.id === user.id &&
+          props.parentPost.postingType === "QUESTION" &&
+          props.object.id === props.answerCommentId && (
+            <div
+              className={styles.primeObjectRegularOption}
+              onClick={() => {
+                updateRightAnswerHandler(false);
+              }}
+            >
+              {formatMessage({
                 id: "alm.community.board.unmarkAsRightAnswer",
                 defaultMessage: "Unmark as Right answer",
-              })
-            }
-          </div> 
-        }
+              })}
+            </div>
+          )}
         <div className={styles.primeSeperator}></div>
-        {props.object.createdBy.id === user.id &&
-          <div className={styles.primeObjectCriticalOption} onClick={deleteObjectHandler}>
-            {
-              formatMessage({
-                id: "alm.community.board.delete",
-                defaultMessage: "Delete",
-              })
-            }
-          </div> 
-        }
-        <div className={styles.primeObjectCriticalOption} onClick={reportObjectHandler}>
-          {
-            formatMessage({
-              id: "alm.community.board.report",
-              defaultMessage: "Report",
-            })
-          }
+        {props.object.createdBy.id === user.id && (
+          <div
+            className={styles.primeObjectCriticalOption}
+            onClick={deleteObjectHandler}
+          >
+            {formatMessage({
+              id: "alm.community.board.delete",
+              defaultMessage: "Delete",
+            })}
+          </div>
+        )}
+        <div
+          className={styles.primeObjectCriticalOption}
+          onClick={reportObjectHandler}
+        >
+          {formatMessage({
+            id: "alm.community.board.report",
+            defaultMessage: "Report",
+          })}
         </div>
       </div>
     </>

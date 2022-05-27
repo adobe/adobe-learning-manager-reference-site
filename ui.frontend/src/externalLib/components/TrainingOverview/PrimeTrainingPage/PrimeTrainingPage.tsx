@@ -9,10 +9,22 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { lightTheme, Provider } from "@adobe/react-spectrum";
-import { useState, useRef } from "react";
+import { lightTheme, ProgressBar, Provider } from "@adobe/react-spectrum";
+import { useRef, useState } from "react";
 import { useIntl } from "react-intl";
+import store from "../../../../store/APIStore";
 import { useTrainingPage } from "../../../hooks/catalog/useTrainingPage";
+import {
+  CERTIFICATION,
+  COMPLETED,
+  COURSE,
+  ENROLLED,
+  LEARNING_PROGRAM,
+  PENDING_APPROVAL,
+  REJECTED,
+  TRAINING_ID_STR,
+  TRAINING_INSTANCE_ID_STR,
+} from "../../../utils/constants";
 import { convertSecondsToTimeText } from "../../../utils/dateTime";
 import {
   getALMConfig,
@@ -21,7 +33,13 @@ import {
   PrimeConfig,
   setALMAttribute,
 } from "../../../utils/global";
+import { SOCIAL_CANCEL_SVG } from "../../../utils/inline_svg";
 import { getPreferredLocalizedMetadata } from "../../../utils/translationService";
+import {
+  cancelUploadFile,
+  getUploadInfo,
+  uploadFile,
+} from "../../../utils/uploadUtils";
 import { ALMBackButton } from "../../Common/ALMBackButton";
 import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 import { ALMLoader } from "../../Common/ALMLoader";
@@ -30,25 +48,6 @@ import { PrimeTrainingItemContainerHeader } from "../PrimeTrainingItemContainerH
 import { PrimeTrainingOverview } from "../PrimeTrainingOverview";
 import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
 import { PrimeTrainingPageMetadata } from "../PrimeTrainingPageMetadata";
-import { ProgressBar } from "@adobe/react-spectrum";
-import {
-  getUploadInfo,
-  uploadFile,
-  cancelUploadFile,
-} from "../../../utils/uploadUtils";
-import store from "../../../../store/APIStore";
-import { SOCIAL_CANCEL_SVG } from "../../../utils/inline_svg";
-import {
-  COURSE,
-  LEARNING_PROGRAM,
-  CERTIFICATION,
-  TRAINING_ID_STR,
-  TRAINING_INSTANCE_ID_STR,
-  PENDING_APPROVAL,
-  ENROLLED,
-  REJECTED,
-  COMPLETED,
-} from "../../../utils/constants";
 import styles from "./PrimeTrainingPage.module.css";
 
 const getTrainingOverviewAttributes = (config: PrimeConfig) => {
@@ -89,6 +88,7 @@ const PrimeTrainingPage = () => {
     addToCartHandler,
     isPreviewEnabled,
     alternateLanguages,
+    updateFileSubmissionUrl,
   } = useTrainingPage(trainingId, trainingInstanceId);
   const locale = config.locale;
   const { formatMessage } = useIntl();
@@ -360,6 +360,7 @@ const PrimeTrainingPage = () => {
                 launchPlayerHandler={launchPlayerHandler}
                 trainingInstance={trainingInstance}
                 isPreviewEnabled={isPreviewEnabled}
+                updateFileSubmissionUrl={updateFileSubmissionUrl}
               />
             )}
             {loType === CERTIFICATION && (
@@ -367,6 +368,7 @@ const PrimeTrainingPage = () => {
                 trainings={training.subLOs}
                 launchPlayerHandler={launchPlayerHandler}
                 isPreviewEnabled={isPreviewEnabled}
+                updateFileSubmissionUrl={updateFileSubmissionUrl}
               />
             )}
             {loType === LEARNING_PROGRAM &&
@@ -429,6 +431,7 @@ const PrimeTrainingPage = () => {
                         section.mandatoryLOCount === section.loIds?.length
                       }
                       isPreviewEnabled={isPreviewEnabled}
+                      updateFileSubmissionUrl={updateFileSubmissionUrl}
                     />
                   </section>
                 );

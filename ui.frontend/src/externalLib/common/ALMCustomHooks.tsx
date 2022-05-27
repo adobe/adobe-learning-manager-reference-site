@@ -19,7 +19,7 @@ import { getDefaultFiltersState, updateFilterList } from "../utils/filters";
 import {
   getALMAttribute,
   getALMConfig,
-  getQueryParamsIObjectFromUrl,
+  getQueryParamsFromUrl,
 } from "../utils/global";
 import { JsonApiParse } from "../utils/jsonAPIAdapter";
 import { isCommerceEnabled } from "../utils/price";
@@ -118,7 +118,7 @@ export default class ALMCustomHooks implements ICustomHooks {
 
   async getFilters() {
     const config = getALMConfig();
-    const queryParams = getQueryParamsIObjectFromUrl();
+    const queryParams = getQueryParamsFromUrl();
 
     let maxPrice = 0;
     if (isCommerceEnabled()) {

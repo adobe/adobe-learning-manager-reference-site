@@ -19,7 +19,6 @@ import {
   getALMAttribute,
   getALMConfig,
   getItemFromStorage,
-  getWindowObject,
   setItemToStorage,
 } from "./global";
 import { JsonApiParse } from "./jsonAPIAdapter";
@@ -54,27 +53,6 @@ export function getDefaultIntsance(
   return training.instances?.filter((i) => i && i.isDefault);
 }
 
-export function locationUpdate(params: any) {
-  const location = getWindowObject().location;
-  const existingQueryParams = new URLSearchParams(decodeURI(location.search));
-  for (let key in params) {
-    if (params[key]) {
-      existingQueryParams.set(key, params[key]);
-    } else {
-      existingQueryParams.delete(key);
-    }
-  }
-  const newurl =
-    window.location.protocol +
-    "//" +
-    window.location.host +
-    window.location.pathname +
-    "?" +
-    encodeURI(existingQueryParams.toString()) +
-    window.location.hash;
-  window.history.replaceState({ path: newurl }, "", newurl);
-}
-
 export function debounce(fn: Function, time = 250) {
   let timeoutId: ReturnType<typeof setTimeout>;
   return function (this: any, ...args: any[]) {
@@ -97,7 +75,7 @@ export const getOrUpdateCatalogFilters = async (): Promise<
     });
     setItemToStorage(PRIME_CATALOG_FILTER, catalogPromise);
     return JsonApiParse(catalogPromise)?.catalogList;
-  } catch (e) { }
+  } catch (e) {}
 };
 
 const getCatalogParamsForAPi = async (
@@ -151,7 +129,7 @@ export async function getParamsForCatalogApi(filterState: CatalogFilterState) {
       );
     }
     if (filterState.price && catalogAttributes?.price === "true") {
-      params["filter.priceRange"] = filterState.price
+      params["filter.priceRange"] = filterState.price;
     }
   }
   return params;

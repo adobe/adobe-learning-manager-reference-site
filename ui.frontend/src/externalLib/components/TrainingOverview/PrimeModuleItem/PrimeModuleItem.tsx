@@ -25,7 +25,6 @@ import { useIntl } from "react-intl";
 import store from "../../../../store/APIStore";
 import { AlertType } from "../../../common/Alert/AlertDialog";
 import { useAlert } from "../../../common/Alert/useAlert";
-import { useTrainingPage } from "../../../hooks";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
@@ -40,6 +39,7 @@ import {
   ELEARNING,
   PENDING_APPROVAL,
   PENDING_SUBMISSION,
+  PREVIEW,
   REJECTED,
   VIRTUAL_CLASSROOM,
 } from "../../../utils/constants";
@@ -64,7 +64,10 @@ import {
   VIRTUAL_CLASSROOM_SVG,
   XLS_SVG,
 } from "../../../utils/inline_svg";
-import { checkIsEnrolled } from "../../../utils/overview";
+import {
+  checkIsEnrolled,
+  storeActionInNonLoggedMode,
+} from "../../../utils/overview";
 import {
   getPreferredLocalizedMetadata,
   GetTranslation,
@@ -103,6 +106,7 @@ const PrimeModuleItem: React.FC<{
   isContent?: boolean;
   isPreviewEnabled: boolean;
   canPlay?: boolean;
+  updateFileSubmissionUrl: Function;
 }> = (props) => {
   const {
     training,
@@ -112,6 +116,7 @@ const PrimeModuleItem: React.FC<{
     isContent,
     isPreviewEnabled,
     canPlay,
+    updateFileSubmissionUrl,
   } = props;
   const { formatMessage } = useIntl();
 
@@ -199,29 +204,17 @@ const PrimeModuleItem: React.FC<{
       setTimeout(() => setShowCannotSkipDialog(false), 3000);
       return;
     }
+    const isPrimeUserLoggedIn = getALMObject().isPrimeUserLoggedIn();
+    if (isModulePreviewAble && !isPrimeUserLoggedIn) {
+      storeActionInNonLoggedMode(PREVIEW);
+      launchPlayerHandler();
+      return;
+    }
     if (
       (isEnrolled && !isClassroomOrVC) ||
-      (!isEnrolled &&
-        loResource.previewEnabled &&
-        getALMObject().isPrimeUserLoggedIn())
+      (isModulePreviewAble && isPrimeUserLoggedIn)
     ) {
-      let fileSubmissionComponents = [
-        "uploadButton",
-        "submissionLink",
-        "fileSubmissionContainer",
-        "fileApproved",
-      ];
-      const matchArray = fileSubmissionComponents.filter((element) => {
-        return event.target.className.includes(element);
-      });
-      if (
-        (inputRef.current && inputRef.current.contains(event.target)) ||
-        matchArray.length > 0
-      ) {
-        return;
-      } else {
-        launchPlayerHandler({ id: training.id, moduleId: loResource.id });
-      }
+      launchPlayerHandler({ id: training.id, moduleId: loResource.id });
     }
   };
   const keyDownHandler = (event: any) => {
@@ -281,12 +274,9 @@ const PrimeModuleItem: React.FC<{
   };
 
   const inputElementId = loResource.id + "-uploadFileSubmission";
-  const { updateFileSubmissionUrl } = useTrainingPage(
-    training.id,
-    trainingInstance.id
-  );
 
   const fileSelected = async (event: any) => {
+    event.stopPropagation();
     const inputElement = document.getElementById(
       inputElementId
     ) as HTMLInputElement;
@@ -315,7 +305,8 @@ const PrimeModuleItem: React.FC<{
     setIsUploading(false);
   };
 
-  const cancelClickHandler = () => {
+  const cancelClickHandler = (event: any) => {
+    event.stopPropagation();
     cancelUploadFile(store.getState().fileUpload.fileName);
     setIsUploading(false);
   };
@@ -430,12 +421,17 @@ const PrimeModuleItem: React.FC<{
           href={submissionUrl}
           target="_blank"
           rel="noreferrer"
+          onClick={anchorClickHandler}
         >
           {getSubmissionFileName(submissionUrl)}
         </a>
         {changeAllowed && getUploadFileSection(hasSession, CHANGE)}
       </>
     );
+  };
+
+  const anchorClickHandler = (event: any) => {
+    event?.stopPropagation();
   };
 
   return (

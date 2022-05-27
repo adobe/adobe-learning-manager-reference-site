@@ -33,21 +33,29 @@ import {
   PrimeLoInstanceSummary,
 } from "../../../models/PrimeModels";
 import {
+  ADD_TO_CART,
   ADOBE_COMMERCE,
   CERTIFICATION,
   COURSE,
+  ENROLL,
   PENDING_ACCEPTANCE,
   PENDING_APPROVAL,
+  PREVIEW,
 } from "../../../utils/constants";
 import { modifyTime } from "../../../utils/dateTime";
 import {
   getALMAccount,
   getALMConfig,
   getALMObject,
+  getQueryParamsFromUrl,
+  updateURLParams,
 } from "../../../utils/global";
 import { filterLoReourcesBasedOnResourceType } from "../../../utils/hooks";
 import { DEFAULT_USER_SVG, LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
-import { checkIsEnrolled } from "../../../utils/overview";
+import {
+  checkIsEnrolled,
+  storeActionInNonLoggedMode,
+} from "../../../utils/overview";
 import { getFormattedPrice } from "../../../utils/price";
 import {
   GetTranslation,
@@ -128,29 +136,36 @@ const PrimeTrainingPageMetaData: React.FC<{
     } else if (trainingInstance.state === "Retired") {
       return "registerInterest";
     } else if (isPricingEnabled) {
-      return "buyNow";
+      return "addToCart";
     } else {
       return "enroll";
     }
   }, [enrollment, trainingInstance.state, isPricingEnabled]);
 
+  const enrollmentCount = instanceSummary.enrollmentCount;
+  const seatLimit = instanceSummary.seatLimit;
+  const seatsAvailable =
+    seatLimit !== undefined ? seatLimit - (enrollmentCount || 0) : -1;
+
   const seatsAvailableText =
-    trainingInstance.seatLimit > -1 ? (
+    seatsAvailable > -1 ? (
       <p style={{ textAlign: "center" }} className={styles.label}>
         {formatMessage({
           id: `alm.overview.seatsAvailable`,
         })}
-        {trainingInstance.seatLimit}
+        {seatsAvailable}
       </p>
     ) : (
       ""
     );
 
   const actionText = useMemo(() => {
-    if (action === "buyNow") {
+    if (action === "addToCart") {
       return formatMessage(
-        { id: "alm.training.buyNow" },
-        { x: training.price }
+        {
+          id: `alm.addToCart`,
+        },
+        { x: getFormattedPrice(training.price) }
       );
     }
     return formatMessage({
@@ -174,13 +189,20 @@ const PrimeTrainingPageMetaData: React.FC<{
     unEnrollmentHandler({ enrollmentId: training.enrollment.id });
   };
 
-  const onPressHandler = async () => {
+  const handleEnrollment = async () => {
+    storeActionInNonLoggedMode(ENROLL);
+
     try {
       enrollmentHandler();
       if (isEnrolled) {
         launchPlayerHandler();
       }
     } catch (e) {}
+  };
+
+  const previewHandler = async () => {
+    storeActionInNonLoggedMode(PREVIEW);
+    launchPlayerHandler();
   };
 
   useEffect(() => {
@@ -195,18 +217,17 @@ const PrimeTrainingPageMetaData: React.FC<{
 
   const addToCart = async () => {
     try {
+      storeActionInNonLoggedMode(ADD_TO_CART);
       const { error, totalQuantity } = await addToCartHandler();
-      if (error) {
-        if (isPrimeUserLoggedIn) {
+      if (isPrimeUserLoggedIn) {
+        if (error && error.length) {
           almAlert(
             true,
             formatMessage({ id: "alm.addToCart.error" }, { loType: loType }),
             AlertType.error
           );
-        }
-      } else {
-        getALMObject().updateCart(totalQuantity);
-        if (isPrimeUserLoggedIn) {
+        } else {
+          getALMObject().updateCart(totalQuantity);
           almAlert(
             true,
             formatMessage({ id: "alm.addedToCart" }),
@@ -217,14 +238,9 @@ const PrimeTrainingPageMetaData: React.FC<{
     } catch (e) {}
   };
 
-  const addProductToCart = async () => {
-    await addToCart();
-  };
-
   //show only if not enrolled
   const showEnrollmentCount =
-    !trainingInstance.learningObject.enrollment &&
-    instanceSummary.enrollmentCount !== undefined
+    !trainingInstance.learningObject.enrollment && enrollmentCount !== undefined
       ? true
       : false;
 
@@ -241,8 +257,15 @@ const PrimeTrainingPageMetaData: React.FC<{
   });
   const showCompletionDeadline =
     showEnrollDeadline === "true" && trainingInstance.completionDeadline;
+
+  const enrollmentDeadline = trainingInstance.enrollmentDeadline;
   const showEnrollmentDeadline =
     !training.enrollment && trainingInstance.enrollmentDeadline;
+
+  const hasEnrollmentDeadlinePassed = enrollmentDeadline
+    ? new Date(enrollmentDeadline) < new Date()
+    : false;
+
   const showJobAids = training.enrollment && training.supplementaryLOs?.length;
   const showResource = training.supplementaryResources?.length;
   const showUnenrollButton =
@@ -276,6 +299,16 @@ const PrimeTrainingPageMetaData: React.FC<{
         },
         { training: GetTranslation(`alm.training.${loType}`, true) }
       )}
+    </p>
+  ) : (
+    ""
+  );
+
+  const enrollmentDeadlinePassedText = hasEnrollmentDeadlinePassed ? (
+    <p style={{ textAlign: "center" }} className={styles.errorText}>
+      {formatMessage({
+        id: "alm.training.overview.enrollmentDeadline.passed",
+      })}
     </p>
   ) : (
     ""
@@ -356,6 +389,29 @@ const PrimeTrainingPageMetaData: React.FC<{
     ? trainingInstance.seatLimit > 0
     : true;
 
+  useEffect(() => {
+    const queryParams = getQueryParamsFromUrl();
+    if (
+      isPrimeUserLoggedIn &&
+      !checkIsEnrolled(training.enrollment) &&
+      queryParams?.action
+    ) {
+      updateURLParams({ action: "" });
+      const action = queryParams.action;
+      switch (action) {
+        case PREVIEW:
+          launchPlayerHandler();
+          break;
+        case ADD_TO_CART:
+          addToCart();
+          break;
+        case ENROLL:
+          handleEnrollment();
+          break;
+      }
+    }
+  }, []);
+
   return (
     <section className={styles.container}>
       {showPreviewButton && (
@@ -363,7 +419,7 @@ const PrimeTrainingPageMetaData: React.FC<{
           <Button
             variant="primary"
             UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
-            onPress={launchPlayerHandler}
+            onPress={previewHandler}
           >
             {formatMessage({
               id: `alm.overview.button.preview`,
@@ -391,11 +447,12 @@ const PrimeTrainingPageMetaData: React.FC<{
             <Button
               variant="primary"
               UNSAFE_className={`${styles.primaryButton} ${styles.commonButton}`}
-              onPress={onPressHandler}
-              isDisabled={!isSeatAvailable}
+              onPress={handleEnrollment}
+              isDisabled={!isSeatAvailable || hasEnrollmentDeadlinePassed}
             >
               {actionText}
             </Button>
+            {enrollmentDeadlinePassedText}
             {seatsAvailableText}
           </>
         )}
@@ -411,22 +468,22 @@ const PrimeTrainingPageMetaData: React.FC<{
           </Button>
         )}
 
-        {action === "buyNow" && (
+        {action === "addToCart" && (
           <>
             <Button
               variant="primary"
               UNSAFE_className={`${styles.primaryButton} ${styles.commonButton}`}
-              onPress={addProductToCart}
-              isDisabled={isTrainingNotSynced || !isSeatAvailable}
+              onPress={addToCart}
+              isDisabled={
+                isTrainingNotSynced ||
+                !isSeatAvailable ||
+                hasEnrollmentDeadlinePassed
+              }
             >
-              {formatMessage(
-                {
-                  id: `alm.addToCart`,
-                },
-                { x: getFormattedPrice(training.price) }
-              )}
+              {actionText}
             </Button>
             {trainingNotAvailableForPurchaseText}
+            {enrollmentDeadlinePassedText}
             {seatsAvailableText}
           </>
         )}
@@ -512,7 +569,7 @@ const PrimeTrainingPageMetaData: React.FC<{
               </Content>
             </ContextualHelp>
             {alternativesLangAvailable?.map((language) => {
-              return <div>{language}</div>;
+              return <div key={language}>{language}</div>;
             })}
           </div>
         </div>
@@ -661,7 +718,7 @@ const PrimeTrainingPageMetaData: React.FC<{
                   id: "alm.overview.enrollment.count",
                 },
                 {
-                  0: instanceSummary.enrollmentCount,
+                  0: enrollmentCount,
                 }
               )}
             </label>

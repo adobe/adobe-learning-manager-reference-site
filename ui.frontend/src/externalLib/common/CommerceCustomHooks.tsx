@@ -26,7 +26,7 @@ import {
 import {
   getALMConfig,
   getItemFromStorage,
-  getQueryParamsIObjectFromUrl,
+  getQueryParamsFromUrl,
   setItemToStorage,
 } from "../utils/global";
 import { JsonApiParse, parseCommerceResponse } from "../utils/jsonAPIAdapter";
@@ -182,7 +182,7 @@ const getOrUpdateFilters = async () => {
   if (filterItems) {
     return filterItems;
   }
-  // const queryParams = getQueryParamsIObjectFromUrl();
+  // const queryParams = getQueryParamsFromUrl();
   try {
     const response = await apolloClient.query({
       query: GET_COMMERCE_FILTERS,
@@ -298,7 +298,7 @@ export default class CommerceCustomHooks implements ICustomHooks {
   }
 
   async getFilters() {
-    const queryParams = getQueryParamsIObjectFromUrl();
+    const queryParams = getQueryParamsFromUrl();
 
     try {
       const items = await getOrUpdateFilters();
@@ -411,18 +411,21 @@ export default class CommerceCustomHooks implements ICustomHooks {
           cartId: cartId,
         },
       });
-      const addProductsToCart = response?.data?.addProductsToCart?.cart;
-      const items = addProductsToCart.items;
-      const totalQuantity = addProductsToCart.total_quantity;
-      const error = addProductsToCart.user_errors;
+      const addProductsToCart = response?.data?.addProductsToCart;
+      const error = addProductsToCart?.user_errors;
+      const items = addProductsToCart?.cart?.items;
+      const totalQuantity = addProductsToCart?.cart?.total_quantity;
       return {
         items,
         totalQuantity,
         error,
       };
-    } catch (error) {
-      console.log(error);
-      return { items: [], totalQuantity: 0, error };
+    } catch (error: any) {
+      return {
+        items: [],
+        totalQuantity: 0,
+        error: [error?.message],
+      };
     }
   }
 }

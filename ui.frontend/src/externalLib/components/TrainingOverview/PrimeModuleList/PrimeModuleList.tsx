@@ -26,6 +26,7 @@ const PrimeModuleList: React.FC<{
   isPartOfLP?: boolean;
   isContent?: boolean;
   isPreviewEnabled: boolean;
+  updateFileSubmissionUrl: Function;
 }> = (props) => {
   const {
     loResources,
@@ -35,6 +36,7 @@ const PrimeModuleList: React.FC<{
     isPartOfLP,
     isContent,
     isPreviewEnabled,
+    updateFileSubmissionUrl,
   } = props;
 
   const isModuleLocked = (
@@ -92,6 +94,7 @@ const PrimeModuleList: React.FC<{
           isContent={isContent}
           isPreviewEnabled={isPreviewEnabled}
           canPlay={!isModuleLocked(loResource, index)}
+          updateFileSubmissionUrl={updateFileSubmissionUrl}
         ></PrimeModuleItem>
       ))}
     </ul>

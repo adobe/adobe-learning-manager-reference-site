@@ -52,8 +52,8 @@ const PrimeCatalogFilters = (props: any) => {
         end: price.list[1].value || price.maxPrice,
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ price?.maxPrice]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [price?.maxPrice]);
 
   if (isLoading) {
     return <ALMLoader />;
@@ -87,8 +87,16 @@ const PrimeCatalogFilters = (props: any) => {
     );
   };
 
-  const changeTrainingPriceHandle = (type: string, event: any) => {
-    let value = parseInt(event || 0);
+  const inputEnterKeyHandler = (event: any, type: string) => {
+    if (event.key === "Enter") {
+      let value = (event.target as HTMLInputElement)?.value;
+      value = value.replaceAll(",", "");
+      changeTrainingPriceHandle(type, value);
+    }
+  };
+
+  const changeTrainingPriceHandle = (type: string, value: any) => {
+    value = parseInt(value || 0);
 
     if (type === "start") {
       if (value < 0) {
@@ -151,9 +159,9 @@ const PrimeCatalogFilters = (props: any) => {
         {/* learnerState Filter ends */}
 
         {/* Price Filter start */}
-        {catalogAttributes["price"] === "true" && price && price.maxPrice ?(
+        {catalogAttributes["price"] === "true" && price && price.maxPrice ? (
           <div key={"price"} className={styles.container}>
-            <h3 className={styles.typeLabel}>
+            <h3 className={`${styles.typeLabel} ${styles.price}`}>
               {GetTranslation("alm.catalog.filter.price.label", true)}
             </h3>
             <div className={styles.listContainer}>
@@ -171,30 +179,34 @@ const PrimeCatalogFilters = (props: any) => {
                 <div>
                   <NumberField
                     value={trainingPrice.start}
-                    onChange={(event) =>
-                      changeTrainingPriceHandle("start", event)
+                    onChange={(value) =>
+                      changeTrainingPriceHandle("start", value)
                     }
                     minValue={0}
                     maxValue={price && price.maxPrice}
                     width={"100%"}
+                    onKeyUp={(event) => inputEnterKeyHandler(event, "start")}
                   ></NumberField>
                 </div>
                 <div className={styles.priceToLabel}>To</div>
                 <div>
                   <NumberField
                     value={trainingPrice.end}
-                    onChange={(event) =>
-                      changeTrainingPriceHandle("end", event)
+                    onChange={(value) =>
+                      changeTrainingPriceHandle("end", value)
                     }
                     minValue={0}
                     maxValue={price && price.maxPrice}
+                    onKeyUp={(event) => inputEnterKeyHandler(event, "end")}
                     width={"100%"}
                   ></NumberField>
                 </div>
               </div>
             </div>
           </div>
-        ) : ""}
+        ) : (
+          ""
+        )}
       </div>
     </>
   );

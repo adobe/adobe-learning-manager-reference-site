@@ -15,26 +15,20 @@ import { AlertType } from "../../common/Alert/AlertDialog";
 import { useAlert } from "../../common/Alert/useAlert";
 import APIServiceInstance from "../../common/APIService";
 import {
-  PrimeAccount,
   PrimeLearningObject,
   PrimeLearningObjectInstance,
   PrimeLoInstanceSummary,
 } from "../../models/PrimeModels";
 import { getJobaidUrl, isJobaidContentTypeUrl } from "../../utils/catalog";
-import {
-  getALMAccount,
-  getALMConfig,
-  getALMObject,
-  getALMUser,
-} from "../../utils/global";
+import { getALMAccount, getALMConfig, getALMUser } from "../../utils/global";
 import {
   filterTrainingInstance,
+  getLocale,
   useBadge,
   useCardBackgroundStyle,
   useCardIcon,
   useLocalizedMetaData,
   useTrainingSkills,
-  getLocale,
 } from "../../utils/hooks";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { LaunchPlayer } from "../../utils/playback-utils";
@@ -50,7 +44,7 @@ export const useTrainingPage = (
 ) => {
   const { locale } = getALMConfig();
   const [almAlert] = useAlert();
-  
+
   const [currentState, setCurrentState] = useState({
     trainingInstance: {} as PrimeLearningObjectInstance,
     isPreviewEnabled: false,
@@ -80,10 +74,8 @@ export const useTrainingPage = (
         queryParam["include"] = params.include || DEFAULT_INCLUDE_LO_OVERVIEW;
         queryParam["useCache"] = true;
         queryParam["filter.ignoreEnhancedLP"] = false;
-        let account = {} as PrimeAccount;
-        if (getALMObject().isPrimeUserLoggedIn()) {
-          account = await getALMAccount();
-        }
+        const account = await getALMAccount();
+
         const response = await APIServiceInstance.getTraining(
           trainingId,
           queryParam
@@ -142,7 +134,7 @@ export const useTrainingPage = (
           setRefreshTraining((prevState) => !prevState);
         }
       } catch (error) {
-          almAlert(true, GetTranslation("alm.enrollment.error"), AlertType.error);
+        almAlert(true, GetTranslation("alm.enrollment.error"), AlertType.error);
         //TODO : handle error
       }
     },
@@ -179,8 +171,8 @@ export const useTrainingPage = (
   }, [trainingInstance]);
 
   const getContentLocales = async () => {
-    var response = await getALMUser();
-    var contentLocales = response.user.account.contentLocales;
+    const account = await getALMAccount();
+    const contentLocales = account.contentLocales;
     return contentLocales;
   };
 
@@ -205,7 +197,7 @@ export const useTrainingPage = (
     },
     [trainingId]
   );
-  
+
   const alternateLanguages = useMemo(async () => {
     let alternateLanguages = new Set<string>();
     getLocale(trainingInstance, alternateLanguages, locale);
@@ -302,10 +294,10 @@ export const useTrainingPage = (
     async (fileUrl: any, loId: any, loInstanceId: any) => {
       const baseApiUrl = getALMConfig().primeApiURL;
       const userResponse = await getALMUser();
-
+      const userId = userResponse?.user?.id;
       const body = {
         data: {
-          id: loInstanceId + "_" + userResponse.user.id,
+          id: loInstanceId + "_" + userId,
           type: "learningObjectInstanceEnrollment",
           attributes: {
             url: fileUrl,
@@ -316,9 +308,7 @@ export const useTrainingPage = (
 
       try {
         await RestAdapter.ajax({
-          url: `${baseApiUrl}/enrollments/${
-            loInstanceId + "_" + userResponse.user.id
-          }`,
+          url: `${baseApiUrl}/enrollments/${loInstanceId + "_" + userId}`,
           method: "PATCH",
           body: JSON.stringify(body),
           headers: headers,

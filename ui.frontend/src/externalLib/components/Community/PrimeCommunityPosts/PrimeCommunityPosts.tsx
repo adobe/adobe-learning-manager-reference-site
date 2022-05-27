@@ -17,50 +17,55 @@ import { useIntl } from "react-intl";
 import styles from "./PrimeCommunityPosts.module.css";
 
 const PrimeCommunityPosts = (props: any) => {
-    const boardId = props.boardId;
-    const { posts, fetchPosts, loadMorePosts, hasMoreItems } = usePosts(boardId);
-    const { formatMessage } = useIntl();
-    const firstRun = useRef(true);
+  const boardId = props.boardId;
+  const { posts, fetchPosts, loadMorePosts, hasMoreItems } = usePosts(boardId);
+  const { formatMessage } = useIntl();
+  const firstRun = useRef(true);
 
-    useEffect(() => {
-        //below needed as first update sets posts as []
-        if(firstRun.current) {
-            firstRun.current = false;
-            return;
-        }
-        setTimeout(() => {
-            posts ? props.showLoader(false) : props.showLoader(true);
-        }, 700)
-    }, [posts, props])
-    
-    const sortFilterChangeHandler = (sortValue: any) => {
-        fetchPosts(boardId, sortValue);
+  useEffect(() => {
+    //below needed as first update sets posts as []
+    if (firstRun.current) {
+      firstRun.current = false;
+      return;
     }
+    setTimeout(() => {
+      posts ? props.showLoader(false) : props.showLoader(true);
+    }, 700);
+  }, [posts, props]);
 
-    return (
-        <>
-        <div className={styles.primePostSectionWrapper}>
-            <div className={styles.primePostSection}>
-                {posts?.length > 0 && 
-                    <PrimeCommunityPostFilters sortFilterChangeHandler={sortFilterChangeHandler}></PrimeCommunityPostFilters>}
-                {posts?.length > 0 &&
-                    <PrimeCommunityPostsContainer
-                        posts={posts}
-                        loadMorePosts={loadMorePosts}
-                        hasMoreItems={hasMoreItems}>
-                    </PrimeCommunityPostsContainer>
-                }
-                {posts.length === 0 && !props.isSearchMode &&
-                    <div className={styles.primeCommunityNoPostFound}>
-                        {formatMessage({
-                            id: "alm.community.noPostMessage",
-                            defaultMessage: "No post found",
-                        })}
-                    </div>
-                }
+  const sortFilterChangeHandler = async (sortValue: any) => {
+    props.showLoader(true);
+    await fetchPosts(boardId, sortValue);
+    props.showLoader(false);
+  };
+
+  return (
+    <>
+      <div className={styles.primePostSectionWrapper}>
+        <div className={styles.primePostSection}>
+          {posts?.length > 0 && (
+            <PrimeCommunityPostFilters
+              sortFilterChangeHandler={sortFilterChangeHandler}
+            ></PrimeCommunityPostFilters>
+          )}
+          {posts?.length > 0 && (
+            <PrimeCommunityPostsContainer
+              posts={posts}
+              loadMorePosts={loadMorePosts}
+              hasMoreItems={hasMoreItems}
+            ></PrimeCommunityPostsContainer>
+          )}
+          {posts.length === 0 && !props.isSearchMode && (
+            <div className={styles.primeCommunityNoPostFound}>
+              {formatMessage({
+                id: "alm.community.noPostMessage",
+                defaultMessage: "No post found",
+              })}
             </div>
+          )}
         </div>
-        </>
-    );
+      </div>
+    </>
+  );
 };
 export default PrimeCommunityPosts;

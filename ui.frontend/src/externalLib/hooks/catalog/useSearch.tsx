@@ -11,13 +11,13 @@ governing permissions and limitations under the License.
 */
 import { useCallback, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { State } from "../../store/state";
 import {
   resetSearchText,
   updateSearchText,
 } from "../../store/actions/catalog/action";
-import { debounce, locationUpdate } from "../../utils/catalog";
-import { getQueryParamsIObjectFromUrl } from "../../utils/global";
+import { State } from "../../store/state";
+import { debounce } from "../../utils/catalog";
+import { getQueryParamsFromUrl, updateURLParams } from "../../utils/global";
 
 const DEFAULT_MIN_LENGTH = 1;
 
@@ -32,7 +32,7 @@ export const useSearch = () => {
 
       if (trimmedText.length === 0) return;
 
-      locationUpdate({ searchText: trimmedText });
+      updateURLParams({ searchText: trimmedText });
       if (trimmedText.length >= DEFAULT_MIN_LENGTH) {
         dispatch(updateSearchText(text));
       } else if (trimmedText.length === 0) {
@@ -43,17 +43,17 @@ export const useSearch = () => {
   );
 
   const resetSearch = useCallback(() => {
-    locationUpdate({ searchText: "" });
+    updateURLParams({ searchText: "" });
     dispatch(resetSearchText());
   }, [dispatch]);
 
   const computedQuery = useMemo(() => {
-    const queryParams = getQueryParamsIObjectFromUrl();
+    const queryParams = getQueryParamsFromUrl();
     return queryParams.searchText || query;
   }, [query]);
 
   useEffect(() => {
-    const queryParams = getQueryParamsIObjectFromUrl();
+    const queryParams = getQueryParamsFromUrl();
     if (queryParams.searchText) {
       dispatch(updateSearchText(queryParams.searchText));
     }

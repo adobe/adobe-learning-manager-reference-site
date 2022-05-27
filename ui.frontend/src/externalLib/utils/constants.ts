@@ -6,6 +6,11 @@ export const PENDING_APPROVAL = "PENDING_APPROVAL";
 export const PENDING_ACCEPTANCE = "PENDING_ACCEPTANCE";
 export const COURSE = "course";
 export const CERTIFICATION = "certification";
+
+export const REQUIRED_ERROR_MESSAGE = "Is required";
+export const PREVIEW = "PREVIEW";
+export const ENROLL = "ENROLL";
+export const ADD_TO_CART = "ADD_TO_CART";
 export const LEARNING_PROGRAM = "learningProgram";
 export const TRAINING_ID_STR = "trainingId";
 export const TRAINING_INSTANCE_ID_STR = "trainingInstanceId";

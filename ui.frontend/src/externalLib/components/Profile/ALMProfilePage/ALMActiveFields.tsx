@@ -9,8 +9,16 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { Item, lightTheme, Picker, Provider, Switch, TextField } from "@adobe/react-spectrum";
+import {
+  Item,
+  lightTheme,
+  Picker,
+  Provider,
+  Switch,
+  TextField,
+} from "@adobe/react-spectrum";
 import React from "react";
+import { useIntl } from "react-intl";
 import { AccountActiveFields, PrimeUser } from "../../../models";
 import styles from "./ALMActiveFields.module.css";
 
@@ -26,14 +34,10 @@ const ALMActiveFields: React.FC<{
   userFieldData: any;
   predefinedMultiValues: any;
 }> = (props) => {
-  // const { formatMessage } = useIntl();
-  // const config = getALMConfig();
-
   const {
     activeFields,
     description,
     title,
-    user,
     accountActiveFields,
     onActiveFieldUpdate,
     onSwitchValueUpdate,
@@ -41,7 +45,7 @@ const ALMActiveFields: React.FC<{
     userFieldData,
     predefinedMultiValues,
   } = props;
-
+  const { formatMessage } = useIntl();
   const configuredActiveFields = activeFields
     ? activeFields.split(",").map((item) => item.trim())
     : [];
@@ -94,103 +98,119 @@ const ALMActiveFields: React.FC<{
             return (
               <React.Fragment key={activeField.name}>
                 <Provider theme={lightTheme} colorScheme={"light"}>
-                <div className={styles.activeFieldSectionBottom}>
-                  <div className={styles.activeFieldName}>
-                    {activeField.name}
-                    {isMultiValuedTextField || hasPredefinedMultiValues ? (
-                      <div className={styles.multiValueLabelText}>
-                        (Supports one or more
-                        <span className={styles.multiValueLabelText}>
-                          values)
-                        </span>
-                      </div>
-                    ) : (
-                      ""
-                    )}
+                  <div className={styles.activeFieldSectionBottom}>
+                    <div className={styles.activeFieldName}>
+                      {activeField.name}
+                      {isMultiValuedTextField || hasPredefinedMultiValues ? (
+                        <div className={styles.multiValueLabelText}>
+                          (Supports one or more
+                          <span className={styles.multiValueLabelText}>
+                            values)
+                          </span>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                    <div>
+                      {showTextField && !isMultiValue && (
+                        <TextField
+                          value={textFieldValues}
+                          placeholder="Type here..."
+                          onChange={(value) => {
+                            onActiveFieldUpdate(value, activeField.name);
+                          }}
+                          UNSAFE_className={styles.textFieldAlign}
+                        />
+                      )}
+                      {showDropdown && (
+                        <Picker
+                          items={dropDownValue()}
+                          onSelectionChange={(value) => {
+                            onActiveFieldUpdate(value, activeField.name);
+                          }}
+                          selectedKey={
+                            JSON.stringify(userFieldData?.fields) === "{}" ||
+                            userFieldData?.fields == undefined
+                              ? null
+                              : userFieldData?.fields[activeField.name]
+                          }
+                        >
+                          {(item) => <Item>{item.name}</Item>}
+                        </Picker>
+                      )}
+                      {isMultiValuedTextField && (
+                        <TextField
+                          value={textFieldValues}
+                          placeholder= {formatMessage({
+                            id: "alm.profile.isMultiValuedTextField.Placeholder",
+                            defaultMessage: "Use comma to separate multiple values",
+                          })}
+                          onChange={(value) => {
+                            onActiveFieldUpdate(value, activeField.name);
+                          }}
+                          UNSAFE_className={styles.textFieldAlign}
+                        />
+                      )}
+                      {hasPredefinedMultiValues &&
+                        activeField?.allowedValues.map(
+                          (allowedValue, index) => {
+                            return (
+                              <div className={styles.alignSwitchItem}>
+                                <span
+                                  className={styles.allowedActiveFieldValues}
+                                >
+                                  {allowedValue}
+                                </span>
+                                <span
+                                  style={
+                                    predefinedMultiValues?.get(allowedValue)
+                                      ? { fontWeight: "normal" }
+                                      : { fontWeight: "bold" }
+                                  }
+                                >
+                                  {formatMessage({
+                                    id: "alm.profile.hasPredefinedMultiValues.OptionNo",
+                                    defaultMessage: "No",
+                                  })}
+                                </span>
+                                <Switch
+                                  isEmphasized
+                                  UNSAFE_className={styles.switch}
+                                  isSelected={predefinedMultiValues?.get(
+                                    allowedValue
+                                  )}
+                                  onChange={(value) => {
+                                    updateSelectedMultiValues(
+                                      allowedValue,
+                                      value
+                                    );
+                                    onSwitchValueUpdate(
+                                      allowedValue,
+                                      value,
+                                      activeField.name
+                                    );
+                                  }}
+                                ></Switch>
+                                <span
+                                  style={
+                                    predefinedMultiValues?.get(allowedValue)
+                                      ? { fontWeight: "bold" }
+                                      : { fontWeight: "normal" }
+                                  }
+                                >
+                                  {formatMessage({
+                                    id: "alm.profile.hasPredefinedMultiValues.OptionYes",
+                                    defaultMessage: "Yes",
+                                  })}
+                                </span>
+                              </div>
+                            );
+                          }
+                        )}
+                    </div>
                   </div>
-                  <div>
-                    {showTextField && !isMultiValue && (
-                      <TextField
-                        value={textFieldValues}
-                        placeholder="Type here..."
-                        onChange={(value) => {
-                          onActiveFieldUpdate(value, activeField.name);
-                        }}
-                        UNSAFE_className={styles.textFieldAlign}
-                      />
-                    )}
-                    {showDropdown && (
-                      <Picker
-                        items={dropDownValue()}
-                        onSelectionChange={(value) => {
-                          onActiveFieldUpdate(value, activeField.name);
-                        }}
-                        selectedKey={
-                          JSON.stringify(userFieldData?.fields) === "{}" ||
-                          userFieldData?.fields == undefined
-                            ? null
-                            : userFieldData?.fields[activeField.name]
-                        }
-                      >
-                        {(item) => <Item>{item.name}</Item>}
-                      </Picker>
-                    )}
-                    {isMultiValuedTextField && (
-                      <TextField
-                        value={textFieldValues}
-                        placeholder="Use comma to separate multiple values"
-                        onChange={(value) => {
-                          onActiveFieldUpdate(value, activeField.name);
-                        }}
-                        UNSAFE_className={styles.textFieldAlign}
-                      />
-                    )}
-                    {hasPredefinedMultiValues &&
-                      activeField?.allowedValues.map((allowedValue, index) => {
-                        return (
-                          <div className={styles.alignSwitchItem}>
-                            <span className={styles.allowedActiveFieldValues}>
-                              {allowedValue}
-                            </span>
-                            <span
-                              style={
-                                predefinedMultiValues?.get(allowedValue)
-                                  ? { fontWeight: "normal" }
-                                  : { fontWeight: "bold" }
-                              }
-                            >
-                              No
-                            </span>
-                            <Switch
-                              isEmphasized
-                              UNSAFE_className={styles.switch}
-                              isSelected={predefinedMultiValues?.get(
-                                allowedValue
-                              )}
-                              onChange={(value) => {
-                                updateSelectedMultiValues(allowedValue, value);
-                                onSwitchValueUpdate(
-                                  allowedValue,
-                                  value,
-                                  activeField.name
-                                );
-                              }}
-                            ></Switch>
-                            <span
-                              style={
-                                predefinedMultiValues?.get(allowedValue)
-                                  ? { fontWeight: "bold" }
-                                  : { fontWeight: "normal" }
-                              }
-                            >
-                              Yes
-                            </span>
-                          </div>
-                        );
-                      })}
-                  </div>
-                </div>
-              </Provider>
+                </Provider>
               </React.Fragment>
             );
           })}

@@ -68,6 +68,7 @@ export interface ESPrimeLearningObject {
   description: string;
   tags: string[];
   loInstances: ESPrimeLearningObjectInstance[];
+  thumbnailImageUrl: string;
 }
 
 export interface CommercePrimeLearningObject {

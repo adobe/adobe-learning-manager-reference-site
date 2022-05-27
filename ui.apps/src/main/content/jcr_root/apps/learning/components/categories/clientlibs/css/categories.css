@@ -159,6 +159,11 @@ governing permissions and limitations under the License.
 }
 
 @media screen and (max-width: 414px) {
+    .categories-list {
+      margin-left: 0px;
+      margin-right: 0px;
+    }
+
     .categories-wrapper {
         /* width: 100%;
         max-width: 100%; */
@@ -168,5 +173,10 @@ governing permissions and limitations under the License.
     #categories-desc {
         margin-left: 10px;
         margin-right: 10px;
+    }
+
+    .categories-left-arrow,
+    .categories-right-arrow {
+      display: none;
     }
 }

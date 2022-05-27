@@ -48,8 +48,9 @@ const ALMProfilePage = () => {
     setUserFieldData,
   } = useProfile();
   const { user, accountActiveFields } = profileAttributes;
-  const [predefinedMultiValues, setPredefinedMultiValues] = useState(new Map());
+  const [ predefinedMultiValues, setPredefinedMultiValues] = useState(new Map());
   const [ isUploading, setIsUploading] = useState(false);
+  const [ changeImage, setChangeImage] = useState(false);
   const state = store.getState();
   const [fileUploadProgress, setFileUploadProgress] = useState(
     state.fileUpload.uploadProgress
@@ -70,8 +71,8 @@ const ALMProfilePage = () => {
     let selectedMultiValues = new Map();
     const userFields: any = user.fields;
     if (userFields == undefined) {
-      accountActiveFields?.fields?.map((filteredArrayTemp1: any) => {
-        selectedMultiValues.set(filteredArrayTemp1, false);
+      accountActiveFields?.fields?.map((field: any) => {
+        selectedMultiValues.set(field, false);
       });
       setPredefinedMultiValues(selectedMultiValues);
     } else {
@@ -82,8 +83,8 @@ const ALMProfilePage = () => {
               activeField.allowedValues.includes(value)
             );
           }
-          multiValues?.map((filteredArrayTemp1: any) => {
-            selectedMultiValues.set(filteredArrayTemp1, true);
+          multiValues?.map((multiValue: any) => {
+            selectedMultiValues.set(multiValue, true);
           });
         }
       });
@@ -120,6 +121,7 @@ const ALMProfilePage = () => {
     await updateProfileImage(file.name, file);
     clearInterval(progressCheck);
     setIsUploading(false);
+    setChangeImage(false);
   };
 
   const onActiveFieldUpdate = (value: any, name: any) => {
@@ -170,11 +172,17 @@ const ALMProfilePage = () => {
 
   const deleteImage = async () => {
     await deleteProfileImage();
+    setChangeImage(false);
   };
 
   const cancelClickHandler = () => {
     cancelUploadFile(store.getState().fileUpload.fileName);
     setIsUploading(false);
+    setChangeImage(false);  
+  };
+
+  const changeImageClickHandler = () => {
+    setChangeImage(true);
   };
 
   return (
@@ -190,51 +198,71 @@ const ALMProfilePage = () => {
                 onChange={(event: any) => imageUploaded(event)}
                 ref={inputRef}
               />
-              <h1 className={styles.profileHeader}>Your Profile</h1>
+              <h1 className={styles.profileHeader}>
+                {formatMessage({
+                  id: "alm.profile.name",
+                  defaultMessage: "Your Profile",
+                })}
+              </h1>
               <ALMBackButton />
               <div className={styles.detailsContainer}>
                 <div className={styles.image}>
                   <div className={styles.imageWrapper}>
-                  <img
-                    className={styles.profileImage}
-                    src={user.avatarUrl}
-                    alt="profile"
-                  />
-                  <div className={styles.deleteImage}>
+                    <img
+                      className={styles.profileImage}
+                      src={user.avatarUrl}
+                      alt="profile"
+                    />
+                  </div>
+                  {!isUploading && !changeImage && (
                     <Button
                       variant="primary"
                       isQuiet
                       UNSAFE_className={styles.button}
-                      onPress={deleteImage}
-                    >
-                      {formatMessage({
-                        id: "alm.profile.delete.image",
-                        defaultMessage: "Delete image",
-                      })}
-                    </Button>
-                  </div>
-                  </div>
-                  {!isUploading &&
-                    <Button
-                      variant="primary"
-                      isQuiet
-                      UNSAFE_className={styles.button}
-                      onPress={startFileUpload}
+                      onPress={changeImageClickHandler}
                     >
                       {formatMessage({
                         id: "alm.profile.change.image",
                         defaultMessage: "Change image",
                       })}
                     </Button>
-                  }
+                  )}
+                  {!isUploading && changeImage && (
                     <Button
-                      variant="cta"
+                      variant="primary"
                       isQuiet
-                      UNSAFE_className={styles.editIcon}
+                      UNSAFE_className={styles.button}
                       onPress={startFileUpload}
                     >
-                      <Edit />
+                      {formatMessage({
+                        id: "alm.profile.edit.image",
+                        defaultMessage: "Edit image",
+                      })}
                     </Button>
+                  )}
+                  {!isUploading && changeImage && (
+                    <div className={styles.deleteImage}>
+                      <Button
+                        variant="primary"
+                        isQuiet
+                        UNSAFE_className={styles.button}
+                        onPress={deleteImage}
+                      >
+                        {formatMessage({
+                          id: "alm.profile.delete.image",
+                          defaultMessage: "Delete image",
+                        })}
+                      </Button>
+                    </div>
+                  )}
+                  <Button
+                    variant="cta"
+                    isQuiet
+                    UNSAFE_className={styles.editIcon}
+                    onPress={startFileUpload}
+                  >
+                    <Edit />
+                  </Button>
                   {isUploading && (
                     <div className={styles.progressArea}>
                       <ProgressBar
@@ -258,9 +286,7 @@ const ALMProfilePage = () => {
                   )}
                   {isUploading && (
                     <div className={styles.progressAreaMobile}>
-                      <ProgressBar
-                        value={fileUploadProgress}
-                      />
+                      <ProgressBar value={fileUploadProgress} />
                       <button
                         className={styles.primeStatusSvg}
                         title={formatMessage({

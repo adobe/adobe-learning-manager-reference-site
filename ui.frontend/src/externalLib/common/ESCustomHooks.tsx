@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import { CatalogFilterState } from "../store/reducers/catalog";
 import { getRequestObjectForESApi } from "../utils/catalog";
 import { getDefaultFiltersState, updateFilterList } from "../utils/filters";
-import { getALMConfig, getQueryParamsIObjectFromUrl } from "../utils/global";
+import { getALMConfig, getQueryParamsFromUrl } from "../utils/global";
 import { JsonApiParse, parseESResponse } from "../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
 import { DEFAULT_PAGE_LIMIT } from "./ALMCustomHooks";
@@ -107,7 +107,7 @@ export default class ESCustomHooks implements ICustomHooks {
   }
 
   async getFilters() {
-    const queryParams = getQueryParamsIObjectFromUrl();
+    const queryParams = getQueryParamsFromUrl();
     const esBaseUrl = getALMConfig().esBaseUrl;
     const response = await RestAdapter.get({
       url: `${esBaseUrl}/filterableData`,

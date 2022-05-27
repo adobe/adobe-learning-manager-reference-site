@@ -14,14 +14,13 @@ import { useDispatch, useSelector } from "react-redux";
 import APIServiceInstance from "../../common/APIService";
 import { updateFiltersOnLoad } from "../../store/actions/catalog/action";
 import { State } from "../../store/state";
-import { locationUpdate } from "../../utils/catalog";
 import {
   ActionMap,
   ACTION_MAP,
   FilterState,
   UpdateFiltersEvent,
 } from "../../utils/filters";
-import { getQueryParamsIObjectFromUrl } from "../../utils/global";
+import { getQueryParamsFromUrl, updateURLParams } from "../../utils/global";
 
 export const useFilter = () => {
   const emptyFilterState = {} as FilterState;
@@ -45,7 +44,7 @@ export const useFilter = () => {
       }
     });
 
-    locationUpdate({ [data.filterType as string]: payload });
+    updateURLParams({ [data.filterType as string]: payload });
     setFilterState({ ...filterState, [data.filterType]: { ...filters } });
     const action = ACTION_MAP[data.filterType as keyof ActionMap];
 
@@ -59,7 +58,7 @@ export const useFilter = () => {
       filters.list[0].value = data.data.start;
       filters.list[1].value = data.data.end;
     }
-    locationUpdate({ [data.filterType as string]: payload });
+    updateURLParams({ [data.filterType as string]: payload });
     setFilterState({ ...filterState, [data.filterType]: { ...filters } });
     const action = ACTION_MAP[data.filterType as keyof ActionMap];
 
@@ -67,7 +66,7 @@ export const useFilter = () => {
   };
 
   useEffect(() => {
-    const queryParams = getQueryParamsIObjectFromUrl();
+    const queryParams = getQueryParamsFromUrl();
     const getFilters = async () => {
       try {
         const filters = await APIServiceInstance.getFilters();
@@ -85,7 +84,7 @@ export const useFilter = () => {
   }, []);
 
   const computedFilters = useMemo(() => {
-    const queryParams = getQueryParamsIObjectFromUrl();
+    const queryParams = getQueryParamsFromUrl();
     return { ...filtersFromState, ...queryParams };
   }, [filtersFromState]);
 
