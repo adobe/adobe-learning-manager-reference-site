@@ -25,6 +25,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { AlertType } from "../../../common/Alert/AlertDialog";
 import { useAlert } from "../../../common/Alert/useAlert";
+import { useConfirmationAlert } from "../../../common/Alert/useConfirmationAlert";
 import { InstanceBadge, Skill } from "../../../models/custom";
 import {
   PrimeLearningObject,
@@ -100,6 +101,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   alternateLanguages,
 }) => {
   const [almAlert] = useAlert();
+  const [almConfirmationAlert] = useConfirmationAlert();
   const { formatMessage } = useIntl();
   const config = getALMConfig();
   const locale = config.locale;
@@ -266,6 +268,53 @@ const PrimeTrainingPageMetaData: React.FC<{
     ? new Date(enrollmentDeadline) < new Date()
     : false;
 
+  const getUnenrollmentConfirmationString = () => {
+    if (isPricingEnabled) {
+      return (
+        <div
+          dangerouslySetInnerHTML={{
+            __html: formatMessage({
+              id: "alm.overview.unenroll.confirmationWithRefundInfo",
+              defaultMessage:
+                "Unenrolling will delete all your progress data and personal information like Notes and Quiz Score (if any).<br><br>Are you sure you want to continue?<br><br>Please contact the Administrator to receive a refund.",
+            }),
+          }}
+        />
+      );
+    }
+    return (
+      <div
+        dangerouslySetInnerHTML={{
+          __html: formatMessage({
+            id: "alm.overview.unenroll.confirmationInfo",
+            defaultMessage:
+              "Unenrolling will delete all your progress data and personal information like Notes and Quiz Score (if any). <br><br> Are you sure you want to continue?",
+          }),
+        }}
+      />
+    );
+  };
+
+  const unEnrollConfirmationClickHandler = () => {
+    var confirmationMessage: any = getUnenrollmentConfirmationString();
+    almConfirmationAlert(
+      formatMessage({
+        id: "alm.overview.unenrollment.confirmationRequired",
+        defaultMessage: "Confirmation Required",
+      }),
+      confirmationMessage,
+      formatMessage({
+        id: "alm.overview.unenrollment.confirmationYes",
+        defaultMessage: "Yes",
+      }),
+      formatMessage({
+        id: "alm.overview.unenrollment.confirmationNo",
+        defaultMessage: "No",
+      }),
+      unEnrollClickHandler
+    );
+  };
+  
   const showJobAids = training.enrollment && training.supplementaryLOs?.length;
   const showResource = training.supplementaryResources?.length;
   const showUnenrollButton =
@@ -893,7 +942,7 @@ const PrimeTrainingPageMetaData: React.FC<{
             <a
               href="javascript:void(0)"
               className={styles.supplymentaryLoName}
-              onClick={unEnrollClickHandler}
+              onClick={unEnrollConfirmationClickHandler}
             >
               {loType === "certification"
                 ? "Unenroll from certification"
