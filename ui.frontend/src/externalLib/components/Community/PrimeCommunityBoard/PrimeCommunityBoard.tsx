@@ -16,7 +16,6 @@ import {
   SOCIAL_ACTIVITY_INDEX_LOW_SVG,
 } from "../../../utils/inline_svg";
 import { PrimeCommunityBoardOptions } from "../PrimeCommunityBoardOptions";
-import { PrimeAlertDialog } from "../PrimeAlertDialog";
 import { formatDate } from "../../../utils/dateTime";
 import GlobeOutline from "@spectrum-icons/workflow/GlobeOutline";
 import LockOpen from "@spectrum-icons/workflow/LockOpen";
@@ -34,6 +33,7 @@ import { PrimeCommunityObjectBody } from "../PrimeCommunityObjectBody";
 import styles from "./PrimeCommunityBoard.module.css";
 import { AlertType } from "../../../common/Alert/AlertDialog";
 import { useAlert } from "../../../common/Alert/useAlert";
+import { useConfirmationAlert } from "../../../common/Alert/useConfirmationAlert";
 
 const PrimeCommunityBoard = (props: any) => {
   const { formatMessage } = useIntl();
@@ -42,8 +42,8 @@ const PrimeCommunityBoard = (props: any) => {
   const [isBoardOptionsOpen, setIsBoardOptionsOpen] =
     useState(showBoardOptions);
   const { reportBoard } = useBoardOptions();
-  const [showConfirmation, setShowConfirmation] = useState(false);
   const [almAlert] = useAlert();
+  const [almConfirmationAlert] = useConfirmationAlert();
 
   const boardSkills = board.skills?.map((skill: any, index: any) => {
     return (index ? ", " : "") + skill.name;
@@ -58,7 +58,26 @@ const PrimeCommunityBoard = (props: any) => {
   };
 
   const reportBoardHandler = () => {
-    setShowConfirmation(true);
+    almConfirmationAlert(
+      formatMessage({
+        id: "alm.community.board.confirmationRequired",
+        defaultMessage: "Confirmation Required",
+      }),
+      formatMessage({
+        id: "alm.community.board.reportBoardMessage",
+        defaultMessage:
+          "Are you sure you want to report this board? A notification will be sent to the board administrator and moderators.",
+      }),
+      formatMessage({
+        id: "alm.community.board.report",
+        defaultMessage: "Report",
+      }),
+      formatMessage({
+        id: "alm.community.cancel.label",
+        defaultMessage: "Cancel",
+      }),
+      callReportBoard
+    );
   };
 
   const copyBoardUrlHandler = () => {
@@ -73,14 +92,7 @@ const PrimeCommunityBoard = (props: any) => {
   };
 
   const callReportBoard = async () => {
-    try {
-      await reportBoard(board.id);
-    } catch (Exception) {}
-    hideConfirmationDialog();
-  };
-
-  const hideConfirmationDialog = () => {
-    setShowConfirmation(false);
+    await reportBoard(board.id);
   };
 
   return (
@@ -104,17 +116,6 @@ const PrimeCommunityBoard = (props: any) => {
                 ></PrimeCommunityBoardOptions>
               )}
             </button>
-            {showConfirmation && (
-              <PrimeAlertDialog
-                variant="confirmation"
-                title="Confirmation Required"
-                primaryActionLabel="Report"
-                onPrimaryAction={callReportBoard}
-                secondaryActionLabel="Cancel"
-                onSecondaryAction={hideConfirmationDialog}
-                body="Are you sure you want to report this board? A notification will be sent to the board administrator and moderators."
-              ></PrimeAlertDialog>
-            )}
             <div className={styles.primeBoardName} role="link" tabIndex={0}>
               <span
                 className={styles.primeBoardNameSpan}

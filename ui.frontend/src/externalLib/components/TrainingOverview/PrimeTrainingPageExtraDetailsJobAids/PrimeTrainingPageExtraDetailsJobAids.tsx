@@ -106,6 +106,7 @@ const PrimeTrainingPageExtraJobAid: React.FC<{
           title={GetTranslation("alm.overview.job.aid.not.in.list", true)}
           primaryActionLabel="Ok"
           classes={styles.warningDialog}
+          show={true}
         ></PrimeAlertDialog>
       )}
     </div>
