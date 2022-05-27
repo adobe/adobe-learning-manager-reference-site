@@ -76,7 +76,7 @@ const useCardBackgroundStyle = (
 
 const useTrainingSkills = (training: PrimeLearningObject): Skill[] => {
   return useMemo(() => {
-    const trainingSkills = training?.skills.map((skill) => {
+    const trainingSkills = training?.skills?.map((skill) => {
       const skillLevel = skill.skillLevel;
       const badge = skillLevel.badge;
       return {

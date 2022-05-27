@@ -33,7 +33,7 @@ const PrimeTrainingOverview: React.FC<{
   } = props;
   return (
     <>
-      {trainings.map((training) => {
+      {trainings?.map((training) => {
         const loType = training.loType;
         if (loType === COURSE) {
           return (

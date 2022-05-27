@@ -175,7 +175,7 @@ const PrimeTrainingPageMetaData: React.FC<{
 
   const filteredSkills: Skill[] = useMemo(() => {
     let map: any = {};
-    let filteredSkills = skills.filter((item) => {
+    let filteredSkills = skills?.filter((item) => {
       if (!map[item.name]) {
         map[item.name] = true;
         return true;
@@ -338,16 +338,18 @@ const PrimeTrainingPageMetaData: React.FC<{
       );
       value = `${completionCount}/${totalCount}`;
     } else if (training.loType === CERTIFICATION) {
-      const totalCount = training.subLOs.length;
-      label = GetTranslationsReplaced(
-        "alm.overview.certification.minimum.criteria.label",
-        {
-          x: completionCount,
-          y: totalCount,
-        },
-        true
-      );
-      value = `${completionCount}/${totalCount}`;
+      const totalCount = training.subLOs?.length;
+      if (totalCount) {
+        label = GetTranslationsReplaced(
+          "alm.overview.certification.minimum.criteria.label",
+          {
+            x: completionCount,
+            y: totalCount,
+          },
+          true
+        );
+        value = `${completionCount}/${totalCount}`;
+      }
     }
     return { label, value };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -767,7 +769,7 @@ const PrimeTrainingPageMetaData: React.FC<{
               true
             )}
           </label>
-          {filteredSkills.map((skill) => {
+          {filteredSkills?.map((skill) => {
             return (
               <div key={skill.name}>
                 {skill.name} - {skill.levelName}{" "}
