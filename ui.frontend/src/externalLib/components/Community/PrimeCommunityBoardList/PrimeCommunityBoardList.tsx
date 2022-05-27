@@ -37,9 +37,8 @@ const PrimeCommunityBoardList = () => {
   } = useBoards(DEFAULT_SORT_VALUE, DEFAULT_SKILL);
   const { posts } = usePosts();
   const { formatMessage } = useIntl();
-  const [selectedSortFilter, setSelectedSortFilter] = useState(
-    DEFAULT_SORT_VALUE
-  );
+  const [selectedSortFilter, setSelectedSortFilter] =
+    useState(DEFAULT_SORT_VALUE);
   const [selectedSkill, setSelectedSkill] = useState(currentSkill);
   const [showLoader, setShowLoader] = useState(true);
   const [isSearchMode, setIsSearchMode] = useState(false);
@@ -78,14 +77,18 @@ const PrimeCommunityBoardList = () => {
     setShowLoader(false);
   };
 
-  const sortFilterChangeHandler = (sortValue: any) => {
+  const sortFilterChangeHandler = async (sortValue: any) => {
     setSelectedSortFilter(sortValue);
-    fetchBoards(sortValue, selectedSkill);
+    setShowLoader(true);
+    await fetchBoards(sortValue, selectedSkill);
+    setShowLoader(false);
   };
 
-  const skillFilterChangeHandler = (skill: any) => {
+  const skillFilterChangeHandler = async (skill: any) => {
     setSelectedSkill(skill);
-    fetchBoards(selectedSortFilter, skill);
+    setShowLoader(true);
+    await fetchBoards(selectedSortFilter, skill);
+    setShowLoader(false);
   };
 
   return (
