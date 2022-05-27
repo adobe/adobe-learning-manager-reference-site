@@ -276,6 +276,7 @@ const PrimeModuleItem: React.FC<{
   const inputElementId = loResource.id + "-uploadFileSubmission";
 
   const fileSelected = async (event: any) => {
+    event.stopPropagation();
     const inputElement = document.getElementById(
       inputElementId
     ) as HTMLInputElement;
@@ -304,7 +305,8 @@ const PrimeModuleItem: React.FC<{
     setIsUploading(false);
   };
 
-  const cancelClickHandler = () => {
+  const cancelClickHandler = (event: any) => {
+    event.stopPropagation();
     cancelUploadFile(store.getState().fileUpload.fileName);
     setIsUploading(false);
   };
@@ -419,12 +421,17 @@ const PrimeModuleItem: React.FC<{
           href={submissionUrl}
           target="_blank"
           rel="noreferrer"
+          onClick={anchorClickHandler}
         >
           {getSubmissionFileName(submissionUrl)}
         </a>
         {changeAllowed && getUploadFileSection(hasSession, CHANGE)}
       </>
     );
+  };
+
+  const anchorClickHandler = (event: any) => {
+    event?.stopPropagation();
   };
 
   return (
