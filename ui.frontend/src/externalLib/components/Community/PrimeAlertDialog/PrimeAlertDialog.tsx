@@ -23,12 +23,12 @@ const PrimeAlertDialog = (props: any) => {
   const showDialog = useRef(false);
 
   useEffect(() => {
-    if (!showDialog.current) {
+    if (!showDialog.current && props.show) {
       const launchDialog = document.getElementById("showAlert") as HTMLElement;
       launchDialog.click();
       showDialog.current = true;
     }
-  }, [showDialog]);
+  }, [showDialog, props]);
 
   const hideDialog = () => {
     showDialog.current = false;
@@ -48,26 +48,28 @@ const PrimeAlertDialog = (props: any) => {
   };
 
   return (
-    <Provider theme={lightTheme} colorScheme={"light"}>
-      <DialogTrigger>
-        <ActionButton
-          id="showAlert"
-          UNSAFE_className={styles.primeAlertDialogButton}
-        ></ActionButton>
-        <AlertDialog
-          variant={props.variant}
-          title={props.title}
-          primaryActionLabel={props.primaryActionLabel}
-          onPrimaryAction={onPrimaryActionHandler}
-          secondaryActionLabel={props.secondaryActionLabel}
-          onSecondaryAction={onSecondaryActionHandler}
-          autoFocusButton="primary"
-          UNSAFE_className={props.classes || ""}
-        >
-          {props.body}
-        </AlertDialog>
-      </DialogTrigger>
-    </Provider>
+    props.show && (
+      <Provider theme={lightTheme} colorScheme={"light"}>
+        <DialogTrigger>
+          <ActionButton
+            id="showAlert"
+            UNSAFE_className={styles.primeAlertDialogButton}
+          ></ActionButton>
+          <AlertDialog
+            variant={props.variant}
+            title={props.title}
+            primaryActionLabel={props.primaryActionLabel}
+            onPrimaryAction={onPrimaryActionHandler}
+            secondaryActionLabel={props.secondaryActionLabel}
+            onSecondaryAction={onSecondaryActionHandler}
+            autoFocusButton="primary"
+            UNSAFE_className={props.classes || ""}
+          >
+            {props.body}
+          </AlertDialog>
+        </DialogTrigger>
+      </Provider>
+    )
   );
 };
 

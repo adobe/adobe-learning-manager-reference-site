@@ -25,7 +25,6 @@ import { useIntl } from "react-intl";
 import store from "../../../../store/APIStore";
 import { AlertType } from "../../../common/Alert/AlertDialog";
 import { useAlert } from "../../../common/Alert/useAlert";
-import { useTrainingPage } from "../../../hooks";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
@@ -107,6 +106,7 @@ const PrimeModuleItem: React.FC<{
   isContent?: boolean;
   isPreviewEnabled: boolean;
   canPlay?: boolean;
+  updateFileSubmissionUrl: Function;
 }> = (props) => {
   const {
     training,
@@ -116,6 +116,7 @@ const PrimeModuleItem: React.FC<{
     isContent,
     isPreviewEnabled,
     canPlay,
+    updateFileSubmissionUrl,
   } = props;
   const { formatMessage } = useIntl();
 
@@ -273,12 +274,9 @@ const PrimeModuleItem: React.FC<{
   };
 
   const inputElementId = loResource.id + "-uploadFileSubmission";
-  const { updateFileSubmissionUrl } = useTrainingPage(
-    training.id,
-    trainingInstance.id
-  );
 
   const fileSelected = async (event: any) => {
+    event.stopPropagation();
     const inputElement = document.getElementById(
       inputElementId
     ) as HTMLInputElement;
@@ -307,7 +305,8 @@ const PrimeModuleItem: React.FC<{
     setIsUploading(false);
   };
 
-  const cancelClickHandler = () => {
+  const cancelClickHandler = (event: any) => {
+    event.stopPropagation();
     cancelUploadFile(store.getState().fileUpload.fileName);
     setIsUploading(false);
   };
@@ -422,12 +421,17 @@ const PrimeModuleItem: React.FC<{
           href={submissionUrl}
           target="_blank"
           rel="noreferrer"
+          onClick={anchorClickHandler}
         >
           {getSubmissionFileName(submissionUrl)}
         </a>
         {changeAllowed && getUploadFileSection(hasSession, CHANGE)}
       </>
     );
+  };
+
+  const anchorClickHandler = (event: any) => {
+    event?.stopPropagation();
   };
 
   return (

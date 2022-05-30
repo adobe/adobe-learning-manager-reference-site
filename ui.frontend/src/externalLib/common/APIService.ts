@@ -41,7 +41,6 @@ class APIService {
     searchText: string
   ) {
     if (this.isUserLoggedIn()) {
-      //this.customHooks = new ALMCustomHooks();
       return new ALMCustomHooks().getTrainings(filterState, sort, searchText);
     }
 
@@ -147,7 +146,6 @@ class APIService {
 
   public async getFilters(): Promise<any> {
     if (this.isUserLoggedIn()) {
-      //this.customHooks = new ALMCustomHooks();
       return new ALMCustomHooks().getFilters();
     }
     if (getALMConfig().usageType === ADOBE_COMMERCE) {

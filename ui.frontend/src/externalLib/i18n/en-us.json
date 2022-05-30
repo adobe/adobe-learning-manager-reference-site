@@ -91,6 +91,11 @@
   "alm.overview.button.pendingAcceptance": "Awaiting Acceptance",
   "alm.overview.text.or": "OR",
   "alm.overview.button.preview": "Preview",
+  "alm.overview.unenroll.confirmationInfo": "Unenrolling will delete all your progress data and personal information like Notes and Quiz Score (if any). <br><br> Are you sure you want to continue ?",
+  "alm.overview.unenroll.confirmationWithRefundInfo": "Unenrolling will delete all your progress data and personal information like Notes and Quiz Score (if any).<br><br>Are you sure you want to continue?<br><br>Please contact the Administrator to receive a refund.",
+  "alm.overview.unenrollment.confirmationYes": "Yes",
+  "alm.overview.unenrollment.confirmationNo": "No",
+  "alm.overview.unenrollment.confirmationRequired": "Confirmation Required",
   "alm.overview.enrollment.count": "{0} enrollment(s)",
   "alm.overview.certification.validity": "Validity",
   "alm.certification.type": "Perpetual",
@@ -193,5 +198,7 @@
   "alm.training.skill.credits": "({x} Credits)",
   "alm.overview.course.core.completed": "Core Content Completed",
   "alm.overview.certUploadNote": "Note: Only one document can be uploaded as a proof.",
-  "alm.training.overview.enrollmentDeadline.passed": "Enrollment deadline has passed"
+  "alm.training.overview.enrollmentDeadline.passed": "Enrollment deadline has passed",
+  "alm.community.board.confirmationRequired": "Confirmation Required",
+  "alm.community.board.reportBoardMessage": "Are you sure you want to report this board? A notification will be sent to the board administrator and moderators."
 }

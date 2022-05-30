@@ -32,6 +32,7 @@ const PrimeCourseOverview: React.FC<{
   showDuration?: boolean;
   showNotes?: boolean;
   isPreviewEnabled: boolean;
+  updateFileSubmissionUrl: Function;
 }> = (props: any) => {
   const {
     training,
@@ -41,6 +42,7 @@ const PrimeCourseOverview: React.FC<{
     launchPlayerHandler,
     isPartOfLP = false,
     isPreviewEnabled = false,
+    updateFileSubmissionUrl,
   } = props;
 
   const config = getALMConfig();
@@ -106,6 +108,7 @@ const PrimeCourseOverview: React.FC<{
                 isPartOfLP={isPartOfLP}
                 trainingInstance={trainingInstance}
                 isPreviewEnabled={isPreviewEnabled}
+                updateFileSubmissionUrl={updateFileSubmissionUrl}
               ></PrimeModuleList>
             </>
           )}
@@ -128,6 +131,7 @@ const PrimeCourseOverview: React.FC<{
             trainingInstance={trainingInstance}
             isContent={true}
             isPreviewEnabled={isPreviewEnabled}
+            updateFileSubmissionUrl={updateFileSubmissionUrl}
           ></PrimeModuleList>
         </Item>
         {showTestout && (
@@ -138,6 +142,7 @@ const PrimeCourseOverview: React.FC<{
               training={training}
               trainingInstance={trainingInstance}
               isPreviewEnabled={isPreviewEnabled}
+              updateFileSubmissionUrl={updateFileSubmissionUrl}
             ></PrimeModuleList>
           </Item>
         )}
