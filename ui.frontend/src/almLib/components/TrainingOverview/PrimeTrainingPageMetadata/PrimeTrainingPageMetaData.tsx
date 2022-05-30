@@ -39,6 +39,7 @@ import {
   CERTIFICATION,
   COURSE,
   ENROLL,
+  LEARNING_PROGRAM,
   PENDING_ACCEPTANCE,
   PENDING_APPROVAL,
   PREVIEW,
@@ -449,6 +450,27 @@ const PrimeTrainingPageMetaData: React.FC<{
     training.enrollment?.loResourceGrades,
     training.loType,
   ]);
+  const trainingsCompleted = useMemo(() => {
+    let value = "";
+    if (
+      !isEnrolled ||
+      (training.loType !== LEARNING_PROGRAM &&
+        training.loType !== CERTIFICATION)
+    ) {
+      return value;
+    }
+    if (training.loType === LEARNING_PROGRAM || training.loType === CERTIFICATION) {
+      const totalCount = training.subLOs?.length || 0;
+      let completionCount = 0;
+      training.subLOs.forEach((lo) => {
+        if (lo.enrollment?.hasPassed) {
+          completionCount += 1;
+        }
+      });
+      value = `${completionCount}/${totalCount}`;
+    }
+    return value;
+  }, [isEnrolled, training.loType, training.subLOs]);
 
   const isSeatAvailable = trainingInstance.seatLimit
     ? trainingInstance.seatLimit > 0
@@ -652,6 +674,24 @@ const PrimeTrainingPageMetaData: React.FC<{
           </div>
         </div>
       )}
+
+      {/* Trainings Completed container */}
+      {isEnrolled && trainingsCompleted && (
+        <div className={styles.commonContainer}>
+          <span aria-hidden="true" className={styles.minimumCriteria}>
+            {trainingsCompleted}
+          </span>
+          <div className={styles.innerContainer}>
+            <label className={styles.minimumCriteriaLabel}>
+              {formatMessage({
+                id: "alm.overview.qminimum.completion.criteria",
+                defaultMessage: "Trainings Completed",
+              })}
+            </label>
+          </div>
+        </div>
+      )}
+
 
       {/* Mandatory Modules container */}
       {showMandatoryModulesCount && (
