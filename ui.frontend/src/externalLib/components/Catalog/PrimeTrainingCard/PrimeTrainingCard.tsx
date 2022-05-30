@@ -16,6 +16,8 @@ import { useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { useTrainingCard } from "../../../hooks/catalog/useTrainingCard";
 import { PrimeLearningObject } from "../../../models/PrimeModels";
+import {  modifyTimeDDMMYY } from "../../../utils/dateTime";
+import { getALMConfig } from "../../../utils/global";
 import { SEND_SVG, THREE_DOTS_MENU_SVG } from "../../../utils/inline_svg";
 import { getFormattedPrice } from "../../../utils/price";
 import { GetTranslation } from "../../../utils/translationService";
@@ -45,6 +47,7 @@ const PrimeTrainingCard: React.FC<{
   } = useTrainingCard(training);
   const [isHovered, setIsHovered] = useState(false);
   const { formatMessage } = useIntl();
+  const { locale } = getALMConfig();
 
   const onMouseEnterHandler = () => {
     setIsHovered(true);
@@ -146,15 +149,40 @@ const PrimeTrainingCard: React.FC<{
                 </div>
                 <div className={styles.showOnHover}>
                   {descriptionHtml}
-                  {skillsAsString ? (
+                  {enrollment && enrollment.completionDeadline ? (
                     <div className={styles.skillsContainer}>
-                      <span className={styles.skiillsLabel}>
-                        {GetTranslation("alm.catalog.card.skills.label", true)}
-                      </span>
-                      <span className={styles.skillsValue}>
-                        {skillsAsString}
+                      <span className={styles.dueDateLabel}>
+                        {formatMessage(
+                          {
+                            id: "alm.catalog.card.due.date",
+                          },
+                          {
+                            "0": modifyTimeDDMMYY(
+                              enrollment?.completionDeadline,
+                              locale
+                            ),
+                          }
+                        )}
                       </span>
                     </div>
+                  ) : (
+                    ""
+                  )}
+
+                  {skillsAsString ? (
+                    <>
+                      <div className={styles.skillsContainer}>
+                        <span className={styles.skiillsLabel}>
+                          {GetTranslation(
+                            "alm.catalog.card.skills.label",
+                            true
+                          )}
+                        </span>
+                        <span className={styles.skillsValue}>
+                          {skillsAsString}
+                        </span>
+                      </div>
+                    </>
                   ) : (
                     ""
                   )}
