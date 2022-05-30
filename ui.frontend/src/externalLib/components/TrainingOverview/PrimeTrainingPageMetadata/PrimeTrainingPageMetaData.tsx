@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { Button, Content, ContextualHelp, Text } from "@adobe/react-spectrum";
+import { Button } from "@adobe/react-spectrum";
 import Calendar from "@spectrum-icons/workflow/Calendar";
 import Clock from "@spectrum-icons/workflow/Clock";
 import ClockCheck from "@spectrum-icons/workflow/ClockCheck";
@@ -62,6 +62,7 @@ import {
   GetTranslation,
   GetTranslationsReplaced,
 } from "../../../utils/translationService";
+import { ALMTooltip } from "../../Common/ALMTooltip";
 import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJobAids";
 import styles from "./PrimeTrainingPageMetadata.module.css";
 
@@ -621,17 +622,13 @@ const PrimeTrainingPageMetaData: React.FC<{
                 defaultMessage: "Alternatives Available",
               })}
             </label>
-            <ContextualHelp variant="help">
-              <Content>
-                <Text>
-                  {formatMessage({
-                    id: "alm.overview.alternativesAvailable.toolTip",
-                    defaultMessage:
-                      "You can change the language or the format of the content in the player.",
-                  })}
-                </Text>
-              </Content>
-            </ContextualHelp>
+            <ALMTooltip
+              message={formatMessage({
+                id: "alm.overview.alternativesAvailable.toolTip",
+                defaultMessage:
+                  "You can change the language or the format of the content in the player.",
+              })}
+            ></ALMTooltip>
             {alternativesLangAvailable?.map((language) => {
               return <div key={language}>{language}</div>;
             })}
@@ -651,11 +648,7 @@ const PrimeTrainingPageMetaData: React.FC<{
                 defaultMessage: "Minimum Completion Criteria",
               })}
             </label>
-            <ContextualHelp variant="help">
-              <Content>
-                <Text>{minimumCriteria.label}</Text>
-              </Content>
-            </ContextualHelp>
+            <ALMTooltip message={minimumCriteria.label}></ALMTooltip>
           </div>
         </div>
       )}
@@ -673,17 +666,13 @@ const PrimeTrainingPageMetaData: React.FC<{
                 defaultMessage: "Mandatory Modules",
               })}
             </label>
-            <ContextualHelp variant="help">
-              <Content>
-                <Text>
-                  {formatMessage({
-                    id: "alm.overview.mandatory.modules.tooltip",
-                    defaultMessage:
-                      "Learners must complete all mandatory Modules (marked with a *) to achieve Course completion status",
-                  })}
-                </Text>
-              </Content>
-            </ContextualHelp>
+            <ALMTooltip
+              message={formatMessage({
+                id: "alm.overview.mandatory.modules.tooltip",
+                defaultMessage:
+                  "Learners must complete all mandatory Modules (marked with a *) to achieve Course completion status",
+              })}
+            ></ALMTooltip>
           </div>
         </div>
       )}
