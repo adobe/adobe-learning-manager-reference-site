@@ -216,10 +216,7 @@ governing permissions and limitations under the License.
   -webkit-transition: width 750ms ease-in-out; */
   background: linear-gradient(90deg, #55b36f, #0f870f);
 }
-.skillsContainer {
-  display: flex;
-  align-items: center;
-}
+
 .descriptionContainer {
   flex-direction: column;
   justify-content: center;
@@ -234,6 +231,7 @@ governing permissions and limitations under the License.
   align-items: center;
   display: flex;
   font-size: var(--prime-font-size-12);
+  margin-bottom: 5px;
 }
 .skillsContainer div {
   width: 50%;
@@ -255,7 +253,7 @@ governing permissions and limitations under the License.
   -webkit-box-orient: vertical;
 }
 
-.skiillsLabel {
+.skiillsLabel,.dueDateLabel {
   font-size: var(--prime-font-size-10);
   font-weight: bold;
   line-height: 11px;
@@ -272,7 +270,7 @@ governing permissions and limitations under the License.
   color: var(--prime-color-black);
   padding-left: 5px;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

@@ -49,6 +49,7 @@
   "alm.catalog.card.virtual.classroom": "||VIRTUAL_CLASSROOM||",
   "alm.catalog.card.classroom": "||CLASSROOM||",
   "alm.catalog.card.progress.percent": "{0}% complete",
+  "alm.catalog.card.due.date": "Due: {0}",
   "alm.catalog.filter": "Filter",
   "alm.instance.header.label": "The Course {0}, has the following Course variations.Select one to see further details.",
   "alm.instance.name": "Instance Name",
