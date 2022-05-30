@@ -314,7 +314,7 @@ const PrimeTrainingPageMetaData: React.FC<{
       unEnrollClickHandler
     );
   };
-  
+
   const showJobAids = training.enrollment && training.supplementaryLOs?.length;
   const showResource = training.supplementaryResources?.length;
   const showUnenrollButton =
@@ -362,6 +362,19 @@ const PrimeTrainingPageMetaData: React.FC<{
   ) : (
     ""
   );
+
+  const mandatoryModulesCount = useMemo(() => {
+    let count = 0;
+    trainingInstance?.loResources.forEach((resource) => {
+      if (resource.mandatory) {
+        count += 1;
+      }
+    });
+    return count;
+  }, [trainingInstance?.loResources]);
+
+  const showMandatoryModulesCount =
+    training.loType === COURSE && mandatoryModulesCount > 0;
 
   const showMinimumCompletion =
     training.loResourceCompletionCount &&
@@ -602,7 +615,7 @@ const PrimeTrainingPageMetaData: React.FC<{
             <GlobeGrid />
           </span>
           <div className={styles.innerContainer}>
-            <label className={styles.alternativesAvailable}>
+            <label className={styles.minimumCriteriaLabel}>
               {formatMessage({
                 id: "alm.overview.alternativesAvailable",
                 defaultMessage: "Alternatives Available",
@@ -641,6 +654,34 @@ const PrimeTrainingPageMetaData: React.FC<{
             <ContextualHelp variant="help">
               <Content>
                 <Text>{minimumCriteria.label}</Text>
+              </Content>
+            </ContextualHelp>
+          </div>
+        </div>
+      )}
+
+      {/* Mandatory Modules container */}
+      {showMandatoryModulesCount && (
+        <div className={styles.commonContainer}>
+          <span aria-hidden="true" className={styles.mandatory}>
+            {mandatoryModulesCount}
+          </span>
+          <div className={styles.innerContainer}>
+            <label className={styles.minimumCriteriaLabel}>
+              {formatMessage({
+                id: "alm.overview.mandatory.modules",
+                defaultMessage: "Mandatory Modules",
+              })}
+            </label>
+            <ContextualHelp variant="help">
+              <Content>
+                <Text>
+                  {formatMessage({
+                    id: "alm.overview.mandatory.modules.tooltip",
+                    defaultMessage:
+                      "Learners must complete all mandatory Modules (marked with a *) to achieve Course completion status",
+                  })}
+                </Text>
               </Content>
             </ContextualHelp>
           </div>

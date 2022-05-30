@@ -103,6 +103,8 @@
   "alm.overview.certification.type": "Type",
   "alm.overview.enrollment.deadline": "Enrollment Deadline",
   "alm.overview.completion.deadline": "Completion Deadline",
+  "alm.overview.mandatory.modules": "Mandatory Modules",
+  "alm.overview.mandatory.modules.tooltip": "Learners must complete all mandatory Modules (marked with a *) to achieve Course completion status",
   "alm.jobaid": "Job Aid",
   "alm.jobaid.added": "Job aid has been added to your list",
   "alm.text.activeFieldsSuccess": "Active Fields saved successfully",
