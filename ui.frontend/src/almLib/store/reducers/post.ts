@@ -34,7 +34,7 @@ import {
     SET_POST_TEXT,
     UPDATE_CREATEPOST_PREVIEW_DATA
  } from "../actions/social/actionTypes";
- import { CreatePostDetails, SocialSearchResultList } from "../reducers/social"
+ import { CreatePostDetails, SocialSearchResultList } from "./social"
 
 const boardId: Reducer<string, AnyAction> = (
     state: string | null | undefined,

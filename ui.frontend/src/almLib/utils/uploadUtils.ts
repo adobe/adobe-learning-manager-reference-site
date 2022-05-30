@@ -19,7 +19,7 @@ import {
   SET_UPLOAD_NAME,
   SET_UPLOAD_PROGRESS,
 } from "../store/actions/fileUpload/actionTypes";
-import { getALMConfig, getALMObject } from "../utils/global";
+import { getALMConfig, getALMObject } from "./global";
 import { RestAdapter } from "./restAdapter";
 
 let evaporateInstance: any;

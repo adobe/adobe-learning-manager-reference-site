@@ -366,7 +366,7 @@ const PrimeTrainingPageMetaData: React.FC<{
 
   const mandatoryModulesCount = useMemo(() => {
     let count = 0;
-    trainingInstance?.loResources.forEach((resource) => {
+    trainingInstance?.loResources?.forEach((resource) => {
       if (resource.mandatory) {
         count += 1;
       }

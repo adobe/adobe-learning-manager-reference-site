@@ -1,4 +1,4 @@
-import { ADOBE_COMMERCE } from "../utils/constants";
+import { ADOBE_COMMERCE } from "./constants";
 import { getALMConfig } from "./global";
 
 const currency = "USD";

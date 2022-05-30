@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-import primeMessages from "../externalLib/i18n/en-us.json";
+import primeMessages from "../almLib/i18n/en-us.json";
 import localizedMessages from "./en-US.json";
 
 export const messages = { ...primeMessages, ...localizedMessages };
