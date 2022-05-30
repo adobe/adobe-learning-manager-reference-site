@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { PrimeAccount, PrimeAccountTerminology } from "../models/PrimeModels";
-import { JsonApiParse } from "../utils/jsonAPIAdapter";
+import { JsonApiParse } from "./jsonAPIAdapter";
 import { SetupAccountTerminologies } from "./translationService";
 const _fontLoading = require("./fontLoading");
 
