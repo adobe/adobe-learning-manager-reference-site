@@ -34,6 +34,7 @@ import styles from "./PrimeCommunityBoard.module.css";
 import { AlertType } from "../../../common/Alert/AlertDialog";
 import { useAlert } from "../../../common/Alert/useAlert";
 import { useConfirmationAlert } from "../../../common/Alert/useConfirmationAlert";
+import { BOARD, HIGH, NORMAL, PRIVATE, PUBLIC } from "../../../utils/constants";
 
 const PrimeCommunityBoard = (props: any) => {
   const { formatMessage } = useIntl();
@@ -100,13 +101,12 @@ const PrimeCommunityBoard = (props: any) => {
       <div className={styles.primeBoardWrapper}>
         <div
           className={
-            props.mode === "single"
-              ? styles.primeBoardItem
-              : styles.primeBoardItemWithBorder
+            props.showBorder
+              ? styles.primeBoardItemWithBorder
+              : styles.primeBoardItem
           }
         >
           <div className="prime-title-skills-container">
-            {/* <span id="sr-only">${i18n(state.locale).BOARD}</span> */}
             <button
               className={styles.primeBoardOptions}
               onClick={toggleBoardOptionsHandler}
@@ -143,12 +143,12 @@ const PrimeCommunityBoard = (props: any) => {
               <div
                 className={styles.primeBoardIcon}
                 title={
-                  board.visibility === "PUBLIC"
+                  board.visibility === PUBLIC
                     ? formatMessage({
                         id: "alm.community.board.public",
                         defaultMessage: "Public Board",
                       })
-                    : board.visibility === "PRIVATE"
+                    : board.visibility === PRIVATE
                     ? formatMessage({
                         id: "alm.community.board.private",
                         defaultMessage: "Private Board",
@@ -159,9 +159,9 @@ const PrimeCommunityBoard = (props: any) => {
                       })
                 }
               >
-                {board.visibility === "PUBLIC" ? (
+                {board.visibility === PUBLIC ? (
                   <GlobeOutline />
-                ) : board.visibility === "PRIVATE" ? (
+                ) : board.visibility === PRIVATE ? (
                   <LockClosed />
                 ) : (
                   <LockOpen />
@@ -171,24 +171,24 @@ const PrimeCommunityBoard = (props: any) => {
           </div>
           <PrimeCommunityObjectBody
             object={board}
-            type="board"
+            type={BOARD}
           ></PrimeCommunityObjectBody>
           <div className={styles.primeBoardActivityPanel}>
             <div className={styles.primeBoardActivityStats}>
               <div className={styles.primeActivityStatsIcon}>
-                {board.visibility === "HIGH"
+                {board.visibility === HIGH
                   ? SOCIAL_ACTIVITY_INDEX_HIGH_SVG()
-                  : board.visibility === "NORMAL"
+                  : board.visibility === NORMAL
                   ? SOCIAL_ACTIVITY_INDEX_MEDIUM_SVG()
                   : SOCIAL_ACTIVITY_INDEX_LOW_SVG()}
               </div>
               <span className={styles.primeActivityStatsText}>
-                {board.visibility === "HIGH"
+                {board.visibility === HIGH
                   ? formatMessage({
                       id: "alm.community.board.highActivity",
                       defaultMessage: "High Activity",
                     })
-                  : board.visibility === "NORMAL"
+                  : board.visibility === NORMAL
                   ? formatMessage({
                       id: "alm.community.board.normalActivity",
                       defaultMessage: "Normal Activity",

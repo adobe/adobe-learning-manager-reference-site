@@ -10,6 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { useCallback } from "react";
+import { COMMENT, POLL, POST } from "../../utils/constants";
 import { getALMConfig } from "../../utils/global";
 import { RestAdapter } from "../../utils/restAdapter";
 
@@ -27,7 +28,7 @@ export const usePost = () => {
       const baseApiUrl = getALMConfig().primeApiURL;
       const postBody: any = {
         data: {
-          type: "post",
+          type: POST,
           attributes: {
             postingType: postingType,
             resource: resource,
@@ -37,20 +38,20 @@ export const usePost = () => {
         },
       };
 
-      if(isResourceModified) {
+      if (isResourceModified) {
         postBody.data.attributes.resource = resource;
       }
 
-      if(postingType === "POLL") {
+      if (postingType === POLL) {
         let otherData = [] as any;
         let index = 1;
         pollOptions.map((value: any) => {
           if (value !== "") {
             let data = {
-              "id": index++,
-              "text": value,
-              "resourceId": null
-            }
+              id: index++,
+              text: value,
+              resourceId: null,
+            };
             return otherData.push(data);
           }
           return null;
@@ -69,31 +70,40 @@ export const usePost = () => {
     []
   );
 
-  const patchPost = useCallback(async (postId: any, input: any, postingType: any, resource: any, isResourceModified: any, pollOptions) => {
-      const baseApiUrl =  getALMConfig().primeApiURL;
-      const postBody:any = 
-      {
-        "data":{
-          "type":"post",
-          "id": postId,
-          "attributes": {
-            "postingType": postingType,
-            "state": "ACTIVE",
-            "text": input,
-          }
-        }
-      }
+  const patchPost = useCallback(
+    async (
+      postId: any,
+      input: any,
+      postingType: any,
+      resource: any,
+      isResourceModified: any,
+      pollOptions
+    ) => {
+      const baseApiUrl = getALMConfig().primeApiURL;
+      const postBody: any = {
+        data: {
+          type: POST,
+          id: postId,
+          attributes: {
+            postingType: postingType,
+            state: "ACTIVE",
+            text: input,
+          },
+        },
+      };
 
-      if(isResourceModified) {
+      if (isResourceModified) {
         postBody.data.attributes.resource = resource;
       }
 
-      if(postingType === "POLL") {
+      if (postingType === POLL) {
         let otherData = [] as any;
         let index = 1;
         pollOptions.map((value: any) => {
-          if(value !== "") {
-            return otherData.push("{\"id\":" + (index++) + ",\"text\":\"" + value + "\",\"resourceId\":null}");
+          if (value !== "") {
+            return otherData.push(
+              '{"id":' + index++ + ',"text":"' + value + '","resourceId":null}'
+            );
           }
           return null;
         });
@@ -102,18 +112,20 @@ export const usePost = () => {
 
       const headers = { "content-type": "application/json" };
       await RestAdapter.ajax({
-          url: `${baseApiUrl}/posts/${postId}`,
-          method:"PATCH",
-          body: JSON.stringify(postBody),
-          headers: headers
+        url: `${baseApiUrl}/posts/${postId}`,
+        method: "PATCH",
+        body: JSON.stringify(postBody),
+        headers: headers,
       });
-  }, []);
+    },
+    []
+  );
 
   const addComment = useCallback(async (postId: any, input: any) => {
     const baseApiUrl = getALMConfig().primeApiURL;
     const postBody = {
       data: {
-        type: "comment",
+        type: COMMENT,
         attributes: {
           state: "ACTIVE",
           text: input,
@@ -127,39 +139,31 @@ export const usePost = () => {
       body: JSON.stringify(postBody),
       headers: headers,
     });
-    //   const parsedResponse = JsonApiParse(response);
   }, []);
 
   const votePost = useCallback(async (postId: any, action: any) => {
-    // try {
     const baseApiUrl = getALMConfig().primeApiURL;
-    //   const params: QueryParams = {};
     await RestAdapter.ajax({
       url: `${baseApiUrl}/posts/${postId}/vote?action=${action}`,
       method: "POST",
     });
-    //   const parsedResponse = JsonApiParse(response);
   }, []);
 
   const deletePostVote = useCallback(async (postId: any, action: any) => {
-    // try {
     const baseApiUrl = getALMConfig().primeApiURL;
-    //   const params: QueryParams = {};
     await RestAdapter.ajax({
       url: `${baseApiUrl}/posts/${postId}/vote?action=${action}`,
       method: "DELETE",
     });
-    //   const parsedResponse = JsonApiParse(response);
   }, []);
 
-  const submitPollVote = useCallback(
-    async (postId: any, optionId: any) => {
-      const baseApiUrl = getALMConfig().primeApiURL;
-      await RestAdapter.ajax({
-        url: `${baseApiUrl}/posts/${postId}/pollvote?optionId=${optionId}`,
-        method: "POST",
-      });
-  },[]);
+  const submitPollVote = useCallback(async (postId: any, optionId: any) => {
+    const baseApiUrl = getALMConfig().primeApiURL;
+    await RestAdapter.ajax({
+      url: `${baseApiUrl}/posts/${postId}/pollvote?optionId=${optionId}`,
+      method: "POST",
+    });
+  }, []);
 
   return {
     addPost,
@@ -167,6 +171,6 @@ export const usePost = () => {
     addComment,
     votePost,
     deletePostVote,
-    submitPollVote
+    submitPollVote,
   };
 };

@@ -16,9 +16,10 @@ import { PrimeReply } from "../../models/PrimeModels";
 import {
   loadReplies,
   paginateReplies,
-  updateReply
+  updateReply,
 } from "../../store/actions/social/action";
 import { State } from "../../store/state";
+import { REPLY } from "../../utils/constants";
 import { getALMConfig } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
@@ -58,40 +59,13 @@ export const useReplies = (commentId: any) => {
     [dispatch]
   );
 
-  const patchReply = useCallback(async (replyId: any, input: any) => {
-    const baseApiUrl = getALMConfig().primeApiURL;
-    const body = {
-      data: {
-        type: "reply",
-        id: replyId,
-        attributes: {
-          state: "ACTIVE",
-          text: input,
-        },
-      },
-    };
-    const headers = { "content-type": "application/json" };
-    const result = await RestAdapter.ajax({
-      url: `${baseApiUrl}/replies/${replyId}`,
-      method: "PATCH",
-      body: JSON.stringify(body),
-      headers: headers,
-    });
-
-    const parsedResponse = JsonApiParse(result);
-    const data = {
-      item: parsedResponse.reply,
-    };
-    dispatch(updateReply(data));
-  },[dispatch]);
-
-  const addReply = useCallback(
-    async (commentId: any, input: any) => {
-      // try {
+  const patchReply = useCallback(
+    async (replyId: any, input: any) => {
       const baseApiUrl = getALMConfig().primeApiURL;
-      const postBody = {
+      const body = {
         data: {
-          type: "reply",
+          type: REPLY,
+          id: replyId,
           attributes: {
             state: "ACTIVE",
             text: input,
@@ -99,20 +73,41 @@ export const useReplies = (commentId: any) => {
         },
       };
       const headers = { "content-type": "application/json" };
-      await RestAdapter.ajax({
-        url: `${baseApiUrl}/comments/${commentId}/replies`,
-        method: "POST",
-        body: JSON.stringify(postBody),
+      const result = await RestAdapter.ajax({
+        url: `${baseApiUrl}/replies/${replyId}`,
+        method: "PATCH",
+        body: JSON.stringify(body),
         headers: headers,
       });
-      //   const parsedResponse = JsonApiParse(response);
+
+      const parsedResponse = JsonApiParse(result);
+      const data = {
+        item: parsedResponse.reply,
+      };
+      dispatch(updateReply(data));
     },
-    []
+    [dispatch]
   );
 
-  // useEffect(() => {
-  //   fetchReplies(commentId);
-  // }, [fetchReplies]);
+  const addReply = useCallback(async (commentId: any, input: any) => {
+    const baseApiUrl = getALMConfig().primeApiURL;
+    const postBody = {
+      data: {
+        type: REPLY,
+        attributes: {
+          state: "ACTIVE",
+          text: input,
+        },
+      },
+    };
+    const headers = { "content-type": "application/json" };
+    await RestAdapter.ajax({
+      url: `${baseApiUrl}/comments/${commentId}/replies`,
+      method: "POST",
+      body: JSON.stringify(postBody),
+      headers: headers,
+    });
+  }, []);
 
   // for pagination
   const loadMoreReplies = useCallback(async () => {
@@ -132,6 +127,6 @@ export const useReplies = (commentId: any) => {
     addReply,
     patchReply,
     loadMoreReplies,
-    hasMoreItems: Boolean(next)
+    hasMoreItems: Boolean(next),
   };
 };

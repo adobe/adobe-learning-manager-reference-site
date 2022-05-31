@@ -10,6 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { Button, lightTheme, Provider } from "@adobe/react-spectrum";
+import { useIntl } from "react-intl";
 import { PrimePost } from "../../../models/PrimeModels";
 import { PrimeCommunityPost } from "../PrimeCommunityPost";
 import styles from "./PrimeCommunityPostsContainer.module.css";
@@ -21,6 +22,7 @@ const PrimeCommunityPostsContainer: React.FC<{
   const listHtml = posts?.map((post) => (
     <PrimeCommunityPost post={post} key={post.id}></PrimeCommunityPost>
   ));
+  const { formatMessage } = useIntl();
 
   return (
     <div>
@@ -34,7 +36,10 @@ const PrimeCommunityPostsContainer: React.FC<{
               onPress={loadMorePosts}
               UNSAFE_className={styles.loadMoreButton}
             >
-              Load more
+              {formatMessage({
+                id: "alm.community.loadMore",
+                defaultMessage: "Load more",
+              })}
             </Button>
           </Provider>
         ) : (

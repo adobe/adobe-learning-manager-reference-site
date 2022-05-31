@@ -28,18 +28,18 @@ const setSkillValues = () => {
   }
 };
 
-const getSelectedSkill = (skillName: any, skills: any) => {
-  skills = skills?.split(",");
+const getSelectedSkill = (skillName: string, skills: string) => {
+  let skillList = skills?.split(",");
   //if skill is not passed in query param or not in list, return first skill of list
-  if (skillName === "" || skills?.indexOf(skillName) < 0) {
-    if(skills) {
+  if (skillName === "" || skillList?.indexOf(skillName) < 0) {
+    if (skills) {
       skillName = skills[0];
     }
   }
   return skillName;
-}
+};
 
-export const useBoards = (sortFilter: any, skillName: any) => {
+export const useBoards = (sortFilter: string, skillName: string) => {
   skillName = skillName ? skillName : "";
   const [skills] = useState(() => setSkillValues());
   const [currentSkill] = useState(() => getSelectedSkill(skillName, skills));
@@ -51,12 +51,11 @@ export const useBoards = (sortFilter: any, skillName: any) => {
       try {
         const baseApiUrl = getALMConfig().primeApiURL;
         const params: QueryParams = {};
-        params["sort"] = sortFilter
-        //To-do add for skill
+        params["sort"] = sortFilter;
         params["filter.state"] = "ACTIVE";
         params["page[offset]"] = "0";
         params["page[limit]"] = "10";
-        if(skillName && skillName !== "")
+        if (skillName && skillName !== "")
           params["filter.board.skills"] = skillName;
         params["include"] = "createdBy,skills";
         const response = await RestAdapter.get({
@@ -77,28 +76,6 @@ export const useBoards = (sortFilter: any, skillName: any) => {
     [dispatch]
   );
 
-  // const fetchBoard = useCallback(async (boardId: any) => {
-  //   try {
-  //     const baseApiUrl =  (window as any).primeConfig.primeApiURL;
-  //     const params: QueryParams = {};
-  //     params["filter.state"]= "ACTIVE";
-  //     params["include"] = "createdBy,skills";
-  //     const response = await RestAdapter.get({
-  //       url: `${baseApiUrl}/boards/10285`,//${boardId}?`,
-  //       params: params,
-  //     });
-  //     const parsedResponse = JsonApiParse(response);
-  //     const data = {
-  //       item: parsedResponse.board,
-  //     };
-
-  //     dispatch(loadBoard(data));
-  //   } catch (e) {
-  //     dispatch(loadBoard({} as PrimeBoard));
-  //     console.log("Error while loading boards " + e);
-  //   }
-  // }, [dispatch]);
-
   useEffect(() => {
     fetchBoards(sortFilter, currentSkill);
   }, [fetchBoards, sortFilter, currentSkill]);
@@ -116,7 +93,6 @@ export const useBoards = (sortFilter: any, skillName: any) => {
   }, [dispatch, next]);
 
   return {
-    // item,
     items,
     loadMoreBoards,
     fetchBoards,

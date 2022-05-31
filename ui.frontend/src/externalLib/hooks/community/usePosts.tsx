@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import APIServiceInstance from "../../common/APIService";
 import { loadPosts, paginatePosts } from "../../store/actions/social/action";
 import { State } from "../../store/state";
+import { BOARD, POST, SKILL } from "../../utils/constants";
 import { getALMConfig } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
@@ -26,53 +27,38 @@ export const usePosts = (boardId?: any) => {
   //Fort any page load or filterchanges
   const fetchPosts = useCallback(
     async (boardId: any, sortFilter?: any) => {
-        const baseApiUrl = getALMConfig().primeApiURL;
-        const params: QueryParams = {};
-        params["sort"] = sortFilter ? sortFilter : DEFAULT_SORT_VALUE;
-        //To-do add for skill
-        params["filter.state"] = "ACTIVE";
-        params["page[offset]"] = "0";
-        params["page[limit]"] = "10";
-        params["include"] = "parent,createdBy";
-        const response = await RestAdapter.get({
-          url: `${baseApiUrl}/boards/${boardId}/posts?`,
-          params: params,
-        });
-        const parsedResponse = JsonApiParse(response);
-        const data = {
-          items: parsedResponse.postList,
-          next: parsedResponse.links?.next || "",
-        };
+      const baseApiUrl = getALMConfig().primeApiURL;
+      const params: QueryParams = {};
+      params["sort"] = sortFilter ? sortFilter : DEFAULT_SORT_VALUE;
+      params["filter.state"] = "ACTIVE";
+      params["page[offset]"] = "0";
+      params["page[limit]"] = "10";
+      params["include"] = "parent,createdBy";
+      const response = await RestAdapter.get({
+        url: `${baseApiUrl}/boards/${boardId}/posts?`,
+        params: params,
+      });
+      const parsedResponse = JsonApiParse(response);
+      const data = {
+        items: parsedResponse.postList,
+        next: parsedResponse.links?.next || "",
+      };
 
-        dispatch(loadPosts(data));
+      dispatch(loadPosts(data));
     },
     [dispatch]
   );
 
-  const votePost = useCallback(
-    async (postId: any, action: any) => {
-      // try {
-      const baseApiUrl = getALMConfig().primeApiURL;
-      await RestAdapter.get({
-        url: `${baseApiUrl}/posts/${postId}/vote?action=${action}`,
-      });
-      // const parsedResponse = JsonApiParse(response);
-      // const data = {
-      //     items: parsedResponse.postList,
-      //     next: parsedResponse.links?.next || "",
-      // };
-
-      // dispatch(loadPosts(data));
-      // } catch (e) {
-      //     dispatch(loadPosts([] as PrimePost[]));
-      //     console.log("Error while loading boards " + e);
-      // }
-    },
-    []
-  );
+  const votePost = useCallback(async (postId: any, action: any) => {
+    // try {
+    const baseApiUrl = getALMConfig().primeApiURL;
+    await RestAdapter.get({
+      url: `${baseApiUrl}/posts/${postId}/vote?action=${action}`,
+    });
+  }, []);
 
   useEffect(() => {
-    if(boardId) {
+    if (boardId) {
       fetchPosts(boardId);
     }
   }, [fetchPosts, boardId]);
@@ -89,37 +75,40 @@ export const usePosts = (boardId?: any) => {
     );
   }, [dispatch, next]);
 
-  const searchPostResult = useCallback(async (queryStr: any, object: any, type: any) => {
-      const baseApiUrl =  getALMConfig().primeApiURL;
+  const searchPostResult = useCallback(
+    async (queryStr: any, object: any, type: any) => {
+      const baseApiUrl = getALMConfig().primeApiURL;
       const params: QueryParams = {};
       params["query"] = queryStr;
-      params["filter.state"]= "ACTIVE";
-      params["page[limit]"]= "10";
-      params["autoCompleteMode"]= "true";
-      params["filter.socialTypes"]= "post";
-      params["sort"]= "relevance";
-      if (type === "board") {
+      params["filter.state"] = "ACTIVE";
+      params["page[limit]"] = "10";
+      params["autoCompleteMode"] = "true";
+      params["filter.socialTypes"] = POST;
+      params["sort"] = "relevance";
+      if (type === BOARD) {
         params["boardId"] = object;
-      } else if (type === "skill" && object && object !== "") {
+      } else if (type === SKILL && object && object !== "") {
         params["filter.skills"] = object;
       }
       params["include"] = "model";
 
       const response = await RestAdapter.get({
-          url: `${baseApiUrl}/social/search`,
-          params: params,
+        url: `${baseApiUrl}/social/search`,
+        params: params,
       });
       const parsedResponse = JsonApiParse(response);
       const data = {
-          items: parsedResponse.postList,
-          next: parsedResponse.links?.next || "",
+        items: parsedResponse.postList,
+        next: parsedResponse.links?.next || "",
       };
       dispatch(loadPosts(data));
       return parsedResponse.postList;
-  }, [dispatch]);
+    },
+    [dispatch]
+  );
 
   return {
-    posts:items,
+    posts: items,
     loadMorePosts,
     fetchPosts,
     votePost,

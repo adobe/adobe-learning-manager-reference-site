@@ -16,21 +16,32 @@ import { useIntl } from "react-intl";
 import Question from "@spectrum-icons/workflow/Question";
 import { PrimeCommunityLinkPreview } from "../PrimeCommunityLinkPreview";
 import { PrimeCommunityPoll } from "../PrimeCommunityPoll";
+import {
+  AUDIO,
+  BOARD,
+  COMMENT,
+  IMAGE,
+  POLL,
+  POST,
+  QUESTION,
+  REPLY,
+  VIDEO,
+} from "../../../utils/constants";
 
 const PrimeCommunityObjectBody = (props: any) => {
   const { formatMessage } = useIntl();
   const object = props.object;
-  const isQuestionType = object.postingType === "QUESTION";
+  const isQuestionType = object.postingType === QUESTION;
   const entityType = props.type;
   const getDescription = () => {
     switch (entityType) {
-      case "board":
+      case BOARD:
         return object.richTextdescription;
-      case "post":
+      case POST:
         return object.richText;
-      case "comment":
+      case COMMENT:
         return props.text;
-      case "reply":
+      case REPLY:
         return props.text;
     }
   };
@@ -71,7 +82,7 @@ const PrimeCommunityObjectBody = (props: any) => {
     <>
       <div
         className={
-          props.type === "board"
+          props.type === BOARD
             ? styles.primeBoardDescription
             : isQuestionType
             ? styles.primeQuestionPostDescription
@@ -99,13 +110,13 @@ const PrimeCommunityObjectBody = (props: any) => {
           })}
         </button>
       )}
-      {props.type !== "board" && (
+      {props.type !== BOARD && (
         <PrimeCommunityLinkPreview
           currentInput={currentDescription}
           showLinkPreview={true}
         ></PrimeCommunityLinkPreview>
       )}
-      {props.type !== "board" && props.object.postingType === "POLL" && (
+      {props.type !== BOARD && props.object.postingType === POLL && (
         <PrimeCommunityPoll
           post={props.object}
           submitPoll={(optionId: any) => {
@@ -113,9 +124,9 @@ const PrimeCommunityObjectBody = (props: any) => {
           }}
         ></PrimeCommunityPoll>
       )}
-      {props.type !== "board" && (
+      {props.type !== BOARD && (
         <div className={styles.primePostPreview}>
-          {object.resource && object.resource.contentType === "VIDEO" && (
+          {object.resource && object.resource.contentType === VIDEO && (
             <div className="image-box">
               <div className="image-container">
                 <iframe
@@ -131,7 +142,7 @@ const PrimeCommunityObjectBody = (props: any) => {
             </div>
           )}
 
-          {object.resource && object.resource.contentType === "IMAGE" && (
+          {object.resource && object.resource.contentType === IMAGE && (
             <div className={styles.primeCommunityImageBox}>
               <div className={styles.primeCommunityImageContainer}>
                 <img
@@ -144,7 +155,7 @@ const PrimeCommunityObjectBody = (props: any) => {
             </div>
           )}
 
-          {object.resource && object.resource.contentType === "AUDIO" && (
+          {object.resource && object.resource.contentType === AUDIO && (
             <div className="image-box">
               <div className="image-container">
                 <iframe

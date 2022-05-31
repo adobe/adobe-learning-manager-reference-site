@@ -26,6 +26,10 @@ governing permissions and limitations under the License.
   display: none;
 }
 
+.primeAddPostMessage {
+  line-height: 30px;
+}
+
 @media (max-width: 414px) {
   .primeAddPostSectionWrapper {
     display: none;
@@ -35,8 +39,4 @@ governing permissions and limitations under the License.
     z-index: 2;
     position: relative;
   }
-}
-
-.primeAddPostMessage {
-  line-height: 30px;
 }

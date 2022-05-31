@@ -193,5 +193,6 @@
   "alm.overview.certUploadNote": "Note: Only one document can be uploaded as a proof.",
   "alm.training.overview.enrollmentDeadline.passed": "Enrollment deadline has passed",
   "alm.community.board.confirmationRequired": "Confirmation Required",
-  "alm.community.board.reportBoardMessage": "Are you sure you want to report this board? A notification will be sent to the board administrator and moderators."
+  "alm.community.board.reportBoardMessage": "Are you sure you want to report this board? A notification will be sent to the board administrator and moderators.",
+  "alm.community.loadMore": "Load more"
 }

@@ -17,6 +17,7 @@ import {
 } from "../../../utils/inline_svg";
 import { useIntl } from "react-intl";
 import styles from "./PrimeCommunityObjectActions.module.css";
+import { COMMENT, REPLY } from "../../../utils/constants";
 
 const PrimeCommunityObjectActions = (props: any) => {
   const { formatMessage } = useIntl();
@@ -47,7 +48,7 @@ const PrimeCommunityObjectActions = (props: any) => {
   return (
     <>
       <div className={styles.primeObjectOptions}>
-        {props.type === "comment" && (
+        {props.type === COMMENT && (
           <button
             className={styles.primeObjectCommentsCount}
             onClick={actionClickHandler}
@@ -55,7 +56,7 @@ const PrimeCommunityObjectActions = (props: any) => {
             {props.actionLabel}
           </button>
         )}
-        {props.type !== "reply" && (
+        {props.type !== REPLY && (
           <button
             className={styles.primeObjectCommentsCount}
             onClick={viewButtonClickHandler}

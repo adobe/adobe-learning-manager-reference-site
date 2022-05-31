@@ -11,15 +11,12 @@ governing permissions and limitations under the License.
 */
 import { PrimeCommunityBoard } from "../PrimeCommunityBoard";
 import { useBoard } from "../../../hooks/community";
-import { usePosts } from "../../../hooks/community";
 import styles from "./PrimeCommunityBoardPage.module.css";
 import { PrimeCommunityPosts } from "../PrimeCommunityPosts";
 import { PrimeCommunityMobileBackBanner } from "../PrimeCommunityMobileBackBanner";
 import { PrimeCommunityMobileScrollToTop } from "../PrimeCommunityMobileScrollToTop";
-// import { PrimeCommunitySearch } from "../PrimeCommunitySearch";
 
 import { useState } from "react";
-import { useIntl } from "react-intl";
 import { getALMConfig, getPathParams } from "../../../utils/global";
 import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 const BOARD_ID_STR = "boardId";
@@ -31,8 +28,6 @@ const PrimeCommunityBoardPage = () => {
     return pathParams[BOARD_ID_STR];
   });
   const { item } = useBoard(boardId);
-  const { formatMessage } = useIntl();
-  const { fetchPosts } = usePosts();
 
   return (
     <ALMErrorBoundary>
@@ -42,17 +37,14 @@ const PrimeCommunityBoardPage = () => {
 
       <div className={styles.primeBoardParent}>
         {item && (
-          <PrimeCommunityBoard board={item} mode="single"></PrimeCommunityBoard>
+          <PrimeCommunityBoard
+            board={item}
+            showBorder={false}
+          ></PrimeCommunityBoard>
         )}
       </div>
 
-      {item && (
-        <PrimeCommunityPosts
-          boardId={item.id}
-          // showLoader={(value: boolean) => setShowLoader(value)}
-          // isSearchMode={isSearchMode}
-        ></PrimeCommunityPosts>
-      )}
+      {item && <PrimeCommunityPosts boardId={item.id}></PrimeCommunityPosts>}
     </ALMErrorBoundary>
   );
 };

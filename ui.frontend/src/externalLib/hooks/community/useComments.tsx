@@ -16,9 +16,10 @@ import { PrimeComment } from "../../models/PrimeModels";
 import {
   loadComments,
   paginateComments,
-  updateComment
+  updateComment,
 } from "../../store/actions/social/action";
 import { State } from "../../store/state";
+import { COMMENT } from "../../utils/constants";
 import { getALMConfig } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
@@ -33,8 +34,6 @@ export const useComments = () => {
       try {
         const baseApiUrl = getALMConfig().primeApiURL;
         const params: QueryParams = {};
-        // params["sort"] = sortFilter ? sortFilter : DEFAULT_SORT_VALUE;
-        //To-do add for skill
         params["filter.state"] = "ACTIVE";
         params["page[offset]"] = "0";
         params["page[limit]"] = "10";
@@ -58,63 +57,65 @@ export const useComments = () => {
     [dispatch]
   );
 
-  // useEffect(() => {
-  //   fetchComments(postId);
-  // }, [fetchComments]);
-
-  const patchComment = useCallback(async (commentId: any, input: any) => {
-    const baseApiUrl = getALMConfig().primeApiURL;
-    const body = {
-      data: {
-        type: "comment",
-        id: commentId,
-        attributes: {
-          state: "ACTIVE",
-          text: input,
+  const patchComment = useCallback(
+    async (commentId: any, input: any) => {
+      const baseApiUrl = getALMConfig().primeApiURL;
+      const body = {
+        data: {
+          type: COMMENT,
+          id: commentId,
+          attributes: {
+            state: "ACTIVE",
+            text: input,
+          },
         },
-      },
-    };
-    const headers = { "content-type": "application/json" };
-    const result = await RestAdapter.ajax({
-      url: `${baseApiUrl}/comments/${commentId}`,
-      method: "PATCH",
-      body: JSON.stringify(body),
-      headers: headers,
-    });
+      };
+      const headers = { "content-type": "application/json" };
+      const result = await RestAdapter.ajax({
+        url: `${baseApiUrl}/comments/${commentId}`,
+        method: "PATCH",
+        body: JSON.stringify(body),
+        headers: headers,
+      });
 
-    const parsedResponse = JsonApiParse(result);
-    const data = {
-      item: parsedResponse.comment,
-    };
-    dispatch(updateComment(data));
-  },[dispatch]);
+      const parsedResponse = JsonApiParse(result);
+      const data = {
+        item: parsedResponse.comment,
+      };
+      dispatch(updateComment(data));
+    },
+    [dispatch]
+  );
 
-  const markCommentAsRightAnswer = useCallback(async (commentId: any, value: any) => {
-    const baseApiUrl = getALMConfig().primeApiURL;
-    const body = {
-      data: {
-        type: "comment",
-        id: commentId,
-        attributes: {
-          state: "ACTIVE",
-          isCorrectAnswer: value,
+  const markCommentAsRightAnswer = useCallback(
+    async (commentId: any, value: any) => {
+      const baseApiUrl = getALMConfig().primeApiURL;
+      const body = {
+        data: {
+          type: COMMENT,
+          id: commentId,
+          attributes: {
+            state: "ACTIVE",
+            isCorrectAnswer: value,
+          },
         },
-      },
-    };
-    const headers = { "content-type": "application/json" };
-    const result = await RestAdapter.ajax({
-      url: `${baseApiUrl}/comments/${commentId}`,
-      method: "PATCH",
-      body: JSON.stringify(body),
-      headers: headers,
-    });
+      };
+      const headers = { "content-type": "application/json" };
+      const result = await RestAdapter.ajax({
+        url: `${baseApiUrl}/comments/${commentId}`,
+        method: "PATCH",
+        body: JSON.stringify(body),
+        headers: headers,
+      });
 
-    const parsedResponse = JsonApiParse(result);
-    const data = {
-      item: parsedResponse.comment,
-    };
-    dispatch(updateComment(data));
-  },[dispatch]);
+      const parsedResponse = JsonApiParse(result);
+      const data = {
+        item: parsedResponse.comment,
+      };
+      dispatch(updateComment(data));
+    },
+    [dispatch]
+  );
 
   const loadMoreComments = useCallback(async () => {
     if (!next) return;
@@ -128,13 +129,11 @@ export const useComments = () => {
   }, [dispatch, next]);
 
   return {
-    // item,
     items,
     patchComment,
     markCommentAsRightAnswer,
     fetchComments,
     loadMoreComments,
     hasMoreItems: Boolean(next),
-    // fetchBoard
   };
 };
