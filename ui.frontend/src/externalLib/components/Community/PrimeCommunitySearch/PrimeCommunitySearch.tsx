@@ -60,17 +60,17 @@ const PrimeCommunitySearch = (props: any) => {
   return (
     <>
       <div className={styles.primeCommunitySearchParent}>
-        <input
-          ref={ref}
-          onKeyUp={handleKeyPress}
-          className={styles.primeCommunitySearchInput}
-          placeholder={props.placeHolderText}
-          ></input>
         <div className={styles.primeSearchButtonWrapper}>
           <button className={styles.primeSearchButton} onClick={searchHandler}>
             {SOCIAL_SEARCH_SVG()}
           </button>
         </div>
+        <input
+          ref={ref}
+          onKeyUp={handleKeyPress}
+          className={styles.primeCommunitySearchInput}
+          placeholder={props.placeHolderText}
+        ></input>
       </div>
     </>
   );

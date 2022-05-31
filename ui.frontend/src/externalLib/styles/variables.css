@@ -16,7 +16,6 @@ governing permissions and limitations under the License.
   --prime-success-color: #0f870f;
   --prime-error-color: #ec0909;
 
-
   --prime-color-nc1: #292929;
   --prime-color-nc2: #cccccc;
   --prime-color-nc3: #717171;
@@ -26,6 +25,7 @@ governing permissions and limitations under the License.
 
   --prime-text-shadow: 0.2rem 0.2rem 0.2rem #565656;
 
+  --prime-font-size-9: 9px;
   --prime-font-size-10: 10px;
   --prime-font-size-11: 11px;
   --prime-font-size-12: 12px;
@@ -54,4 +54,3 @@ body {
   margin: 0;
   font-family: "source-sans-pro" !important;
 }
-

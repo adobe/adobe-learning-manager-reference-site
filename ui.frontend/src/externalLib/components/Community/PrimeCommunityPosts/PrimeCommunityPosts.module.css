@@ -18,7 +18,6 @@ governing permissions and limitations under the License.
 .primePostSection {
   border-radius: 2px;
   opacity: 1;
-  padding: 15px 20px;
   width: 100%;
   max-width: 716px;
   border: 1px solid #d5d5d5;
@@ -34,4 +33,67 @@ governing permissions and limitations under the License.
 
 .primeCommunityNoPostFound {
   font-size: var(--prime-font-size-14);
+  padding: 20px;
+}
+
+.primeCommunityActionRowContainer {
+  display: flex;
+  margin-bottom: 30px;
+  margin-top: 20px;
+  margin-left: auto;
+  justify-content: center;
+}
+
+@media (max-width: 414px) {
+  .primeCommunityActionRowContainer {
+    padding: 5px 20px;
+    width: 100%;
+    margin-top: -20px;
+  }
+}
+
+.primeLoaderWrapper {
+  margin-bottom: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.primeCommunitySearchStatus {
+  display: flex;
+  font-size: var(--prime-font-size-14);
+  width: 716px;
+  justify-content: flex-end;
+  margin-bottom: 5px;
+}
+
+.primeCommunitySearchClear {
+  border: none;
+  background-color: transparent;
+  color: #306eb5;
+}
+
+.primeCommunitySearchClear:hover {
+  cursor: pointer;
+}
+
+.primeCommunityActionRowWrapper {
+  width: 716px;
+  display: flex;
+}
+
+.primeCommunitySearchStatusWrapper {
+  display: flex;
+  justify-content: center;
+}
+@media (max-width: 414px) {
+  .primeCommunitySearchWrapper {
+    width: 100%;
+    height: 40px;
+  }
+}
+
+.primeCommunitySearchWrapper {
+  display: flex;
+  margin-left: auto;
 }
