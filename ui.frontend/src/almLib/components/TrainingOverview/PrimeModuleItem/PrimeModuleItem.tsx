@@ -229,29 +229,24 @@ const PrimeModuleItem: React.FC<{
       : "";
 
   const gradeHasPassed = (): boolean => {
-    if (!enrollment || !training.isSubLoOrderEnforced) {
+    if (!enrollment) {
       return false;
     }
 
     const loResourceGrades = enrollment.loResourceGrades;
-
     const filteredResourceGrades = loResourceGrades.filter(
-      (loResourceGrade) => loResourceGrade.id.search(loResource.id) > -1
+      (loResourceGrade) => loResourceGrade.id.search(loResource.id) !== -1
     );
 
     const loResourceGrade = filteredResourceGrades.length
       ? filteredResourceGrades[0]
       : ({} as PrimeLearningObjectResourceGrade);
 
-    var hasPassed = false;
-
-    if (loResourceGrade) {
-      if (loResourceGrade && loResourceGrade.hasPassed) {
-        hasPassed = true;
-      }
+    if (loResourceGrade.hasPassed) {
+      return true;
     }
 
-    return hasPassed;
+    return false;
   };
 
   const state = store.getState();
