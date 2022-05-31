@@ -11,8 +11,8 @@ governing permissions and limitations under the License.
 */-->
 
 <div class="categories-wrapper">
-    <ol class="categories-list" data-sly-repeat="${resource.children}">
-            <li class="category-item" data-sly-repeat="${item.children}">
+    <ol class="categories-list" data-sly-repeat.categories="${resource.children}">
+            <li class="category-item" data-sly-repeat="${categories.children}" data-sly-test="${categories.name == 'categories'}">
                 <img class="category-img" src="${item.fileReference}"></img>
                 <span class="category-headline">${item.headline}</span>
                 <span class="category-desc">${item.description}</span>

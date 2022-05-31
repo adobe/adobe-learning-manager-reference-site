@@ -17,6 +17,7 @@ import APIServiceInstance from "../../common/APIService";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
+  PrimeLearningObjectInstanceEnrollment,
   PrimeLoInstanceSummary,
 } from "../../models/PrimeModels";
 import { getJobaidUrl, isJobaidContentTypeUrl } from "../../utils/catalog";
@@ -122,20 +123,29 @@ export const useTrainingPage = (
   }, [trainingInstance]);
 
   const enrollmentHandler = useCallback(
-    async ({ id, instanceId, isSupplementaryLO = false } = {}) => {
+    async ({
+      id,
+      instanceId,
+      isSupplementaryLO = false,
+    } = {}): Promise<PrimeLearningObjectInstanceEnrollment> => {
       let queryParam: QueryParams = {
         loId: id || trainingId,
         loInstanceId: instanceId || trainingInstance.id,
       };
+      const emptyResponse = {} as PrimeLearningObjectInstanceEnrollment;
       try {
-        await APIServiceInstance.enrollToTraining(queryParam);
+        const response = await APIServiceInstance.enrollToTraining(queryParam);
         if (!isSupplementaryLO) {
-          //just to refresh the training data
+          //Refresh the training data
           setRefreshTraining((prevState) => !prevState);
         }
+        if (response) {
+          return response.learningObjectInstanceEnrollment;
+        }
+        return emptyResponse;
       } catch (error) {
         almAlert(true, GetTranslation("alm.enrollment.error"), AlertType.error);
-        //TODO : handle error
+        return emptyResponse;
       }
     },
     [trainingId, trainingInstance.id]
