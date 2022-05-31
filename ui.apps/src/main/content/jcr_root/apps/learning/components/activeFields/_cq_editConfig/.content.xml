@@ -7,6 +7,6 @@
 	  afterdelete="REFRESH_PAGE"
 	  afterinsert="REFRESH_PAGE"
         aftermove="REFRESH_PAGE"
-	  afterremove="REFRESH_PAGE"
+	 afterremove="REFRESH_PAGE"
         afteredit="REFRESH_PAGE"/>
 </jcr:root>

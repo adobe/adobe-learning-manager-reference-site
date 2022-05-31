@@ -763,7 +763,7 @@
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_1594170470008>
             </embed>
-            <skillscontainer jcr:primaryType="nt:unstructured">
+            <productscontainer jcr:primaryType="nt:unstructured">
                 <policy_1646843692619
                     jcr:lastModified="{Date}2022-03-10T08:07:54.054+05:30"
                     jcr:lastModifiedBy="admin"
@@ -775,7 +775,7 @@
                         jcr:mixinTypes="[]"
                         jcr:primaryType="nt:unstructured"/>
                 </policy_1646843692619>
-            </skillscontainer>
+            </productscontainer>
             <categories jcr:primaryType="nt:unstructured">
                 <policy_1646843692620
                     jcr:lastModified="{Date}2022-03-10T08:07:54.054+05:30"
