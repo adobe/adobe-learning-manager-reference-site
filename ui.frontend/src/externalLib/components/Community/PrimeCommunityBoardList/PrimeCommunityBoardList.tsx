@@ -128,25 +128,27 @@ const PrimeCommunityBoardList = () => {
           </div>
         )}
         {isSearchMode && !showLoader && (
-          <div className={styles.primeCommunitySearchStatus}>
-            <div className={styles.primeCommunitySearchCount}>
-              {searchResult}{" "}
-              {formatMessage({
-                id: "alm.community.search.resultFound",
-                defaultMessage: "result(s) found",
-              })}
+          <div className={styles.primeCommunitySearchStatusWrapper}>
+            <div className={styles.primeCommunitySearchStatus}>
+              <div className={styles.primeCommunitySearchCount}>
+                {searchResult}{" "}
+                {formatMessage({
+                  id: "alm.community.search.resultFound",
+                  defaultMessage: "result(s) found",
+                })}
+              </div>
+              <button
+                className={styles.primeCommunitySearchClear}
+                onClick={resetSearchHandler}
+              >
+                (
+                {formatMessage({
+                  id: "alm.community.search.clear.label",
+                  defaultMessage: "Clear",
+                })}
+                )
+              </button>
             </div>
-            <button
-              className={styles.primeCommunitySearchClear}
-              onClick={resetSearchHandler}
-            >
-              (
-              {formatMessage({
-                id: "alm.community.search.clear.label",
-                defaultMessage: "Clear",
-              })}
-              )
-            </button>
           </div>
         )}
         {isSearchMode &&
@@ -156,6 +158,7 @@ const PrimeCommunityBoardList = () => {
               <PrimeCommunityPost
                 post={post}
                 key={post.id}
+                src="boardListSearch"
               ></PrimeCommunityPost>
             </div>
           ))}

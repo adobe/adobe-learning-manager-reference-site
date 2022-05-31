@@ -68,12 +68,6 @@ const PrimeCommunityAddPost = (props: any) => {
     <>
       <div className={styles.primeAddPostSectionWrapper}>
         <div className={styles.primeAddPostSection}>
-          <div className={styles.primeAddPostMessage}>
-            {formatMessage({
-              id: "alm.community.shareLearningMessage",
-              defaultMessage: "Share your learning with your colleagues",
-            })}
-          </div>
           <div className={styles.primeAddPostButtonDiv}>
             <PrimeCommunityAddPostButton
               savePostHandler={(

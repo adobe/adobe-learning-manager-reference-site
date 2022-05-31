@@ -11,42 +11,44 @@ governing permissions and limitations under the License.
 */
 @import "../../../styles/variables.css";
 .primePostHeader {
-    vertical-align: middle;
-    display: flex;
+  vertical-align: middle;
+  display: flex;
+  margin-bottom: 20px;
 }
-.primePostOwnerImage{
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
-    border: 1px solid transparent;
-    border-radius: 50%;
+.primePostOwnerImage {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  border: 1px solid transparent;
+  border-radius: 50%;
 }
 
 .primePostOwnerName {
-    padding-top: 12px;
-    font-size: var(--prime-font-size-14);
-    font-weight: 600;
+  padding-top: 12px;
+  font-size: var(--prime-font-size-17);
+  font-weight: 600;
 }
 
 .primePostDateSeperator {
-    height: 3px;
-    width: 3px;
-    background-color: black;
-    border-radius: 50%;
-    display: inline-block;
-    margin-top: 20px;
-    margin-left: 10px;
+  height: 3px;
+  width: 3px;
+  background-color: black;
+  border-radius: 50%;
+  display: inline-block;
+  margin-top: 22px;
+  margin-left: 10px;
 }
 
-.primePostDateCreated  {
-    padding-top: 14px;
-    padding-left:10px;
-    font-size: var(--prime-font-size-12);
-    color: var(--prime-color-nc3);
+.primePostDateCreated {
+  padding-top: 16px;
+  padding-left: 10px;
+  font-size: var(--prime-font-size-12);
+  color: var(--prime-color-nc3);
 }
 
 .primeCommunityOptionsIcon {
-    margin-left: auto;
-    background: none;
-    border: none;
+  margin-left: auto;
+  background: none;
+  border: none;
+  margin-right: -5px;
 }

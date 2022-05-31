@@ -180,7 +180,13 @@ const PrimeCommunityPost = (props: any) => {
 
   return (
     <>
-      <div className={styles.primePostWrapper}>
+      <div
+        className={
+          props.src === "boardListSearch"
+            ? styles.primePostWrapperWithBorder
+            : styles.primePostWrapper
+        }
+      >
         <PrimeCommunityObjectHeader
           object={post}
           type="post"
@@ -236,6 +242,9 @@ const PrimeCommunityPost = (props: any) => {
           ></PrimeCommunityComments>
         )}
       </div>
+      {props.src !== "boardListSearch" && (
+        <hr className={styles.postSeperator} />
+      )}{" "}
     </>
   );
 };

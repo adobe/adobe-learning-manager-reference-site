@@ -10,20 +10,11 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 @import "../../../styles/variables.css";
-.primeAddPostSectionWrapper {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 30px;
-}
 
 .primeAddPostSection {
   border-radius: 2px;
   opacity: 1;
-  padding: 10px 25px;
-  width: 100%;
-  border: 1px solid #d5d5d5;
-  border-radius: 2px;
-  max-width: 716px;
+  width: 135px;
   opacity: 1;
   position: relative;
   font-size: var(--prime-font-size-12);
@@ -48,7 +39,4 @@ governing permissions and limitations under the License.
 
 .primeAddPostMessage {
   line-height: 30px;
-}
-.primeAddPostButtonDiv {
-  margin-left: auto;
 }

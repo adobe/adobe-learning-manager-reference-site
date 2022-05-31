@@ -12,10 +12,15 @@ governing permissions and limitations under the License.
 .primePostDescription,
 .primePostPreview,
 .primeQuestionPostDescription {
-  margin-top: 15px;
   overflow-wrap: anywhere;
-  font-size: 15px;
-  margin-bottom: 10px;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.primeBoardDescription {
+  margin-top: -10px;
+  overflow-wrap: anywhere;
+  font-size: 16px;
 }
 
 .primeQuestionPostDescription {
@@ -72,5 +77,14 @@ governing permissions and limitations under the License.
   margin-left: 10px;
   margin-right: 10px;
   color: #0f870f;
+  margin-top: 15px;
+}
+
+p {
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+.primePostDescriptionText {
   margin-top: 15px;
 }

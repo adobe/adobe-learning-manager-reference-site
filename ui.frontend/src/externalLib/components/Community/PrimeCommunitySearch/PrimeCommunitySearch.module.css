@@ -11,12 +11,11 @@ governing permissions and limitations under the License.
 */
 @import "../../../styles/variables.css";
 .primeCommunitySearchInput {
-  padding: 10px;
+  padding: 10px 0px;
   min-width: 200px;
   font-size: var(--prime-font-size-14);
   border: none;
   outline: none;
-  margin-left: 3px;
 }
 
 input:placeholder-shown {
@@ -26,28 +25,22 @@ input:placeholder-shown {
 @media (max-width: 414px) {
   .primeCommunitySearchInput {
     height: 35px;
-    padding: 10px;
+    padding: 10px 0px;
     width: inherit;
   }
 }
 
 .primeSearchButton {
   height: 100%;
-  width: 35px;
+  width: 30px;
   background: none;
   border: none;
   fill: var(--prime-color-nc3);
+  margin-top: 1px;
 }
 
 .primeSearchButton:hover {
   cursor: pointer;
-}
-
-@media (max-width: 414px) {
-  .primeSearchButton {
-    height: 40px;
-    width: 40px;
-  }
 }
 
 .primeCommunitySearchWrapper {
@@ -64,12 +57,21 @@ input:placeholder-shown {
 }
 
 @media (max-width: 414px) {
+  .primeSearchButton {
+    height: 32px;
+    width: 30px;
+  }
+
+  .primeCommunitySearchInput {
+    min-width: 150px;
+    width: 160px;
+  }
   .primeCommunitySearchWrapper {
-    width: 100%;
-    height: 40px;
+    width: 205px;
+    height: 35px;
   }
 
   .primeCommunitySearchParent {
-    width: 100%;
+    width: 205px;
   }
 }

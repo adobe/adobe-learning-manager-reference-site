@@ -98,7 +98,13 @@ const PrimeCommunityBoard = (props: any) => {
   return (
     <>
       <div className={styles.primeBoardWrapper}>
-        <div className={styles.primeBoardItem}>
+        <div
+          className={
+            props.mode === "single"
+              ? styles.primeBoardItem
+              : styles.primeBoardItemWithBorder
+          }
+        >
           <div className="prime-title-skills-container">
             {/* <span id="sr-only">${i18n(state.locale).BOARD}</span> */}
             <button
