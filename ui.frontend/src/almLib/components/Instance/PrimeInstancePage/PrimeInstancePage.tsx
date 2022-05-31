@@ -99,7 +99,7 @@ const PrimeInstancePage = () => {
 
   const headerLabel = formatMessage(
     {
-      id: "alm.instance.header.label",
+      id: `alm.instance.header.${training.loType}.label`,
     },
     {
       0: name,
