@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 */
 import React, { useRef } from "react";
 import { usePosts } from "../../../hooks/community";
+import { ENTER } from "../../../utils/constants";
 import { SOCIAL_SEARCH_SVG } from "../../../utils/inline_svg";
 import styles from "./PrimeCommunitySearch.module.css";
 
@@ -43,7 +44,7 @@ const PrimeCommunitySearch = (props: any) => {
 
   const handleKeyPress = async (event?: any) => {
     clearTimeout(searchTimer);
-    if (event.key === "Enter") {
+    if (event.key === ENTER) {
       await searchHandler();
       clearTextArea();
     } else {

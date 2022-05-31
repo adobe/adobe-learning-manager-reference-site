@@ -16,9 +16,10 @@ import { PrimeCommunitySearch } from "../PrimeCommunitySearch";
 import { ALMLoader } from "../../Common/ALMLoader";
 
 import { usePosts } from "../../../hooks/community";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useIntl } from "react-intl";
 import styles from "./PrimeCommunityPosts.module.css";
+import { BOARD } from "../../../utils/constants";
 
 const PrimeCommunityPosts = (props: any) => {
   const boardId = props.boardId;
@@ -50,11 +51,13 @@ const PrimeCommunityPosts = (props: any) => {
   const resetSearchHandler = async () => {
     setIsSearchMode(false);
     setSearchResult(0);
-    setShowLoader(true);
-    await fetchPosts(boardId);
-    setShowLoader(false);
+    getPosts(boardId);
   };
   const sortFilterChangeHandler = async (sortValue: any) => {
+    getPosts(boardId, sortValue);
+  };
+
+  const getPosts = async (boardId: any, sortValue?: any) => {
     setShowLoader(true);
     await fetchPosts(boardId, sortValue);
     setShowLoader(false);
@@ -73,7 +76,7 @@ const PrimeCommunityPosts = (props: any) => {
             )}
             <PrimeCommunitySearch
               objectId={boardId}
-              type="board"
+              type={BOARD}
               searchCountHandler={(value: any) => searchCountHandler(value)}
               showLoaderHandler={showLoaderHandler}
               searchModeHandler={searchModeHandler}

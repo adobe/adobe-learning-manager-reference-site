@@ -29,7 +29,7 @@ export const useBoard = (boardId: any) => {
       params["filter.state"] = "ACTIVE";
       params["include"] = "createdBy,skills";
       const response = await RestAdapter.get({
-        url: `${baseApiUrl}boards/${boardId}`, //${boardId}?`,
+        url: `${baseApiUrl}boards/${boardId}`,
         params: params,
       });
       const parsedResponse = JsonApiParse(response);

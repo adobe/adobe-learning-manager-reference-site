@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 import { useEffect, useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import { PrimeUser } from "../../../models";
+import { QUESTION } from "../../../utils/constants";
 import { getALMUser } from "../../../utils/global";
 import styles from "./PrimeCommunityObjectOptions.module.css";
 
@@ -82,7 +83,7 @@ const PrimeCommunityObjectOptions = (props: any) => {
           )}
         {props.parentPost &&
           props.parentPost.createdBy.id === user.id &&
-          props.parentPost.postingType === "QUESTION" &&
+          props.parentPost.postingType === QUESTION &&
           props.object.id !== props.answerCommentId && (
             <div
               className={styles.primeObjectRegularOption}
@@ -99,7 +100,7 @@ const PrimeCommunityObjectOptions = (props: any) => {
 
         {props.parentPost &&
           props.parentPost.createdBy.id === user.id &&
-          props.parentPost.postingType === "QUESTION" &&
+          props.parentPost.postingType === QUESTION &&
           props.object.id === props.answerCommentId && (
             <div
               className={styles.primeObjectRegularOption}

@@ -34,25 +34,22 @@ export const useCommunityObjectOptions = () => {
     [dispatch]
   );
 
-  const reportPostAbuse = useCallback(
-    async (postId) => {
-      const baseApiUrl = getALMConfig().primeApiURL;
-      const headers = { "content-type": "application/json" };
-      const postBody = {
-        data: {
-          id: postId,
-          type: "reportAbuse",
-        },
-      };
-      await RestAdapter.ajax({
-        url: `${baseApiUrl}/posts/${postId}/reportAbuse`,
-        method: "POST",
-        body: JSON.stringify(postBody),
-        headers: headers,
-      });
-    },
-    []
-  );
+  const reportPostAbuse = useCallback(async (postId) => {
+    const baseApiUrl = getALMConfig().primeApiURL;
+    const headers = { "content-type": "application/json" };
+    const postBody = {
+      data: {
+        id: postId,
+        type: "reportAbuse",
+      },
+    };
+    await RestAdapter.ajax({
+      url: `${baseApiUrl}/posts/${postId}/reportAbuse`,
+      method: "POST",
+      body: JSON.stringify(postBody),
+      headers: headers,
+    });
+  }, []);
 
   const deleteCommentFromServer = useCallback(
     async (commentId) => {
@@ -66,25 +63,22 @@ export const useCommunityObjectOptions = () => {
     [dispatch]
   );
 
-  const reportCommentAbuse = useCallback(
-    async (commentId) => {
-      const baseApiUrl = getALMConfig().primeApiURL;
-      const headers = { "content-type": "application/json" };
-      const postBody = {
-        data: {
-          id: commentId,
-          type: "reportAbuse",
-        },
-      };
-      await RestAdapter.ajax({
-        url: `${baseApiUrl}/comments/${commentId}/reportAbuse`,
-        method: "POST",
-        body: JSON.stringify(postBody),
-        headers: headers,
-      });
-    },
-    []
-  );
+  const reportCommentAbuse = useCallback(async (commentId) => {
+    const baseApiUrl = getALMConfig().primeApiURL;
+    const headers = { "content-type": "application/json" };
+    const postBody = {
+      data: {
+        id: commentId,
+        type: "reportAbuse",
+      },
+    };
+    await RestAdapter.ajax({
+      url: `${baseApiUrl}/comments/${commentId}/reportAbuse`,
+      method: "POST",
+      body: JSON.stringify(postBody),
+      headers: headers,
+    });
+  }, []);
 
   const deleteReplyFromServer = useCallback(
     async (replyId) => {
@@ -98,25 +92,22 @@ export const useCommunityObjectOptions = () => {
     [dispatch]
   );
 
-  const reportReplyAbuse = useCallback(
-    async (replyId) => {
-      const baseApiUrl = getALMConfig().primeApiURL;
-      const headers = { "content-type": "application/json" };
-      const postBody = {
-        data: {
-          id: replyId,
-          type: "reportAbuse",
-        },
-      };
-      await RestAdapter.ajax({
-        url: `${baseApiUrl}/replies/${replyId}/reportAbuse`,
-        method: "POST",
-        body: JSON.stringify(postBody),
-        headers: headers,
-      });
-    },
-    []
-  );
+  const reportReplyAbuse = useCallback(async (replyId) => {
+    const baseApiUrl = getALMConfig().primeApiURL;
+    const headers = { "content-type": "application/json" };
+    const postBody = {
+      data: {
+        id: replyId,
+        type: "reportAbuse",
+      },
+    };
+    await RestAdapter.ajax({
+      url: `${baseApiUrl}/replies/${replyId}/reportAbuse`,
+      method: "POST",
+      body: JSON.stringify(postBody),
+      headers: headers,
+    });
+  }, []);
 
   return {
     deletePostFromServer,

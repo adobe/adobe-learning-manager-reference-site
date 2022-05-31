@@ -12,47 +12,48 @@ governing permissions and limitations under the License.
 import styles from "./PrimeCommunityBoardFilters.module.css";
 import { useEffect, useRef, useState } from "react";
 import { PrimeDropdown } from "../PrimeDropdown";
+import { DATE_UPDATED } from "../../../utils/constants";
 
 const PrimeCommunityBoardFilters = (props: any) => {
   const ref = useRef<any>();
 
   let defaultSkillFilter = props.selectedSkill;
-  const [selectedSkillFilter, setSelectedSkillFilter] = useState(defaultSkillFilter);
+  const [selectedSkillFilter, setSelectedSkillFilter] =
+    useState(defaultSkillFilter);
   const [showSkillFilter, setShowSkillFilter] = useState(false);
 
   const isSkillEmpty = (value: any) => {
     return !value || value === "";
-  }
+  };
 
   //populate skill list
   let skills = props.skills?.split(",");
-  const [skillList, setSkillList ] = useState({});
+  const [skillList, setSkillList] = useState({});
   const firstRun = useRef(true);
-  
+
   useEffect(() => {
     if (firstRun.current) {
       let index = 1;
       const skillFilters: { [key: string]: number } = {};
-      if(!skills || skills.length === 0) {
+      if (!skills || skills.length === 0) {
         setShowSkillFilter(false);
       } else {
         skills?.forEach((skill: any) => {
-          if(!isSkillEmpty(skill))
-          skillFilters[skill] = index++;
+          if (!isSkillEmpty(skill)) skillFilters[skill] = index++;
         });
         setSkillList(skillFilters);
         setShowSkillFilter(true);
       }
       firstRun.current = false;
     }
-  },[skills]);
+  }, [skills]);
 
   const skillFilterLabel = {
     id: "alm.community.board.skill",
     defaultMessage: "Skill",
   };
 
-  let defaultSortFilter = "Date Updated";
+  let defaultSortFilter = DATE_UPDATED;
   const [selectedSortFilter, setSelectedSortFilter] =
     useState(defaultSortFilter);
   const sortFilters: { [key: string]: string } = {
@@ -84,14 +85,14 @@ const PrimeCommunityBoardFilters = (props: any) => {
     <>
       <div className={styles.primeBoardOptionsWrapper}>
         <div ref={ref} className={styles.primeBoardFilters}>
-          {showSkillFilter &&
+          {showSkillFilter && (
             <PrimeDropdown
               label={skillFilterLabel}
               optionList={Object.keys(skillList)}
               selectedOption={selectedSkillFilter}
               optionClickHandler={skillClickHandler}
             ></PrimeDropdown>
-          }
+          )}
           <PrimeDropdown
             label={sortFilterLabel}
             optionList={Object.keys(sortFilters)}

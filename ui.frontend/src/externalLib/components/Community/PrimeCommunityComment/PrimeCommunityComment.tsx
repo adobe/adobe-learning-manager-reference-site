@@ -18,6 +18,14 @@ import { useIntl } from "react-intl";
 import { useComment, useReplies } from "../../../hooks/community";
 import { useRef, useEffect, useState } from "react";
 import styles from "./PrimeCommunityComment.module.css";
+import {
+  COMMENT,
+  DOWN,
+  DOWNVOTE,
+  REPLY,
+  UP,
+  UPVOTE,
+} from "../../../utils/constants";
 
 const PrimeCommunityComment = (props: any) => {
   const { formatMessage } = useIntl();
@@ -27,12 +35,10 @@ const PrimeCommunityComment = (props: any) => {
   const { voteComment, deleteCommentVote } = useComment();
   const { addReply, fetchReplies } = useReplies(comment.id);
   const myVoteStatus = comment.myVoteStatus ? comment.myVoteStatus : "";
-  const [myUpVoteStatus, setMyUpVoteStatus] = useState(
-    myVoteStatus === "UPVOTE"
-  );
+  const [myUpVoteStatus, setMyUpVoteStatus] = useState(myVoteStatus === UPVOTE);
   const [upVoteCount, setUpVoteCount] = useState(comment.upVote);
   const [myDownVoteStatus, setMyDownVoteStatus] = useState(
-    myVoteStatus === "DOWNVOTE"
+    myVoteStatus === DOWNVOTE
   );
   const [downVoteCount, setDownVoteCount] = useState(comment.downVote);
   const firstRunForUpvote = useRef(true);
@@ -102,8 +108,8 @@ const PrimeCommunityComment = (props: any) => {
   const upVoteButtonClickHandler = () => {
     //if already upVoted, delete vote
     myUpVoteStatus
-      ? deleteCommentVote(comment.id, "UP")
-      : voteComment(comment.id, "UP");
+      ? deleteCommentVote(comment.id, UP)
+      : voteComment(comment.id, UP);
     if (!myUpVoteStatus && myDownVoteStatus) {
       setMyDownVoteStatus((myDownVoteStatus) => !myDownVoteStatus);
     }
@@ -113,8 +119,8 @@ const PrimeCommunityComment = (props: any) => {
   const downVoteButtonClickHandler = () => {
     //if already downVoted, delete vote
     myDownVoteStatus
-      ? deleteCommentVote(comment.id, "DOWN")
-      : voteComment(comment.id, "DOWN");
+      ? deleteCommentVote(comment.id, DOWN)
+      : voteComment(comment.id, DOWN);
     if (!myDownVoteStatus && myUpVoteStatus) {
       setMyUpVoteStatus((myUpVoteStatus) => !myUpVoteStatus);
     }
@@ -172,7 +178,7 @@ const PrimeCommunityComment = (props: any) => {
             <PrimeCommunityObjectHeader
               object={comment}
               parentPost={parentPost}
-              type="comment"
+              type={COMMENT}
               updateObjectHandler={updateCommentHandler}
               updateRightAnswerHandler={updateRightAnswerHandler}
               answerCommentId={props.answerCommentId}
@@ -181,11 +187,11 @@ const PrimeCommunityComment = (props: any) => {
             <PrimeCommunityObjectBody
               object={comment}
               text={commentText}
-              type="comment"
+              type={COMMENT}
             ></PrimeCommunityObjectBody>
             <PrimeCommunityObjectActions
               object={comment}
-              type="comment"
+              type={COMMENT}
               actionLabel={formatMessage({
                 id: "alm.community.reply.label",
                 defaultMessage: "Reply",
@@ -216,7 +222,7 @@ const PrimeCommunityComment = (props: any) => {
             {showReplies && (
               <PrimeCommunityReplies
                 object={comment}
-                type="reply"
+                type={REPLY}
                 deleteReplyHandler={deleteReplyHandler}
               ></PrimeCommunityReplies>
             )}
