@@ -30,6 +30,7 @@ import { InstanceBadge, Skill } from "../../../models/custom";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
+  PrimeLearningObjectInstanceEnrollment,
   PrimeLearningObjectResourceGrade,
   PrimeLoInstanceSummary,
 } from "../../../models/PrimeModels";
@@ -75,7 +76,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   instanceSummary: PrimeLoInstanceSummary;
   showAuthorInfo: string;
   showEnrollDeadline: string;
-  enrollmentHandler: () => void;
+  enrollmentHandler: () => Promise<PrimeLearningObjectInstanceEnrollment>;
   alternateLanguages: Promise<string[]>;
   launchPlayerHandler: () => void;
   addToCartHandler: () => Promise<{
@@ -195,10 +196,9 @@ const PrimeTrainingPageMetaData: React.FC<{
 
   const handleEnrollment = async () => {
     storeActionInNonLoggedMode(ENROLL);
-
     try {
-      enrollmentHandler();
-      if (isEnrolled) {
+      const enrollment = await enrollmentHandler();
+      if (checkIsEnrolled(enrollment)) {
         launchPlayerHandler();
       }
     } catch (e) {}
@@ -459,7 +459,10 @@ const PrimeTrainingPageMetaData: React.FC<{
     ) {
       return value;
     }
-    if (training.loType === LEARNING_PROGRAM || training.loType === CERTIFICATION) {
+    if (
+      training.loType === LEARNING_PROGRAM ||
+      training.loType === CERTIFICATION
+    ) {
       const totalCount = training.subLOs?.length || 0;
       let completionCount = 0;
       training.subLOs.forEach((lo) => {
@@ -691,7 +694,6 @@ const PrimeTrainingPageMetaData: React.FC<{
           </div>
         </div>
       )}
-
 
       {/* Mandatory Modules container */}
       {showMandatoryModulesCount && (
