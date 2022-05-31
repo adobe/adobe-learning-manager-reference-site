@@ -143,7 +143,7 @@ public class EmbeddableLrngWidgetModel {
 		widgetObject.put(Constants.EmbeddableWidgetConfig.CP_EMIT_PLAYER_EVENT_PROP, Constants.EmbeddableWidgetConfig.CP_EMIT_PLAYER_EVENT_PROP_VALUE);
 		widgetObject.put(Constants.EmbeddableWidgetConfig.CP_EMIT_PAGELINK_EVENT_PROP, Constants.EmbeddableWidgetConfig.CP_EMIT_PAGELINK_EVENT_PROP_VALUE);
 
-		if (Constants.EmbeddableWidgetConfig.SOCIAL_WIDGET_REF.equals(selectedWidgetRef) || Constants.EmbeddableWidgetConfig.LEADERBOARD_WIDGET_REF.equals(selectedWidgetRef))
+		if (Constants.EmbeddableWidgetConfig.LEADERBOARD_WIDGET_REF.equals(selectedWidgetRef))
 		{
 			widgetObject.put(Constants.EmbeddableWidgetConfig.CP_DISABLE_LINKS_PROP, Constants.EmbeddableWidgetConfig.CP_DISABLE_LINKS_PROP_VALUE_TRUE);
 		}
