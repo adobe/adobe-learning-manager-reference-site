@@ -33,11 +33,9 @@ governing permissions and limitations under the License.
 div[class^="spectrum-Tooltip"].almTooltip {
   visibility: initial;
   opacity: 1;
-}
-.almTooltip {
-  position: absolute;
-  right: 0;
-  width: 180px;
+  position: absolute!important;
+  right: 0!important;
+  width: 180px!important;
 }
 .almTooltip span[class^="spectrum-Tooltip-tip"] {
   left: 96%;
