@@ -57,8 +57,8 @@ const PrimeCommunityBoardFilters = (props: any) => {
   const [selectedSortFilter, setSelectedSortFilter] =
     useState(defaultSortFilter);
   const sortFilters: { [key: string]: string } = {
-    "Date Created": "dateCreated",
-    "Date Updated": "dateUpdated",
+    "Date Created": "-dateCreated",
+    "Date Updated": "-dateUpdated",
     Name: "name",
     // "relevance": "Relavance"
   };
