@@ -49,6 +49,18 @@ const PrimeCourseOverview: React.FC<{
   const config = getALMConfig();
   const locale = config.locale;
 
+  const getDuration = (
+    learningObjectResources: PrimeLearningObjectResource[]
+  ) => {
+    let duration = 0;
+    learningObjectResources.forEach((learningObjectResource) => {
+      const resource = filteredResource(learningObjectResource, locale);
+      const resDuration = resource.desiredDuration;
+      duration += isNaN(resDuration) ? 0 : resDuration;
+    });
+    return duration;
+  };
+
   let moduleReources = filterLoReourcesBasedOnResourceType(
     trainingInstance,
     "Content"
@@ -63,6 +75,8 @@ const PrimeCourseOverview: React.FC<{
     "Pre Work"
   );
 
+  const contentModuleDuration = getDuration(moduleReources);
+
   if (isPartOfLP) {
     moduleReources = [...moduleReources, ...preWorkResources];
     preWorkResources = [] as PrimeLearningObjectResource[];
@@ -71,13 +85,7 @@ const PrimeCourseOverview: React.FC<{
   let [preWorkDuration, setPreWorkDuration] = useState(0);
   useEffect(() => {
     if (preWorkResources.length) {
-      let duration = 0;
-      preWorkResources.forEach((preWorkResource) => {
-        const resource = filteredResource(preWorkResource, locale);
-        const resDuration = resource.desiredDuration;
-        duration += isNaN(resDuration) ? 0 : resDuration;
-      });
-      setPreWorkDuration(duration);
+      setPreWorkDuration(getDuration(preWorkResources));
     }
   }, [locale, preWorkResources]);
 
@@ -126,7 +134,7 @@ const PrimeCourseOverview: React.FC<{
               <header role="heading" className={styles.header} aria-level={2}>
                 <div className={styles.loResourceType}>Core Content</div>
                 <div className={styles.time}>
-                  {convertSecondsToTimeText(training.duration)}
+                  {convertSecondsToTimeText(contentModuleDuration)}
                 </div>
               </header>
             </div>
