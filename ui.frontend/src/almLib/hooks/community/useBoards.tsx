@@ -33,7 +33,7 @@ const getSelectedSkill = (skillName: string, skills: string) => {
   //if skill is not passed in query param or not in list, return first skill of list
   if (skillName === "" || skillList?.indexOf(skillName) < 0) {
     if (skills) {
-      skillName = skills[0];
+      skillName = skillList[0];
     }
   }
   return skillName;
