@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
+  PrimeLearningObjectResource,
 } from "../../../models/PrimeModels";
 import { convertSecondsToTimeText } from "../../../utils/dateTime";
 import { getALMConfig } from "../../../utils/global";
@@ -48,7 +49,7 @@ const PrimeCourseOverview: React.FC<{
   const config = getALMConfig();
   const locale = config.locale;
 
-  const moduleReources = filterLoReourcesBasedOnResourceType(
+  let moduleReources = filterLoReourcesBasedOnResourceType(
     trainingInstance,
     "Content"
   );
@@ -57,10 +58,15 @@ const PrimeCourseOverview: React.FC<{
     "Test Out"
   );
 
-  const preWorkResources = filterLoReourcesBasedOnResourceType(
+  let preWorkResources = filterLoReourcesBasedOnResourceType(
     trainingInstance,
     "Pre Work"
   );
+
+  if (isPartOfLP) {
+    moduleReources = [...moduleReources, ...preWorkResources];
+    preWorkResources = [] as PrimeLearningObjectResource[];
+  }
 
   let [preWorkDuration, setPreWorkDuration] = useState(0);
   useEffect(() => {
@@ -91,14 +97,16 @@ const PrimeCourseOverview: React.FC<{
       </TabList>
       <TabPanels UNSAFE_className={styles.tabPanels}>
         <Item key="Modules">
-          {showDuration && preWorkResources.length > 0 && (
+          {preWorkResources.length > 0 && (
             <>
               <div className={styles.overviewcontainer}>
                 <header role="heading" className={styles.header} aria-level={2}>
                   <div className={styles.loResourceType}>Prework</div>
-                  <div className={styles.time}>
-                    {convertSecondsToTimeText(preWorkDuration)}
-                  </div>
+                  {showDuration && (
+                    <div className={styles.time}>
+                      {convertSecondsToTimeText(preWorkDuration)}
+                    </div>
+                  )}
                 </header>
               </div>
               <PrimeModuleList
