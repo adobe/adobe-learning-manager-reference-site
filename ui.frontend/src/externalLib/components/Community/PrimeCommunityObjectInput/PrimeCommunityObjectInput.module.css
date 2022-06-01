@@ -23,6 +23,7 @@ governing permissions and limitations under the License.
   width: 100%;
   height: 75px;
   padding: 10px;
+  resize: vertical;
 }
 
 textarea:placeholder-shown {
