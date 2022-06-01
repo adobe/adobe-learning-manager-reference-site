@@ -65,26 +65,52 @@ const PrimeCommunityObjectOptions = (props: any) => {
     }
   };
 
+  const isPostOwner = () => {
+    return props.object.createdBy.id === user.id;
+  };
+
+  const isPollTypePost = () => {
+    return (
+      props.parentPost &&
+      props.parentPost.postingType === QUESTION &&
+      props.object.id === props.answerCommentId
+    );
+  };
+
+  const isMyPollVoteSubmitted = () => {
+    return props.object.myPoll && Object.keys(props.object.myPoll).length !== 0;
+  };
+
+  const showEditOption = () => {
+    if (isPostOwner() && !isMyPollVoteSubmitted()) {
+      return true;
+    }
+    return false;
+  };
+
+  const showPollOptions = () => {
+    if (isPostOwner() && isPollTypePost()) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <>
       <div ref={ref} className={styles.primeObjectOptionsList}>
-        {props.object.createdBy.id === user.id &&
-          (!props.object.myPoll ||
-            Object.keys(props.object.myPoll).length === 0) && (
-            <div
-              className={styles.primeObjectRegularOption}
-              onClick={editObjectHandler}
-            >
-              {formatMessage({
-                id: "alm.community.board.edit",
-                defaultMessage: "Edit",
-              })}
-            </div>
-          )}
-        {props.parentPost &&
-          props.parentPost.createdBy.id === user.id &&
-          props.parentPost.postingType === QUESTION &&
-          props.object.id !== props.answerCommentId && (
+        {showEditOption() && (
+          <div
+            className={styles.primeObjectRegularOption}
+            onClick={editObjectHandler}
+          >
+            {formatMessage({
+              id: "alm.community.board.edit",
+              defaultMessage: "Edit",
+            })}
+          </div>
+        )}
+        {showPollOptions() && (
+          <>
             <div
               className={styles.primeObjectRegularOption}
               onClick={() => {
@@ -96,12 +122,6 @@ const PrimeCommunityObjectOptions = (props: any) => {
                 defaultMessage: "Mark as Right answer",
               })}
             </div>
-          )}
-
-        {props.parentPost &&
-          props.parentPost.createdBy.id === user.id &&
-          props.parentPost.postingType === QUESTION &&
-          props.object.id === props.answerCommentId && (
             <div
               className={styles.primeObjectRegularOption}
               onClick={() => {
@@ -113,9 +133,12 @@ const PrimeCommunityObjectOptions = (props: any) => {
                 defaultMessage: "Unmark as Right answer",
               })}
             </div>
-          )}
-        <div className={styles.primeSeperator}></div>
-        {props.object.createdBy.id === user.id && (
+          </>
+        )}
+        {(showEditOption() || showPollOptions()) && (
+          <div className={styles.primeSeperator}></div>
+        )}
+        {isPostOwner() && (
           <div
             className={styles.primeObjectCriticalOption}
             onClick={deleteObjectHandler}
