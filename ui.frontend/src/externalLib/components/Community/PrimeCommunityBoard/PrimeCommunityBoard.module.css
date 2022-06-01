@@ -140,6 +140,17 @@ governing permissions and limitations under the License.
   margin-right: 10px;
 }
 
+.tooltipText {
+  display: none;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 5px;
+  position: absolute;
+  z-index: 1;
+  font-size: var(--prime-font-size-11);
+}
+
 @media (max-width: 414px) {
   .primeVerticalSeperator {
     display: none;
