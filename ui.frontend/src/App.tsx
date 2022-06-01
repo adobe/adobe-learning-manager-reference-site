@@ -22,8 +22,8 @@ import {
   PrimeInstancePage,
   PrimeNotificationContainer,
   PrimeTrainingPage,
-} from "./externalLib";
-import { ALMProfilePage } from "./externalLib/components/Profile/ALMProfilePage";
+} from "./almLib";
+import { ALMProfilePage } from "./almLib/components/Profile/ALMProfilePage";
 
 const App = (props: any) => {
   // const { mountingPoints } = config;
