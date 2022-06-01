@@ -1,4 +1,4 @@
-/*
+/**
 Copyright 2021 Adobe. All rights reserved.
 This file is licensed to you under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License. You may obtain a copy
@@ -9,9 +9,4 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-
-import primeMessages from "../almLib/i18n/en-us.json";
-import localizedMessages from "./en-US.json";
-
-export const messages = { ...primeMessages, ...localizedMessages };
-export const locale = 'en';
+export { default as ALMTooltip } from "./ALMTooltip"

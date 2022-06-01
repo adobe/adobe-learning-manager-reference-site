@@ -38,10 +38,16 @@ governing permissions and limitations under the License.
     color: #292929;
 }
 
+.categories {
+  position: relative;
+  min-height: 100px;
+}
+
 .categories-wrapper {
   /* max-width: var(--prime-container-max-width-desktop);
   width: var(--prime-container-width); */
   margin: 0 auto;
+  min-height: 100px;
 }
 
 .categories-list {

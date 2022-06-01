@@ -28,7 +28,7 @@ governing permissions and limitations under the License.
     .set("courseInstancePreviewPageShowLink", ["loInstancePreview", "course", new RegExp(/course\/(\d+)\/instance\/(\d+)\/preview\??(.*)/i)])
     .set("catalogPageLink", ["catalogPage"])
     .set("myLearningPageLink", ["myLearningPage"])
-    .set("postsLink", ["boardsPage"])
+    .set("postsLink", ["postsPage", new RegExp(/board\/(\d+)/i)])
     .set("allboardsPageLink", ["boardsPage"])
     .set("skillsPageLink", ["profilePage"]);
 
@@ -135,7 +135,12 @@ governing permissions and limitations under the License.
         case "profilePage":
           window.ALM.navigateToProfilePage();
           break;
-          
+
+        case "postsPage":
+          let boardId = e.route.match(almLinksMapObj[1])[1];
+          window.ALM.navigateToBoardDetailsPage(boardId);
+          break;
+
         default:
           break;
       }
