@@ -19,6 +19,7 @@ import { PrimeCommunityAddPostDialogTrigger } from "../PrimeCommunityAddPostDial
 import { useConfirmationAlert } from "../../../common/Alert/useConfirmationAlert";
 import { useIntl } from "react-intl";
 import { COMMENT, DELETE, POST, REPLY, UPDATE } from "../../../utils/constants";
+import { getALMConfig } from "../../../utils/global";
 
 const PrimeCommunityObjectHeader = (props: any) => {
   const { formatMessage } = useIntl();
@@ -35,6 +36,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
   } = useCommunityObjectOptions();
   const [showUpdatePostModal, setShowUpdatePostModal] = useState(false);
   const [almConfirmationAlert] = useConfirmationAlert();
+  const config = getALMConfig();
 
   const optionsClickHandler = () => {
     toggleOptions();
@@ -213,7 +215,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
         </span>
         <span className={styles.primePostDateSeperator}></span>
         <span className={styles.primePostDateCreated}>
-          {formatDate(object.dateCreated)}
+          {formatDate(object.dateCreated, config.locale)}
         </span>
         <button
           className={styles.primeCommunityOptionsIcon}
