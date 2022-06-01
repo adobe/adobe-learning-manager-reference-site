@@ -26,7 +26,7 @@ import Visibility from "@spectrum-icons/workflow/Visibility";
 import UserGroup from "@spectrum-icons/workflow/UserGroup";
 import Clock from "@spectrum-icons/workflow/Clock";
 import { getALMConfig, getALMObject } from "../../../utils/global";
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useIntl } from "react-intl";
 import { useBoardOptions } from "../../../hooks/community";
 import { PrimeCommunityObjectBody } from "../PrimeCommunityObjectBody";
@@ -46,9 +46,22 @@ const PrimeCommunityBoard = (props: any) => {
   const [almAlert] = useAlert();
   const [almConfirmationAlert] = useConfirmationAlert();
   const config = getALMConfig();
+  const ref = useRef<any>();
 
   const boardSkills = board.skills?.map((skill: any, index: any) => {
     return (index ? ", " : "") + skill.name;
+  });
+
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        hideTooltip();
+      }
+    };
+    document.addEventListener("click", handleClickOutside, true);
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
   });
 
   const toggleBoardOptionsHandler = () => {
@@ -95,6 +108,20 @@ const PrimeCommunityBoard = (props: any) => {
 
   const callReportBoard = async () => {
     await reportBoard(board.id);
+  };
+
+  const getTooltipElement = () => {
+    return document.getElementById(board.id + "-tooltipText");
+  };
+
+  const showTooltip = () => {
+    let element = getTooltipElement();
+    element?.setAttribute("style", "display:block;");
+  };
+
+  const hideTooltip = () => {
+    let element = getTooltipElement();
+    element?.setAttribute("style", "display:none;");
   };
 
   return (
@@ -209,8 +236,20 @@ const PrimeCommunityBoard = (props: any) => {
                   defaultMessage:
                     "Calculated daily based on the number of new posts, comments, participants, views, likes and dislikes",
                 })}
+                onTouchStart={showTooltip}
+                ref={ref}
               >
-                {<Info />}
+                <Info />
+                <span
+                  id={board.id + "-tooltipText"}
+                  className={styles.tooltipText}
+                >
+                  {formatMessage({
+                    id: "alm.community.board.activityCalc",
+                    defaultMessage:
+                      "Calculated daily based on the number of new posts, comments, participants, views, likes and dislikes",
+                  })}
+                </span>
               </div>
             </div>
             <div className={styles.primeVerticalSeperator}></div>
