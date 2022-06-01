@@ -25,7 +25,7 @@ import FileTxt from "@spectrum-icons/workflow/FileTxt";
 import Visibility from "@spectrum-icons/workflow/Visibility";
 import UserGroup from "@spectrum-icons/workflow/UserGroup";
 import Clock from "@spectrum-icons/workflow/Clock";
-import { getALMObject } from "../../../utils/global";
+import { getALMConfig, getALMObject } from "../../../utils/global";
 import { useState } from "react";
 import { useIntl } from "react-intl";
 import { useBoardOptions } from "../../../hooks/community";
@@ -45,6 +45,7 @@ const PrimeCommunityBoard = (props: any) => {
   const { reportBoard } = useBoardOptions();
   const [almAlert] = useAlert();
   const [almConfirmationAlert] = useConfirmationAlert();
+  const config = getALMConfig();
 
   const boardSkills = board.skills?.map((skill: any, index: any) => {
     return (index ? ", " : "") + skill.name;
@@ -255,7 +256,7 @@ const PrimeCommunityBoard = (props: any) => {
                   id: "alm.community.board.createdOn.label",
                   defaultMessage: "Created on ",
                 })}
-                {formatDate(board.dateCreated)}
+                {formatDate(board.dateCreated, config.locale)}
                 {formatMessage({
                   id: "alm.community.board.by.label",
                   defaultMessage: " by ",
