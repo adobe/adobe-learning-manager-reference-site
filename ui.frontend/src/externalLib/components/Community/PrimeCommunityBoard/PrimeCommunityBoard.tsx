@@ -176,19 +176,19 @@ const PrimeCommunityBoard = (props: any) => {
           <div className={styles.primeBoardActivityPanel}>
             <div className={styles.primeBoardActivityStats}>
               <div className={styles.primeActivityStatsIcon}>
-                {board.visibility === HIGH
+                {board.activityLevel === HIGH
                   ? SOCIAL_ACTIVITY_INDEX_HIGH_SVG()
-                  : board.visibility === NORMAL
+                  : board.activityLevel === NORMAL
                   ? SOCIAL_ACTIVITY_INDEX_MEDIUM_SVG()
                   : SOCIAL_ACTIVITY_INDEX_LOW_SVG()}
               </div>
               <span className={styles.primeActivityStatsText}>
-                {board.visibility === HIGH
+                {board.activityLevel === HIGH
                   ? formatMessage({
                       id: "alm.community.board.highActivity",
                       defaultMessage: "High Activity",
                     })
-                  : board.visibility === NORMAL
+                  : board.activityLevel === NORMAL
                   ? formatMessage({
                       id: "alm.community.board.normalActivity",
                       defaultMessage: "Normal Activity",
