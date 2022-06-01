@@ -56,16 +56,18 @@ const PrimeCommunityObjectBody = (props: any) => {
   const MAX_CHAR_SHOWN = 450;
   const DEFAULT_INDEX_VALUE = 2;
   const [viewIndex, setViewIndex] = useState(DEFAULT_INDEX_VALUE);
-  const [viewMore, setViewMore] = useState(description.length > MAX_CHAR_SHOWN);
+  const [viewMore, setViewMore] = useState(
+    description?.length > MAX_CHAR_SHOWN
+  );
   const [currentDescription, setCurrentDescription] = useState(
-    description.length > MAX_CHAR_SHOWN
+    description?.length > MAX_CHAR_SHOWN
       ? description.substring(0, MAX_CHAR_SHOWN)
       : description
   );
 
   const getTruncatedDescription = () => {
     const supportedCharacterLength = MAX_CHAR_SHOWN * viewIndex;
-    if (description.length <= supportedCharacterLength) {
+    if (description?.length <= supportedCharacterLength) {
       setViewMore(false);
       setCurrentDescription(description);
       setViewIndex(DEFAULT_INDEX_VALUE);
