@@ -150,10 +150,13 @@ const PrimeCommunityBoard = (props: any) => {
                 ></PrimeCommunityBoardOptions>
               )}
             </button>
-            <div className={styles.primeBoardName} role="link" tabIndex={0}>
+            <div className={styles.primeBoardName}>
               <span
                 className={styles.primeBoardNameSpan}
                 onClick={boardNameClickHandler}
+                onKeyDown={boardNameClickHandler}
+                role="button"
+                tabIndex={0}
               >
                 {board.name}
               </span>
