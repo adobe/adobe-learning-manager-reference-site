@@ -90,7 +90,7 @@ export const usePosts = (boardId?: any) => {
       } else if (type === SKILL && object && object !== "") {
         params["filter.skills"] = object;
       }
-      params["include"] = "model";
+      params["include"] = "model.createdBy";
 
       const response = await RestAdapter.get({
         url: `${baseApiUrl}/social/search`,
