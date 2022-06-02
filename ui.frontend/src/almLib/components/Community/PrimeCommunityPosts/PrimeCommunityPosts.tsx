@@ -16,20 +16,29 @@ import { PrimeCommunitySearch } from "../PrimeCommunitySearch";
 import { ALMLoader } from "../../Common/ALMLoader";
 
 import { usePosts } from "../../../hooks/community";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useIntl } from "react-intl";
 import styles from "./PrimeCommunityPosts.module.css";
-import { BOARD } from "../../../utils/constants";
+import { BOARD, PUBLIC } from "../../../utils/constants";
+import { getALMUser } from "../../../utils/global";
+import { PrimeUser } from "../../../models";
 
 const PrimeCommunityPosts = (props: any) => {
-  const boardId = props.boardId;
-  const { posts, fetchPosts, loadMorePosts, hasMoreItems } = usePosts(boardId);
+  const board = props.board;
+  const {
+    posts,
+    fetchPosts,
+    loadMorePosts,
+    hasMoreItems,
+    fetchBoardModerators,
+  } = usePosts(board.id);
   const { formatMessage } = useIntl();
   const [showLoader, setShowLoader] = useState(false);
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [searchResult, setSearchResult] = useState(0);
   const [searchString, setSearchString] = useState("");
-
+  const [user, setUser] = useState({} as PrimeUser);
+  const [boardModerators, setBoardModerators] = useState([] as string[]);
   const showLoaderHandler = (value: any) => {
     setShowLoader(value);
   };
@@ -53,10 +62,10 @@ const PrimeCommunityPosts = (props: any) => {
   const resetSearchHandler = async () => {
     setIsSearchMode(false);
     setSearchResult(0);
-    getPosts(boardId);
+    getPosts(board.id);
   };
   const sortFilterChangeHandler = async (sortValue: any) => {
-    getPosts(boardId, sortValue);
+    getPosts(board.id, sortValue);
   };
 
   const getPosts = async (boardId: any, sortValue?: any) => {
@@ -65,11 +74,37 @@ const PrimeCommunityPosts = (props: any) => {
     setShowLoader(false);
   };
 
+  useEffect(() => {
+    (async () => {
+      const response = await getALMUser();
+      setUser(response?.user || ({} as PrimeUser));
+      const moderators = await fetchBoardModerators(board.id);
+      let moderatorIds = [] as string[];
+      moderators.userList.forEach((element) => {
+        moderatorIds.push(element.id);
+      });
+      setBoardModerators(moderatorIds);
+    })();
+  }, []);
+
+  const isNewPostAllowed = () => {
+    if (
+      board.visibility === PUBLIC ||
+      boardModerators?.includes(user.id) ||
+      board.postingAllowed
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <>
       <div className={styles.primeCommunityActionRowContainer}>
         <div className={styles.primeCommunityActionRowWrapper}>
-          <PrimeCommunityAddPost boardId={boardId}></PrimeCommunityAddPost>
+          {isNewPostAllowed() && (
+            <PrimeCommunityAddPost boardId={board.id}></PrimeCommunityAddPost>
+          )}
           <div className={styles.primeCommunitySearchWrapper}>
             {posts?.length > 0 && (
               <PrimeCommunityPostFilters
@@ -77,7 +112,7 @@ const PrimeCommunityPosts = (props: any) => {
               ></PrimeCommunityPostFilters>
             )}
             <PrimeCommunitySearch
-              objectId={boardId}
+              objectId={board.id}
               type={BOARD}
               searchCountHandler={(results: any, queryString: string) =>
                 searchCountHandler(results, queryString)
