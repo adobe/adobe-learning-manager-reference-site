@@ -33,7 +33,7 @@ const PrimeModuleList: React.FC<{
     launchPlayerHandler,
     training,
     trainingInstance,
-    isPartOfLP,
+    isPartOfLP = false,
     isContent,
     isPreviewEnabled,
     updateFileSubmissionUrl,
@@ -95,6 +95,7 @@ const PrimeModuleList: React.FC<{
           isPreviewEnabled={isPreviewEnabled}
           canPlay={!isModuleLocked(loResource, index)}
           updateFileSubmissionUrl={updateFileSubmissionUrl}
+          isPartOfLP={isPartOfLP}
         ></PrimeModuleItem>
       ))}
     </ul>

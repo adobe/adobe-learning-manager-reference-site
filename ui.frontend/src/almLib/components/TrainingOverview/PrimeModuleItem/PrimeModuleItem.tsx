@@ -40,6 +40,7 @@ import {
   PENDING_APPROVAL,
   PENDING_SUBMISSION,
   PREVIEW,
+  PREWORK,
   REJECTED,
   VIRTUAL_CLASSROOM,
 } from "../../../utils/constants";
@@ -107,6 +108,7 @@ const PrimeModuleItem: React.FC<{
   isPreviewEnabled: boolean;
   canPlay?: boolean;
   updateFileSubmissionUrl: Function;
+  isPartOfLP: boolean;
 }> = (props) => {
   const {
     training,
@@ -117,12 +119,15 @@ const PrimeModuleItem: React.FC<{
     isPreviewEnabled,
     canPlay,
     updateFileSubmissionUrl,
+    isPartOfLP = false,
   } = props;
   const { formatMessage } = useIntl();
 
   const [almAlert] = useAlert();
 
   const [showCannotSkipDialog, setShowCannotSkipDialog] = useState(false);
+
+  const showPreWorkLabel = loResource.loResourceType === PREWORK && isPartOfLP;
 
   useEffect(() => {
     if (showCannotSkipDialog) {
@@ -465,13 +470,20 @@ const PrimeModuleItem: React.FC<{
           </div>
           <div className={styles.headerWrapper}>
             <div className={styles.titleContainer}>
-              <span className={styles.title}>{name}</span>
+              <span className={styles.title}>
+                {name}{" "}
+                {showPreWorkLabel
+                  ? formatMessage({
+                      id: "alm.module.prework",
+                    })
+                  : ""}
+              </span>
               {isModulePreviewAble && (
                 <span className={styles.previewable}>
                   {formatMessage({
                     id: "alm.module.session.preview",
                     defaultMessage: "Preview",
-                  })}{" "}
+                  })}
                   <Visibility aria-hidden="true" />
                 </span>
               )}

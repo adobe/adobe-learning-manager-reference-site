@@ -1,5 +1,5 @@
 import { PrimeLearningObjectInstanceEnrollment } from "../models";
-import { PENDING_ACCEPTANCE, PENDING_APPROVAL } from "./constants";
+import { PENDING_ACCEPTANCE, PENDING_APPROVAL, WAITING } from "./constants";
 import { getALMObject, updateURLParams } from "./global";
 
 export function checkIsEnrolled(
@@ -8,7 +8,8 @@ export function checkIsEnrolled(
   return (
     enrollment &&
     enrollment?.state !== PENDING_APPROVAL &&
-    enrollment?.state !== PENDING_ACCEPTANCE
+    enrollment?.state !== PENDING_ACCEPTANCE &&
+    enrollment?.state !== WAITING
   );
 }
 
