@@ -9,7 +9,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { getALMObject } from "./global";
+import { getALMObject, redirectToLoginAndAbort } from "./global";
 export type QueryParams = Record<
   string,
   string | number | boolean | Array<any>
@@ -82,6 +82,9 @@ export class RestAdapter {
       xhr.onload = function () {
         if ((this.status >= 200 && this.status < 300) || this.status === 304) {
           resolve(xhr.response);
+        } else if (this.status >= 400 && this.status < 500) {
+          redirectToLoginAndAbort(true);
+          return;
         } else {
           reject({
             status: this.status,

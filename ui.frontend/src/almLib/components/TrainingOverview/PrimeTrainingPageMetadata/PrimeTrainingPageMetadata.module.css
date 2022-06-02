@@ -91,13 +91,17 @@ governing permissions and limitations under the License.
   width: 100%;
   border-bottom: 1px solid var(--prime-color-nc5);
 }
-.icon {
+.icon , .altLangIcon{
   margin-right: 10px;
 }
-.icon svg {
+.icon svg, .altLangIcon svg{
   fill: var(--prime-icon-color);
   width: 25px;
   height: 25px;
+}
+
+.altLangIcon {
+  margin-top: 8px;
 }
 
 .minimumCriteria {
@@ -109,6 +113,7 @@ governing permissions and limitations under the License.
   min-width: 25px;
   font-size: 16px;
   margin-right: 10px;
+  margin-top: 3px;
   text-align: center;
   color: var(--prime-icon-color);
 }

@@ -197,34 +197,40 @@ governing permissions and limitations under the License.
   padding: 0 5px 0 5px;
 }
 
-#learning-button-cont {
+#learning-button-cont,
+#explore-button-cont {
   display: flex;
   flex-direction: row;
   margin-bottom: 10px;
 }
 
-#learning-button-cont .cmp-button {
+#learning-button-cont .cmp-button,
+#explore-button-cont .cmp-button {
   width: 186px;
   height: 60px;
   text-transform: initial;
 }
 
-#learning-button-cont button:first-child {
+#learning-button-cont button:first-child,
+#explore-button-cont button:first-child {
   background: #292929 0% 0% no-repeat padding-box;
   color: white;
 }
 
-#learning-button-cont a {
+#learning-button-cont a,
+#explore-button-cont a {
   text-align: center;
   text-decoration: none;
 }
 
-#learning-button-cont a span {
+#learning-button-cont a span,
+#explore-button-cont a span {
   display: inline-block;
   margin-top: 18px;
 }
 
-#learning-button-cont .cmp-button .cmp-button__text {
+#learning-button-cont .cmp-button .cmp-button__text,
+#explore-button-cont .cmp-button .cmp-button__text {
   padding: 0;
   float: initial;
 }
@@ -372,11 +378,13 @@ governing permissions and limitations under the License.
     margin-top: 30px;
   }
 
-  #learning-button-cont {
+  #learning-button-cont,
+  #explore-button-cont {
     margin-bottom: 40px;
   }
 
-  #learning-button-cont .cmp-button {
+  #learning-button-cont .cmp-button,
+  #explore-button-cont .cmp-button {
     width: 133px;
     height: 33px;
     font: normal normal normal 16px/20px Source Sans Pro;
@@ -386,7 +394,8 @@ governing permissions and limitations under the License.
     border: 1px solid #e4e4e4;
   }
 
-  #learning-button-cont a span {
+  #learning-button-cont a span,
+  #explore-button-cont a span {
     display: inline-block;
     margin-top: 5px;
   }

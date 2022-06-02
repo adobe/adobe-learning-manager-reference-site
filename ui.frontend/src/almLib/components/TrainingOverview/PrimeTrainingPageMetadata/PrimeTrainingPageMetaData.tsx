@@ -637,7 +637,7 @@ const PrimeTrainingPageMetaData: React.FC<{
       {/* Alternate Languages */}
       {alternativesLangAvailable.length > 0 && (
         <div className={styles.commonContainer}>
-          <span aria-hidden="true" className={styles.icon}>
+          <span aria-hidden="true" className={styles.altLangIcon}>
             <GlobeGrid />
           </span>
           <div className={styles.innerContainer}>

@@ -66,6 +66,9 @@ const ALMProfilePage = () => {
     section2Title,
   } = activeFieldAttributes;
 
+  let showActiveFieldButton =
+  accountActiveFields?.fields || user.fields;
+
   useEffect(() => {
     let multiValues: any;
     let selectedMultiValues = new Map();
@@ -333,22 +336,24 @@ const ALMProfilePage = () => {
             updateSelectedMultiValues={updateSelectedMultiValues}
             predefinedMultiValues={predefinedMultiValues}
           />
-          <section className={styles.saveActiveFieldButton}>
-            <></>
-            <hr />
-            <div className={styles.activeFieldButtonContainer}>
-              <Button
-                UNSAFE_className={styles.activeFieldsSaveOption}
-                variant="cta"
-                onPress={UpdateAccountActiveFields}
-              >
-                {formatMessage({
-                  id: "alm.profile.fields.saveProfileChanges",
-                  defaultMessage: "Save Changes",
-                })}
-              </Button>
-            </div>
-          </section>
+          {showActiveFieldButton && (
+            <section className={styles.saveActiveFieldButton}>
+              <></>
+              <hr />
+              <div className={styles.activeFieldButtonContainer}>
+                <Button
+                  UNSAFE_className={styles.activeFieldsSaveOption}
+                  variant="cta"
+                  onPress={UpdateAccountActiveFields}
+                >
+                  {formatMessage({
+                    id: "alm.profile.fields.saveProfileChanges",
+                    defaultMessage: "Save Changes",
+                  })}
+                </Button>
+              </div>
+            </section>
+          )}
         </div>
       </Provider>
     </ALMErrorBoundary>
