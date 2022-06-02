@@ -45,7 +45,6 @@ governing permissions and limitations under the License.
 .forgotPassword {
   color: var(--prime-color-primary);
   padding: 0;
-  margin-bottom: 10px;
 }
 
 .mandatory > label > svg {
@@ -75,3 +74,55 @@ governing permissions and limitations under the License.
   }
 }
 
+.commonButton {
+  width: 100%;
+  cursor: pointer;
+  font-size: var(--prime-font-size-14);
+  min-height: 32px;
+  font-weight: 600;
+  padding: 5px 12px;
+  min-width: 70px;
+  display: block;
+  border-radius: 2px;
+  border-radius: 20px;
+  margin-top: 20px;
+}
+
+.secondaryButton {
+  border: 2px solid var(--prime-color-nc4);
+  color: var(--prime-color-nc4);
+  background-color: var(--prime-color-white);
+}
+
+.secondaryButton:enabled:hover,
+.secondaryButton:enabled:focus,
+.secondaryButton:enabled:focus-visible {
+  color: var(--prime-color-white);
+  background-color: var(--prime-color-nc4);
+  border-color: var(--prime-color-nc4);
+  outline: none;
+}
+
+.primaryButton {
+  background-color: var(--prime-color-primary);
+  border: 2px solid var(--prime-color-primary) !important;
+  color: var(--prime-color-white);
+}
+.primaryButton:enabled:hover,
+.primaryButton:enabled:focus,
+.primaryButton:enabled:focus-visible {
+  background-color: var(--prime-color-primary);
+  border: 2px solid var(--prime-color-primary) !important;
+  color: var(--prime-color-white);
+  outline: none;
+}
+.commonButton:disabled {
+  outline: none;
+  opacity: 0.6;
+  cursor: default;
+  pointer-events: none;
+  border: none !important;
+  background-color: var(--prime-color-nc2);
+  border-color: var(--prime-color-nc2);
+  color: var(--prime-color-nc4);
+}
