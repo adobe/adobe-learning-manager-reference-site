@@ -28,20 +28,22 @@ const PrimeCommunityPosts = (props: any) => {
   const [showLoader, setShowLoader] = useState(false);
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [searchResult, setSearchResult] = useState(0);
+  const [searchString, setSearchString] = useState("");
 
   const showLoaderHandler = (value: any) => {
     setShowLoader(value);
   };
 
-  const searchCountHandler = (value: any) => {
+  const searchCountHandler = (results: any, queryString: string) => {
     setSearchResult(
-      value
-        ? value.length
+      results
+        ? results.length
         : formatMessage({
             id: "alm.community.search.no.label",
             defaultMessage: "No",
           })
     );
+    setSearchString(queryString);
   };
 
   const searchModeHandler = (value: any) => {
@@ -77,7 +79,9 @@ const PrimeCommunityPosts = (props: any) => {
             <PrimeCommunitySearch
               objectId={boardId}
               type={BOARD}
-              searchCountHandler={(value: any) => searchCountHandler(value)}
+              searchCountHandler={(results: any, queryString: string) =>
+                searchCountHandler(results, queryString)
+              }
               showLoaderHandler={showLoaderHandler}
               searchModeHandler={searchModeHandler}
               resetSearchHandler={resetSearchHandler}
@@ -101,8 +105,9 @@ const PrimeCommunityPosts = (props: any) => {
               {searchResult}{" "}
               {formatMessage({
                 id: "alm.community.search.resultFound",
-                defaultMessage: "result(s) found",
-              })}
+                defaultMessage: "result(s) found for",
+              })}{" "}
+              '{searchString}'
             </div>
             <button
               className={styles.primeCommunitySearchClear}

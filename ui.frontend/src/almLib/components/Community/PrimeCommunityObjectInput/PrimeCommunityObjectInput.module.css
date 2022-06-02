@@ -21,9 +21,26 @@ governing permissions and limitations under the License.
 
 .primePostObjectInput {
   width: 100%;
-  height: 75px;
+  height: 50px;
   padding: 10px;
   resize: vertical;
+  font-family: "source-sans-pro" !important;
+}
+
+.primePostObjectInput::-webkit-input-placeholder {
+  font-family: "source-sans-pro" !important;
+}
+
+.primePostObjectInput:-ms-input-placeholder {
+  font-family: "source-sans-pro" !important;
+}
+
+.primePostObjectInput:-moz-placeholder {
+  font-family: "source-sans-pro" !important;
+}
+
+.primePostObjectInput::-moz-placeholder {
+  font-family: "source-sans-pro" !important;
 }
 
 textarea:placeholder-shown {
@@ -44,7 +61,7 @@ textarea:placeholder-shown {
 }
 
 .primeTextAreaCountRemaining {
-  font-size: var(--prime-font-size-10);
+  font-size: var(--prime-font-size-12);
   padding: 5px;
   margin-left: auto;
 }

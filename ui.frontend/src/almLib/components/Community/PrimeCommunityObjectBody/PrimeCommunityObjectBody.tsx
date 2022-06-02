@@ -102,15 +102,17 @@ const PrimeCommunityObjectBody = (props: any) => {
         ></div>
       </div>
       {viewMore && (
-        <button
-          className={styles.primeCommunityViewMoreButton}
-          onClick={getTruncatedDescription}
-        >
-          {formatMessage({
-            id: "alm.community.viewMore",
-            defaultMessage: "View more",
-          })}
-        </button>
+        <div className={styles.viewMoreDiv}>
+          <button
+            className={styles.primeCommunityViewMoreButton}
+            onClick={getTruncatedDescription}
+          >
+            {formatMessage({
+              id: "alm.community.viewMore",
+              defaultMessage: "View more",
+            })}
+          </button>
+        </div>
       )}
       {props.type !== BOARD && (
         <PrimeCommunityLinkPreview
