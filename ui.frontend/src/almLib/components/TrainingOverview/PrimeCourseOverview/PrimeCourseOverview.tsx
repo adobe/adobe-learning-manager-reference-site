@@ -16,6 +16,7 @@ import {
   PrimeLearningObjectInstance,
   PrimeLearningObjectResource,
 } from "../../../models/PrimeModels";
+import { CONTENT, PREWORK, TESTOUT } from "../../../utils/constants";
 import { convertSecondsToTimeText } from "../../../utils/dateTime";
 import { getALMConfig } from "../../../utils/global";
 import {
@@ -63,22 +64,22 @@ const PrimeCourseOverview: React.FC<{
 
   let moduleReources = filterLoReourcesBasedOnResourceType(
     trainingInstance,
-    "Content"
+    CONTENT
   );
   const testOutResources = filterLoReourcesBasedOnResourceType(
     trainingInstance,
-    "Test Out"
+    TESTOUT
   );
 
   let preWorkResources = filterLoReourcesBasedOnResourceType(
     trainingInstance,
-    "Pre Work"
+    PREWORK
   );
 
   const contentModuleDuration = getDuration(moduleReources);
 
   if (isPartOfLP) {
-    moduleReources = [...moduleReources, ...preWorkResources];
+    moduleReources = [...preWorkResources, ...moduleReources];
     preWorkResources = [] as PrimeLearningObjectResource[];
   }
 
