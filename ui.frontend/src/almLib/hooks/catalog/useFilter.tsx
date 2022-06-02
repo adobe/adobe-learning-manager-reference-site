@@ -18,6 +18,7 @@ import {
   ActionMap,
   ACTION_MAP,
   FilterState,
+  FilterType,
   UpdateFiltersEvent,
 } from "../../utils/filters";
 import { getQueryParamsFromUrl, updateURLParams } from "../../utils/global";
@@ -31,6 +32,18 @@ export const useFilter = () => {
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
 
+  const setFiltersAndDispatch = (
+    data: UpdateFiltersEvent,
+    filters: FilterType,
+    payload: string
+  ) => {
+    updateURLParams({ [data.filterType as string]: payload });
+    setFilterState({ ...filterState, [data.filterType]: { ...filters } });
+    const action = ACTION_MAP[data.filterType as keyof ActionMap];
+
+    if (action && action instanceof Function) dispatch(action(payload));
+  };
+
   const updateFilters = (data: UpdateFiltersEvent) => {
     const filters = filterState[data.filterType as keyof FilterState]!;
     let payload = "";
@@ -43,12 +56,7 @@ export const useFilter = () => {
         payload = payload ? `${payload},${item.value}` : `${item.value}`;
       }
     });
-
-    updateURLParams({ [data.filterType as string]: payload });
-    setFilterState({ ...filterState, [data.filterType]: { ...filters } });
-    const action = ACTION_MAP[data.filterType as keyof ActionMap];
-
-    if (action && action instanceof Function) dispatch(action(payload));
+    setFiltersAndDispatch(data, filters, payload);
   };
 
   const updatePriceFilter = (data: UpdateFiltersEvent) => {
@@ -58,11 +66,7 @@ export const useFilter = () => {
       filters.list[0].value = data.data.start;
       filters.list[1].value = data.data.end;
     }
-    updateURLParams({ [data.filterType as string]: payload });
-    setFilterState({ ...filterState, [data.filterType]: { ...filters } });
-    const action = ACTION_MAP[data.filterType as keyof ActionMap];
-
-    if (action && action instanceof Function) dispatch(action(payload));
+    setFiltersAndDispatch(data, filters, payload);
   };
 
   useEffect(() => {
