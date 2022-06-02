@@ -89,4 +89,10 @@ p {
 .primePostDescriptionText {
   margin-top: 15px;
   padding-bottom: 10px;
+  text-align: justify;
+  margin-right: 5px;
+}
+
+.viewMoreDiv {
+  margin-top: -20px;
 }

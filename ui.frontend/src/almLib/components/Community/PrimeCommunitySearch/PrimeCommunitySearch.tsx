@@ -34,7 +34,7 @@ const PrimeCommunitySearch = (props: any) => {
     props.searchModeHandler(true);
     props.showLoaderHandler(true);
     const result = await searchPostResult(ref.current.value, objectId, type);
-    props.searchCountHandler(result);
+    props.searchCountHandler(result, ref.current.value);
     props.showLoaderHandler(false);
   };
 

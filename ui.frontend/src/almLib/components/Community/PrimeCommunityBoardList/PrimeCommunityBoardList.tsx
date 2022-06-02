@@ -43,7 +43,8 @@ const PrimeCommunityBoardList = () => {
   const [selectedSkill, setSelectedSkill] = useState(currentSkill);
   const [showLoader, setShowLoader] = useState(true);
   const [isSearchMode, setIsSearchMode] = useState(false);
-  const [searchResult, setSearchResult] = useState("0");
+  const [searchResult, setSearchResult] = useState(0);
+  const [searchString, setSearchString] = useState("");
 
   useEffect(() => {
     if (items) {
@@ -55,15 +56,16 @@ const PrimeCommunityBoardList = () => {
     setShowLoader(value);
   };
 
-  const searchCountHandler = (value: string) => {
+  const searchCountHandler = (results: any, queryString: string) => {
     setSearchResult(
-      value
-        ? String(value.length)
+      results
+        ? results.length
         : formatMessage({
             id: "alm.community.search.no.label",
             defaultMessage: "No",
           })
     );
+    setSearchString(queryString);
   };
 
   const searchModeHandler = (value: boolean) => {
@@ -72,7 +74,7 @@ const PrimeCommunityBoardList = () => {
 
   const resetSearchHandler = () => {
     setIsSearchMode(false);
-    setSearchResult("0");
+    setSearchResult(0);
     getBoards(selectedSortFilter, selectedSkill);
   };
 
@@ -111,8 +113,8 @@ const PrimeCommunityBoardList = () => {
               <PrimeCommunitySearch
                 objectId={selectedSkill}
                 type={SKILL}
-                searchCountHandler={(value: string) =>
-                  searchCountHandler(value)
+                searchCountHandler={(results: any, queryString: string) =>
+                  searchCountHandler(results, queryString)
                 }
                 showLoaderHandler={showLoaderHandler}
                 searchModeHandler={searchModeHandler}
@@ -137,8 +139,9 @@ const PrimeCommunityBoardList = () => {
                 {searchResult}{" "}
                 {formatMessage({
                   id: "alm.community.search.resultFound",
-                  defaultMessage: "result(s) found",
-                })}
+                  defaultMessage: "result(s) found for",
+                })}{" "}
+                '{searchString}'
               </div>
               <button
                 className={styles.primeCommunitySearchClear}
