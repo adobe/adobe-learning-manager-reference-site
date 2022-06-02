@@ -22,6 +22,7 @@ governing permissions and limitations under the License.
 .primeBoardItemWithBorder {
   width: 716px;
   background: #ffffff 0% 0% no-repeat padding-box;
+  color: #292929;
 }
 
 .primeBoardItemWithBorder {
@@ -32,6 +33,7 @@ governing permissions and limitations under the License.
   opacity: 1;
   position: relative;
   padding: 20px;
+  color: #306eb5;
 }
 
 .primeBoardName {
@@ -39,7 +41,7 @@ governing permissions and limitations under the License.
   margin-bottom: 12px;
   text-align: left;
   font-weight: bold;
-  color: #292929;
+  color: inherit;
   line-height: 35px;
 }
 
