@@ -44,6 +44,7 @@ import {
   PENDING_ACCEPTANCE,
   PENDING_APPROVAL,
   PREVIEW,
+  WAITING,
 } from "../../../utils/constants";
 import { modifyTime } from "../../../utils/dateTime";
 import {
@@ -152,13 +153,39 @@ const PrimeTrainingPageMetaData: React.FC<{
   const seatsAvailable =
     seatLimit !== undefined ? seatLimit - (enrollmentCount || 0) : -1;
 
-  const seatsAvailableText =
-    seatsAvailable > -1 ? (
+  const isSeatAvailable = trainingInstance.seatLimit
+    ? trainingInstance.seatLimit > 0 && seatsAvailable > 0
+    : true;
+
+  const seatsAvailableText = trainingInstance.seatLimit ? (
+    seatsAvailable > 0 ? (
+      <p style={{ textAlign: "center" }} className={styles.label}>
+        {formatMessage(
+          {
+            id: `alm.overview.seatsAvailable`,
+          },
+          { x: seatsAvailable }
+        )}
+      </p>
+    ) : (
+      seatsAvailable == 0 && (
+        <p style={{ textAlign: "center" }} className={styles.errorText}>
+          {formatMessage({
+            id: `alm.overview.no.seats.available`,
+          })}
+        </p>
+      )
+    )
+  ) : (
+    ""
+  );
+
+  const waitListText =
+    enrollment && enrollment.state == WAITING ? (
       <p style={{ textAlign: "center" }} className={styles.label}>
         {formatMessage({
-          id: `alm.overview.seatsAvailable`,
+          id: `alm.overview.waitlist`,
         })}
-        {seatsAvailable}
       </p>
     ) : (
       ""
@@ -298,7 +325,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   };
 
   const unEnrollConfirmationClickHandler = () => {
-    var confirmationMessage: any = getUnenrollmentConfirmationString();
+    const confirmationMessage: any = getUnenrollmentConfirmationString();
     almConfirmationAlert(
       formatMessage({
         id: "alm.overview.unenrollment.confirmationRequired",
@@ -475,10 +502,6 @@ const PrimeTrainingPageMetaData: React.FC<{
     return value;
   }, [isEnrolled, training.loType, training.subLOs]);
 
-  const isSeatAvailable = trainingInstance.seatLimit
-    ? trainingInstance.seatLimit > 0
-    : true;
-
   useEffect(() => {
     const queryParams = getQueryParamsFromUrl();
     if (
@@ -555,6 +578,7 @@ const PrimeTrainingPageMetaData: React.FC<{
             onPress={launchPlayerHandler}
           >
             {actionText}
+            {waitListText}
           </Button>
         )}
 
