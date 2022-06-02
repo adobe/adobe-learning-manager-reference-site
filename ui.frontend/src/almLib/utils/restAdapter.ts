@@ -82,7 +82,7 @@ export class RestAdapter {
       xhr.onload = function () {
         if ((this.status >= 200 && this.status < 300) || this.status === 304) {
           resolve(xhr.response);
-        } else if (this.status >= 400 && this.status < 500) {
+        } else if (this.status == 401) {
           redirectToLoginAndAbort(true);
           return;
         } else {

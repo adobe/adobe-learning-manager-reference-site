@@ -1,7 +1,7 @@
 @import "../../styles/variables.css";
 
 .alertbackdrop {
-  display: flex;   
+  display: flex;
   justify-content: center;
   position: fixed;
   width: 100%;
@@ -18,7 +18,7 @@
 
 .alert {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   left: 0;
   right: 0;
   margin: 0;
@@ -33,7 +33,7 @@
   max-width: 60rem;
   min-height: 7rem;
   min-width: 18.75rem;
-  height: 7rem;  
+  height: 7rem;
   padding: 1rem;
   position: relative;
   top: 18rem;
@@ -41,7 +41,7 @@
 }
 
 .error {
-  color:var(--prime-error-color);
+  color: var(--prime-error-color);
 }
 
 .alertIcon {
@@ -69,4 +69,3 @@
   display: flex;
   align-items: center;
 }
-
