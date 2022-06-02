@@ -49,6 +49,18 @@ export const usePosts = (boardId?: any) => {
     [dispatch]
   );
 
+  const fetchBoardModerators = useCallback(async (boardId: any) => {
+    const baseApiUrl = getALMConfig().primeApiURL;
+    let params: QueryParams = {};
+    params["page[offset]"] = "0";
+    params["page[limit]"] = "10";
+    const response = await RestAdapter.get({
+      url: `${baseApiUrl}/boards/${boardId}/moderators?`,
+      params: params,
+    });
+    return JsonApiParse(response);
+  }, []);
+
   const votePost = useCallback(async (postId: any, action: any) => {
     // try {
     const baseApiUrl = getALMConfig().primeApiURL;
@@ -109,6 +121,7 @@ export const usePosts = (boardId?: any) => {
 
   return {
     posts: items,
+    fetchBoardModerators,
     loadMorePosts,
     fetchPosts,
     votePost,

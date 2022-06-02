@@ -44,7 +44,7 @@ const PrimeCommunityBoardPage = () => {
         )}
       </div>
 
-      {item && <PrimeCommunityPosts boardId={item.id}></PrimeCommunityPosts>}
+      {item && <PrimeCommunityPosts board={item}></PrimeCommunityPosts>}
     </ALMErrorBoundary>
   );
 };
