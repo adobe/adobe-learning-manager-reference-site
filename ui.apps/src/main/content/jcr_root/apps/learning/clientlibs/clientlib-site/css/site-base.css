@@ -493,7 +493,8 @@ governing permissions and limitations under the License.
 #learning-parent-container {
   max-width: var(--prime-container-max-width-desktop);
   width: var(--prime-container-width);
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #alm-support-header .text
@@ -513,6 +514,7 @@ governing permissions and limitations under the License.
     max-width: var(--prime-container-max-width-tablet);
     width: var(--prime-container-width);
     padding: 0;
+    margin-top: 20px;
   }
 
   #alm-support-header .text
