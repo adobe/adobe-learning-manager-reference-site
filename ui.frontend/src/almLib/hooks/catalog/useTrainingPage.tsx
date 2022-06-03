@@ -160,7 +160,7 @@ export const useTrainingPage = (
           setRefreshTraining((prevState) => !prevState);
         }
       } catch (error) {
-        console.log(error);
+        almAlert(true, GetTranslation("alm.unenrollment.error"), AlertType.error);
         //TODO : handle error
       }
     },
