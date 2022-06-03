@@ -91,6 +91,7 @@ const SignIn = () => {
 
   return (
     <div className={styles.signInContainer}>
+    <h1>Login</h1>
       {view !== RESET_PASSWORD ? (
         <Form
           maxWidth="size-3600"
@@ -159,17 +160,17 @@ const SignIn = () => {
                 isDisabled={isLoading}
                 className={`${styles.primaryButton} ${styles.commonButton}`}
               >
-                {isLoading ? <CommerceLoader size="S" /> : "LOGIN"}
+                {isLoading ? <CommerceLoader size="S" /> : "Login"}
               </button>
 
               <button
                 type="button"
                 onClick={() => setView(CREATE_ACCOUNT)}
                 isDisabled={isLoading}
-                className={`${styles.primaryButton} ${styles.commonButton}`}
+                className={`${styles.secondaryButton} ${styles.commonButton}`}
 
               >
-                CREATE AN ACCOUNT
+                Create an Account
               </button>
             </div>
           )}
@@ -182,7 +183,7 @@ const SignIn = () => {
                 className={`${styles.primaryButton} ${styles.commonButton}`}
 
               >
-                {view === CREATE_ACCOUNT ? "CREATE AN ACCOUNT" : "SUBMIT"}
+                {view === CREATE_ACCOUNT ? "Create an Account" : "Submit"}
               </button>
 
               <button
@@ -192,7 +193,7 @@ const SignIn = () => {
                 className={`${styles.secondaryButton} ${styles.commonButton}`}
 
               >
-                CANCEL
+                Cancel
               </button>
             </div>
           )}
