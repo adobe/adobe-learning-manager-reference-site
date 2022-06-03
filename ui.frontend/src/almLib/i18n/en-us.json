@@ -182,7 +182,7 @@
   "alm.profile.fields.saveProfileChanges": "Save Changes",
   "alm.profile.skills.cancel": "Cancel",
   "alm.addToCart": "Add to cart - {x}",
-  "alm.addToCart.error": "An error occurred while adding {loType}.",
+  "alm.addToCart.general.error": "An error occurred while adding {loType}.",
   "alm.addedToCart": "Added to cart",
   "alm.training.overview.not.available": "{training} is not yet available for purchase",
   "alm.overview.certification.minimum.criteria.label": "Learners must complete ${x} of ${y} |||COURSE||| to achieve ||CERTIFICATION||",
@@ -207,5 +207,6 @@
   "alm.overview.certUploadNote": "Note: Only one document can be uploaded as a proof.",
   "alm.training.overview.enrollmentDeadline.passed": "Enrollment deadline has passed",
   "alm.community.board.confirmationRequired": "Confirmation Required",
-  "alm.community.board.reportBoardMessage": "Are you sure you want to report this board? A notification will be sent to the board administrator and moderators."
+  "alm.community.board.reportBoardMessage": "Are you sure you want to report this board? A notification will be sent to the board administrator and moderators.",
+  "alm.overview.added.to.cart.error":"Item already added to cart"
 }
