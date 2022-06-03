@@ -90,7 +90,7 @@ export function modifyTimeDDMMYY(dateToModify: string, locale: string) {
   const local = new Date(dateToModify).toLocaleDateString(locale, {
     day: "numeric",
     month: "short",
-    year: "numeric"
+    year: "numeric",
   });
 
   return local;
@@ -112,7 +112,9 @@ export function modifyTimeDDMMYY(dateToModify: string, locale: string) {
 // }
 
 export function GetFormattedDate(dateStr: string, getUserLocale: string) {
-  if (!dateStr) { return "" }
+  if (!dateStr) {
+    return "";
+  }
   const date = new Date(dateStr);
   const dateTimeFormat = new Intl.DateTimeFormat(getUserLocale, {
     month: "short",
@@ -139,10 +141,10 @@ export function GetFormattedDate(dateStr: string, getUserLocale: string) {
 }
 
 //inputFormat => 2022-02-13T14:00:39.000Z, outputFormat => Feb 13, 2022
-export function formatDate(dateString: any) {
+export function formatDate(dateString: any, locale: string) {
   const options = { year: "numeric", month: "short", day: "2-digit" } as const;
   const value = new Date(dateString)
-    .toLocaleDateString(undefined, options)
+    .toLocaleDateString(locale, options)
     .split(" ");
   return value[1] + " " + value[0] + ", " + value[2]; // MMM DD, YYYY
 }

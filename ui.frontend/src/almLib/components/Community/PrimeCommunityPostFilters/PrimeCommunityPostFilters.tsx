@@ -10,29 +10,39 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { useState } from "react";
+import { DATE_CREATED } from "../../../utils/constants";
 import { PrimeDropdown } from "../PrimeDropdown";
 
-const PrimeCommunityPostFilters  = (props: any) => {
-    let defaultSortFilter = "Date Created";
-    const [selectedSortFilter, setSelectedSortFilter] = useState(defaultSortFilter);
-    const sortFilters:{[key: string]: string} = {
-        "Date Created": "-dateCreated", 
-        "Date Updated": "-dateUpdated", 
-    };
-    const sortFilterLabel = {id: "alm.community.board.sortBy", defaultMessage: "Sort by"}
+const PrimeCommunityPostFilters = (props: any) => {
+  let defaultSortFilter = DATE_CREATED;
+  const [selectedSortFilter, setSelectedSortFilter] =
+    useState(defaultSortFilter);
+  const sortFilters: { [key: string]: string } = {
+    "Date Created": "-dateCreated",
+    "Date Updated": "-dateUpdated",
+  };
+  const sortFilterLabel = {
+    id: "alm.community.board.sortBy",
+    defaultMessage: "Sort by",
+  };
 
-    const sortClickHandler = (option: any) => {
-        setSelectedSortFilter(option);
-        if (typeof props.sortFilterChangeHandler === 'function') {
-            props.sortFilterChangeHandler(sortFilters[option]);
-        }   
+  const sortClickHandler = (option: any) => {
+    setSelectedSortFilter(option);
+    if (typeof props.sortFilterChangeHandler === "function") {
+      props.sortFilterChangeHandler(sortFilters[option]);
     }
+  };
 
-    return (
-        <>
-            <PrimeDropdown label={sortFilterLabel} optionList={Object.keys(sortFilters)} selectedOption={selectedSortFilter} optionClickHandler={sortClickHandler}></PrimeDropdown>
-        </>
-    );
+  return (
+    <>
+      <PrimeDropdown
+        label={sortFilterLabel}
+        optionList={Object.keys(sortFilters)}
+        selectedOption={selectedSortFilter}
+        optionClickHandler={sortClickHandler}
+      ></PrimeDropdown>
+    </>
+  );
 };
 
 export default PrimeCommunityPostFilters;

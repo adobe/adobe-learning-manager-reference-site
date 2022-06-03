@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 */
 import React, { useRef } from "react";
 import { usePosts } from "../../../hooks/community";
+import { ENTER } from "../../../utils/constants";
 import { SOCIAL_SEARCH_SVG } from "../../../utils/inline_svg";
 import styles from "./PrimeCommunitySearch.module.css";
 
@@ -33,7 +34,7 @@ const PrimeCommunitySearch = (props: any) => {
     props.searchModeHandler(true);
     props.showLoaderHandler(true);
     const result = await searchPostResult(ref.current.value, objectId, type);
-    props.searchCountHandler(result);
+    props.searchCountHandler(result, ref.current.value);
     props.showLoaderHandler(false);
   };
 
@@ -43,7 +44,7 @@ const PrimeCommunitySearch = (props: any) => {
 
   const handleKeyPress = async (event?: any) => {
     clearTimeout(searchTimer);
-    if (event.key === "Enter") {
+    if (event.key === ENTER) {
       await searchHandler();
       clearTextArea();
     } else {
@@ -60,17 +61,17 @@ const PrimeCommunitySearch = (props: any) => {
   return (
     <>
       <div className={styles.primeCommunitySearchParent}>
-        <input
-          ref={ref}
-          onKeyUp={handleKeyPress}
-          className={styles.primeCommunitySearchInput}
-          placeholder={props.placeHolderText}
-          ></input>
         <div className={styles.primeSearchButtonWrapper}>
           <button className={styles.primeSearchButton} onClick={searchHandler}>
             {SOCIAL_SEARCH_SVG()}
           </button>
         </div>
+        <input
+          ref={ref}
+          onKeyUp={handleKeyPress}
+          className={styles.primeCommunitySearchInput}
+          placeholder={props.placeHolderText}
+        ></input>
       </div>
     </>
   );

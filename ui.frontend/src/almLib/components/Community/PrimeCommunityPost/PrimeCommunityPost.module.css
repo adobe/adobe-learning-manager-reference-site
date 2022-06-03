@@ -9,9 +9,17 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-.primePostWrapper {
-    border-top: 1px solid #ccc;
-    padding: 20px 0px;
-    max-width: 716px;
-    margin: auto;
+.primePostWrapper,
+.primePostWrapperWithBorder {
+  padding: 15px 20px;
+  max-width: 716px;
+  margin: auto;
+}
+
+.primePostWrapperWithBorder {
+  border: 1px solid #d5d5d5;
+}
+
+.postSeperator {
+  border-top: 1px solid #d5d5d5;
 }

@@ -10,21 +10,21 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 .primeBoardOptionsWrapper {
-    display:flex;
+  display: flex;
 }
 
 .primeBoardFilters {
-    margin-top: 55px;
-    border-radius: 2px;
-    opacity: 1;
-    width: 400px;
-    display:flex;
+  margin-top: 55px;
+  border-radius: 2px;
+  opacity: 1;
+  width: 400px;
+  display: flex;
 }
 
 @media (max-width: 414px) {
-    .primeBoardFilters {
-        margin-top: 25px;
-        padding: 0px;
-        width: 100%;
-    }
+  .primeBoardFilters {
+    margin-top: 25px;
+    padding: 0px;
+    width: 100%;
+  }
 }

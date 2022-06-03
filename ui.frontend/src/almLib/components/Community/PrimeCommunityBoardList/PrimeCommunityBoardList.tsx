@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useBoards, usePosts } from "../../../hooks/community";
+import { SKILL } from "../../../utils/constants";
 import { getQueryParamsFromUrl } from "../../../utils/global";
 import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 import { ALMLoader } from "../../Common/ALMLoader";
@@ -25,7 +26,7 @@ import styles from "./PrimeCommunityBoardList.module.css";
 
 const PrimeCommunityBoardList = () => {
   const queryParams = getQueryParamsFromUrl();
-  const DEFAULT_SORT_VALUE = "dateUpdated";
+  const DEFAULT_SORT_VALUE = "-dateUpdated";
   const DEFAULT_SKILL = queryParams ? queryParams.skill : "";
   const {
     items,
@@ -43,6 +44,7 @@ const PrimeCommunityBoardList = () => {
   const [showLoader, setShowLoader] = useState(true);
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [searchResult, setSearchResult] = useState(0);
+  const [searchString, setSearchString] = useState("");
 
   useEffect(() => {
     if (items) {
@@ -50,44 +52,45 @@ const PrimeCommunityBoardList = () => {
     }
   }, [items]);
 
-  const showLoaderHandler = (value: any) => {
+  const showLoaderHandler = (value: boolean) => {
     setShowLoader(value);
   };
 
-  const searchCountHandler = (value: any) => {
+  const searchCountHandler = (results: any, queryString: string) => {
     setSearchResult(
-      value
-        ? value.length
+      results
+        ? results.length
         : formatMessage({
             id: "alm.community.search.no.label",
             defaultMessage: "No",
           })
     );
+    setSearchString(queryString);
   };
 
-  const searchModeHandler = (value: any) => {
+  const searchModeHandler = (value: boolean) => {
     setIsSearchMode(value);
   };
 
-  const resetSearchHandler = async () => {
+  const resetSearchHandler = () => {
     setIsSearchMode(false);
     setSearchResult(0);
-    setShowLoader(true);
-    await fetchBoards(selectedSortFilter, selectedSkill);
-    setShowLoader(false);
+    getBoards(selectedSortFilter, selectedSkill);
   };
 
-  const sortFilterChangeHandler = async (sortValue: any) => {
+  const sortFilterChangeHandler = (sortValue: string) => {
     setSelectedSortFilter(sortValue);
-    setShowLoader(true);
-    await fetchBoards(sortValue, selectedSkill);
-    setShowLoader(false);
+    getBoards(sortValue, selectedSkill);
   };
 
-  const skillFilterChangeHandler = async (skill: any) => {
+  const skillFilterChangeHandler = (skill: string) => {
     setSelectedSkill(skill);
+    getBoards(selectedSortFilter, skill);
+  };
+
+  const getBoards = async (sortFilter: string, skillFilter: string) => {
     setShowLoader(true);
-    await fetchBoards(selectedSortFilter, skill);
+    await fetchBoards(sortFilter, skillFilter);
     setShowLoader(false);
   };
 
@@ -109,8 +112,10 @@ const PrimeCommunityBoardList = () => {
             <div className={styles.primeCommunitySearchWrapper}>
               <PrimeCommunitySearch
                 objectId={selectedSkill}
-                type="skill"
-                searchCountHandler={(value: any) => searchCountHandler(value)}
+                type={SKILL}
+                searchCountHandler={(results: any, queryString: string) =>
+                  searchCountHandler(results, queryString)
+                }
                 showLoaderHandler={showLoaderHandler}
                 searchModeHandler={searchModeHandler}
                 resetSearchHandler={resetSearchHandler}
@@ -128,25 +133,28 @@ const PrimeCommunityBoardList = () => {
           </div>
         )}
         {isSearchMode && !showLoader && (
-          <div className={styles.primeCommunitySearchStatus}>
-            <div className={styles.primeCommunitySearchCount}>
-              {searchResult}{" "}
-              {formatMessage({
-                id: "alm.community.search.resultFound",
-                defaultMessage: "result(s) found",
-              })}
+          <div className={styles.primeCommunitySearchStatusWrapper}>
+            <div className={styles.primeCommunitySearchStatus}>
+              <div className={styles.primeCommunitySearchCount}>
+                {searchResult}{" "}
+                {formatMessage({
+                  id: "alm.community.search.resultFound",
+                  defaultMessage: "result(s) found for",
+                })}{" "}
+                '{searchString}'
+              </div>
+              <button
+                className={styles.primeCommunitySearchClear}
+                onClick={resetSearchHandler}
+              >
+                (
+                {formatMessage({
+                  id: "alm.community.search.clear.label",
+                  defaultMessage: "Clear",
+                })}
+                )
+              </button>
             </div>
-            <button
-              className={styles.primeCommunitySearchClear}
-              onClick={resetSearchHandler}
-            >
-              (
-              {formatMessage({
-                id: "alm.community.search.clear.label",
-                defaultMessage: "Clear",
-              })}
-              )
-            </button>
           </div>
         )}
         {isSearchMode &&
@@ -156,6 +164,7 @@ const PrimeCommunityBoardList = () => {
               <PrimeCommunityPost
                 post={post}
                 key={post.id}
+                showBorder={true}
               ></PrimeCommunityPost>
             </div>
           ))}

@@ -59,16 +59,13 @@ export const useBoardOptions = () => {
     [dispatch]
   );
 
-  const reportBoard = useCallback(
-    async (boardId) => {
-      const baseApiUrl = getALMConfig().primeApiURL;
-      await RestAdapter.ajax({
-        url: `${baseApiUrl}/boards/${boardId}/reportAbuse`,
-        method: "POST",
-      });
-    },
-    []
-  );
+  const reportBoard = useCallback(async (boardId) => {
+    const baseApiUrl = getALMConfig().primeApiURL;
+    await RestAdapter.ajax({
+      url: `${baseApiUrl}/boards/${boardId}/reportAbuse`,
+      method: "POST",
+    });
+  }, []);
 
   return {
     item,

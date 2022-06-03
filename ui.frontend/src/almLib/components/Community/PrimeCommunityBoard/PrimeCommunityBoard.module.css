@@ -18,26 +18,31 @@ governing permissions and limitations under the License.
   margin-right: auto;
 }
 
-.primeBoardItem {
+.primeBoardItem,
+.primeBoardItemWithBorder {
   width: 716px;
-  padding: 20px;
   background: #ffffff 0% 0% no-repeat padding-box;
+  color: #292929;
+}
+
+.primeBoardItemWithBorder {
+  position: relative;
   box-shadow: 0px 0px 3px #0000001a;
   border: 1px solid #d5d5d5;
   border-radius: 2px;
   opacity: 1;
   position: relative;
+  padding: 20px;
+  color: #306eb5;
 }
 
 .primeBoardName {
-  font-size: var(--prime-font-size-18);
+  font-size: var(--prime-font-size-24);
   margin-bottom: 12px;
   text-align: left;
-  font-weight: 600;
-  font-family: Source Sans Pro;
-  letter-spacing: 0px;
-  color: #306eb5;
-  opacity: 1;
+  font-weight: bold;
+  color: inherit;
+  line-height: 35px;
 }
 
 .primeBoardNameSpan:hover {
@@ -47,7 +52,8 @@ governing permissions and limitations under the License.
 .primeBoardOptions {
   border: none;
   background: transparent;
-  margin-top: -10px;
+  margin-top: 5px;
+  margin-right: -5px;
   float: right;
   fill: #306eb5;
 }
@@ -55,7 +61,6 @@ governing permissions and limitations under the License.
 .primeBoardSkill {
   text-align: left;
   font-size: var(--prime-font-size-12);
-  font-family: Source Sans Pro;
   letter-spacing: 0px;
   color: var(--prime-color-nc3);
   opacity: 1;
@@ -64,8 +69,9 @@ governing permissions and limitations under the License.
 }
 
 .primeBoardSkillNames {
-  margin-right: 10px;
+  margin-right: 8px;
   max-width: 600px;
+  font-size: var(--prime-font-size-12);
 }
 
 .primeBoardDescription {
@@ -80,6 +86,7 @@ governing permissions and limitations under the License.
   .primeBoardDescription {
     height: auto;
     width: 100%;
+    padding: 20px;
   }
 
   .primeBoardSkillNames {
@@ -88,7 +95,8 @@ governing permissions and limitations under the License.
 }
 
 .primeBoardIcon {
-  width: 15px;
+  width: 17px;
+  margin-top: -2px;
 }
 
 .primeBoardActivityPanel {
@@ -96,6 +104,8 @@ governing permissions and limitations under the License.
   flex-direction: row;
   align-items: center;
   flex-wrap: wrap;
+  border-top: 1px solid #d5d5d5;
+  padding-top: 5px;
 }
 
 .primeBoardActivityStats {
@@ -104,26 +114,26 @@ governing permissions and limitations under the License.
 }
 
 .primeActivityStatsText {
-  font-size: var(--prime-font-size-11);
+  font-size: var(--prime-font-size-12);
   padding-left: 2px;
   vertical-align: text-top;
   margin-right: 15px;
-  margin-top: 4px;
+  margin-top: 7px;
   color: var(--prime-color-nc3);
 }
 
 .primeActivityStatsIcon {
-  width: 20px;
+  width: 15px;
   color: var(--prime-color-nc3);
-  margin-top: 2px;
+  margin-top: 5px;
   margin-right: 5px;
 }
 
 .primeActivityInfoIcon {
   margin-left: -8px;
   margin-right: 10px;
-  margin-top: 3px;
-  width: 15px;
+  width: 12px;
+  padding-top: 3px;
   color: var(--prime-color-nc3);
 }
 
@@ -131,6 +141,17 @@ governing permissions and limitations under the License.
   border-left: 1px solid #ccc;
   height: 2rem;
   margin-right: 10px;
+}
+
+.tooltipText {
+  display: none;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 5px;
+  position: absolute;
+  z-index: 1;
+  font-size: var(--prime-font-size-11);
 }
 
 @media (max-width: 414px) {
