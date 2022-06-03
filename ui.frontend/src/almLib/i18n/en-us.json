@@ -118,6 +118,7 @@
   "alm.overview.section.xOutOfy": "{0} out of {1}",
   "alm.overview.section.mandatory": "Mandatory",
   "alm.enrollment.error": "An error occurred.",
+  "alm.unenrollment.error": "An error occurred.",
   "alm.community.search.noResults": "No Results found",
   "alm.community.search.placeholder": "Search within community",
   "alm.community.searchInBoard.placeholder": "Search within board",
