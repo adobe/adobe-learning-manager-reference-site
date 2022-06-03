@@ -147,8 +147,12 @@ export const getConfigurableAttributes = (cssSelector: string) => {
   return (document.querySelector(cssSelector) as any)?.dataset;
 };
 
+export const isUserLoggedIn = () => {
+  return getALMObject().isPrimeUserLoggedIn();
+};
+
 export const redirectToLoginAndAbort = (forceRedirect = false) => {
-  if (forceRedirect || !getALMObject().isPrimeUserLoggedIn()) {
+  if (forceRedirect || !isUserLoggedIn()) {
     getALMObject().handleLogIn();
     return true;
   }

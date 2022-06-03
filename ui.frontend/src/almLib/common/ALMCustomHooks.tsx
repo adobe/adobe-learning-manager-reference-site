@@ -24,6 +24,7 @@ import {
 import { JsonApiParse } from "../utils/jsonAPIAdapter";
 import { isCommerceEnabled } from "../utils/price";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
+import APIServiceInstance from "./APIService";
 import ICustomHooks from "./ICustomHooks";
 
 export const DEFAULT_PAGE_LIMIT = 9;
@@ -34,7 +35,7 @@ const DEFAULT_SEARCH_SNIPPETTYPE =
 const DEFAULT_SEARCH_INCLUDE =
   "model.instances.loResources.resources,model.instances.badge,model.supplementaryResources,model.enrollment.loResourceGrades,model.skills.skillLevel.skill";
 
-export default class ALMCustomHooks implements ICustomHooks {
+class ALMCustomHooks implements ICustomHooks {
   primeApiURL = getALMConfig().primeApiURL;
   async getTrainings(
     filterState: CatalogFilterState,
@@ -75,7 +76,15 @@ export default class ALMCustomHooks implements ICustomHooks {
     const response = await RestAdapter.get({
       url,
     });
-    return JsonApiParse(response);
+
+    const parsedResponse = JsonApiParse(response);
+
+    return {
+      learningObjectList: parsedResponse.learningObjectList || [],
+      links: {
+        next: parsedResponse.links?.next || "",
+      },
+    };
   }
   async loadMore(url: string) {
     const response = await RestAdapter.get({
@@ -186,9 +195,13 @@ export default class ALMCustomHooks implements ICustomHooks {
     };
     // return { skillsList, tagsList, catalogList };
   }
+  async addProductToCart(sku: string) {
+    const defaultCartValues = { items: [], totalQuantity: 0, error: null };
+    return { ...defaultCartValues, error: true };
+  }
 }
 
-// APIServiceInstance.registerServiceInstance(
-//   SERVICEINSTANCE.PRIME,
-//   new ALMCustomHooks()
-// );
+const ALMCustomHooksInstance = new ALMCustomHooks();
+
+APIServiceInstance.registerServiceInstance("aem-sites", ALMCustomHooksInstance);
+export default ALMCustomHooksInstance;
