@@ -202,69 +202,79 @@ const ALMSkillComponent = (props: any) => {
                 (skillInterest) =>
                   skillInterest.skill.name.toLowerCase() !== generalSkill
               )
-              .map((skillInterest: any) => (
-                <div
-                  className={styles.skillBox}
-                  tabIndex={0}
-                  id={"skill-" + skillInterest.skill.id}
-                  aria-labelledby={"skillName-" + skillInterest.skill.id}
-                  role="group"
-                  onMouseDown={(event: any) => {
-                    handleClickOnSkillBox(event);
-                  }}
-                  onMouseLeave={(event: any) => {
-                    removeFocus_lxpv(event);
-                  }}
-                >
-                  <span className={styles.skillName}>
-                    {skillInterest.skill.name}
-                  </span>
-                  <button
-                    onClick={() => {
-                      removeSkillInterest(skillInterest.skill.id);
+              .map((skillInterest) => {
+                const id = skillInterest.skill.id;
+
+                return (
+                  <div
+                    key={id}
+                    className={styles.skillBox}
+                    tabIndex={0}
+                    id={"skill-" + id}
+                    aria-labelledby={"skillName-" + id}
+                    role="group"
+                    onMouseDown={(event: any) => {
+                      handleClickOnSkillBox(event);
                     }}
-                    className={styles.removeInterestButton}
-                    aria-label={formatMessage({
-                      id: "alm.profile.skills.removeInterest",
-                      defaultMessage: "Remove from My interests",
-                    })}
-                    title={formatMessage({
-                      id: "alm.profile.skills.removeInterest",
-                      defaultMessage: "Remove from My interests",
-                    })}
-                  ></button>
-                  <div className={styles.arrowUp}></div>
-                  <div className={styles.skillDataTooltip} aria-hidden="true">
-                    {skillInterest.skill.name}
-                    <br />
-                    {skillInterest.source === "USER_SELECTED" ? (
-                      ``
-                    ) : (
-                      <div>
-                        {getFormattedSourceString(skillInterest.source)}
-                      </div>
-                    )}
-                    {populateUserSkillInterestLevelData(skillInterest).map(
-                      (level: any) => {
-                        return (
-                          <div>
-                            <strong>{getSkillLevelName(level.levelId)}</strong>:
-                            {getCreditsPercent(
-                              level.pointsAchieved,
-                              level.totalPoints
-                            )}
-                            %
-                            {formatMessage({
-                              id: "alm.profile.skills.achieved",
-                              defaultMessage: " Achieved",
-                            })}
-                          </div>
-                        );
-                      }
-                    )}
+                    onMouseLeave={(event: any) => {
+                      removeFocus_lxpv(event);
+                    }}
+                  >
+                    <span className={styles.skillName}>
+                      {skillInterest.skill.name}
+                    </span>
+                    <button
+                      onClick={() => {
+                        removeSkillInterest(id);
+                      }}
+                      className={styles.removeInterestButton}
+                      aria-label={formatMessage({
+                        id: "alm.profile.skills.removeInterest",
+                        defaultMessage: "Remove from My interests",
+                      })}
+                      title={formatMessage({
+                        id: "alm.profile.skills.removeInterest",
+                        defaultMessage: "Remove from My interests",
+                      })}
+                    ></button>
+                    <div className={styles.arrowUp}></div>
+                    <div className={styles.skillDataTooltip} aria-hidden="true">
+                      {skillInterest.skill.name}
+                      <br />
+                      {skillInterest.source === "USER_SELECTED" ? (
+                        ``
+                      ) : (
+                        <div>
+                          {getFormattedSourceString(skillInterest.source)}
+                        </div>
+                      )}
+                      {populateUserSkillInterestLevelData(skillInterest).map(
+                        (level: any) => {
+                          return (
+                            <div
+                              key={`${level.levelId}_${skillInterest.skill.id}`}
+                            >
+                              <strong>
+                                {getSkillLevelName(level.levelId)}
+                              </strong>
+                              :
+                              {getCreditsPercent(
+                                level.pointsAchieved,
+                                level.totalPoints
+                              )}
+                              %
+                              {formatMessage({
+                                id: "alm.profile.skills.achieved",
+                                defaultMessage: " Achieved",
+                              })}
+                            </div>
+                          );
+                        }
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
           </div>
         )}
         {mode === "view" && hasMoreItems && (

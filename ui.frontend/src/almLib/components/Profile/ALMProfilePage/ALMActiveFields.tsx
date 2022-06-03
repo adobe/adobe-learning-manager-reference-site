@@ -142,9 +142,11 @@ const ALMActiveFields: React.FC<{
                       {isMultiValuedTextField && (
                         <TextField
                           value={textFieldValues}
-                          placeholder= {formatMessage({
-                            id: "alm.profile.isMultiValuedTextField.Placeholder",
-                            defaultMessage: "Use comma to separate multiple values",
+                          placeholder={formatMessage({
+                            id:
+                              "alm.profile.isMultiValuedTextField.Placeholder",
+                            defaultMessage:
+                              "Use comma to separate multiple values",
                           })}
                           onChange={(value) => {
                             onActiveFieldUpdate(value, activeField.name);
@@ -170,7 +172,8 @@ const ALMActiveFields: React.FC<{
                                   }
                                 >
                                   {formatMessage({
-                                    id: "alm.profile.hasPredefinedMultiValues.OptionNo",
+                                    id:
+                                      "alm.profile.hasPredefinedMultiValues.OptionNo",
                                     defaultMessage: "No",
                                   })}
                                 </span>
@@ -200,7 +203,8 @@ const ALMActiveFields: React.FC<{
                                   }
                                 >
                                   {formatMessage({
-                                    id: "alm.profile.hasPredefinedMultiValues.OptionYes",
+                                    id:
+                                      "alm.profile.hasPredefinedMultiValues.OptionYes",
                                     defaultMessage: "Yes",
                                   })}
                                 </span>

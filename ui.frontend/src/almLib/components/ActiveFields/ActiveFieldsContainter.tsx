@@ -23,7 +23,7 @@ import styles from "./ActiveFieldsContainter.module.css";
 import ALMActiveFields from "./ALMActiveFields";
 
 const getActiveFieldAttributes = (config: PrimeConfig) => {
-  let cssSelector = config.mountingPoints.profilePageContainer;
+  let cssSelector = config.mountingPoints.activeFieldsContainer;
   const activeFieldAttributes = getConfigurableAttributes(cssSelector) || {};
   return activeFieldAttributes;
 };
@@ -87,7 +87,7 @@ const ActiveFieldsContainter = () => {
   const onActiveFieldUpdate = (value: string, name: string) => {
     let fields: any = userFieldData.fields || {};
     fields[name] = value;
-    setUserFieldData(fields);
+    setUserFieldData({ fields });
   };
 
   const onSwitchValueUpdate = (
@@ -107,7 +107,7 @@ const ActiveFieldsContainter = () => {
       fields[fieldName] = fields[fieldName]?.filter(
         (x: string) => x !== attrName
       );
-      setUserFieldData(fields);
+      setUserFieldData({ fields });
     }
   };
 
