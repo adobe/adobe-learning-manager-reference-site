@@ -10,10 +10,10 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import React, { useState } from "react";
-import styles from "./ALMSkillComponent.module.css";
 import { useIntl } from "react-intl";
-import { useUserSkillInterest } from "../../../hooks/community/useUserSkillInterest";
-import { useSkills } from "../../../hooks/community/useSkills";
+import { useSkills } from "../../hooks/community/useSkills";
+import { useUserSkillInterest } from "../../hooks/community/useUserSkillInterest";
+import styles from "./ALMSkillComponent.module.css";
 
 const ALMSkillComponent = (props: any) => {
   const { formatMessage } = useIntl();
@@ -65,7 +65,7 @@ const ALMSkillComponent = (props: any) => {
 
   const scrollToSkillsSection = () => {
     document.getElementById("skills-section")?.scrollIntoView();
-  }
+  };
 
   const editSkillInterest = async () => {
     await fetchSkills();
@@ -157,8 +157,9 @@ const ALMSkillComponent = (props: any) => {
     let pointsArray = [];
     if (userSkillInterest.userSkills) {
       for (let i = 0; i < userSkillInterest.userSkills.length; i++) {
-        const skillEnrollmentDetails =
-          userSkillInterest.userSkills[i].id.split("_");
+        const skillEnrollmentDetails = userSkillInterest.userSkills[i].id.split(
+          "_"
+        );
         const levelId = skillEnrollmentDetails[2];
 
         if (levelId) {
@@ -201,69 +202,79 @@ const ALMSkillComponent = (props: any) => {
                 (skillInterest) =>
                   skillInterest.skill.name.toLowerCase() !== generalSkill
               )
-              .map((skillInterest: any) => (
-                <div
-                  className={styles.skillBox}
-                  tabIndex={0}
-                  id={"skill-" + skillInterest.skill.id}
-                  aria-labelledby={"skillName-" + skillInterest.skill.id}
-                  role="group"
-                  onMouseDown={(event: any) => {
-                    handleClickOnSkillBox(event);
-                  }}
-                  onMouseLeave={(event: any) => {
-                    removeFocus_lxpv(event);
-                  }}
-                >
-                  <span className={styles.skillName}>
-                    {skillInterest.skill.name}
-                  </span>
-                  <button
-                    onClick={() => {
-                      removeSkillInterest(skillInterest.skill.id);
+              .map((skillInterest) => {
+                const id = skillInterest.skill.id;
+
+                return (
+                  <div
+                    key={id}
+                    className={styles.skillBox}
+                    tabIndex={0}
+                    id={"skill-" + id}
+                    aria-labelledby={"skillName-" + id}
+                    role="group"
+                    onMouseDown={(event: any) => {
+                      handleClickOnSkillBox(event);
                     }}
-                    className={styles.removeInterestButton}
-                    aria-label={formatMessage({
-                      id: "alm.profile.skills.removeInterest",
-                      defaultMessage: "Remove from My interests",
-                    })}
-                    title={formatMessage({
-                      id: "alm.profile.skills.removeInterest",
-                      defaultMessage: "Remove from My interests",
-                    })}
-                  ></button>
-                  <div className={styles.arrowUp}></div>
-                  <div className={styles.skillDataTooltip} aria-hidden="true">
-                    {skillInterest.skill.name}
-                    <br />
-                    {skillInterest.source === "USER_SELECTED" ? (
-                      ``
-                    ) : (
-                      <div>
-                        {getFormattedSourceString(skillInterest.source)}
-                      </div>
-                    )}
-                    {populateUserSkillInterestLevelData(skillInterest).map(
-                      (level: any) => {
-                        return (
-                          <div>
-                            <strong>{getSkillLevelName(level.levelId)}</strong>:
-                            {getCreditsPercent(
-                              level.pointsAchieved,
-                              level.totalPoints
-                            )}
-                            %
-                            {formatMessage({
-                              id: "alm.profile.skills.achieved",
-                              defaultMessage: " Achieved",
-                            })}
-                          </div>
-                        );
-                      }
-                    )}
+                    onMouseLeave={(event: any) => {
+                      removeFocus_lxpv(event);
+                    }}
+                  >
+                    <span className={styles.skillName}>
+                      {skillInterest.skill.name}
+                    </span>
+                    <button
+                      onClick={() => {
+                        removeSkillInterest(id);
+                      }}
+                      className={styles.removeInterestButton}
+                      aria-label={formatMessage({
+                        id: "alm.profile.skills.removeInterest",
+                        defaultMessage: "Remove from My interests",
+                      })}
+                      title={formatMessage({
+                        id: "alm.profile.skills.removeInterest",
+                        defaultMessage: "Remove from My interests",
+                      })}
+                    ></button>
+                    <div className={styles.arrowUp}></div>
+                    <div className={styles.skillDataTooltip} aria-hidden="true">
+                      {skillInterest.skill.name}
+                      <br />
+                      {skillInterest.source === "USER_SELECTED" ? (
+                        ``
+                      ) : (
+                        <div>
+                          {getFormattedSourceString(skillInterest.source)}
+                        </div>
+                      )}
+                      {populateUserSkillInterestLevelData(skillInterest).map(
+                        (level: any) => {
+                          return (
+                            <div
+                              key={`${level.levelId}_${skillInterest.skill.id}`}
+                            >
+                              <strong>
+                                {getSkillLevelName(level.levelId)}
+                              </strong>
+                              :
+                              {getCreditsPercent(
+                                level.pointsAchieved,
+                                level.totalPoints
+                              )}
+                              %
+                              {formatMessage({
+                                id: "alm.profile.skills.achieved",
+                                defaultMessage: " Achieved",
+                              })}
+                            </div>
+                          );
+                        }
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
           </div>
         )}
         {mode === "view" && hasMoreItems && (

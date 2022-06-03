@@ -19,6 +19,8 @@ const mountingPoints = {
   notificationContainer: ".notification__container",
   instanceContainer: ".instance__container",
   profilePageContainer: ".profile__container",
+  userSkillsContainer: ".skills__container",
+  activeFieldsContainer: ".activeFields__container",
 };
 
 (window as any).ALM = (window as any).ALM || {};

@@ -9,7 +9,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-@import "../../../styles/variables.css";
+@import "../../styles/variables.css";
 
 .pageContainer {
   display: flex;
@@ -68,11 +68,10 @@ governing permissions and limitations under the License.
   position: relative;
 }
 
-
 .deleteImage {
-    text-align: center;
-    line-height: 20px;
-    cursor: pointer;
+  text-align: center;
+  line-height: 20px;
+  cursor: pointer;
 }
 
 .details {
@@ -168,9 +167,9 @@ governing permissions and limitations under the License.
 .progressArea {
   display: flex;
   width: 200px;
-  margin-left:20px;
+  margin-left: 20px;
 }
-.progressAreaMobile{
+.progressAreaMobile {
   display: none;
 }
 @media screen and (max-width: 1024px) {
@@ -256,10 +255,10 @@ governing permissions and limitations under the License.
     fill: currentColor;
     padding-left: 5px;
   }
-  .progressArea{
+  .progressArea {
     display: none;
   }
-  .progressAreaMobile{
+  .progressAreaMobile {
     display: flex;
     width: 80px;
     margin-left: 25px;

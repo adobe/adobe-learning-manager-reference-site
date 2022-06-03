@@ -9,7 +9,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-@import "../../../styles/variables.css";
+@import "../../styles/variables.css";
 
 .activeFields {
   margin: 0 auto;
@@ -33,26 +33,28 @@ governing permissions and limitations under the License.
 }
 
 .multiValueLabelText {
-    font-style: italic;
-    font-weight: normal;
-    font-size: 16px;
-    clear: both;
-    display: inline-block;
-    width: 100%;
+  font-style: italic;
+  font-weight: normal;
+  font-size: 16px;
+  clear: both;
+  display: inline-block;
+  width: 100%;
 }
 
-.textFieldAlign{
-    max-width: 100%;
-    width: var(--spectrum-global-dimension-size-2400); 
-    min-width: var(--spectrum-global-dimension-size-600);
-    min-width: var(--spectrum-dropdown-min-width,var(--spectrum-global-dimension-size-600));
-    display: inline-block;
-    position: relative;
-    /* width: 348px; */
-    height: 60px;
-
+.textFieldAlign {
+  max-width: 100%;
+  width: var(--spectrum-global-dimension-size-2400);
+  min-width: var(--spectrum-global-dimension-size-600);
+  min-width: var(
+    --spectrum-dropdown-min-width,
+    var(--spectrum-global-dimension-size-600)
+  );
+  display: inline-block;
+  position: relative;
+  /* width: 348px; */
+  height: 60px;
 }
-.switch{
+.switch {
   width: 50px;
   left: 20px;
 }
@@ -61,7 +63,6 @@ governing permissions and limitations under the License.
   font-size: var(--prime-font-size-20);
   color: var(--prime-color-nc1);
 }
-
 
 .activeFieldSectionBottom {
   margin-bottom: 40px;

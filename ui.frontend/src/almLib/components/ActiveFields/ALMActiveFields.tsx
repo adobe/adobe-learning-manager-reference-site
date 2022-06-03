@@ -19,7 +19,7 @@ import {
 } from "@adobe/react-spectrum";
 import React from "react";
 import { useIntl } from "react-intl";
-import { AccountActiveFields, PrimeUser } from "../../../models";
+import { AccountActiveFields, PrimeUser } from "../../models";
 import styles from "./ALMActiveFields.module.css";
 
 const ALMActiveFields: React.FC<{
@@ -50,7 +50,7 @@ const ALMActiveFields: React.FC<{
     ? activeFields.split(",").map((item) => item.trim())
     : [];
 
-  const fields = accountActiveFields.fields?.filter((activeField) => {
+  const fields = accountActiveFields.fields?.filter((activeField: any) => {
     return configuredActiveFields.indexOf(activeField.name) !== -1;
   });
 
@@ -61,7 +61,7 @@ const ALMActiveFields: React.FC<{
         <section className={styles.activeFields}>
           <div className={styles.title}>{title}</div> <hr />
           <div className={styles.description}>{description}</div>
-          {fields?.map((activeField) => {
+          {fields?.map((activeField: any) => {
             const allowedValuesPresent = activeField.allowedValues.length > 0;
             const isMultiValue = activeField.isMultiValue;
             const showTextField = !allowedValuesPresent;
@@ -78,15 +78,11 @@ const ALMActiveFields: React.FC<{
               id: string;
               name: string;
             }
-            const fields = userFieldData.fields;
-            let fieldValue = "";
-            if (fields) {
-              fieldValue = fields[activeField.name];
-            }
+
             const dropDownValue = () => {
               if (showDropdown) {
                 let options: dropDown[] = [];
-                activeField?.allowedValues.map((allowedValue) => {
+                activeField?.allowedValues.map((allowedValue: any) => {
                   let option: dropDown = { id: "", name: "" };
                   option.id = allowedValue;
                   option.name = allowedValue;
@@ -115,7 +111,7 @@ const ALMActiveFields: React.FC<{
                     <div>
                       {showTextField && !isMultiValue && (
                         <TextField
-                          value={textFieldValues}
+                          value={textFieldValues || ""}
                           placeholder="Type here..."
                           onChange={(value) => {
                             onActiveFieldUpdate(value, activeField.name);
@@ -141,10 +137,12 @@ const ALMActiveFields: React.FC<{
                       )}
                       {isMultiValuedTextField && (
                         <TextField
-                          value={textFieldValues}
-                          placeholder= {formatMessage({
-                            id: "alm.profile.isMultiValuedTextField.Placeholder",
-                            defaultMessage: "Use comma to separate multiple values",
+                          value={textFieldValues || ""}
+                          placeholder={formatMessage({
+                            id:
+                              "alm.profile.isMultiValuedTextField.Placeholder",
+                            defaultMessage:
+                              "Use comma to separate multiple values",
                           })}
                           onChange={(value) => {
                             onActiveFieldUpdate(value, activeField.name);
@@ -154,9 +152,12 @@ const ALMActiveFields: React.FC<{
                       )}
                       {hasPredefinedMultiValues &&
                         activeField?.allowedValues.map(
-                          (allowedValue, index) => {
+                          (allowedValue: any, index: number) => {
                             return (
-                              <div className={styles.alignSwitchItem}>
+                              <div
+                                className={styles.alignSwitchItem}
+                                key={index}
+                              >
                                 <span
                                   className={styles.allowedActiveFieldValues}
                                 >
@@ -170,7 +171,8 @@ const ALMActiveFields: React.FC<{
                                   }
                                 >
                                   {formatMessage({
-                                    id: "alm.profile.hasPredefinedMultiValues.OptionNo",
+                                    id:
+                                      "alm.profile.hasPredefinedMultiValues.OptionNo",
                                     defaultMessage: "No",
                                   })}
                                 </span>
@@ -200,7 +202,8 @@ const ALMActiveFields: React.FC<{
                                   }
                                 >
                                   {formatMessage({
-                                    id: "alm.profile.hasPredefinedMultiValues.OptionYes",
+                                    id:
+                                      "alm.profile.hasPredefinedMultiValues.OptionYes",
                                     defaultMessage: "Yes",
                                   })}
                                 </span>
