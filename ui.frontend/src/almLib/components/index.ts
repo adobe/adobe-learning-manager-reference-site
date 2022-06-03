@@ -51,6 +51,5 @@ export * from "./Community/PrimeDropdown";
 export * from "./Instance/PrimeInstancePage";
 export * from "./Notifications/PrimeNotificationContainer";
 export * from "./Portal";
-export * from "./Profile/ALMProfilePage";
 export * from "./TrainingOverview/PrimeTrainingPage";
 export * from "./UserProfile";
