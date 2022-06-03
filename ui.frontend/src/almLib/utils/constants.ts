@@ -10,6 +10,7 @@ export const CERTIFICATION = "certification";
 export const PREWORK = "Pre Work";
 export const TESTOUT = "Test Out";
 export const CONTENT = "Content";
+export const JOBAID = "jobAid";
 
 export const REQUIRED_ERROR_MESSAGE = "Is required";
 export const PREVIEW = "PREVIEW";
