@@ -195,22 +195,22 @@ const PrimeTrainingCard: React.FC<{
                     ""
                   )}
                   <div className={styles.skillsContainer}>
-                    {enrollment
-                      ? type !== JOBAID && (
-                          <>
-                            {enrollmentHtml}
-                            <div className={styles.percentComplete}>
-                              {formatMessage(
-                                {
-                                  id: "alm.catalog.card.progress.percent",
-                                  defaultMessage: `${enrollment?.progressPercent}% completes`,
-                                },
-                                { "0": enrollment?.progressPercent }
-                              )}
-                            </div>
-                          </>
-                        )
-                      : ""}
+                    {enrollment && type !== JOBAID ? (
+                      <>
+                        {enrollmentHtml}
+                        <div className={styles.percentComplete}>
+                          {formatMessage(
+                            {
+                              id: "alm.catalog.card.progress.percent",
+                              defaultMessage: `${enrollment?.progressPercent}% completes`,
+                            },
+                            { "0": enrollment?.progressPercent }
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
               </div>
