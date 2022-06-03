@@ -16,6 +16,7 @@ import { useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { useTrainingCard } from "../../../hooks/catalog/useTrainingCard";
 import { PrimeLearningObject } from "../../../models/PrimeModels";
+import { JOBAID } from "../../../utils/constants";
 import { modifyTimeDDMMYY } from "../../../utils/dateTime";
 import { getALMConfig } from "../../../utils/global";
 import { SEND_SVG, THREE_DOTS_MENU_SVG } from "../../../utils/inline_svg";
@@ -194,7 +195,7 @@ const PrimeTrainingCard: React.FC<{
                     ""
                   )}
                   <div className={styles.skillsContainer}>
-                    {enrollment ? (
+                    {enrollment && type !== JOBAID ? (
                       <>
                         {enrollmentHtml}
                         <div className={styles.percentComplete}>
