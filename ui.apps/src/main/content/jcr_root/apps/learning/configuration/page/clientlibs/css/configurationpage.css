@@ -64,7 +64,7 @@ governing permissions and limitations under the License.
 
 #admin-configs-cont .account-widget-config-heading .coral-Form-fieldlabel {
     font: normal normal normal 20px/30px Source Sans Pro;
-    border-top: 1px solid black;
+    border-top: 1px solid #dadada;
     margin-top: 40px;
     padding-top: 10px;
     padding-bottom: 10px;

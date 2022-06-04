@@ -30,7 +30,7 @@ trackingFeature="learning:catalog">
                                             <filterHeading
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/heading"
-                                                level="5"
+                                                level="4"
                                                 text="Select what filters to show"
                                                 granite:rel="alm-catalog-dialog-heading"
                                                 cq:showOnCreate="{Boolean}true"/>
