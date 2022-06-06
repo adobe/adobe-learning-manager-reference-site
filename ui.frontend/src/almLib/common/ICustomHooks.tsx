@@ -31,8 +31,8 @@ export default interface ICustomHooks {
       }
     | undefined
   >;
-  loadMore(url: string): void;
-  getTraining(id: string, params: QueryParams): void;
+  loadMore(url: string): Promise<JsonApiResponse | undefined>;
+  getTraining(id: string, params: QueryParams): Promise<PrimeLearningObject>;
   getTrainingInstanceSummary(
     trainingId: string,
     instanceId: string

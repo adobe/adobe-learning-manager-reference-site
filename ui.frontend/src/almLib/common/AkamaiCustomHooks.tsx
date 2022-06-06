@@ -9,9 +9,10 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { getALMConfig } from "../utils/global";
+import { getALMConfig, isUserLoggedIn } from "../utils/global";
 import { JsonApiParse } from "../utils/jsonAPIAdapter";
-import { RestAdapter } from "../utils/restAdapter";
+import { QueryParams, RestAdapter } from "../utils/restAdapter";
+import ALMCustomHooksInstance from "./ALMCustomHooks";
 
 class AkamaiCustomHooks {
   almConfig = getALMConfig();
@@ -19,7 +20,10 @@ class AkamaiCustomHooks {
   esBaseUrl = this.almConfig.esBaseUrl;
   almCdnBaseUrl = this.almConfig.almCdnBaseUrl;
 
-  async getTraining(id: string) {
+  async getTraining(id: string, params: QueryParams = {} as QueryParams) {
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.getTraining(id, params);
+    }
     const loPath = id.replace(":", "/");
     const response = await RestAdapter.get({
       url: `${this.almCdnBaseUrl}/${loPath}.json`,

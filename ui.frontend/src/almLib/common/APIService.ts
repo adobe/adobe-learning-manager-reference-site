@@ -43,14 +43,19 @@ class APIService {
     searchText: string,
     url: string
   ) {
-    this.customHooks.loadMoreTrainings(filterState, sort, searchText, url);
+    return this.customHooks.loadMoreTrainings(
+      filterState,
+      sort,
+      searchText,
+      url
+    );
   }
   public async loadMore(url: string) {
-    this.customHooks.loadMore(url);
+    return this.customHooks.loadMore(url);
   }
 
   public async getTraining(id: string, params: QueryParams) {
-    this.customHooks.getTraining(id, params);
+    return this.customHooks.getTraining(id, params);
   }
 
   public async getTrainingInstanceSummary(

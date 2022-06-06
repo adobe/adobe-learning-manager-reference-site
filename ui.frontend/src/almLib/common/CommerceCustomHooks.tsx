@@ -300,7 +300,7 @@ class CommerceCustomHooks implements ICustomHooks {
   }
 
   async getTraining(id: string, params: QueryParams = {} as QueryParams) {
-    AkamaiCustomHooksInstance.getTraining(id);
+    return AkamaiCustomHooksInstance.getTraining(id, params);
   }
 
   async getTrainingInstanceSummary(trainingId: string, instanceId: string) {

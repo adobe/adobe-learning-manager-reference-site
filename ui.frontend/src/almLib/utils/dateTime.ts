@@ -75,7 +75,10 @@ export const timeSince = (date: any) => {
 };
 
 export function modifyTime(dateToModify: string, locale: string) {
-  const local = new Date(dateToModify).toLocaleDateString(locale, {
+  if (isNaN(Date.parse(dateToModify))) {
+    return "";
+  }
+  const date = new Date(dateToModify).toLocaleDateString(locale, {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -83,10 +86,13 @@ export function modifyTime(dateToModify: string, locale: string) {
     minute: "2-digit",
   });
 
-  return local;
+  return date;
 }
 
 export function modifyTimeDDMMYY(dateToModify: string, locale: string) {
+  if (isNaN(Date.parse(dateToModify))) {
+    return "";
+  }
   const local = new Date(dateToModify).toLocaleDateString(locale, {
     day: "numeric",
     month: "short",
@@ -96,23 +102,8 @@ export function modifyTimeDDMMYY(dateToModify: string, locale: string) {
   return local;
 }
 
-// const DEFAULT_DATE_OPTIONS: any = {
-//   year: "numeric",
-//   month: "short",
-//   day: "numeric",
-// };
-// export function dateBasedOnLocale(
-//   date: string,
-//   locale: string,
-//   options: any = {}
-// ) {
-//   if (!date) return "";
-//   const dateOptions = { ...DEFAULT_DATE_OPTIONS, options };
-//   return new Date(date).toLocaleDateString(locale, dateOptions);
-// }
-
 export function GetFormattedDate(dateStr: string, getUserLocale: string) {
-  if (!dateStr) {
+  if (isNaN(Date.parse(dateStr))) {
     return "";
   }
   const date = new Date(dateStr);
