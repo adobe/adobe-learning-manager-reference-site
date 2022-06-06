@@ -95,17 +95,17 @@ export const useAlmSignIn = (props) => {
             "alm_commerce_token=" + (token || "") + expires + "; path=/";
         }
 
-        setIsLoading(false);
         if (process.env.NODE_ENV === "production") {
           await fetch(
             `/cpoauth.commerceToken.html?token=${token}&pagePath=${window.location.pathname}`
           );
         }
+        setIsLoading(false);
         setIsloggedIn(true);
       } catch (exception) {
         setIsLoading(false);
         setIsloggedIn(false);
-        getALMObject().handleLogOut();
+        // getALMObject().handleLogOut();
       }
     },
     [signIn]

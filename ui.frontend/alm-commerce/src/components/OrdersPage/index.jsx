@@ -47,8 +47,8 @@ export default function OrdersPage() {
     }
     return (
         <div>
-            <h1>Order placed successfully.</h1>
-            <Button variant="cta" type="button" onPress={proceedHandler} >Proceed</Button>
+            <h1>Thank you for your purchase.</h1>
+            <Button variant="cta" type="button" onPress={proceedHandler} >Proceed to Learning site</Button>
         </div>
     )
 }

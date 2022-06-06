@@ -10,10 +10,12 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { IntlProvider } from "react-intl";
-import "./App.css";
 import { mountingPoints } from "./config/config";
 import { AppContextProvider } from "./contextProviders";
 import {
+  ActiveFieldsContainter,
+  ALMSkillComponent,
+  ALMUserProfile,
   CommerceContextProvider,
   Portal,
   PrimeCatalogContainer,
@@ -22,8 +24,8 @@ import {
   PrimeInstancePage,
   PrimeNotificationContainer,
   PrimeTrainingPage,
-} from "./externalLib";
-import { ALMProfilePage } from "./externalLib/components/Profile/ALMProfilePage";
+} from "./almLib";
+import "./App.css";
 
 const App = (props: any) => {
   // const { mountingPoints } = config;
@@ -46,11 +48,15 @@ const App = (props: any) => {
           <Portal selector={mountingPoints.instanceContainer}>
             <PrimeInstancePage />
           </Portal>
-
           <Portal selector={mountingPoints.profilePageContainer}>
-            <ALMProfilePage />
+            <ALMUserProfile />
           </Portal>
-
+          <Portal selector={mountingPoints.userSkillsContainer}>
+            <ALMSkillComponent />
+          </Portal>
+          <Portal selector={mountingPoints.activeFieldsContainer}>
+            <ActiveFieldsContainter />
+          </Portal>
           <Portal selector={mountingPoints.boardContainer}>
             <PrimeCommunityBoardPage />
           </Portal>
@@ -60,7 +66,7 @@ const App = (props: any) => {
         </AppContextProvider>
       </CommerceContextProvider>
     </IntlProvider>
-  )
-}
+  );
+};
 
 export default App;

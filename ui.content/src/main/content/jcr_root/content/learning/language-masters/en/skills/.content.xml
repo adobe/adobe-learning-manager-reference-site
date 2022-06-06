@@ -42,13 +42,13 @@
                             text="&lt;p>&lt;span class=&quot;heading&quot;>Welcome to the Fin Ease Community.&lt;/span>&lt;br>&#xa;Advice can come from many different places and the guidance provided can have a tremendous impact on your life, especially if you have an open mind. Join our community and connect with instructors and peers.&lt;/p>&#xa;"
                             textIsRich="true"/>
                     </container>
-                    <skillscontainer
+                    <productscontainer
                         jcr:created="{Date}2022-03-07T17:05:44.833+05:30"
                         jcr:createdBy="admin"
                         jcr:lastModified="{Date}2022-04-18T10:23:14.052+05:30"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="learning/components/skillscontainer"
+                        sling:resourceType="learning/components/productscontainer"
                         productRows="4">
                         <product
                             jcr:created="{Date}2022-03-13T14:56:49.919+05:30"
@@ -105,7 +105,7 @@
                             displayPopupTitle="false"
                             titleValueFromDAM="false"
                             fileReference="/content/dam/learning/site/community/CreditDesign.png"/>
-                    </skillscontainer>
+                    </productscontainer>
                 </container>
             </container>
         </root>

@@ -58,6 +58,7 @@ const SignIn = () => {
   }
 
   const submitHandler = (event) => {
+    event.preventDefault();
     if (view === CREATE_ACCOUNT) {
       createAccountHandler(createAccountForm);
     } else if (view === LOGIN) {
@@ -90,9 +91,10 @@ const SignIn = () => {
 
   return (
     <div className={styles.signInContainer}>
+    <h1>Login</h1>
       {view !== RESET_PASSWORD ? (
         <Form
-        maxWidth="size-3600"
+          maxWidth="size-3600"
           UNSAFE_className={styles.form}
         >
           <span className={styles.error}>
@@ -108,6 +110,7 @@ const SignIn = () => {
                 onChange={(value) => setValue("firstname", value)}
                 isRequired={true}
                 UNSAFE_className={styles.mandatory}
+                onKeyDown={(event) => console.log(event)}
               />
               <TextField
                 label="Last Name"
@@ -151,48 +154,47 @@ const SignIn = () => {
                 Forgot Password?
               </Button>
               <br />
-              <Button
-                variant="cta"
+              <button
                 type="submit"
-                onPress={submitHandler}
+                onClick={submitHandler}
                 isDisabled={isLoading}
-                UNSAFE_className={styles.button}
+                className={`${styles.primaryButton} ${styles.commonButton}`}
               >
-                {isLoading ? <CommerceLoader size="S" /> : "LOGIN"}
-              </Button>
+                {isLoading ? <CommerceLoader size="S" /> : "Login"}
+              </button>
 
-              <Button
-                variant="cta"
+              <button
                 type="button"
-                onPress={() => setView(CREATE_ACCOUNT)}
+                onClick={() => setView(CREATE_ACCOUNT)}
                 isDisabled={isLoading}
-                UNSAFE_className={styles.createAccountButton}
+                className={`${styles.secondaryButton} ${styles.commonButton}`}
+
               >
-                CREATE AN ACCOUNT
-              </Button>
+                Create an Account
+              </button>
             </div>
           )}
           {view !== LOGIN && (
             <div>
-              <Button
-                variant="cta"
+              <button
                 type="submit"
-                onPress={submitHandler}
+                onClick={submitHandler}
                 isDisabled={isLoading}
-                UNSAFE_className={styles.createAccountButton}
-              >
-                {view === CREATE_ACCOUNT ? "CREATE AN ACCOUNT" : "SUBMIT"}
-              </Button>
+                className={`${styles.primaryButton} ${styles.commonButton}`}
 
-              <Button
-                variant="secondary"
-                type="button"
-                onPress={() => setView(LOGIN)}
-                isDisabled={isLoading}
-                UNSAFE_className={styles.cancelButton}
               >
-                CANCEL
-              </Button>
+                {view === CREATE_ACCOUNT ? "Create an Account" : "Submit"}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setView(LOGIN)}
+                isDisabled={isLoading}
+                className={`${styles.secondaryButton} ${styles.commonButton}`}
+
+              >
+                Cancel
+              </button>
             </div>
           )}
         </Form>

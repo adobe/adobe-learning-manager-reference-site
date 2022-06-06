@@ -19,6 +19,10 @@ governing permissions and limitations under the License.
     position: relative;
 }
 
+#home-categories-container #categories-headline {
+  margin-top: 30px;
+}
+
 #categories-headline.cmp-text {
     text-align: center;
     font: normal normal bold 27px/42px Source Sans Pro;
@@ -38,10 +42,16 @@ governing permissions and limitations under the License.
     color: #292929;
 }
 
+.categories {
+  position: relative;
+  min-height: 100px;
+}
+
 .categories-wrapper {
   /* max-width: var(--prime-container-max-width-desktop);
   width: var(--prime-container-width); */
   margin: 0 auto;
+  min-height: 100px;
 }
 
 .categories-list {

@@ -9,7 +9,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License. */
 
 import { createStore } from "redux";
-import { reducer } from "../externalLib";
+import { reducer } from "../almLib";
 
 import { composeWithDevTools } from "redux-devtools-extension";
 

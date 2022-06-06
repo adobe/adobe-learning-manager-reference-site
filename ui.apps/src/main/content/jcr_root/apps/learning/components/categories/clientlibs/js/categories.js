@@ -13,6 +13,7 @@ governing permissions and limitations under the License.
 (function (document, window, $) {
     "use strict";
     
+    const CATEGORIES_WRAPPER_SEL = ".categories-wrapper";
     const CATEGORIES_LEFT_ARROW_SEL = ".categories-left-arrow";
     const CATEGORIES_RIGHT_ARROW_SEL = ".categories-right-arrow";
     const CATEGORIES_LIST_SEL = ".categories-list";
@@ -20,13 +21,15 @@ governing permissions and limitations under the License.
 
    $(document).ready(function (e) {
        $(CATEGORIES_LEFT_ARROW_SEL).on("click", function (e) {
-            let leftPos = $(CATEGORIES_LIST_SEL).scrollLeft();
-            $(CATEGORIES_LIST_SEL).animate({scrollLeft: leftPos - 360}, 400);
+            let categoriesListElem = $(this).siblings(CATEGORIES_WRAPPER_SEL).find(CATEGORIES_LIST_SEL);
+            let leftPos = categoriesListElem.scrollLeft();
+            categoriesListElem.animate({scrollLeft: leftPos - 360}, 400);
        });
 
        $(CATEGORIES_RIGHT_ARROW_SEL).on("click", function (e) {
-            let leftPos = $(CATEGORIES_LIST_SEL).scrollLeft();
-            $(CATEGORIES_LIST_SEL).animate({scrollLeft: leftPos + 360}, 400);
+            let categoriesListElem = $(this).siblings(CATEGORIES_WRAPPER_SEL).find(CATEGORIES_LIST_SEL);
+            let leftPos = categoriesListElem.scrollLeft();
+            categoriesListElem.animate({scrollLeft: leftPos + 360}, 400);
        });
 
        $(CATEGORIES_LINK_BTN_SEL).on("click", function (e) {

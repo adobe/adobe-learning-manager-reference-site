@@ -1,0 +1,233 @@
+/**
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+@import "../../../styles/variables.css";
+
+.actionContainer {
+  margin-bottom: 20px;
+}
+.commonButton {
+  width: 100%;
+  cursor: pointer;
+  font-size: var(--prime-font-size-14);
+  min-height: 38px;
+  font-weight: 600;
+  padding: 5px 12px;
+  min-width: 70px;
+  display: block;
+  border-radius: 2px;
+  border-radius: 20px;
+}
+
+.secondaryButton {
+  border: 2px solid var(--prime-color-primary);
+  color: var(--prime-color-primary);
+  background-color: var(--prime-color-white);
+}
+
+.secondaryButton:enabled:hover,
+.secondaryButton:enabled:focus,
+.secondaryButton:enabled:focus-visible {
+  color: var(--prime-color-white);
+  background-color: var(--prime-color-primary);
+  border-color: var(--prime-color-primary);
+  outline: none;
+}
+/* .primaryButton::after {
+  border-radius: 0;
+} */
+
+.primaryButton {
+  background-color: var(--prime-color-primary);
+  border: 2px solid var(--prime-color-primary) !important;
+  color: var(--prime-color-white);
+}
+.primaryButton:enabled:hover,
+.primaryButton:enabled:focus,
+.primaryButton:enabled:focus-visible {
+  background-color: var(--prime-color-primary);
+  border: 2px solid var(--prime-color-primary) !important;
+  color: var(--prime-color-white);
+  outline: none;
+}
+.commonButton:disabled {
+  outline: none;
+  opacity: 0.9;
+  cursor: default;
+  pointer-events: none;
+  border: none !important;
+}
+
+/* .secondaryButton::after {
+  border-radius: 0;
+} */
+
+.pendingButton {
+  background-color: var(--prime-color-nc2) !important;
+  color: var(--prime-color-white) !important;
+  outline: none;
+  border: none;
+}
+
+.buyNowContainer {
+  background: var(--prime-color-nc5);
+  border-radius: 2px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.commonContainer {
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  width: 100%;
+  border-bottom: 1px solid var(--prime-color-nc5);
+}
+.icon,
+.altLangIcon {
+  margin-right: 10px;
+}
+.icon svg,
+.altLangIcon svg {
+  fill: var(--prime-icon-color);
+  width: 25px;
+  height: 25px;
+}
+
+.altLangIcon {
+  margin-top: 8px;
+}
+
+.minimumCriteria {
+  font-size: 16px;
+  margin-right: 10px;
+  color: var(--prime-icon-color);
+}
+.mandatory {
+  min-width: 25px;
+  font-size: 16px;
+  margin-right: 10px;
+  margin-top: 3px;
+  text-align: center;
+  color: var(--prime-icon-color);
+}
+.innerContainer {
+  margin-left: 10px;
+  width: calc(100% - 50px);
+  font-size: var(--prime-font-size-14);
+}
+.label {
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-nc3);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+
+.errorText {
+  font-size: var(--prime-font-size-12);
+  color: var(--prime-error-color);
+  font-weight: var(--prime-font-weight-600);
+  padding-bottom: 5px;
+}
+
+.minimumCriteriaLabel {
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-nc3);
+  overflow: hidden;
+  padding-bottom: 5px;
+}
+.authorContainer {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  /* padding-top: 20px; */
+  border-bottom: 1px solid var(--prime-color-nc5);
+}
+.authors {
+  display: flex;
+}
+.authorName {
+  margin: 0;
+  margin-bottom: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.resourceName {
+  display: flex;
+  flex-direction: column;
+}
+
+.badge svg {
+  transform: scale(1.5);
+}
+.moduleCompleted {
+  font-size: var(--prime-font-size-20);
+  width: 25px;
+  margin-right: 10px;
+}
+.authors img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+.supplymentaryLoName {
+  display: inline-block;
+  max-width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--prime-color-primary);
+  text-decoration: none;
+}
+
+.mangerPendingApprovalText {
+  text-align: center;
+  color: var(--prime-color-nc3);
+  font-size: var(--prime-font-size-14);
+  margin: 5px 0;
+}
+
+.textOr {
+  text-align: center;
+  color: var(--prime-color-nc3);
+  font-size: var(--prime-font-size-16);
+  margin: 5px 0;
+}
+
+.cpauthorcircle {
+  text-align: center;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+  border-radius: 200px;
+  display: inline-block;
+  height: 36px;
+  width: 36px;
+  vertical-align: top;
+}
+
+@media screen and (max-width: 414px) {
+  .container .commonContainer {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+  .container .commonContainer:last-child {
+    padding-bottom: 0;
+  }
+}

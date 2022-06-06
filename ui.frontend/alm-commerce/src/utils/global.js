@@ -35,6 +35,9 @@ export function getAccessToken() {
 export function getCommerceToken() {
   return getALMObject().getCommerceToken();
 }
+export const getCommerceStoreName = () => {
+  return getALMConfig().commerceStoreName;
+}
 
 export const getAccountActiveFields = async () => {
   return await getALMObject().getAccountActiveFields();
