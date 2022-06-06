@@ -16,7 +16,8 @@ import { useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { useTrainingCard } from "../../../hooks/catalog/useTrainingCard";
 import { PrimeLearningObject } from "../../../models/PrimeModels";
-import {  modifyTimeDDMMYY } from "../../../utils/dateTime";
+import { JOBAID } from "../../../utils/constants";
+import { modifyTimeDDMMYY } from "../../../utils/dateTime";
 import { getALMConfig } from "../../../utils/global";
 import { SEND_SVG, THREE_DOTS_MENU_SVG } from "../../../utils/inline_svg";
 import { getFormattedPrice } from "../../../utils/price";
@@ -83,6 +84,17 @@ const PrimeTrainingCard: React.FC<{
     enrollmentHtml
   );
 
+  const completionDeadline = useMemo(() => {
+    if (!enrollment) return "";
+    const { completionDeadline, loInstance } = enrollment;
+    if (completionDeadline) {
+      return completionDeadline;
+    }
+    if (loInstance?.completionDeadline) {
+      return loInstance?.completionDeadline;
+    }
+  }, [enrollment]);
+
   const cardClass = `${styles.card} ${isHovered ? styles.hover : ""}`;
   const fomatLabel = useMemo(() => {
     return format ? GetTranslation(`${formatMap[format]}`, true) : "";
@@ -96,7 +108,6 @@ const PrimeTrainingCard: React.FC<{
   if (price) {
     priceLabel = getFormattedPrice(price);
   }
-
   const extraIconHtml = (
     <div className={styles.extraIcon}>{THREE_DOTS_MENU_SVG()}</div>
   );
@@ -149,7 +160,7 @@ const PrimeTrainingCard: React.FC<{
                 </div>
                 <div className={styles.showOnHover}>
                   {descriptionHtml}
-                  {enrollment && enrollment.completionDeadline ? (
+                  {completionDeadline ? (
                     <div className={styles.skillsContainer}>
                       <span className={styles.dueDateLabel}>
                         {formatMessage(
@@ -157,10 +168,7 @@ const PrimeTrainingCard: React.FC<{
                             id: "alm.catalog.card.due.date",
                           },
                           {
-                            "0": modifyTimeDDMMYY(
-                              enrollment?.completionDeadline,
-                              locale
-                            ),
+                            "0": modifyTimeDDMMYY(completionDeadline, locale),
                           }
                         )}
                       </span>
@@ -187,7 +195,7 @@ const PrimeTrainingCard: React.FC<{
                     ""
                   )}
                   <div className={styles.skillsContainer}>
-                    {enrollment ? (
+                    {enrollment && type !== JOBAID ? (
                       <>
                         {enrollmentHtml}
                         <div className={styles.percentComplete}>

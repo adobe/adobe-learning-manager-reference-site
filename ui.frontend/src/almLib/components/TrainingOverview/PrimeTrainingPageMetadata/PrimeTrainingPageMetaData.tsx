@@ -168,7 +168,7 @@ const PrimeTrainingPageMetaData: React.FC<{
         )}
       </p>
     ) : (
-      seatsAvailable == 0 && (
+      seatsAvailable <= 0 && (
         <p style={{ textAlign: "center" }} className={styles.errorText}>
           {formatMessage({
             id: `alm.overview.no.seats.available`,
@@ -252,9 +252,19 @@ const PrimeTrainingPageMetaData: React.FC<{
       const { error, totalQuantity } = await addToCartHandler();
       if (isPrimeUserLoggedIn) {
         if (error && error.length) {
+          let errorKey = "alm.addToCart.general.error";
+          error?.forEach((item: any) => {
+            if (
+              item &&
+              item.message &&
+              item.message?.includes("exceeds the maximum qty allowed")
+            ) {
+              errorKey = "alm.overview.added.to.cart.error";
+            }
+          });
           almAlert(
             true,
-            formatMessage({ id: "alm.addToCart.error" }, { loType: loType }),
+            formatMessage({ id: errorKey }, { loType: loType }),
             AlertType.error
           );
         } else {
@@ -572,14 +582,16 @@ const PrimeTrainingPageMetaData: React.FC<{
         {(action === "start" ||
           action === "continue" ||
           action === "revisit") && (
-          <Button
-            variant="primary"
-            UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
-            onPress={launchPlayerHandler}
-          >
-            {actionText}
+          <>
+            <Button
+              variant="primary"
+              UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
+              onPress={launchPlayerHandler}
+            >
+              {actionText}
+            </Button>
             {waitListText}
-          </Button>
+          </>
         )}
 
         {action === "addToCart" && (

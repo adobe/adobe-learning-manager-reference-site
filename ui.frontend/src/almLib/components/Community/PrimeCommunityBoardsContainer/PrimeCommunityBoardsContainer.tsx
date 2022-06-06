@@ -10,6 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { Button, lightTheme, Provider } from "@adobe/react-spectrum";
+import { useIntl } from "react-intl";
 import { PrimeBoard } from "../../../models/PrimeModels";
 import { PrimeCommunityBoard } from "../PrimeCommunityBoard";
 import styles from "./PrimeCommunityBoardsContainer.module.css";
@@ -19,8 +20,13 @@ const PrimeCommunityBoardsContainer: React.FC<{
   hasMoreItems: boolean;
 }> = ({ boards, loadMoreBoards, hasMoreItems }) => {
   const listHtml = boards?.map((board) => (
-    <PrimeCommunityBoard board={board} key={board.id}></PrimeCommunityBoard>
+    <PrimeCommunityBoard
+      board={board}
+      key={board.id}
+      showBorder={true}
+    ></PrimeCommunityBoard>
   ));
+  const { formatMessage } = useIntl();
 
   return (
     <div>
@@ -34,7 +40,10 @@ const PrimeCommunityBoardsContainer: React.FC<{
               onPress={loadMoreBoards}
               UNSAFE_className={styles.loadMoreButton}
             >
-              Load more
+              {formatMessage({
+                id: "alm.community.loadMore",
+                defaultMessage: "Load more",
+              })}
             </Button>
           </Provider>
         ) : (

@@ -16,24 +16,35 @@ import { useIntl } from "react-intl";
 import Question from "@spectrum-icons/workflow/Question";
 import { PrimeCommunityLinkPreview } from "../PrimeCommunityLinkPreview";
 import { PrimeCommunityPoll } from "../PrimeCommunityPoll";
+import {
+  AUDIO,
+  BOARD,
+  COMMENT,
+  IMAGE,
+  POLL,
+  POST,
+  QUESTION,
+  REPLY,
+  VIDEO,
+} from "../../../utils/constants";
 
 const PrimeCommunityObjectBody = (props: any) => {
   const { formatMessage } = useIntl();
   const object = props.object;
-  const isQuestionType = object.postingType === "QUESTION";
+  const isQuestionType = object.postingType === QUESTION;
   const entityType = props.type;
   const getDescription = () => {
-    switch(entityType) {
-      case "board":
+    switch (entityType) {
+      case BOARD:
         return object.richTextdescription;
-      case "post": 
+      case POST:
         return object.richText;
-      case "comment":
+      case COMMENT:
         return props.text;
-      case "reply":
+      case REPLY:
         return props.text;
     }
-  }
+  };
   const description = getDescription();
   const primeConfig = getALMConfig();
   const iframeSrc = `${
@@ -44,111 +55,144 @@ const PrimeCommunityObjectBody = (props: any) => {
 
   const MAX_CHAR_SHOWN = 450;
   const DEFAULT_INDEX_VALUE = 2;
-  const [ viewIndex, setViewIndex ] = useState(DEFAULT_INDEX_VALUE);
-  const [ viewMore, setViewMore ] = useState(description.length > MAX_CHAR_SHOWN);
-  const [ currentDescription, setCurrentDescription ] = useState(description.length > MAX_CHAR_SHOWN ? description.substring(0, MAX_CHAR_SHOWN) : description);
-  
+  const [viewIndex, setViewIndex] = useState(DEFAULT_INDEX_VALUE);
+  const [viewMore, setViewMore] = useState(
+    description?.length > MAX_CHAR_SHOWN
+  );
+  const [currentDescription, setCurrentDescription] = useState(
+    description?.length > MAX_CHAR_SHOWN
+      ? description.substring(0, MAX_CHAR_SHOWN)
+      : description
+  );
+
   const getTruncatedDescription = () => {
     const supportedCharacterLength = MAX_CHAR_SHOWN * viewIndex;
-    if(description.length <= supportedCharacterLength) {
+    if (description?.length <= supportedCharacterLength) {
       setViewMore(false);
       setCurrentDescription(description);
       setViewIndex(DEFAULT_INDEX_VALUE);
-    }
-    else
+    } else
       setCurrentDescription(description.substring(0, supportedCharacterLength));
-      setViewIndex(viewIndex + 1);
-  }
+    setViewIndex(viewIndex + 1);
+  };
 
   const submitPoll = (optionId: any) => {
     props.submitPoll(optionId);
-  }
+  };
 
   return (
     <>
-      <div className={isQuestionType ? styles.primeQuestionPostDescription : styles.primePostDescription}>
-        {isQuestionType && 
-          <div className={styles.primeCommunityQuestionIcon}>
-            <Question/>
-          </div>
+      <div
+        className={
+          props.type === BOARD
+            ? styles.primeBoardDescription
+            : isQuestionType
+            ? styles.primeQuestionPostDescription
+            : styles.primePostDescription
         }
-        <div dangerouslySetInnerHTML={{ __html: currentDescription }}></div>
+      >
+        {isQuestionType && (
+          <div className={styles.primeCommunityQuestionIcon}>
+            <Question />
+          </div>
+        )}
+        <div
+          className={styles.primePostDescriptionText}
+          dangerouslySetInnerHTML={{ __html: currentDescription }}
+        ></div>
       </div>
-      {viewMore &&
-        <button className={styles.primeCommunityViewMoreButton} onClick={getTruncatedDescription}>
-          {formatMessage({
-            id: "alm.community.viewMore",
-            defaultMessage: "View more",
-          })}
-        </button>
-      }
-      <PrimeCommunityLinkPreview currentInput={currentDescription} showLinkPreview={true}></PrimeCommunityLinkPreview>
-      {props.object.postingType === "POLL" &&
-        <PrimeCommunityPoll post={props.object} submitPoll={(optionId: any) => {submitPoll(optionId)}}></PrimeCommunityPoll>
-      }
-      <div className={styles.primePostPreview}>
-        {object.resource && object.resource.contentType === "VIDEO" && (
-          <div className="image-box">
-            <div className="image-container">
-              <iframe
-                className={styles.primePostVideoIframe}
-                src={iframeSrc}
-                allowFullScreen={true}
-                allow="autoplay"
-                frameBorder="0"
-                loading="lazy"
-                title="primePostVideo"
-              ></iframe>
-            </div>
-          </div>
-        )}
-
-        {object.resource && object.resource.contentType === "IMAGE" && (
-          <div className={styles.primeCommunityImageBox}>
-            <div className={styles.primeCommunityImageContainer}>
-              <img
-                src={object.resource.data!}
-                loading="lazy"
-                className={styles.primePostImage}
-                alt="primePostImage"
-              />
-            </div>
-          </div>
-        )}
-
-        {object.resource && object.resource.contentType === "AUDIO" && (
-          <div className="image-box">
-            <div className="image-container">
-              <iframe
-                className={styles.primePostVideoIframe}
-                src={iframeSrc}
-                allowFullScreen={true}
-                allow="autoplay"
-                loading="lazy"
-                title="primePostAudio"
-              ></iframe>
-            </div>
-          </div>
-        )}
-
-        {object.resource &&
-          ["PDF", "XLS", "PPTX", "DOC"].includes(
-            object.resource.contentType
-          ) && (
+      {viewMore && (
+        <div className={styles.viewMoreDiv}>
+          <button
+            className={styles.primeCommunityViewMoreButton}
+            onClick={getTruncatedDescription}
+          >
+            {formatMessage({
+              id: "alm.community.viewMore",
+              defaultMessage: "View more",
+            })}
+          </button>
+        </div>
+      )}
+      {props.type !== BOARD && (
+        <PrimeCommunityLinkPreview
+          currentInput={currentDescription}
+          showLinkPreview={true}
+        ></PrimeCommunityLinkPreview>
+      )}
+      {props.type !== BOARD && props.object.postingType === POLL && (
+        <PrimeCommunityPoll
+          post={props.object}
+          submitPoll={(optionId: any) => {
+            submitPoll(optionId);
+          }}
+        ></PrimeCommunityPoll>
+      )}
+      {props.type !== BOARD && (
+        <div className={styles.primePostPreview}>
+          {object.resource && object.resource.contentType === VIDEO && (
             <div className="image-box">
               <div className="image-container">
                 <iframe
                   className={styles.primePostVideoIframe}
                   src={iframeSrc}
-                  allow="autoplay"
                   allowFullScreen={true}
+                  allow="autoplay"
+                  frameBorder="0"
                   loading="lazy"
-                  title="primePostStatic"
+                  title="primePostVideo"
                 ></iframe>
               </div>
             </div>
           )}
-      </div>
+
+          {object.resource && object.resource.contentType === IMAGE && (
+            <div className={styles.primeCommunityImageBox}>
+              <div className={styles.primeCommunityImageContainer}>
+                <img
+                  src={object.resource.data!}
+                  loading="lazy"
+                  className={styles.primePostImage}
+                  alt="primePostImage"
+                />
+              </div>
+            </div>
+          )}
+
+          {object.resource && object.resource.contentType === AUDIO && (
+            <div className="image-box">
+              <div className="image-container">
+                <iframe
+                  className={styles.primePostVideoIframe}
+                  src={iframeSrc}
+                  allowFullScreen={true}
+                  allow="autoplay"
+                  loading="lazy"
+                  title="primePostAudio"
+                ></iframe>
+              </div>
+            </div>
+          )}
+
+          {object.resource &&
+            ["PDF", "XLS", "PPTX", "DOC"].includes(
+              object.resource.contentType
+            ) && (
+              <div className="image-box">
+                <div className="image-container">
+                  <iframe
+                    className={styles.primePostVideoIframe}
+                    src={iframeSrc}
+                    allow="autoplay"
+                    allowFullScreen={true}
+                    loading="lazy"
+                    title="primePostStatic"
+                  ></iframe>
+                </div>
+              </div>
+            )}
+        </div>
+      )}
     </>
   );
 };

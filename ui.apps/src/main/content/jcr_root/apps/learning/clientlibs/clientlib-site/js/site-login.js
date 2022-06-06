@@ -56,7 +56,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     } else if (!isPrimeUserLoggedIn()) {
       if (isLearningPage()) {
         window.ALM.navigateToExplorePage();
-      } else if (isCommunityPage()) {
+      } else if (isCommunityPage() || isBoardDetailsPage() || isBoardsPage() || isProfilePage()) {
         window.ALM.navigateToCommerceSignInPage();
       }
     }
@@ -82,7 +82,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
           pagePath: pathName,
         };
         fetchAccessToken(data);
-      } else if (isCommunityPage() || (CP_OAUTH_STATE == state && code)) {
+      } else if (isCommunityPage() || isBoardDetailsPage() || isBoardsPage() || isProfilePage() || (CP_OAUTH_STATE == state && code)) {
         // Auto-login like Prime Usage only if user navigates to Community page.
         // For rest pages, show non-logged in behavior
         handlePrimeLogIn();
@@ -139,13 +139,18 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   const isEmailRedirectPage = () =>
     window.location.pathname === window.ALM.getALMConfig().emailRedirectPath;
 
+  const isBoardsPage = () =>
+    window.location.pathname.includes(window.ALM.getALMConfig().communityBoardsPath);
+
+  const isBoardDetailsPage = () =>
+    window.location.pathname.includes(window.ALM.getALMConfig().communityBoardDetailsPath);
+
+  const isProfilePage = () =>
+    window.location.pathname.includes(window.ALM.getALMConfig().profilePath);
+
   const handlePageLoad = () => {
-    if (
-      !isPrimeUserLoggedIn() ||
-      (!isAuthor() &&
-        CURRENT_USAGE_TYPE === COMMERCE_USAGE_TYPE &&
-        !isCommerceLoggedIn())
-    ) {
+    if (!isPrimeUserLoggedIn() || 
+        (!isAuthor() && CURRENT_USAGE_TYPE === COMMERCE_USAGE_TYPE && !isCommerceLoggedIn())) {
       cleanUpUserData();
     }
     // If sign-out or sign-in Page do nothing

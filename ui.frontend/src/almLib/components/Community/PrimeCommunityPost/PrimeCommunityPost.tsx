@@ -18,6 +18,7 @@ import { useIntl } from "react-intl";
 import { useComments, usePost } from "../../../hooks/community";
 import { useRef, useEffect, useState } from "react";
 import { useConfirmationAlert } from "../../../common/Alert/useConfirmationAlert";
+import { DOWN, DOWNVOTE, POST, UP, UPVOTE } from "../../../utils/constants";
 import styles from "./PrimeCommunityPost.module.css";
 
 const PrimeCommunityPost = (props: any) => {
@@ -28,12 +29,10 @@ const PrimeCommunityPost = (props: any) => {
     usePost();
   const { fetchComments } = useComments();
   const myVoteStatus = post.myVoteStatus ? post.myVoteStatus : "";
-  const [myUpVoteStatus, setMyUpVoteStatus] = useState(
-    myVoteStatus === "UPVOTE"
-  );
+  const [myUpVoteStatus, setMyUpVoteStatus] = useState(myVoteStatus === UPVOTE);
   const [upVoteCount, setUpVoteCount] = useState(post.upVote);
   const [myDownVoteStatus, setMyDownVoteStatus] = useState(
-    myVoteStatus === "DOWNVOTE"
+    myVoteStatus === DOWNVOTE
   );
   const [downVoteCount, setDownVoteCount] = useState(post.downVote);
   const firstRunForUpvote = useRef(true);
@@ -101,7 +100,7 @@ const PrimeCommunityPost = (props: any) => {
 
   const upVoteButtonClickHandler = () => {
     //if already upVoted, delete vote
-    myUpVoteStatus ? deletePostVote(post.id, "UP") : votePost(post.id, "UP");
+    myUpVoteStatus ? deletePostVote(post.id, UP) : votePost(post.id, UP);
     if (!myUpVoteStatus && myDownVoteStatus) {
       setMyDownVoteStatus((myDownVoteStatus) => !myDownVoteStatus);
     }
@@ -110,9 +109,7 @@ const PrimeCommunityPost = (props: any) => {
 
   const downVoteButtonClickHandler = () => {
     //if already downVoted, delete vote
-    myDownVoteStatus
-      ? deletePostVote(post.id, "DOWN")
-      : votePost(post.id, "DOWN");
+    myDownVoteStatus ? deletePostVote(post.id, DOWN) : votePost(post.id, DOWN);
     if (!myDownVoteStatus && myUpVoteStatus) {
       setMyUpVoteStatus((myUpVoteStatus) => !myUpVoteStatus);
     }
@@ -180,10 +177,16 @@ const PrimeCommunityPost = (props: any) => {
 
   return (
     <>
-      <div className={styles.primePostWrapper}>
+      <div
+        className={
+          props.showBorder
+            ? styles.primePostWrapperWithBorder
+            : styles.primePostWrapper
+        }
+      >
         <PrimeCommunityObjectHeader
           object={post}
-          type="post"
+          type={POST}
           updateObjectHandler={(
             input: any,
             postingType: any,
@@ -202,7 +205,7 @@ const PrimeCommunityPost = (props: any) => {
         ></PrimeCommunityObjectHeader>
         <PrimeCommunityObjectBody
           object={post}
-          type="post"
+          type={POST}
           submitPoll={(optionId: any) => {
             submitPoll(optionId);
           }}
@@ -236,6 +239,7 @@ const PrimeCommunityPost = (props: any) => {
           ></PrimeCommunityComments>
         )}
       </div>
+      {!props.showBorder && <hr className={styles.postSeperator} />}{" "}
     </>
   );
 };

@@ -11,55 +11,69 @@ governing permissions and limitations under the License.
 */
 @import "../../../styles/variables.css";
 .primeObjectOptions {
-    display: flex;
-    margin-bottom: 15px;
+  display: flex;
+  margin-bottom: 15px;
 }
 
 .primeObjectCommentsCount {
-    font-size: var(--prime-font-size-12);
-    color: #306EB5;
-    background: none;
-    border: none;
-    padding-left:0;
-    margin-right: 15px;
+  font-size: var(--prime-font-size-14);
+  color: #306eb5;
+  background: none;
+  border: none;
+  padding-left: 0;
+  margin-right: 15px;
+  font-family: "source-sans-pro" !important;
 }
 
 .primeObjectCommentsCount:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-.primeObjectUpVoteIcon, .primeObjectDownVoteIcon {
-    margin-right: 5px;
-    font-size: var(--prime-font-size-12);
-    border: none;
-    background: none;
+.primeObjectUpVoteIcon,
+.primeObjectDownVoteIcon {
+  margin-right: 5px;
+  font-size: var(--prime-font-size-12);
+  border: none;
+  background: none;
+  display: flex;
 }
 
-.primeObjectUpVoteIcon:hover, .primeObjectDownVoteIcon:hover {
-    cursor: pointer;
+.primeObjectDownVoteIcon {
+  padding-top: 4px;
 }
 
-.primeObjectUpVoteCount, .primeObjectDownVoteCount {
-    vertical-align: top;
-    margin-left: 5px;
+.primeObjectUpVoteIcon:hover,
+.primeObjectDownVoteIcon:hover {
+  cursor: pointer;
+}
+
+.primeObjectUpVoteCount,
+.primeObjectDownVoteCount {
+  vertical-align: top;
+  margin-left: 3px;
+  padding-top: 4px;
+}
+
+.primeObjectDownVoteCount {
+  padding-top: 1px;
 }
 
 .primeObjectRightAnswer {
-    margin-left: 3rem;
-    font-weight: 600;
-    padding: 3px 5px;
-    border-radius: 4px;
-    background-color: #55B36F;
-    color: #fff;
-    font-size: 12px;
+  margin-left: 3rem;
+  font-weight: 600;
+  padding: 3px 5px;
+  border-radius: 4px;
+  background-color: #55b36f;
+  color: #fff;
+  font-size: 12px;
 }
 
 @media (max-width: 414px) {
-    .primeObjectCommentsCount {
-        margin-right: 10px;
-    }
+  .primeObjectCommentsCount {
+    margin-right: 10px;
+  }
 
-    .primeObjectRightAnswer {
-        margin-left: 0px;
-    }
+  .primeObjectRightAnswer {
+    margin-left: 0px;
+  }
 }

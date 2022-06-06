@@ -25,8 +25,8 @@ import FileTxt from "@spectrum-icons/workflow/FileTxt";
 import Visibility from "@spectrum-icons/workflow/Visibility";
 import UserGroup from "@spectrum-icons/workflow/UserGroup";
 import Clock from "@spectrum-icons/workflow/Clock";
-import { getALMObject } from "../../../utils/global";
-import { useState } from "react";
+import { getALMConfig, getALMObject } from "../../../utils/global";
+import { useRef, useState, useEffect } from "react";
 import { useIntl } from "react-intl";
 import { useBoardOptions } from "../../../hooks/community";
 import { PrimeCommunityObjectBody } from "../PrimeCommunityObjectBody";
@@ -34,6 +34,7 @@ import styles from "./PrimeCommunityBoard.module.css";
 import { AlertType } from "../../../common/Alert/AlertDialog";
 import { useAlert } from "../../../common/Alert/useAlert";
 import { useConfirmationAlert } from "../../../common/Alert/useConfirmationAlert";
+import { BOARD, HIGH, NORMAL, PRIVATE, PUBLIC } from "../../../utils/constants";
 
 const PrimeCommunityBoard = (props: any) => {
   const { formatMessage } = useIntl();
@@ -44,9 +45,23 @@ const PrimeCommunityBoard = (props: any) => {
   const { reportBoard } = useBoardOptions();
   const [almAlert] = useAlert();
   const [almConfirmationAlert] = useConfirmationAlert();
+  const config = getALMConfig();
+  const ref = useRef<any>();
 
   const boardSkills = board.skills?.map((skill: any, index: any) => {
     return (index ? ", " : "") + skill.name;
+  });
+
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        hideTooltip();
+      }
+    };
+    document.addEventListener("click", handleClickOutside, true);
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
   });
 
   const toggleBoardOptionsHandler = () => {
@@ -95,12 +110,31 @@ const PrimeCommunityBoard = (props: any) => {
     await reportBoard(board.id);
   };
 
+  const getTooltipElement = () => {
+    return document.getElementById(board.id + "-tooltipText");
+  };
+
+  const showTooltip = () => {
+    let element = getTooltipElement();
+    element?.setAttribute("style", "display:block;");
+  };
+
+  const hideTooltip = () => {
+    let element = getTooltipElement();
+    element?.setAttribute("style", "display:none;");
+  };
+
   return (
     <>
       <div className={styles.primeBoardWrapper}>
-        <div className={styles.primeBoardItem}>
+        <div
+          className={
+            props.showBorder
+              ? styles.primeBoardItemWithBorder
+              : styles.primeBoardItem
+          }
+        >
           <div className="prime-title-skills-container">
-            {/* <span id="sr-only">${i18n(state.locale).BOARD}</span> */}
             <button
               className={styles.primeBoardOptions}
               onClick={toggleBoardOptionsHandler}
@@ -116,10 +150,13 @@ const PrimeCommunityBoard = (props: any) => {
                 ></PrimeCommunityBoardOptions>
               )}
             </button>
-            <div className={styles.primeBoardName} role="link" tabIndex={0}>
+            <div className={styles.primeBoardName}>
               <span
                 className={styles.primeBoardNameSpan}
                 onClick={boardNameClickHandler}
+                onKeyDown={boardNameClickHandler}
+                role="button"
+                tabIndex={0}
               >
                 {board.name}
               </span>
@@ -137,12 +174,12 @@ const PrimeCommunityBoard = (props: any) => {
               <div
                 className={styles.primeBoardIcon}
                 title={
-                  board.visibility === "PUBLIC"
+                  board.visibility === PUBLIC
                     ? formatMessage({
                         id: "alm.community.board.public",
                         defaultMessage: "Public Board",
                       })
-                    : board.visibility === "PRIVATE"
+                    : board.visibility === PRIVATE
                     ? formatMessage({
                         id: "alm.community.board.private",
                         defaultMessage: "Private Board",
@@ -153,9 +190,9 @@ const PrimeCommunityBoard = (props: any) => {
                       })
                 }
               >
-                {board.visibility === "PUBLIC" ? (
+                {board.visibility === PUBLIC ? (
                   <GlobeOutline />
-                ) : board.visibility === "PRIVATE" ? (
+                ) : board.visibility === PRIVATE ? (
                   <LockClosed />
                 ) : (
                   <LockOpen />
@@ -165,24 +202,24 @@ const PrimeCommunityBoard = (props: any) => {
           </div>
           <PrimeCommunityObjectBody
             object={board}
-            type="board"
+            type={BOARD}
           ></PrimeCommunityObjectBody>
           <div className={styles.primeBoardActivityPanel}>
             <div className={styles.primeBoardActivityStats}>
               <div className={styles.primeActivityStatsIcon}>
-                {board.visibility === "HIGH"
+                {board.activityLevel === HIGH
                   ? SOCIAL_ACTIVITY_INDEX_HIGH_SVG()
-                  : board.visibility === "NORMAL"
+                  : board.activityLevel === NORMAL
                   ? SOCIAL_ACTIVITY_INDEX_MEDIUM_SVG()
                   : SOCIAL_ACTIVITY_INDEX_LOW_SVG()}
               </div>
               <span className={styles.primeActivityStatsText}>
-                {board.visibility === "HIGH"
+                {board.activityLevel === HIGH
                   ? formatMessage({
                       id: "alm.community.board.highActivity",
                       defaultMessage: "High Activity",
                     })
-                  : board.visibility === "NORMAL"
+                  : board.activityLevel === NORMAL
                   ? formatMessage({
                       id: "alm.community.board.normalActivity",
                       defaultMessage: "Normal Activity",
@@ -202,8 +239,20 @@ const PrimeCommunityBoard = (props: any) => {
                   defaultMessage:
                     "Calculated daily based on the number of new posts, comments, participants, views, likes and dislikes",
                 })}
+                onTouchStart={showTooltip}
+                ref={ref}
               >
-                {<Info />}
+                <Info />
+                <span
+                  id={board.id + "-tooltipText"}
+                  className={styles.tooltipText}
+                >
+                  {formatMessage({
+                    id: "alm.community.board.activityCalc",
+                    defaultMessage:
+                      "Calculated daily based on the number of new posts, comments, participants, views, likes and dislikes",
+                  })}
+                </span>
               </div>
             </div>
             <div className={styles.primeVerticalSeperator}></div>
@@ -249,7 +298,7 @@ const PrimeCommunityBoard = (props: any) => {
                   id: "alm.community.board.createdOn.label",
                   defaultMessage: "Created on ",
                 })}
-                {formatDate(board.dateCreated)}
+                {formatDate(board.dateCreated, config.locale)}
                 {formatMessage({
                   id: "alm.community.board.by.label",
                   defaultMessage: " by ",

@@ -18,6 +18,8 @@ import { PrimeCommunityObjectOptions } from "../PrimeCommunityObjectOptions";
 import { PrimeCommunityAddPostDialogTrigger } from "../PrimeCommunityAddPostDialogTrigger";
 import { useConfirmationAlert } from "../../../common/Alert/useConfirmationAlert";
 import { useIntl } from "react-intl";
+import { COMMENT, DELETE, POST, REPLY, UPDATE } from "../../../utils/constants";
+import { getALMConfig } from "../../../utils/global";
 
 const PrimeCommunityObjectHeader = (props: any) => {
   const { formatMessage } = useIntl();
@@ -34,6 +36,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
   } = useCommunityObjectOptions();
   const [showUpdatePostModal, setShowUpdatePostModal] = useState(false);
   const [almConfirmationAlert] = useConfirmationAlert();
+  const config = getALMConfig();
 
   const optionsClickHandler = () => {
     toggleOptions();
@@ -45,17 +48,17 @@ const PrimeCommunityObjectHeader = (props: any) => {
 
   const getDeleteConfirmationString = () => {
     switch (props.type) {
-      case "post":
+      case POST:
         return formatMessage({
           id: "alm.community.post.deleteConfirmation",
           defaultMessage: "Are you sure you want to delete this post?",
         });
-      case "comment":
+      case COMMENT:
         return formatMessage({
           id: "alm.community.comment.deleteConfirmation",
           defaultMessage: "Are you sure you want to delete this comment?",
         });
-      case "reply":
+      case REPLY:
         return formatMessage({
           id: "alm.community.reply.deleteConfirmation",
           defaultMessage: "Are you sure you want to delete this reply?",
@@ -67,22 +70,22 @@ const PrimeCommunityObjectHeader = (props: any) => {
   };
 
   const deleteHandler = () => {
-    showConfirmationDialog(getDeleteConfirmationString(), "delete");
+    showConfirmationDialog(getDeleteConfirmationString(), DELETE);
   };
 
   const getReportConfirmationString = () => {
     switch (props.type) {
-      case "post":
+      case POST:
         return formatMessage({
           id: "alm.community.post.reportConfirmation",
           defaultMessage: "Are you sure you want to report this post?",
         });
-      case "comment":
+      case COMMENT:
         return formatMessage({
           id: "alm.community.comment.reportConfirmation",
           defaultMessage: "Are you sure you want to report this comment?",
         });
-      case "reply":
+      case REPLY:
         return formatMessage({
           id: "alm.community.reply.reportConfirmation",
           defaultMessage: "Are you sure you want to report this reply?",
@@ -93,7 +96,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
     }
   };
   const reportAbuseHandler = () => {
-    showConfirmationDialog(getReportConfirmationString(), "report");
+    showConfirmationDialog(getReportConfirmationString());
   };
 
   const deletePost = async () => {
@@ -128,7 +131,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
 
   const showConfirmationDialog = (
     confirmationMessage: String,
-    primaryAction: String
+    primaryAction?: String
   ) => {
     almConfirmationAlert(
       formatMessage({
@@ -144,15 +147,15 @@ const PrimeCommunityObjectHeader = (props: any) => {
         id: "alm.community.cancel.label",
         defaultMessage: "Cancel",
       }),
-      props.type === "comment"
-        ? primaryAction === "delete"
+      props.type === COMMENT
+        ? primaryAction === DELETE
           ? deleteComment
           : reportComment
-        : props.type === "reply"
-        ? primaryAction === "delete"
+        : props.type === REPLY
+        ? primaryAction === DELETE
           ? deleteReply
           : reportReply
-        : primaryAction === "delete"
+        : primaryAction === DELETE
         ? deletePost
         : reportPost
     );
@@ -160,7 +163,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
 
   const editHandler = () => {
     switch (props.type) {
-      case "post":
+      case POST:
         setShowUpdatePostModal(true);
         break;
       default:
@@ -212,7 +215,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
         </span>
         <span className={styles.primePostDateSeperator}></span>
         <span className={styles.primePostDateCreated}>
-          {formatDate(object.dateCreated)}
+          {formatDate(object.dateCreated, config.locale)}
         </span>
         <button
           className={styles.primeCommunityOptionsIcon}
@@ -238,7 +241,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
             className={styles.primeAddPostButton}
             openDialog={true}
             post={object}
-            mode="update"
+            mode={UPDATE}
             savePostHandler={(
               input: any,
               postingType: any,
