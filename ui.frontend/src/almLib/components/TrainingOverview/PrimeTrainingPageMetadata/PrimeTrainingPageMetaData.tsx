@@ -253,8 +253,8 @@ const PrimeTrainingPageMetaData: React.FC<{
       if (isPrimeUserLoggedIn) {
         if (error && error.length) {
           let errorKey = "alm.addToCart.general.error";
-          error?.forEach((item: string) => {
-            if (item?.includes("exceeds the maximum qty allowed")) {
+          error?.forEach((item: any) => {
+            if (item && item.message && item.message?.includes("exceeds the maximum qty allowed")) {
               errorKey = "alm.overview.added.to.cart.error";
             }
           });
