@@ -90,6 +90,7 @@
   "alm.overview.button.pendingApproval": "Pending",
   "alm.overview.manager.approval.pending": "Manager approval pending",
   "alm.overview.button.pendingAcceptance": "Awaiting Acceptance",
+  "alm.overview.button.waiting": "Waitlisted",
   "alm.overview.text.or": "OR",
   "alm.overview.button.preview": "Preview",
   "alm.overview.unenroll.confirmationInfo": "Unenrolling will delete all your progress data and personal information like Notes and Quiz Score (if any). <br><br> Are you sure you want to continue ?",
@@ -208,6 +209,6 @@
   "alm.training.overview.enrollmentDeadline.passed": "Enrollment deadline has passed",
   "alm.community.board.confirmationRequired": "Confirmation Required",
   "alm.community.board.reportBoardMessage": "Are you sure you want to report this board? A notification will be sent to the board administrator and moderators.",
-  "alm.overview.added.to.cart.error":"Item already added to cart",
+  "alm.overview.added.to.cart.error": "Item already added to cart",
   "alm.community.loadMore": "Load more"
 }

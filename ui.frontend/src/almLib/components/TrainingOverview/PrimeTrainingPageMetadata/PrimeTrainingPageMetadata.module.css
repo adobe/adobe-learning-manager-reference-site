@@ -91,10 +91,12 @@ governing permissions and limitations under the License.
   width: 100%;
   border-bottom: 1px solid var(--prime-color-nc5);
 }
-.icon , .altLangIcon{
+.icon,
+.altLangIcon {
   margin-right: 10px;
 }
-.icon svg, .altLangIcon svg{
+.icon svg,
+.altLangIcon svg {
   fill: var(--prime-icon-color);
   width: 25px;
   height: 25px;
@@ -130,6 +132,7 @@ governing permissions and limitations under the License.
   -webkit-box-orient: vertical;
   overflow: hidden;
   padding-bottom: 5px;
+  padding-top: 5px;
 }
 
 .errorText {
