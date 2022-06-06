@@ -26,14 +26,6 @@ const PrimeNotificationsList = (props: any) => {
   });
   return (
     <div>
-      {/* <div className={styles.unreadCountItem}>
-          <div className={styles.unreadCountText}>
-            {unreadCount} New
-          </div>
-          <div className={styles.unreadCountNotificationText}>
-            Notifications
-          </div>
-      </div> */}
       <div className={styles.notificationListBox} id="notifications">
         <ul className={styles.notificationList}>
           {notifications?.map((entry: any) => (

@@ -55,18 +55,17 @@ const PrimeNotificationContainer = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     fetchNotifications,
-    // markReadNotification,
     pollUnreadNotificationCount,
     showNotifications,
   ]);
 
   if (isLoading) {
-    return <span></span>;
+    return <></>;
   }
 
   const handleClickOutside = (event: any) => {
-    let t = wrapperRef.current;
-    if (t && !t.contains(event.target)) {
+    let element = wrapperRef.current;
+    if (element && !element.contains(event.target)) {
       setShowNotifications(false);
     }
   };
