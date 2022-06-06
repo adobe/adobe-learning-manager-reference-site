@@ -16,7 +16,7 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { getALMConfig, getCommerceToken } from "../utils/global";
+import { getALMConfig, getCommerceToken, getCommerceStoreName } from "../utils/global";
 
 const uri = getALMConfig().graphqlProxyPath || getALMConfig().commerceURL;
 const httpLink = createHttpLink({
@@ -25,10 +25,13 @@ const httpLink = createHttpLink({
 
 const authLink = setContext((_, { headers }) => {
   const signInToken = getCommerceToken();
+  const store = getCommerceStoreName() || "default";
+
   return {
     headers: {
       ...headers,
       authorization: signInToken ? `Bearer ${signInToken}` : "",
+      store
     },
   };
 });

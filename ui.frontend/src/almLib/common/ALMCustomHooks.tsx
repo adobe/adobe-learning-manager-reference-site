@@ -136,7 +136,7 @@ class ALMCustomHooks implements ICustomHooks {
           url: `${config.primeApiURL}ecommerce/maxPrice?filter.loTypes=course%2ClearningProgram%2Ccertification`,
         });
         const parsedResponse: MaxPrice = JSON.parse(response as string);
-        maxPrice = Math.max(...Object.values(parsedResponse));
+        maxPrice = Math.ceil(Math.max(...Object.values(parsedResponse)));
       } catch (e) {
         console.error(e);
       }

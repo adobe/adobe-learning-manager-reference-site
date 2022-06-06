@@ -42,7 +42,7 @@
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="learning/components/text"
-                            text="&lt;p>&lt;span class=&quot;heading&quot;>If you need support, we are here for you.&lt;/span>&lt;br>&#xa;Advice can come from many different places and the guidance provided can have a tremendous impact on your life, especially if you have an open mind. Join our community.&lt;/p>"
+                            text="&lt;p>&lt;span class=&quot;heading&quot;>If you need support, we are here for you!&lt;/span>&lt;br>&#xa;Just let us know what issue you’re facing and we’ll get back to you at the earliest possible so that you can achieve your learning goals seamlessly.&lt;/p>"
                             textIsRich="true"/>
                     </container>
                     <support-container
@@ -60,7 +60,7 @@
                             jcr:lastModified="{Date}2022-03-18T19:45:30.543+05:30"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            jcr:title="Enter Product name"
+                            jcr:title="Product name"
                             sling:resourceType="learning/components/form/text"
                             helpMessage="Product Name"
                             name="product"
@@ -73,9 +73,9 @@
                             jcr:lastModified="{Date}2022-03-18T19:48:44.258+05:30"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            jcr:title="Hello, please provide your problems in detail. Our executive will contact you shortly."
+                            jcr:title="Message"
                             sling:resourceType="learning/components/form/text"
-                            helpMessage="Hello, I need help with purchasing the training…"
+                            helpMessage="Describe your issue"
                             name="description"
                             rows="6"
                             type="textarea"

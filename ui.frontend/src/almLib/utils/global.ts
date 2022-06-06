@@ -34,6 +34,7 @@ export interface PrimeConfig {
   graphqlProxyPath: string;
   usageType: "aem-sites" | "aem-es" | "aem-commerce";
   accountData: string;
+  commerceStoreName: string;
   mountingPoints: {
     [key: string]: string;
   };
@@ -215,3 +216,7 @@ export const getItemFromStorage = (key: string) => {
 export const setItemToStorage = (key: string, data: any, ttl = 10800) => {
   return getALMObject().storage.setItem(key, data, ttl);
 };
+
+export const getCommerceStoreName = () => {
+  return getALMConfig().commerceStoreName;
+}
