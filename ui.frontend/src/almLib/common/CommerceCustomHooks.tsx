@@ -388,7 +388,7 @@ export default class CommerceCustomHooks implements ICustomHooks {
           response.data?.products?.items[0]?.price_range?.maximum_price
             ?.regular_price?.value || 0;
         if (defaultFiltersState.price.list) {
-          defaultFiltersState.price.maxPrice = maxPrice;
+          defaultFiltersState.price.maxPrice = Math.ceil(maxPrice);
         }
         return defaultFiltersState;
       }
