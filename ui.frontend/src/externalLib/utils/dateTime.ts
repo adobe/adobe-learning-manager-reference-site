@@ -139,12 +139,3 @@ export function GetFormattedDate(dateStr: string, getUserLocale: string) {
   }
   return `${month} ${day}, ${year}`;
 }
-
-//inputFormat => 2022-02-13T14:00:39.000Z, outputFormat => Feb 13, 2022
-export function formatDate(dateString: any, locale: string) {
-  const options = { year: "numeric", month: "short", day: "2-digit" } as const;
-  const value = new Date(dateString)
-    .toLocaleDateString(locale, options)
-    .split(" ");
-  return value[1] + " " + value[0] + ", " + value[2]; // MMM DD, YYYY
-}

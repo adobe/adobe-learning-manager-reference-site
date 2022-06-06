@@ -16,7 +16,7 @@ import {
   SOCIAL_ACTIVITY_INDEX_LOW_SVG,
 } from "../../../utils/inline_svg";
 import { PrimeCommunityBoardOptions } from "../PrimeCommunityBoardOptions";
-import { formatDate } from "../../../utils/dateTime";
+import { GetFormattedDate } from "../../../utils/dateTime";
 import GlobeOutline from "@spectrum-icons/workflow/GlobeOutline";
 import LockOpen from "@spectrum-icons/workflow/LockOpen";
 import LockClosed from "@spectrum-icons/workflow/LockClosed";
@@ -256,7 +256,7 @@ const PrimeCommunityBoard = (props: any) => {
                   id: "alm.community.board.createdOn.label",
                   defaultMessage: "Created on ",
                 })}
-                {formatDate(board.dateCreated, config.locale)}
+                {GetFormattedDate(board.dateCreated, config.locale)}
                 {formatMessage({
                   id: "alm.community.board.by.label",
                   defaultMessage: " by ",
