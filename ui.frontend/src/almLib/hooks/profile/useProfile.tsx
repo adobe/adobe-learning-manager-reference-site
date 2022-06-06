@@ -57,7 +57,6 @@ export const useProfile = () => {
         setUserFieldData(userFields);
         setErrorCode("");
       } catch (error: any) {
-        // setErrorMessage("Error fetching profile details");
         setErrorCode(error.status);
         console.error("Error fetching profile details : ", error);
       }

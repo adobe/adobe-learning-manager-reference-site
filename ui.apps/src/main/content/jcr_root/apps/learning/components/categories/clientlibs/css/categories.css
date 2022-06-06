@@ -19,6 +19,10 @@ governing permissions and limitations under the License.
     position: relative;
 }
 
+#home-categories-container #categories-headline {
+  margin-top: 30px;
+}
+
 #categories-headline.cmp-text {
     text-align: center;
     font: normal normal bold 27px/42px Source Sans Pro;

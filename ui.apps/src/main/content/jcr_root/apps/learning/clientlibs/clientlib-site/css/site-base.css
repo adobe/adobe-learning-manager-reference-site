@@ -318,17 +318,31 @@ governing permissions and limitations under the License.
 /* css for support page */
 #alm-support-container
 {
-  width: 715px;
+  width: 660px;
   margin: 0 auto;
   min-height: 500px;
   font: normal normal normal 19px/32px Source Sans Pro;
   color: #000000;
 }
 
+#alm-support-container .text {
+  margin-top: 30px;
+}
+
+#alm-support-container .text {
+  margin-top: 10px;
+}
+
 #alm-support-container textarea
 {
   width:100%;
-  margin-top: 15px;
+  margin-top: 8px;
+  resize: none;
+  font: italic normal normal 14px/17px Source Sans Pro;
+  color: #222222;
+  padding-left: 12px;
+  padding-top: 6px;
+  height: 100px;
 }
 
 #alm-support-container #support-send-btn
@@ -340,6 +354,7 @@ governing permissions and limitations under the License.
   border-radius: 22px;
   border: 0;
   text-transform: none;
+  margin-top: 30px;
 }
 
 #alm-support-container #support-send-btn .cmp-button__text
@@ -364,9 +379,13 @@ governing permissions and limitations under the License.
 
 #alm-support-header .heading
 {
-  font-weight: bold;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
   display: inline-block;
+  font: normal normal bold 21px/26px Source Sans Pro;
+}
+
+#alm-support-header .cmp-text {
+  margin-top: 15px;
 }
 
 @media screen and (min-width: 1024px) {
@@ -493,7 +512,8 @@ governing permissions and limitations under the License.
 #learning-parent-container {
   max-width: var(--prime-container-max-width-desktop);
   width: var(--prime-container-width);
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #alm-support-header .text
@@ -513,6 +533,7 @@ governing permissions and limitations under the License.
     max-width: var(--prime-container-max-width-tablet);
     width: var(--prime-container-width);
     padding: 0;
+    margin-top: 20px;
   }
 
   #alm-support-header .text
@@ -551,7 +572,9 @@ governing permissions and limitations under the License.
   {
     max-width: 100%;
     width: 100%;
-    padding: 0;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 10px;
   }
 
   #tmplt-carousel .cmp-teaser .cmp-teaser__content
