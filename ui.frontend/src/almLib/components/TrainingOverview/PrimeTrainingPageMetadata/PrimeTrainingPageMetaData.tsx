@@ -133,6 +133,8 @@ const PrimeTrainingPageMetaData: React.FC<{
         return "pendingApproval";
       } else if (enrollment.state === PENDING_ACCEPTANCE) {
         return "pendingAcceptance";
+      } else if (enrollment.state === WAITING) {
+        return "waiting";
       } else if (enrollment.progressPercent === 0) {
         return "start";
       } else if (enrollment.progressPercent === 100) {
@@ -642,6 +644,19 @@ const PrimeTrainingPageMetaData: React.FC<{
             </Button>
 
             {seatsAvailableText}
+          </>
+        )}
+        {action === "waiting" && (
+          <>
+            <Button
+              variant="secondary"
+              UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
+              isDisabled={true}
+            >
+              {actionText}
+            </Button>
+
+            {waitListText}
           </>
         )}
       </div>

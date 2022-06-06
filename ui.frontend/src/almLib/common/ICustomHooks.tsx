@@ -9,6 +9,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
+import { JsonApiResponse, PrimeLearningObject } from "../models";
 import { CatalogFilterState } from "../store/reducers/catalog";
 import { QueryParams } from "../utils/restAdapter";
 
@@ -17,15 +18,29 @@ export default interface ICustomHooks {
     filterState: CatalogFilterState,
     sort: string,
     searchText: string
-  ): void;
+  ): Promise<{ trainings: PrimeLearningObject[]; next: any } | undefined>;
   loadMoreTrainings(
     filterState: CatalogFilterState,
     sort: string,
     searchText: string,
     url: string
-  ): void;
-  loadMore(url: string): void;
-  getTraining(id: string, params: QueryParams): void;
-
+  ): Promise<
+    | {
+        learningObjectList: PrimeLearningObject[];
+        links: { next: any };
+      }
+    | undefined
+  >;
+  loadMore(url: string): Promise<JsonApiResponse | undefined>;
+  getTraining(id: string, params: QueryParams): Promise<PrimeLearningObject>;
+  getTrainingInstanceSummary(
+    trainingId: string,
+    instanceId: string
+  ): Promise<JsonApiResponse | null>;
   getFilters(): void;
+  enrollToTraining(params: QueryParams): Promise<JsonApiResponse | undefined>;
+  unenrollFromTraining(enrollmentId: string): Promise<unknown | null>;
+  addProductToCart(
+    sku: string
+  ): Promise<{ items: any; totalQuantity: Number; error: any }>;
 }

@@ -12,10 +12,20 @@ governing permissions and limitations under the License.
 import { CatalogFilterState } from "../store/reducers/catalog";
 import { getRequestObjectForESApi } from "../utils/catalog";
 import { getDefaultFiltersState, updateFilterList } from "../utils/filters";
-import { getALMConfig, getQueryParamsFromUrl } from "../utils/global";
-import { JsonApiParse, parseESResponse } from "../utils/jsonAPIAdapter";
+import {
+  getALMConfig,
+  getQueryParamsFromUrl,
+  isUserLoggedIn,
+  redirectToLoginAndAbort,
+} from "../utils/global";
+import { parseESResponse } from "../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
-import { DEFAULT_PAGE_LIMIT } from "./ALMCustomHooks";
+import AkamaiCustomHooksInstance from "./AkamaiCustomHooks";
+import {
+  default as ALMCustomHooksInstance,
+  DEFAULT_PAGE_LIMIT,
+} from "./ALMCustomHooks";
+import APIServiceInstance from "./APIService";
 import ICustomHooks from "./ICustomHooks";
 
 interface ISortMap {
@@ -30,7 +40,7 @@ const sortMap: any = {
 const headers = {
   "Content-Type": "application/json",
 };
-export default class ESCustomHooks implements ICustomHooks {
+class ESCustomHooks implements ICustomHooks {
   almConfig = getALMConfig();
   primeCdnTrainingBaseEndpoint = this.almConfig.primeCdnTrainingBaseEndpoint;
   esBaseUrl = this.almConfig.esBaseUrl;
@@ -40,6 +50,9 @@ export default class ESCustomHooks implements ICustomHooks {
     sort: string,
     searchText: string = ""
   ) {
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.getTrainings(filterState, sort, searchText);
+    }
     const requestObject = getRequestObjectForESApi(
       filterState,
       sortMap[sort as keyof ISortMap],
@@ -65,6 +78,14 @@ export default class ESCustomHooks implements ICustomHooks {
     searchText: string = "",
     url: string
   ) {
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.loadMoreTrainings(
+        filterState,
+        sort,
+        searchText,
+        url
+      );
+    }
     const requestObject = getRequestObjectForESApi(
       filterState,
       sortMap[sort as keyof ISortMap],
@@ -87,26 +108,47 @@ export default class ESCustomHooks implements ICustomHooks {
     };
   }
   async loadMore(url: string) {
-    return null;
+    if (redirectToLoginAndAbort()) {
+      return;
+    }
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.loadMore(url);
+    }
   }
-  async getTraining(id: string) {
-    const loPath = id.replace(":", "/");
-    const response = await RestAdapter.get({
-      url: `${this.almCdnBaseUrl}/${loPath}.json`,
-    });
-    return JsonApiParse(response).learningObject;
+
+  async getTraining(id: string, params: QueryParams = {} as QueryParams) {
+    return AkamaiCustomHooksInstance.getTraining(id, params);
   }
   async getTrainingInstanceSummary(trainingId: string, instanceId: string) {
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.getTrainingInstanceSummary(
+        trainingId,
+        instanceId
+      );
+    }
     return null;
   }
   async enrollToTraining(params: QueryParams = {}) {
-    return null;
+    if (redirectToLoginAndAbort()) {
+      return;
+    }
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.enrollToTraining(params);
+    }
   }
-  async unenrollFromTraining(params: QueryParams = {}) {
-    return null;
+  async unenrollFromTraining(enrollmentId: string) {
+    if (redirectToLoginAndAbort()) {
+      return;
+    }
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.unenrollFromTraining(enrollmentId);
+    }
   }
 
   async getFilters() {
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.getFilters();
+    }
     const queryParams = getQueryParamsFromUrl();
     const esBaseUrl = getALMConfig().esBaseUrl;
     const response = await RestAdapter.get({
@@ -155,4 +197,13 @@ export default class ESCustomHooks implements ICustomHooks {
       };
     }
   }
+  async addProductToCart(sku: string) {
+    const defaultCartValues = { items: [], totalQuantity: 0, error: null };
+    return { ...defaultCartValues, error: true };
+  }
 }
+
+const ESCustomHooksInstance = new ESCustomHooks();
+
+APIServiceInstance.registerServiceInstance("aem-es", ESCustomHooksInstance);
+export default ESCustomHooksInstance;

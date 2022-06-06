@@ -27,11 +27,18 @@ import {
   getALMConfig,
   getItemFromStorage,
   getQueryParamsFromUrl,
+  isUserLoggedIn,
+  redirectToLoginAndAbort,
   setItemToStorage,
 } from "../utils/global";
-import { JsonApiParse, parseCommerceResponse } from "../utils/jsonAPIAdapter";
-import { QueryParams, RestAdapter } from "../utils/restAdapter";
-import { DEFAULT_PAGE_LIMIT } from "./ALMCustomHooks";
+import { parseCommerceResponse } from "../utils/jsonAPIAdapter";
+import { QueryParams } from "../utils/restAdapter";
+import AkamaiCustomHooksInstance from "./AkamaiCustomHooks";
+import {
+  default as ALMCustomHooksInstance,
+  DEFAULT_PAGE_LIMIT,
+} from "./ALMCustomHooks";
+import APIServiceInstance from "./APIService";
 import ICustomHooks from "./ICustomHooks";
 
 const CART_ID = "CART_ID";
@@ -70,8 +77,8 @@ const transformFilters = (
   item: FilterItem,
   filterType: string
 ) => {
-  let defaultFilters =
-    defaultFiltersState[filterType as keyof FilterState].list!;
+  let defaultFilters = defaultFiltersState[filterType as keyof FilterState]
+    .list!;
   item.attribute_options.forEach((attributeOption) => {
     const { label } = attributeOption;
     const index = defaultFilters?.findIndex((type) => type.value === label);
@@ -196,7 +203,7 @@ const getOrUpdateFilters = async () => {
   }
 };
 
-export default class CommerceCustomHooks implements ICustomHooks {
+class CommerceCustomHooks implements ICustomHooks {
   almConfig = getALMConfig();
   primeCdnTrainingBaseEndpoint = this.almConfig.primeCdnTrainingBaseEndpoint;
   esBaseUrl = this.almConfig.esBaseUrl;
@@ -233,7 +240,6 @@ export default class CommerceCustomHooks implements ICustomHooks {
       };
     } catch (error) {
       console.log(error);
-      return { error };
     }
   }
 
@@ -243,6 +249,14 @@ export default class CommerceCustomHooks implements ICustomHooks {
     search: string = "",
     currentPage: string
   ) {
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.loadMoreTrainings(
+        filterState,
+        sort,
+        search,
+        currentPage
+      );
+    }
     try {
       const filter = await getTransformedFilter(filterState);
 
@@ -274,30 +288,52 @@ export default class CommerceCustomHooks implements ICustomHooks {
       };
     } catch (error) {
       console.log(error);
-      return { error };
     }
   }
   async loadMore(url: string) {
-    return null;
+    if (redirectToLoginAndAbort()) {
+      return;
+    }
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.loadMore(url);
+    }
   }
-  async getTraining(id: string) {
-    const loPath = id.replace(":", "/");
-    const response = await RestAdapter.get({
-      url: `${this.almCdnBaseUrl}/${loPath}/.json`,
-    });
-    return JsonApiParse(response).learningObject;
+
+  async getTraining(id: string, params: QueryParams = {} as QueryParams) {
+    return AkamaiCustomHooksInstance.getTraining(id, params);
   }
+
   async getTrainingInstanceSummary(trainingId: string, instanceId: string) {
-    return null;
-  }
-  async enrollToTraining(params: QueryParams = {}) {
-    return null;
-  }
-  async unenrollFromTraining(params: QueryParams = {}) {
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.getTrainingInstanceSummary(
+        trainingId,
+        instanceId
+      );
+    }
     return null;
   }
 
+  async enrollToTraining(params: QueryParams = {}) {
+    if (redirectToLoginAndAbort()) {
+      return;
+    }
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.enrollToTraining(params);
+    }
+  }
+  async unenrollFromTraining(enrollmentId: string) {
+    if (redirectToLoginAndAbort()) {
+      return;
+    }
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.unenrollFromTraining(enrollmentId);
+    }
+  }
+
   async getFilters() {
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.getFilters();
+    }
     const queryParams = getQueryParamsFromUrl();
 
     try {
@@ -398,6 +434,10 @@ export default class CommerceCustomHooks implements ICustomHooks {
   }
 
   async addProductToCart(sku: string) {
+    const defaultCartValues = { items: [], totalQuantity: 0, error: null };
+    if (redirectToLoginAndAbort()) {
+      return { ...defaultCartValues, error: true };
+    }
     try {
       sku = sku.replace("_", ":"); // Magento SKU has a colon; Public API training instance id is of the format course:1234_12345
       const cartId = getItemFromStorage(CART_ID);
@@ -429,3 +469,11 @@ export default class CommerceCustomHooks implements ICustomHooks {
     }
   }
 }
+
+const CommerceCustomHooksInstance = new CommerceCustomHooks();
+
+APIServiceInstance.registerServiceInstance(
+  "aem-commerce",
+  CommerceCustomHooksInstance
+);
+export default CommerceCustomHooksInstance;
