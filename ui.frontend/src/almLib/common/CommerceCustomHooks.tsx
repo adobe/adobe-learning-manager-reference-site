@@ -214,6 +214,9 @@ class CommerceCustomHooks implements ICustomHooks {
     sort: string,
     search: string = ""
   ) {
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.getTrainings(filterState, sort, search);
+    }
     try {
       const filter = await getTransformedFilter(filterState);
       const response = await apolloClient.query({
