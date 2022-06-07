@@ -14,15 +14,6 @@ governing permissions and limitations under the License.
   background: #F7F7F7 0% 0% no-repeat padding-box;
 }
 
-#home-categories-container {
-    margin-top: -10px;
-    position: relative;
-}
-
-#home-categories-container #categories-headline {
-  margin-top: 30px;
-}
-
 #categories-headline.cmp-text {
     text-align: center;
     font: normal normal bold 27px/42px Source Sans Pro;

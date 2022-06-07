@@ -1,0 +1,138 @@
+/*
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+
+#alm-support-container
+{
+  width: 660px;
+  margin: 0 auto;
+  min-height: 500px;
+  font: normal normal normal 19px/32px Source Sans Pro;
+  color: #000000;
+}
+
+#alm-support-container .text {
+  margin-top: 30px;
+}
+
+#alm-support-container .text {
+  margin-top: 10px;
+}
+
+#alm-support-container textarea
+{
+  width:100%;
+  margin-top: 8px;
+  resize: none;
+  font: italic normal normal 14px/17px Source Sans Pro;
+  color: #222222;
+  padding-left: 12px;
+  padding-top: 6px;
+  height: 100px;
+}
+
+#alm-support-container #support-send-btn
+{
+  margin-left: auto;
+  width: 84px;
+  height: 36px;
+  background: #717171 0% 0% no-repeat padding-box;
+  border-radius: 22px;
+  border: 0;
+  text-transform: none;
+  margin-top: 30px;
+}
+
+#alm-support-container #support-send-btn .cmp-button__text
+{
+  font: normal normal normal 16px/20px Source Sans Pro;
+  letter-spacing: 0px;
+  color: #FFFFFF;
+  text-transform: none;
+  float: none;
+  padding: 0
+}
+
+
+#alm-support-header
+{
+  background: #306EB5 0% 0% no-repeat padding-box;
+  height: 222px;
+  color: #FFFFFF;
+  font: normal normal normal 16px/26px Source Sans Pro;
+  margin-bottom: 40px;
+}
+
+#alm-support-header .heading
+{
+  margin-bottom: 8px;
+  display: inline-block;
+  font: normal normal bold 21px/26px Source Sans Pro;
+}
+
+#alm-support-header .cmp-text {
+  margin-top: 15px;
+}
+
+#alm-support-header .text
+{
+  max-width: var(--prime-container-max-width-desktop);
+  width: var(--prime-container-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 10px;
+}
+
+@media screen and (min-width: 1024px) {
+    #alm-support-header
+    {
+      height: 150px;
+    }
+  
+    #alm-support-header .text
+    {
+        width: 930px;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (min-width: 1366px) {
+    #alm-support-header .text
+    {
+        width: 1084px;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    #alm-support-header .text
+    {
+        max-width: var(--prime-container-max-width-tablet);
+        width: var(--prime-container-width);
+    }
+}
+
+@media screen and (max-width: 414px) {
+    #alm-support-container {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 10px 0 10px;
+    }
+
+    #alm-support-header .text
+    {
+        max-width: 100%;
+        width: 100%;
+        padding-left: 0px;
+        padding-right: 0px;
+        padding-top: 10px;
+    }
+}
