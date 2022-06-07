@@ -20,7 +20,7 @@ import { JOBAID } from "../../../utils/constants";
 import { modifyTimeDDMMYY } from "../../../utils/dateTime";
 import { getALMConfig } from "../../../utils/global";
 import { SEND_SVG, THREE_DOTS_MENU_SVG } from "../../../utils/inline_svg";
-import { getFormattedPrice } from "../../../utils/price";
+import { getFormattedPrice, isCommerceEnabled } from "../../../utils/price";
 import { GetTranslation } from "../../../utils/translationService";
 import styles from "./PrimeTrainingCard.module.css";
 
@@ -109,7 +109,7 @@ const PrimeTrainingCard: React.FC<{
   let priceLabel = "";
   const price = training.price;
 
-  if (price) {
+  if (price && isCommerceEnabled()) {
     priceLabel = getFormattedPrice(price);
   }
   const extraIconHtml = (

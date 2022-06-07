@@ -38,7 +38,6 @@ governing permissions and limitations under the License.
   color: var(--prime-color-white);
   line-height: 120%;
   vertical-align: bottom;
-  text-shadow: var(--prime-text-shadow);
   font-size: var(--prime-font-size-24);
   overflow: hidden;
   text-overflow: ellipsis;
