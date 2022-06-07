@@ -62,6 +62,7 @@ governing permissions and limitations under the License.
 
 .card.hover .showOnHover {
   display: block;
+  padding: 10px 10px 5px 10px;
 }
 
 .detailsContainer {
@@ -112,8 +113,8 @@ governing permissions and limitations under the License.
   margin: 8px 0;
   letter-spacing: 0px;
   opacity: 1;
-  font-size: var(--prime-font-size-18);
-  line-height: 24px;
+  font-size: var(--prime-font-size-14);
+  line-height: 18px;
   text-transform: capitalize;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -121,12 +122,12 @@ governing permissions and limitations under the License.
   overflow: hidden;
 }
 .trainingType {
-  font-size: var(--prime-font-size-10);
+  font-size: var(--prime-font-size-12);
   line-height: 13px;
   letter-spacing: 0px;
   opacity: 1;
   text-transform: capitalize;
-  margin-bottom: 20px;
+  margin-bottom: 35px;
 }
 .thumbnail {
   width: 100%;
@@ -136,7 +137,7 @@ governing permissions and limitations under the License.
   left: 0;
 }
 .lillsLabel {
-  font-size: var(--prime-font-size-10);
+  font-size: var(--prime-font-size-12);
   font-weight: bold;
   line-height: 11px;
   letter-spacing: 0px;
@@ -146,7 +147,7 @@ governing permissions and limitations under the License.
   content: ":";
 }
 .lillsValue {
-  font-size: var(--prime-font-size-10);
+  font-size: var(--prime-font-size-12);
   line-height: 11px;
   letter-spacing: 0px;
   color: var(--prime-color-black);
@@ -184,7 +185,7 @@ governing permissions and limitations under the License.
   width: 100%;
 }
 .extraLabel {
-  font-size: var(--prime-font-size-10);
+  font-size: var(--prime-font-size-12);
   font-weight: bold;
   letter-spacing: 0px;
   color: var(--prime-color-black);
@@ -220,7 +221,6 @@ governing permissions and limitations under the License.
 .descriptionContainer {
   flex-direction: column;
   justify-content: center;
-  padding: 10px;
   margin-left: -10px;
   margin-right: -10px;
   color: var(--prime-color-black);
@@ -241,7 +241,7 @@ governing permissions and limitations under the License.
 }
 
 .description {
-  font-size: var(--prime-font-size-10);
+  font-size: var(--prime-font-size-12);
   line-height: 13px;
   overflow: hidden;
   letter-spacing: 0px;
@@ -254,7 +254,7 @@ governing permissions and limitations under the License.
 }
 
 .skiillsLabel,.dueDateLabel {
-  font-size: var(--prime-font-size-10);
+  font-size: var(--prime-font-size-12);
   font-weight: bold;
   line-height: 11px;
   letter-spacing: 0px;
@@ -264,7 +264,7 @@ governing permissions and limitations under the License.
   content: ":";
 }
 .skillsValue {
-  font-size: var(--prime-font-size-10);
+  font-size: var(--prime-font-size-12);
   line-height: 11px;
   letter-spacing: 0px;
   color: var(--prime-color-black);
