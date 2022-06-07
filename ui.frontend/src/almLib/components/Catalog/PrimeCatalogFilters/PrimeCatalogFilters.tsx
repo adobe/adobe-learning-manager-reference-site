@@ -13,6 +13,7 @@ import { RangeSlider, NumberField } from "@adobe/react-spectrum";
 import { useEffect, useState } from "react";
 import { UpdateFiltersEvent } from "../../../utils/filters";
 import { getALMObject } from "../../../utils/global";
+import { isCommerceEnabled } from "../../../utils/price";
 import { GetTranslation } from "../../../utils/translationService";
 import { ALMLoader } from "../../Common/ALMLoader";
 import styles from "./PrimeCatalogFilters.module.css";
@@ -159,7 +160,7 @@ const PrimeCatalogFilters = (props: any) => {
         {/* learnerState Filter ends */}
 
         {/* Price Filter start */}
-        {catalogAttributes["price"] === "true" && price && price.maxPrice ? (
+        {isCommerceEnabled() && catalogAttributes["price"] === "true" && price && price.maxPrice ? (
           <div key={"price"} className={styles.container}>
             <h3 className={`${styles.typeLabel} ${styles.price}`}>
               {GetTranslation("alm.catalog.filter.price.label", true)}
