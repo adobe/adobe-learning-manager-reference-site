@@ -74,12 +74,16 @@ const PrimeTrainingCard: React.FC<{
     ""
   );
   const hasCompletedTrainingHtml = enrollment?.hasPassed ? (
-    <div className={styles.completed}>
-      {formatMessage({
-        id: "alm.catalog.card.complete.label",
-        defaultMessage: "Complete",
-      })}
-    </div>
+    type !== JOBAID ? (
+      <div className={styles.completed}>
+        {formatMessage({
+          id: "alm.catalog.card.complete.label",
+          defaultMessage: "Complete",
+        })}
+      </div>
+    ) : (
+      ""
+    )
   ) : (
     enrollmentHtml
   );
@@ -194,24 +198,26 @@ const PrimeTrainingCard: React.FC<{
                   ) : (
                     ""
                   )}
-                  <div className={styles.skillsContainer}>
-                    {enrollment && type !== JOBAID ? (
-                      <>
-                        {enrollmentHtml}
-                        <div className={styles.percentComplete}>
-                          {formatMessage(
-                            {
-                              id: "alm.catalog.card.progress.percent",
-                              defaultMessage: `${enrollment?.progressPercent}% completes`,
-                            },
-                            { "0": enrollment?.progressPercent }
-                          )}
-                        </div>
-                      </>
-                    ) : (
-                      ""
-                    )}
-                  </div>
+
+                  {enrollment && type !== JOBAID ? (
+                    <div
+                      className={styles.skillsContainer}
+                      style={{ marginBottom: 0 }}
+                    >
+                      {enrollmentHtml}
+                      <div className={styles.percentComplete}>
+                        {formatMessage(
+                          {
+                            id: "alm.catalog.card.progress.percent",
+                            defaultMessage: `${enrollment?.progressPercent}% completes`,
+                          },
+                          { "0": enrollment?.progressPercent }
+                        )}
+                      </div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
             </div>
