@@ -20,7 +20,7 @@ governing permissions and limitations under the License.
   align-items: center;
 }
 .label {
-  font-size: var(--prime-font-size-18);
+  font-size: var(--prime-font-size-28);
   letter-spacing: 0px;
   color: var(--prime-color-black);
   margin: 0;
