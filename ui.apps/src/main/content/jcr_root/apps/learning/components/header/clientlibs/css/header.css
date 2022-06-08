@@ -258,7 +258,8 @@ governing permissions and limitations under the License.
 .alm-header-profile-options ul {
   list-style-type: none;
   padding-left: 22px;
-  margin-bottom: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .alm-header-profile-options a {
