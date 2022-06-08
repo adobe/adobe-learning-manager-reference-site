@@ -82,9 +82,6 @@ export class RestAdapter {
       xhr.onload = function () {
         if ((this.status >= 200 && this.status < 300) || this.status === 304) {
           resolve(xhr.response);
-        } else if (this.status == 401) {
-          redirectToLoginAndAbort(true);
-          return;
         } else {
           reject({
             status: this.status,
@@ -94,16 +91,20 @@ export class RestAdapter {
         }
       };
       xhr.onerror = function () {
-        if (this.status == 401) {
-          redirectToLoginAndAbort(true);
-          return;
-        }
         reject({
           status: this.status,
           statusText: xhr.statusText,
           responseText: this.responseText,
         });
       };
+
+      xhr.onreadystatechange = function() {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+          redirectToLoginAndAbort(true);
+          return;
+        }
+      };
+
       xhr.send(options.body ? options.body : null);
     });
   }

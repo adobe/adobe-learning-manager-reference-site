@@ -357,6 +357,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   };
 
   const handleLogIn = (queryParams) => {
+    cleanUpUserData();
     switch (CURRENT_USAGE_TYPE) {
       case PRIME_USAGE_TYPE:
       case ES_USAGE_TYPE:
