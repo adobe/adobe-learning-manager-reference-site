@@ -169,7 +169,7 @@ const PrimeModuleItem: React.FC<{
     resource.dateStart && resource.completionDeadline ? true : false;
 
   const durationText = convertSecondsToTimeText(
-    resource.authorDesiredDuration || resource.desiredDuration
+    resource.authorDesiredDuration ?? resource.desiredDuration
   );
 
   const moduleIcon =
