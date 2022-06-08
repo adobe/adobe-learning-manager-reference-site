@@ -56,7 +56,7 @@ const PrimeCourseOverview: React.FC<{
     let duration = 0;
     learningObjectResources.forEach((learningObjectResource) => {
       const resource = filteredResource(learningObjectResource, locale);
-      const resDuration = resource.desiredDuration;
+      const resDuration = resource.authorDesiredDuration ?? resource.desiredDuration;
       duration += isNaN(resDuration) ? 0 : resDuration;
     });
     return duration;
