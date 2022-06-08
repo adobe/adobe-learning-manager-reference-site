@@ -48,12 +48,16 @@ governing permissions and limitations under the License.
     position: absolute;
     bottom: 30px;
     right: 30px;
+    width: 94px;
+    height: 32px;
+    text-align: center;
+    line-height: 26px;
   }
   
   .news-section .news-section-newsItem a {
-    padding: 15px;
     color: #306eb5;
     text-decoration: none;
+    font: normal normal 600 14px/20px Source Sans Pro;
   }
  
   
