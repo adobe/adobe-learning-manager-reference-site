@@ -94,6 +94,10 @@ export class RestAdapter {
         }
       };
       xhr.onerror = function () {
+        if (this.status == 401) {
+          redirectToLoginAndAbort(true);
+          return;
+        }
         reject({
           status: this.status,
           statusText: xhr.statusText,
