@@ -20,7 +20,7 @@ import { JOBAID } from "../../../utils/constants";
 import { modifyTimeDDMMYY } from "../../../utils/dateTime";
 import { getALMConfig } from "../../../utils/global";
 import { SEND_SVG, THREE_DOTS_MENU_SVG } from "../../../utils/inline_svg";
-import { getFormattedPrice } from "../../../utils/price";
+import { getFormattedPrice, isCommerceEnabled } from "../../../utils/price";
 import { GetTranslation } from "../../../utils/translationService";
 import styles from "./PrimeTrainingCard.module.css";
 
@@ -74,12 +74,16 @@ const PrimeTrainingCard: React.FC<{
     ""
   );
   const hasCompletedTrainingHtml = enrollment?.hasPassed ? (
-    <div className={styles.completed}>
-      {formatMessage({
-        id: "alm.catalog.card.complete.label",
-        defaultMessage: "Complete",
-      })}
-    </div>
+    type !== JOBAID ? (
+      <div className={styles.completed}>
+        {formatMessage({
+          id: "alm.catalog.card.complete.label",
+          defaultMessage: "Complete",
+        })}
+      </div>
+    ) : (
+      ""
+    )
   ) : (
     enrollmentHtml
   );
@@ -105,7 +109,7 @@ const PrimeTrainingCard: React.FC<{
   let priceLabel = "";
   const price = training.price;
 
-  if (price) {
+  if (price && isCommerceEnabled()) {
     priceLabel = getFormattedPrice(price);
   }
   const extraIconHtml = (
@@ -194,24 +198,26 @@ const PrimeTrainingCard: React.FC<{
                   ) : (
                     ""
                   )}
-                  <div className={styles.skillsContainer}>
-                    {enrollment && type !== JOBAID ? (
-                      <>
-                        {enrollmentHtml}
-                        <div className={styles.percentComplete}>
-                          {formatMessage(
-                            {
-                              id: "alm.catalog.card.progress.percent",
-                              defaultMessage: `${enrollment?.progressPercent}% completes`,
-                            },
-                            { "0": enrollment?.progressPercent }
-                          )}
-                        </div>
-                      </>
-                    ) : (
-                      ""
-                    )}
-                  </div>
+
+                  {enrollment && type !== JOBAID ? (
+                    <div
+                      className={styles.skillsContainer}
+                      style={{ marginBottom: 0 }}
+                    >
+                      {enrollmentHtml}
+                      <div className={styles.percentComplete}>
+                        {formatMessage(
+                          {
+                            id: "alm.catalog.card.progress.percent",
+                            defaultMessage: `${enrollment?.progressPercent}% completes`,
+                          },
+                          { "0": enrollment?.progressPercent }
+                        )}
+                      </div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
             </div>
