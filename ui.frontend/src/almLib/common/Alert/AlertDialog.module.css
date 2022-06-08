@@ -41,7 +41,7 @@
 }
 
 .alertbackdrop .alert .error {
-  color: var(--prime-error-color) !important;
+  color: var(--prime-error-color);
 }
 
 .alertbackdrop .alert .alertIcon {
