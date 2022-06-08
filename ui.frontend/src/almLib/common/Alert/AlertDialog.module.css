@@ -40,17 +40,17 @@
   font-size: var(----prime-font-size-16);
 }
 
-.error {
-  color: var(--prime-error-color);
+.alertbackdrop .alert .error {
+  color: var(--prime-error-color) !important;
 }
 
-.alertIcon {
+.alertbackdrop .alert .alertIcon {
   width: 50px;
   height: 65px;
   margin: 0px 20px;
 }
 
-.success {
+.alertbackdrop .alert .success {
   color: var(--prime-color-primary);
 }
 
