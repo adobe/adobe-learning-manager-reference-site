@@ -10,7 +10,6 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-import { Button } from "@adobe/react-spectrum";
 import React, { useState } from "react";
 import { useCartPage } from "../../hooks/CartPage/useCartPage";
 import { useCheckoutPage } from "../../hooks/CheckoutPage/useCheckoutPage";
@@ -101,18 +100,18 @@ export default function CheckoutPage() {
         );
       })}
       <div className={styles.buttonContainer}>
-        <Button
-          variant="cta"
+        <button
           type="button"
-          onPress={placeOrder}
-          isDisabled={shouldShowLoadingIndicator || !canPlaceOrder}
+          onClick={placeOrder}
+          disabled={shouldShowLoadingIndicator || !canPlaceOrder}
+          className={`almButton primary`}
         >
           {shouldShowLoadingIndicator ? (
             <CommerceLoader size="S" />
           ) : (
             "Place Order"
           )}
-        </Button>
+        </button>
       </div>
     </>
   );

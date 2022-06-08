@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-import { Button, TextField, Form } from "@adobe/react-spectrum";
+import { TextField, Form } from "@adobe/react-spectrum";
 import React, { useEffect, useState } from "react";
 import { useAddressBook } from "../../hooks/AddressBook/useAddressBook";
 import { getCartId } from "../../utils/global";
@@ -299,18 +299,18 @@ function AddressBook({ setCanPlaceOrder }) {
           <div className={styles.half}></div>
           <div className={`${styles.half} ${styles.actionButton}`}>
 
-            <Button
-              variant="cta"
+            <button
               type="button"
-              onPress={submitHandler}
-              isDisabled={addBillingAddressLoading}
+              onClick={submitHandler}
+              disabled={addBillingAddressLoading}
+              className={`almButton primary`}
             >
               {addBillingAddressLoading ? (
                 <CommerceLoader size="S" />
               ) : (
                 isAddressAvailable ? "Confirm Billing Address" : "Add Billing Address"
               )}
-            </Button>
+            </button>
           </div>
         </div>
       </Form>

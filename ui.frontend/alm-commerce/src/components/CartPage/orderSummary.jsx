@@ -9,7 +9,6 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { Button } from '@adobe/react-spectrum';
 import React from 'react'
 import styles from "./orderSummary.module.css";
 import { formatPrice } from "../../utils/price";
@@ -27,10 +26,10 @@ export default function OrderSummary(props) {
             </div>
 
             <div className={styles.actionContainer}>
-                <Button variant="cta" type="button" onPress={clickHandler}>
+                <button variant="cta" type="button" onClick={clickHandler} className={`almButton primary`}>
                     {buttonLabel}
-                </Button>
+                </button>
             </div>
-        </div>
+        </div >
     )
 }
