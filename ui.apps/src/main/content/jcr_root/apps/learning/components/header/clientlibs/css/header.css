@@ -45,7 +45,7 @@ governing permissions and limitations under the License.
 }
 
 .alm-header-vertical-nav .nav-highlight {
-  color: #FB704B;
+  color: #fb704b;
 }
 
 .alm-header-vertical-nav span {
@@ -77,6 +77,7 @@ governing permissions and limitations under the License.
   height: 122px;
   border-radius: 50%;
   margin-top: 60px;
+  margin-left: 36px;
 }
 
 .alm-header-vertical-nav .vert-nav-separator {
@@ -112,8 +113,7 @@ governing permissions and limitations under the License.
   justify-content: space-between;
 }
 
-#alm-header .alm-header-cont .alm-profile__text
-{
+#alm-header .alm-header-cont .alm-profile__text {
   cursor: pointer;
 }
 
@@ -136,15 +136,13 @@ governing permissions and limitations under the License.
   margin-left: 26px;
 }
 
-#alm-header .alm-header-cont .alm-header-icons .alm-header-cart
-{
+#alm-header .alm-header-cont .alm-header-icons .alm-header-cart {
   height: 22px;
   width: 22px;
   margin-top: 22px;
   margin-left: 20px;
   cursor: pointer;
 }
-
 
 #alm-header .alm-header-cont .alm-header-navigation {
   list-style-type: none;
@@ -169,7 +167,7 @@ governing permissions and limitations under the License.
 #alm-header .alm-header-cont .alm-header-navigation .nav-highlight {
   position: absolute;
   bottom: 0;
-  border-top: 3px solid #FB704B;
+  border-top: 3px solid #fb704b;
   left: -5px;
 }
 
@@ -230,13 +228,11 @@ governing permissions and limitations under the License.
     display: none;
   }
 
-  #alm-header .alm-header-cont .alm-header-icons .alm-header-profile
-  {
+  #alm-header .alm-header-cont .alm-header-icons .alm-header-profile {
     display: none;
   }
 
-  .alm-header-down
-  {
+  .alm-header-down {
     display: none;
   }
 }
@@ -309,7 +305,7 @@ governing permissions and limitations under the License.
   top: 15px;
   right: -10px;
   font-weight: 600;
-  background-color: #1F39FF;
+  background-color: #1f39ff;
   border-radius: 100px;
   line-height: 15px;
   min-width: 15px;
