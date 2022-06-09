@@ -46,7 +46,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
   const [pollTypeSelected, setPollTypeSelected] = useState(false);
 
   const isInputFilled = () => {
-    return ref?.current?.value !== "" ? true : false;
+    return ref?.current?.value?.trim() !== "" ? true : false;
   };
 
   const [saveEnabled, setSaveEnabled] = useState(isInputFilled());
