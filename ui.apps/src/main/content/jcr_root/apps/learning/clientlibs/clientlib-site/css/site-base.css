@@ -281,12 +281,12 @@ governing permissions and limitations under the License.
   #catalog-page-container,
   #home-catalog-container {
     margin: 0 auto;
-    margin-top: 30px;
+    margin-top: 50px;
   }
 
   #home-categories-container {
     margin: 0 auto;
-    margin-top: 30px;
+    margin-top: 50px;
     margin-bottom: 60px;
   }
 
@@ -397,7 +397,7 @@ governing permissions and limitations under the License.
     max-width: var(--prime-container-max-width-tablet);
     width: var(--prime-container-width);
     padding: 0;
-    margin-top: 20px;
+    margin-top: 30px;
   }
 
   #home-categories-container {

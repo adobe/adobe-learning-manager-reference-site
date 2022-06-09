@@ -17,6 +17,13 @@ governing permissions and limitations under the License.
   const SIGNOUT_PAGE_LOGIN_BTN_SEL = "#signout-page-login-btn";
   const DIV_NEW_PAR_SEL = "div.new.newpar.section.aem-Grid-newComponent";
   const PAGE_BODY_SEL = "#learning-body";
+  const EXPLORE_PAGE_BUTTONS_CONT = "#explore-button-cont";
+
+  const renderExplorePageButtons = () => {
+    if (!window.ALM.isPrimeUserLoggedIn()) {
+      $(EXPLORE_PAGE_BUTTONS_CONT).hide();
+    }
+  };
 
   const adjustFooterLayout = () => {
     const curWindowHeight = $(window).height();
@@ -44,6 +51,7 @@ governing permissions and limitations under the License.
     }
 
     adjustFooterLayout();
+    renderExplorePageButtons();
   });
 
 })(window, document, Granite, jQuery);
