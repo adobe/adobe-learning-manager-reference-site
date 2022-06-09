@@ -91,6 +91,7 @@ p {
   padding-bottom: 10px;
   text-align: justify;
   margin-right: 5px;
+  word-wrap: break-word;
 }
 
 .viewMoreDiv {
