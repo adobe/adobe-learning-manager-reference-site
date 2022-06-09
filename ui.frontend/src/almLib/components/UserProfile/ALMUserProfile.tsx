@@ -28,11 +28,8 @@ import styles from "./ALMUserProfile.module.css";
 
 const ALMUserProfile = () => {
   const { formatMessage } = useIntl();
-  const {
-    profileAttributes,
-    updateProfileImage,
-    deleteProfileImage,
-  } = useProfile();
+  const { profileAttributes, updateProfileImage, deleteProfileImage } =
+    useProfile();
   const { user } = profileAttributes;
   const [isUploading, setIsUploading] = useState(false);
   const [changeImage, setChangeImage] = useState(false);
@@ -86,6 +83,10 @@ const ALMUserProfile = () => {
     setChangeImage(true);
   };
 
+  const isEditImageState = () => {
+    return !isUploading && changeImage;
+  };
+
   return (
     <ALMErrorBoundary>
       <Provider theme={lightTheme} colorScheme={"light"}>
@@ -106,7 +107,13 @@ const ALMUserProfile = () => {
                 })}
               </h1>
               <ALMBackButton />
-              <div className={styles.detailsContainer}>
+              <div
+                className={
+                  isEditImageState()
+                    ? styles.detailsContainerWithBottomPadding
+                    : styles.detailsContainer
+                }
+              >
                 <div className={styles.image}>
                   <div className={styles.imageWrapper}>
                     <img
@@ -128,33 +135,33 @@ const ALMUserProfile = () => {
                       })}
                     </Button>
                   )}
-                  {!isUploading && changeImage && (
-                    <Button
-                      variant="primary"
-                      isQuiet
-                      UNSAFE_className={styles.button}
-                      onPress={startFileUpload}
-                    >
-                      {formatMessage({
-                        id: "alm.profile.edit.image",
-                        defaultMessage: "Edit image",
-                      })}
-                    </Button>
-                  )}
-                  {!isUploading && changeImage && (
-                    <div className={styles.deleteImage}>
+                  {isEditImageState() && (
+                    <>
                       <Button
                         variant="primary"
                         isQuiet
                         UNSAFE_className={styles.button}
-                        onPress={deleteImage}
+                        onPress={startFileUpload}
                       >
                         {formatMessage({
-                          id: "alm.profile.delete.image",
-                          defaultMessage: "Delete image",
+                          id: "alm.profile.edit.image",
+                          defaultMessage: "Edit image",
                         })}
                       </Button>
-                    </div>
+                      <div className={styles.deleteImage}>
+                        <Button
+                          variant="primary"
+                          isQuiet
+                          UNSAFE_className={styles.button}
+                          onPress={deleteImage}
+                        >
+                          {formatMessage({
+                            id: "alm.profile.delete.image",
+                            defaultMessage: "Delete image",
+                          })}
+                        </Button>
+                      </div>
+                    </>
                   )}
                   <Button
                     variant="cta"
