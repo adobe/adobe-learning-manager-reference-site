@@ -27,7 +27,7 @@ const ALMSkillComponent = (props: any) => {
   } = useUserSkillInterest();
   const { skills, fetchSkills, hasMoreSkills, loadMoreSkills } = useSkills();
   const [mode, setMode] = useState("view");
-  let selectedSkills = [] as any;
+  const [selectedInterest, setSelectedInterest] = useState([] as any);
   const generalSkill = "general";
 
   const removeFocus_lxpv = (event: Event) => {
@@ -37,8 +37,17 @@ const ALMSkillComponent = (props: any) => {
     }
   };
 
+  const clearSelectedSkills = () => {
+    setSelectedInterest([]);
+  }
+
+  const loadMoreSkillsHandler = async () => {
+    await loadMoreSkills();
+  }
+
   const toggleSkillSelection = (node: any) => {
     const skillId = node.id.split("skill-")[1];
+    let selectedSkills = selectedInterest;
     if (selectedSkills.indexOf(skillId) > -1) {
       selectedSkills.splice(selectedSkills.indexOf(skillId), 1);
       node.style.boxShadow = "none";
@@ -48,6 +57,7 @@ const ALMSkillComponent = (props: any) => {
       node.style.boxShadow = "0 0 3pt 3pt #4283d0";
       node.setAttribute("aria-pressed", "true");
     }
+    setSelectedInterest(selectedSkills);
   };
 
   const handleClickOnSkillBox = (event: any) => {
@@ -74,16 +84,15 @@ const ALMSkillComponent = (props: any) => {
   };
 
   const saveSkillInterest = async () => {
-    if (selectedSkills.length !== 0) {
-      await saveUserSkillInterest(selectedSkills);
+    if (selectedInterest.length !== 0) {
+      await saveUserSkillInterest(selectedInterest);
       await fetchUserSkillInterest();
     }
-    setMode("view");
-    scrollToSkillsSection();
+    discardSelection();
   };
 
   const discardSelection = () => {
-    selectedSkills = [];
+    clearSelectedSkills();
     setMode("view");
     scrollToSkillsSection();
   };
@@ -334,7 +343,7 @@ const ALMSkillComponent = (props: any) => {
           </div>
         )}
         {mode === "edit" && hasMoreSkills && (
-          <button className={styles.showMoreButton} onClick={loadMoreSkills}>
+          <button className={styles.showMoreButton} onClick={loadMoreSkillsHandler}>
             {formatMessage({
               id: "alm.profile.skills.viewMore",
               defaultMessage: "View more",
