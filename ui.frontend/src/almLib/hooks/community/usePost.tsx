@@ -43,20 +43,9 @@ export const usePost = () => {
       }
 
       if (postingType === POLL) {
-        let otherData = [] as any;
-        let index = 1;
-        pollOptions.map((value: any) => {
-          if (value !== "") {
-            let data = {
-              id: index++,
-              text: value,
-              resourceId: null,
-            };
-            return otherData.push(data);
-          }
-          return null;
-        });
-        postBody.data.attributes.otherData = JSON.stringify(otherData);
+        postBody.data.attributes.otherData = JSON.stringify(
+          getPollPostObject(pollOptions)
+        );
       }
 
       const headers = { "content-type": "application/json" };
@@ -70,6 +59,22 @@ export const usePost = () => {
     []
   );
 
+  const getPollPostObject = (pollOptions: any[]) => {
+    let otherData = [] as any;
+    let index = 1;
+    pollOptions.map((value: any) => {
+      if (value !== "") {
+        let data = {
+          id: index++,
+          text: value,
+          resourceId: null,
+        };
+        return otherData.push(data);
+      }
+      return null;
+    });
+    return otherData;
+  };
   const patchPost = useCallback(
     async (
       postId: any,
@@ -97,17 +102,9 @@ export const usePost = () => {
       }
 
       if (postingType === POLL) {
-        let otherData = [] as any;
-        let index = 1;
-        pollOptions.map((value: any) => {
-          if (value !== "") {
-            return otherData.push(
-              '{"id":' + index++ + ',"text":"' + value + '","resourceId":null}'
-            );
-          }
-          return null;
-        });
-        postBody.data.attributes.otherData = JSON.stringify(otherData);
+        postBody.data.attributes.otherData = JSON.stringify(
+          getPollPostObject(pollOptions)
+        );
       }
 
       const headers = { "content-type": "application/json" };
