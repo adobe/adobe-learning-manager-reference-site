@@ -156,7 +156,7 @@ const SignIn = () => {
               <button
                 type="submit"
                 onClick={submitHandler}
-                isDisabled={isLoading}
+                disabled={isLoading}
                 className={`almButton primary ${styles.commonButton}`}
               >
                 {isLoading ? <CommerceLoader size="S" /> : "Login"}
@@ -165,7 +165,7 @@ const SignIn = () => {
               <button
                 type="button"
                 onClick={() => setView(CREATE_ACCOUNT)}
-                isDisabled={isLoading}
+                disabled={isLoading}
                 className={`almButton secondary ${styles.commonButton}`}
 
               >
@@ -178,7 +178,7 @@ const SignIn = () => {
               <button
                 type="submit"
                 onClick={submitHandler}
-                isDisabled={isLoading}
+                disabled={isLoading}
                 className={`almButton primary ${styles.commonButton}`}
 
               >
@@ -188,7 +188,7 @@ const SignIn = () => {
               <button
                 type="button"
                 onClick={() => setView(LOGIN)}
-                isDisabled={isLoading}
+                disabled={isLoading}
                 className={`almButton secondary ${styles.commonButton}`}
 
 
