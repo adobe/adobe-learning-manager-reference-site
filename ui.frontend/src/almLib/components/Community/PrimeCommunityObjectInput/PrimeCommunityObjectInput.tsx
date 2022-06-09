@@ -75,7 +75,7 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
     );
     if (currentInputLength > 0) {
       if (typeof props.enablePrimaryAction === "function") {
-        props.enablePrimaryAction();
+        ref.current.value.trim() !== "" ? props.enablePrimaryAction() :  props.disablePrimaryAction();
       }
     } else {
       if (typeof props.disablePrimaryAction === "function") {
