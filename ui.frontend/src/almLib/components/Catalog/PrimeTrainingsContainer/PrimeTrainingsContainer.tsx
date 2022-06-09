@@ -40,14 +40,9 @@ const PrimeTrainingsContainer: React.FC<{
       {listHtml}
       <div id="load-more-trainings" className={styles.loadMoreContainer}>
         {hasMoreItems ? (
-          <Button
-            variant="cta"
-            isQuiet
-            onPress={loadMoreTraining}
-            UNSAFE_className={styles.loadMoreButton}
-          >
-            Load more
-          </Button>
+          <button onClick={loadMoreTraining} className="almButton secondary">
+            {formatMessage({ id: "alm.community.loadMore" })}
+          </button>
         ) : (
           ""
         )}

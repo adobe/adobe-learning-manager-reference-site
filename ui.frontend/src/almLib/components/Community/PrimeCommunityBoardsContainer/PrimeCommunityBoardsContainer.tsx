@@ -34,17 +34,15 @@ const PrimeCommunityBoardsContainer: React.FC<{
       <div id="load-more-boards" className={styles.loadMoreContainer}>
         {hasMoreItems ? (
           <Provider theme={lightTheme} colorScheme={"light"}>
-            <Button
-              variant="cta"
-              isQuiet
-              onPress={loadMoreBoards}
-              UNSAFE_className={styles.loadMoreButton}
+            <button
+              onClick={loadMoreBoards}
+              className={`almButton secondary ${styles.loadMoreButton}`}
             >
               {formatMessage({
                 id: "alm.community.loadMore",
                 defaultMessage: "Load more",
               })}
-            </Button>
+            </button>
           </Provider>
         ) : (
           ""

@@ -72,22 +72,6 @@ governing permissions and limitations under the License.
   opacity: 1;
   margin: 0;
 }
-
-.button {
-  cursor: pointer;
-  border: 2px solid var(--prime-color-primary);
-  color: var(--prime-color-primary);
-  background-color: var(--prime-color-white);
-  font-size: var(--prime-font-size-14);
-}
-.button:hover,
-.button:focus,
-.button:focus-visible {
-  color: var(--prime-color-white);
-  background-color: var(--prime-color-primary);
-  border-color: var(--prime-color-primary);
-  outline: none;
-}
 .instructorsName {
   font-size: var(--prime-font-size-14);
   line-height: 19px;
