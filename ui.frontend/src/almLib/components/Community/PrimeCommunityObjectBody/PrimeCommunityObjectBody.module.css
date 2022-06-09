@@ -97,3 +97,9 @@ p {
 .viewMoreDiv {
   margin-top: -20px;
 }
+
+.objectbodyLink {
+  color: #4283d0;
+  cursor: pointer;
+  text-decoration: none;
+}

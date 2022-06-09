@@ -33,16 +33,71 @@ const PrimeCommunityObjectBody = (props: any) => {
   const object = props.object;
   const isQuestionType = object.postingType === QUESTION;
   const entityType = props.type;
+  const urlRegex =
+    "((http|https)://)(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)";
+
+  const formatUrl = (url: string) => {
+    if (!/^https?:\/\//i.test(url)) {
+      url = "http://" + url;
+    }
+    return url;
+  };
+
+  const isValidUrl = (input: string) => {
+    return (
+      input.match(urlRegex) || (input.indexOf(".") > -1 && !input.endsWith("."))
+    );
+  };
+
+  const getFormattedDescription = (description: string) => {
+    if (description !== "") {
+      let inputParts = description.split(" ");
+      let url = "";
+      //checking if any part of input contains url
+      for (let input of inputParts) {
+        if (isValidUrl(input)) {
+          url = input;
+          if (url !== "") {
+            let urlStrings: any = [];
+            //checking if any part of url contains new line before or after
+            if (url.indexOf("\r") > -1) {
+              urlStrings = url.split("\r");
+            } else if (url.indexOf("\n") > -1) {
+              urlStrings = url.split("\n");
+            }
+            if (urlStrings.length > 0) {
+              for (let input of urlStrings) {
+                if (isValidUrl(input)) {
+                  url = input;
+                  break;
+                }
+              }
+            }
+            description = description.replace(
+              url,
+              `<a class="${styles.objectbodyLink}" href="${formatUrl(
+                url
+              )}" target="_blank" rel="noopener noreferrer">${url}</a>`
+            );
+            console.log("found " + url);
+          }
+        }
+      }
+    }
+    return description;
+  };
   const getDescription = () => {
     switch (entityType) {
       case BOARD:
-        return object.richTextdescription;
+        return getFormattedDescription(object.richTextdescription);
       case POST:
-        return object.richText;
+        return getFormattedDescription(object.richText);
       case COMMENT:
-        return props.text;
+        return getFormattedDescription(props.text);
       case REPLY:
-        return props.text;
+        return getFormattedDescription(props.text);
+      default:
+        return "";
     }
   };
   const description = getDescription();
