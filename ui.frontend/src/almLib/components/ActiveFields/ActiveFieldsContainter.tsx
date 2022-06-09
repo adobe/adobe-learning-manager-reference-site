@@ -142,7 +142,7 @@ const ActiveFieldsContainter = () => {
             updateSelectedMultiValues={updateSelectedMultiValues}
             predefinedMultiValues={predefinedMultiValues}
           />
-          {showActiveFieldButton.length > 0 && (
+          {showActiveFieldButton && (
             <section className={styles.saveActiveFieldButton}>
               <hr />
               <div className={styles.activeFieldButtonContainer}>
