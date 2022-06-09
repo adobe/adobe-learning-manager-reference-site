@@ -49,9 +49,7 @@ const ActiveFieldsContainter = () => {
     section2Description,
     section2Title,
   } = activeFieldAttributes;
-
   let showActiveFieldButton = accountActiveFields?.fields || user.fields;
-
   useEffect(() => {
     let multiValues: any;
     let selectedMultiValues = new Map();
@@ -144,7 +142,7 @@ const ActiveFieldsContainter = () => {
             updateSelectedMultiValues={updateSelectedMultiValues}
             predefinedMultiValues={predefinedMultiValues}
           />
-          {showActiveFieldButton && (
+          {showActiveFieldButton.length > 0 && (
             <section className={styles.saveActiveFieldButton}>
               <hr />
               <div className={styles.activeFieldButtonContainer}>
