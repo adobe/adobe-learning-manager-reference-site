@@ -63,6 +63,10 @@ governing permissions and limitations under the License.
   top: -16px;
 }
 
+#tmplt-carousel .cmp-carousel__indicators li {
+  cursor: pointer;
+}
+
 #tmplt-carousel {
   margin-bottom: 10px;
 }

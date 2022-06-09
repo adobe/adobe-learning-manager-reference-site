@@ -94,6 +94,10 @@ governing permissions and limitations under the License.
   margin-top: 15px;
 }
 
+#home-catalog-container .cmp-carousel__indicators li {
+  cursor: pointer;
+}
+
 /* CSS for MyLearning Page*/
 #learning-parent-container #learning-carousel-cont .cmp-teaser__title,
 #home-catalog-container #home-carousel-cont .cmp-teaser__title {
@@ -267,6 +271,10 @@ governing permissions and limitations under the License.
 
 #learning-parent-container .cmp-carousel__indicators {
   margin-top: 15px;
+}
+
+#learning-parent-container .cmp-carousel__indicators li {
+  cursor: pointer;
 }
 
 @media screen and (min-width: 1024px) {
