@@ -16,18 +16,3 @@ governing permissions and limitations under the License.
     align-items: center;
   }
   
-  .loadMoreButton {
-    border: 2px solid var(--prime-color-primary)!important;
-    color: var(--prime-color-primary)!important;
-    background-color: var(--prime-color-white)!important;
-    cursor: pointer;
-  }
-  .loadMoreButton:hover,
-  .loadMoreButton:focus,
-  .loadMoreButton:focus-visible {
-    color: var(--prime-color-white);
-    background-color: var(--prime-color-primary);
-    border-color: var(--prime-color-primary);
-    outline: none;
-  }
-  

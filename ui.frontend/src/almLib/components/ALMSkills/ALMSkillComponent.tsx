@@ -309,7 +309,7 @@ const ALMSkillComponent = (props: any) => {
         )}
         {mode === "view" && (
           <div className={styles.modifyInterest}>
-            <button className={styles.actionButton} onClick={editSkillInterest}>
+            <button className={`almButton primary ${styles.actionButton}`} onClick={editSkillInterest}>
               {formatMessage({
                 id: "alm.profile.skills.modifyInterest",
                 defaultMessage: "Modify Interest",
@@ -362,13 +362,13 @@ const ALMSkillComponent = (props: any) => {
         )}
         {mode === "edit" && (
           <div className={styles.modifyInterest}>
-            <button className={styles.actionButton} onClick={saveSkillInterest}>
+            <button className={`almButton primary ${styles.actionButton}`} onClick={saveSkillInterest}>
               {formatMessage({
                 id: "alm.profile.skills.addInterest",
                 defaultMessage: "Add Interest",
               })}
             </button>
-            <button className={styles.actionButton} onClick={discardSelection}>
+            <button className={`almButton secondary ${styles.actionButton}`} onClick={discardSelection}>
               {formatMessage({
                 id: "alm.profile.skills.cancel",
                 defaultMessage: "Cancel",

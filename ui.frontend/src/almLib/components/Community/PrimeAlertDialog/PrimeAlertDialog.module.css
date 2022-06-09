@@ -10,5 +10,48 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 .primeAlertDialogButton {
-    display: none !important;
+  display: none !important;
 }
+.dialogButton button {
+    border-radius: 24px;
+    cursor: pointer;
+    font-size: var(--prime-font-size-14);
+    font-weight: 600;
+    min-height: 32px;
+    border: 2px solid var(--prime-color-white);
+}
+.dialogButton button[class*="spectrum-Button--secondary"] {
+  color: var(--prime-color-primary);
+  background-color: var(--prime-color-white);
+  border-color: var(--prime-color-primary);
+}
+.dialogButton button[class*="spectrum-Button--secondary"]:hover,
+.dialogButton button[class*="spectrum-Button--secondary"]:focus {
+  background-color: var(--prime-color-nc9);
+  border-color: var(--prime-color-primary-hover);
+  color: var(--prime-color-primary-hover);
+}
+
+.dialogButton button[class*="spectrum-Button--secondary"]:disabled {
+    background: var(--prime-color-white);
+    border-color: var(--prime-color-nc7);
+    color: var(--prime-color-nc8);
+    cursor: not-allowed;
+  }
+
+.dialogButton button[class*="spectrum-Button--cta"] {
+  color: var(--prime-color-white);
+  background-color: var(--prime-color-primary);
+  border-color: var(--prime-color-primary);
+}
+.dialogButton button[class*="spectrum-Button--cta"]:hover,
+.dialogButton button[class*="spectrum-Button--cta"]:focus {
+  background-color: var(--prime-color-primary-hover);
+  border-color: var(--prime-color-primary-hover);
+}
+.dialogButton button[class*="spectrum-Button--cta"]:disabled {
+    background: var(--prime-color-nc7);
+    border-color: var(--prime-color-nc7);
+    color: var(--prime-color-nc8);
+    cursor: not-allowed;
+  }

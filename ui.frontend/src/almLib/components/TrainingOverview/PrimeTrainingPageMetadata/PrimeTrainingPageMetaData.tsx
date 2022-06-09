@@ -11,7 +11,6 @@ governing permissions and limitations under the License.
 */
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { Button } from "@adobe/react-spectrum";
 import Calendar from "@spectrum-icons/workflow/Calendar";
 import Clock from "@spectrum-icons/workflow/Clock";
 import ClockCheck from "@spectrum-icons/workflow/ClockCheck";
@@ -541,15 +540,14 @@ const PrimeTrainingPageMetaData: React.FC<{
     <section className={styles.container}>
       {showPreviewButton && (
         <>
-          <Button
-            variant="primary"
-            UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
-            onPress={previewHandler}
+          <button
+            className={`almButton secondary ${styles.commonButton}`}
+            onClick={previewHandler}
           >
             {formatMessage({
               id: `alm.overview.button.preview`,
             })}
-          </Button>
+          </button>
 
           <div className={styles.textOr}>
             {formatMessage({
@@ -560,23 +558,19 @@ const PrimeTrainingPageMetaData: React.FC<{
       )}
       <div className={styles.actionContainer}>
         {action === "registerInterest" && (
-          <Button
-            variant="primary"
-            UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
-          >
+          <button className={`almButton secondary ${styles.commonButton}`}>
             {actionText}
-          </Button>
+          </button>
         )}
         {action === "enroll" && (
           <>
-            <Button
-              variant="primary"
-              UNSAFE_className={`${styles.primaryButton} ${styles.commonButton}`}
-              onPress={handleEnrollment}
-              isDisabled={!isSeatAvailable || hasEnrollmentDeadlinePassed}
+            <button
+              className={`almButton primary ${styles.commonButton}`}
+              onClick={handleEnrollment}
+              disabled={!isSeatAvailable || hasEnrollmentDeadlinePassed}
             >
               {actionText}
-            </Button>
+            </button>
             {enrollmentDeadlinePassedText}
             {seatsAvailableText}
           </>
@@ -585,31 +579,29 @@ const PrimeTrainingPageMetaData: React.FC<{
           action === "continue" ||
           action === "revisit") && (
           <>
-            <Button
-              variant="primary"
-              UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
-              onPress={launchPlayerHandler}
+            <button
+              className={`almButton secondary ${styles.commonButton}`}
+              onClick={launchPlayerHandler}
             >
               {actionText}
-            </Button>
+            </button>
             {waitListText}
           </>
         )}
 
         {action === "addToCart" && (
           <>
-            <Button
-              variant="primary"
-              UNSAFE_className={`${styles.primaryButton} ${styles.commonButton}`}
-              onPress={addToCart}
-              isDisabled={
+            <button
+              className={`almButton primary ${styles.commonButton}`}
+              onClick={addToCart}
+              disabled={
                 isTrainingNotSynced ||
                 !isSeatAvailable ||
                 hasEnrollmentDeadlinePassed
               }
             >
               {actionText}
-            </Button>
+            </button>
             {trainingNotAvailableForPurchaseText}
             {enrollmentDeadlinePassedText}
             {seatsAvailableText}
@@ -617,13 +609,12 @@ const PrimeTrainingPageMetaData: React.FC<{
         )}
         {action === "pendingApproval" && (
           <>
-            <Button
-              variant="secondary"
-              UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
-              isDisabled={true}
+            <button
+              className={`almButton secondary ${styles.commonButton}`}
+              disabled={true}
             >
               {actionText}
-            </Button>
+            </button>
             <div className={styles.mangerPendingApprovalText}>
               {formatMessage({
                 id: "alm.overview.manager.approval.pending",
@@ -635,26 +626,24 @@ const PrimeTrainingPageMetaData: React.FC<{
 
         {action === "pendingAcceptance" && (
           <>
-            <Button
-              variant="secondary"
-              UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
-              isDisabled={true}
+            <button
+              className={`almButton secondary ${styles.commonButton}`}
+              disabled={true}
             >
               {actionText}
-            </Button>
+            </button>
 
             {seatsAvailableText}
           </>
         )}
         {action === "waiting" && (
           <>
-            <Button
-              variant="secondary"
-              UNSAFE_className={`${styles.secondaryButton} ${styles.commonButton}`}
-              isDisabled={true}
+            <button
+              className={`almButton secondary ${styles.commonButton}`}
+              disabled={true}
             >
               {actionText}
-            </Button>
+            </button>
 
             {waitListText}
           </>

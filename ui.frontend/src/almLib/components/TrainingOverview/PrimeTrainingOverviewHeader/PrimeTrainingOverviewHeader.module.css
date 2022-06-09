@@ -46,20 +46,20 @@ governing permissions and limitations under the License.
 .progressContainer {
   width: 65%;
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
 }
 .progressBar {
-  width: 90%;
+  width: 95%;
+  margin-right: 10px;
 }
 .percent {
   position: relative;
-  bottom: 10px;
+  bottom: 8px;
   color: var(--prime-color-white);
   text-shadow: var(--prime-text-shadow);
 }
 .progressBar div[class^="spectrum-BarLoader-fill"] {
-  background: #eaeaea;
+  background: var(--prime-color-nc6);
 }
 
 .progressBar div[class^="spectrum-BarLoader-track"] {
@@ -100,5 +100,8 @@ governing permissions and limitations under the License.
   .headingContainer {
     width: 100%;
     max-width: var(--prime-container-max-width-mobile);
+  }
+  .percent {
+    bottom: 10px;
   }
 }

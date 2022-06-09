@@ -11,37 +11,25 @@ governing permissions and limitations under the License.
 */
 @import "../../../styles/variables.css";
 .primeDialogLaunchButton {
-  background: #306eb5;
-  border-radius: 22px;
-  opacity: 1;
-  color: #ffffff;
-  padding: 8px 22px;
-  font-size: var(--prime-font-size-12);
-  border: none;
+  color: var(--prime-color-white)!important;
+  font-size: var(--prime-font-size-14)!important;
+
 }
 
 .primeHiddenDialogLaunchButton {
   display: none !important;
 }
 
-.primeDialogLaunchButton:hover {
-  cursor: pointer;
-  background: #4283d0;
-  color: #ffffff;
-}
+
 
 @media (max-width: 414px) {
   .primeDialogLaunchButton {
     position: fixed;
-    background-color: #306eb5;
-    border: none;
+   
     display: block;
     z-index: 2;
-    border-radius: 20px;
     width: auto;
-    height: 40px;
     bottom: 5%;
     right: 35%;
-    color: #ffffff;
   }
 }
