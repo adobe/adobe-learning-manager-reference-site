@@ -23,6 +23,7 @@ import { useState } from "react";
 import { isJobaidContentTypeUrl } from "../../../utils/catalog";
 import { PrimeAlertDialog } from "../../Community/PrimeAlertDialog";
 import { GetTranslation } from "../../../utils/translationService";
+import { useIntl } from "react-intl";
 
 const PrimeTrainingPageExtraJobAid: React.FC<{
   resource: PrimeResource;
@@ -37,6 +38,7 @@ const PrimeTrainingPageExtraJobAid: React.FC<{
   unEnrollmentHandler,
   jobAidClickHandler,
 }) => {
+  const { formatMessage } = useIntl();
   //on clikc, if not enrolled show popup alert
   const [isEnrolled, setIsEnrolled] = useState(() => {
     return training.enrollment ? true : false;
@@ -77,6 +79,16 @@ const PrimeTrainingPageExtraJobAid: React.FC<{
     }
   };
 
+  const jobAidAddToListMsg = formatMessage({
+    id: "alm.overview.job.aid.add.from.list",
+    defaultMessage: "Add to my list",
+  });
+
+  const jobAidRemoveToListMsg = formatMessage({
+    id: "alm.overview.job.aid.remove.from.list",
+    defaultMessage: "Remove from my list",
+  });
+  
   return (
     <div className={styles.jobAid}>
       <a
@@ -90,12 +102,12 @@ const PrimeTrainingPageExtraJobAid: React.FC<{
       </a>
       <span className={styles.jobAidIcon}>
         {isEnrolled ? (
-          <span onClick={unenroll} role="button" tabIndex={0}>
-            <RemoveCircle aria-label="Remove from My List" />
+          <span title = {jobAidRemoveToListMsg} onClick={unenroll} role="button" tabIndex={0}>
+            <RemoveCircle aria-label={jobAidRemoveToListMsg} />
           </span>
         ) : (
-          <span onClick={enroll} role="button" tabIndex={0}>
-            <AddCircle aria-label="Add to My List" />
+          <span title = {jobAidAddToListMsg} onClick={enroll} role="button" tabIndex={0}>
+            <AddCircle aria-label={jobAidAddToListMsg} />
           </span>
         )}
       </span>
