@@ -265,7 +265,8 @@ const PrimeModuleItem: React.FC<{
   );
 
   const inputRef = useRef<null | HTMLInputElement>(null);
-  const startFileUpload = () => {
+  const startFileUpload = (event: any) => {
+    event?.stopPropagation();
     (inputRef?.current as HTMLInputElement)?.click();
   };
 
@@ -403,6 +404,7 @@ const PrimeModuleItem: React.FC<{
             id={inputElementId}
             className={styles.uploadFileSubmission}
             onChange={(event: any) => fileSelected(event)}
+            onClick={(event: any) => stopClickPropagation(event)}
             ref={inputRef}
           />
         </span>
@@ -421,7 +423,7 @@ const PrimeModuleItem: React.FC<{
           href={submissionUrl}
           target="_blank"
           rel="noreferrer"
-          onClick={anchorClickHandler}
+          onClick={(event: any) => stopClickPropagation(event)}
         >
           {getSubmissionFileName(submissionUrl)}
         </a>
@@ -430,7 +432,7 @@ const PrimeModuleItem: React.FC<{
     );
   };
 
-  const anchorClickHandler = (event: any) => {
+  const stopClickPropagation = (event: any) => {
     event?.stopPropagation();
   };
 
