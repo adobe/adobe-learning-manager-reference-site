@@ -24,6 +24,7 @@ const PrimeModuleList: React.FC<{
   launchPlayerHandler: Function;
   loResources: PrimeLearningObjectResource[];
   isPartOfLP?: boolean;
+  isParentLOEnrolled?: boolean;
   isContent?: boolean;
   isPreviewEnabled: boolean;
   updateFileSubmissionUrl: Function;
@@ -34,6 +35,7 @@ const PrimeModuleList: React.FC<{
     training,
     trainingInstance,
     isPartOfLP = false,
+    isParentLOEnrolled = false,
     isContent,
     isPreviewEnabled,
     updateFileSubmissionUrl,
@@ -96,6 +98,7 @@ const PrimeModuleList: React.FC<{
           canPlay={!isModuleLocked(loResource, index)}
           updateFileSubmissionUrl={updateFileSubmissionUrl}
           isPartOfLP={isPartOfLP}
+          isParentLOEnrolled={isParentLOEnrolled}
         ></PrimeModuleItem>
       ))}
     </ul>

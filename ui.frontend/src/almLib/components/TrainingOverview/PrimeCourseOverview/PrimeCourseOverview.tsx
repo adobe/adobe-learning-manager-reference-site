@@ -30,6 +30,7 @@ const PrimeCourseOverview: React.FC<{
   training: PrimeLearningObject;
   trainingInstance: PrimeLearningObjectInstance;
   launchPlayerHandler: Function;
+  isParentLOEnrolled?: boolean;
   isPartOfLP?: boolean;
   showDuration?: boolean;
   showNotes?: boolean;
@@ -43,6 +44,7 @@ const PrimeCourseOverview: React.FC<{
     showNotes = false,
     launchPlayerHandler,
     isPartOfLP = false,
+    isParentLOEnrolled = false,
     isPreviewEnabled = false,
     updateFileSubmissionUrl,
   } = props;
@@ -126,6 +128,7 @@ const PrimeCourseOverview: React.FC<{
                 trainingInstance={trainingInstance}
                 isPreviewEnabled={isPreviewEnabled}
                 updateFileSubmissionUrl={updateFileSubmissionUrl}
+                isParentLOEnrolled={isParentLOEnrolled}
               ></PrimeModuleList>
             </>
           )}
@@ -149,6 +152,7 @@ const PrimeCourseOverview: React.FC<{
             isContent={true}
             isPreviewEnabled={isPreviewEnabled}
             updateFileSubmissionUrl={updateFileSubmissionUrl}
+            isParentLOEnrolled={isParentLOEnrolled}
           ></PrimeModuleList>
         </Item>
         {showTestout && (
@@ -160,6 +164,7 @@ const PrimeCourseOverview: React.FC<{
               trainingInstance={trainingInstance}
               isPreviewEnabled={isPreviewEnabled}
               updateFileSubmissionUrl={updateFileSubmissionUrl}
+              isParentLOEnrolled={isParentLOEnrolled}
             ></PrimeModuleList>
           </Item>
         )}

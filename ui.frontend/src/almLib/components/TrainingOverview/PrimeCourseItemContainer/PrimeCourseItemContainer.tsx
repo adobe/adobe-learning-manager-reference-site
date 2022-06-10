@@ -30,6 +30,7 @@ const PrimeCourseItemContainer: React.FC<{
   training: PrimeLearningObject;
   launchPlayerHandler: Function;
   isPartOfLP?: boolean;
+  isParentLOEnrolled?: boolean;
   showMandatoryLabel?: boolean;
   isPreviewEnabled: boolean;
   updateFileSubmissionUrl: Function;
@@ -41,6 +42,7 @@ const PrimeCourseItemContainer: React.FC<{
     showMandatoryLabel = false,
     isPreviewEnabled = false,
     updateFileSubmissionUrl,
+    isParentLOEnrolled = false,
   } = props;
 
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -85,6 +87,7 @@ const PrimeCourseItemContainer: React.FC<{
           isPartOfLP={isPartOfLP}
           isPreviewEnabled={isPreviewEnabled}
           updateFileSubmissionUrl={updateFileSubmissionUrl}
+          isParentLOEnrolled={isParentLOEnrolled}
         />
       )}
 
