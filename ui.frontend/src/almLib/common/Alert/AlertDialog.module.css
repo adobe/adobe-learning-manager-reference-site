@@ -32,9 +32,9 @@
   border-radius: 0;
   max-width: 60rem;
   min-height: 7rem;
-  min-width: 18.75rem;
+  min-width: 15rem;
   height: 7rem;
-  padding: 1rem;
+  padding-right: 30px;
   position: relative;
   top: 18rem;
   font-size: var(----prime-font-size-16);
