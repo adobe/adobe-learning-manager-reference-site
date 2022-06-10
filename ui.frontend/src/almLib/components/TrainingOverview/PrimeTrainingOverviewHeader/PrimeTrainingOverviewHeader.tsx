@@ -10,9 +10,9 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { ProgressBar } from "@adobe/react-spectrum";
-import { url } from "inspector";
 import React from "react";
 import { PrimeLearningObjectInstanceEnrollment } from "../../../models/PrimeModels";
+import { checkIsEnrolled } from "../../../utils/overview";
 import { GetTranslation } from "../../../utils/translationService";
 import styles from "./PrimeTrainingOverviewHeader.module.css";
 
@@ -24,10 +24,24 @@ const PrimeTrainingOverviewHeader: React.FC<{
   showProgressBar?: boolean;
   enrollment?: PrimeLearningObjectInstanceEnrollment;
 }> = (props) => {
-  const { format, title, color, bannerUrl, showProgressBar = false, enrollment } = props;
+  const {
+    format,
+    title,
+    color,
+    bannerUrl,
+    showProgressBar = false,
+    enrollment,
+  } = props;
 
   return (
-    <div style={bannerUrl ? { background: `url(${bannerUrl}) no-repeat center center / cover`} : { backgroundColor: color }} className={styles.header}>
+    <div
+      style={
+        bannerUrl
+          ? { background: `url(${bannerUrl}) no-repeat center center / cover` }
+          : { backgroundColor: color }
+      }
+      className={styles.header}
+    >
       <div className={styles.headingContainer}>
         <div className={styles.format}>
           {GetTranslation(`alm.catalog.card.${format}`, true)}
@@ -41,7 +55,7 @@ const PrimeTrainingOverviewHeader: React.FC<{
         >
           {title}
         </h1>
-        {showProgressBar && enrollment && (
+        {showProgressBar && enrollment && checkIsEnrolled(enrollment) && (
           <div className={styles.progressContainer}>
             <ProgressBar
               showValueLabel={false}
