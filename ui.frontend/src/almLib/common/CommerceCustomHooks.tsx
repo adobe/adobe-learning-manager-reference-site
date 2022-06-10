@@ -77,8 +77,8 @@ const transformFilters = (
   item: FilterItem,
   filterType: string
 ) => {
-  let defaultFilters = defaultFiltersState[filterType as keyof FilterState]
-    .list!;
+  let defaultFilters =
+    defaultFiltersState[filterType as keyof FilterState].list!;
   item.attribute_options.forEach((attributeOption) => {
     const { label } = attributeOption;
     const index = defaultFilters?.findIndex((type) => type.value === label);
@@ -225,6 +225,9 @@ class CommerceCustomHooks implements ICustomHooks {
           pageSize: DEFAULT_PAGE_LIMIT,
           filter,
           search,
+          sort: {
+            almpublishdate: "DESC",
+          },
         },
       });
       const filtersFromStorage = await getOrUpdateFilters();
@@ -270,6 +273,9 @@ class CommerceCustomHooks implements ICustomHooks {
           filter,
           currentPage: parseInt(currentPage) + 1,
           search,
+          sort: {
+            almpublishdate: "DESC",
+          },
         },
       });
       const filtersFromStorage = await getOrUpdateFilters();

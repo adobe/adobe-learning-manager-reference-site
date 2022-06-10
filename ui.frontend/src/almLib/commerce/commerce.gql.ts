@@ -75,12 +75,14 @@ export const GET_COMMERCE_TRAININGS = gql`
     $filter: ProductAttributeFilterInput
     $currentPage: Int = 1
     $search: String = ""
+    $sort:ProductAttributeSortInput
   ) {
     products(
       pageSize: $pageSize
       filter: $filter
       currentPage: $currentPage
       search: $search
+      sort:$sort
     ) {
       page_info {
         page_size
