@@ -131,13 +131,36 @@ const PrimeModuleItem: React.FC<{
 
   useEffect(() => {
     if (showCannotSkipDialog) {
-      almAlert(
-        true,
-        GetTranslation("alm.overview.cannot.skip.ordered.module", true),
-        AlertType.error
-      );
+      let messages: string;
+      if (isPrerequisiteLOsCompleted()) {
+        messages = GetTranslation(
+          "alm.overview.cannot.skip.prerequisite.module",
+          true
+        );
+      } else {
+        messages = GetTranslation(
+          "alm.overview.cannot.skip.ordered.module",
+          true
+        );
+      }
+      almAlert(true, messages, AlertType.error);
     }
   }, [almAlert, showCannotSkipDialog]);
+
+  const isPrerequisiteLOsCompleted = () => {
+    if (
+      training.prerequisiteLOs &&
+      training.isPrerequisiteEnforced &&
+      training.prerequisiteLOs.some(
+        (l) => !l.enrollment || l.enrollment.state !== "COMPLETED"
+      )
+    ) {
+      // prerequisite enforced and not completed
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   const config = getALMConfig();
   const locale = config.locale;
