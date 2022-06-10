@@ -156,6 +156,8 @@
   "alm.community.comment.rightAnswer": "RIGHT ANSWER",
   "alm.error.message": "Error Loading the Component : ",
   "alm.overview.job.aid.not.in.list": "This ||JOB_AID|| does not exist in your list",
+  "alm.overview.job.aid.remove.from.list": "Remove from my list",
+  "alm.overview.job.aid.add.from.list": "Add to my list",
   "alm.community.showMoreComments": "Show more comments",
   "alm.community.showMoreReplies": "Show more replies",
   "alm.community.post.poll.submitChoice": "Submit Choice",
