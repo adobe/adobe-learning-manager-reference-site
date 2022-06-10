@@ -189,6 +189,7 @@
   "alm.overview.certification.minimum.criteria.label": "Learners must complete ${x} of ${y} |||COURSE||| to achieve ||CERTIFICATION||",
   "alm.overview.course.minimum.criteria.label": "Learners must complete ${x} of ${y} ||MODULE|| to achieve ||COURSE||",
   "alm.overview.cannot.skip.ordered.module": "Cannot skip ||MODULE|| in an ordered ||COURSE||",
+  "alm.overview.cannot.skip.prerequisite.module": "Cannot skip pre-requisite |||COURSE|||. Please complete all the pre-requisite |||COURSE||| before starting this ||COURSE||",
   "alm.overview.submissionPending.label": "Submission Pending",
   "alm.overview.module.uploadFile": "Upload File",
   "alm.overview.submissionAwaitingApproval.label": "Submission Awaiting Approval",

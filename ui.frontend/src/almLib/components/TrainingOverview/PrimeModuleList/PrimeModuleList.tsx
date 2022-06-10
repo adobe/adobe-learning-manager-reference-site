@@ -15,6 +15,7 @@ import {
   PrimeLearningObjectInstance,
   PrimeLearningObjectResource,
 } from "../../../models/PrimeModels";
+import { arePrerequisiteEnforcedAndCompleted } from "../../../utils/overview";
 import { PrimeModuleItem } from "../PrimeModuleItem";
 import styles from "./PrimeModuleList.module.css";
 
@@ -43,14 +44,7 @@ const PrimeModuleList: React.FC<{
     loResource: PrimeLearningObjectResource,
     index: number
   ): boolean => {
-    if (
-      training.prerequisiteLOs &&
-      training.isPrerequisiteEnforced &&
-      training.prerequisiteLOs.some(
-        (l) => !l.enrollment || l.enrollment.state !== "COMPLETED"
-      )
-    ) {
-      // prerequisite enforced and not completed
+    if (!arePrerequisiteEnforcedAndCompleted(training)) {
       return true;
     }
     if (!training.isSubLoOrderEnforced) {

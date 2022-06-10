@@ -1,5 +1,5 @@
-import { PrimeLearningObjectInstanceEnrollment } from "../models";
-import { PENDING_ACCEPTANCE, PENDING_APPROVAL, WAITING } from "./constants";
+import { PrimeLearningObject, PrimeLearningObjectInstanceEnrollment } from "../models";
+import { COMPLETED, PENDING_ACCEPTANCE, PENDING_APPROVAL, WAITING } from "./constants";
 import { getALMObject, updateURLParams } from "./global";
 
 export function checkIsEnrolled(
@@ -17,4 +17,20 @@ export const storeActionInNonLoggedMode = (actionType: string) => {
   if (!getALMObject().isPrimeUserLoggedIn()) {
     updateURLParams({ action: actionType });
   }
+};
+
+export const arePrerequisiteEnforcedAndCompleted = (
+  training: PrimeLearningObject
+) => {
+  if (
+    training.prerequisiteLOs &&
+    training.isPrerequisiteEnforced &&
+    training.prerequisiteLOs.some(
+      (l) => !l.enrollment || l.enrollment.state !== COMPLETED
+    )
+  ) {
+    // prerequisite enforced and not completed
+    return false;
+  }
+  return true;
 };
