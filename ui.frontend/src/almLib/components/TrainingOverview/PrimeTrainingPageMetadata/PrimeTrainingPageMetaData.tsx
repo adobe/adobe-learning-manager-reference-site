@@ -149,8 +149,8 @@ const PrimeTrainingPageMetaData: React.FC<{
     }
   }, [enrollment, trainingInstance.state, isPricingEnabled]);
 
-  const enrollmentCount = instanceSummary.enrollmentCount;
-  const seatLimit = instanceSummary.seatLimit;
+  const enrollmentCount = instanceSummary?.enrollmentCount;
+  const seatLimit = instanceSummary?.seatLimit;
   const seatsAvailable =
     seatLimit !== undefined ? seatLimit - (enrollmentCount || 0) : -1;
 
@@ -182,7 +182,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   );
 
   const waitListText =
-    enrollment && enrollment.state == WAITING ? (
+    enrollment && enrollment.state === WAITING ? (
       <p style={{ textAlign: "center" }} className={styles.label}>
         {formatMessage({
           id: `alm.overview.waitlist`,
@@ -503,7 +503,7 @@ const PrimeTrainingPageMetaData: React.FC<{
     ) {
       const totalCount = training.subLOs?.length || 0;
       let completionCount = 0;
-      training.subLOs.forEach((lo) => {
+      training.subLOs?.forEach((lo) => {
         if (lo.enrollment?.hasPassed) {
           completionCount += 1;
         }
@@ -805,8 +805,8 @@ const PrimeTrainingPageMetaData: React.FC<{
               })}
             </label>
             <div>
-              {loType === "certification"
-                ? showCertificationDeadline == undefined
+              {loType === CERTIFICATION
+                ? !showCertificationDeadline
                   ? formatMessage(
                       {
                         id: "alm.overview.certification.deadline",

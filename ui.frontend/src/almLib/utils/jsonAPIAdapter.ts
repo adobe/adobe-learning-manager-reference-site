@@ -91,7 +91,7 @@ export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
         isList = true;
       }
     }
-  } else {
+  } else if (data) {
     if (data["type"] === "searchResult") {
       data = jsonApiResponse.included.filter(
         (item: { type: any }) => item.type === "learningObject"
@@ -104,7 +104,8 @@ export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
   const retval: any = {};
   if (dataType) {
     retval[
-      `${dataType === "searchResult" ? "learningObject" : dataType}${isList ? "List" : ""
+      `${dataType === "searchResult" ? "learningObject" : dataType}${
+        isList ? "List" : ""
       }`
     ] = result;
   }
@@ -179,10 +180,10 @@ export class ObjectWrapper {
         } else
           retval = relData
             ? ObjectWrapper.GetWrapper(
-              relData["type"],
-              relData["id"],
-              this.ALMStore
-            )
+                relData["type"],
+                relData["id"],
+                this.ALMStore
+              )
             : undefined;
       }
     }
@@ -450,7 +451,7 @@ export function parseCommerceResponse(
       const loFormatOptions =
         filterMap.get(ALMToCommerceTypes["loFormat"]) || [];
       loFormatOptions?.forEach((element: { label: any; value: any }) => {
-        if (element.value == item.almdeliverytype) {
+        if (element.value === item.almdeliverytype) {
           lo.loFormat = element.label;
         }
       });
@@ -458,7 +459,7 @@ export function parseCommerceResponse(
     if (item.almlotype) {
       const loTypesOptions = filterMap.get(ALMToCommerceTypes["loTypes"]) || [];
       loTypesOptions?.forEach((element: { label: any; value: any }) => {
-        if (element.value == item.almlotype) {
+        if (element.value === item.almlotype) {
           lo.loType = element.label;
         }
       });
@@ -474,4 +475,4 @@ export function parseCommerceResponse(
   });
   return loResponse;
 }
-export { };
+export {};
