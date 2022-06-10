@@ -36,6 +36,7 @@ import {
   APPROVED,
   CHANGE,
   CLASSROOM,
+  COMPLETED,
   ELEARNING,
   PENDING_APPROVAL,
   PENDING_SUBMISSION,
@@ -66,6 +67,7 @@ import {
   XLS_SVG,
 } from "../../../utils/inline_svg";
 import {
+  arePrerequisiteEnforcedAndCompleted,
   checkIsEnrolled,
   storeActionInNonLoggedMode,
 } from "../../../utils/overview";
@@ -131,13 +133,20 @@ const PrimeModuleItem: React.FC<{
 
   useEffect(() => {
     if (showCannotSkipDialog) {
-      almAlert(
-        true,
-        GetTranslation("alm.overview.cannot.skip.ordered.module", true),
-        AlertType.error
+      let messages: string = GetTranslation(
+        "alm.overview.cannot.skip.ordered.module",
+        true
       );
+      if (!arePrerequisiteEnforcedAndCompleted(training)) {
+        messages = GetTranslation(
+          "alm.overview.cannot.skip.prerequisite.module",
+          true
+        );
+      }
+      almAlert(true, messages, AlertType.error);
     }
   }, [almAlert, showCannotSkipDialog]);
+
 
   const config = getALMConfig();
   const locale = config.locale;
