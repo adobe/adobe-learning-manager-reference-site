@@ -16,6 +16,7 @@ import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
 } from "../../../models/PrimeModels";
+import { COMPLETED } from "../../../utils/constants";
 import { convertSecondsToTimeText } from "../../../utils/dateTime";
 import { getALMObject } from "../../../utils/global";
 import { useCardBackgroundStyle, useCardIcon } from "../../../utils/hooks";
@@ -75,7 +76,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
     const { state } = training.enrollment;
     if (state === "STARTED") {
       statusText = "In Progress";
-    } else if (state === "COMPLETED") {
+    } else if (state === COMPLETED) {
       statusText = "Completed";
     }
   }

@@ -36,6 +36,7 @@ import {
   APPROVED,
   CHANGE,
   CLASSROOM,
+  COMPLETED,
   ELEARNING,
   PENDING_APPROVAL,
   PENDING_SUBMISSION,
@@ -66,6 +67,7 @@ import {
   XLS_SVG,
 } from "../../../utils/inline_svg";
 import {
+  arePrerequisiteEnforcedAndCompleted,
   checkIsEnrolled,
   storeActionInNonLoggedMode,
 } from "../../../utils/overview";
@@ -131,15 +133,13 @@ const PrimeModuleItem: React.FC<{
 
   useEffect(() => {
     if (showCannotSkipDialog) {
-      let messages: string;
-      if (isPrerequisiteLOsCompleted()) {
+      let messages: string = GetTranslation(
+        "alm.overview.cannot.skip.ordered.module",
+        true
+      );
+      if (!arePrerequisiteEnforcedAndCompleted(training)) {
         messages = GetTranslation(
           "alm.overview.cannot.skip.prerequisite.module",
-          true
-        );
-      } else {
-        messages = GetTranslation(
-          "alm.overview.cannot.skip.ordered.module",
           true
         );
       }
@@ -147,20 +147,6 @@ const PrimeModuleItem: React.FC<{
     }
   }, [almAlert, showCannotSkipDialog]);
 
-  const isPrerequisiteLOsCompleted = () => {
-    if (
-      training.prerequisiteLOs &&
-      training.isPrerequisiteEnforced &&
-      training.prerequisiteLOs.some(
-        (l) => !l.enrollment || l.enrollment.state !== "COMPLETED"
-      )
-    ) {
-      // prerequisite enforced and not completed
-      return true;
-    } else {
-      return false;
-    }
-  };
 
   const config = getALMConfig();
   const locale = config.locale;
