@@ -65,6 +65,10 @@ governing permissions and limitations under the License.
   padding: 10px 10px 5px 10px;
 }
 
+.card.hover .title {
+  font-size: var(--prime-font-size-14);
+}
+
 .detailsContainer {
   z-index: 1;
   background: transparent;
@@ -113,7 +117,7 @@ governing permissions and limitations under the License.
   margin: 8px 0;
   letter-spacing: 0px;
   opacity: 1;
-  font-size: var(--prime-font-size-14);
+  font-size: var(--prime-font-size-18);
   line-height: 18px;
   text-transform: capitalize;
   display: -webkit-box;
