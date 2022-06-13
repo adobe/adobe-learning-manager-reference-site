@@ -451,6 +451,7 @@ export function parseCommerceResponse(
         filterMap.get(ALMToCommerceTypes["loFormat"]) || [];
       loFormatOptions?.forEach((element: { label: any; value: any }) => {
         if (element.value == item.almdeliverytype) {
+          
           lo.loFormat = element.label;
         }
       });
