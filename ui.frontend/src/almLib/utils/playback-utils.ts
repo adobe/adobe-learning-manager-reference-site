@@ -15,6 +15,7 @@ import {
   getWindowObject,
   redirectToLoginAndAbort,
 } from "./global";
+import { getLocale } from "./translationService";
 // let currenttrainingId = "";
 
 export function LaunchPlayer(props: any) {
@@ -95,7 +96,11 @@ export function GetPlayerURl(trainingId = "", moduleId = ""): string {
   //to-do handle preview/guest
   let url = `${hostName}${playerEndPoint}${key}&${authKey}&hostname=${hostName}&trapfocus=true`;
   if (moduleId) {
-    url += `&module_id=${moduleId}`;
+    url = `${url}&module_id=${moduleId}`;
+  }
+  const locale = getLocale(primeConfig.pageLocale);
+  if (locale) {
+    url = `${url}&locale=${locale}`;
   }
   return url;
 }

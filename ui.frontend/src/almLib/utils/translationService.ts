@@ -25,6 +25,56 @@ const ENGLISH_LOCALE = "en-US";
 //let _userLocale: string | undefined = undefined;
 let accountTerminologyMap: { [key: string]: AccountTerminology };
 
+const langMap: { [key: string]: string } = {
+  de: "de-DE",
+  en: "en-US",
+  es: "es-ES",
+  fr: "fr-FR",
+  it: "it-IT",
+  ja: "ja-JP",
+  ko: "ko-KR",
+  nb: "nb-NO",
+  nl: "nl-NL",
+  pl: "pl-PL",
+  pt: "pt-BR",
+  ru: "ru-RU",
+  tr: "tr-TR",
+  zh: "zh-CN",
+  zz: "zz-ZZ",
+};
+const availableLanguages = [
+  "de",
+  "en",
+  "es",
+  "fr",
+  "it",
+  "ja",
+  "ko",
+  "nb",
+  "nl",
+  "pl",
+  "pt",
+  "ru",
+  "tr",
+  "zh",
+  "zz",
+];
+
+export function getLocale(locale: string): string | undefined {
+  if (locale) {
+    if (locale.length == 2) {
+      return langMap[locale];
+    }
+    if (
+      locale.length > 2 &&
+      availableLanguages.includes(locale.slice(0, 2).toLowerCase())
+    ) {
+      return langMap[locale.slice(0, 2)];
+    }
+  }
+  return undefined;
+}
+
 export function getPreferredLocalizedMetadata<T>(
   localizedMetadata: T[],
   locale: string
