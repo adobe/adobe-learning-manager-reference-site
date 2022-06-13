@@ -451,7 +451,7 @@ export function parseCommerceResponse(
       const loFormatOptions =
         filterMap.get(ALMToCommerceTypes["loFormat"]) || [];
       loFormatOptions?.forEach((element: { label: any; value: any }) => {
-        if (element.value === item.almdeliverytype) {
+        if (element.value == item.almdeliverytype) {
           lo.loFormat = element.label;
         }
       });
@@ -459,7 +459,7 @@ export function parseCommerceResponse(
     if (item.almlotype) {
       const loTypesOptions = filterMap.get(ALMToCommerceTypes["loTypes"]) || [];
       loTypesOptions?.forEach((element: { label: any; value: any }) => {
-        if (element.value === item.almlotype) {
+        if (element.value == item.almlotype) {
           lo.loType = element.label;
         }
       });
