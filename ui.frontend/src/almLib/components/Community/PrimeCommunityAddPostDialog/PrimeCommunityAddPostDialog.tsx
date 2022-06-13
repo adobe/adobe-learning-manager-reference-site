@@ -413,36 +413,39 @@ const PrimeCommunityAddPostDialog = (props: any) => {
         )}
       </Content>
       <ButtonGroup>
-        <Button
-          variant="secondary"
-          onPress={(close) => {
+        <button
+          onClick={(close) => {
             closeDialogHandler(close);
           }}
+          className={`almButton secondary ${styles.button}`}
         >
           {formatMessage({
             id: "alm.community.cancel.label",
             defaultMessage: "Cancel",
           })}
-        </Button>
+        </button>
         {saveEnabled ? (
-          <Button
-            variant="cta"
-            onPress={(close) => {
+          <button
+            onClick={(close) => {
               savePostHandler(close);
             }}
+            className={`almButton primary`}
           >
             {formatMessage({
               id: "alm.community.post.label",
               defaultMessage: "Post",
             })}
-          </Button>
+          </button>
         ) : (
-          <Button variant="cta" isDisabled={true}>
+          <button
+            disabled={true}
+            className={`almButton primary`}
+          >
             {formatMessage({
               id: "alm.community.post.label",
               defaultMessage: "Post",
             })}
-          </Button>
+          </button>
         )}
       </ButtonGroup>
     </Dialog>

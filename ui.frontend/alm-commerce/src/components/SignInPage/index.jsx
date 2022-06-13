@@ -91,7 +91,7 @@ const SignIn = () => {
 
   return (
     <div className={styles.signInContainer}>
-    <h1>Login</h1>
+      <h1 className={styles.label}>Login</h1>
       {view !== RESET_PASSWORD ? (
         <Form
           maxWidth="size-3600"
@@ -153,12 +153,11 @@ const SignIn = () => {
               >
                 Forgot Password?
               </Button>
-              <br />
               <button
                 type="submit"
                 onClick={submitHandler}
-                isDisabled={isLoading}
-                className={`${styles.primaryButton} ${styles.commonButton}`}
+                disabled={isLoading}
+                className={`almButton primary ${styles.commonButton}`}
               >
                 {isLoading ? <CommerceLoader size="S" /> : "Login"}
               </button>
@@ -166,8 +165,8 @@ const SignIn = () => {
               <button
                 type="button"
                 onClick={() => setView(CREATE_ACCOUNT)}
-                isDisabled={isLoading}
-                className={`${styles.secondaryButton} ${styles.commonButton}`}
+                disabled={isLoading}
+                className={`almButton secondary ${styles.commonButton}`}
 
               >
                 Create an Account
@@ -179,8 +178,8 @@ const SignIn = () => {
               <button
                 type="submit"
                 onClick={submitHandler}
-                isDisabled={isLoading}
-                className={`${styles.primaryButton} ${styles.commonButton}`}
+                disabled={isLoading}
+                className={`almButton primary ${styles.commonButton}`}
 
               >
                 {view === CREATE_ACCOUNT ? "Create an Account" : "Submit"}
@@ -189,8 +188,9 @@ const SignIn = () => {
               <button
                 type="button"
                 onClick={() => setView(LOGIN)}
-                isDisabled={isLoading}
-                className={`${styles.secondaryButton} ${styles.commonButton}`}
+                disabled={isLoading}
+                className={`almButton secondary ${styles.commonButton}`}
+
 
               >
                 Cancel

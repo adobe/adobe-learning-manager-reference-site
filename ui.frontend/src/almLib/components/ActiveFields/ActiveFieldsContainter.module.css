@@ -136,23 +136,9 @@ governing permissions and limitations under the License.
   display: none;
 }
 
-.activeFieldsSaveOption:hover {
-  cursor: pointer;
-  background: #4283d0;
-  color: #ffffff;
-}
 
 .activeFieldsSaveOption {
-  padding: 8px 22px;
-  height: 2px;
-  border-radius: 22px;
-  font-size: var(--prime-font-size-14);
-  background: var(--prime-color-primary);
-  color: #ffffff;
-  opacity: 1;
-  border: none;
-  margin-top: 20px;
-  font-weight: normal;
+
   margin-top: 50px;
   margin-bottom: 50px;
 }

@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import styles from "./PrimeCommunityObjectHeader.module.css";
-import { formatDate } from "../../../utils/dateTime";
+import { GetFormattedDate } from "../../../utils/dateTime";
 import { SOCIAL_MORE_OPTIONS_SVG } from "../../../utils/inline_svg";
 import { useState } from "react";
 import { useCommunityObjectOptions } from "../../../hooks/community";
@@ -215,7 +215,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
         </span>
         <span className={styles.primePostDateSeperator}></span>
         <span className={styles.primePostDateCreated}>
-          {formatDate(object.dateCreated, config.locale)}
+          {GetFormattedDate(object.dateCreated, config.locale)}
         </span>
         <button
           className={styles.primeCommunityOptionsIcon}

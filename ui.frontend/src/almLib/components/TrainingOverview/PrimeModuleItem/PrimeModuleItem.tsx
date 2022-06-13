@@ -111,6 +111,7 @@ const PrimeModuleItem: React.FC<{
   canPlay?: boolean;
   updateFileSubmissionUrl: Function;
   isPartOfLP: boolean;
+  isParentLOEnrolled: boolean;
 }> = (props) => {
   const {
     training,
@@ -122,6 +123,7 @@ const PrimeModuleItem: React.FC<{
     canPlay,
     updateFileSubmissionUrl,
     isPartOfLP = false,
+    isParentLOEnrolled = false,
   } = props;
   const { formatMessage } = useIntl();
 
@@ -178,7 +180,7 @@ const PrimeModuleItem: React.FC<{
     resource.dateStart && resource.completionDeadline ? true : false;
 
   const durationText = convertSecondsToTimeText(
-    resource.authorDesiredDuration || resource.desiredDuration
+    resource.authorDesiredDuration ?? resource.desiredDuration
   );
 
   const moduleIcon =
@@ -213,6 +215,9 @@ const PrimeModuleItem: React.FC<{
   };
 
   const itemClickHandler = (event: any) => {
+    if (isPartOfLP && !isParentLOEnrolled) {
+      return;
+    }
     if (isEnrolled && !canPlay) {
       setShowCannotSkipDialog(true);
       setTimeout(() => setShowCannotSkipDialog(false), 3000);

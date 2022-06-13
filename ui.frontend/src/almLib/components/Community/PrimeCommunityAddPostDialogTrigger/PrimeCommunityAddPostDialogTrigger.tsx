@@ -76,7 +76,7 @@ const PrimeCommunityAddPostDialogTrigger = (props: any) => {
         ) : (
           <ActionButton
             id="showAddPostDialog"
-            UNSAFE_className={styles.primeDialogLaunchButton}
+            UNSAFE_className={`almButton primary ${styles.primeDialogLaunchButton}`}
             onPress={onClickHandler}
           >
             {props.buttonLabel}

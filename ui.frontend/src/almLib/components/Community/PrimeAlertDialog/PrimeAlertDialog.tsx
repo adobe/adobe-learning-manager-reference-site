@@ -21,7 +21,7 @@ import styles from "./PrimeAlertDialog.module.css";
 
 const PrimeAlertDialog = (props: any) => {
   const showDialog = useRef(false);
-
+  const classes = `${props.classes} ${styles.dialogButton} `
   useEffect(() => {
     if (!showDialog.current && props.show) {
       const launchDialog = document.getElementById("showAlert") as HTMLElement;
@@ -63,7 +63,7 @@ const PrimeAlertDialog = (props: any) => {
             secondaryActionLabel={props.secondaryActionLabel}
             onSecondaryAction={onSecondaryActionHandler}
             autoFocusButton="primary"
-            UNSAFE_className={props.classes || ""}
+            UNSAFE_className={classes || ""}
           >
             {props.body}
           </AlertDialog>

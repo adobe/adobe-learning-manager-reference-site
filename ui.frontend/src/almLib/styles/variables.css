@@ -22,6 +22,9 @@ governing permissions and limitations under the License.
   --prime-color-nc4: #5d5d5d;
   --prime-color-nc5: #f7f7f7;
   --prime-color-nc6: #e8e8e8;
+  --prime-color-nc7: #e6e6e6;
+  --prime-color-nc8: #909090;
+  --prime-color-nc9: #d9e6f5;
 
   --prime-text-shadow: 0.2rem 0.2rem 0.2rem #565656;
 
@@ -40,6 +43,7 @@ governing permissions and limitations under the License.
   --prime-font-weight-400: 400;
 
   --prime-color-primary: #306eb5;
+  --prime-color-primary-hover: #0054b6;
   /* #306eb5; */
   --prime-font-weight-600: 600;
 

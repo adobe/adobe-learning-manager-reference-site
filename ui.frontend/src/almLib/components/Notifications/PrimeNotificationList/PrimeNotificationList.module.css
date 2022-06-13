@@ -24,6 +24,8 @@ governing permissions and limitations under the License.
   right: 0px;
   z-index: 11;
   box-shadow: 0 0 5px rgb(0 0 0 / 20%);
+  scrollbar-color: var(--prime-color-nc8) var(--prime-color-nc5);
+  scrollbar-width: thin;
 }
 
 .notificationList {

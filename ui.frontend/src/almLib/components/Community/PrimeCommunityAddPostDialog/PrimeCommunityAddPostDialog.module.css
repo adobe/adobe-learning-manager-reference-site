@@ -149,3 +149,7 @@ governing permissions and limitations under the License.
 .primeCommunityRemoveOption:hover {
     cursor: pointer;
 }
+
+.button{
+    margin-right: 10px;
+}

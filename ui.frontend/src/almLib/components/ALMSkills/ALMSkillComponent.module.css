@@ -82,22 +82,11 @@ governing permissions and limitations under the License.
   color: #000000;
 }
 
-.actionButton {
-  background: #306eb5;
-  border-radius: 22px;
-  opacity: 1;
-  color: #ffffff;
-  padding: 8px 22px;
-  font-size: var(--prime-font-size-12);
-  border: none;
+.modifyInterest .actionButton {
+
   margin-top: 20px;
   margin-right: 25px;
-}
-
-.actionButton:hover {
-  cursor: pointer;
-  background: #4283d0;
-  color: #ffffff;
+  display: inline-block;
 }
 
 .removeInterestButton {

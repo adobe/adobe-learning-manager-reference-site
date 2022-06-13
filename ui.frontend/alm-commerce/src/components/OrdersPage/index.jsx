@@ -14,7 +14,6 @@ import { useSearchParams } from "react-router-dom";
 import { useOrdersPage } from "../../hooks/OrdersPage/useOrdersPage";
 import { getALMConfig, getALMObject } from '../../utils/global';
 import CommerceLoader from '../Common/Loader';
-import { Button } from '@adobe/react-spectrum';
 
 
 export default function OrdersPage() {
@@ -48,7 +47,8 @@ export default function OrdersPage() {
     return (
         <div>
             <h1>Thank you for your purchase.</h1>
-            <Button variant="cta" type="button" onPress={proceedHandler} >Proceed to Learning site</Button>
-        </div>
+            <button type="button"
+                onClick={proceedHandler} className={`almButton primary`}>Proceed to Learning site</button>
+        </div >
     )
 }

@@ -146,16 +146,15 @@ const ActiveFieldsContainter = () => {
             <section className={styles.saveActiveFieldButton}>
               <hr />
               <div className={styles.activeFieldButtonContainer}>
-                <Button
-                  UNSAFE_className={styles.activeFieldsSaveOption}
-                  variant="cta"
-                  onPress={UpdateAccountActiveFields}
+                <button
+                  className={`almButton primary ${styles.activeFieldsSaveOption}`}
+                  onClick={UpdateAccountActiveFields}
                 >
                   {formatMessage({
                     id: "alm.profile.fields.saveProfileChanges",
                     defaultMessage: "Save Changes",
                   })}
-                </Button>
+                </button>
               </div>
             </section>
           )}

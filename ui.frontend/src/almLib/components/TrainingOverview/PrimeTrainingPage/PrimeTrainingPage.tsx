@@ -34,6 +34,7 @@ import {
   setALMAttribute,
 } from "../../../utils/global";
 import { SOCIAL_CANCEL_SVG } from "../../../utils/inline_svg";
+import { checkIsEnrolled } from "../../../utils/overview";
 import { getPreferredLocalizedMetadata } from "../../../utils/translationService";
 import {
   cancelUploadFile,
@@ -112,6 +113,7 @@ const PrimeTrainingPage = () => {
   const sections = training.sections;
   const prerequisiteLOs = training.prerequisiteLOs;
   const prequisiteConstraints = training.prequisiteConstraints;
+  const isEnrolled = checkIsEnrolled(training?.enrollment);
 
   const startFileUpload = () => {
     (inputRef?.current as HTMLInputElement)?.click();
@@ -361,6 +363,7 @@ const PrimeTrainingPage = () => {
                 trainingInstance={trainingInstance}
                 isPreviewEnabled={isPreviewEnabled}
                 updateFileSubmissionUrl={updateFileSubmissionUrl}
+                isParentLOEnrolled={isEnrolled}
               />
             )}
             {loType === CERTIFICATION && (
@@ -369,6 +372,7 @@ const PrimeTrainingPage = () => {
                 launchPlayerHandler={launchPlayerHandler}
                 isPreviewEnabled={isPreviewEnabled}
                 updateFileSubmissionUrl={updateFileSubmissionUrl}
+                isParentLOEnrolled={isEnrolled}
               />
             )}
             {loType === LEARNING_PROGRAM &&
@@ -432,6 +436,7 @@ const PrimeTrainingPage = () => {
                       }
                       isPreviewEnabled={isPreviewEnabled}
                       updateFileSubmissionUrl={updateFileSubmissionUrl}
+                      isParentLOEnrolled={isEnrolled}
                     />
                   </section>
                 );

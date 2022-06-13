@@ -16,65 +16,6 @@ governing permissions and limitations under the License.
 }
 .commonButton {
   width: 100%;
-  cursor: pointer;
-  font-size: var(--prime-font-size-14);
-  min-height: 38px;
-  font-weight: 600;
-  padding: 5px 12px;
-  min-width: 70px;
-  display: block;
-  border-radius: 2px;
-  border-radius: 20px;
-}
-
-.secondaryButton {
-  border: 2px solid var(--prime-color-primary);
-  color: var(--prime-color-primary);
-  background-color: var(--prime-color-white);
-}
-
-.secondaryButton:enabled:hover,
-.secondaryButton:enabled:focus,
-.secondaryButton:enabled:focus-visible {
-  color: var(--prime-color-white);
-  background-color: var(--prime-color-primary);
-  border-color: var(--prime-color-primary);
-  outline: none;
-}
-/* .primaryButton::after {
-  border-radius: 0;
-} */
-
-.primaryButton {
-  background-color: var(--prime-color-primary);
-  border: 2px solid var(--prime-color-primary) !important;
-  color: var(--prime-color-white);
-}
-.primaryButton:enabled:hover,
-.primaryButton:enabled:focus,
-.primaryButton:enabled:focus-visible {
-  background-color: var(--prime-color-primary);
-  border: 2px solid var(--prime-color-primary) !important;
-  color: var(--prime-color-white);
-  outline: none;
-}
-.commonButton:disabled {
-  outline: none;
-  opacity: 0.9;
-  cursor: default;
-  pointer-events: none;
-  border: none !important;
-}
-
-/* .secondaryButton::after {
-  border-radius: 0;
-} */
-
-.pendingButton {
-  background-color: var(--prime-color-nc2) !important;
-  color: var(--prime-color-white) !important;
-  outline: none;
-  border: none;
 }
 
 .buyNowContainer {

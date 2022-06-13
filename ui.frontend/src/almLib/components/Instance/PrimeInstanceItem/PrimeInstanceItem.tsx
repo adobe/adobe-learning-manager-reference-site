@@ -107,23 +107,18 @@ const PrimeInstanceItem = (props: any) => {
               aria-hidden="true"
             >
               <Money />
-
             </span>
             {getFormattedPrice(price)}
           </p>
         )}
       </div>
       <div className={styles.actionWrapper}>
-        <Button
-          variant="primary"
-          onPress={selectHandler}
-          UNSAFE_className={styles.button}
-        >
+        <button onClick={selectHandler} className={`almButton secondary ${styles.button}`}>
           {formatMessage({
             id: "alm.instance.see.details",
             defaultMessage: "See details",
           })}
-        </Button>
+        </button>
       </div>
     </li>
   );
