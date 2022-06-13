@@ -9,20 +9,21 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import styles from "./PrimeCommunityObjectInput.module.css";
-import { useIntl } from "react-intl";
-import Send from "@spectrum-icons/workflow/Send";
 import Cancel from "@spectrum-icons/workflow/Cancel";
-import React, { useEffect, useState, useRef } from "react";
+import Send from "@spectrum-icons/workflow/Send";
+import React, { useEffect, useRef, useState } from "react";
+import { useIntl } from "react-intl";
 import { PrimeCommunityLinkPreview } from "../PrimeCommunityLinkPreview";
+import styles from "./PrimeCommunityObjectInput.module.css";
 // import { PrimeCommunityLoLinkPreview } from "../PrimeCommunityLoLinkPreview";
 
 const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
   const { formatMessage } = useIntl();
   const objectTextLimit = props.characterLimit ? props.characterLimit : 1000;
   const emptyString = "";
-  const [charactersRemaining, setCharactersRemaining] =
-    useState(objectTextLimit);
+  const [charactersRemaining, setCharactersRemaining] = useState(
+    objectTextLimit
+  );
   const [showLinkPreview, setShowLinkPreview] = useState(false);
   // const [ showLoLinkPreview, setShowLoLinkPreview ] = useState(false);
   const firstRun = useRef(true);
@@ -75,7 +76,9 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
     );
     if (currentInputLength > 0) {
       if (typeof props.enablePrimaryAction === "function") {
-        props.enablePrimaryAction();
+        ref.current.value.trim() !== ""
+          ? props.enablePrimaryAction()
+          : props.disablePrimaryAction();
       }
     } else {
       if (typeof props.disablePrimaryAction === "function") {

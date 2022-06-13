@@ -13,6 +13,7 @@ governing permissions and limitations under the License.
 #signout-page-cont
 {
   min-height: 500px;
+  margin-top: 80px;
 }
 
 #signout-page-cont #signout-page-txt
@@ -40,6 +41,7 @@ governing permissions and limitations under the License.
   border-radius: 24px;
   border: 0;
   cursor: pointer;
+  margin-top: 30px;
 }
 
 #signout-page-cont #signout-page-login-btn .cmp-button__text

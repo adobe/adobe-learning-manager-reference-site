@@ -11,7 +11,6 @@ governing permissions and limitations under the License.
 */
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { Button } from "@adobe/react-spectrum";
 import Calendar from "@spectrum-icons/workflow/Calendar";
 import Location from "@spectrum-icons/workflow/Location";
 import Money from "@spectrum-icons/workflow/Money";
@@ -113,7 +112,10 @@ const PrimeInstanceItem = (props: any) => {
         )}
       </div>
       <div className={styles.actionWrapper}>
-        <button onClick={selectHandler} className={`almButton secondary ${styles.button}`}>
+        <button
+          onClick={selectHandler}
+          className={`almButton secondary ${styles.button}`}
+        >
           {formatMessage({
             id: "alm.instance.see.details",
             defaultMessage: "See details",

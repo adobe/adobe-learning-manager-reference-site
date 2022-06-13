@@ -29,6 +29,7 @@ export interface PrimeConfig {
   communityBoardDetailsPath: string;
   commerceBasePath: string;
   locale: string;
+  pageLocale: string;
   almCdnBaseUrl: string;
   commerceURL: string;
   graphqlProxyPath: string;
@@ -219,4 +220,4 @@ export const setItemToStorage = (key: string, data: any, ttl = 10800) => {
 
 export const getCommerceStoreName = () => {
   return getALMConfig().commerceStoreName;
-}
+};

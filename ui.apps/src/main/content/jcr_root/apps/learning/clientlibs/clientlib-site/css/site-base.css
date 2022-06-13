@@ -94,6 +94,10 @@ governing permissions and limitations under the License.
   margin-top: 15px;
 }
 
+#home-catalog-container .cmp-carousel__indicators li {
+  cursor: pointer;
+}
+
 /* CSS for MyLearning Page*/
 #learning-parent-container #learning-carousel-cont .cmp-teaser__title,
 #home-catalog-container #home-carousel-cont .cmp-teaser__title {
@@ -203,7 +207,7 @@ governing permissions and limitations under the License.
 }
 
 #home-catalog-container .carousel {
-  margin-bottom: 40px;
+  margin-bottom: 50px;
 }
 
 #home-catalog-container .newssection  {
@@ -255,6 +259,12 @@ governing permissions and limitations under the License.
   height: 249px;
 }
 
+#home-catalog-container .cmp-teaser__image,
+#home-catalog-container .cmp-teaser__image .cmp-image,
+#home-catalog-container .cmp-teaser__image .cmp-image .cmp-image__image {
+  height: 400px;
+}
+
 #learning-parent-container .carousel {
   height: 279px;
 }
@@ -263,16 +273,20 @@ governing permissions and limitations under the License.
   margin-top: 15px;
 }
 
+#learning-parent-container .cmp-carousel__indicators li {
+  cursor: pointer;
+}
+
 @media screen and (min-width: 1024px) {
   #catalog-page-container,
   #home-catalog-container {
     margin: 0 auto;
-    margin-top: 30px;
+    margin-top: 50px;
   }
 
   #home-categories-container {
     margin: 0 auto;
-    margin-top: 30px;
+    margin-top: 50px;
     margin-bottom: 60px;
   }
 
@@ -299,7 +313,7 @@ governing permissions and limitations under the License.
   }
   
   #home-catalog-container .carousel {
-    margin-bottom: 60px;
+    margin-bottom: 70px;
   }
   
   #home-catalog-container .newssection  {
@@ -383,7 +397,7 @@ governing permissions and limitations under the License.
     max-width: var(--prime-container-max-width-tablet);
     width: var(--prime-container-width);
     padding: 0;
-    margin-top: 20px;
+    margin-top: 30px;
   }
 
   #home-categories-container {

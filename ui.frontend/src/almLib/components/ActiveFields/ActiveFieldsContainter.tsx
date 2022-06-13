@@ -9,7 +9,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { Button, lightTheme, Provider } from "@adobe/react-spectrum";
+import { lightTheme, Provider } from "@adobe/react-spectrum";
 import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useProfile } from "../../hooks";
@@ -54,27 +54,27 @@ const ActiveFieldsContainter = () => {
     let multiValues: any;
     let selectedMultiValues = new Map();
     const userFields: any = user.fields;
-    if (userFields == undefined) {
-      accountActiveFields?.fields?.map((field: any) => {
+    if (!userFields) {
+      accountActiveFields?.fields?.forEach((field: any) => {
         selectedMultiValues.set(field, false);
       });
       setPredefinedMultiValues(selectedMultiValues);
     } else {
-      accountActiveFields?.fields?.map((activeField) => {
+      accountActiveFields?.fields?.forEach((activeField) => {
         if (activeField.allowedValues.length > 0 && activeField.isMultiValue) {
-          if (userFields[activeField.name] != undefined) {
+          if (userFields[activeField.name]) {
             multiValues = userFields[activeField.name].filter((value: string) =>
               activeField.allowedValues.includes(value)
             );
           }
-          multiValues?.map((multiValue: any) => {
+          multiValues?.forEach((multiValue: any) => {
             selectedMultiValues.set(multiValue, true);
           });
         }
       });
       setPredefinedMultiValues(selectedMultiValues);
     }
-  }, [user]);
+  }, [user, accountActiveFields]);
 
   const updateSelectedMultiValues = (allowedValue: any, value: boolean) => {
     let selectedMultiValues = new Map(predefinedMultiValues);

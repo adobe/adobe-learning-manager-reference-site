@@ -35,7 +35,8 @@ governing permissions and limitations under the License.
 .userProfile input {
   display: none;
 }
-.detailsContainer {
+.detailsContainer,
+.detailsContainerWithBottomPadding {
   display: flex;
 }
 
@@ -196,10 +197,14 @@ governing permissions and limitations under the License.
   .userProfile {
     padding: 0;
   }
-  .detailsContainer {
+  .detailsContainer,
+  .detailsContainerWithBottomPadding {
     padding: 20px 20px 50px 20px;
     border-top: 2px solid var(--prime-color-nc6);
     border-bottom: 2px solid var(--prime-color-nc6);
+  }
+  .detailsContainerWithBottomPadding {
+    padding-bottom: 100px;
   }
   .image {
     width: 54px;

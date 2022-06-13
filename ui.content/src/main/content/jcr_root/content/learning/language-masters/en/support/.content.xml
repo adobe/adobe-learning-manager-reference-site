@@ -62,10 +62,10 @@
                             jcr:primaryType="nt:unstructured"
                             jcr:title="Product name"
                             sling:resourceType="learning/components/form/text"
+                            id="alm-support-product-name"
                             helpMessage="Product Name"
                             name="product"
-                            rows="2"
-                            type="textarea"
+                            type="text"
                             usePlaceholder="true"/>
                         <text_1812514109
                             jcr:created="{Date}2022-03-18T19:47:13.305+05:30"
