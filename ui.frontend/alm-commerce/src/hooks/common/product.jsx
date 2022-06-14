@@ -24,7 +24,7 @@ const useCardBackgroundStyle = (training) => {
             background: `${themeColors[colorCode]} url(
                 ${cardIconUrl}
             ) center center no-repeat`,
-            backgroundSize: "50px",
+            backgroundSize: "80px",
         };
     }, [training]);
 
