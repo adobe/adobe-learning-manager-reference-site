@@ -36,7 +36,8 @@
   height: 7rem;
   padding-right: 30px;
   position: relative;
-  top: 18rem;
+  top: 50%;
+  margin-top: -50px;
   font-size: var(----prime-font-size-16);
 }
 
