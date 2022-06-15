@@ -54,11 +54,32 @@ export const useAddressBook = (props) => {
         }
     }, [navigate])
 
-    const addBillingAddress = useCallback(async (variables = {}) => {
+    const addBillingAddress = useCallback(async (input = {}) => {
         await addDefaultBillingAddress({
-            variables
+            variables: {
+                address: input.address
+            }
         });
-        await addBillingAddressOnCart({ variables });
+        let request = {
+            cart_id: input.cartId,
+            "billing_address": {
+                address: {
+                    firstname: input.address.firstname,
+                    lastname: input.address.lastname,
+                    street: input.address.street,
+                    city: input.address.city,
+                    region: input.address.region["region_id"] || input.address.region["region"],
+                    postcode: input.address.postcode,
+                    country_code: input.address.country_code,
+                    telephone: input.address.telephone
+                }
+            }
+        }
+        await addBillingAddressOnCart({
+            variables: {
+                request
+            }
+        });
 
     }, [addBillingAddressOnCart, addDefaultBillingAddress]);
 
