@@ -25,31 +25,58 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.sling</groupId>
-                <artifactId>sling-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>biz.aQute.bnd</groupId>
-                <artifactId>bnd-maven-plugin</artifactId>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
                 <executions>
                     <execution>
-                        <id>bnd-process</id>
+                        <id>scr-metadata</id>
                         <goals>
-                            <goal>bnd-process</goal>
+                            <goal>manifest</goal>
                         </goals>
                         <configuration>
-                            <bnd><![CDATA[
-Import-Package: javax.annotation;version=0.0.0,*
-                                ]]></bnd>
+                            <supportIncrementalBuild>true</supportIncrementalBuild>
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <exportScr>true</exportScr>
+                    <instructions>
+                        <!-- Enable registration of Sling Models classes via bnd plugin -->
+                        <_plugin>org.apache.sling.bnd.models.ModelsScannerPlugin</_plugin>
+                        <!-- Enable processing of OSGI DS component annotations -->
+                        <_dsannotations>*</_dsannotations>
+                        <!-- Enable processing of OSGI metatype annotations -->
+                        <_metatypeannotations>*</_metatypeannotations>
+                        <Import-Package>
+                            !org.apache.sling.sitemap.*,
+                            *
+                        </Import-Package>
+                        <DynamicImport-Package>
+                            <!-- Dynamically import the following, optional packages. optional imports do not necessarily resolve even
+                            when the package is actually available -->
+                            org.apache.sling.sitemap;version="[1.0, 2)",
+                            org.apache.sling.sitemap.builder;version="[1.0, 2)",
+                            org.apache.sling.sitemap.spi.common;version="[1.0, 2)",
+                            org.apache.sling.sitemap.spi.generator;version="[1.0, 1.1)",
+                        </DynamicImport-Package>
+                    </instructions>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.sling</groupId>
+                        <artifactId>org.apache.sling.bnd.models</artifactId>
+                        <version>1.0.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
-                <groupId>biz.aQute.bnd</groupId>
-                <artifactId>bnd-baseline-maven-plugin</artifactId>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
-                    <failOnMissing>false</failOnMissing>
+                    <instructions>
+                        <Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment>
+                    </instructions>
                 </configuration>
                 <executions>
                     <execution>
@@ -76,115 +103,6 @@ Import-Package: javax.annotation;version=0.0.0,*
         </plugins>
     </build>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.sling</groupId>
-            <artifactId>org.apache.sling.sitemap</artifactId>
-        </dependency>
-        <!-- OSGi Dependencies -->
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.annotation.versioning</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.annotation.bundle</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.service.metatype.annotations</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.service.component.annotations</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.service.component</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.service.cm</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.service.event</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.service.log</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.framework</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.resource</artifactId>
-        </dependency>
-        <!-- Other Dependencies -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.jcr</groupId>
-            <artifactId>jcr</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>javax.annotation-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.sling</groupId>
-            <artifactId>org.apache.sling.servlets.annotations</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.sling</groupId>
-            <artifactId>org.apache.sling.models.api</artifactId>
-        </dependency>
-	  <dependency>
-	 	<groupId>com.google.code.gson</groupId>
-		<artifactId>gson</artifactId>
-		<version>2.8.6</version>
-	  </dependency>
-        <!-- Testing -->
-        <dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit-addons</groupId>
-            <artifactId>junit-addons</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.wcm</groupId>
-            <artifactId>io.wcm.testing.aem-mock.junit5</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
     <profiles>
 		<profile>
 			<activation>
@@ -202,30 +120,60 @@ Import-Package: javax.annotation;version=0.0.0,*
 		</profile>
 		<profile>
             <id>classic</id>
-
              <build>
                 <plugins>
-                    <plugin>
-                       <!--================
-                        Relax AEM 6.x Dependencies to allow for broader deployment compatibility for 6.5.x
-                        ====================-->
-                        <groupId>biz.aQute.bnd</groupId>
-                        <artifactId>bnd-maven-plugin</artifactId>
+                        <plugin>
+                        <groupId>org.apache.felix</groupId>
+                        <artifactId>maven-bundle-plugin</artifactId>
+                        <extensions>true</extensions>
                         <executions>
                             <execution>
+                                <id>scr-metadata</id>
+                                <goals>
+                                    <goal>manifest</goal>
+                                </goals>
                                 <configuration>
-                                    <bnd><![CDATA[
-        Import-Package: javax.annotation;version=0.0.0, \
-                        com.day.cq.search;version="[1.3.0,2)", \
-                        com.day.cq.wcm.api;version="[1.27.0,2)", \
-                        org.apache.commons.lang3;version="[3.9.0,4)", \
-                        org.apache.sling.api.resource;version="[2.11.1,3)", \
-                        *
-                                        ]]></bnd>
+                                    <supportIncrementalBuild>true</supportIncrementalBuild>
                                 </configuration>
                             </execution>
                         </executions>
+                        <configuration>
+                            <exportScr>true</exportScr>
+                            <instructions>
+                                <!-- Enable registration of Sling Models classes via bnd plugin -->
+                                <_plugin>org.apache.sling.bnd.models.ModelsScannerPlugin</_plugin>
+                                <!-- Enable processing of OSGI DS component annotations -->
+                                <_dsannotations>*</_dsannotations>
+                                <!-- Enable processing of OSGI metatype annotations -->
+                                <_metatypeannotations>*</_metatypeannotations>
+                                <Import-Package>
+                                    javax.annotation;version=0.0.0,
+                                    com.day.cq.search;version=1.3.0,
+                                    com.day.cq.wcm.api;version=1.27.0,
+                                    org.apache.commons.lang3;version=3.9.0,
+                                    org.apache.sling.api.resource;version=2.11.1,
+                                    !org.apache.sling.sitemap.*,
+                                    *
+                                </Import-Package>
+                                <DynamicImport-Package>
+                                    <!-- Dynamically import the following, optional packages. optional imports do not necessarily resolve even
+                                    when the package is actually available -->
+                                    org.apache.sling.sitemap;version="[1.0, 2)",
+                                    org.apache.sling.sitemap.builder;version="[1.0, 2)",
+                                    org.apache.sling.sitemap.spi.common;version="[1.0, 2)",
+                                    org.apache.sling.sitemap.spi.generator;version="[1.0, 1.1)",
+                                </DynamicImport-Package>
+                            </instructions>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.sling</groupId>
+                                <artifactId>org.apache.sling.bnd.models</artifactId>
+                                <version>1.0.0</version>
+                            </dependency>
+                        </dependencies>
                     </plugin>
+                    
                 </plugins>
             </build>
 
@@ -379,4 +327,115 @@ Import-Package: javax.annotation;version=0.0.0,*
             </dependencies>
         </profile>
 	</profiles>
+
+        <dependencies>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.sitemap</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- OSGi Dependencies -->
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.annotation.versioning</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.annotation.bundle</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.metatype.annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.component.annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.component</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.cm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.event</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.log</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.framework</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.resource</artifactId>
+        </dependency>
+        <!-- Other Dependencies -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.jcr</groupId>
+            <artifactId>jcr</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.servlets.annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.models.api</artifactId>
+        </dependency>
+	  <dependency>
+	 	<groupId>com.google.code.gson</groupId>
+		<artifactId>gson</artifactId>
+		<version>2.8.6</version>
+	  </dependency>
+        <!-- Testing -->
+        <dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit-addons</groupId>
+            <artifactId>junit-addons</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.wcm</groupId>
+            <artifactId>io.wcm.testing.aem-mock.junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
 </project>

@@ -54,21 +54,21 @@
                         granite:id="alm-usage-type-select"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                        fieldLabel="Adobe Learning Manager usage"
+                        fieldLabel="Adobe Learning Manager mode"
                         name="./usageType">
                         <items jcr:primaryType="nt:unstructured">
                             <sites
                                 jcr:primaryType="nt:unstructured"
-                                text="For training internal employees (AEM + Learning Manager)"
+                                text="AEM + Adobe Learning Manager (logged-in users)"
                                 value="aem-sites"/>
-                            <commerce
-                                jcr:primaryType="nt:unstructured"
-                                text="For hosting paid courses on learning (AEM + Learning Manager + Commerce)"
-                                value="aem-commerce"/>
                             <es
                                 jcr:primaryType="nt:unstructured"
-                                text="For showcasing products to customers &amp; partners without account creation (AEM + Learning Manager + Training Metadata)"
+                                text="AEM + Adobe Learning Manager (logged-in/non-logged-in users)"
                                 value="aem-es"/>
+                            <commerce
+                                jcr:primaryType="nt:unstructured"
+                                text="AEM + Adobe Learning Manager + Adobe Commerce (logged-in/non-logged-in users)"
+                                value="aem-commerce"/>
                         </items>
                     </usage>
                     <almBaseURL
