@@ -62,17 +62,10 @@ function AddressBook({ setCanPlaceOrder }) {
   } = useAddressBook();
 
   useEffect(() => {
-    setState((prevState) => {
-      return {
-        ...prevState,
-        region: { ...prevState.region, value: "" },
-      };
-    })
     getCountryRegions({ code: country_code.value });
   }, [country_code.value, getCountryRegions]);
 
   useEffect(() => {
-    // console.log("inside default address useeffect", defaultBillingAddress);
     if (defaultBillingAddress?.firstname) {
       setState((prevState) => {
         const street1 = defaultBillingAddress.street?.length
@@ -91,7 +84,10 @@ function AddressBook({ setCanPlaceOrder }) {
           country_code: { ...prevState.country_code, value: defaultBillingAddress.country_code },
           streetAddress: { ...prevState.streetAddress, value: street1 },
           streetAddress2: { ...prevState.streetAddress2, value: street2 },
-          region: { ...prevState.region, value: defaultBillingAddress.region?.region_id },
+          region: {
+            ...prevState.region, value: defaultBillingAddress.region?.region_id
+              || defaultBillingAddress.region?.region
+          },
           postcode: { ...prevState.postcode, value: defaultBillingAddress.postcode },
           telephone: { ...prevState.telephone, value: defaultBillingAddress.telephone },
         };
@@ -114,6 +110,14 @@ function AddressBook({ setCanPlaceOrder }) {
     setState((prevState) => {
       return { ...prevState, [key]: { ...prevState[key], value } };
     });
+    if (key === 'country_code') {
+      setState((prevState) => {
+        return {
+          ...prevState,
+          region: { ...prevState.region, value: "" },
+        };
+      })
+    }
   };
   const submitHandler = async () => {
     setIsSubmitted(true);
@@ -137,6 +141,8 @@ function AddressBook({ setCanPlaceOrder }) {
           firstname: firstName.value,
           lastname: lastName.value,
           middlename: middleName.value,
+          default_shipping: true,
+          default_billing: true
         },
         cartId: getCartId(),
       };
