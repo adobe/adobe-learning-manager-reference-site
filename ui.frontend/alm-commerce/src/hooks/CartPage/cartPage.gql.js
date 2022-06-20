@@ -36,6 +36,7 @@ export const GET_CART_DETAILS = gql`
       items {
         id
         product {
+          almloid
           name
           sku
           almthumbnailurl

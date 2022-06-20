@@ -31,35 +31,12 @@ export const GET_COUNTRY_REGIONS = gql`
         }
     }
 `;
-
-
 export const ADD_DEFAULT_BILLING_ADDRESS = gql`
     mutation mutation_add_billing_address(
-        $region:Int!,
-        $country_code:CountryCodeEnum!,
-        $streetAddress:String!,
-        $streetAddress2:String!,
-        $telephone:String!,
-        $postcode:String!,
-        $city:String!,
-        $firstName:String!,
-        $lastName:String!,
-        $middleName:String!
+        $address:CustomerAddressInput!
     ) {
     createCustomerAddress(
-      input: {
-        region: { region_id: $region }
-        country_code: $country_code
-        street: [$streetAddress, $streetAddress2]
-        telephone: $telephone
-        postcode: $postcode
-        city: $city
-        firstname: $firstName
-        lastname: $lastName
-        middlename : $middleName
-        default_shipping: true
-        default_billing: true
-      }
+      input: $address
     ) {
             id
             default_shipping
@@ -94,36 +71,12 @@ export const GET_ADDRESSES = gql`
   } 
 `;
 
-
 export const SET_BILLING_ADDRESS = gql`
   mutation mutation_setBillingA59(
-      $cardId: String!,
-      $region:Int!,
-      $country_code:String!,
-      $streetAddress:String!,
-      $streetAddress2:String!,
-      $telephone:String!,
-      $postcode:String!,
-      $city:String!,
-      $firstName:String!,
-      $lastName:String!
+      $request:SetBillingAddressOnCartInput!
     ) {
     setBillingAddressOnCart(
-      input: {
-        cart_id: $cardId
-        billing_address: {
-            address: {
-                firstname: $firstName
-                lastname: $lastName
-                street: [$streetAddress, $streetAddress2]
-                city: $city
-                region_id: $region
-                postcode: $postcode
-                country_code: $country_code
-                telephone: $telephone
-            }
-            }
-        }
+      input: $request
     ) {
       cart {
         billing_address {

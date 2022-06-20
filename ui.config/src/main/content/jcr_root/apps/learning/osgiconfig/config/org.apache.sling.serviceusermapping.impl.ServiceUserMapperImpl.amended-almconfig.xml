@@ -13,4 +13,4 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
           jcr:primaryType="sling:OsgiConfig"
           user.default=""
-          user.mapping="aem-learning-core:alm-components-configuration=[sling-context-aware-config-web-console,content-reader-service,configuration-reader-service]"/>
+          user.mapping="com.adobe.learning.aem-learning-core:alm-components-configuration=[sling-context-aware-config-web-console,content-reader-service,configuration-reader-service]"/>

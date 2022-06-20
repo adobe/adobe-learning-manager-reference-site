@@ -112,6 +112,8 @@ governing permissions and limitations under the License.
   color: var(--prime-color-black);
   font-weight: bold;
   padding: 3px 8px;
+  position: absolute;
+  top: -20px;
 }
 .title {
   margin: 8px 0;

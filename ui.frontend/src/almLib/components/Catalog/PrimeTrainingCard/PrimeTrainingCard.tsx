@@ -119,25 +119,25 @@ const PrimeTrainingCard: React.FC<{
   return (
     <>
       <li className={styles.listItem}>
-        <a
+        <div
           className={cardClass}
           onMouseLeave={onMouseLeaveHandler}
-          href={"javascript:void(0)"}
+          // href={"javascript:void(0)"}
           onClick={cardClickHandler}
+          tabIndex={0}
+          aria-label={name}
         >
           <div style={{ ...cardBgStyle }} className={styles.thumbnail}></div>
 
           {imageUrl ? <div className={styles.backdrop}></div> : ""}
 
           <div className={styles.detailsContainer}>
-            <div className={styles.topBar}>
-              <div className={styles.format}>{fomatLabel}</div>
-            </div>
+            
 
             <div className={styles.bottomBar}>
-              {priceLabel && <span className={styles.price}>{priceLabel}</span>}
               <div className={styles.title}>{name}</div>
               <div className={styles.trainingType}>{trainingTypeLabel}</div>
+              {priceLabel && <span className={styles.price}>{priceLabel}</span>}
               <div
                 className={styles.descriptionContainer}
                 onMouseEnter={onMouseEnterHandler}
@@ -221,8 +221,12 @@ const PrimeTrainingCard: React.FC<{
                 </div>
               </div>
             </div>
+
+            <div className={styles.topBar}>
+              <div className={styles.format}>{fomatLabel}</div>
+            </div>
           </div>
-        </a>
+        </div>
       </li>
     </>
   );

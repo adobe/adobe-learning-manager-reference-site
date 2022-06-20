@@ -215,7 +215,7 @@ const PrimeModuleItem: React.FC<{
   };
 
   const itemClickHandler = (event: any) => {
-    if (isPartOfLP && !isParentLOEnrolled) {
+    if (isPartOfLP && !isParentLOEnrolled && !isModulePreviewAble) {
       return;
     }
     if (isEnrolled && !canPlay) {

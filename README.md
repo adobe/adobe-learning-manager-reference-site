@@ -11,6 +11,12 @@ The main parts of the template are:
 * ui.content: contains sample content using the components from the ui.apps
 * ui.frontend: contains React components.
 
+## Released Builds/Packages
+AEM package for the component 
+
+* [`aem-learning.all-x.x.x.zip`](https://github.com/adobe/adobe-learning-manager-reference-site/releases/latest): Build for AEM as a Cloud Service
+* [`aem-learning.all-x.x.x-classic.zip`](https://github.com/adobe/adobe-learning-manager-reference-site/releases/latest): Package for AEM 6.5+
+
 ## How to build
 
 To build all the modules run in the project root directory the following command with Maven 3:

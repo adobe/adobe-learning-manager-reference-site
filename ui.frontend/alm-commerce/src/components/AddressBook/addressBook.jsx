@@ -35,6 +35,7 @@ function AddressBook({ setCanPlaceOrder }) {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isAddressAvailable, setIsAddressAvailable] = useState(false);
+  const [showRegionInputBox, setShowRegionInputBox] = useState(false);
 
   const {
     firstName,
@@ -65,7 +66,6 @@ function AddressBook({ setCanPlaceOrder }) {
   }, [country_code.value, getCountryRegions]);
 
   useEffect(() => {
-    // console.log("inside default address useeffect", defaultBillingAddress);
     if (defaultBillingAddress?.firstname) {
       setState((prevState) => {
         const street1 = defaultBillingAddress.street?.length
@@ -84,7 +84,10 @@ function AddressBook({ setCanPlaceOrder }) {
           country_code: { ...prevState.country_code, value: defaultBillingAddress.country_code },
           streetAddress: { ...prevState.streetAddress, value: street1 },
           streetAddress2: { ...prevState.streetAddress2, value: street2 },
-          region: { ...prevState.region, value: defaultBillingAddress.region?.region_id },
+          region: {
+            ...prevState.region, value: defaultBillingAddress.region?.region_id
+              || defaultBillingAddress.region?.region
+          },
           postcode: { ...prevState.postcode, value: defaultBillingAddress.postcode },
           telephone: { ...prevState.telephone, value: defaultBillingAddress.telephone },
         };
@@ -99,10 +102,22 @@ function AddressBook({ setCanPlaceOrder }) {
     }
   }, [doeCartHasBillingAddress, setCanPlaceOrder])
 
+  useEffect(() => {
+    countries?.length && regions.length === 0 ? setShowRegionInputBox(true) : setShowRegionInputBox(false)
+  }, [countries?.length, regions])
+
   const changeHandler = (key, value) => {
     setState((prevState) => {
       return { ...prevState, [key]: { ...prevState[key], value } };
     });
+    if (key === 'country_code') {
+      setState((prevState) => {
+        return {
+          ...prevState,
+          region: { ...prevState.region, value: "" },
+        };
+      })
+    }
   };
   const submitHandler = async () => {
     setIsSubmitted(true);
@@ -113,18 +128,23 @@ function AddressBook({ setCanPlaceOrder }) {
       return state[key].value === "";
     });
     if (!isFormInvalid) {
-      let request = {
-        region: region.value,
-        country_code: country_code.value,
-        streetAddress: streetAddress.value,
-        streetAddress2: streetAddress2.value || "",
-        telephone: telephone.value,
-        postcode: postcode.value,
-        city: city.value,
-        firstName: firstName.value,
-        lastName: lastName.value,
-        middleName: middleName.value,
-        cardId: getCartId(),
+
+      const regionObj = showRegionInputBox ? { region: region.value } : { region_id: region.value }
+      const request = {
+        address: {
+          region: regionObj,
+          country_code: country_code.value,
+          street: [streetAddress.value, streetAddress2.value || "",],
+          telephone: telephone.value,
+          postcode: postcode.value,
+          city: city.value,
+          firstname: firstName.value,
+          lastname: lastName.value,
+          middlename: middleName.value,
+          default_shipping: true,
+          default_billing: true
+        },
+        cartId: getCartId(),
       };
       await addBillingAddress(request);
     }
@@ -196,7 +216,6 @@ function AddressBook({ setCanPlaceOrder }) {
                 changeHandler("country_code", event.target.value)
               }
               isRequired={true}
-              UNSAFE_className={styles.mandatory}
             >
               {/* <option>--Select a Country--</option> */}
               {countries.map((item) => (
@@ -249,22 +268,37 @@ function AddressBook({ setCanPlaceOrder }) {
               State
               {mandatorySvg}
             </label>
-            <select
-              id="region"
-              className={getDropDownClass(region.value)}
-              value={region.value}
-              onChange={(event) => changeHandler("region", event.target.value)}
-            >
-              <option value="">--Select a State--</option>
-              {regions.map((item) => (
-                <option key={`region-${item.code}-${item.id}`} value={item.id}>
-                  {item.name}
-                </option>
-              ))}
-            </select>
-            <span className={styles.errorText}>
-              {getValidationState(region.value) && region.error}
-            </span>
+
+            {
+              showRegionInputBox ? (
+                <TextField
+                  value={region.value}
+                  width={"100%"}
+                  onChange={(value) => changeHandler("region", value)}
+                  validationState={getValidationState(region.value)}
+                  errorMessage={region.error}
+                  isRequired={true}
+                  UNSAFE_className={styles.mandatory} />
+              ) : (<>
+                <select
+                  id="region"
+                  className={getDropDownClass(region.value)}
+                  value={region.value}
+                  onChange={(event) => changeHandler("region", event.target.value)}
+                >
+                  <option value="">--Select a State--</option>
+                  {regions.map((item) => (
+                    <option key={`region-${item.code}-${item.id}`} value={item.id}>
+                      {item.name}
+                    </option>
+                  ))}
+                </select>  <span className={styles.errorText}>
+                  {getValidationState(region.value) && region.error}
+                </span>
+              </>)
+            }
+
+
           </div>
         </div>
 

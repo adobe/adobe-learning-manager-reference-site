@@ -34,18 +34,17 @@ governing permissions and limitations under the License.
   margin-bottom: 1px;
 }
 .title {
-  width: 80%;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
+  width: 70%;
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 .cursor {
   cursor: pointer;
 }
 .headerWrapper {
   /* width: 90%; */
-  width: 100%;
+  width: calc(100% - 60px);
   padding: 10px 10px 10px 0;
   line-height: 1.25rem;
 }
@@ -166,7 +165,7 @@ a.details {
   border-radius: 30px;
   position: absolute;
   margin-top: 5px;
-	margin-left: 3px;
+  margin-left: 3px;
   line-height: 40%;
   background-color: var(--prime-color-white);
 }
@@ -185,7 +184,7 @@ a.details {
 .progressArea {
   display: flex;
   width: 200px;
-  margin-left:20px;
+  margin-left: 20px;
 }
 
 .primeStatusSvg {
@@ -211,16 +210,16 @@ a.details {
     display: flex;
   }
 
-  .headerWrapper {
-    width: 100%;
-  }
 
   .progressArea {
     width: 175px;
   }
-  
+
   .primeStatusSvg {
-    width: 45px
+    width: 45px;
+  }
+  .title {
+    width: 50%;
   }
 }
 
@@ -238,12 +237,12 @@ a.details {
   display: none;
 }
 
-.uploadButton{
+.uploadButton {
   background: none;
   border: none;
   padding-bottom: 12px;
   font-size: 11px;
-  color: #4283d0
+  color: #4283d0;
 }
 
 .uploadButton:hover {
