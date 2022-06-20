@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" jcr:primaryType="nt:unstructured" jcr:title="Catalog" sling:resourceType="cq/gui/components/authoring/dialog" 
+extraClientlibs="[apps.alm.components.editor.catalog]"
+trackingFeature="learning:catalog">
+    <content jcr:primaryType="nt:unstructured" sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs jcr:primaryType="nt:unstructured" sling:resourceType="granite/ui/components/coral/foundation/tabs" maximized="{Boolean}false">
+                <items jcr:primaryType="nt:unstructured">
+                    <properties jcr:primaryType="nt:unstructured" jcr:title="Properties" sling:resourceType="granite/ui/components/coral/foundation/container" margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <columns jcr:primaryType="nt:unstructured" sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns" margin="{Boolean}true">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column jcr:primaryType="nt:unstructured" sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <showSearch 
+                                                jcr:primaryType="nt:unstructured" 
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/switch" 
+                                                fieldLabel="Search Bar" 
+                                                name="./showSearch"
+                                                granite:rel="alm-catalog-dialog-search-filter" 
+                                                required="{Boolean}false" value="true" /> 
+                                            <showFilters 
+                                                jcr:primaryType="nt:unstructured" 
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/switch" 
+                                                fieldLabel="Filters Panel"
+                                                name="./showFilters"
+                                                granite:rel="alm-catalog-dialog-filters"
+                                                required="{Boolean}false" value="true" />
+
+                                            <filterHeading
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/heading"
+                                                level="4"
+                                                text="Select what filters to show"
+                                                granite:rel="alm-catalog-dialog-heading"
+                                                cq:showOnCreate="{Boolean}true"/>
+
+                                            <showCatalogFilter 
+                                                jcr:primaryType="nt:unstructured" 
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox" 
+                                                text="Categories" 
+                                                name="./showCatalogFilter" 
+                                                required="{Boolean}false" 
+                                                value="true" 
+                                                uncheckedValue="false"/>  
+                                            <skillsFilter 
+                                                jcr:primaryType="nt:unstructured" 
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox" 
+                                                text="Products" 
+                                                name="./skillsFilter" 
+                                                required="{Boolean}false" 
+                                                value="true" 
+                                                uncheckedValue="false"/>  
+                                            <skillsLevelFilter 
+                                                jcr:primaryType="nt:unstructured" 
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox" 
+                                                text="Proficiency" 
+                                                name="./skillsLevelFilter" 
+                                                required="{Boolean}false" 
+                                                value="true" 
+                                                uncheckedValue="false"/>
+                                            <priceFilter 
+                                                jcr:primaryType="nt:unstructured" 
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox" 
+                                                text="Price" 
+                                                name="./priceFilter" 
+                                                required="{Boolean}false" 
+                                                value="true" 
+                                                uncheckedValue="false"/>
+                                            <typeFilter 
+                                                jcr:primaryType="nt:unstructured" 
+                                                name="./typeFilter"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox" 
+                                                text="Type" 
+                                                required="{Boolean}false" 
+                                                value="true"
+                                                uncheckedValue="false" />
+                                            <formatFilter 
+                                                jcr:primaryType="nt:unstructured" 
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox" 
+                                                text="Format" 
+                                                name="./formatFilter" 
+                                                required="{Boolean}false" 
+                                                value="true" 
+                                                uncheckedValue="false"/>
+                                            <durationFilter 
+                                                jcr:primaryType="nt:unstructured" 
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox" 
+                                                text="Duration"
+                                                name="./durationFilter" 
+                                                required="{Boolean}false" 
+                                                value="true" 
+                                                uncheckedValue="false"/>                                                                            
+                                            <statusFilter 
+                                                jcr:primaryType="nt:unstructured" 
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox" 
+                                                text="Status" 
+                                                name="./statusFilter" 
+                                                required="{Boolean}false" 
+                                                value="true" 
+                                                uncheckedValue="false"/>
+                                            <tagsFilter 
+                                                jcr:primaryType="nt:unstructured" 
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox" 
+                                                text="Tags" 
+                                                name="./tagsFilter" 
+                                                required="{Boolean}false" 
+                                                value="true" 
+                                                uncheckedValue="false"/>
+                                        </items>
+                                    </column>
+                                </items>
+                            </columns>
+                        </items>
+                    </properties>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>

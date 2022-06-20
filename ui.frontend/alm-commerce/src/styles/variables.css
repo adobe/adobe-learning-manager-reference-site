@@ -1,0 +1,60 @@
+/**
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+:root {
+  --prime-color-black: #000000;
+  --prime-color-white: #fff;
+  --prime-icon-color: #eb5e00;
+  --prime-success-color: #0f870f;
+  --prime-error-color: #ec0909;
+
+  --prime-color-nc1: #292929;
+  --prime-color-nc2: #cccccc;
+  --prime-color-nc3: #717171;
+  --prime-color-nc4: #5d5d5d;
+  --prime-color-nc5: #f7f7f7;
+  --prime-color-nc6: #e8e8e8;
+  --prime-color-nc7: #e6e6e6;
+  --prime-color-nc8: #909090;
+  --prime-color-nc9: #d9e6f5;
+
+  --prime-text-shadow: 0.2rem 0.2rem 0.2rem #565656;
+
+  --prime-font-size-9: 9px;
+  --prime-font-size-10: 10px;
+  --prime-font-size-11: 11px;
+  --prime-font-size-12: 12px;
+  --prime-font-size-14: 14px;
+  --prime-font-size-16: 16px;
+  --prime-font-size-18: 18px;
+  --prime-font-size-20: 20px;
+  --prime-font-size-21: 21px;
+  --prime-font-size-24: 24px;
+  --prime-font-size-28: 28px;
+
+  --prime-font-weight-400: 400;
+
+  --prime-color-primary: #306eb5;
+  --prime-color-primary-hover: #0054b6;
+  /* #306eb5; */
+  --prime-font-weight-600: 600;
+
+  --prime-container-max-width-mobile: 100%;
+  --prime-container-max-width-tablet: 930px;
+  --prime-container-max-width-desktop: 1084px;
+  --prime-container-max-width-above-desktop: 1084px;
+  --prime-container-width: 90%;
+}
+
+body {
+  margin: 0;
+  font-family: "source-sans-pro" !important;
+}

@@ -1,0 +1,54 @@
+/**
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+/* Back button css */
+@import "../../../styles/variables.css";
+
+.backContainer {
+  display: none;
+}
+
+@media screen and (max-width: 414px) {
+  .backContainer {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    max-height: 47px;
+  }
+  .buttonLabel {
+    font-size: var(--prime-font-size-14);
+    line-height: 18px;
+    font-weight: normal;
+    letter-spacing: 0px;
+    color: var(--prime-color-nc1);;
+    opacity: 1;
+  }
+  .backButton::after {
+    border-radius: 0;
+    outline: 0;
+  }
+  .backButton:hover,
+  .backButton:focus,
+  .backButton:focus-visible {
+    outline: none;
+  }
+  .backButton {
+    min-width: initial;
+    min-height: initial;
+    padding-left: 0;
+    border-radius: 0;
+  }
+  .backButton svg {
+    position: relative;
+    right: 2px;
+    margin-right: 10px;
+  }
+}

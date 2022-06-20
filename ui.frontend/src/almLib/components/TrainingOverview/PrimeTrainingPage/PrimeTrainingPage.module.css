@@ -1,0 +1,202 @@
+/**
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+@import "../../../styles/variables.css";
+
+.left {
+  width: calc(100% - 256px);
+  padding-right: 80px;
+  padding-bottom: 30px;
+  float: left;
+}
+
+.right {
+  width: 256px;
+  padding: 20px 0;
+  float: left;
+}
+.trainingOverviewContainer, .trainingOverviewPrequisite {
+  border: 1px solid var(--prime-color-nc6);
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.trainingOverviewContainer {
+  padding: 10px;
+}
+
+.trainingPrequisiteLabel {
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.sectionName {
+  margin: 0 0 10px 0;
+  color: var(--prime-color-nc1);
+  font-size: var(--prime-font-size-16);
+
+}
+.sectionOptional {
+  display: inline-block;
+  margin-bottom: 20px;
+  background: var(--prime-success-color);
+  border-radius: 8px;
+  color: var(--prime-color-white);
+  font-weight: var(--prime-font-weight-600);
+  font-size: var(--prime-font-size-10);
+  padding: 1px 8px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.overview {
+  font-size: var(--prime-font-size-16);
+  color: var(--prime-color-nc1);
+  overflow: hidden;
+  display: inline-block;
+  width: 100%;
+  padding: 10px 0 0 0;
+  white-space: normal!important;
+  height: auto;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%
+}
+.duration {
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-nc3);
+}
+.pageContainer {
+  display: flex;
+  max-width: var(--prime-container-max-width-desktop);
+  width: var(--prime-container-width);
+  margin: 0 auto;
+}
+@media screen and (max-width: 1024px) {
+  .headingContainer {
+    max-width: var(--prime-container-max-width-tablet);
+    width: var(--prime-container-width);
+    padding: 0;
+  }
+}
+
+@media screen and (max-width: 414px) {
+  .left {
+    order: 2;
+    width: 100%;
+    padding: 20px;
+  }
+  .right {
+    order: 1;
+    width: 100%;
+    padding: 20px 20px 0 20px;
+  }
+  .pageContainer {
+    flex-direction: column;
+    width: 100%;
+    max-width: var(--prime-container-max-width-mobile);
+  }
+  .trainingOverviewContainer {
+    border: none;
+    margin-bottom: 20px;
+    padding: 0;
+  }
+  .overview {
+    margin-top: 0;
+  }
+}
+.loader {
+  height: 200px;
+}
+
+.externalCertUploadInfo {
+  max-width: 100%;
+  border: 1px solid var(--prime-color-nc6);
+  clear: both;
+  text-align: left !important;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  border-left: 5px solid orange;
+  background-color: #fff;
+}
+
+.externalCertUploadMessage {
+  padding: 10px;
+}
+
+.fileSubmissionContainer {
+  text-transform: none;
+  font-weight: 700;
+  margin-left: 15px;
+  margin-bottom: 10px;
+}
+
+.awaitingApproval {
+  color: #e6a000;
+}
+
+.submissionLink {
+  color: #4283d0;
+  text-decoration: none;
+  margin-left: 5px;
+}
+
+.fileUploadNote {
+  margin-top: 20px;
+  margin-bottom: 30px;
+  margin-left: 15px;
+}
+
+.fileApproved {
+  color: #0f870f;
+}
+
+.uploadUpperSeperator, .uploadLowerSeperator {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 2px solid #ccc;
+}
+
+.uploadLowerSeperator {
+  border: 1px solid #ccc;
+}
+
+.uploadFileSubmission {
+  display: none;
+}
+
+.uploadButton{
+  background: none;
+  border: none;
+  padding-bottom: 12px;
+  font-size: 13px;
+  color: #4283d0;
+  font-weight: 750;
+}
+
+.uploadButton:hover {
+  border: none;
+  cursor: pointer;
+}
+
+.primeStatusSvg {
+  background: none;
+  border: none;
+  width: 35px;
+  fill: currentColor;
+  padding-left: 10px;
+}

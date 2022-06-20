@@ -1,0 +1,177 @@
+/**
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+@import "../../styles/variables.css";
+
+.skillsArea {
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+@media screen and (min-width: 1024px) {
+  .skillsArea,
+  .skillsContainer {
+    width: 930px;
+  }
+}
+@media screen and (min-width: 1366px) {
+  .skillsArea,
+  .skillsContainer {
+    width: 1084px;
+  }
+}
+@media (max-width: 414px) {
+  .skillsArea,
+  .skillsContainer {
+    padding-left: 20px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .skillsArea,
+  .skillsContainer {
+    padding-left: 20px;
+  }
+}
+
+.skillsHeading {
+  font-size: var(--prime-font-size-18);
+  font: normal normal bold 21px/27px Source Sans Pro;
+  letter-spacing: 0px;
+  color: #292929;
+}
+
+.skillsDescription {
+  margin-bottom: 60px;
+}
+
+.skillBox,
+.skillBoxSelectable {
+  width: 256px;
+  height: 90px;
+  line-height: 90px;
+  border-radius: 4px;
+  border: solid 1px #cccccc;
+  background-color: #ededed;
+  margin-right: 20px;
+  display: inline-block;
+  margin-bottom: 20px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 2px 10px 1px rgba(0, 0, 0, 0.11);
+  font-size: 13px;
+}
+
+.skillBoxSelectable {
+  cursor: pointer;
+}
+
+.skillName,
+.skillNameSelectable {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+  color: #000000;
+}
+
+.modifyInterest .actionButton {
+
+  margin-top: 20px;
+  margin-right: 25px;
+  display: inline-block;
+}
+
+.removeInterestButton {
+  background-color: #858585;
+  color: #ffffff;
+  z-index: 10;
+  cursor: auto;
+  display: none;
+  position: absolute;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  border: none;
+  padding: 0;
+  font-weight: 700;
+  margin-top: -90px;
+}
+
+.removeInterestButton:hover {
+  cursor: pointer;
+}
+
+.arrowUp {
+  display: none;
+  position: absolute;
+  z-index: 10;
+  width: 0;
+  height: 0;
+  margin-left: 100px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid;
+  border-bottom-color: #858585;
+  margin-top: -15px;
+}
+
+.skillDataTooltip {
+  display: none;
+  background-color: #858585;
+  color: #ffffff;
+  z-index: 1;
+  padding: 10px;
+  font-size: 13px;
+  position: absolute;
+  width: 256px;
+  text-align: left;
+  line-height: normal;
+  margin-top: -5px;
+}
+
+.skillBox:hover .removeInterestButton {
+  display: block;
+}
+
+.skillBox:focus-within .removeInterestButton {
+  display: block;
+}
+
+.skillBox:hover .skillDataTooltip {
+  display: block;
+}
+
+.skillBox:focus-within .skillDataTooltip {
+  display: block;
+}
+
+.skillBox:hover .arrowUp {
+  display: block;
+}
+
+.skillBox:focus-within .arrowUp {
+  display: block;
+}
+
+.removeInterestButton::after {
+  content: "\00d7";
+  fill: #ffffff;
+}
+
+.showMoreButton {
+  background: none;
+  border: none;
+  color: #4283d0;
+}
+
+.showMoreButton:hover {
+  cursor: pointer;
+}

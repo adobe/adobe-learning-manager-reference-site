@@ -1,0 +1,6 @@
+ {
+     "configModel": {
+       "jcr:primaryType": "nt:unstructured",
+       "sling:resourceType": "cprime/components/configModel"
+     }
+}

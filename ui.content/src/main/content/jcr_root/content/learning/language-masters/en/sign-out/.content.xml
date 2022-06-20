@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:lastModified="{Date}2022-04-19T16:20:08.983+05:30"
+        cq:lastModifiedBy="admin"
+        cq:template="/conf/learning/settings/wcm/templates/page-content1"
+        jcr:primaryType="cq:PageContent"
+        id="learning-body"
+        jcr:title="Sign Out"
+        sling:resourceType="learning/components/page">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="learning/components/container"
+            layout="responsiveGrid">
+            <container
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="learning/components/container"
+                layout="responsiveGrid">
+                <title
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="learning/components/title"/>
+                <container
+                    jcr:lastModified="{Date}2022-04-19T16:20:08.982+05:30"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="learning/components/container"
+                    id="signout-page-cont"
+                    layout="responsiveGrid">
+                    <text
+                        jcr:created="{Date}2022-04-07T16:37:39.753+05:30"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2022-04-19T16:13:11.859+05:30"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="learning/components/text"
+                        id="signout-page-txt"
+                        text="&lt;p style=&quot;text-align: center;&quot;>&lt;b>Click here to login again&lt;/b>&lt;/p>&#xd;&#xa;"
+                        textIsRich="true"/>
+                    <button
+                        jcr:created="{Date}2022-04-19T16:02:04.549+05:30"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2022-04-19T16:05:29.096+05:30"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Login"
+                        sling:resourceType="learning/components/button"
+                        id="signout-page-login-btn"/>
+                </container>
+            </container>
+        </root>
+    </jcr:content>
+</jcr:root>

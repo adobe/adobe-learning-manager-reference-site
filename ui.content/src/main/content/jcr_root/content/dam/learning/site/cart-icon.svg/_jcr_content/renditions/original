@@ -1,0 +1,8 @@
+<svg id="Smock_Search_22_N" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
+  <rect id="Canvas" width="22" height="22" fill="#292929" opacity="0"/>
+  <g id="Group_73711" data-name="Group 73711" transform="translate(1.221 1.275)">
+    <ellipse id="Ellipse_130" data-name="Ellipse 130" cx="1.547" cy="1.692" rx="1.547" ry="1.692" transform="translate(4.508 16.228)"/>
+    <ellipse id="Ellipse_131" data-name="Ellipse 131" cx="1.547" cy="1.692" rx="1.547" ry="1.692" transform="translate(13.399 16.228)"/>
+    <path id="Path_7491" data-name="Path 7491" d="M17,13.806H6.068L6.51,12.3h9.724a.772.772,0,0,0,.758-.621L19.7,4.33a.774.774,0,0,0-.759-.925h-.073V3.388H3.767l-.747-2.03A.774.774,0,0,0,2.252.7H.77a.774.774,0,0,0,0,1.547h.815l3.438,9.24-.75,2.943a.91.91,0,0,0,.667,1.1q.041.01.083.016H17.007a.921.921,0,0,0,.774-.928A.812.812,0,0,0,17,13.806ZM4.363,5.012H17.742L15.6,10.753H6.477Z" transform="translate(0 -0.028)"/>
+  </g>
+</svg>

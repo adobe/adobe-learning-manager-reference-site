@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Properties"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    trackingFeature="learning:categories">
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+        <items jcr:primaryType="nt:unstructured">
+            <column
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/container">
+                <items jcr:primaryType="nt:unstructured">
+                    <categories
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                        composite="{Boolean}true"
+                        fieldDescription = "Click '+' to add a Category"
+                        fieldLabel="Categories">
+                        <field
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/container"
+                            name="./categories">
+                            <items 
+                                jcr:primaryType="nt:unstructured">
+                                <file
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
+                                    allowUpload="{Boolean}false"
+                                    class="cq-droptarget"
+                                    fieldLabel="Image Asset"
+                                    fileNameParameter="./fileName"
+                                    fileReferenceParameter="./fileReference"
+                                    mimeTypes="[image/gif,image/jpeg,image/png,image/tiff,image/svg+xml]"
+                                    name="./file"
+                                    title="Upload Image Asset"/>
+                                <headline
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                    fieldDescription="Headline"
+                                    fieldLabel="Headline"
+                                    name="./headline"/>
+                                <description
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                    fieldDescription="Description"
+                                    fieldLabel="Description"
+                                    name="./description"/>
+                                <catalogs
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                    fieldDescription="Mention catalog names in comma separated value"
+                                    fieldLabel="Catalogs"
+                                    name="./catalogs"/>
+                                <tags
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                    fieldDescription="Mention tag names in comma separated value"
+                                    fieldLabel="Tags"
+                                    name="./tags"/>
+                                <products
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                    fieldDescription="Mention product names in comma separated value"
+                                    fieldLabel="Products"
+                                    name="./products"/>
+                            </items>
+                        </field>
+                    </categories>
+                </items>
+            </column>
+        </items>
+    </content>
+</jcr:root>

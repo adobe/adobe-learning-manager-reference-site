@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ |  Copyright 2021 Adobe. All rights reserved.
+ |   This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ |   you may not use this file except in compliance with the License. You may obtain a copy
+ |   of the License at http://www.apache.org/licenses/LICENSE-2.0
+ |
+ |  Unless required by applicable law or agreed to in writing, software distributed under
+ |   the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ |   OF ANY KIND, either express or implied. See the License for the specific language
+ |   governing permissions and limitations under the License.
+-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
+          jcr:primaryType="nt:unstructured"
+          jcr:title="Adobe Learning Manager Configuration"
+          sling:resourceType="cq/gui/components/authoring/dialog"
+          extraClientlibs="[alm.admin.configuration]">
+    <content jcr:primaryType="nt:unstructured"
+             sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+        <items jcr:primaryType="nt:unstructured">
+            <column jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/container"
+                granite:id="admin-configs-cont">
+                <items jcr:primaryType="nt:unstructured">
+                    <title
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                        name="./jcr:title"
+                        value="adobe-learning-manager-config"/>
+                    <configHeading
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/field"
+                        fieldLabel="Account Configuration"
+                        wrapperClass="account-config-heading"/>
+                    <configHeading2
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/field"
+                        fieldLabel="Configure the Learning Manager account by sharing below details"
+                        wrapperClass="account-config-heading2"/>
+                    <configHelpBtn
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/field"
+                        fieldLabel="Help"
+                        wrapperClass="config-help-btn"/>
+                    <usage
+                        cq:showOnCreate="{Boolean}true"
+                        granite:id="alm-usage-type-select"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                        fieldLabel="Adobe Learning Manager usage"
+                        name="./usageType">
+                        <items jcr:primaryType="nt:unstructured">
+                            <sites
+                                jcr:primaryType="nt:unstructured"
+                                text="For training internal employees (AEM + Learning Manager)"
+                                value="aem-sites"/>
+                            <commerce
+                                jcr:primaryType="nt:unstructured"
+                                text="For hosting paid courses on learning (AEM + Learning Manager + Commerce)"
+                                value="aem-commerce"/>
+                            <es
+                                jcr:primaryType="nt:unstructured"
+                                text="For showcasing products to customers &amp; partners without account creation (AEM + Learning Manager + Training Metadata)"
+                                value="aem-es"/>
+                        </items>
+                    </usage>
+                    <almBaseURL
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Adobe Learning Manager URL"
+                        name="./almBaseURL"
+                        required="{Boolean}true"/>
+                    <accountId
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldDescription="Enter Adobe Learning Manager account ID"
+                        fieldLabel="Account ID"
+                        name="./accountId"
+                        required="{Boolean}true"/>
+                    <clientId
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldDescription="Enter Client ID provided to you in integration admin from Learning Manager account. Refer help section to learn more."                        
+                        fieldLabel="Client ID"
+                        name="./clientId"
+                        required="{Boolean}true"/>
+                    <clientSecret
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldDescription="Enter client secret generated in integration admin from learning manager account. Refer help section to learn more."
+                        fieldLabel="Client secret"
+                        name="./clientSecret"
+                        required="{Boolean}true"/>
+                    <authorRefreshToken
+                        cq:showOnCreate="{Boolean}true"
+                        granite:rel="aem-sites"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldDescription="Enter author refresh token generated from Learning Manager account. Refer help section to learn more."                        
+                        fieldLabel="Author refresh token"
+                        name="./authorRefreshToken"
+                        required="{Boolean}true"/>
+                    <almCdnBaseUrl
+                        cq:showOnCreate="{Boolean}true"
+                        granite:rel="aem-commerce aem-es"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldDescription="Enter cdn base url generated in integration admin from Learning Manager account. Refer help section to learn more."
+                        fieldLabel="Adobe Learning Manager cdn base URL"
+                        name="./almCdnBaseUrl"
+                        required="{Boolean}true"/>
+                    <commerceURL
+                        cq:showOnCreate="{Boolean}true"
+                        granite:rel="aem-commerce"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Adobe Commerce URL"
+                        name="./commerceURL"
+                        required="{Boolean}true"/>
+                    <graphqlProxyPath
+                        cq:showOnCreate="{Boolean}true"
+                        granite:rel="aem-commerce"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldDescription="Enter your proxy path for added enhancements. Refer help section to learn more."
+                        fieldLabel="GraphQL proxy path "
+                        name="./graphqlProxyPath"
+                        required="{Boolean}true"
+                        value="/alm/graphql"/>
+                    <commerceStoreName
+                        cq:showOnCreate="{Boolean}true"
+                        granite:rel="aem-commerce"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Adobe Commerce store name"
+                        name="./commerceStoreName"
+                        required="{Boolean}true"
+                        value="default"/>
+                    <customerTokenLifetime
+                        cq:showOnCreate="{Boolean}true"
+                        granite:rel="aem-commerce"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldDescription="Enter Adobe Commerce customer token lifetime (in secs). Refer help section to learn more."
+                        fieldLabel="Adobe Commerce customer token lifetime (in secs)"
+                        name="./customerTokenLifetime"
+                        required="{Boolean}true"
+                        value="3600"/>
+                    <refreshToken
+                        cq:showOnCreate="{Boolean}true"
+                        granite:rel="aem-commerce aem-es"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldDescription="Enter admin refresh token generated from Learning Manager account. Refer help section to learn more."
+                        fieldLabel="Admin refresh token"
+                        name="./refreshToken"
+                        required="{Boolean}true"/>
+                    <esBase
+                        cq:showOnCreate="{Boolean}true"
+                        granite:rel="aem-es"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldDescription="Enter Training Metadata url generated in integration admin from Learning Manager account. Refer help section to learn more."                        
+                        fieldLabel="Training Metadata base URL"
+                        name="./esBaseUrl"
+                        required="{Boolean}true"/>
+                    <almRegister
+                        cq:showOnCreate="{Boolean}true"
+                        granite:rel="aem-es"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldDescription="Enter self-registration URL generated in integration admin from Learning Manager account to enable account creation by learners. Refer help section to learn more."
+                        fieldLabel="Adobe Learning Manager register URL"
+                        name="./almRegisterUrl"/>
+                    <siteMap
+                        cq:showOnCreate="{Boolean}true"
+                        granite:rel="aem-commerce aem-es"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                        name="./siteMap"
+                        text="Create site map for seo enhancements"
+                        value="true"/>
+                    <sitemapTrainingPath
+                        cq:showOnCreate="{Boolean}true"
+                        granite:rel="aem-commerce aem-es"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                        fieldDescription="In case of custom training pages added, update training page path."
+                        fieldLabel="Site map training page path"
+                        name="./sitemapTrainingPath"
+                        required="{Boolean}true"/>
+                    <accountData
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/foundation/form/hidden"
+                        name="./accountData"
+                        value=""/>
+                    <nomenclatureSection
+                        cq:showOnCreate="{Boolean}true"
+                        wrapperClass="nomenclature-config-section aem-commerce aem-es"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/field"
+                        fieldLabel="Sync terminology with Adobe Learning Manager"
+                        fieldDescription="This will fetch all terminology data used across Learning Manager. Refer help section to learn more."/>
+                    <nomenclature
+                        granite:id="fetch-nomenclature-button"
+                        granite:rel="aem-commerce aem-es"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/button"
+                        text="Sync"
+                        variant="primary"/>
+                    <embWidgetSection
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/field"
+                        fieldLabel="Widget Configuration"
+                        wrapperClass="account-widget-config-heading"
+                        cq:showOnCreate="{Boolean}true"/>     
+                     <embWidgetSection1
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/field"
+                        fieldLabel="Configure theme, card-layout, font-styling &amp; color scheme for widgets on the ‘Learning’ page"
+                        wrapperClass="account-widget-config-heading2"
+                        cq:showOnCreate="{Boolean}true"/>
+                    <customization
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldDescription="Enter json formatted script to customize the theme. Refer help section to learn more."
+                        fieldLabel="Customization"
+                        name="./theme.customization"/>
+                    <primaryColor
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/colorfield"
+                        fieldLabel="Primary color"
+                        name="./theme.primaryColor"
+                        value="rgb(38,118,255)"/>
+                    <secondaryColor
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/colorfield"
+                        fieldLabel="Seconday color"
+                        name="./theme.secondaryColor"
+                        value="rgb(0,145,255)"/>
+                    <higherOrderEnroll
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                        fieldDescription="If disabled, the results will hide courses which are part of the enrolled learning path/ certification. Refer help section to learn more."
+                        wrapperClass="account-higher-order-enroll"
+                        checked="false"
+                        name="./commonConfig.ignoreHigherOrderLOEnrollment"
+                        text="Show courses from an enrolled learning path/ certification in results"
+                        value="false"/>
+                    <higherOrderEnrollType
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/foundation/form/hidden"
+                        name="./commonConfig.ignoreHigherOrderLOEnrollment@TypeHint"
+                        value="Boolean"/>
+                    <background
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/foundation/form/hidden"
+                        name="./theme.background"
+                        value="transparent"/>
+                    <configHelpURL
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/foundation/form/hidden"
+                        name="./configHelpURL"
+                        value="https://helpx.adobe.com/captivate-prime/integrate-aem-captivate-prime.html"/>
+                </items>
+            </column>
+        </items>
+    </content>
+</jcr:root>

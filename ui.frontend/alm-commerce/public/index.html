@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <script>
+      class NamespacedSessionStorage {
+        constructor(sessionStorage, key) {
+          this.sessionStorage = sessionStorage;
+          this.key = key;
+        }
+        _makeKey(key) {
+          return `${this.key}__${key}`;
+        }
+        getItem(name) {
+          return this.sessionStorage.getItem(this._makeKey(name));
+        }
+        setItem(name, value) {
+          return this.sessionStorage.setItem(this._makeKey(name), value);
+        }
+        removeItem(name) {
+          return this.sessionStorage.removeItem(this._makeKey(name));
+        }
+      }
+
+      class BrowserPersistence {
+        constructor() {
+          this.key = "ALM_BROWSER_PERSISTENCE";
+          this.storage = new NamespacedSessionStorage(sessionStorage, this.key);
+        }
+        getRawItem(name) {
+          return this.storage.getItem(name);
+        }
+        getItem(name) {
+          const now = Date.now();
+          const item = this.storage.getItem(name);
+          if (!item) {
+            return undefined;
+          }
+          const { value, ttl, timeStored } = JSON.parse(item);
+
+          if (ttl && now - timeStored > ttl * 1000) {
+            this.storage.removeItem(name);
+            return undefined;
+          }
+
+          return JSON.parse(value);
+        }
+        setItem(name, value, ttl) {
+          const timeStored = Date.now();
+          this.storage.setItem(
+            name,
+            JSON.stringify({
+              value: JSON.stringify(value),
+              timeStored,
+              ttl,
+            })
+          );
+        }
+        removeItem(name) {
+          this.storage.removeItem(name);
+        }
+      }
+    </script>
+    <script>
+      const ALMConfig = {
+        "jcr:primaryType": "cq:PageContent",
+        "jcr:createdBy": "admin",
+        "jcr:title": "ALM",
+        accountId: "1",
+        magentoRootCategoryId: "1",
+        clientSecret: "8ca8ded0-9ead-44c3-bc6d-96af99b213d8",
+        "cq:template": "/apps/aem-learn-components/configuration/page/template",
+        almBaseURL: "https://captivateprimeqe.adobe.com",
+        primeApiURL: "https://captivateprimeqe.adobe.com/primeapi/v2/",
+        "cq:template": "/apps/learning/configuration/page/template",
+        magentoGraphqlEndpoint: "/magento/graphql",
+        locale: "en-US",
+        primeRegisterUrl: "1",
+        cdnBaseUrl: "https://cpcontentsqe.adobe.com",
+        "jcr:created": "2022-03-02T22:19:50.386+05:30",
+        "cq:lastModified": "2022-03-03T13:57:24.962+05:30",
+        refreshToken: "1",
+        usageType: "aem-es",
+        clientId: "eb391052-1a8e-472a-a6c5-227156f37229",
+        "sling:resourceType": "learning/configuration/page",
+        primeBaseUrl: "1",
+        "sling:configPropertyInherit": "true",
+        "cq:lastModifiedBy": "admin",
+        esBaseUrl:
+          "https://primeapps-stage.adobe.com/almsearch/api/v1/qe/7110/a75477eb-2a4c-4f6e-b897-a6506da18e3f",
+        siteMap: "siteMap",
+        instancePath: "http://localhost:3000/instance.html",
+        catalogPath: "http://localhost:3000/catalog.html",
+        trainingOverviewPath: "http://localhost:3000/trainingOverview.html",
+        communityPath: "http://localhost:3000/community.html",
+        communityBoardsPath: "http://localhost:3000/community.html",
+        communityBoardDetailsPath: "http://localhost:3000/community.html",
+        commerceBasePath: "/",
+        //almCdnBaseUrl: "https://cpcontentsqe.adobe.com",
+        almCdnBaseUrl:
+          "https://cpcontentsqe.adobe.com/public/guest/qe/api/a75477eb-2a4c-4f6e-b897-a6506da18e3f/7110",
+        primeTileColors: {
+          0: "#00000",
+          1: "#FFFFFF",
+          2: "#445566",
+        },
+        authorMode: true,
+        customerTokenLifetime: "3600",
+        commerceURL:
+          "https://forprime-keiokya-i6chtryvajcii.ap-4.magentosite.cloud/graphql",
+      };
+
+      const getAccessToken = () => {
+        return "9e87bc3fd1b022fe801fdabed5c0b00c";
+      };
+
+      const COMMERCE_TOKEN_COOKIE_NAME = "alm_commerce_token";
+
+      const getCommerceToken = () => {
+        let cookieValues = document.cookie.match(
+          `(^|[^;]+)\\s*${COMMERCE_TOKEN_COOKIE_NAME}\\s*=\\s*([^;]+)`
+        );
+        return cookieValues ? cookieValues.pop() : "";
+      };
+
+      const getALMConfig = () => {
+        return window.ALM.ALMConfig;
+      };
+
+      const navigateToTrainingOverviewPage = (
+        trainingId,
+        trainingInstanceId = ""
+      ) => {
+        let { trainingOverviewPath } = getALMConfig();
+        trainingOverviewPath = getUrl(trainingOverviewPath, {
+          trainingId: trainingId,
+        });
+        window.location = trainingInstanceId
+          ? getUrl(trainingOverviewPath, {
+              trainingInstanceId: trainingInstanceId,
+            })
+          : trainingOverviewPath;
+      };
+
+      const navigateToInstancePage = (trainingId) => {
+        let { instancePath } = getALMConfig();
+        window.location = getUrl(instancePath, { trainingId: trainingId });
+      };
+
+      const navigateToBoardDetailsPage = (boardId) => {
+        let { communityBoardDetailsPath } = getALMConfig();
+        window.location = getUrl(communityBoardDetailsPath, {
+          boardId: boardId,
+        });
+      };
+
+      const getUrlWithQueryParams = (urlStr, params) => {
+        const url = new URL(urlStr);
+        for (const param in params) {
+          url.searchParams.append(param, params[param].toString());
+        }
+        return url.toString();
+      };
+
+      const getUrl = (urlStr, params) => {
+        for (const param in params) {
+          urlStr = urlStr + "/" + param + "/" + params[param];
+        }
+        return urlStr;
+      };
+
+      async function getALMUser() {
+        if (!window.ALM.isPrimeUserLoggedIn()) {
+          window.ALM.storage.removeItem("user");
+          return;
+        }
+        let user = window.ALM.storage.getItem("user");
+        if (user) {
+          return user;
+        }
+        const primeApiURL = window.ALM.ALMConfig.primeApiURL;
+        const userUrl = `${primeApiURL}/user?include=account`;
+        const headers = {
+          Accept: "application/vnd.api+json",
+          Authorization: `oauth ${getAccessToken()}`,
+        };
+        try {
+          const userResponse = await fetch(`${userUrl}`, {
+            credentials: "include",
+            headers,
+            method: "GET",
+          });
+          if (userResponse && userResponse.status == 200) {
+            user = await userResponse.json();
+            const userStr = JSON.stringify(user);
+            window.ALM.storage.setItem("user", userStr, 1800);
+            return userStr;
+          } else {
+            console.error("User call failed!!");
+            window.ALM.storage.removeItem("user");
+          }
+        } catch (e) {
+          window.ALM.storage.removeItem("user");
+          throw e;
+        }
+      }
+
+      const updateALMUser = async () => {
+        window.ALM.storage.removeItem("user");
+        return getALMUser();
+      };
+
+      const isPrimeUserLoggedIn = () => {
+        return false;
+      };
+      const navigateToExplorePage = () => {
+        let { catalogPath } = getALMConfig();
+        window.location = catalogPath;
+      };
+
+      const getAccountActiveFields = async () => {
+        const primeApiURL = getALMConfig().primeApiURL;
+        const accountActiveFieldsUrl = primeApiURL + "account/fields";
+        const headers = {
+          Accept: "application/vnd.api+json",
+          Authorization: `oauth ${getAccessToken()}`,
+        };
+        try {
+          const response = await fetch(accountActiveFieldsUrl, {
+            credentials: "include",
+            headers,
+            method: "GET",
+          });
+          if (response) {
+            const activeFields = await response.json();
+            console.log(activeFields);
+            return activeFields;
+          }
+        } catch (e) {
+          throw e;
+        }
+      };
+
+      function handleLogOut() {
+        console.log("logout");
+      }
+
+      window.ALM = window.ALM || {};
+      window.ALM.ALMConfig = ALMConfig; //window.ALM.ALMConfig || primeConfig;
+      window.ALM.getALMConfig = getALMConfig;
+      window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
+      window.ALM.navigateToInstancePage = navigateToInstancePage;
+      window.ALM.navigateToBoardDetailsPage = navigateToBoardDetailsPage;
+      window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
+      window.ALM.getAccessToken = getAccessToken;
+      window.ALM.getCommerceToken = getCommerceToken;
+      window.ALM.getALMUser = getALMUser;
+      window.ALM.handleLogOut = handleLogOut;
+      window.ALM.getAccountActiveFields = getAccountActiveFields;
+      window.ALM.updateALMUser = updateALMUser;
+      window.ALM.navigateToExplorePage = navigateToExplorePage;
+      window.ALM.storage = window.ALM.storage || new BrowserPersistence();
+      window.ALM.updateCart = function (value) {
+        console.log(value);
+      };
+      if (isPrimeUserLoggedIn()) {
+        getALMUser();
+      }
+    </script>
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="alm-commerce"></div>
+  </body>
+</html>

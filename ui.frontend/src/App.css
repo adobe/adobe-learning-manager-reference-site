@@ -1,0 +1,26 @@
+@import "./almLib/styles/buttons.css";
+@import "./almLib/styles/variables.css";
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--prime-color-nc5);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--prime-color-nc8);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--prime-color-nc3);
+}
+
+html {
+  scrollbar-color: var(--prime-color-nc8) var(--prime-color-nc5);
+  scrollbar-width: thin;
+}

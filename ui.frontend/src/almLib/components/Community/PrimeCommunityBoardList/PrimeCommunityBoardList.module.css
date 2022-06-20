@@ -1,0 +1,106 @@
+/**
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+@import "../../../styles/variables.css";
+.primeCommunityHeaderRow {
+  display: flex;
+  max-width: 716px;
+  font-weight: 500;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 414px) {
+  .primeCommunityHeaderRow {
+    display: block;
+    margin-bottom: 30px;
+    margin-left: 20px;
+    font-weight: 500;
+    padding-left: 0px;
+  }
+}
+
+.primeCommunitySearchContainer {
+  display: flex;
+  margin-left: auto;
+  margin-right: 25px;
+  margin-top: 45px;
+  margin-bottom: 20px;
+  height: 40px;
+}
+
+@media (max-width: 414px) {
+  .primeCommunitySearchContainer {
+    width: 100%;
+    margin-top: 15px;
+  }
+}
+
+.primeLoaderWrapper {
+  margin-bottom: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.primeCommunitySearchStatus {
+  display: flex;
+  font-size: var(--prime-font-size-14);
+  margin: auto;
+  width: 716px;
+  margin-bottom: 25px;
+  justify-content: flex-end;
+}
+
+.primeCommunitySearchClear {
+  border: none;
+  background-color: transparent;
+  color: #306eb5;
+}
+
+.primeCommunitySearchClear:hover {
+  cursor: pointer;
+}
+
+.primeCommunityNoBoardFound {
+  font-size: var(--prime-font-size-14);
+  max-width: 716px;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.primeCommunitySearchWrapper {
+  width: 316px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.primeCommunitySearchStatusWrapper {
+  display: flex;
+  justify-content: center;
+}
+@media (max-width: 414px) {
+  .primeCommunitySearchWrapper {
+    width: 100%;
+    height: 37px;
+    margin-right: 20px;
+  }
+
+  .primeCommunitySearchStatus,
+  .primeCommunityNoBoardFound {
+    padding-left: 20px;
+  }
+}
+
+.primeCommunitySearchResultContainer {
+  padding: 0px 20px;
+}

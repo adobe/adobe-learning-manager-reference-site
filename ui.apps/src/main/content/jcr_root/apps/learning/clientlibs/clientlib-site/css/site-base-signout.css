@@ -1,0 +1,50 @@
+/*
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+
+#signout-page-cont
+{
+  min-height: 500px;
+  margin-top: 80px;
+}
+
+#signout-page-cont #signout-page-txt
+{
+  font: normal normal bold 27px/42px Source Sans Pro;
+  letter-spacing: 0px;
+  color: #292929;
+}
+
+#signout-page-cont div.button
+{
+  justify-content: center;
+}
+
+#signout-page-cont #signout-page-login-btn
+{
+  width: 160px;
+  height: 48px;
+  text-align: center;
+  font: normal normal 600 16px/22px Source Sans Pro;
+  letter-spacing: 0px;
+  color: #FCFCFC;
+  text-transform: none;
+  background: #306EB5 0% 0% no-repeat padding-box;
+  border-radius: 24px;
+  border: 0;
+  cursor: pointer;
+  margin-top: 30px;
+}
+
+#signout-page-cont #signout-page-login-btn .cmp-button__text
+{
+  float: none;
+}

@@ -1,0 +1,87 @@
+/**
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+@import "../../styles/variables.css";
+.signInContainer {
+  width: 400px;
+  min-height: 450px;
+  background: var(--prime-color-white) 0% 0% no-repeat padding-box;
+  margin: auto;
+  margin-top: 50px;
+
+  box-shadow: 0px 0px 3px #0000001a;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto !important;
+}
+.error {
+  color: var(--prime-error-color);
+}
+
+.label {
+  text-align: center;
+  margin: 10px 0 0 0;
+}
+
+.button,
+.createAccountButton,
+.cancelButton {
+  margin: 0 auto;
+  width: 100%;
+  display: block;
+}
+
+.createAccountButton,
+.cancelButton {
+  margin-top: 20px;
+}
+
+.forgotPassword {
+  color: var(--prime-color-primary);
+  padding: 0;
+}
+
+.mandatory > label > svg {
+  fill: red;
+}
+
+.recoverPassword {
+  padding: 20px;
+}
+
+.recoverPasswordText {
+  color: var(--prime-color-nc1);
+  font-size: var(--prime-font-size-16);
+  font-weight: var(--prime-font-weight-600);
+}
+
+.emailSentText {
+  margin-top: 20px;
+  color: var(--prime-color-nc1);
+  font-size: var(--prime-font-size-14);
+}
+
+@media screen and (max-width: 414px) {
+  .signInContainer {
+    width: 100%;
+    box-shadow: none;
+  }
+}
+
+.commonButton {
+  width: 100%;
+  margin-top: 20px;
+}

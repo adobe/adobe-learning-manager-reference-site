@@ -1,0 +1,11 @@
+ {
+     "widgetModel": {
+       "jcr:primaryType": "nt:unstructured",
+       "sling:resourceType": "cprime/components/widget",
+       "name": "Admin Recommendation",
+       "widgetRefSelected": "com.adobe.captivateprime.lostrip.trending",
+       "theme.background":"transparent",
+       "theme.primaryColor":"rgb(38,118,255)",
+       "test.boolean": true
+     }
+}

@@ -1,0 +1,315 @@
+/*
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+
+.alm-header-vertical-nav {
+  box-shadow: 3px 3px 6px #00000029;
+  background-color: #232323;
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  height: 100%;
+  position: fixed;
+  transform: translateX(-100%);
+  z-index: 4;
+  visibility: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font: normal normal normal 20px/25px Source Sans Pro;
+}
+
+.alm-header-vertical-nav.open {
+  visibility: visible;
+  transform: translateX(0%);
+  overflow: auto;
+}
+
+.alm-header-vertical-nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.alm-header-vertical-nav a {
+  text-decoration: none;
+  color: #ececec;
+}
+
+.alm-header-vertical-nav .nav-highlight {
+  color: #fb704b;
+}
+
+.alm-header-vertical-nav span {
+  color: #ececec;
+}
+
+.alm-header-vertical-nav .vert-nav-close-button {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  float: right;
+}
+
+.alm-header-vertical-nav .vert-nav-profile-cont {
+  text-align: center;
+}
+
+.vertical-nav-cont {
+  width: 280px;
+  margin: 0 auto;
+}
+
+.alm-header-vertical-nav .vert-nav-close-icon {
+  float: right;
+}
+
+.alm-header-vertical-nav .vert-nav-profile-image {
+  width: 122px;
+  height: 122px;
+  border-radius: 50%;
+  margin-top: 60px;
+  margin-left: 36px;
+}
+
+.alm-header-vertical-nav .vert-nav-separator {
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  margin: 1.4rem auto 1.5rem;
+  opacity: 1;
+  width: 100%;
+}
+
+.vert-nav-profile-cont li {
+  margin-bottom: 6px;
+}
+
+#alm-header {
+  max-width: var(--prime-container-max-width-desktop);
+  width: var(--prime-container-width);
+  margin: 0 auto;
+}
+
+#alm-header .alm-header-cont .alm-header-icons {
+  display: flex !important;
+  position: relative;
+}
+
+.alm-header-icons .notification__container {
+  display: flex;
+  margin-top: 10px;
+}
+
+#alm-header .alm-header-cont {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+#alm-header .alm-header-cont .alm-profile__text {
+  cursor: pointer;
+}
+
+#alm-header .alm-header-cont .alm-header-logo {
+  width: 137px;
+  height: 33px;
+  margin-top: 18px;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation,
+#alm-header .alm-header-cont .alm-header-icons {
+  font: normal normal normal 14px/18px Source Sans Pro;
+}
+
+#alm-header .alm-header-cont .alm-header-icons .alm-header-profile {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  margin-top: 15px;
+  margin-left: 26px;
+}
+
+#alm-header .alm-header-cont .alm-header-icons .alm-header-cart {
+  height: 22px;
+  width: 22px;
+  margin-top: 22px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation {
+  list-style-type: none;
+  display: flex;
+  width: 60%;
+  max-width: 500px;
+  justify-content: space-between;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation a {
+  text-decoration: none;
+  color: #292929;
+  margin: 20px 0px 20px 0px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation li {
+  position: relative;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation .nav-highlight {
+  position: absolute;
+  bottom: 0;
+  border-top: 3px solid #fb704b;
+  left: -5px;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation .size__XS {
+  width: 50px;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation .size__S {
+  width: 65px;
+}
+
+#alm-header .alm-header-cont .alm-header-navigation .size__M {
+  width: 80px;
+}
+
+.alm-header-down {
+  width: 15px;
+  height: 15px;
+  margin-top: 30px;
+  margin-left: 5px;
+}
+#alm-header .alm-header-cont .alm-header-menu {
+  width: 22px;
+  height: 22px;
+  margin-top: 20px;
+  margin-left: 15px;
+  display: none;
+}
+
+@media screen and (max-width: 1024px) {
+  #alm-header {
+    max-width: var(--prime-container-max-width-tablet);
+    width: var(--prime-container-width);
+    padding: 0;
+  }
+  #alm-header .alm-header-cont {
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 414px) {
+  #alm-header {
+    width: 100%;
+    max-width: 100%;
+  }
+  #alm-header .alm-header-cont .alm-header-icons {
+    display: flex;
+  }
+
+  .alm-header-icons .notification__container {
+    display: flex;
+    margin-top: 10px;
+  }
+  #alm-header .alm-header-cont .alm-header-menu {
+    display: flex;
+  }
+  #alm-header .alm-header-cont .alm-header-navigation {
+    display: none;
+  }
+
+  #alm-header .alm-header-cont .alm-header-icons .alm-header-profile {
+    display: none;
+  }
+
+  .alm-header-down {
+    display: none;
+  }
+}
+
+.alm-header-profile-options {
+  display: none;
+  width: 117px;
+  height: auto;
+  position: absolute;
+  z-index: 1;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  font: normal normal normal 14px/35px Source Sans Pro;
+  box-shadow: 0px 3px 9px #00000029;
+  color: #000000;
+  right: 0;
+  top: 100%;
+}
+
+.alm-header-profile-options ul {
+  list-style-type: none;
+  padding-left: 22px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.alm-header-profile-options a {
+  text-decoration: none;
+  color: #000000;
+}
+
+.alm-header-profile-options .alm-log-in,
+.alm-header-profile-options .alm-log-out,
+.alm-header-profile-options .alm-register {
+  cursor: pointer;
+}
+
+.alm-header-profile {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  margin-top: 15px;
+  margin-left: 35px;
+  cursor: pointer;
+}
+
+.alm-header-down {
+  width: 15px;
+  height: 15px;
+  margin-top: 30px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+@media screen and (min-width: 1024px) {
+  .alm-header-cont .alm-header-icons,
+  .alm-header-cont .alm-header-navigation,
+  .alm-header-cont .alm-header-profile,
+  .alm-header-cont .alm-header-down {
+    display: flex;
+  }
+}
+
+.alm-header-cart-cont {
+  position: relative;
+}
+
+.alm-header-cart-cont .alm-header-cart-counter {
+  display: none;
+  position: absolute;
+  top: 15px;
+  right: -10px;
+  font-weight: 600;
+  background-color: #1f39ff;
+  border-radius: 100px;
+  line-height: 15px;
+  min-width: 15px;
+  font-size: 12px;
+  color: white;
+  text-align: center;
+}

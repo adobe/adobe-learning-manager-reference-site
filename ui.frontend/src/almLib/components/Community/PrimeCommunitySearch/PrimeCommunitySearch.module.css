@@ -1,0 +1,77 @@
+/**
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+@import "../../../styles/variables.css";
+.primeCommunitySearchInput {
+  padding: 10px 0px;
+  min-width: 200px;
+  font-size: var(--prime-font-size-14);
+  border: none;
+  outline: none;
+}
+
+input:placeholder-shown {
+  font-style: italic;
+}
+
+@media (max-width: 414px) {
+  .primeCommunitySearchInput {
+    height: 35px;
+    padding: 10px 0px;
+    width: inherit;
+  }
+}
+
+.primeSearchButton {
+  height: 100%;
+  width: 30px;
+  background: none;
+  border: none;
+  fill: var(--prime-color-nc3);
+  margin-top: 1px;
+}
+
+.primeSearchButton:hover {
+  cursor: pointer;
+}
+
+.primeCommunitySearchWrapper {
+  width: 316px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.primeCommunitySearchParent {
+  display: flex;
+  border: 1px solid var(--prime-color-nc3);
+  border-radius: 2px;
+  box-shadow: 1px var(--prime-color-nc1);
+}
+
+@media (max-width: 414px) {
+  .primeSearchButton {
+    height: 32px;
+    width: 30px;
+  }
+
+  .primeCommunitySearchInput {
+    min-width: 150px;
+    width: 160px;
+  }
+  .primeCommunitySearchWrapper {
+    width: 205px;
+    height: 35px;
+  }
+
+  .primeCommunitySearchParent {
+    width: 205px;
+  }
+}

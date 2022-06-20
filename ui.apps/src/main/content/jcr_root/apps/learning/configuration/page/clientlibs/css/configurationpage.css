@@ -1,0 +1,88 @@
+/*
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+
+#admin-configs-cont {
+    font: normal normal normal 14px/30px Source Sans Pro;
+    width: 35rem; 
+}
+
+.coral-Form--aligned #admin-configs-cont .coral-Form-fieldlabel,
+.coral-Form--vertical #admin-configs-cont .coral-Form-fieldlabel {
+    font: normal normal normal 14px/30px Source Sans Pro;
+}
+
+#emb-widget-config-section {
+    border-top: 1px solid black;
+    margin-top: 40px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#fetch-nomenclature-button
+{
+    margin-top: 10px;
+    width: 120px;
+    height: 35px;
+    border-radius: 24px;
+}
+
+#admin-configs-cont .coral-Form-fieldwrapper.account-config-heading,
+#admin-configs-cont .account-config-heading .coral-Form-fieldlabel {
+    font: normal normal normal 24px/30px Source Sans Pro;
+    color: #707070;
+    margin-top: 30px;
+    margin-bottom: 5px;
+}
+
+#admin-configs-cont .coral-Form-fieldwrapper.account-config-heading2,
+#admin-configs-cont .account-config-heading2 .coral-Form-fieldlabel {
+    font: normal normal 600 14px/20px Source Sans Pro;
+    display: inline-block;
+    width: 90%;
+    margin-bottom: 15px;
+}
+
+.coral-Form-fieldwrapper.config-help-btn {
+    display: inline-block;
+    float: right;
+    margin-bottom: 30px;
+}
+
+.config-help-btn .coral-Form-fieldlabel {
+    color: #3471DE;
+    cursor: pointer;
+}
+
+#admin-configs-cont .account-widget-config-heading .coral-Form-fieldlabel {
+    font: normal normal normal 20px/30px Source Sans Pro;
+    border-top: 1px solid #dadada;
+    margin-top: 40px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#admin-configs-cont .account-widget-config-heading2 .coral-Form-fieldlabel {
+    font: normal normal 600 14px/20px Source Sans Pro;
+    margin-bottom: 15px;
+}
+
+.nomenclature-config-section {
+    margin-top: 30px;
+}
+
+.coral-Form--vertical .coral-Form-fieldwrapper .coral-Form-fielderror, .coral-Form--vertical .coral-Form-fieldwrapper .coral-Form-fieldinfo {
+    top: 8px;
+}
+
+#admin-configs-cont coral-switch {
+    top: 5px;
+}

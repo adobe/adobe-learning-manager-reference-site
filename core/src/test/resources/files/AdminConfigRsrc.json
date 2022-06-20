@@ -1,0 +1,11 @@
+ {
+     "jcr:content": {
+       "jcr:primaryType": "cq:PageContent",
+       "almBaseURL":"https://learningmanagerqe.adobe.com",
+       "refreshToken": "refreshToken",
+       "clientId": "clientId",
+       "clientSecret": "clientSecret",
+       "theme.background": "transparent",
+       "testConfig": "test1"
+      }
+}

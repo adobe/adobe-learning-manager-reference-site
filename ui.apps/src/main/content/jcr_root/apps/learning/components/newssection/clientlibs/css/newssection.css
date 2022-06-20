@@ -1,0 +1,83 @@
+/*
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+
+.news-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .news-section-author {
+    font: normal normal 400 16px/22px Source Sans Pro;
+  }
+  
+  .news-section .news-section-newsItem {
+    position: relative;
+    background-color: #f7f7f7;
+    height: 240px;
+    font-size: 16px;
+    padding: 30px;
+    width: 32%;
+  }
+  
+  .news-section .news-section-newsItem .title {
+    font: normal normal 600 18px/27px Source Sans Pro;
+    color: #292929;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    overflow: hidden;
+    padding: 0;
+    margin: 0 0 10px 0;
+  }
+  
+  .news-section .news-section-newsItem .link {
+    border: 2px solid #306eb5;
+    border-radius: 16px;
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    width: 94px;
+    height: 32px;
+    text-align: center;
+    line-height: 26px;
+  }
+  
+  .news-section .news-section-newsItem a {
+    color: #306eb5;
+    text-decoration: none;
+    font: normal normal 600 14px/20px Source Sans Pro;
+  }
+ 
+  
+.news-section-cont
+{
+    display: inline-block;
+    margin: 10px 0 10px 0;
+    font: normal normal 600 21px/23px Source Sans Pro;
+}
+
+.news-section-newsItem span
+{
+    overflow: auto;
+    display: inline-block;
+    height: 110px;
+}
+
+@media screen and (max-width: 414px) {
+  .news-section .news-section-newsItem {
+    width: 100%;
+    margin: 5px 0;
+  }
+}

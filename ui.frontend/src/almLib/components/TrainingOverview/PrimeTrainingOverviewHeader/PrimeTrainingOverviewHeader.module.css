@@ -1,0 +1,107 @@
+/**
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+@import "../../../styles/variables.css";
+
+.header {
+  -webkit-transition: height 0.2s;
+  -ms-transition: height 0.2s;
+  -moz-transition: height 0.2s;
+  -o-transition: height 0.2s;
+  transition: height 0.2s;
+  height: 150px;
+  width: 100%;
+  background-repeat: repeat-x;
+}
+
+.format {
+  margin-top: 20px;
+  height: 30px;
+  letter-spacing: 1px;
+  text-shadow: var(--prime-text-shadow);
+  font-size: var(--prime-font-size-16);
+  color: var(--prime-color-white);
+  line-height: 1.42857;
+}
+
+.title {
+  margin-top: 35px;
+  text-align: left;
+  color: var(--prime-color-white);
+  line-height: 120%;
+  vertical-align: bottom;
+  font-size: var(--prime-font-size-24);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.progressContainer {
+  width: 65%;
+  display: flex;
+  align-items: flex-start;
+}
+.progressBar {
+  width: 95%;
+  margin-right: 10px;
+}
+.percent {
+  position: relative;
+  bottom: 8px;
+  color: var(--prime-color-white);
+  text-shadow: var(--prime-text-shadow);
+}
+.progressBar div[class^="spectrum-BarLoader-fill"] {
+  background: var(--prime-color-nc6);
+}
+
+.progressBar div[class^="spectrum-BarLoader-track"] {
+  background: #9d9d9d;
+}
+
+.headingContainer {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-style: normal;
+  /* font-weight: var(--prime-font-size-24) !important; */
+  max-width: var(--prime-container-max-width-desktop);
+  width: var(--prime-container-width);
+}
+@media screen and (max-width: 1024px) {
+  .headingContainer {
+    max-width: var(--prime-container-max-width-tablet);
+    width: var(--prime-container-width);
+    padding: 0;
+  }
+  .title {
+    font-size: var(--prime-font-size-20);
+  }
+}
+
+@media screen and (max-width: 414px) {
+  .header {
+    padding: 0 20px;
+  }
+  .progressContainer {
+    width: 100%;
+  }
+  .progressBar {
+    width: 85%;
+  }
+  .headingContainer {
+    width: 100%;
+    max-width: var(--prime-container-max-width-mobile);
+  }
+  .percent {
+    bottom: 10px;
+  }
+}

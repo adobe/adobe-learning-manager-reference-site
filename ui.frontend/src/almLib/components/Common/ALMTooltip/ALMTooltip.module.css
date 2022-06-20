@@ -1,0 +1,45 @@
+/**
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+@import "../../../styles/variables.css";
+
+.tooltip {
+  display: none;
+}
+.showOnHover {
+  position: relative;
+}
+.showOnHover:hover .tooltip {
+  display: block;
+}
+.showOnHover svg {
+  width: 20px;
+  height: 20px;
+  transform: scale(0.7) rotate(180deg);
+  position: relative;
+  top: 5px;
+  left: 2px;
+  cursor: pointer;
+}
+
+div[class^="spectrum-Tooltip"].almTooltip {
+  visibility: initial;
+  opacity: 1;
+  position: absolute!important;
+  right: 0!important;
+  width: 180px!important;
+}
+.almTooltip span[class^="spectrum-Tooltip-tip"] {
+  left: 96%;
+}
+.almTooltip span[class^="spectrum-Tooltip-label"] {
+  font-size: var(--prime-font-size-12);
+}

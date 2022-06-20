@@ -1,0 +1,288 @@
+/**
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+@import "../../../styles/variables.css";
+
+.container {
+  /* max-width: 50%; */
+  /* margin: 0 auto; */
+  border-top: 1px solid var(--prime-color-nc6);
+  clear: both;
+  text-align: left !important;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.moduleDescription {
+  font-size: var(--prime-font-size-14);
+  padding: 15px;
+}
+
+.headerContainer {
+  background-color: var(--prime-color-white);
+  display: flex;
+  margin-bottom: 1px;
+}
+.title {
+  width: 80%;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.cursor {
+  cursor: pointer;
+}
+.headerWrapper {
+  /* width: 90%; */
+  width: 100%;
+  padding: 10px 10px 10px 0;
+  line-height: 1.25rem;
+}
+.resourceType {
+  text-transform: uppercase;
+  display: flex;
+}
+.headerIcon {
+  display: flex;
+  padding: 10px;
+}
+
+.details {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--prime-color-nc3);
+  font-size: var(--prime-font-size-12);
+}
+.details span {
+  display: block;
+}
+a.details {
+  color: var(--prime-color-primary);
+  text-decoration: none;
+}
+
+.icon {
+  display: flex;
+  padding: 10px;
+  position: relative;
+}
+.headerIcon svg {
+  fill: var(--prime-icon-color);
+  width: 40px;
+  height: 40px;
+}
+
+.icon svg {
+  fill: var(--prime-icon-color);
+  width: 40px;
+  height: 40px;
+}
+.spectrumIcon {
+  padding: 10px 15px;
+}
+.spectrumIcon svg {
+  fill: var(--prime-icon-color);
+  width: 24px;
+  height: 24px;
+}
+
+.wrapperContainer {
+  background-color: var(--prime-color-nc5);
+  border-color: var(--prime-color-nc6);
+  /* border: 1px solid #c9c9c9; */
+}
+
+.metaDataContainer {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: var(--prime-color-nc5);
+}
+
+.metadata {
+  width: 50%;
+  display: flex;
+  align-items: center;
+}
+
+.resourceAndDuration {
+  display: flex;
+  justify-content: space-between;
+  color: var(--prime-color-nc3);
+  font-size: var(--prime-font-size-12);
+}
+
+.moduleLocked,
+.modulePassed {
+  background-size: contain;
+  border-radius: 30px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  line-height: 40%;
+  background-color: var(--prime-color-white);
+}
+
+.moduleLocked svg {
+  fill: var(--prime-color-nc3);
+  width: 16px;
+  height: 16px;
+}
+
+.modulePassed svg {
+  fill: var(--prime-success-color);
+  width: 16px;
+  height: 16px;
+}
+
+.previewable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--prime-color-nc3);
+  font-size: var(--prime-font-size-12);
+}
+
+.previewable svg {
+  fill: var(--prime-icon-color);
+  width: 18px;
+  height: 13px;
+  margin-left: 3px;
+}
+
+.mandatoryModule {
+  background-size: contain;
+  border-radius: 30px;
+  position: absolute;
+  margin-top: 5px;
+	margin-left: 3px;
+  line-height: 40%;
+  background-color: var(--prime-color-white);
+}
+
+.mandatoryModule svg {
+  fill: var(--prime-error-color);
+  width: 10px;
+  height: 10px;
+}
+
+.titleContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.progressArea {
+  display: flex;
+  width: 200px;
+  margin-left:20px;
+}
+
+.primeStatusSvg {
+  background: none;
+  border: none;
+  width: 35px;
+  fill: currentColor;
+  padding-left: 10px;
+}
+
+@media screen and (max-width: 414px) {
+  .metaDataContainer {
+    display: flex;
+    flex-direction: columns;
+  }
+
+  .container {
+    max-width: 100%;
+  }
+
+  .metadata {
+    width: 100%;
+    display: flex;
+  }
+
+  .headerWrapper {
+    width: 100%;
+  }
+
+  .progressArea {
+    width: 175px;
+  }
+  
+  .primeStatusSvg {
+    width: 45px
+  }
+}
+
+.fileSubmissionContainer {
+  text-transform: none;
+  font-weight: 700;
+  margin-left: 15px;
+}
+
+.fileSubmissionContainer:hover {
+  cursor: default;
+}
+
+.uploadFileSubmission {
+  display: none;
+}
+
+.uploadButton{
+  background: none;
+  border: none;
+  padding-bottom: 12px;
+  font-size: 11px;
+  color: #4283d0
+}
+
+.uploadButton:hover {
+  border: none;
+  cursor: pointer;
+}
+
+.submissionLink {
+  color: #4283d0;
+  text-decoration: none;
+}
+
+.fileApproved {
+  color: #0f870f;
+}
+
+.fileRejected {
+  color: #e61414;
+}
+
+.fileAwaitingApproval {
+  color: #e6a000;
+}
+
+.warningDialog [class^="spectrum-ButtonGroup"] {
+  display: none !important;
+}
+
+.warningDialog [class^="spectrum-Dialog-heading"] {
+  padding-right: 15px !important;
+}
+
+.warningDialog svg[class^="spectrum-Dialog-typeIcon"] {
+  transform: scale(1.4);
+}
+.warningDialog [class^="spectrum-Dialog-content"] {
+  display: none;
+}
+
+.warningDialog hr {
+  display: none;
+}

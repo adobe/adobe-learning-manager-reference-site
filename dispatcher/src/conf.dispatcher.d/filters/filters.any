@@ -1,0 +1,19 @@
+#
+# This file contains the filter ACL, and can be customized.
+#
+# By default, it includes the default filter ACL.
+#
+
+$include "./default_filters.any"
+
+# Allow components JSON model
+/0101 { /type "allow" /extension "json" /selectors "model" /path "/content/*" }
+
+# Allow manifest.webmanifest files located in the content
+/0102 { /type "allow" /extension "webmanifest" /path "/content/*/manifest" }
+
+# Allow Access Token servlet
+/0104 { /type "allow" /method "POST" /extension "html" /selectors "cpAccessToken" /path "/cpoauth"}
+
+# Allow Commerce Access Token servlet
+/0105 { /type "allow" /method "GET" /extension "html" /selectors "commerceToken" /path "/cpoauth"}

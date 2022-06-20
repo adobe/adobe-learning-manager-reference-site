@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:isCheckedOut="{Boolean}true"
+    jcr:mixinTypes="[mix:referenceable,mix:versionable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="d11e4af4-7e87-4cd1-a818-353a747e8a8e">
+    <jcr:content
+        cq:name="lrng-logo.png"
+        cq:parentPath="/content/dam/learning/site"
+        dam:assetState="processed"
+        jcr:lastModified="{Date}2022-04-19T19:15:55.375+05:30"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            dam:Bitsperpixel="{Long}32"
+            dam:extracted="{Date}2022-04-19T19:15:55.141+05:30"
+            dam:Fileformat="PNG"
+            dam:MIMEtype="image/png"
+            dam:Numberofimages="{Long}1"
+            dam:Numberoftextualcomments="{Long}0"
+            dam:Physicalheightindpi="{Long}150"
+            dam:Physicalheightininches="{Decimal}0.6200537085533142"
+            dam:Physicalwidthindpi="{Long}150"
+            dam:Physicalwidthininches="{Decimal}1.820157766342163"
+            dam:Progressive="no"
+            dam:sha1="d2a4b2d0637744ab78560e33b407f6860ce2bce9"
+            dam:size="{Long}2907"
+            dc:format="image/png"
+            dc:modified="{Date}2022-04-19T19:15:55.260+05:30"
+            jcr:lastModified="{Date}2022-04-19T19:15:55.260+05:30"
+            jcr:lastModifiedBy="admin"
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"
+            tiff:ImageLength="{Long}93"
+            tiff:ImageWidth="{Long}273"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>
