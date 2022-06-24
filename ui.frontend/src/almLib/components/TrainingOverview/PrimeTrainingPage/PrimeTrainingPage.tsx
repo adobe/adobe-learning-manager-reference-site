@@ -352,6 +352,7 @@ const PrimeTrainingPage = () => {
                     showMandatoryLabel={showMandatoryLabel}
                     isprerequisiteLO={true}
                     isPreviewEnabled={isPreviewEnabled}
+                    isParentLOEnrolled={isEnrolled}
                   />
                 </section>
               );

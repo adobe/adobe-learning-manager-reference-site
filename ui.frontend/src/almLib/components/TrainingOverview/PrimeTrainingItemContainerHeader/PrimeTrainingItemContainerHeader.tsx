@@ -37,6 +37,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
   showMandatoryLabel?: boolean;
   isprerequisiteLO?: boolean;
   isPreviewEnabled?: boolean;
+  isParentLOEnrolled?: boolean;
 }> = (props) => {
   const {
     name,
@@ -49,6 +50,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
     showMandatoryLabel = false,
     isprerequisiteLO = false,
     isPreviewEnabled = false,
+    isParentLOEnrolled = false,
   } = props;
   const { formatMessage } = useIntl();
   const authorNames = training.authorNames?.length
@@ -58,8 +60,8 @@ const PrimeTrainingItemContainerHeader: React.FC<{
   const { cardIconUrl, color } = useCardIcon(training);
   const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
   let loType = training.loType;
-  const isEnrolled = checkIsEnrolled(training.enrollment);
-  const isPreviewable = isPreviewEnabled && training.hasPreview && !isEnrolled;
+  // const isEnrolled = checkIsEnrolled(training.enrollment);
+  const isPreviewable = isPreviewEnabled && training.hasPreview && !isParentLOEnrolled;
 
   const onClickHandler = (event: any) => {
     //NOTE: Don't open player in case training name is clicked

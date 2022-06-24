@@ -164,7 +164,7 @@ const PrimeModuleItem: React.FC<{
   const resource = useResource(loResource, locale);
 
   const isModulePreviewAble =
-    isPreviewEnabled && !isEnrolled && loResource.previewEnabled;
+    isPreviewEnabled && !isParentLOEnrolled && loResource.previewEnabled;
 
   const isClassroomOrVC =
     loResource.resourceType === CLASSROOM ||

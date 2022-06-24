@@ -76,6 +76,7 @@ const PrimeCourseItemContainer: React.FC<{
         isPartOfLP={isPartOfLP}
         showMandatoryLabel={showMandatoryLabel}
         isPreviewEnabled={isPreviewEnabled}
+        isParentLOEnrolled={isParentLOEnrolled}
       />
       {!isCollapsed && (
         <PrimeCourseOverview

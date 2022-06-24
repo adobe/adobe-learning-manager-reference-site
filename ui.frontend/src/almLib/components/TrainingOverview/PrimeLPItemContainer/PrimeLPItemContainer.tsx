@@ -71,6 +71,7 @@ const PrimeLPItemContainer: React.FC<{
         isPartOfLP={isPartOfLP}
         showMandatoryLabel={showMandatoryLabel}
         isPreviewEnabled={isPreviewEnabled}
+        isParentLOEnrolled={isParentLOEnrolled}
 
       />
       <div className={styles.collapsibleContainer}>
