@@ -39,7 +39,7 @@
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="learning/components/text"
-                            text="&lt;p>&lt;span class=&quot;heading&quot;>Welcome to the Fin Ease Community.&lt;/span>&lt;br>&#xa;Advice can come from many different places and the guidance provided can have a tremendous impact on your life, especially if you have an open mind. Join our community and connect with instructors and peers.&lt;/p>&#xa;"
+                            text="&lt;p>&lt;span class=&quot;heading&quot;>Welcome to the SecurFinancial Community.&lt;/span>&lt;br>&#xa;Advice can come from many different places and the guidance provided can have a tremendous impact on your life, especially if you have an open mind. Join our community and connect with instructors and peers.&lt;/p>&#xa;"
                             textIsRich="true"/>
                     </container>
                     <productscontainer

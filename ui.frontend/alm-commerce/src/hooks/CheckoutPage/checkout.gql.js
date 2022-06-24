@@ -12,8 +12,8 @@ governing permissions and limitations under the License.
 import { gql } from "@apollo/client";
 
 export const GET_PAYMENTS_MODE = gql`
-  query getPayments($cardId: String!) {
-    cart(cart_id: $cardId) {
+  query getPayments($cartId: String!) {
+    cart(cart_id: $cartId) {
       available_payment_methods {
         code
         title
@@ -23,9 +23,9 @@ export const GET_PAYMENTS_MODE = gql`
 `;
 
 export const SET_PAYMENT_MODE = gql`
-  mutation setPaymentMethod($cardId: String!, $code: String!) {
+  mutation setPaymentMethod($cartId: String!, $code: String!) {
     setPaymentMethodOnCart(
-      input: { cart_id: $cardId, payment_method: { code: $code } }
+      input: { cart_id: $cartId, payment_method: { code: $code } }
     ) {
       cart {
         selected_payment_method {
@@ -37,55 +37,10 @@ export const SET_PAYMENT_MODE = gql`
 `;
 
 export const PROCESS_ORDER = gql`
-  mutation CreateOrder($cardId: String!) {
-    placeOrder(input: { cart_id: $cardId }) {
+  mutation CreateOrder($cartId: String!) {
+    placeOrder(input: { cart_id: $cartId }) {
       order {
         order_number
-      }
-    }
-  }
-`;
-
-export const SET_BILLING_ADDRESS = gql`
-  mutation mutation_setBillingA59($cardId: String!) {
-    setBillingAddressOnCart(
-      input: {
-        cart_id: $cardId
-        billing_address: {
-          address: {
-            firstname: "John"
-            lastname: "Doe"
-            company: "Company Name"
-            street: ["64 Strawberry Dr", "Beverly Hills"]
-            city: "Los Angeles"
-            region: "CA"
-            region_id: 12
-            postcode: "90210"
-            country_code: "US"
-            telephone: "123-456-0000"
-            save_in_address_book: true
-          }
-        }
-      }
-    ) {
-      cart {
-        billing_address {
-          firstname
-          lastname
-          company
-          street
-          city
-          region {
-            code
-            label
-          }
-          postcode
-          telephone
-          country {
-            code
-            label
-          }
-        }
       }
     }
   }

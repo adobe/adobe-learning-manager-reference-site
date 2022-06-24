@@ -12,9 +12,9 @@ governing permissions and limitations under the License.
 import { gql } from "@apollo/client";
 
 export const REMOVE_ITEM_FROM_CART = gql`
-  mutation removeItem($cardId: String!, $cart_item_id: Int!) {
+  mutation removeItem($cartId: String!, $cart_item_id: Int!) {
     removeItemFromCart(
-      input: { cart_id: $cardId, cart_item_id: $cart_item_id }
+      input: { cart_id: $cartId, cart_item_id: $cart_item_id }
     ) {
       cart {
         items {

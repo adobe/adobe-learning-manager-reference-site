@@ -172,6 +172,7 @@ const PrimeCommunityObjectBody = (props: any) => {
       {props.type !== BOARD && (
         <PrimeCommunityLinkPreview
           currentInput={currentDescription}
+          viewMode={true}
           showLinkPreview={true}
         ></PrimeCommunityLinkPreview>
       )}

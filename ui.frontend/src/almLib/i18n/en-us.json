@@ -2,7 +2,7 @@
   "alm.community.board.lowActivity": "Low Activity",
   "alm.community.board.normalActivity": "Normal Activity",
   "alm.community.board.highActivity": "High Activity",
-  "alm.community.board.skill": "Skills",
+  "alm.community.board.skills": "|||SKILL|||",
   "alm.community.board.public": "Public Board",
   "alm.community.board.private": "Private Board",
   "alm.community.board.restricted": "Restricted Board",
@@ -213,5 +213,6 @@
   "alm.community.board.confirmationRequired": "Confirmation Required",
   "alm.community.board.reportBoardMessage": "Are you sure you want to report this board? A notification will be sent to the board administrator and moderators.",
   "alm.overview.added.to.cart.error": "Item already added to cart",
-  "alm.community.loadMore": "Load more"
+  "alm.community.loadMore": "Load more",
+  "alm.notification.empty":"No notifications available"
 }

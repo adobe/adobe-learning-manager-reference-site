@@ -9,14 +9,12 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { useIntl } from "react-intl";
 import styles from "./PrimeDropdown.module.css";
 import { useRef, useState, useEffect } from "react";
 import { ARROW_DOWN_SVG } from "../../../utils/inline_svg";
 
 const PrimeDropdown = (props: any) => {
   const ref = useRef<any>();
-  const { formatMessage } = useIntl();
   const selectedOption = props.selectedOption;
   const optionList = props.optionList;
   const expandDropdown = false;
@@ -53,7 +51,7 @@ const PrimeDropdown = (props: any) => {
   return (
     <>
       <div ref={ref} className={styles.primeDropdown}>
-        {formatMessage(props.label)}
+        {props.label}
         <span
           className={styles.primeDropdownValue}
           onClick={dropdownClickHandler}

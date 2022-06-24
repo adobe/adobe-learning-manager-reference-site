@@ -62,16 +62,24 @@ const PrimeCommunityLinkPreview = (props: any) => {
     const currentInput = props.currentInput;
     if (currentInput !== "") {
       try {
-        let inputParts = currentInput.split(" ");
         let url = "";
-        //checking if any part of input contains url
-        for (let input of inputParts) {
-          if (
-            input.match(urlRegex) ||
-            (input.indexOf(".") > -1 && !input.endsWith("."))
-          ) {
-            url = input;
-            break;
+        if (props.viewMode) {
+          if (currentInput.indexOf('href="') > -1) {
+            url = currentInput
+              .split('href="')[1]
+              .substring(0, currentInput.split('href="')[1].indexOf('"'));
+          }
+        } else {
+          let inputParts = currentInput.split(" ");
+          //checking if any part of input contains url
+          for (let input of inputParts) {
+            if (
+              input.match(urlRegex) ||
+              (input.indexOf(".") > -1 && !input.endsWith("."))
+            ) {
+              url = input;
+              break;
+            }
           }
         }
         if (url !== "") {

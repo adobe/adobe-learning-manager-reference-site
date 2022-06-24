@@ -33,7 +33,7 @@ export const useCheckoutPage = (props) => {
     { data: paymentModes, error: getPaymentError },
   ] = useLazyQuery(GET_PAYMENTS_MODE, {
     variables: {
-      cardId: cartId,
+      cartId: cartId,
     },
   });
 
@@ -94,14 +94,14 @@ export const useCheckoutPage = (props) => {
         await postMethod(PURCHASE_INITIATED_PATH);
         await setPaymentMode({
           variables: {
-            cardId: cartId,
+            cartId: cartId,
             code: paymentMode,
           },
         });
 
         await processOrder({
           variables: {
-            cardId: cartId,
+            cartId: cartId,
           },
         });
       } catch (e) {

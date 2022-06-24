@@ -3,5 +3,6 @@
     granite:rel="skills-image"
     jcr:primaryType="cq:Component"
     jcr:title="Product"
+    jcr:description="Tile indicating a skill that enables access to a Boards List."
     sling:resourceSuperType="core/wcm/components/image/v2/image"
     componentGroup="Learning - Structure"/>

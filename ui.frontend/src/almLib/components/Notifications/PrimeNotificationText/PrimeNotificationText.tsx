@@ -11,7 +11,9 @@ governing permissions and limitations under the License.
 */
 import { modifyTimeDDMMYY } from "../../../utils/dateTime";
 import { getALMConfig } from "../../../utils/global";
+import { ReplaceLoTypeWithAccountTerminology } from "../../../utils/translationService";
 import styles from "./PrimeNotificationText.module.css";
+
 
 const feedbackChannels: Array<string> = [
   "course::l1FeedbackPrompt",
@@ -34,7 +36,23 @@ const PrimeNotificationText = (props: any) => {
 
   const notif = props.notification;
   const redirectOverviewPage = props.redirectOverviewPage;
-  let message = notif.message;
+  
+
+
+  let message = notif.message
+        .replace(
+            "course",
+            ReplaceLoTypeWithAccountTerminology("course")
+        )
+        .replace(
+            "program",
+            ReplaceLoTypeWithAccountTerminology("learningProgram")
+        )
+        .replace(
+            "certification",
+            ReplaceLoTypeWithAccountTerminology("certification")
+        );
+
 
   let name1 = -1,
     name0 = -1,

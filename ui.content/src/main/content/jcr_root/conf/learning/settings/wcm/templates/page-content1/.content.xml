@@ -5,7 +5,7 @@
         cq:lastModified="{Date}2022-02-19T16:47:16.049+05:30"
         cq:lastModifiedBy="admin"
         cq:templateType="/conf/learning/settings/wcm/template-types/page"
-        jcr:description="AEM Learn Page Template"
+        jcr:description="Page Template"
         jcr:primaryType="cq:PageContent"
         jcr:title="Content Page Teaser"
         status="enabled"/>

@@ -13,9 +13,12 @@ import styles from "./PrimeCommunityBoardFilters.module.css";
 import { useEffect, useRef, useState } from "react";
 import { PrimeDropdown } from "../PrimeDropdown";
 import { DATE_UPDATED } from "../../../utils/constants";
+import { GetTranslation } from "../../../utils/translationService";
+import { useIntl } from "react-intl";
 
 const PrimeCommunityBoardFilters = (props: any) => {
   const ref = useRef<any>();
+  const { formatMessage } = useIntl();
 
   let defaultSkillFilter = props.selectedSkill;
   const [selectedSkillFilter, setSelectedSkillFilter] =
@@ -47,11 +50,6 @@ const PrimeCommunityBoardFilters = (props: any) => {
       firstRun.current = false;
     }
   }, [skills]);
-
-  const skillFilterLabel = {
-    id: "alm.community.board.skill",
-    defaultMessage: "Skill",
-  };
 
   let defaultSortFilter = DATE_UPDATED;
   const [selectedSortFilter, setSelectedSortFilter] =
@@ -87,14 +85,17 @@ const PrimeCommunityBoardFilters = (props: any) => {
         <div ref={ref} className={styles.primeBoardFilters}>
           {showSkillFilter && (
             <PrimeDropdown
-              label={skillFilterLabel}
+              label={GetTranslation("alm.community.board.skills", true)}
               optionList={Object.keys(skillList)}
               selectedOption={selectedSkillFilter}
               optionClickHandler={skillClickHandler}
             ></PrimeDropdown>
           )}
           <PrimeDropdown
-            label={sortFilterLabel}
+            label={formatMessage({
+              id: "alm.community.board.sortBy",
+              defaultMessage: "Sort by",
+            })}
             optionList={Object.keys(sortFilters)}
             selectedOption={selectedSortFilter}
             optionClickHandler={sortClickHandler}

@@ -52,6 +52,19 @@ governing permissions and limitations under the License.
 .trainingDetailsContainer {
   display: flex;
 }
+.previewable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--prime-color-nc3);
+  font-size: var(--prime-font-size-12);
+}
+.previewable svg {
+  fill: var(--prime-icon-color);
+  width: 18px;
+  height: 13px;
+  margin-left: 3px;
+}
 
 .card {
   display: flex;

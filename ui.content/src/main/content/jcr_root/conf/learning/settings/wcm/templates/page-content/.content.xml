@@ -8,7 +8,7 @@
         cq:lastReplicatedBy="admin"
         cq:lastReplicationAction="Activate"
         cq:templateType="/conf/learning/settings/wcm/template-types/page"
-        jcr:description="AEM Learn Page Template"
+        jcr:description="Page Template"
         jcr:primaryType="cq:PageContent"
         jcr:title="Content Page"
         status="enabled"/>

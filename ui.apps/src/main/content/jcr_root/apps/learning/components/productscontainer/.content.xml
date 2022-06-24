@@ -3,4 +3,5 @@
     cq:isContainer="{Boolean}true"
     jcr:primaryType="cq:Component"
     jcr:title="Products Container"
+    jcr:description="Accommodates multiple skills or products."
     componentGroup="Learning - Structure"/>

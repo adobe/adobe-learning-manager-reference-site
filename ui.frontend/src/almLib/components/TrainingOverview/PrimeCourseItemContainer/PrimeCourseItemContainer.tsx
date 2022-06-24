@@ -50,7 +50,6 @@ const PrimeCourseItemContainer: React.FC<{
   const clickHandler = () => {
     setIsCollapsed((prevState) => !prevState);
   };
-
   const { locale } = getALMConfig();
 
   const trainingInstance = filterTrainingInstance(training);
@@ -76,6 +75,7 @@ const PrimeCourseItemContainer: React.FC<{
         launchPlayerHandler={launchPlayerHandler}
         isPartOfLP={isPartOfLP}
         showMandatoryLabel={showMandatoryLabel}
+        isPreviewEnabled={isPreviewEnabled}
       />
       {!isCollapsed && (
         <PrimeCourseOverview

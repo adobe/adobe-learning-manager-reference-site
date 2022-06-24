@@ -172,6 +172,22 @@ export function SetupAccountTerminologies(
   });
 }
 
+export function ReplaceLoTypeWithAccountTerminology(term: string): string {
+  const terminologiesLoType =
+        term === "learningProgram"
+            ? "LEARNING_PATH"
+            : term === "jobAid"
+            ? "JOB_AID"
+            : term === "certification"
+            ? "CERTIFICATION"
+            : term === "MODULES"
+            ? "MODULES"
+            : term === "MODULE"
+            ? "MODULE"
+            : "COURSE";
+  return accountTerminologyMap[terminologiesLoType]?accountTerminologyMap[terminologiesLoType]['name_lxpv']:term;
+} 
+
 const defaultAccountTerminologies = [
   {
     entityType: "MODULE",

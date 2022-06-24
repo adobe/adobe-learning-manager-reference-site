@@ -10,14 +10,23 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-import { TextField, Form } from "@adobe/react-spectrum";
+import { Form, TextField } from "@adobe/react-spectrum";
 import React, { useEffect, useState } from "react";
 import { useAddressBook } from "../../hooks/AddressBook/useAddressBook";
 import { getCartId } from "../../utils/global";
 import CommerceLoader from "../Common/Loader";
 import styles from "./addressBook.module.css";
 
-const mandatorySvg = (<svg class="spectrum-Icon_368b34 spectrum-UIIcon-Asterisk_368b34 spectrum-FieldLabel-requiredIcon_d2db1f" focusable="false" aria-hidden="true" role="img"><path d="M6.573 6.558c.056.055.092.13 0 .204l-1.148.74c-.093.056-.13.02-.167-.073L3.832 4.947l-1.87 2.055c-.02.037-.075.074-.13 0l-.889-.926c-.092-.055-.074-.111 0-.167l2.111-1.76-2.408-.906c-.037 0-.092-.074-.055-.167l.63-1.259a.097.097 0 0 1 .166-.036l2.111 1.37.13-2.704a.097.097 0 0 1 .111-.11L5.277.54c.092 0 .11.037.092.13l-.722 2.647 2.444-.74c.056-.038.111-.038.148.073l.241 1.37c.019.093 0 .13-.074.13l-2.556.204z"></path></svg>)
+const mandatorySvg = (
+  <svg
+    className="spectrum-Icon_368b34 spectrum-UIIcon-Asterisk_368b34 spectrum-FieldLabel-requiredIcon_d2db1f"
+    focusable="false"
+    aria-hidden="true"
+    role="img"
+  >
+    <path d="M6.573 6.558c.056.055.092.13 0 .204l-1.148.74c-.093.056-.13.02-.167-.073L3.832 4.947l-1.87 2.055c-.02.037-.075.074-.13 0l-.889-.926c-.092-.055-.074-.111 0-.167l2.111-1.76-2.408-.906c-.037 0-.092-.074-.055-.167l.63-1.259a.097.097 0 0 1 .166-.036l2.111 1.37.13-2.704a.097.097 0 0 1 .111-.11L5.277.54c.092 0 .11.037.092.13l-.722 2.647 2.444-.74c.056-.038.111-.038.148.073l.241 1.37c.019.093 0 .13-.074.13l-2.556.204z"></path>
+  </svg>
+);
 
 const REQUIRED_ERROR_MESSAGE = "Is required";
 function AddressBook({ setCanPlaceOrder }) {
@@ -78,45 +87,68 @@ function AddressBook({ setCanPlaceOrder }) {
         return {
           ...prevState,
           city: { ...prevState.city, value: defaultBillingAddress.city },
-          firstName: { ...prevState.firstName, value: defaultBillingAddress.firstname },
-          middleName: { ...prevState.middleName, value: defaultBillingAddress.middleName || "" },
-          lastName: { ...prevState.lastName, value: defaultBillingAddress.lastname },
-          country_code: { ...prevState.country_code, value: defaultBillingAddress.country_code },
-          streetAddress: { ...prevState.streetAddress, value: street1 },
-          streetAddress2: { ...prevState.streetAddress2, value: street2 },
-          region: {
-            ...prevState.region, value: defaultBillingAddress.region?.region_id
-              || defaultBillingAddress.region?.region
+          firstName: {
+            ...prevState.firstName,
+            value: defaultBillingAddress.firstname || "",
           },
-          postcode: { ...prevState.postcode, value: defaultBillingAddress.postcode },
-          telephone: { ...prevState.telephone, value: defaultBillingAddress.telephone },
+          middleName: {
+            ...prevState.middleName,
+            value: defaultBillingAddress.middleName || "",
+          },
+          lastName: {
+            ...prevState.lastName,
+            value: defaultBillingAddress.lastname || "",
+          },
+          country_code: {
+            ...prevState.country_code,
+            value: defaultBillingAddress.country_code,
+          },
+          streetAddress: { ...prevState.streetAddress, value: street1 || "" },
+          streetAddress2: { ...prevState.streetAddress2, value: street2 || "" },
+          region: {
+            ...prevState.region,
+            value:
+              defaultBillingAddress.region?.region_id ||
+              defaultBillingAddress.region?.region ||
+              "",
+          },
+          postcode: {
+            ...prevState.postcode,
+            value: defaultBillingAddress.postcode,
+          },
+          telephone: {
+            ...prevState.telephone,
+            value: defaultBillingAddress.telephone,
+          },
         };
       });
-      setIsAddressAvailable(true)
+      setIsAddressAvailable(true);
     }
   }, [defaultBillingAddress]);
 
   useEffect(() => {
     if (doeCartHasBillingAddress) {
-      setCanPlaceOrder && setCanPlaceOrder(doeCartHasBillingAddress)
+      setCanPlaceOrder && setCanPlaceOrder(doeCartHasBillingAddress);
     }
-  }, [doeCartHasBillingAddress, setCanPlaceOrder])
+  }, [doeCartHasBillingAddress, setCanPlaceOrder]);
 
   useEffect(() => {
-    countries?.length && regions.length === 0 ? setShowRegionInputBox(true) : setShowRegionInputBox(false)
-  }, [countries?.length, regions])
+    countries?.length && regions.length === 0
+      ? setShowRegionInputBox(true)
+      : setShowRegionInputBox(false);
+  }, [countries?.length, regions]);
 
   const changeHandler = (key, value) => {
     setState((prevState) => {
       return { ...prevState, [key]: { ...prevState[key], value } };
     });
-    if (key === 'country_code') {
+    if (key === "country_code") {
       setState((prevState) => {
         return {
           ...prevState,
           region: { ...prevState.region, value: "" },
         };
-      })
+      });
     }
   };
   const submitHandler = async () => {
@@ -128,13 +160,14 @@ function AddressBook({ setCanPlaceOrder }) {
       return state[key].value === "";
     });
     if (!isFormInvalid) {
-
-      const regionObj = showRegionInputBox ? { region: region.value } : { region_id: region.value }
+      const regionObj = showRegionInputBox
+        ? { region: region.value }
+        : { region_id: region.value };
       const request = {
         address: {
           region: regionObj,
           country_code: country_code.value,
-          street: [streetAddress.value, streetAddress2.value || "",],
+          street: [streetAddress.value, streetAddress2.value || ""],
           telephone: telephone.value,
           postcode: postcode.value,
           city: city.value,
@@ -142,7 +175,7 @@ function AddressBook({ setCanPlaceOrder }) {
           lastname: lastName.value,
           middlename: middleName.value,
           default_shipping: true,
-          default_billing: true
+          default_billing: true,
         },
         cartId: getCartId(),
       };
@@ -179,7 +212,6 @@ function AddressBook({ setCanPlaceOrder }) {
               errorMessage={firstName.error}
               isRequired={true}
               UNSAFE_className={styles.mandatory}
-
             />
           </div>
           <div className={styles.half}>
@@ -215,7 +247,6 @@ function AddressBook({ setCanPlaceOrder }) {
               onChange={(event) =>
                 changeHandler("country_code", event.target.value)
               }
-              isRequired={true}
             >
               {/* <option>--Select a Country--</option> */}
               {countries.map((item) => (
@@ -269,36 +300,41 @@ function AddressBook({ setCanPlaceOrder }) {
               {mandatorySvg}
             </label>
 
-            {
-              showRegionInputBox ? (
-                <TextField
-                  value={region.value}
-                  width={"100%"}
-                  onChange={(value) => changeHandler("region", value)}
-                  validationState={getValidationState(region.value)}
-                  errorMessage={region.error}
-                  isRequired={true}
-                  UNSAFE_className={styles.mandatory} />
-              ) : (<>
+            {showRegionInputBox ? (
+              <TextField
+                value={region.value}
+                width={"100%"}
+                onChange={(value) => changeHandler("region", value)}
+                validationState={getValidationState(region.value)}
+                errorMessage={region.error}
+                isRequired={true}
+                UNSAFE_className={styles.mandatory}
+              />
+            ) : (
+              <>
                 <select
                   id="region"
                   className={getDropDownClass(region.value)}
                   value={region.value}
-                  onChange={(event) => changeHandler("region", event.target.value)}
+                  onChange={(event) =>
+                    changeHandler("region", event.target.value)
+                  }
                 >
                   <option value="">--Select a State--</option>
                   {regions.map((item) => (
-                    <option key={`region-${item.code}-${item.id}`} value={item.id}>
+                    <option
+                      key={`region-${item.code}-${item.id}`}
+                      value={item.id}
+                    >
                       {item.name}
                     </option>
                   ))}
-                </select>  <span className={styles.errorText}>
+                </select>{" "}
+                <span className={styles.errorText}>
                   {getValidationState(region.value) && region.error}
                 </span>
-              </>)
-            }
-
-
+              </>
+            )}
           </div>
         </div>
 
@@ -332,7 +368,6 @@ function AddressBook({ setCanPlaceOrder }) {
         <div className={styles.row}>
           <div className={styles.half}></div>
           <div className={`${styles.half} ${styles.actionButton}`}>
-
             <button
               type="button"
               onClick={submitHandler}
@@ -341,8 +376,10 @@ function AddressBook({ setCanPlaceOrder }) {
             >
               {addBillingAddressLoading ? (
                 <CommerceLoader size="S" />
+              ) : isAddressAvailable ? (
+                "Confirm Billing Address"
               ) : (
-                isAddressAvailable ? "Confirm Billing Address" : "Add Billing Address"
+                "Add Billing Address"
               )}
             </button>
           </div>

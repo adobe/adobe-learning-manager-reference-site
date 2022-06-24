@@ -69,7 +69,7 @@ export const useNotifications = () => {
   const { notifications, next } = useSelector(
     (state: State) => state.notification
   );
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const dispatch = useDispatch();
   const config = getALMConfig();
@@ -90,6 +90,7 @@ export const useNotifications = () => {
       if (!userId) {
         return;
       }
+      setIsLoading(true);
       const params: QueryParams = {};
       params["page[limit]"] = pageLimit;
       params["announcementsOnly"] = false;
@@ -134,10 +135,8 @@ export const useNotifications = () => {
         count = parsedResponse.userNotificationList.length;
 
       setUnreadCount(count);
-      setIsLoading(false);
     } catch (e) {
       console.log("Error while loading notifications " + e);
-      setIsLoading(false);
     }
   }, [config.primeApiURL]);
 

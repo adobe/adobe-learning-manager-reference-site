@@ -10,20 +10,18 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { useState } from "react";
+import { useIntl } from "react-intl";
 import { DATE_CREATED } from "../../../utils/constants";
 import { PrimeDropdown } from "../PrimeDropdown";
 
 const PrimeCommunityPostFilters = (props: any) => {
   let defaultSortFilter = DATE_CREATED;
+  const { formatMessage } = useIntl();
   const [selectedSortFilter, setSelectedSortFilter] =
     useState(defaultSortFilter);
   const sortFilters: { [key: string]: string } = {
     "Date Created": "-dateCreated",
     "Date Updated": "-dateUpdated",
-  };
-  const sortFilterLabel = {
-    id: "alm.community.board.sortBy",
-    defaultMessage: "Sort by",
   };
 
   const sortClickHandler = (option: any) => {
@@ -36,7 +34,10 @@ const PrimeCommunityPostFilters = (props: any) => {
   return (
     <>
       <PrimeDropdown
-        label={sortFilterLabel}
+        label={formatMessage({
+          id: "alm.community.board.sortBy",
+          defaultMessage: "Sort by",
+        })}
         optionList={Object.keys(sortFilters)}
         selectedOption={selectedSortFilter}
         optionClickHandler={sortClickHandler}

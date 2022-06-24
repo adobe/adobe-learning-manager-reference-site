@@ -351,6 +351,7 @@ const PrimeTrainingPage = () => {
                     isPartOfLP={prerequisiteLO.loType === LEARNING_PROGRAM}
                     showMandatoryLabel={showMandatoryLabel}
                     isprerequisiteLO={true}
+                    isPreviewEnabled={isPreviewEnabled}
                   />
                 </section>
               );

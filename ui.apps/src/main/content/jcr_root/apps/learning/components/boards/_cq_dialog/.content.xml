@@ -3,7 +3,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Boards"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    trackingFeature="learning:boards:v1">
+    trackingFeature="learning:boards">
     <content
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/container">

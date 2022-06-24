@@ -35,6 +35,9 @@ import { AlertType } from "../../../common/Alert/AlertDialog";
 import { useAlert } from "../../../common/Alert/useAlert";
 import { useConfirmationAlert } from "../../../common/Alert/useConfirmationAlert";
 import { BOARD, HIGH, NORMAL, PRIVATE, PUBLIC } from "../../../utils/constants";
+import {
+  GetTranslation
+} from "../../../utils/translationService";
 
 const PrimeCommunityBoard = (props: any) => {
   const { formatMessage } = useIntl();
@@ -164,10 +167,7 @@ const PrimeCommunityBoard = (props: any) => {
             <div className={styles.primeBoardSkill}>
               {boardSkills && (
                 <span className={styles.primeBoardSkillNames}>
-                  {formatMessage({
-                    id: "alm.community.board.skills",
-                    defaultMessage: "Skills",
-                  })}
+                  {GetTranslation("alm.community.board.skills", true)}
                   : {boardSkills}
                 </span>
               )}

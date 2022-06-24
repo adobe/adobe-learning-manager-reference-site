@@ -32,7 +32,6 @@ export default function CheckoutPage() {
   // const totalPrice = prices["grand_total"]?.value || 0;
   const [canPlaceOrder, setCanPlaceOrder] = useState(false);
 
-
   const {
     paymentModes,
     createOrder,
@@ -75,28 +74,19 @@ export default function CheckoutPage() {
       <h2 className={styles.paymentHeading}>Payment Method</h2>
       {paymentMethods.slice(0, 1).map((paymentMethod) => {
         return (
-          <>
-            <div className={styles.paymentContainer}>
-              <div
-                key={paymentMethod.code}
-                className={styles.paymentModeContainer}
-              >
-                <input
-                  id={paymentMethod.code}
-                  type="radio"
-                  defaultChecked={selectedPaymentMode === paymentMethod.code}
-                  name="paymentMethod"
-                  value={paymentMethod.code}
-                  onChange={() =>
-                    handlePaymentModeSelection(paymentMethod.code)
-                  }
-                />
-                <label htmlFor={paymentMethod.code}>
-                  {paymentMethod.title}
-                </label>
-              </div>
+          <div className={styles.paymentContainer} key={paymentMethod.code}>
+            <div className={styles.paymentModeContainer}>
+              <input
+                id={paymentMethod.code}
+                type="radio"
+                defaultChecked={selectedPaymentMode === paymentMethod.code}
+                name="paymentMethod"
+                value={paymentMethod.code}
+                onChange={() => handlePaymentModeSelection(paymentMethod.code)}
+              />
+              <label htmlFor={paymentMethod.code}>{paymentMethod.title}</label>
             </div>
-          </>
+          </div>
         );
       })}
       <div className={styles.buttonContainer}>

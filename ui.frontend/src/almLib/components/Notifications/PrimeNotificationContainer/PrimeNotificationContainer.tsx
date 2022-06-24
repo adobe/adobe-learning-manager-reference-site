@@ -38,6 +38,13 @@ const PrimeNotificationContainer = () => {
     setShowNotifications((prevState) => !prevState);
   };
 
+  const handleClickOutside = (event: any) => {
+    let element = wrapperRef.current;
+    if (element && !element.contains(event.target)) {
+      setShowNotifications(false);
+    }
+  };
+
   useEffect(() => {
     let timer: any;
     document.addEventListener("click", handleClickOutside, false);
@@ -58,17 +65,6 @@ const PrimeNotificationContainer = () => {
     pollUnreadNotificationCount,
     showNotifications,
   ]);
-
-  if (isLoading) {
-    return <></>;
-  }
-
-  const handleClickOutside = (event: any) => {
-    let element = wrapperRef.current;
-    if (element && !element.contains(event.target)) {
-      setShowNotifications(false);
-    }
-  };
 
   return (
     <ALMErrorBoundary>
@@ -92,6 +88,7 @@ const PrimeNotificationContainer = () => {
           <PrimeNotificationList
             notifications={notifications}
             unreadCount={unreadCount}
+            isLoading={isLoading}
             loadMoreNotifications={loadMoreNotifications}
             redirectOverviewPage={redirectOverviewPage}
           />

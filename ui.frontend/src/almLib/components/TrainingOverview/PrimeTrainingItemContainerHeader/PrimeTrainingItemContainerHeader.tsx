@@ -22,6 +22,8 @@ import { getALMObject } from "../../../utils/global";
 import { useCardBackgroundStyle, useCardIcon } from "../../../utils/hooks";
 import { GetTranslation } from "../../../utils/translationService";
 import styles from "./PrimeTrainingItemContainerHeader.module.css";
+import Visibility from "@spectrum-icons/workflow/Visibility";
+import { checkIsEnrolled } from "../../../utils/overview";
 
 const PrimeTrainingItemContainerHeader: React.FC<{
   name: string;
@@ -34,6 +36,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
   isPartOfLP?: boolean;
   showMandatoryLabel?: boolean;
   isprerequisiteLO?: boolean;
+  isPreviewEnabled?: boolean;
 }> = (props) => {
   const {
     name,
@@ -45,6 +48,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
     isPartOfLP = false,
     showMandatoryLabel = false,
     isprerequisiteLO = false,
+    isPreviewEnabled = false,
   } = props;
   const { formatMessage } = useIntl();
   const authorNames = training.authorNames?.length
@@ -54,6 +58,8 @@ const PrimeTrainingItemContainerHeader: React.FC<{
   const { cardIconUrl, color } = useCardIcon(training);
   const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
   let loType = training.loType;
+  const isEnrolled = checkIsEnrolled(training.enrollment);
+  const isPreviewable = isPreviewEnabled && training.hasPreview && !isEnrolled;
 
   const onClickHandler = (event: any) => {
     //NOTE: Don't open player in case training name is clicked
@@ -122,6 +128,17 @@ const PrimeTrainingItemContainerHeader: React.FC<{
             </>
           )}
         </div>
+        {isPreviewable ? (
+          <span className={styles.previewable}>
+            {formatMessage({
+              id: "alm.module.session.preview",
+              defaultMessage: "Preview",
+            })}
+            <Visibility aria-hidden="true" />
+          </span>
+        ) : (
+          ""
+        )}
         {statusText && <div className={styles.status}>{statusText}</div>}
       </div>
       <div className={styles.trainingDetailsContainer}>

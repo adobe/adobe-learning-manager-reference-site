@@ -12,42 +12,36 @@ governing permissions and limitations under the License.
 import { gql } from "@apollo/client";
 
 export const GET_COUNTRIES = gql`
-    query {
-        countries {
-            id
-            two_letter_abbreviation
-            full_name_english
-        }
+  query {
+    countries {
+      id
+      two_letter_abbreviation
+      full_name_english
     }
+  }
 `;
 export const GET_COUNTRY_REGIONS = gql`
-    query($code: String!) {
-        country(id: $code) {
-            available_regions {
-                id
-                code
-                name
-            }
-        }
+  query($code: String!) {
+    country(id: $code) {
+      available_regions {
+        id
+        code
+        name
+      }
     }
+  }
 `;
 export const ADD_DEFAULT_BILLING_ADDRESS = gql`
-    mutation mutation_add_billing_address(
-        $address:CustomerAddressInput!
-    ) {
-    createCustomerAddress(
-      input: $address
-    ) {
-            id
-            default_shipping
-        }
+  mutation mutation_add_billing_address($address: CustomerAddressInput!) {
+    createCustomerAddress(input: $address) {
+      id
+      default_shipping
     }
-  
+  }
 `;
 
-
 export const GET_ADDRESSES = gql`
-    query getAddresses {
+  query getAddresses {
     customer {
       addresses {
         id
@@ -68,16 +62,12 @@ export const GET_ADDRESSES = gql`
         middlename
       }
     }
-  } 
+  }
 `;
 
 export const SET_BILLING_ADDRESS = gql`
-  mutation mutation_setBillingA59(
-      $request:SetBillingAddressOnCartInput!
-    ) {
-    setBillingAddressOnCart(
-      input: $request
-    ) {
+  mutation mutation_setBilling($request: SetBillingAddressOnCartInput!) {
+    setBillingAddressOnCart(input: $request) {
       cart {
         billing_address {
           firstname

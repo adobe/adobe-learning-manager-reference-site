@@ -232,10 +232,12 @@ governing permissions and limitations under the License.
   $(document).on('foundation-contentloaded', () => {
     usageTypeSelectElem = $(USAGE_TYPE_SELECT_ID_SEL).get(0);
 
-    Coral.commons.ready(usageTypeSelectElem, function() {
-      hideUnselectedUsageOptions();
-      usageTypeSelectElem.on('change', hideUnselectedUsageOptions);
-    });
+    if (usageTypeSelectElem) {
+      Coral.commons.ready(usageTypeSelectElem, function() {
+        hideUnselectedUsageOptions();
+        usageTypeSelectElem.on('change', hideUnselectedUsageOptions);
+      });
+    }
 
     let siteMapCheckboxElem = $(SITE_MAP_SEL).get(0);
     if (siteMapCheckboxElem) {

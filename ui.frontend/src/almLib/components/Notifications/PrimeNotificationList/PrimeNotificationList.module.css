@@ -62,10 +62,28 @@ governing permissions and limitations under the License.
   margin-top: 8px;
 }
 
+.notificationEmpty{
+  padding: 10px;
+  font-size: var(--prime-font-size-16);
+  font-weight: var(--prime-font-weight-600);
+  display: flex;
+  justify-content: center;
+
+}
+
+.notificationLoaderWrapper {
+  margin-top:20px;
+  margin-bottom: 20px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+}
+
 @media screen and (max-width: 414px) {
   .notificationListBox {
     position: absolute;
     width: 100vw;
     right: -93px;
   }
+
 }

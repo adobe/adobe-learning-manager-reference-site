@@ -39,7 +39,7 @@ export const useProduct = (refreshCartHandler) => {
       try {
         await removeItem({
           variables: {
-            cardId: cartId,
+            cartId: cartId,
             cart_item_id: itemId,
           },
         });

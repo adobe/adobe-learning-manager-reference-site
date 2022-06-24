@@ -63,6 +63,7 @@ governing permissions and limitations under the License.
     font-size: 21px;
     margin-bottom: 5px;
     display: inline-block;
+    margin-top: 15px;
 }
 
 @media screen and (min-width: 1024px) {

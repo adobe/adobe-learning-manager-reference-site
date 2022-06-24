@@ -14,30 +14,47 @@ import { PrimeNotificationItem } from "../PrimeNotificationItem";
 import { useLoadMore } from "../../../hooks/loadMore";
 
 import styles from "./PrimeNotificationList.module.css";
+import { useIntl } from "react-intl";
+import { ALMLoader } from "../../Common/ALMLoader";
 
 const PrimeNotificationsList = (props: any) => {
-  const { notifications, loadMoreNotifications, redirectOverviewPage } = props;
+  const { notifications, loadMoreNotifications, redirectOverviewPage, isLoading } = props;
   const elementRef = useRef(null);
+  const { formatMessage } = useIntl();
   useLoadMore({
     items: notifications,
     callback: loadMoreNotifications,
     containerId: "notifications",
     elementRef,
   });
-  return (
-    <div>
-      <div className={styles.notificationListBox} id="notifications">
-        <ul className={styles.notificationList}>
-          {notifications?.map((entry: any) => (
-            <PrimeNotificationItem
-              notification={entry}
-              key={entry.id}
-              redirectOverviewPage={redirectOverviewPage}
-            ></PrimeNotificationItem>
-          ))}
-        </ul>
-        <div ref={elementRef}></div>
+
+  const notificationHTML =
+    notifications?.length > 0 ? (
+      <ul className={styles.notificationList}>
+        {notifications?.map((entry: any) => (
+          <PrimeNotificationItem
+            notification={entry}
+            key={entry.id}
+            redirectOverviewPage={redirectOverviewPage}
+          ></PrimeNotificationItem>
+        ))}
+      </ul>
+    ) : (
+      <div className={styles.notificationEmpty}>
+        {formatMessage({
+          id: "alm.notification.empty",
+          defaultMessage: "No notifications available",
+        })}
       </div>
+    );
+
+
+  return (
+    <div className={styles.notificationListBox} id="notifications">
+      {isLoading ? <div className={styles.notificationLoaderWrapper}>
+        <ALMLoader />
+      </div> : notificationHTML}
+      <div ref={elementRef}></div>
     </div>
   );
 };

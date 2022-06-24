@@ -70,6 +70,8 @@ const PrimeLPItemContainer: React.FC<{
         launchPlayerHandler={launchPlayerHandler}
         isPartOfLP={isPartOfLP}
         showMandatoryLabel={showMandatoryLabel}
+        isPreviewEnabled={isPreviewEnabled}
+
       />
       <div className={styles.collapsibleContainer}>
         <Button variant="overBackground" isQuiet onPress={clickHandler}>
