@@ -15,9 +15,11 @@ import { createSearchParams, useNavigate } from "react-router-dom";
 import { PURCHASE_INITIATED_PATH, SIGN_IN_PATH } from "../../utils/constants";
 import { getCartId, getCommerceToken, postMethod } from "../../utils/global";
 import {
+  CREATE_TOKEN,
   GET_PAYMENTS_MODE,
   PROCESS_ORDER,
   SET_PAYMENT_MODE,
+  SET_PAYMENT_ON_CART,
 } from "./checkout.gql";
 
 export const useCheckoutPage = (props) => {
@@ -51,6 +53,19 @@ export const useCheckoutPage = (props) => {
     processOrder,
     { data: orderData, loading: processOrderLoading, error: orderError },
   ] = useMutation(PROCESS_ORDER);
+  const [
+    fetchToken,
+    { data: tokenData, loading: TokenLoading, error: TokenError },
+  ] = useMutation(CREATE_TOKEN);
+
+  const [
+    setPaymentOnCart,
+    {
+      data: set_payment_on_cartData,
+      loading: set_payment_on_cartLoading,
+      error: set_payment_on_cartError,
+    },
+  ] = useMutation(SET_PAYMENT_ON_CART);
 
   const shouldShowLoadingIndicator =
     processOrderLoading || setPaymentModeLoading;
@@ -59,6 +74,8 @@ export const useCheckoutPage = (props) => {
     const getPaymentModes = async () => {
       try {
         await fetchPaymentModes();
+        await fetchToken();
+        console.log(tokenData);
       } catch (error) {
         if (process.env.NODE_ENV !== "production") {
           console.error(error);
@@ -88,25 +105,60 @@ export const useCheckoutPage = (props) => {
     navigateToOrdersSuccessPage(orderData?.placeOrder?.order?.order_number);
   }, [navigateToOrdersSuccessPage, orderData]);
 
+  const processBraintreePayment = async (braintreeInstance) => {
+    if (!braintreeInstance) {
+      console.log("Braintree instance not found");
+      return;
+    }
+    braintreeInstance.requestPaymentMethod((error, payload) => {
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      const paymentMethodNonce = payload.nonce;
+
+      setPaymentOnCart({
+        variables: {
+          cartId: cartId,
+          nonce: paymentMethodNonce,
+        },
+      }).then(() => {
+        processOrder({
+          variables: {
+            cartId: cartId,
+          },
+        });
+      });
+    });
+  };
+
+  const processMoneyOrder = async (paymentMode) => {
+    await setPaymentMode({
+      variables: {
+        cartId: cartId,
+        code: paymentMode,
+      },
+    });
+    await processOrder({
+      variables: {
+        cartId: cartId,
+      },
+    });
+  };
   const createOrder = useCallback(
-    async ({ paymentMode } = {}) => {
+    async ({ paymentMode, braintreeInstance } = {}) => {
       try {
         await postMethod(PURCHASE_INITIATED_PATH);
-        await setPaymentMode({
-          variables: {
-            cartId: cartId,
-            code: paymentMode,
-          },
-        });
-
-        await processOrder({
-          variables: {
-            cartId: cartId,
-          },
-        });
+        switch (paymentMode) {
+          case "braintree":
+            await processBraintreePayment(braintreeInstance);
+            break;
+          default:
+            await processMoneyOrder(paymentMode);
+        }
       } catch (e) {
         console.log(e);
-        //TODO : handle error
       }
     },
     [cartId, processOrder, setPaymentMode]
@@ -131,5 +183,6 @@ export const useCheckoutPage = (props) => {
     orderData,
     createOrder,
     shouldShowLoadingIndicator,
+    tokenData,
   };
 };

@@ -178,9 +178,9 @@
   "alm.profile.skills.removeInterest": "Remove from My interests",
   "alm.profile.skills.achieved": " Achieved",
   "alm.profile.skills.viewMore": "View more",
-  "alm.profile.skills.noSkillInterest": "You have not expressed interest in any Skill",
+  "alm.profile.skills.noSkillInterest": "You have not expressed interest in any ||SKILL||",
   "alm.profile.skills.modifyInterest": "Modify Interest",
-  "alm.profile.skills.noSkill": "No skill found",
+  "alm.profile.skills.noSkill": "No ||SKILL|| found",
   "alm.profile.skills.addInterest": "Add Interest",
   "alm.profile.fields.saveProfileChanges": "Save Changes",
   "alm.profile.skills.cancel": "Cancel",
@@ -214,5 +214,5 @@
   "alm.community.board.reportBoardMessage": "Are you sure you want to report this board? A notification will be sent to the board administrator and moderators.",
   "alm.overview.added.to.cart.error": "Item already added to cart",
   "alm.community.loadMore": "Load more",
-  "alm.notification.empty":"No notifications available"
+  "alm.notification.empty": "No notifications available"
 }

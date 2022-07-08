@@ -214,6 +214,14 @@ governing permissions and limitations under the License.
         }
     }
 
+    function handleOutsideProfileClick(e) {
+        if (!$(HEADER_PROFILE_ARROW_DOWN_SEL).is(e.target) && 
+            !$(HEADER_PROFILE_PIC_SEL).is(e.target) &&
+            $(HEADER_PROFILE_OPTIONS_CONT_SEL).has(e.target).length === 0) {
+                $(HEADER_PROFILE_OPTIONS_CONT_SEL).hide();
+        }
+    }
+
     $(document).ready(function () {
         renderLoginButtons();
         highlightNavigationButtons();
@@ -239,6 +247,8 @@ governing permissions and limitations under the License.
         $(HEADER_PROFILE_OPTIONS_SEL).on("click", () => {
             $(HEADER_PROFILE_OPTIONS_CONT_SEL).toggle();
         });
+
+        $(document).off("click", handleOutsideProfileClick).on("click", handleOutsideProfileClick);
 
         if (window.ALM.isPrimeUserLoggedIn()) {
             fetchProfileDetails();

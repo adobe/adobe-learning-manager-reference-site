@@ -10,20 +10,34 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { AnyAction } from "redux";
-import { LOAD_BOARD_DETAILS, LOAD_COMMENTS, LOAD_REPLIES, PAGINATE_REPLIES, PAGINATE_SOCIAL_BOARD_POSTS, SOCIAL_CMT_DELETE_SUCCESS, SOCIAL_POST_DELETE_SUCCESS, SOCIAL_REPLY_DELETE_SUCCESS } from ".";
-import { PrimeBoard, PrimePost, PrimeComment, PrimeReply } from "../../../models/PrimeModels";
 import {
-    LOAD_SOCIAL_BOARD,
-    LOAD_SOCIAL_BOARDS,
-    PAGINATE_SOCIAL_BOARDS,
-    SOCIAL_ADD_BOARD_FAVORITE_SUCCESS,
-    SOCIAL_REMOVE_BOARD_FAVORITE_SUCCESS,
-    SOCIAL_BOARD_DELETE_SUCCESS,
-    SET_SELECTED_POST,
-    PAGINATE_COMMENTS,
-    UPDATE_COMMENT,
-    UPDATE_REPLY,
-    UPDATE_POST
+  LOAD_BOARD_DETAILS,
+  LOAD_COMMENTS,
+  LOAD_REPLIES,
+  PAGINATE_REPLIES,
+  PAGINATE_SOCIAL_BOARD_POSTS,
+  SOCIAL_CMT_DELETE_SUCCESS,
+  SOCIAL_POST_DELETE_SUCCESS,
+  SOCIAL_REPLY_DELETE_SUCCESS,
+} from ".";
+import {
+  PrimeBoard,
+  PrimePost,
+  PrimeComment,
+  PrimeReply,
+} from "../../../models/PrimeModels";
+import {
+  LOAD_SOCIAL_BOARD,
+  LOAD_SOCIAL_BOARDS,
+  PAGINATE_SOCIAL_BOARDS,
+  SOCIAL_ADD_BOARD_FAVORITE_SUCCESS,
+  SOCIAL_REMOVE_BOARD_FAVORITE_SUCCESS,
+  SOCIAL_BOARD_DELETE_SUCCESS,
+  SET_SELECTED_POST,
+  PAGINATE_COMMENTS,
+  UPDATE_COMMENT,
+  UPDATE_REPLY,
+  UPDATE_POST,
 } from "./actionTypes";
 
 export const loadBoard = (payload: any): AnyAction => ({
@@ -58,7 +72,6 @@ export const paginateBoards = (payload: {
   type: PAGINATE_SOCIAL_BOARDS,
   payload,
 });
-
 
 export const loadPosts = (payload: any): AnyAction => ({
   type: LOAD_BOARD_DETAILS,
@@ -106,7 +119,7 @@ export const paginateReplies = (payload: {
 
 export const deletePost = (payload: any): AnyAction => ({
   type: SOCIAL_POST_DELETE_SUCCESS,
-  payload
+  payload,
 });
 
 export const deleteComment = (payload: any): AnyAction => ({

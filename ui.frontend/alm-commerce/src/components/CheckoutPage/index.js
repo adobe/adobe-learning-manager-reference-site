@@ -10,7 +10,9 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-import React, { useState } from "react";
+import { Button } from "@adobe/react-spectrum";
+import dropin from "braintree-web-drop-in";
+import React, { useEffect, useRef, useState } from "react";
 import { useCartPage } from "../../hooks/CartPage/useCartPage";
 import { useCheckoutPage } from "../../hooks/CheckoutPage/useCheckoutPage";
 import { formatPrice } from "../../utils/price";
@@ -19,35 +21,73 @@ import ProductList from "../CartPage/productList";
 import CommerceLoader from "../Common/Loader";
 import styles from "./CheckoutPage.module.css";
 
+const BRAINTREE = "braintree";
+
 export default function CheckoutPage() {
   const {
     cartItems,
     hasItems,
-    // isCartUpdating,
     shouldShowLoadingIndicator: cartLoading,
-    // totalQuantity,
     prices = {},
   } = useCartPage();
 
-  // const totalPrice = prices["grand_total"]?.value || 0;
   const [canPlaceOrder, setCanPlaceOrder] = useState(false);
-
+  const [braintreeInstance, setBraintreeInstance] = useState(undefined);
   const {
     paymentModes,
     createOrder,
     shouldShowLoadingIndicator,
+    tokenData,
   } = useCheckoutPage();
 
   const paymentMethods = paymentModes?.cart?.available_payment_methods || [];
 
   const [selectedPaymentMode, setSelectedPaymentMode] = useState("checkmo");
 
-  const handlePaymentModeSelection = (paymentMode) => {
-    setSelectedPaymentMode(paymentMode);
-  };
+  const brainTreeDropIn = "braintree-drop-in-div";
+
+  const braintreeContainer = useRef(null);
+
+  const executeScroll = () => braintreeContainer.current.scrollIntoView();
+  useEffect(() => {
+    if (selectedPaymentMode === BRAINTREE) {
+      executeScroll();
+    }
+  }, [selectedPaymentMode]);
+
+  useEffect(() => {
+    const initializeBraintree = () => {
+      if (!tokenData) {
+        return;
+      }
+      dropin.create(
+        {
+          authorization: tokenData.createBraintreeClientToken,
+          container: `#${brainTreeDropIn}`,
+        },
+        function (error, instance) {
+          if (error) {
+            console.error(error);
+          } else {
+            setBraintreeInstance(instance);
+          }
+        }
+      );
+    };
+    if (braintreeInstance) {
+      braintreeInstance.teardown().then(() => {
+        initializeBraintree();
+      });
+    } else {
+      initializeBraintree();
+    }
+  }, [tokenData]);
 
   const placeOrder = () => {
-    createOrder({ paymentMode: selectedPaymentMode });
+    createOrder({
+      paymentMode: selectedPaymentMode,
+      braintreeInstance: braintreeInstance,
+    });
   };
 
   if (cartLoading) {
@@ -60,10 +100,12 @@ export default function CheckoutPage() {
       </h1>
     );
   }
+  console.log(paymentModes);
 
   return (
     <>
       <AddressBook setCanPlaceOrder={setCanPlaceOrder} />
+
       <ProductList cartItems={cartItems} canDeleteProduct={false} />
       <hr />
       <div className={styles.totalPrice}>
@@ -72,36 +114,44 @@ export default function CheckoutPage() {
       </div>
 
       <h2 className={styles.paymentHeading}>Payment Method</h2>
-      {paymentMethods.slice(0, 1).map((paymentMethod) => {
+      {paymentMethods.map((paymentMethod) => {
+        const paymentMode = paymentMethod.code;
         return (
-          <div className={styles.paymentContainer} key={paymentMethod.code}>
-            <div className={styles.paymentModeContainer}>
+          <div className={styles.paymentContainer} key={paymentMode}>
+            <div key={paymentMode} className={styles.paymentModeContainer}>
               <input
-                id={paymentMethod.code}
+                id={paymentMode}
                 type="radio"
-                defaultChecked={selectedPaymentMode === paymentMethod.code}
+                defaultChecked={selectedPaymentMode === paymentMode}
                 name="paymentMethod"
-                value={paymentMethod.code}
-                onChange={() => handlePaymentModeSelection(paymentMethod.code)}
+                value={selectedPaymentMode}
+                onChange={() => setSelectedPaymentMode(paymentMode)}
               />
-              <label htmlFor={paymentMethod.code}>{paymentMethod.title}</label>
+              <label htmlFor={paymentMode}>{paymentMethod.title}</label>
             </div>
           </div>
         );
       })}
+      <div
+        ref={braintreeContainer}
+        id={brainTreeDropIn}
+        style={{ marginTop: "-10px" }}
+        className={selectedPaymentMode === BRAINTREE ? "" : styles.hidden}
+      />
+
       <div className={styles.buttonContainer}>
-        <button
+        <Button
+          variant="cta"
           type="button"
-          onClick={placeOrder}
-          disabled={shouldShowLoadingIndicator || !canPlaceOrder}
-          className={`almButton primary`}
+          onPress={placeOrder}
+          isDisabled={shouldShowLoadingIndicator || !canPlaceOrder}
         >
           {shouldShowLoadingIndicator ? (
             <CommerceLoader size="S" />
           ) : (
             "Place Order"
           )}
-        </button>
+        </Button>
       </div>
     </>
   );

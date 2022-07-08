@@ -23,7 +23,8 @@ governing permissions and limitations under the License.
   padding: 20px 0;
   float: left;
 }
-.trainingOverviewContainer, .trainingOverviewPrequisite {
+.trainingOverviewContainer,
+.trainingOverviewPrequisite {
   border: 1px solid var(--prime-color-nc6);
   border-radius: 6px;
   margin-bottom: 20px;
@@ -34,15 +35,14 @@ governing permissions and limitations under the License.
 }
 
 .trainingPrequisiteLabel {
-  margin-bottom: 20px;
-  margin-top: 20px;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 .sectionName {
   margin: 0 0 10px 0;
   color: var(--prime-color-nc1);
   font-size: var(--prime-font-size-16);
-
 }
 .sectionOptional {
   display: inline-block;
@@ -64,23 +64,26 @@ governing permissions and limitations under the License.
   display: inline-block;
   width: 100%;
   padding: 10px 0 0 0;
-  white-space: normal!important;
+  white-space: normal !important;
   height: auto;
 }
 
 img {
   max-width: 100%;
-  max-height: 100%
+  max-height: 100%;
 }
 .duration {
   font-size: var(--prime-font-size-14);
   color: var(--prime-color-nc3);
+  margin-bottom: 10px;
+  display: block;
 }
 .pageContainer {
   display: flex;
   max-width: var(--prime-container-max-width-desktop);
   width: var(--prime-container-width);
   margin: 0 auto;
+  margin-top: 15px;
 }
 @media screen and (max-width: 1024px) {
   .headingContainer {
@@ -150,7 +153,7 @@ img {
 }
 
 .submissionLink {
-  color: #4283d0;
+  color: var(--prime-color-primary);
   text-decoration: none;
   margin-left: 5px;
 }
@@ -165,26 +168,27 @@ img {
   color: #0f870f;
 }
 
-.uploadUpperSeperator, .uploadLowerSeperator {
+.uploadUpperSeperator,
+.uploadLowerSeperator {
   margin-top: 20px;
   margin-bottom: 20px;
-  border: 2px solid #ccc;
+  border: 2px solid var(--prime-color-nc2);
 }
 
 .uploadLowerSeperator {
-  border: 1px solid #ccc;
+  border: 1px solid var(--prime-color-nc2);
 }
 
 .uploadFileSubmission {
   display: none;
 }
 
-.uploadButton{
+.uploadButton {
   background: none;
   border: none;
   padding-bottom: 12px;
   font-size: 13px;
-  color: #4283d0;
+  color: var(--prime-color-primary);
   font-weight: 750;
 }
 

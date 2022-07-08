@@ -101,14 +101,13 @@
         "jcr:created": "2022-03-02T22:19:50.386+05:30",
         "cq:lastModified": "2022-03-03T13:57:24.962+05:30",
         refreshToken: "xxxx",
-        usageType: "aem-es",
+        usageType: "aem-commerce",
         clientId: "xxxxx",
         "sling:resourceType": "learning/configuration/page",
         primeBaseUrl: "1",
         "sling:configPropertyInherit": "true",
         "cq:lastModifiedBy": "admin",
-        esBaseUrl:
-          "xxxxxx",
+        esBaseUrl: "xxxxxx",
         siteMap: "siteMap",
         instancePath: "http://localhost:3000/instance.html",
         catalogPath: "http://localhost:3000/catalog.html",
@@ -117,9 +116,7 @@
         communityBoardsPath: "http://localhost:3000/community.html",
         communityBoardDetailsPath: "http://localhost:3000/community.html",
         commerceBasePath: "/",
-        //almCdnBaseUrl: "https://cpcontentsqe.adobe.com",
-        almCdnBaseUrl:
-          "xxxxxx",
+        almCdnBaseUrl: "xxxxxx",
         primeTileColors: {
           0: "#00000",
           1: "#FFFFFF",
@@ -127,8 +124,7 @@
         },
         authorMode: true,
         customerTokenLifetime: "3600",
-        commerceURL:
-          "xxxxxx",
+        commerceURL: "xxxxxx",
       };
 
       const getAccessToken = () => {
@@ -263,7 +259,19 @@
       };
 
       function handleLogOut() {
-        console.log("logout");
+        const COMMERCE_TOKEN_COOKIE_NAME = "alm_commerce_token";
+        const ACCESS_TOKEN_COOKIE_NAME = "alm_cp_token";
+        document.cookie =
+          ACCESS_TOKEN_COOKIE_NAME +
+          "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+
+        document.cookie =
+          COMMERCE_TOKEN_COOKIE_NAME +
+          "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+        window.ALM.storage.removeItem("user");
+        window.ALM.storage.removeItem("CART_ID");
+        window.ALM.storage.removeItem("PRIME_CATALOG_FILTER");
+        window.ALM.storage.removeItem("COMMERCE_FILTERS");
       }
 
       window.ALM = window.ALM || {};

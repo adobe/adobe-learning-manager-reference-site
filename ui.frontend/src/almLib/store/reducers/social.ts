@@ -200,7 +200,9 @@ const items: Reducer<PrimeBoard[], AnyAction> = (
     case CHANGE_SOCIAL_TAB:
       return null;
     case PAGINATE_SOCIAL_BOARDS:
-      return action.payload.items ? [...state!, ...action.payload.items] : state;
+      return action.payload.items
+        ? [...state!, ...action.payload.items]
+        : state;
     case SOCIAL_ADD_BOARD_FAVORITE_SUCCESS: {
       if (state === null || state!.length === 0) {
         return [];
@@ -332,7 +334,9 @@ const postsItems: Reducer<PrimePost[], AnyAction> = (
     case LOAD_BOARD_DETAILS:
       return action.payload.items || [];
     case PAGINATE_SOCIAL_BOARD_POSTS:
-      return action.payload.items ? [...state!, ...action.payload.items] : state;
+      return action.payload.items
+        ? [...state!, ...action.payload.items]
+        : state;
     case LOAD_COMMENTS:
       if (!action.payload.selectedPostId) {
         return state;
@@ -368,7 +372,9 @@ const postsItems: Reducer<PrimePost[], AnyAction> = (
         return [];
       }
       // eslint-disable-next-line no-case-declarations
-      const index = state?.findIndex((item) => item.id === action.payload.postId);
+      const index = state?.findIndex(
+        (item) => item.id === action.payload.item.id
+      );
       if (index < 0) return state;
       //uncomment below if else
       // if (state[index].previewData) {
@@ -377,9 +383,9 @@ const postsItems: Reducer<PrimePost[], AnyAction> = (
       //         attributes: {...state[index].attributes, previewData: {...state[index].attributes.previewData, ...action.post.attributes.previewData,},},
       //     };
       // } else {
-        // }
-        
-      state[index] = action.payload.post;
+      // }
+
+      state[index] = action.payload.item;
       return state;
     }
 
@@ -680,7 +686,9 @@ const commentsItems: Reducer<PrimeComment[], AnyAction> = (
       }
       return [];
     case PAGINATE_COMMENTS:
-      return action.payload.items ? [...state!, ...action.payload.items] : state;
+      return action.payload.items
+        ? [...state!, ...action.payload.items]
+        : state;
     case LOAD_REPLIES:
       if (!action.payload.selectedCommentId) {
         return state;
@@ -818,7 +826,9 @@ const replyItems: Reducer<PrimeReply[], AnyAction> = (
       }
       return [];
     case PAGINATE_REPLIES:
-      return action.payload.items ? [...state!, ...action.payload.items] : state;
+      return action.payload.items
+        ? [...state!, ...action.payload.items]
+        : state;
     case UPDATE_REPLY: {
       if (!state) {
         return [];

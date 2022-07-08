@@ -36,7 +36,6 @@ governing permissions and limitations under the License.
   padding-right: 20px;
   font-size: var(--prime-font-size-16);
   color: var(--prime-color-black);
-  font-weight: 600;
 }
 
 .removeItem {
@@ -46,7 +45,7 @@ governing permissions and limitations under the License.
 }
 
 .removeItem svg {
-  fill: var(  --prime-color-nc4);
+  fill: var(--prime-color-nc4);
 }
 
 .priceLabel {

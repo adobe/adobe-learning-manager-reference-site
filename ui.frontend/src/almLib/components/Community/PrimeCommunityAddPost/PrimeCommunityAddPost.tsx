@@ -20,7 +20,7 @@ const PrimeCommunityAddPost = (props: any) => {
   const { formatMessage } = useIntl();
   const { addPost } = usePost();
   const [almConfirmationAlert] = useConfirmationAlert();
-
+  const EMPTY = "";
   const savePostHandler = async (
     input: any,
     postingType: any,
@@ -60,7 +60,9 @@ const PrimeCommunityAddPost = (props: any) => {
       formatMessage({
         id: "alm.community.ok.label",
         defaultMessage: "Ok",
-      })
+      }),
+      EMPTY,
+      props.reloadPosts
     );
   };
 

@@ -13,8 +13,12 @@ import { useCallback } from "react";
 import { COMMENT, POLL, POST } from "../../utils/constants";
 import { getALMConfig } from "../../utils/global";
 import { RestAdapter } from "../../utils/restAdapter";
+import { JsonApiParse } from "../../utils/jsonAPIAdapter";
+import { useDispatch } from "react-redux";
+import { updatePost } from "../../store/actions/social/action";
 
 export const usePost = () => {
+  const dispatch = useDispatch();
   const addPost = useCallback(
     async (
       boardId: any,
@@ -108,12 +112,17 @@ export const usePost = () => {
       }
 
       const headers = { "content-type": "application/json" };
-      await RestAdapter.ajax({
+      const result = await RestAdapter.ajax({
         url: `${baseApiUrl}/posts/${postId}`,
         method: "PATCH",
         body: JSON.stringify(postBody),
         headers: headers,
       });
+      const parsedResponse = JsonApiParse(result);
+      const data = {
+        item: parsedResponse.post,
+      };
+      dispatch(updatePost(data));
     },
     []
   );

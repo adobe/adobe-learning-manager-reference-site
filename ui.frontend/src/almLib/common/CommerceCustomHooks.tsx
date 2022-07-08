@@ -17,7 +17,7 @@ import {
 import { GET_MAX_PRICE } from "../commerce/commerce.gql";
 import { apolloClient } from "../contextProviders";
 import { CatalogFilterState } from "../store/reducers/catalog";
-import { getIndividualFiltersForCommerce } from "../utils/catalog";
+import { getIndividualFiltersForCommerce, sortList } from "../utils/catalog";
 import {
   FilterState,
   getDefaultFiltersState,
@@ -178,7 +178,7 @@ const getTransformedFilter = async (filterState: CatalogFilterState) => {
     const pricesArray = filterState.price.split("-");
     filter[ALM_PRICE] = {
       from: pricesArray[0],
-      to: pricesArray[1],
+      to: pricesArray[1] == "0" ? "0.0000000001": pricesArray[1] ,
     };
   }
   return filter;
@@ -195,7 +195,27 @@ const getOrUpdateFilters = async () => {
       query: GET_COMMERCE_FILTERS,
     });
 
-    const items = response.data.customAttributeMetadata.items;
+    const items = JSON.parse(
+      JSON.stringify(response.data.customAttributeMetadata.items)
+    );
+    //sorting skills list
+    const skillsIndex = items.findIndex(
+      (item: any) => item.attribute_code === "almskill"
+    );
+    items[skillsIndex].attribute_options = sortList(
+      items[skillsIndex].attribute_options,
+      "label"
+    );
+    //sorting tags list
+    const tagsIndex = items.findIndex(
+      (item: any) => item.attribute_code === "almtags"
+    );
+    items[tagsIndex].attribute_options = sortList(
+      items[tagsIndex].attribute_options,
+      "label"
+    );
+
+
     setItemToStorage(COMMERCE_FILTERS, items);
     return items;
   } catch (e) {

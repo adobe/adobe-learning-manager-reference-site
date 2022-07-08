@@ -48,7 +48,9 @@ const PrimeCommunityPost = (props: any) => {
   });
   const [buttonLabel, setButtonLabel] = useState(showCommentsLabel);
   const [commentCount, setCommentCount] = useState(post.commentCount);
+  const [postDescription, setPostDescription] = useState(post.richText);
   const [almConfirmationAlert] = useConfirmationAlert();
+  const EMPTY = "";
 
   const viewButtonClickHandler = () => {
     if (!showComments) {
@@ -147,13 +149,13 @@ const PrimeCommunityPost = (props: any) => {
         isResourceModified,
         pollOptions
       );
-      showConfirmationDialog();
+      showConfirmationDialog(input);
     } catch (exception) {
       console.log("Error in creating Post");
     }
   };
 
-  const showConfirmationDialog = () => {
+  const showConfirmationDialog = (input: any) => {
     almConfirmationAlert(
       formatMessage({
         id: "alm.community.postPublished.label",
@@ -167,8 +169,14 @@ const PrimeCommunityPost = (props: any) => {
       formatMessage({
         id: "alm.community.ok.label",
         defaultMessage: "Ok",
-      })
+      }),
+      EMPTY,
+      () => setPostText(input)
     );
+  };
+
+  const setPostText = (input: any) => {
+    setPostDescription(input);
   };
 
   const submitPoll = (optionId: any) => {
@@ -187,6 +195,7 @@ const PrimeCommunityPost = (props: any) => {
         <PrimeCommunityObjectHeader
           object={post}
           type={POST}
+          description={postDescription}
           updateObjectHandler={(
             input: any,
             postingType: any,
@@ -206,6 +215,7 @@ const PrimeCommunityPost = (props: any) => {
         <PrimeCommunityObjectBody
           object={post}
           type={POST}
+          description={postDescription}
           submitPoll={(optionId: any) => {
             submitPoll(optionId);
           }}

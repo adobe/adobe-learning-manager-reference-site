@@ -75,7 +75,7 @@ export const getOrUpdateCatalogFilters = async (): Promise<
     });
     setItemToStorage(PRIME_CATALOG_FILTER, catalogPromise);
     return JsonApiParse(catalogPromise)?.catalogList;
-  } catch (e) {}
+  } catch (e) { }
 };
 
 const getCatalogParamsForAPi = async (
@@ -214,4 +214,9 @@ export function getIndividualFiltersForCommerce(
   });
 
   return value;
+}
+
+
+export function sortList(list: Array<any>, paramName: string) {
+  return [...list].sort((a, b) => a[paramName]?.trim().localeCompare(b[paramName]?.trim()));
 }
