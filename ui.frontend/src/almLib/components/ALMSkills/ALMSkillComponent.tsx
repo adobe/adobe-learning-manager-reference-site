@@ -13,6 +13,7 @@ import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { useSkills } from "../../hooks/community/useSkills";
 import { useUserSkillInterest } from "../../hooks/community/useUserSkillInterest";
+import { GetTranslation } from "../../utils/translationService";
 import styles from "./ALMSkillComponent.module.css";
 
 const ALMSkillComponent = (props: any) => {
@@ -39,11 +40,11 @@ const ALMSkillComponent = (props: any) => {
 
   const clearSelectedSkills = () => {
     setSelectedInterest([]);
-  }
+  };
 
   const loadMoreSkillsHandler = async () => {
     await loadMoreSkills();
-  }
+  };
 
   const toggleSkillSelection = (node: any) => {
     const skillId = node.id.split("skill-")[1];
@@ -166,9 +167,8 @@ const ALMSkillComponent = (props: any) => {
     let pointsArray = [];
     if (userSkillInterest.userSkills) {
       for (let i = 0; i < userSkillInterest.userSkills.length; i++) {
-        const skillEnrollmentDetails = userSkillInterest.userSkills[i].id.split(
-          "_"
-        );
+        const skillEnrollmentDetails =
+          userSkillInterest.userSkills[i].id.split("_");
         const levelId = skillEnrollmentDetails[2];
 
         if (levelId) {
@@ -300,16 +300,16 @@ const ALMSkillComponent = (props: any) => {
         {mode === "view" && noSkillInterestPresent() && (
           <div className={styles.skillsContainer}>
             <span>
-              {formatMessage({
-                id: "alm.profile.skills.noSkillInterest",
-                defaultMessage: "You have not expressed interest in any Skill",
-              })}
+              {GetTranslation("alm.profile.skills.noSkillInterest", true)}
             </span>
           </div>
         )}
         {mode === "view" && (
           <div className={styles.modifyInterest}>
-            <button className={`almButton primary ${styles.actionButton}`} onClick={editSkillInterest}>
+            <button
+              className={`almButton primary ${styles.actionButton}`}
+              onClick={editSkillInterest}
+            >
               {formatMessage({
                 id: "alm.profile.skills.modifyInterest",
                 defaultMessage: "Modify Interest",
@@ -343,7 +343,10 @@ const ALMSkillComponent = (props: any) => {
           </div>
         )}
         {mode === "edit" && hasMoreSkills && (
-          <button className={styles.showMoreButton} onClick={loadMoreSkillsHandler}>
+          <button
+            className={styles.showMoreButton}
+            onClick={loadMoreSkillsHandler}
+          >
             {formatMessage({
               id: "alm.profile.skills.viewMore",
               defaultMessage: "View more",
@@ -353,22 +356,25 @@ const ALMSkillComponent = (props: any) => {
         {mode === "edit" && noSkillPresent() && (
           <div className={styles.skillsContainer}>
             <span>
-              {formatMessage({
-                id: "alm.profile.skills.noSkill",
-                defaultMessage: "No skill found",
-              })}
+              {GetTranslation("alm.profile.skills.noSkill", true)}
             </span>
           </div>
         )}
         {mode === "edit" && (
           <div className={styles.modifyInterest}>
-            <button className={`almButton primary ${styles.actionButton}`} onClick={saveSkillInterest}>
+            <button
+              className={`almButton primary ${styles.actionButton}`}
+              onClick={saveSkillInterest}
+            >
               {formatMessage({
                 id: "alm.profile.skills.addInterest",
                 defaultMessage: "Add Interest",
               })}
             </button>
-            <button className={`almButton secondary ${styles.actionButton}`} onClick={discardSelection}>
+            <button
+              className={`almButton secondary ${styles.actionButton}`}
+              onClick={discardSelection}
+            >
               {formatMessage({
                 id: "alm.profile.skills.cancel",
                 defaultMessage: "Cancel",

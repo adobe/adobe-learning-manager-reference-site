@@ -33,8 +33,9 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   const PRIME_USAGE_TYPE = "aem-sites";
   const ES_USAGE_TYPE = "aem-es";
   const COMMERCE_USAGE_TYPE = "aem-commerce";
+  const DEFAULT_USAGE = "aem-default";
 
-  const CURRENT_USAGE_TYPE = window.ALM.ALMConfig.usageType || PRIME_USAGE_TYPE;
+  const CURRENT_USAGE_TYPE = window.ALM.ALMConfig.usageType || DEFAULT_USAGE;
 
   const cleanUpUserData = () => {
     document.cookie =
@@ -171,6 +172,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
         handleCommerceLogIn();
         break;
 
+      case DEFAULT_USAGE:
       default:
         break;
     }

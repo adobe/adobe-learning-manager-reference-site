@@ -80,4 +80,8 @@ governing permissions and limitations under the License.
     width: 100%;
     margin: 5px 0;
   }
+
+  .news-section {
+    padding: 20px;
+  }
 }

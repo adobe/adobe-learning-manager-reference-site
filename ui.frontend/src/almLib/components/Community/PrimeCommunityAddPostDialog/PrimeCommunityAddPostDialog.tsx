@@ -50,6 +50,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
   };
 
   const [saveEnabled, setSaveEnabled] = useState(isInputFilled());
+  const [isUploading, setIsUploading] = useState(false);
   const [fileUploadProgress, setFileUploadProgress] = useState(
     state.fileUpload.uploadProgress
   );
@@ -69,9 +70,8 @@ const PrimeCommunityAddPostDialog = (props: any) => {
         setResource(props.post?.resource);
         setFileUploadProgress(100);
         setTextMode(false);
-      } else {
+      } else if (textMode) {
         state.fileUpload.fileName = "";
-        setTextMode(true);
       }
       if (props.post.postingType === QUESTION) {
         setQuestionTypeSelected(true);
@@ -145,6 +145,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
   const preUploadChecks = () => {
     setSaveEnabled(false);
     setTextMode(false);
+    setIsUploading(true);
   };
 
   const upload = async () => {
@@ -170,6 +171,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
 
   const postUploadChecks = () => {
     setFileUploadProgress(100);
+    setIsUploading(false);
     setSaveEnabled(isInputFilled());
   };
 
@@ -223,6 +225,12 @@ const PrimeCommunityAddPostDialog = (props: any) => {
     setPollOptions(pollOptions);
   };
 
+  const enableSaveButton = () => {
+    if (!isUploading) {
+      setSaveEnabled(true);
+    }
+  };
+
   return (
     <Dialog UNSAFE_className={styles.primeConfirmationDialog}>
       <Heading>
@@ -258,9 +266,9 @@ const PrimeCommunityAddPostDialog = (props: any) => {
             defaultMessage: "Write or paste something here...",
           })}
           characterLimit={COMMENT_CHAR_LIMIT}
-          defaultValue={props.post?.richText}
+          defaultValue={props.description}
           enablePrimaryAction={() => {
-            setSaveEnabled(true);
+            enableSaveButton();
           }}
           disablePrimaryAction={() => {
             setSaveEnabled(false);
@@ -437,10 +445,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
             })}
           </button>
         ) : (
-          <button
-            disabled={true}
-            className={`almButton primary`}
-          >
+          <button disabled={true} className={`almButton primary`}>
             {formatMessage({
               id: "alm.community.post.label",
               defaultMessage: "Post",

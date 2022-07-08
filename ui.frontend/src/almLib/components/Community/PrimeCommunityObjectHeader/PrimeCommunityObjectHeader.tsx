@@ -241,6 +241,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
             className={styles.primeAddPostButton}
             openDialog={true}
             post={object}
+            description={props.description}
             mode={UPDATE}
             savePostHandler={(
               input: any,

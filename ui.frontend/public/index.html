@@ -90,8 +90,7 @@
         locale: "en-US",
         cdnBaseUrl: "https://cpcontentsdev.adobe.com",
         usageType: "aem-commerce",
-        accountData:
-          '{}',
+        accountData: "{}",
         esBaseUrl: "xxxxx",
         instancePath: "/instance.html",
         catalogPath: "/explore.html",
@@ -99,18 +98,14 @@
         communityPath: "/community.html",
         communityBoardsPath: "/community.html",
         communityBoardDetailsPath: "/community.html",
-        commerceBasePath: "",
-        //almCdnBaseUrl: "https://cpcontentsqe.adobe.com",
-        almCdnBaseUrl:
-          "xxxxx",
+        almCdnBaseUrl: "xxxxx",
         primeTileColors: {
           0: "#00000",
           1: "#FFFFFF",
           2: "#445566",
         },
         commerceSignInPath: "signIn",
-        commerceURL:
-          "xxxx",
+        commerceURL: "xxxx",
         commerceStoreName: "xxx",
       };
 
@@ -309,6 +304,22 @@
           default:
             break;
         }
+      }
+
+      function handleLogOut() {
+        const COMMERCE_TOKEN_COOKIE_NAME = "alm_commerce_token";
+        const ACCESS_TOKEN_COOKIE_NAME = "alm_cp_token";
+        document.cookie =
+          ACCESS_TOKEN_COOKIE_NAME +
+          "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+
+        document.cookie =
+          COMMERCE_TOKEN_COOKIE_NAME +
+          "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+        window.ALM.storage.removeItem("user");
+        window.ALM.storage.removeItem("CART_ID");
+        window.ALM.storage.removeItem("PRIME_CATALOG_FILTER");
+        window.ALM.storage.removeItem("COMMERCE_FILTERS");
       }
 
       window.ALM = window.ALM || {};

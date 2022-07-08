@@ -59,6 +59,7 @@ export interface ALM {
   getAccountActiveFields: Function;
   updateAccountActiveFieldsDetails: Function;
   handleLogIn: Function;
+  handleLogOut: Function;
   storage: any;
 }
 

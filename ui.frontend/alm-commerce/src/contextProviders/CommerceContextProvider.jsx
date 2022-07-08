@@ -16,7 +16,14 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { getALMConfig, getCommerceToken, getCommerceStoreName } from "../utils/global";
+import { onError } from "@apollo/client/link/error";
+import { SIGN_IN_PATH } from "../utils/constants";
+import {
+  getALMConfig,
+  getALMObject,
+  getCommerceStoreName,
+  getCommerceToken,
+} from "../utils/global";
 
 const uri = getALMConfig().graphqlProxyPath || getALMConfig().commerceURL;
 const httpLink = createHttpLink({
@@ -31,14 +38,28 @@ const authLink = setContext((_, { headers }) => {
     headers: {
       ...headers,
       authorization: signInToken ? `Bearer ${signInToken}` : "",
-      store
+      store,
     },
   };
 });
 
+const errorControl = onError(({ networkError, graphQLErrors }) => {
+  if (graphQLErrors) {
+    graphQLErrors.forEach(({ message, locations, path, extensions }) => {
+      if (extensions?.category === "graphql-authorization") {
+        getALMObject().handleLogOut();
+        window.location.pathname = SIGN_IN_PATH;
+      }
+    });
+  }
+  if (networkError) {
+    console.log(" [Network error]:", networkError);
+  }
+});
+
 export const apolloClient = new ApolloClient({
-  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
+  link: errorControl.concat(authLink.concat(httpLink)),
 });
 
 const contextProviders = [];

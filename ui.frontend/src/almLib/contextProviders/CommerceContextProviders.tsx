@@ -16,11 +16,14 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+import { onError } from "@apollo/client/link/error";
 import React from "react";
 import {
   getALMConfig,
+  getALMObject,
   getCommerceStoreName,
   getCommerceToken,
+  redirectToLoginAndAbort,
 } from "../utils/global";
 
 const uri = getALMConfig().graphqlProxyPath || getALMConfig().commerceURL;
@@ -40,9 +43,23 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+const errorControl = onError(({ networkError, graphQLErrors }) => {
+  if (graphQLErrors) {
+    graphQLErrors.forEach(({ message, locations, path, extensions }) => {
+      if (extensions?.category === "graphql-authorization") {
+        getALMObject().handleLogOut();
+        redirectToLoginAndAbort(true);
+      }
+    });
+  }
+  if (networkError) {
+    console.log(" [Network error]:", networkError);
+  }
+});
+
 export const apolloClient = new ApolloClient({
-  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
+  link: errorControl.concat(authLink.concat(httpLink)),
 });
 
 const CommerceContextProviders = (props: React.PropsWithChildren<{}>) => {

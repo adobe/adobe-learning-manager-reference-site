@@ -85,6 +85,7 @@ const PrimeCommunityAddPostDialogTrigger = (props: any) => {
         {(close: any) => (
           <PrimeCommunityAddPostDialog
             post={props.post}
+            description={props.description}
             mode={props.mode}
             saveHandler={(
               event: any,

@@ -62,15 +62,15 @@ const PrimeCommunityPosts = (props: any) => {
   const resetSearchHandler = async () => {
     setIsSearchMode(false);
     setSearchResult(0);
-    getPosts(board.id);
+    getPosts();
   };
   const sortFilterChangeHandler = async (sortValue: any) => {
-    getPosts(board.id, sortValue);
+    getPosts(sortValue);
   };
 
-  const getPosts = async (boardId: any, sortValue?: any) => {
+  const getPosts = async (sortValue?: any) => {
     setShowLoader(true);
-    await fetchPosts(boardId, sortValue);
+    await fetchPosts(board.id, sortValue);
     setShowLoader(false);
   };
 
@@ -103,7 +103,10 @@ const PrimeCommunityPosts = (props: any) => {
       <div className={styles.primeCommunityActionRowContainer}>
         <div className={styles.primeCommunityActionRowWrapper}>
           {isNewPostAllowed() && (
-            <PrimeCommunityAddPost boardId={board.id}></PrimeCommunityAddPost>
+            <PrimeCommunityAddPost
+              boardId={board.id}
+              reloadPosts={getPosts}
+            ></PrimeCommunityAddPost>
           )}
           <div className={styles.primeCommunitySearchWrapper}>
             {posts?.length > 0 && (

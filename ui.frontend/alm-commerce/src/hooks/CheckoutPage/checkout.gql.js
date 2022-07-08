@@ -36,11 +36,63 @@ export const SET_PAYMENT_MODE = gql`
   }
 `;
 
+export const SET_PAYMENT_ON_CART = gql`
+  mutation mutation_setPayment($cartId: String!, $nonce: String!) {
+    setPaymentMethodOnCart(
+      input: {
+        cart_id: $cartId
+        payment_method: {
+          code: "braintree"
+          braintree: {
+            payment_method_nonce: $nonce
+            is_active_payment_token_enabler: false
+          }
+        }
+      }
+    ) {
+      cart {
+        selected_payment_method {
+          code
+        }
+      }
+    }
+  }
+`;
+
 export const PROCESS_ORDER = gql`
   mutation CreateOrder($cartId: String!) {
     placeOrder(input: { cart_id: $cartId }) {
       order {
         order_number
+      }
+    }
+  }
+`;
+
+export const CREATE_TOKEN = gql`
+  mutation mutation_createBrainToken {
+    createBraintreeClientToken
+  }
+`;
+
+export const BRAINTREE_PAYMENT = gql`
+  mutation mutation_setPayment {
+    setPaymentMethodOnCart(
+      input: {
+        cart_id: $cartId
+        payment_method: {
+          code: "braintree"
+          braintree: {
+            payment_method_nonce: "fake-nonce"
+            is_active_payment_token_enabler: false
+          }
+        }
+      }
+    ) {
+      cart {
+        selected_payment_method {
+          code
+        }
       }
     }
   }

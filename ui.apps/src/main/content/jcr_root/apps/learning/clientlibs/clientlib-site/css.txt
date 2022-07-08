@@ -2,8 +2,8 @@
 
 site-components.css
 site-base.css
-site-base-footer.css
-site-base-header.css
-site-base-signout.css
-site-base-support.css
-site-base-templates.css
+site-learning-footer.css
+site-learning-header.css
+site-learning-signout.css
+site-learning-support.css
+site-learning-templates.css

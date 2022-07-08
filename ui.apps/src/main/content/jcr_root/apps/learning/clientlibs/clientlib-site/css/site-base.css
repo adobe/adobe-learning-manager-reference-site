@@ -286,7 +286,6 @@ governing permissions and limitations under the License.
 
   #home-categories-container {
     margin: 0 auto;
-    margin-top: 50px;
     margin-bottom: 60px;
   }
 
@@ -365,9 +364,10 @@ governing permissions and limitations under the License.
   #home-catalog-container,
   #home-categories-container {
     margin: 0 auto;
-    margin-top: 60px;
   }
 
+  #catalog-page-container,
+  #home-catalog-container,
   #learning-parent-container {
     margin-top: 50px;
   }
@@ -388,7 +388,7 @@ governing permissions and limitations under the License.
 }
 
 #home-categories-container #categories-headline {
-  margin-top: 30px;
+  margin-top: 60px;
 }
 
 @media screen and (max-width: 1024px) {
@@ -404,7 +404,6 @@ governing permissions and limitations under the License.
     max-width: var(--prime-container-max-width-tablet);
     width: var(--prime-container-width);
     padding: 0;
-    margin-top: 20px;
     margin-bottom: 40px;
   }
 
@@ -423,9 +422,5 @@ governing permissions and limitations under the License.
   #learning-parent-container {
     width: 100%;
     max-width: 100%;
-  }
-
-  .news-section {
-    padding: 20px;
   }
 }

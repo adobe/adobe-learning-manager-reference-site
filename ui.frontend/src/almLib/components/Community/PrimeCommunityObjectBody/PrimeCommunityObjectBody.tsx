@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 import { getALMConfig, getALMObject } from "../../../utils/global";
 import styles from "./PrimeCommunityObjectBody.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import Question from "@spectrum-icons/workflow/Question";
 import { PrimeCommunityLinkPreview } from "../PrimeCommunityLinkPreview";
@@ -100,7 +100,7 @@ const PrimeCommunityObjectBody = (props: any) => {
         return "";
     }
   };
-  const description = getDescription();
+  const [fullDescription, setFullDescription] = useState(getDescription());
   const primeConfig = getALMConfig();
   const iframeSrc = `${
     primeConfig.almBaseURL
@@ -112,28 +112,42 @@ const PrimeCommunityObjectBody = (props: any) => {
   const DEFAULT_INDEX_VALUE = 2;
   const [viewIndex, setViewIndex] = useState(DEFAULT_INDEX_VALUE);
   const [viewMore, setViewMore] = useState(
-    description?.length > MAX_CHAR_SHOWN
+    fullDescription?.length > MAX_CHAR_SHOWN
   );
   const [currentDescription, setCurrentDescription] = useState(
-    description?.length > MAX_CHAR_SHOWN
-      ? description.substring(0, MAX_CHAR_SHOWN)
-      : description
+    fullDescription?.length > MAX_CHAR_SHOWN
+      ? fullDescription.substring(0, MAX_CHAR_SHOWN)
+      : fullDescription
   );
 
   const getTruncatedDescription = () => {
     const supportedCharacterLength = MAX_CHAR_SHOWN * viewIndex;
-    if (description?.length <= supportedCharacterLength) {
+    if (fullDescription?.length <= supportedCharacterLength) {
       setViewMore(false);
-      setCurrentDescription(description);
+      setCurrentDescription(fullDescription);
       setViewIndex(DEFAULT_INDEX_VALUE);
     } else
-      setCurrentDescription(description.substring(0, supportedCharacterLength));
+      setCurrentDescription(
+        fullDescription.substring(0, supportedCharacterLength)
+      );
     setViewIndex(viewIndex + 1);
   };
 
   const submitPoll = (optionId: any) => {
     props.submitPoll(optionId);
   };
+
+  useEffect(() => {
+    if (props.description) {
+      setFullDescription(props.description);
+      setCurrentDescription(
+        props.description?.length > MAX_CHAR_SHOWN
+          ? props.description.substring(0, MAX_CHAR_SHOWN)
+          : props.description
+      );
+      setViewMore(props.description?.length > MAX_CHAR_SHOWN);
+    }
+  }, [props.description]);
 
   return (
     <>
