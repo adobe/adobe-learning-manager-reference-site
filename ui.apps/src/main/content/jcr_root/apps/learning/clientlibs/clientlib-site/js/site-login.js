@@ -35,6 +35,8 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   const COMMERCE_USAGE_TYPE = "aem-commerce";
   const DEFAULT_USAGE = "aem-default";
 
+  const ALM_AUTHENTICATION_ERROR_ID = "alm-authentication-validator";
+
   const CURRENT_USAGE_TYPE = window.ALM.ALMConfig.usageType || DEFAULT_USAGE;
 
   const cleanUpUserData = () => {
@@ -180,6 +182,46 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
   const isAuthor = () => window.ALM.ALMConfig.authorMode == true;
 
+  const showPopup = (errorMsg, variant, header) => {
+    let dialogElem = $("#" + ALM_AUTHENTICATION_ERROR_ID);
+    let dialogModal;
+    let bodyClasses = $("body").attr("class").split(/\s+/);
+    let isCoralLightClassPresent = bodyClasses.includes("coral--light");
+    if (!isCoralLightClassPresent) {
+      $("body").addClass("coral--light");
+    }
+
+    if(dialogElem.is(":visible"))
+    {
+      return;
+    }
+
+    dialogModal = new Coral.Dialog().set({
+      id: ALM_AUTHENTICATION_ERROR_ID,
+      variant: variant,
+      closable: "on",
+      header: {
+        innerHTML: header
+      },
+      content: {
+        innerHTML: errorMsg
+      },
+      footer: {
+        innerHTML: '<button is="coral-button" variant="default" coral-close>OK</button>'
+      }
+    });
+
+    dialogModal.on('coral-overlay:close', function (event) {
+      if (!isCoralLightClassPresent) {
+        $("body").removeClass("coral--light");
+      }
+      $("#" + ALM_AUTHENTICATION_ERROR_ID).remove();
+    });
+
+    document.body.appendChild(dialogModal);
+    dialogModal.show();
+  }
+
   function getCpOauthUrl() {
     const almBaseURL = window.ALM.ALMConfig.almBaseURL;
     const clientId = window.ALM.ALMConfig.clientId;
@@ -224,7 +266,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
         }
       },
       error: () => {
-        alert("Failed to authenticate");
+        showPopup("Failed to authenticate.", "error", "Error");
       },
     });
   };
