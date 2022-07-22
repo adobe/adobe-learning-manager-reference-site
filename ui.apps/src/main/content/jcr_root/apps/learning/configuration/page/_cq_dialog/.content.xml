@@ -107,7 +107,7 @@
                         granite:rel="aem-sites"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldDescription="Enter author refresh token generated from Learning Manager account. Refer help section to learn more."                        
+                        fieldDescription="Enter admin's learner scoped refresh token generated from Learning Manager account. Refer help section to learn more."                        
                         fieldLabel="Author refresh token"
                         name="./authorRefreshToken"
                         required="{Boolean}true"/>
@@ -162,8 +162,8 @@
                         granite:rel="aem-commerce aem-es"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldDescription="Enter admin's learner scoped refresh token generated from Learning Manager account. Refer help section to learn more."
-                        fieldLabel="Admin's learner scoped refresh token"
+                        fieldDescription="Enter admin's learner scoped refresh token for non-commerce and admin's admin scoped refresh token for commerce generated from Learning Manager account. Refer help section to learn more."
+                        fieldLabel="Admin refresh token"
                         name="./refreshToken"
                         required="{Boolean}true"/>
                     <esBase
