@@ -185,6 +185,11 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   const showPopup = (errorMsg, variant, header) => {
     let dialogElem = $("#" + ALM_AUTHENTICATION_ERROR_ID);
     let dialogModal;
+    let bodyClasses = $("body").attr("class").split(/\s+/);
+    let isCoralLightClassPresent = bodyClasses.includes("coral--light");
+    if (!isCoralLightClassPresent) {
+      $("body").addClass("coral--light");
+    }
 
     if(dialogElem.is(":visible"))
     {
@@ -207,6 +212,9 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     });
 
     dialogModal.on('coral-overlay:close', function (event) {
+      if (!isCoralLightClassPresent) {
+        $("body").removeClass("coral--light");
+      }
       $("#" + ALM_AUTHENTICATION_ERROR_ID).remove();
     });
 
