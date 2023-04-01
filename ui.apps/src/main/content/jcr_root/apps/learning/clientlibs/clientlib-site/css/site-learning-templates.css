@@ -122,7 +122,7 @@ governing permissions and limitations under the License.
   }
 }
 
-@media screen and (max-width: 414px) {
+@media screen and (max-width: 450px) {
   #tmplt-carousel .cmp-teaser .cmp-teaser__content
   {
     width: 90%;

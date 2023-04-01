@@ -18,7 +18,7 @@ governing permissions and limitations under the License.
   cursor: pointer;
 }
 .headerContainer:hover {
-  background-color: var(--prime-color-nc6);
+  background-color: var(--prime-color-white);
 }
 
 .metadata {
@@ -26,6 +26,7 @@ governing permissions and limitations under the License.
   margin-bottom: 10px;
   justify-content: space-between;
   font-size: var(--prime-font-size-14);
+  color: var(--prime-color-nc3);
 }
 
 .metadataContents {
@@ -85,6 +86,11 @@ governing permissions and limitations under the License.
   font-weight: var(--prime-font-weight-600);
   line-height: 20px;
 }
+
+.disabled {
+  pointer-events: none;
+}
+
 .type {
   font-size: var(--prime-font-size-14);
   line-height: 26px;
@@ -108,11 +114,12 @@ governing permissions and limitations under the License.
 }
 
 .authorNames {
-  text-transform: lowercase;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 150px;
+  color: var(--prime-color-nc3);
+  font-family: "source-sans-pro";
 }
 .authorNames:first-letter {
   text-transform: uppercase;
@@ -138,11 +145,11 @@ governing permissions and limitations under the License.
 
 /* override css for LP */
 /* .isPartOfLP.headerContainer {
-  border: 1px solid var(--prime-color-nc6);
+  border: 1px solid var(--prime-color-nc4);
   border-bottom: none;
 } */
 
-@media screen and (max-width: 414px) {
+@media screen and (max-width: 450px) {
   .title {
     display: -webkit-box;
     -webkit-line-clamp: 1;

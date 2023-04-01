@@ -9,44 +9,114 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
+import { useState } from "react";
 import { useIntl } from "react-intl";
 import { PrimeLearningObject } from "../../../models/PrimeModels";
+import { LIST_VIEW, TILE_VIEW } from "../../../utils/constants";
 import { PrimeTrainingCard } from "../PrimeTrainingCard";
+import { PrimeTrainingList } from "../PrimeTrainingList";
+import ViewList from "@spectrum-icons/workflow/ViewList";
+import ClassicGridView from "@spectrum-icons/workflow/ClassicGridView";
+
 import styles from "./PrimeTrainingsContainer.module.css";
 
 const PrimeTrainingsContainer: React.FC<{
   trainings: PrimeLearningObject[] | null;
   loadMoreTraining: () => void;
   hasMoreItems: boolean;
-}> = ({ trainings, loadMoreTraining, hasMoreItems }) => {
+  guest?: boolean;
+  signUpURL?: string;
+  almDomain?: string;
+}> = ({
+  trainings,
+  loadMoreTraining,
+  hasMoreItems,
+  guest,
+  signUpURL,
+  almDomain,
+}) => {
   const { formatMessage } = useIntl();
+
+  const setInitialView = () => {
+    return window.localStorage.getItem("view") || TILE_VIEW;
+  };
+
+  const isListView = () => {
+    return view === LIST_VIEW;
+  };
+
+  const [view, setView] = useState(setInitialView());
+
   const listHtml = trainings?.length ? (
-    <ul className={styles.primeTrainingsList}>
-      {trainings?.map((training) => (
-        <PrimeTrainingCard
-          training={training}
-          key={training.id}
-        ></PrimeTrainingCard>
-      ))}
+    <ul
+      className={
+        isListView() ? styles.primeTrainingsList : styles.primeTrainingsCards
+      }
+    >
+      {trainings?.map((training) =>
+        isListView() ? (
+          <PrimeTrainingList
+            training={training}
+            key={training.id}
+            guest={guest}
+            signUpURL={signUpURL}
+            almDomain={almDomain}
+          ></PrimeTrainingList>
+        ) : (
+          <PrimeTrainingCard
+            training={training}
+            key={training.id}
+            guest={guest}
+            signUpURL={signUpURL}
+            almDomain={almDomain}
+          ></PrimeTrainingCard>
+        )
+      )}
     </ul>
   ) : (
     <p className={styles.noResults}>
       {formatMessage({ id: "alm.catalog.no.result" })}
     </p>
   );
+
+  const setCatalogView = (view: string) => {
+    setView(view);
+    window.localStorage.setItem("view", view);
+  };
+
   return (
-    <div className={styles.primeTrainingsContainer}>
-      {listHtml}
-      <div id="load-more-trainings" className={styles.loadMoreContainer}>
-        {hasMoreItems ? (
-          <button onClick={loadMoreTraining} className="almButton secondary">
-            {formatMessage({ id: "alm.community.loadMore" })}
-          </button>
-        ) : (
-          ""
-        )}
+    <>
+      {isListView() && (
+        <div
+          className={styles.viewButton}
+          onClick={() => setCatalogView(TILE_VIEW)}
+        >
+          <ClassicGridView />
+        </div>
+      )}
+      {!isListView() && (
+        <div
+          className={styles.viewButton}
+          onClick={() => setCatalogView(LIST_VIEW)}
+        >
+          <ViewList />
+        </div>
+      )}
+
+      <div className={styles.primeTrainingsContainer}>
+        {isListView() && <hr className={styles.primeVerticalSeparator}></hr>}
+        {listHtml}
+        <div id="load-more-trainings" className={styles.loadMoreContainer}>
+          {hasMoreItems ? (
+            <button onClick={loadMoreTraining} className="almButton secondary">
+              {formatMessage({ id: "alm.community.loadMore" })}
+            </button>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -13,6 +13,7 @@ import { Button } from "@adobe/react-spectrum";
 import ChevronDown from "@spectrum-icons/workflow/ChevronDown";
 import ChevronUp from "@spectrum-icons/workflow/ChevronUp";
 import React, { useMemo, useState } from "react";
+import { useIntl } from "react-intl";
 import {
   PrimeLearningObject,
   PrimeLocalizationMetadata,
@@ -34,6 +35,7 @@ const PrimeCourseItemContainer: React.FC<{
   showMandatoryLabel?: boolean;
   isPreviewEnabled: boolean;
   updateFileSubmissionUrl: Function;
+  parentLoName: string;
 }> = (props) => {
   const {
     training,
@@ -43,6 +45,7 @@ const PrimeCourseItemContainer: React.FC<{
     isPreviewEnabled = false,
     updateFileSubmissionUrl,
     isParentLOEnrolled = false,
+    parentLoName,
   } = props;
 
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -50,7 +53,7 @@ const PrimeCourseItemContainer: React.FC<{
   const clickHandler = () => {
     setIsCollapsed((prevState) => !prevState);
   };
-  const { locale } = getALMConfig();
+  const { locale } = useIntl();
 
   const trainingInstance = filterTrainingInstance(training);
   const { name, description, overview, richTextOverview } =
@@ -77,6 +80,7 @@ const PrimeCourseItemContainer: React.FC<{
         showMandatoryLabel={showMandatoryLabel}
         isPreviewEnabled={isPreviewEnabled}
         isParentLOEnrolled={isParentLOEnrolled}
+        parentLoName={parentLoName}
       />
       {!isCollapsed && (
         <PrimeCourseOverview
@@ -96,8 +100,8 @@ const PrimeCourseItemContainer: React.FC<{
         <Button variant="overBackground" isQuiet onPress={clickHandler}>
           {isCollapsed ? <ChevronDown /> : <ChevronUp />}
         </Button>
-        {noOfModules > 0 && (
-          <span className={styles.count}>{noOfModules} module(s)</span>
+        {noOfModules > 0 && isCollapsed && (
+          <span className={styles.count}>{noOfModules} Module</span>
         )}
       </div>
     </li>

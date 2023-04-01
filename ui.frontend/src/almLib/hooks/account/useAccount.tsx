@@ -10,7 +10,6 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 // import { useAccountContext } from "../../contextProviders";
-
 // export const useAccount = () => {
 //   const { account } = useAccountContext();
 
@@ -19,4 +18,22 @@ governing permissions and limitations under the License.
 //   };
 // };
 
-export {};
+import { useEffect, useState } from "react";
+import { PrimeAccount } from "../../models";
+import { getALMAccount } from "../../utils/global";
+
+export const useAccount = () => {
+  const [account, setAccount] = useState({} as PrimeAccount);
+  const getAccount = async () => {
+    const accountInfo = await getALMAccount();
+    setAccount(accountInfo);
+  };
+
+  useEffect(() => {
+    getAccount();
+  }, []);
+
+  return {
+    account,
+  };
+};

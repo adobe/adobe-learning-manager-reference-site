@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 */
 import { Item, TabList, TabPanels, Tabs } from "@react-spectrum/tabs";
 import { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
@@ -23,6 +24,7 @@ import {
   filteredResource,
   filterLoReourcesBasedOnResourceType,
 } from "../../../utils/hooks";
+import { GetTranslation } from "../../../utils/translationService";
 import { PrimeModuleList } from "../PrimeModuleList";
 import styles from "./PrimeCourseOverview.module.css";
 
@@ -49,17 +51,16 @@ const PrimeCourseOverview: React.FC<{
     updateFileSubmissionUrl,
   } = props;
 
-  const config = getALMConfig();
-  const locale = config.locale;
-
+  const { locale } = useIntl();
   const getDuration = (
     learningObjectResources: PrimeLearningObjectResource[]
   ) => {
     let duration = 0;
     learningObjectResources.forEach((learningObjectResource) => {
       const resource = filteredResource(learningObjectResource, locale);
-      const resDuration = resource.authorDesiredDuration ?? resource.desiredDuration;
-      duration += isNaN(resDuration) ? 0 : resDuration;
+      const resDuration =
+        resource.authorDesiredDuration || resource.desiredDuration || 0;
+      duration += resDuration;
     });
     return duration;
   };
@@ -102,9 +103,15 @@ const PrimeCourseOverview: React.FC<{
       UNSAFE_className={isPartOfLP ? styles.isPartOfLP : ""}
     >
       <TabList id="tabList" UNSAFE_className={classNames}>
-        <Item key="Modules">Modules</Item>
-        {showTestout && <Item key="Testout">Testout</Item>}
-        {showNotes && <Item key="Notes">Notes</Item>}
+        <Item key="Modules">
+          {GetTranslation("alm.training.modules", true)}
+        </Item>
+        {showTestout && (
+          <Item key="Testout">{GetTranslation("alm.text.testout", true)}</Item>
+        )}
+        {showNotes && (
+          <Item key="Notes">{GetTranslation("alm.text.notes")}</Item>
+        )}
       </TabList>
       <TabPanels UNSAFE_className={styles.tabPanels}>
         <Item key="Modules">
@@ -112,7 +119,9 @@ const PrimeCourseOverview: React.FC<{
             <>
               <div className={styles.overviewcontainer}>
                 <header role="heading" className={styles.header} aria-level={2}>
-                  <div className={styles.loResourceType}>Prework</div>
+                  <div className={styles.loResourceType}>
+                    {GetTranslation("alm.text.prework", true)}
+                  </div>
                   {showDuration && (
                     <div className={styles.time}>
                       {convertSecondsToTimeText(preWorkDuration)}
@@ -136,7 +145,9 @@ const PrimeCourseOverview: React.FC<{
           {showDuration && (
             <div className={styles.overviewcontainer}>
               <header role="heading" className={styles.header} aria-level={2}>
-                <div className={styles.loResourceType}>Core Content</div>
+                <div className={styles.loResourceType}>
+                  {GetTranslation("alm.text.coreContent", true)}
+                </div>
                 <div className={styles.time}>
                   {convertSecondsToTimeText(contentModuleDuration)}
                 </div>
@@ -168,7 +179,9 @@ const PrimeCourseOverview: React.FC<{
             ></PrimeModuleList>
           </Item>
         )}
-        {showNotes && <Item key="Notes">You have no notes.</Item>}
+        {showNotes && (
+          <Item key="Notes">{GetTranslation("alm.text.noNotes")}</Item>
+        )}
       </TabPanels>
     </Tabs>
   );

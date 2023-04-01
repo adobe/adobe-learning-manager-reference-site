@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:dc="http://purl.org/dc/elements/1.1/"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="16091f00-a43e-41c2-b026-6385da76864d">
+    jcr:uuid="86991716-dbe1-4bf3-97ba-4e8500ef60c7">
     <jcr:content
         dam:assetState="processed"
-        jcr:lastModified="{Date}2022-04-21T11:46:45.675+05:30"
+        jcr:lastModified="{Date}2023-02-16T16:24:10.357+05:30"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
             dam:Bitsperpixel="{Long}32"
-            dam:extracted="{Date}2022-04-21T11:46:45.234+05:30"
+            dam:extracted="{Date}2023-02-16T16:24:08.081+05:30"
             dam:Fileformat="PNG"
             dam:MIMEtype="image/png"
             dam:Numberofimages="{Long}1"
@@ -20,13 +20,13 @@
             dam:Physicalwidthindpi="{Long}-1"
             dam:Physicalwidthininches="{Decimal}-1.0"
             dam:Progressive="no"
-            dam:sha1="72aa2a6d5d539cb45138aa8906090bcb199cb7d2"
-            dam:size="{Long}1771686"
+            dam:sha1="22a09cb6527c7e0a1a7e36c4fd1004910b0d8f09"
+            dam:size="{Long}850687"
             dc:format="image/png"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"
-            tiff:ImageLength="{Long}500"
-            tiff:ImageWidth="{Long}1920"/>
+            tiff:ImageLength="{Long}350"
+            tiff:ImageWidth="{Long}1280"/>
         <related jcr:primaryType="nt:unstructured"/>
     </jcr:content>
 </jcr:root>

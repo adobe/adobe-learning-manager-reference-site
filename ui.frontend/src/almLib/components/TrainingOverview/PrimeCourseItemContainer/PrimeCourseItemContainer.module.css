@@ -14,7 +14,7 @@ governing permissions and limitations under the License.
 .container {
   max-width: 100%;
   /* margin: 0 auto; */
-  border: 1px solid var(--prime-color-nc6);
+  border: 1px solid var(--prime-color-nc2);
   clear: both;
   text-align: left !important;
   list-style: none;
@@ -22,6 +22,7 @@ governing permissions and limitations under the License.
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
+  background-color: var(--prime-color-white);
 }
 
 .moduleDescription {
@@ -68,15 +69,15 @@ governing permissions and limitations under the License.
 }
 
 .wrapperContainer {
-  background-color: var(--prime-color-nc5);
-  border-color: var(--prime-color-nc6);
+  background-color: var(--prime-color-nc4);
+  border-color: var(--prime-color-nc4);
   /* border: 1px solid #c9c9c9; */
 }
 
 .metaDataContainer {
   display: flex;
   flex-wrap: wrap;
-  background-color: var(--prime-color-nc5);
+  background-color: var(--prime-color-nc4);
 }
 
 .metadata {
@@ -90,7 +91,7 @@ governing permissions and limitations under the License.
   justify-content: space-between;
 }
 
-@media screen and (max-width: 414px) {
+@media screen and (max-width: 450px) {
   .metaDataContainer {
     display: flex;
     flex-direction: columns;
@@ -111,7 +112,7 @@ governing permissions and limitations under the License.
 }
 
 .collapsibleContainer {
-  background: no-repeat padding-box var(--prime-color-nc6);
+  background: no-repeat padding-box var(--prime-color-nc4);
   border: none;
   display: flex;
   justify-content: center;
@@ -124,6 +125,7 @@ governing permissions and limitations under the License.
   width: 100%;
   padding: 0;
   min-height: 19px;
+  border: transparent;
 }
 
 .collapsibleContainer .count {

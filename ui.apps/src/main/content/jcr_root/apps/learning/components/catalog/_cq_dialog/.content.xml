@@ -107,6 +107,14 @@ trackingFeature="learning:catalog">
                                                 required="{Boolean}false" 
                                                 value="true" 
                                                 uncheckedValue="false"/>
+                                            <citiesFilter 
+                                                jcr:primaryType="nt:unstructured" 
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox" 
+                                                text="Cities"
+                                                name="./citiesFilter" 
+                                                required="{Boolean}false" 
+                                                value="true" 
+                                                uncheckedValue="false"/> 
                                         </items>
                                     </column>
                                 </items>

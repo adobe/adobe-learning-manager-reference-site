@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 @import "../../../styles/variables.css";
 .headerContainer {
-  margin-bottom: 60px;
+  margin-bottom: 15px;
   padding-top: 20px;
 }
 .header {
@@ -24,6 +24,7 @@ governing permissions and limitations under the License.
   letter-spacing: 0px;
   color: var(--prime-color-black);
   margin: 0;
+  font-family: "source-sans-pro" !important;
 }
 .searchContainer {
   width: 265px;
@@ -83,18 +84,17 @@ governing permissions and limitations under the License.
   height: 16px;
 }
 .button {
-  display: none;
+  display: none!important;
 }
 .closeIcon {
-  display: none;
+  display: none!important;
 }
-.loader{
+.loader {
   margin: 20px 0;
 }
 
 .pageContainer {
   max-width: var(--prime-container-max-width-desktop);
-  /* width: var(--prime-container-width); */
   margin: 0 auto;
 }
 @media screen and (max-width: 1024px) {
@@ -104,14 +104,13 @@ governing permissions and limitations under the License.
     padding: 0;
   }
 }
-@media screen and (max-width: 414px) {
+@media screen and (max-width: 450px) {
   .headerContainer {
     margin-bottom: 10px;
   }
   .header {
     flex-direction: column;
     align-items: flex-start;
-    /* padding: 20px; */
   }
   .label {
     margin-bottom: 20px;
@@ -131,7 +130,7 @@ governing permissions and limitations under the License.
     font-weight: normal;
     padding: 5px 12px;
     min-width: 70px;
-    display: block;
+    display: block!important;
   }
   .button:hover,
   .button:focus,
@@ -194,20 +193,27 @@ governing permissions and limitations under the License.
     -o-transition: transform 250ms ease-in 0ms;
     transition: transform 250ms ease-in 0ms;
   }
-  .closeIcon {
-    display: flex;
-    margin-left: auto;
-    min-width: auto;
-    padding: 0;
-    min-height: 24px;
+  .teamsExtraTopMargin {
+    margin-top: 30px;
   }
-  .closeIcon svg {
-    width: 20px;
-    height: 20px;
+  .closeIcon {
+    display: flex!important;
+    margin-left: auto!important;
+    min-width: auto!important;
+    padding: 0!important;
+    min-height: 24px!important;
   }
   .pageContainer {
     width: 100%;
     max-width: var(--prime-container-max-width-mobile);
     padding: 0 20px;
   }
+}
+
+.catalogDescription {
+  color: var(--prime-color-nc1);
+  font-size: var(--prime-font-size-18);
+  letter-spacing: 0;
+  margin-bottom: 10px;
+  font-family: "source-sans-pro" !important;
 }

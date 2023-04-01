@@ -29,7 +29,7 @@ governing permissions and limitations under the License.
   padding: 0.5rem;
 }
 
-@media (max-width: 414px) {
+@media (max-width: 450px) {
   .primeObjectOptionsList {
     margin-left: -80px;
   }

@@ -7,12 +7,12 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: var(--prime-color-nc5);
+  background: var(--prime-color-nc4);
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: var(--prime-color-nc8);
+  background: var(--prime-color-nc5);
 }
 
 /* Handle on hover */
@@ -21,6 +21,7 @@
 }
 
 html {
-  scrollbar-color: var(--prime-color-nc8) var(--prime-color-nc5);
+  scrollbar-color: var(--prime-color-nc5) var(--prime-color-nc4);
   scrollbar-width: thin;
 }
+

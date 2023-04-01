@@ -18,9 +18,9 @@ import User from "@spectrum-icons/workflow/User";
 import { useMemo } from "react";
 import { useIntl } from "react-intl";
 import { GetFormattedDate } from "../../../utils/dateTime";
+import { getALMConfig } from "../../../utils/global";
 import { getFormattedPrice } from "../../../utils/price";
-import { GetTranslation } from "../../../utils/translationService";
-import { formatMap } from "../../Catalog/PrimeTrainingCard/PrimeTrainingCard";
+import { GetTranslation, formatMap } from "../../../utils/translationService";
 import styles from "./PrimeInstanceItem.module.css";
 
 const PrimeInstanceItem = (props: any) => {
@@ -45,12 +45,25 @@ const PrimeInstanceItem = (props: any) => {
     return format ? GetTranslation(`${formatMap[format]}`, true) : "";
   }, [format]);
 
+  const getInstanceName = () => {
+    return (
+      <>
+        {getALMConfig().isTeamsApp ? (
+          <a className={styles.instanceName} onClick={selectHandler}>
+            {name}
+          </a>
+        ) : (
+          <a className={styles.instanceName} onClick={selectHandler} href={"#"}>
+            {name}
+          </a>
+        )}
+      </>
+    );
+  };
   return (
     <li className={styles.instanceListItem}>
       <div className={styles.instanceNameWrapper}>
-        <a className={styles.instanceName} onClick={selectHandler} href={"#"}>
-          {name}
-        </a>
+        {getInstanceName()}
         <p className={styles.instanceLoFormat}>{fomatLabel}</p>
         {instructorsName && (
           <p className={styles.instructorsName}>
@@ -63,8 +76,7 @@ const PrimeInstanceItem = (props: any) => {
             </span>
             <span
               className={`${styles.mobileOnly} ${styles.icon}`}
-              aria-hidden="true"
-            >
+              aria-hidden="true">
               <User />
             </span>
             {instructorsName}
@@ -76,8 +88,7 @@ const PrimeInstanceItem = (props: any) => {
           <p className={styles.startDate}>
             <span
               className={`${styles.mobileOnly} ${styles.icon}`}
-              aria-hidden="true"
-            >
+              aria-hidden="true">
               <Calendar />
             </span>
             {dateValue}
@@ -90,8 +101,7 @@ const PrimeInstanceItem = (props: any) => {
           <p className={styles.startDate}>
             <span
               className={`${styles.mobileOnly} ${styles.icon}`}
-              aria-hidden="true"
-            >
+              aria-hidden="true">
               <Location />
             </span>
             {location}
@@ -103,8 +113,7 @@ const PrimeInstanceItem = (props: any) => {
           <p className={styles.startDate}>
             <span
               className={`${styles.mobileOnly} ${styles.icon}`}
-              aria-hidden="true"
-            >
+              aria-hidden="true">
               <Money />
             </span>
             {getFormattedPrice(price)}
@@ -114,8 +123,7 @@ const PrimeInstanceItem = (props: any) => {
       <div className={styles.actionWrapper}>
         <button
           onClick={selectHandler}
-          className={`almButton secondary ${styles.button}`}
-        >
+          className={`almButton secondary ${styles.button}`}>
           {formatMessage({
             id: "alm.instance.see.details",
             defaultMessage: "See details",

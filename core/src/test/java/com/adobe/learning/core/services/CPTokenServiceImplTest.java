@@ -20,7 +20,7 @@ public class CPTokenServiceImplTest {
 	@BeforeEach
 	public void setUp() {
 		cpTokenService = new CPTokenServiceImpl();
-		almURL = "https://learningmanagerqe.adobe.com";
+		almURL = "https://learningmanagerstage1.adobe.com";
 		clientId = clientSecret = refreshToken = code = "xxxxxxxxxx";
 		email = "praful@adobetest.com";
 	}

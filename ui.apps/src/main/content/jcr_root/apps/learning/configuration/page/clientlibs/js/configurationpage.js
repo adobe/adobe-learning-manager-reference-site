@@ -26,6 +26,8 @@ governing permissions and limitations under the License.
   const SITE_MAP_SEL = "coral-checkbox[name='./siteMap']";
   const SITE_MAP_TRAINING_PATH_SEL = "foundation-autocomplete[name='./sitemapTrainingPath']";
   const CONFIG_HELP_BTN_SEL = ".config-help-btn";
+  const CONFIG_RDA_TOKEN_HEADING_SEL = ".config-rda-token-heading";
+  const CONFIG_RDA_TOKEN_BTN_SEL = ".config-rda-token-btn";
 
   const SKU_URL = "{almURL}/primeapi/v2/account/{accountId}/connectorConfig?connectorName=aemReferenceSites";
   const NOMENCLAURE_URL = "{almURL}/primeapi/v2/account";
@@ -229,6 +231,38 @@ governing permissions and limitations under the License.
     }
   }
 
+  function openRdaTokenPage() {
+    const rdaFetchTokenURLConfig = $("input[name='./configRdaTokenURL']").val();
+    if (rdaFetchTokenURLConfig)
+    {
+      let rdaFetchTokenURL = new URL(rdaFetchTokenURLConfig);
+      if (rdaFetchTokenURL) {
+        const almBaseURLConfig = $("input[name='./almBaseURL']").val();
+        if (almBaseURLConfig)
+        {
+          const almBaseURl = new URL(almBaseURLConfig);
+          rdaFetchTokenURL.hostname = almBaseURl.hostname;
+        }
+      
+        const clientId = $("input[name='./clientId']").val();
+        if (clientId)
+        {
+          rdaFetchTokenURL.searchParams.set('client_id', clientId);
+        }
+        const newWindow = window.open(rdaFetchTokenURL, "_blank");
+        window.focus();
+      }
+    }
+  }
+
+  function renderRdaConfigUI() {
+    const rdaFetchTokenURL = $("input[name='./configRdaTokenURL']").val();
+    if (!rdaFetchTokenURL) {
+      $(CONFIG_RDA_TOKEN_HEADING_SEL).hide();
+      $(CONFIG_RDA_TOKEN_BTN_SEL).hide();
+    }
+  }
+
   $(document).on('foundation-contentloaded', () => {
     usageTypeSelectElem = $(USAGE_TYPE_SELECT_ID_SEL).get(0);
 
@@ -247,12 +281,14 @@ governing permissions and limitations under the License.
       });
     }
 
+    renderRdaConfigUI();
 
     $(CONFIG_FORM_DONE_ACT_SEL).off("click", handleSubmit).on("click", handleSubmit);
     $(CONFIG_FORM_SAVE_ACT_SEL).off("click", handleSubmit).on("click", handleSubmit);
     $(CONFIG_FORM_CREATE_SEL).filter("button[type='submit']").off("click", handleSubmit).on("click", handleSubmit);
-    $(NOMENCLATURE_BUTTON_SEL).on("click", () => fetchNomenclatureData());
-    $(CONFIG_HELP_BTN_SEL).on("click", () => openHelpxPage());
+    $(NOMENCLATURE_BUTTON_SEL).off("click").on("click", () => fetchNomenclatureData());
+    $(CONFIG_HELP_BTN_SEL).off("click").on("click", () => openHelpxPage());
+    $(CONFIG_RDA_TOKEN_BTN_SEL).off("click").on("click", () => openRdaTokenPage());
   });
 
 })(window, document, jQuery);

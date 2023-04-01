@@ -58,6 +58,7 @@ governing permissions and limitations under the License.
     color: #306eb5;
     text-decoration: none;
     font: normal normal 600 14px/20px Source Sans Pro;
+    display: inline-block;
   }
  
   
@@ -75,7 +76,7 @@ governing permissions and limitations under the License.
     height: 110px;
 }
 
-@media screen and (max-width: 414px) {
+@media screen and (max-width: 450px) {
   .news-section .news-section-newsItem {
     width: 100%;
     margin: 5px 0;

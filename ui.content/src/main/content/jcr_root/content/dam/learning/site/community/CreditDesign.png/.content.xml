@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
-    jcr:isCheckedOut="{Boolean}true"
-    jcr:mixinTypes="[mix:referenceable,mix:versionable]"
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:dc="http://purl.org/dc/elements/1.1/"
+    jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="8925f3eb-8bc0-48e1-a675-11e0bf7c4543">
+    jcr:uuid="23c27930-933c-48f1-b70f-13854974aff2">
     <jcr:content
-        cq:name="CreditDesign.png"
-        cq:parentPath="/content/dam/learning/site/community"
         dam:assetState="processed"
-        jcr:lastModified="{Date}2022-04-19T19:15:55.779+05:30"
+        jcr:lastModified="{Date}2023-02-16T16:25:08.646+05:30"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
             dam:Bitsperpixel="{Long}32"
-            dam:extracted="{Date}2022-04-19T19:15:54.804+05:30"
+            dam:extracted="{Date}2023-02-16T16:25:08.061+05:30"
             dam:Fileformat="PNG"
             dam:MIMEtype="image/png"
             dam:Numberofimages="{Long}1"
@@ -23,16 +20,13 @@
             dam:Physicalwidthindpi="{Long}-1"
             dam:Physicalwidthininches="{Decimal}-1.0"
             dam:Progressive="no"
-            dam:sha1="d03f755ebd913b7bae63c46cda54df31a4e79853"
-            dam:size="{Long}95439"
+            dam:sha1="f8efbf758c5e1b8b82378b240e7e616191e37636"
+            dam:size="{Long}242478"
             dc:format="image/png"
-            dc:modified="{Date}2022-04-19T19:15:55.670+05:30"
-            jcr:lastModified="{Date}2022-04-19T19:15:55.670+05:30"
-            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"
-            tiff:ImageLength="{Long}185"
-            tiff:ImageWidth="{Long}256"/>
+            tiff:ImageLength="{Long}314"
+            tiff:ImageWidth="{Long}450"/>
         <related jcr:primaryType="nt:unstructured"/>
     </jcr:content>
 </jcr:root>

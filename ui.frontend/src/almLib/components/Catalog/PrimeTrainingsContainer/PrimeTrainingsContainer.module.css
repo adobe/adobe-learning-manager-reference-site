@@ -15,9 +15,18 @@ governing permissions and limitations under the License.
   flex-wrap: wrap;
   width: 100%;
 }
-.primeTrainingsList {
+.primeTrainingsCards {
   display: flex;
   flex-wrap: wrap;
+  align-self: self-start;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  gap: 20px;
+}
+
+.primeTrainingsList {
   align-self: self-start;
   list-style: none;
   margin: 0;
@@ -41,9 +50,9 @@ governing permissions and limitations under the License.
 }
 
 .loadMoreButton {
-  border: 2px solid var(--prime-color-primary)!important;
-  color: var(--prime-color-primary)!important;
-  background-color: var(--prime-color-white)!important;
+  border: 2px solid var(--prime-color-primary) !important;
+  color: var(--prime-color-primary) !important;
+  background-color: var(--prime-color-white) !important;
   cursor: pointer;
 }
 .loadMoreButton:hover,
@@ -55,3 +64,16 @@ governing permissions and limitations under the License.
   outline: none;
 }
 
+.viewButton {
+  width: 20px;
+  display: flex;
+  margin-left: auto;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+.primeVerticalSeperator {
+  border-left: 1px solid var(--prime-color-nc2);
+  height: 2rem;
+  margin-right: 10px;
+}

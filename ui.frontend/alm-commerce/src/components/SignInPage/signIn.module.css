@@ -74,7 +74,7 @@ governing permissions and limitations under the License.
   font-size: var(--prime-font-size-14);
 }
 
-@media screen and (max-width: 414px) {
+@media screen and (max-width: 450px) {
   .signInContainer {
     width: 100%;
     box-shadow: none;

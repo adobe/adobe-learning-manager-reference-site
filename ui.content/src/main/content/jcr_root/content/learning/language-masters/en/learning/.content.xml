@@ -171,7 +171,7 @@
                             sling:resourceType="learning/components/teaser"
                             actionsEnabled="true"
                             descriptionFromPage="false"
-                            fileReference="/content/dam/learning/site/templates/Masterclass.png"
+                            fileReference="/content/dam/learning/site/templates/Masterclass1.png"
                             textIsRich="true"
                             titleFromPage="false">
                             <actions jcr:primaryType="nt:unstructured">

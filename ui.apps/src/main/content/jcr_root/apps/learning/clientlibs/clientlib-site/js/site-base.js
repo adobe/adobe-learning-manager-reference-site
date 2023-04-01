@@ -29,6 +29,8 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
       const primeApiURL = `${primeBaseURL}/primeapi/v2/`;
       window.ALM.ALMConfig["primeApiURL"] = primeApiURL;
     }
+    window.ALM.ALMConfig["frontendResourcesPath"] = "/etc.clientlibs/learning/clientlibs/clientlib-alm/resources";
+    
   };
 
   const init = () => {

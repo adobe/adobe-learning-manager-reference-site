@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 @import "../../../styles/variables.css";
 .notificationListBox {
-  width: 414px;
+  width: 450px;
   font-size: var(--prime-font-size-16);
   list-style: none;
   background-color: var(--prime-color-white);
@@ -24,7 +24,7 @@ governing permissions and limitations under the License.
   right: 0px;
   z-index: 11;
   box-shadow: 0 0 5px rgb(0 0 0 / 20%);
-  scrollbar-color: var(--prime-color-nc8) var(--prime-color-nc5);
+  scrollbar-color: var(--prime-color-nc5) var(--prime-color-nc4);
   scrollbar-width: thin;
 }
 
@@ -79,7 +79,7 @@ governing permissions and limitations under the License.
   justify-content: center;
 }
 
-@media screen and (max-width: 414px) {
+@media screen and (max-width: 450px) {
   .notificationListBox {
     position: absolute;
     width: 100vw;

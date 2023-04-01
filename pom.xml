@@ -18,7 +18,7 @@
     <groupId>com.adobe.learning</groupId>
     <artifactId>aem-learning</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <description>Learning Site</description>
 
     <modules>
@@ -50,6 +50,19 @@
         <frontend-maven-plugin.version>1.12.0</frontend-maven-plugin.version>
         <componentGroupName>Learning Site</componentGroupName>
     </properties>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>maven-cp-dev-snapshot</name>
+            <url>https://artifactory.corp.adobe.com/artifactory/maven-cp-dev-snapshot-local</url>
+        </snapshotRepository>
+        <repository>
+            <id>central</id>
+            <name>maven-cp-dev-release</name>
+            <url>https://artifactory.corp.adobe.com/artifactory/maven-cp-dev-release-local</url>
+        </repository>
+    </distributionManagement>
 
     <build>
         <plugins>

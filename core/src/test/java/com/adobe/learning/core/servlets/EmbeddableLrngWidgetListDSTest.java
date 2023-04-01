@@ -41,7 +41,7 @@ public class EmbeddableLrngWidgetListDSTest {
 		dsServlet = new EmbeddableLrngWidgetListDS();
 
 		JsonObject adminConfigs = new JsonObject();
-		adminConfigs.addProperty("almBaseURL", "https://learningmanagerqe.adobe.com");
+		adminConfigs.addProperty("almBaseURL", "https://learningmanagerstage1.adobe.com");
 		adminConfigs.addProperty("theme.background", "transparent");
 		lenient().when(configService.getAdminConfigs(isNull())).thenReturn(adminConfigs);
 

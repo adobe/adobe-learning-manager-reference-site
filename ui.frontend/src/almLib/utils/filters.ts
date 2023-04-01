@@ -19,6 +19,7 @@ import {
   updateSkillLevelFilter,
   updateSkillNameFilter,
   updateTagsFilter,
+  updateCitiesFilter,
 } from "../store/actions/catalog/action";
 import { getQueryParamsFromUrl } from "./global";
 export const filtersDefaultState: FilterState = {
@@ -111,6 +112,12 @@ export const filtersDefaultState: FilterState = {
   tagName: {
     type: "tagName",
     label: "alm.catalog.filter.tags.label",
+    list: [],
+    isListDynamic: true,
+  },
+  cities: {
+    type: "cities",
+    label: "alm.catalog.filter.cities.label",
     list: [],
     isListDynamic: true,
   },
@@ -207,6 +214,7 @@ export const ACTION_MAP = {
   duration: updateDurationFilter,
   catalogs: updateCatalogsFilter,
   price: updatePriceFilter,
+  cities: updateCitiesFilter,
 };
 
 export interface UpdateFiltersEvent {
@@ -222,6 +230,7 @@ export interface FilterState {
   skillName: FilterType;
   loFormat: FilterType;
   tagName: FilterType;
+  cities: FilterType;
   catalogs: FilterType;
   skillLevel: FilterType;
   duration: FilterType;

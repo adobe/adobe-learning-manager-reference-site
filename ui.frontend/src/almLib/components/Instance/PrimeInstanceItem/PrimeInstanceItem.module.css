@@ -52,7 +52,7 @@ governing permissions and limitations under the License.
   font-size: var(--prime-font-size-14);
   line-height: 19px;
   letter-spacing: 0px;
-  color: var(--prime-color-nc4);
+  color: var(--prime-color-nc3);
   opacity: 1;
   margin: 0 0 20px 0;
 }
@@ -60,7 +60,7 @@ governing permissions and limitations under the License.
   font-size: var(--prime-font-size-14);
   line-height: 15px;
   letter-spacing: 0px;
-  color: var(--prime-color-nc4);
+  color: var(--prime-color-nc3);
   opacity: 1;
   margin: 0;
 }
@@ -68,7 +68,7 @@ governing permissions and limitations under the License.
   font-size: var(--prime-font-size-14);
   line-height: 15px;
   letter-spacing: 0px;
-  color: var(--prime-color-nc4);
+  color: var(--prime-color-nc3);
   opacity: 1;
   margin: 0;
 }
@@ -84,9 +84,9 @@ governing permissions and limitations under the License.
   display: none;
 }
 
-@media screen and (max-width: 414px) {
+@media screen and (max-width: 450px) {
   .instanceListItem {
-    background: var(--prime-color-nc5);
+    background: var(--prime-color-nc4);
     border: none;
     padding: 18px 20px;
     flex-direction: column;

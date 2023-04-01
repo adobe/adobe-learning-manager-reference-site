@@ -28,7 +28,7 @@ governing permissions and limitations under the License.
     width: 1084px;
   }
 }
-@media (max-width: 414px) {
+@media (max-width: 450px) {
   .skillsArea,
   .skillsContainer {
     padding-left: 20px;
@@ -46,7 +46,7 @@ governing permissions and limitations under the License.
   font-size: var(--prime-font-size-18);
   font: normal normal bold 21px/27px Source Sans Pro;
   letter-spacing: 0px;
-  color: #292929;
+  color: var(--prime-color-nc1);
 }
 
 .skillsDescription {
@@ -59,8 +59,8 @@ governing permissions and limitations under the License.
   height: 90px;
   line-height: 90px;
   border-radius: 4px;
-  border: solid 1px #cccccc;
-  background-color: #ededed;
+  border: solid 1px var(--prime-color-nc2);
+  background-color: var(--prime-color-nc4);
   margin-right: 20px;
   display: inline-block;
   margin-bottom: 20px;
@@ -79,11 +79,10 @@ governing permissions and limitations under the License.
   display: inline-block;
   vertical-align: middle;
   line-height: normal;
-  color: #000000;
+  color: var(--prime-color-black);
 }
 
 .modifyInterest .actionButton {
-
   margin-top: 20px;
   margin-right: 25px;
   display: inline-block;
@@ -91,7 +90,7 @@ governing permissions and limitations under the License.
 
 .removeInterestButton {
   background-color: #858585;
-  color: #ffffff;
+  color: var(--prime-color-white);
   z-index: 10;
   cursor: auto;
   display: none;
@@ -126,7 +125,7 @@ governing permissions and limitations under the License.
 .skillDataTooltip {
   display: none;
   background-color: #858585;
-  color: #ffffff;
+  color: var(--prime-color-white);
   z-index: 1;
   padding: 10px;
   font-size: 13px;
@@ -163,13 +162,13 @@ governing permissions and limitations under the License.
 
 .removeInterestButton::after {
   content: "\00d7";
-  fill: #ffffff;
+  fill: var(--prime-color-white);
 }
 
 .showMoreButton {
   background: none;
   border: none;
-  color: #4283d0;
+  color: var(--prime-color-primary);
 }
 
 .showMoreButton:hover {

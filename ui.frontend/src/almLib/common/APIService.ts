@@ -12,13 +12,13 @@ governing permissions and limitations under the License.
 import { CatalogFilterState } from "../store/reducers/catalog";
 import { getALMConfig } from "../utils/global";
 import { QueryParams } from "../utils/restAdapter";
-import ALMCustomHooksInstance from "./ALMCustomHooks";
+// import ALMCustomHooksInstance from "./ALMCustomHooks";
 import ICustomHooks from "./ICustomHooks";
 
 class APIService {
-  customHooks: ICustomHooks;
+  customHooks: ICustomHooks | null;
   constructor() {
-    this.customHooks = ALMCustomHooksInstance;
+    this.customHooks = null;
   }
 
   public registerServiceInstance(
@@ -35,7 +35,7 @@ class APIService {
     sort: string,
     searchText: string
   ) {
-    return this.customHooks.getTrainings(filterState, sort, searchText);
+    return this.customHooks?.getTrainings(filterState, sort, searchText);
   }
   public async loadMoreTrainings(
     filterState: CatalogFilterState,
@@ -43,7 +43,7 @@ class APIService {
     searchText: string,
     url: string
   ) {
-    return this.customHooks.loadMoreTrainings(
+    return this.customHooks?.loadMoreTrainings(
       filterState,
       sort,
       searchText,
@@ -51,32 +51,36 @@ class APIService {
     );
   }
   public async loadMore(url: string) {
-    return this.customHooks.loadMore(url);
+    return this.customHooks?.loadMore(url);
   }
 
   public async getTraining(id: string, params: QueryParams) {
-    return this.customHooks.getTraining(id, params);
+    return this.customHooks?.getTraining(id, params);
   }
 
   public async getTrainingInstanceSummary(
     trainingId: string,
     instanceId: string
   ) {
-    return this.customHooks.getTrainingInstanceSummary(trainingId, instanceId);
+    return this.customHooks?.getTrainingInstanceSummary(trainingId, instanceId);
   }
   public async enrollToTraining(params: QueryParams = {}) {
-    return this.customHooks.enrollToTraining(params);
+    return this.customHooks?.enrollToTraining(params);
   }
   public async unenrollFromTraining(enrollmentId: string = "") {
-    return this.customHooks.unenrollFromTraining(enrollmentId);
+    return this.customHooks?.unenrollFromTraining(enrollmentId);
   }
   public async getFilters(): Promise<any> {
-    return this.customHooks.getFilters();
+    return this.customHooks?.getFilters();
   }
 
   public async addProductToCart(
     sku: string
   ): Promise<{ items: any; totalQuantity: Number; error: any }> {
+    const defaultCartValues = { items: [], totalQuantity: 0, error: null };
+    if (!this.customHooks) {
+      return { ...defaultCartValues, error: true };
+    }
     return this.customHooks.addProductToCart(sku);
   }
 }

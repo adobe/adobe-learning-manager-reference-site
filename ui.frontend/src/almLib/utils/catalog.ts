@@ -15,6 +15,7 @@ import {
   PrimeLearningObjectInstance,
 } from "../models/PrimeModels";
 import { CatalogFilterState } from "../store/reducers/catalog";
+import { ENGLISH_LOCALE } from "./constants";
 import {
   getALMAttribute,
   getALMConfig,
@@ -75,7 +76,7 @@ export const getOrUpdateCatalogFilters = async (): Promise<
     });
     setItemToStorage(PRIME_CATALOG_FILTER, catalogPromise);
     return JsonApiParse(catalogPromise)?.catalogList;
-  } catch (e) { }
+  } catch (e) {}
 };
 
 const getCatalogParamsForAPi = async (
@@ -131,6 +132,9 @@ export async function getParamsForCatalogApi(filterState: CatalogFilterState) {
     if (filterState.price && catalogAttributes?.price === "true") {
       params["filter.priceRange"] = filterState.price;
     }
+    if (filterState.cities && catalogAttributes?.cities === "true") {
+      params["filter.cityName"] = filterState.cities;
+    }
   }
   return params;
 }
@@ -148,6 +152,7 @@ export function getFiltersObjectForESApi(filterState: CatalogFilterState) {
     skillLevel,
     skillName,
     tagName,
+    cities,
     catalogs,
   } = filterState;
   let filters: any = {
@@ -158,6 +163,7 @@ export function getFiltersObjectForESApi(filterState: CatalogFilterState) {
       loSkillNames: skillName ? filterState.skillName.split(",") : null,
       tags: tagName ? filterState.tagName.split(",") : null,
       catalogNames: catalogs ? catalogs.split(",") : null,
+      cities: cities ? cities.split(",") : null,
     },
     range: {},
   };
@@ -188,6 +194,7 @@ export function getRequestObjectForESApi(
       name: sort,
       order: "desc",
     },
+    lang: [getALMConfig().locale || ENGLISH_LOCALE],
     filters: getFiltersObjectForESApi(filterState),
   };
   return requestObject;
@@ -216,7 +223,8 @@ export function getIndividualFiltersForCommerce(
   return value;
 }
 
-
 export function sortList(list: Array<any>, paramName: string) {
-  return [...list].sort((a, b) => a[paramName]?.trim().localeCompare(b[paramName]?.trim()));
+  return [...list].sort((a, b) =>
+    a[paramName]?.trim().localeCompare(b[paramName]?.trim())
+  );
 }

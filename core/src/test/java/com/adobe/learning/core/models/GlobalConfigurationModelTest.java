@@ -53,14 +53,14 @@ public class GlobalConfigurationModelTest {
 	
 	@Test
 	public void testConfigs() {
-		String expectedConfigs = "{\"accountId\":\"7110\",\"almBaseURL\":\"https://learningmanagerqe.adobe.com\",\"communityPath\":\"/skills.html\",\"communityBoardDetailsPath\":\"/board.html\",\"commerceBasePath\":\"/commerce.html\",\"emailRedirectPath\":\"/email-redirect.html\",\"homePath\":\"/home.html\",\"catalogPath\":\"/explore.html\",\"learningPath\":\"/learning.html\",\"commerceSignInPath\":\"/commerce.html\",\"supportPath\":\"/support.html\",\"trainingOverviewPath\":\"/overview.html\",\"communityBoardsPath\":\"/boards.html\",\"commerceCartPath\":\"/commerce.html\",\"signOutPath\":\"/sign-out.html\",\"profilePath\":\"/profile.html\",\"instancePath\":\"/instance.html\"}";
+		String expectedConfigs = "{\"accountId\":\"7110\",\"almBaseURL\":\"https://learningmanagerstage1.adobe.com\",\"communityPath\":\"/skills.html\",\"communityBoardDetailsPath\":\"/board.html\",\"commerceBasePath\":\"/commerce.html\",\"emailRedirectPath\":\"/email-redirect.html\",\"homePath\":\"/home.html\",\"catalogPath\":\"/explore.html\",\"learningPath\":\"/learning.html\",\"commerceSignInPath\":\"/commerce.html\",\"supportPath\":\"/support.html\",\"trainingOverviewPath\":\"/overview.html\",\"communityBoardsPath\":\"/boards.html\",\"commerceCartPath\":\"/commerce.html\",\"signOutPath\":\"/sign-out.html\",\"profilePath\":\"/profile.html\",\"instancePath\":\"/instance.html\"}";
 		assertTrue(JsonParser.parseString(expectedConfigs).equals(JsonParser.parseString(configModel.getConfig())));
 	}
 	
 	private JsonObject getConfigs() {
 		JsonObject config = new JsonObject();
 		config.addProperty("accountId", "7110");
-		config.addProperty("almBaseURL", "https://learningmanagerqe.adobe.com");
+		config.addProperty("almBaseURL", "https://learningmanagerstage1.adobe.com");
 		return config;
 	}
 

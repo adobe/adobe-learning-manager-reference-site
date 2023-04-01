@@ -73,29 +73,93 @@ export interface ESPrimeLearningObject {
 
 export interface CommercePrimeLearningObject {
   almauthor: string[];
-  almavgrating: number;
+  almavgrating: string;
   almdeliverytype: string;
   almduration: number;
   almlotype: string;
   almpublishdate: string;
-  almratingscount: number;
+  almratingscount: string;
   almskill: string;
   almstatus: string;
   almtags: string[];
   almthumbnailurl: string;
   almusecourseeffectiveness: string;
   almusecourserating: string;
-  description: { html: string, __typename: string }
+  description: { html: string; __typename: string };
   name: string;
   sku: string;
   price_range: {
     maximum_price: {
       final_price: {
-        value: number
-        currency: string
-      }
-    }
-  }
+        value: number;
+        currency: string;
+      };
+    };
+  };
+}
+
+export interface JNLConfig {
+  cpDomain: string;
+  almDomain: string;
+  customDomain: string;
+  subDomain: string;
+  accountData: string;
+  accountTerminologies: string;
+  footerLinks: string;
+  almCdnBaseUrl: string;
+  esBaseUrl: string;
+  accountConfig: JNLAccountConfig;
+}
+
+export interface JNLAccountConfig {
+  mastHeads: PrimeMastHeadData[];
+  categoryBrowsers: PrimeCategoryBrowserData;
+  registrationProfile: PrimeRegistrationProfile;
+  catalogConfig: PrimeCatalogConfig;
+  localesAddedForNonLoggedInPage: string[];
+  isNLExperienceEnabled: boolean;
+}
+
+export interface PrimeCatalogConfig {
+  showFilterPanel: boolean;
+  showSearchBar: boolean;
+  heading: PrimeHeadingConfig[];
+}
+
+export interface PrimeHeadingConfig {
+  title: string;
+  description: string;
+  locale: string;
+}
+
+export interface PrimeRegistrationProfile {
+  profileId: number;
+  type: string;
+}
+
+export interface PrimeCategoryBrowserData {
+  heading: PrimeHeadingConfig[];
+  categories: PrimeCategoryData[];
+}
+
+export interface PrimeCategoryData {
+  localizedMetadata: PrimeHeadingConfig[];
+  contentUrl: string;
+  sourceUrl: string;
+  catalogFilters: string[];
+  skillFilters: string[];
+  tagFilters: string[];
+}
+
+export interface PrimeMastHeadData {
+  contentMetaData: PrimeMastHeadContentData[];
+  actionUrl: string;
+}
+
+export interface PrimeMastHeadContentData {
+  contentUrl: string;
+  sourceUrl: string;
+  locale: string;
 }
 
 // export interface CatalogLearningObject {

@@ -19,6 +19,7 @@ import {
   UPDATE_LOTYPES_FILTERS,
   UPDATE_SKILLNAME_FILTERS,
   UPDATE_TAGS_FILTERS,
+  UPDATE_CITIES_FILTERS,
   UPDATE_SEARCH_TEXT,
   UPDATE_FILTERS_ON_LOAD,
   RESET_SEARCH_TEXT,
@@ -58,9 +59,13 @@ export const updateLoFormatFilter = (payload: string): AnyAction => ({
   payload,
 });
 
-
 export const updateTagsFilter = (payload: string): AnyAction => ({
   type: UPDATE_TAGS_FILTERS,
+  payload,
+});
+
+export const updateCitiesFilter = (payload: string): AnyAction => ({
+  type: UPDATE_CITIES_FILTERS,
   payload,
 });
 

@@ -24,7 +24,13 @@ import {
   PrimeInstancePage,
   PrimeNotificationContainer,
   PrimeTrainingPage,
+  ALMMasthead,
+  ALMCategoryBrowser,
+  ALMNavigationBar,
+  ALMFooter,
 } from "./almLib";
+
+import "./almLib/utils/global";
 import "./App.css";
 
 const App = (props: any) => {
@@ -62,6 +68,18 @@ const App = (props: any) => {
           </Portal>
           <Portal selector={mountingPoints.boardsContainer}>
             <PrimeCommunityBoardList />
+          </Portal>
+          <Portal selector={mountingPoints.navigationBarContainer}>
+            <ALMNavigationBar />
+          </Portal>
+          <Portal selector={mountingPoints.mastHeadContainer}>
+            <ALMMasthead />
+          </Portal>
+          <Portal selector={mountingPoints.categoryBrowserContainer}>
+            <ALMCategoryBrowser />
+          </Portal>
+          <Portal selector={mountingPoints.footerContainer}>
+            <ALMFooter />
           </Portal>
         </AppContextProvider>
       </CommerceContextProvider>

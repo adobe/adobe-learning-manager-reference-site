@@ -21,7 +21,7 @@ governing permissions and limitations under the License.
   margin-left: -80px;
 }
 
-@media (max-width: 414px) {
+@media (max-width: 450px) {
   .primeBoardOptionsList {
     min-width: 110px;
   }

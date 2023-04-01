@@ -18,27 +18,20 @@ import {
   paginateTrainings,
 } from "../../store/actions/catalog/action";
 import { State } from "../../store/state";
-import {
-  getALMConfig,
-  getConfigurableAttributes,
-  setALMAttribute,
-} from "../../utils/global";
+import { getPageAttributes } from "../../utils/global";
+
 import { useFilter } from "./useFilter";
 import { useSearch } from "./useSearch";
 
-const setFiltersOptions = () => {
-  const config = getALMConfig();
-  if (config) {
-    let cssSelector = config.mountingPoints.catalogContainer;
-    let value = getConfigurableAttributes(cssSelector) || {};
-    setALMAttribute("catalogAttributes", value);
-    return value;
-  }
-};
-
 export const useCatalog = () => {
-  //To Do: need to check a better way of doping this
-  const [catalogAttributes] = useState(() => setFiltersOptions());
+  //To Do: need to check a better way of doing this
+  const [catalogAttributes, setCatalogAttributes] = useState(() =>
+    getPageAttributes("catalogContainer", "catalogAttributes")
+  );
+  const updatedCatalogAttributed = getPageAttributes(
+    "catalogContainer",
+    "catalogAttributes"
+  );
   const [state, setState] = useState<{
     isLoading: boolean;
     errorCode: string;
@@ -75,6 +68,7 @@ export const useCatalog = () => {
     filters.loTypes,
     filters.skillName,
     filters.tagName,
+    filters.cities,
     filters.skillLevel,
     filters.duration,
     filters.catalogs,
@@ -85,7 +79,8 @@ export const useCatalog = () => {
 
   useEffect(() => {
     fetchTrainings();
-  }, [fetchTrainings]);
+    setCatalogAttributes(updatedCatalogAttributed);
+  }, [fetchTrainings, catalogAttributes]);
 
   //for pagination
   const loadMoreTraining = useCallback(
@@ -120,6 +115,7 @@ export const useCatalog = () => {
       filters.skillLevel,
       filters.duration,
       filters.catalogs,
+      filters.cities,
       query,
       sort,
     ]

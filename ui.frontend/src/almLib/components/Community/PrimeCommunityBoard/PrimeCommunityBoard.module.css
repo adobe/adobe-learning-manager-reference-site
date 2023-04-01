@@ -81,19 +81,6 @@ governing permissions and limitations under the License.
   margin-bottom: 10px;
 }
 
-@media (max-width: 414px) {
-  .primeBoardItem,
-  .primeBoardDescription {
-    height: auto;
-    width: 100%;
-    padding: 20px;
-  }
-
-  .primeBoardSkillNames {
-    max-width: 330px;
-  }
-}
-
 .primeBoardIcon {
   width: 17px;
   margin-top: -2px;
@@ -151,10 +138,20 @@ governing permissions and limitations under the License.
   padding: 5px 5px;
   position: absolute;
   z-index: 1;
-  font-size: var(--prime-font-size-11);
+  font-size: var(--prime-font-size-10);
 }
 
-@media (max-width: 414px) {
+@media (max-width: 450px) {
+  .primeBoardItem,
+  .primeBoardDescription {
+    height: auto;
+    width: 100%;
+    padding: 20px;
+  }
+  
+  .primeBoardSkillNames {
+    max-width: 330px;
+  }
   .primeVerticalSeperator {
     display: none;
   }

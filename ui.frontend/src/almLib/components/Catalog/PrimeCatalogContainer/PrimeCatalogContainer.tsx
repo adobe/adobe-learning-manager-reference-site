@@ -15,8 +15,12 @@ import Filter from "@spectrum-icons/workflow/Filter";
 import { useState } from "react";
 import { useIntl } from "react-intl";
 import { useCatalog } from "../../../hooks/catalog/useCatalog";
+import { getALMConfig } from "../../../utils/global";
 import { CLOSE_SVG } from "../../../utils/inline_svg";
-import { GetTranslation } from "../../../utils/translationService";
+import {
+  GetTranslation,
+  isTranslated,
+} from "../../../utils/translationService";
 import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 import { ALMLoader } from "../../Common/ALMLoader";
 import { PrimeCatalogFilters } from "../PrimeCatalogFilters";
@@ -24,7 +28,7 @@ import PrimeCatalogSearch from "../PrimeCatalogSearch/PrimeCatalogSearch";
 import { PrimeTrainingsContainer } from "../PrimeTrainingsContainer";
 import styles from "./PrimeCatalogContainer.module.css";
 
-const PrimeCatalogContainer = () => {
+const PrimeCatalogContainer = (props: any) => {
   const {
     trainings,
     loadMoreTraining,
@@ -40,11 +44,17 @@ const PrimeCatalogContainer = () => {
   } = useCatalog();
   const { formatMessage } = useIntl();
   const [showFiltersOnMobile, setShowFiltersOnMobile] = useState(false);
+  const isTeamsApp = getALMConfig().isTeamsApp;
+  const defaultCatalogHeading = isTranslated(
+    GetTranslation("alm.catalog.header", true)
+  )
+    ? GetTranslation("alm.catalog.header", true)
+    : "";
 
   const showingSearchHtml = query && (
     <div className={styles.searchAppliedContainer}>
       <div className={styles.searchAppliedLabel}>
-        Showing results for
+        {GetTranslation("alm.text.searchResults")}
         <div className={styles.searchTextContainer}>
           <span className={styles.searchText}>{query}</span>
           <span className={styles.searchReset} onClick={resetSearch}>
@@ -61,7 +71,7 @@ const PrimeCatalogContainer = () => {
 
   const filtersCss = `${styles.filtersContainer} ${
     showFiltersOnMobile ? styles.onMobile : ""
-  }`;
+  } ${isTeamsApp ? styles.teamsExtraTopMargin : ""}`;
 
   const toggleFiltersonMobile = () => {
     setShowFiltersOnMobile((prevState) => !prevState);
@@ -74,16 +84,14 @@ const PrimeCatalogContainer = () => {
           UNSAFE_className={styles.closeIcon}
           variant="primary"
           isQuiet
-          onPress={toggleFiltersonMobile}
-        >
+          onPress={toggleFiltersonMobile}>
           <Close aria-label="Close" />
         </Button>
         <PrimeCatalogFilters
           filterState={filterState}
           updateFilters={updateFilters}
           catalogAttributes={catalogAttributes}
-          updatePriceFilter={updatePriceFilter}
-        ></PrimeCatalogFilters>
+          updatePriceFilter={updatePriceFilter}></PrimeCatalogFilters>
       </div>
     ) : (
       ""
@@ -94,8 +102,7 @@ const PrimeCatalogContainer = () => {
       <Button
         variant="primary"
         UNSAFE_className={styles.button}
-        onPress={toggleFiltersonMobile}
-      >
+        onPress={toggleFiltersonMobile}>
         {formatMessage({
           id: "alm.catalog.filter",
           defaultMessage: "Filters",
@@ -113,10 +120,7 @@ const PrimeCatalogContainer = () => {
     );
 
   const searchContainerHTML = (
-    <div className={styles.searchContainer}>
-      {filtersButtonForMobileHTML}
-      {searchHtml}
-    </div>
+    <div className={styles.searchContainer}>{searchHtml}</div>
   );
   return (
     <ALMErrorBoundary>
@@ -125,19 +129,23 @@ const PrimeCatalogContainer = () => {
           <div className={styles.headerContainer}>
             <div className={styles.header}>
               <h1 className={styles.label}>
-                {GetTranslation("alm.catalog.header", true)}
+                {props.heading ? props.heading : defaultCatalogHeading}
               </h1>
-
-              {searchContainerHTML}
+              {filtersButtonForMobileHTML}
+              {!isTeamsApp && searchContainerHTML}
             </div>
+            {props.description && (
+              <div className={styles.catalogDescription}>
+                {props.description}
+              </div>
+            )}
             {catalogAttributes?.showSearch === "true" && showingSearchHtml}
           </div>
           <div className={styles.filtersAndListConatiner}>
             {filtersHtml}
             <div
               className={listContainerCss}
-              aria-hidden={showFiltersOnMobile ? "true" : "false"}
-            >
+              aria-hidden={showFiltersOnMobile ? "true" : "false"}>
               {isLoading ? (
                 <ALMLoader classes={styles.loader} />
               ) : (
@@ -145,7 +153,9 @@ const PrimeCatalogContainer = () => {
                   trainings={trainings}
                   loadMoreTraining={loadMoreTraining}
                   hasMoreItems={hasMoreItems}
-                ></PrimeTrainingsContainer>
+                  guest={props.guest}
+                  signUpURL={props.signUpURL}
+                  almDomain={props.almDomain}></PrimeTrainingsContainer>
               )}
             </div>
           </div>

@@ -35,4 +35,7 @@ public interface Catalog {
     String getStatusFilter();
 
     String getTagsFilter();
+
+    String getCitiesFilter();
+
 }

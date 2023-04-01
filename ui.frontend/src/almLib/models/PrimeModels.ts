@@ -375,6 +375,7 @@ export interface PrimeLearningObject {
   hasPreview: boolean;
   price: number;
   loResourceCompletionCount: number;
+  isBookmarked: boolean;
   // price?: {
   //   currency: string;
   //   value: number;
@@ -388,6 +389,7 @@ export interface PrimeLearningObjectInstance {
   dateCreated: string;
   enabledL1FeedbackForEachCourse: boolean;
   enrollmentDeadline: string;
+  unenrollmentDeadline: string;
   isDefault: boolean;
   isFlexible: boolean;
   seatLimit: number;
@@ -447,6 +449,16 @@ export interface PrimeLearningObjectResource {
   loInstance: PrimeLearningObjectInstance;
   resources: PrimeResource[];
   previewEnabled: boolean;
+  sessionRecordingInfo: PrimeSessionRecordingInfo[];
+}
+
+export interface PrimeSessionRecordingInfo {
+  duration: string;
+  endtime: string;
+  name: string;
+  passcode: string;
+  startTime: string;
+  url: string;
 }
 
 export interface PrimeLearningObjectResourceGrade {
@@ -722,6 +734,7 @@ export interface PrimeResource {
   seatLimit: number;
   type: string;
   room: PrimeRoom;
+  roomLocation: string;
 }
 
 export interface PrimeRoom {
@@ -731,6 +744,7 @@ export interface PrimeRoom {
   roomName: string;
   seatLimit: number;
   url: string;
+  city: string;
 }
 
 export interface PrimeSearchResult {

@@ -24,6 +24,7 @@ import { isJobaidContentTypeUrl } from "../../../utils/catalog";
 import { PrimeAlertDialog } from "../../Community/PrimeAlertDialog";
 import { GetTranslation } from "../../../utils/translationService";
 import { useIntl } from "react-intl";
+import { useJobAids } from "../../../hooks/useJobAids";
 
 const PrimeTrainingPageExtraJobAid: React.FC<{
   resource: PrimeResource;
@@ -38,57 +39,21 @@ const PrimeTrainingPageExtraJobAid: React.FC<{
   unEnrollmentHandler,
   jobAidClickHandler,
 }) => {
-  const { formatMessage } = useIntl();
-  //on clikc, if not enrolled show popup alert
-  const [isEnrolled, setIsEnrolled] = useState(() => {
-    return training.enrollment ? true : false;
-  });
-  const [showAlert, setShowAlert] = useState(false);
+  const {
+    enroll,
+    unenroll,
+    jobAidAddToListMsg,
+    jobAidRemoveToListMsg,
+    nameClickHandler,
+    isEnrolled,
+    showAlert,
+  } = useJobAids(
+    training,
+    enrollmentHandler,
+    unEnrollmentHandler,
+    jobAidClickHandler
+  );
 
-  const unenroll = () => {
-    unEnrollmentHandler({
-      enrollmentId: training.enrollment.id,
-      isSupplementaryLO: true,
-    });
-    setIsEnrolled(false);
-  };
-
-  const enroll = () => {
-    enrollmentHandler({
-      id: training.id,
-      instanceId: training.instances[0].id,
-      isSupplementaryLO: false,
-    });
-    setIsEnrolled(true);
-  };
-
-  const nameClickHandler = () => {
-    if (isJobaidContentTypeUrl(training)) {
-      jobAidClickHandler(training);
-      return;
-    }
-
-    if (isEnrolled) {
-      jobAidClickHandler(training);
-      return;
-    } else {
-      // alert("not in your list");
-      setShowAlert(true);
-      setTimeout(() => setShowAlert(false), 3000);
-      //need to show dialog
-    }
-  };
-
-  const jobAidAddToListMsg = formatMessage({
-    id: "alm.overview.job.aid.add.from.list",
-    defaultMessage: "Add to my list",
-  });
-
-  const jobAidRemoveToListMsg = formatMessage({
-    id: "alm.overview.job.aid.remove.from.list",
-    defaultMessage: "Remove from my list",
-  });
-  
   return (
     <div className={styles.jobAid}>
       <a
@@ -102,11 +67,21 @@ const PrimeTrainingPageExtraJobAid: React.FC<{
       </a>
       <span className={styles.jobAidIcon}>
         {isEnrolled ? (
-          <span title = {jobAidRemoveToListMsg} onClick={unenroll} role="button" tabIndex={0}>
+          <span
+            title={jobAidRemoveToListMsg}
+            onClick={unenroll}
+            role="button"
+            tabIndex={0}
+          >
             <RemoveCircle aria-label={jobAidRemoveToListMsg} />
           </span>
         ) : (
-          <span title = {jobAidAddToListMsg} onClick={enroll} role="button" tabIndex={0}>
+          <span
+            title={jobAidAddToListMsg}
+            onClick={enroll}
+            role="button"
+            tabIndex={0}
+          >
             <AddCircle aria-label={jobAidAddToListMsg} />
           </span>
         )}

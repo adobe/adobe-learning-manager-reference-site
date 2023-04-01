@@ -21,10 +21,10 @@ public class EmbeddableLrngWidgetUtilsTest {
 	@BeforeEach
 	public void setUp()
 	{
-		hostName = "https://learningmanagerqe.adobe.com";
+		hostName = "https://learningmanagerstage1.adobe.com";
 		widgetObject = new HashMap<>();
 		widgetObject.put("auth.accessToken", "1234");
-		widgetObject.put("commonConfig.almBaseURL", "https://learningmanagerqe.adobe.com");
+		widgetObject.put("commonConfig.almBaseURL", "https://learningmanagerstage1.adobe.com");
 		widgetObject.put("commonConfig.disableLinks", true);
 		widgetObject.put("theme.primaryColor", "rgb(38,118,255)");
 		widgetObject.put("theme.background", "transparent");
@@ -39,7 +39,7 @@ public class EmbeddableLrngWidgetUtilsTest {
 		assertTrue(accessToken.equals("1234"));
 		JsonObject commonObject = objects.get("commonConfig").getAsJsonObject();
 		String hostName = commonObject.get("almBaseURL").getAsString();
-		assertTrue(hostName.equals("https://learningmanagerqe.adobe.com"));
+		assertTrue(hostName.equals("https://learningmanagerstage1.adobe.com"));
 		String disableLink = commonObject.get("disableLinks").getAsString();
 		assertTrue(disableLink.equals("true"));
 		JsonObject themeObject = objects.get("theme").getAsJsonObject();

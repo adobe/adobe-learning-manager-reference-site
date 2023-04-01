@@ -22,11 +22,11 @@ public class GlobalConfigurationUtilsTest {
 
 	private JsonObject getAdminConfigs() {
 		JsonObject adminConfigs = new JsonObject();
-		adminConfigs.addProperty("almBaseURL", "https://learningmanagerqe.adobe.com");
+		adminConfigs.addProperty("almBaseURL", "https://learningmanagerstage1.adobe.com");
 		adminConfigs.addProperty("clientSecret", "xxxxx");
 		adminConfigs.addProperty("clientId", "xxxxx");
 		adminConfigs.addProperty("refreshToken", "xxxxx");
-		adminConfigs.addProperty("commerceURL", "https://learningmanagerqe.adobe.com");
+		adminConfigs.addProperty("commerceURL", "https://learningmanagerstage1.adobe.com");
 		adminConfigs.addProperty("customerTokenLifetime", "3600");
 		adminConfigs.addProperty("authorRefreshToken", "xxxxxx");
 		return adminConfigs;

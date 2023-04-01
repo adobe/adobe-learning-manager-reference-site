@@ -14,7 +14,7 @@ governing permissions and limitations under the License.
     display: none;
 }
 
-@media (max-width:414px) {
+@media (max-width:450px) {
     .primeCommunityTopRow{
         display: flex;
         background-color: #306EB5;

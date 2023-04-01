@@ -51,7 +51,7 @@ governing permissions and limitations under the License.
   float: unset !important;
 }
 
-@media screen and (max-width: 414px) {
+@media screen and (max-width: 450px) {
   .experiencefragment.cmp-experiencefragment--header {
     height: 56px;
   }

@@ -20,7 +20,7 @@ const PrimeCommunityPoll = (props: any) => {
   const myPoll = post.myPoll;
   const [choiceSelectedIndex, setChoiceSelectedIndex] = useState("");
   const [choiceSelected, setChoiceSelected] = useState("");
-  const [alreadyVoted, setAlreadyVoted] = useState(myPoll ? false : true);
+  const [alreadyVoted, setAlreadyVoted] = useState(myPoll ? true : false);
   const [pollStats, setPollStats] = useState([]);
   const [totalVotes, setTotalVotes] = useState(-1);
 
@@ -80,7 +80,7 @@ const PrimeCommunityPoll = (props: any) => {
 
   useEffect(() => {
     //if user has voted
-    if (myPoll.optionId) {
+    if (myPoll?.optionId) {
       postSubmitActions(myPoll.optionId);
     }
 

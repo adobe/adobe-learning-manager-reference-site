@@ -16,7 +16,7 @@
                         "jcr:title":"adobe-learning-manager-config",
                         "sling:resourceType":"learning/configuration/page",
                         "accountId":"7110",
-                        "almBaseURL":"https://learningmanagerqe.adobe.com",
+                        "almBaseURL":"https://learningmanagerstage1.adobe.com",
                         "siteMap":"false",
                         "theme.background":"transparent",
                         "theme.primaryColor":"rgb(38,118,255)",

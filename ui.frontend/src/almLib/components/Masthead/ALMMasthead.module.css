@@ -1,0 +1,202 @@
+@import "../../styles/variables.css";
+
+.primeCarousel {
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  background: var(--prime-color-black);
+  text-align: center;
+  z-index: 1;
+  position: relative;
+}
+.primeSlides {
+  overflow: hidden;
+  position: relative;
+  outline: 0;
+  margin: 0 auto;
+}
+.primeMasthead {
+  margin: 0;
+  padding: 0;
+  transition: transform 0.5s ease;
+  transform: translateX(0%);
+  white-space: nowrap;
+  scroll-padding: 50px;
+}
+.primeMasthead li {
+  display: inline-block;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+}
+.primeMastheadDots {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  text-align: center;
+  z-index: 5;
+  user-select: none;
+  list-style: none;
+  margin: 0;
+  white-space: nowrap;
+  overflow-x: visible;
+  font-size: 0;
+  background-image: linear-gradient(
+    to bottom,
+    #0000,
+    var(--prime-color-black)
+  );
+}
+.primeMastheadDots li {
+  color: var(--prime-color-white);
+  cursor: pointer;
+  text-indent: 0;
+  display: inline-block;
+  outline: 0;
+}
+.primeMastheadDots li b {
+  display: block;
+  text-indent: -9999px;
+  margin-right: 7px;
+  background-color: var(--prime-color-white);
+  background-color: hsla(0, 0%, 100%, 0.3);
+  width: 13px;
+  height: 13px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  transition: height 0.3s ease;
+  border-radius: 50%;
+}
+.primeMastheadActions {
+  z-index: 6;
+}
+.primeMastheadContinue {
+  min-width: 94px;
+  height: 32px;
+  border: none;
+  border-radius: 16px;
+  background-color: var(--prime-color-white);
+  font-weight: bold;
+  letter-spacing: normal;
+  text-align: center;
+  cursor: pointer;
+  color: var(--prime-color-nc3);
+}
+.primeMastheadContinue:hover {
+  opacity: 0.8;
+}
+
+.primeMastheadMedia > div,
+.primeMastheadMedia img {
+  padding: 0;
+  width: 100%;
+  height: 300px;
+  vertical-align: bottom;
+}
+@media screen and (min-width: 768px) and (max-width: 979px) {
+  .primeMastheadMedia > div,
+  .primeMastheadMedia img {
+    height: 216px;
+  }
+}
+@media screen and (max-width: 767px) {
+  .primeMastheadMedia > div,
+  .primeMastheadMedia img {
+    height: 216px;
+  }
+  .primeMastheadNavIcons {
+    display: none !important;
+  }
+}
+@media screen and (max-width: 480px) {
+  .primeMastheadMedia > div,
+  .primeMastheadMedia img {
+    height: 200px;
+  }
+  .primeMastheadNavIcons {
+    display: none !important;
+  }
+}
+.primeMastheadIconsContainer {
+  float: right;
+  display: inline-flex;
+}
+.primeMastheadNavIcons {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  padding: 0 0 2.5rem 0;
+  pointer-events: none;
+  z-index: 6;
+}
+.primeMastheadIcon {
+  margin: 0 2rem 0 0;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+}
+.primeMastheadIcon svg {
+  display: block;
+  margin: 8px;
+  fill: var(--prime-color-white);
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  pointer-events: all;
+}
+.primeMasthead ul {
+  font-size: 0;
+}
+
+/* .vjs-modal-dialog-content,
+.vjs-big-play-button,
+.vjs-close-button,
+.vjs-control-bar {
+  display: none;
+} */
+
+.primeMastheadNavIconDisabled {
+  margin: 0 2rem 0 0;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  opacity: 0.2;
+  cursor: default;
+  pointer-events: none;
+}
+.primeMastheadNavIconDisabled svg {
+  pointer-events: none;
+}
+
+.primeMasthead-carousel-tablist-highlight {
+  display: none;
+  position: absolute;
+  outline: 2px solid var(--prime-color-primary);
+  outline: -webkit-focus-ring-color auto 5px;
+  background-color: transparent;
+  box-shadow: 0px 0px 0px 1px transparent;
+  -moz-boxshadow: 0px 0px 0px 1px transparent;
+  -webkit-boxshadow: 0px 0px 0px 1px transparent;
+  pointer-events: none;
+}
+
+.primeMastheadSrOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.primeDots {
+  z-index: 60000;
+  padding: 1% 0 !important;
+}

@@ -36,7 +36,6 @@ import {
   APPROVED,
   CHANGE,
   CLASSROOM,
-  COMPLETED,
   ELEARNING,
   PENDING_APPROVAL,
   PENDING_SUBMISSION,
@@ -74,13 +73,13 @@ import {
 import {
   getPreferredLocalizedMetadata,
   GetTranslation,
+  formatMap,
 } from "../../../utils/translationService";
 import {
   cancelUploadFile,
   getUploadInfo,
   uploadFile,
 } from "../../../utils/uploadUtils";
-import { formatMap } from "../../Catalog/PrimeTrainingCard/PrimeTrainingCard";
 import styles from "./PrimeModuleItem.module.css";
 
 interface ActionMap {
@@ -118,20 +117,20 @@ const PrimeModuleItem: React.FC<{
     trainingInstance,
     launchPlayerHandler,
     loResource,
-    isContent,
     isPreviewEnabled,
     canPlay,
     updateFileSubmissionUrl,
     isPartOfLP = false,
     isParentLOEnrolled = false,
   } = props;
-  const { formatMessage } = useIntl();
+  const { formatMessage, locale } = useIntl();
 
   const [almAlert] = useAlert();
 
   const [showCannotSkipDialog, setShowCannotSkipDialog] = useState(false);
 
   const showPreWorkLabel = loResource.loResourceType === PREWORK && isPartOfLP;
+  const isPreworkModule = loResource.loResourceType === PREWORK;
 
   useEffect(() => {
     if (showCannotSkipDialog) {
@@ -148,10 +147,6 @@ const PrimeModuleItem: React.FC<{
       almAlert(true, messages, AlertType.error);
     }
   }, [almAlert, showCannotSkipDialog]);
-
-
-  const config = getALMConfig();
-  const locale = config.locale;
 
   let localizedMetadata = loResource.localizedMetadata;
   const { name, description, overview } = getPreferredLocalizedMetadata(
@@ -180,7 +175,7 @@ const PrimeModuleItem: React.FC<{
     resource.dateStart && resource.completionDeadline ? true : false;
 
   const durationText = convertSecondsToTimeText(
-    resource.authorDesiredDuration ?? resource.desiredDuration
+    resource.authorDesiredDuration || resource.desiredDuration || 0
   );
 
   const moduleIcon =
@@ -189,12 +184,14 @@ const PrimeModuleItem: React.FC<{
   const sessionsTemplate = getSessionsTemplate(
     styles,
     resource,
+    loResource,
     isClassroomOrVC,
     hasSessionDetails,
     durationText,
     isVC,
     isEnrolled,
-    formatMessage
+    formatMessage,
+    locale
   );
 
   let descriptionTextHTML = getDescriptionTemplate(
@@ -437,8 +434,7 @@ const PrimeModuleItem: React.FC<{
           href={submissionUrl}
           target="_blank"
           rel="noreferrer"
-          onClick={(event: any) => stopClickPropagation(event)}
-        >
+          onClick={(event: any) => stopClickPropagation(event)}>
           {getSubmissionFileName(submissionUrl)}
         </a>
         {changeAllowed && getUploadFileSection(hasSession, CHANGE)}
@@ -461,8 +457,7 @@ const PrimeModuleItem: React.FC<{
           data-test={loResource.id}
           onClick={itemClickHandler}
           onKeyDown={keyDownHandler}
-          role="button"
-        >
+          role="button">
           <div className={styles.icon} aria-hidden="true">
             {loResourceMandatory() ? (
               <span className={styles.mandatoryModule}>
@@ -476,7 +471,7 @@ const PrimeModuleItem: React.FC<{
               <span className={styles.modulePassed}>
                 <CheckmarkCircle aria-hidden="true" />
               </span>
-            ) : !canPlay ? (
+            ) : (!canPlay && !isPreworkModule) ? (
               <span className={styles.moduleLocked}>
                 <LockClosed aria-hidden="true" />
               </span>
@@ -522,8 +517,7 @@ const PrimeModuleItem: React.FC<{
                         id: "alm.removeUpload.label",
                         defaultMessage: "Remove upload",
                       })}
-                      onClick={cancelClickHandler}
-                    >
+                      onClick={cancelClickHandler}>
                       {SOCIAL_CANCEL_SVG()}
                     </button>
                   </div>
@@ -583,12 +577,14 @@ const getSessionsTemplate = (
     readonly [key: string]: string;
   },
   resource: PrimeResource,
+  loResource: PrimeLearningObjectResource,
   isClassroomOrVC: boolean,
   hasSessionDetails: boolean,
   durationText: string,
   isVC: boolean = false,
   isEnrolled: boolean,
-  formatMessage: Function
+  formatMessage: Function,
+  locale: string
 ) => {
   if (!isClassroomOrVC || (isClassroomOrVC && !hasSessionDetails)) {
     return "";
@@ -600,7 +596,7 @@ const getSessionsTemplate = (
         { defaultMessage: "Not Available" }
       );
 
-  const timeInfo = getTimeInfo(resource, formatMessage);
+  const timeInfo = getTimeInfo(resource, formatMessage, locale);
   const showSeatLimit = Boolean(resource.seatLimit);
   return (
     <div className={styles.metaDataContainer}>
@@ -611,6 +607,14 @@ const getSessionsTemplate = (
         <div className={styles.details}>
           <span>{timeInfo.dateText}</span>
           <span>{timeInfo.timeText}</span>
+        </div>
+      </div>
+      <div className={styles.metadata}>
+        <div className={styles.spectrumIcon}>
+          <Clock aria-hidden="true" />
+        </div>
+        <div className={styles.details}>
+          {formatMessage({ id: "alm.overview.duration" }, { 0: durationText })}
         </div>
       </div>
       {showSeatLimit && (
@@ -626,42 +630,109 @@ const getSessionsTemplate = (
           </div>
         </div>
       )}
-
-      {resource.location && !isVC && (
-        <div className={styles.metadata}>
-          <div className={styles.spectrumIcon}>
-            <Location aria-hidden="true" />
-          </div>
-          <div className={styles.details}>{resource.location}</div>
-        </div>
-      )}
       <div className={styles.metadata}>
         <div className={styles.spectrumIcon}>
           <User aria-hidden="true" />
         </div>
         <div className={styles.details}>{instructorNames}</div>
       </div>
-      <div className={styles.metadata}>
-        <div className={styles.spectrumIcon}>
-          <Clock aria-hidden="true" />
-        </div>
-        <div className={styles.details}>
-          {formatMessage({ id: "alm.overview.duration" }, { 0: durationText })}
-        </div>
-      </div>
       {isVC && isEnrolled && (
+        <>
+          {loResource.sessionRecordingInfo?.length > 0 && (
+            <div className={styles.metadata}>
+              <div className={styles.spectrumIcon}>
+                <Link aria-hidden="true" />
+              </div>
+              <div className={styles.sessionRecordingInfo}>
+                <span>
+                  {formatMessage({
+                    id: "alm.overview.vc.sessionRecordingInfo",
+                    defaultMessage: "Session Recordings",
+                  })}
+                </span>
+                <span>
+                  <a
+                    className={styles.details}
+                    href={loResource.sessionRecordingInfo[0].url}
+                    target="_blank"
+                    rel="noreferrer">
+                    {loResource.sessionRecordingInfo[0].name}
+                  </a>
+                </span>
+
+                <span>
+                  {formatMessage({
+                    id: "alm.overview.vc.sessionRecordingPasscode",
+                    defaultMessage: "Passcode",
+                  })}
+                  : {loResource.sessionRecordingInfo[0].passcode}
+                </span>
+              </div>
+            </div>
+          )}
+          <div className={styles.metadata}>
+            <div className={styles.spectrumIcon}>
+              <Link aria-hidden="true" />
+            </div>
+            <a
+              className={styles.details}
+              href={resource.location}
+              target="_blank"
+              rel="noreferrer">
+              {GetTranslation("alm.overview.vc.url", true)}
+            </a>
+          </div>
+        </>
+      )}
+      {resource.room && (
         <div className={styles.metadata}>
           <div className={styles.spectrumIcon}>
-            <Link aria-hidden="true" />
+            <Location aria-hidden="true" />
           </div>
-          <a
-            className={styles.details}
-            href={resource.location}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {GetTranslation("alm.overview.vc.url", true)}
-          </a>
+          <div className={styles.roomDetails}>
+            <div className={styles.details}>{resource.room.roomName}</div>
+            <div title={resource.room.roomInfo} className={styles.details}>
+              {resource.room.roomInfo}
+            </div>
+            <div className={styles.details}>{resource.room.city}</div>
+            {resource.room.url && (
+              <div className={styles.details}>
+                <a
+                  className={styles.roomUrl}
+                  href={resource.room.url}
+                  target="_blank">
+                  {formatMessage({
+                    id: "alm.overview.locationDetails",
+                    defaultMessage: "Location Details",
+                  })}
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+      {!resource.room && (
+        <div className={styles.metadata}>
+          <div className={styles.spectrumIcon}>
+            <Location aria-hidden="true" />
+          </div>
+          <div className={styles.details}>
+            {" "}
+            {isVC &&
+              (resource.roomLocation
+                ? resource.roomLocation
+                : formatMessage(
+                    { id: "alm.module.instructorName.NotAvailable" },
+                    { defaultMessage: "Not Available" }
+                  ))}
+            {!isVC &&
+              (resource.location
+                ? resource.location
+                : formatMessage(
+                    { id: "alm.module.instructorName.NotAvailable" },
+                    { defaultMessage: "Not Available" }
+                  ))}
+          </div>
         </div>
       )}
     </div>
@@ -670,10 +741,10 @@ const getSessionsTemplate = (
 
 const getTimeInfo = (
   resource: PrimeResource,
-  formatMessage: Function
+  formatMessage: Function,
+  locale: string
 ): { dateText: string; timeText: string } => {
   const { dateStart, completionDeadline } = resource;
-  const { locale } = getALMConfig();
   let startDateObj = new Date(dateStart);
   let completionDateObj = new Date(completionDeadline);
   let dateText = "",

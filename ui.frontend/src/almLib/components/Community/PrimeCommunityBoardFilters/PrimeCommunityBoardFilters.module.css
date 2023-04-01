@@ -21,7 +21,7 @@ governing permissions and limitations under the License.
   display: flex;
 }
 
-@media (max-width: 414px) {
+@media (max-width: 450px) {
   .primeBoardFilters {
     margin-top: 25px;
     padding: 0px;

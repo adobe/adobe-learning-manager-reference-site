@@ -30,7 +30,7 @@ governing permissions and limitations under the License.
   line-height: 30px;
 }
 
-@media (max-width: 414px) {
+@media (max-width: 450px) {
   .primeAddPostSectionWrapper {
     display: none;
   }

@@ -11,8 +11,20 @@ governing permissions and limitations under the License.
 */
 import { PrimeAccount, PrimeAccountTerminology } from "../models/PrimeModels";
 import { JsonApiParse } from "./jsonAPIAdapter";
+import { setThemeVariables } from "./themes";
 import { SetupAccountTerminologies } from "./translationService";
 const _fontLoading = require("./fontLoading");
+
+export interface PrimeThemeData {
+  id: string;
+  name: string;
+  url: string;
+  className: string;
+  brandColor: string;
+  sidebarIconColor: string;
+  sidebarColor: string;
+  widgetPrimaryColor: string;
+}
 
 export interface PrimeConfig {
   almBaseURL: string;
@@ -22,6 +34,7 @@ export interface PrimeConfig {
   accessToken: string;
   baseUrl: string;
   instancePath: string;
+  homePath: string;
   catalogPath: string;
   trainingOverviewPath: string;
   communityPath: string;
@@ -36,9 +49,12 @@ export interface PrimeConfig {
   usageType: "aem-sites" | "aem-es" | "aem-commerce";
   accountData: string;
   commerceStoreName: string;
+  frontendResourcesPath: string;
   mountingPoints: {
     [key: string]: string;
   };
+  themeData: PrimeThemeData;
+  isTeamsApp: boolean;
 }
 
 export interface ALM {
@@ -61,6 +77,7 @@ export interface ALM {
   handleLogIn: Function;
   handleLogOut: Function;
   storage: any;
+  themeData: PrimeThemeData;
 }
 
 export function getWindowObject() {
@@ -95,7 +112,10 @@ export const getPathParams = (pagePath: string, pathParams: string[] = []) => {
   let paramsMap: {
     [key: string]: string;
   } = {};
-  const pathname = getWindowObject().location.pathname;
+  const currentUrl = getWindowObject().location;
+  const pathname = currentUrl.pathname.indexOf(pagePath) > -1
+      ? currentUrl.pathname
+      : currentUrl.hash;
   let params: string[] = pathname.split(pagePath)[1].split("/");
   for (let i = 0; i < pathParams.length; i++) {
     const pathParam = pathParams[i];
@@ -177,9 +197,9 @@ export function updateURLParams(params: any) {
     "//" +
     window.location.host +
     window.location.pathname +
-    "?" +
-    encodeURI(existingQueryParams.toString()) +
-    window.location.hash;
+    (existingQueryParams.toString().length !== 0
+      ? "?" + encodeURI(existingQueryParams.toString()) + window.location.hash
+      : "");
   window.history.replaceState({ path: newurl }, "", newurl);
 }
 
@@ -195,18 +215,23 @@ export const getALMAccount = async () => {
   return account;
 };
 
-const init = async () => {
+export const init = async () => {
+  let account: PrimeAccount | undefined;
   if (!getALMObject().isPrimeUserLoggedIn()) {
-    const account = await getALMAccount();
+    account = await getALMAccount();
     const accountTerminologies = account.accountTerminologies;
-    SetupAccountTerminologies(
-      accountTerminologies as PrimeAccountTerminology[]
-    );
-    return;
+    SetupAccountTerminologies(accountTerminologies);
+  } else {
+    const response = await getALMUser();
+    account = response?.user?.account;
+    SetupAccountTerminologies(account?.accountTerminologies);
   }
-  const response = await getALMUser();
-  const account = response?.user?.account;
-  SetupAccountTerminologies(account?.accountTerminologies);
+  const themeData = account?.themeData;
+  if (themeData) {
+    const primeThemeData = JSON.parse(themeData) as PrimeThemeData;
+    getALMConfig().themeData = primeThemeData;
+    setThemeVariables(primeThemeData);
+  }
 };
 
 init();
@@ -222,3 +247,96 @@ export const setItemToStorage = (key: string, data: any, ttl = 10800) => {
 export const getCommerceStoreName = () => {
   return getALMConfig().commerceStoreName;
 };
+
+export const getRegistrationsURLs = (accountConfig: any, almDomain: string) => {
+  const registrationProfile: {
+    [key: string]: string;
+  } = accountConfig?.registrationProfile;
+  const queryParams = getQueryParamsFromUrl();
+  const epId = queryParams["groupid"];
+  const ipId = queryParams["ipId"];
+  const accesskey = queryParams["accesskey"];
+  let domain = window.location.origin;
+  if (domain.indexOf("localhost") != -1) {
+    domain = almDomain;
+  }
+  let signUpURL = "";
+  let signInURL = "";
+  if (ipId) {
+    signUpURL = `${domain}/accountiplogin?ipId=${ipId}&accesskey=${accesskey}`;
+    signInURL = signUpURL;
+  } else if (epId) {
+    signUpURL = `${domain}/eplogin?groupid=${epId}&accesskey=${accesskey}`;
+    signInURL = `${domain}/accounteplogin?epId=${epId}&accesskey=${accesskey}`;
+  } else {
+    signUpURL = registrationProfile.signUpURL;
+    signInURL = registrationProfile.signInURL;
+  }
+  return { signUpURL, signInURL };
+};
+
+export const isUrl = (link: string) => {
+  let url;
+  try {
+    url = new URL(link);
+  } catch (_) {
+    return false;
+  }
+  return url.protocol === "http:" || url.protocol === "https:";
+};
+
+export const navigateToLogin = (url: any, loId: string, almDomain: any) => {
+  let returnPathUrl = encodeURIComponent(
+    almDomain + "/app/learner#/" + loId.split(":")[0] + "/" + loId.split(":")[1]
+  );
+  (window as any).location.href = url + "&returnPath=" + returnPathUrl;
+};
+
+export function getPageAttributes(
+  container: string,
+  pageAttributeName: string
+) {
+  const config = getALMConfig();
+  if (config) {
+    let cssSelector = config.mountingPoints[container];
+    let attributes = getConfigurableAttributes(cssSelector) || {};
+    setALMAttribute(pageAttributeName, attributes);
+    return attributes;
+  }
+}
+
+function getEventForTeams(type: string) {
+  return {
+    type: type,
+  };
+}
+
+function sendEvent(eventDetails: any) {
+  window.postMessage(eventDetails, "*");
+}
+
+export function navigateToLoInTeamsApp(
+  trainingId: string,
+  trainingInstanceId?: string,
+  parentLoDetails?: string,
+  clearParentLoDetails?: boolean
+) {
+  let eventDetails: any = getEventForTeams("almNavigateToLoInTeamsApp");
+  eventDetails.trainingId = trainingId;
+  if (trainingInstanceId) {
+    eventDetails.trainingInstanceId = trainingInstanceId;
+  }
+  if (parentLoDetails) {
+    eventDetails.parentLoDetails = parentLoDetails;
+  }
+  if (clearParentLoDetails) {
+    eventDetails.clearParentLoDetails = clearParentLoDetails;
+  }
+  sendEvent(eventDetails);
+}
+
+export function navigateToLoInstanceInTeamsApp(trainingId: string) {
+  let eventDetails: any = getEventForTeams("almNavigateToLoInstanceInTeamsApp");
+  eventDetails.trainingId = trainingId;
+  sendEvent(eventDetails);
+}

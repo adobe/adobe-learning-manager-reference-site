@@ -128,7 +128,7 @@ governing permissions and limitations under the License.
     cursor: pointer;
 }
 
-@media (max-width: 414px) {
+@media (max-width: 450px) {
     .primeCommunityPollInput {
         width: 60%;
     }

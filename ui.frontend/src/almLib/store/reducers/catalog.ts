@@ -26,7 +26,8 @@ import {
   UPDATE_SEARCH_TEXT,
   UPDATE_SKILLLEVEL_FILTERS,
   UPDATE_SKILLNAME_FILTERS,
-  UPDATE_TAGS_FILTERS
+  UPDATE_TAGS_FILTERS,
+  UPDATE_CITIES_FILTERS
 } from "../actions/catalog/actionTypes";
 
 export const DEFUALT_FILTERS_VALUE = {
@@ -42,6 +43,7 @@ export interface CatalogFilterState {
   skillLevel: string;
   catalogs: string;
   price: string;
+  cities: string;
 }
 
 export interface CatalogState {
@@ -127,6 +129,20 @@ const tagName: Reducer<string, AnyAction> = (
       return action.payload;
     case UPDATE_FILTERS_ON_LOAD:
       return action.payload.tagName;
+    default:
+      return state || "";
+  }
+};
+
+const cities: Reducer<string, AnyAction> = (
+  state: string | undefined,
+  action: AnyAction
+) => {
+  switch (action.type) {
+    case UPDATE_CITIES_FILTERS:
+      return action.payload;
+    case UPDATE_FILTERS_ON_LOAD:
+      return action.payload.cities;
     default:
       return state || "";
   }
@@ -228,6 +244,7 @@ const next: Reducer<string, AnyAction> = (
     case UPDATE_CATALOGS_FILTERS:
     case UPDATE_DURATION_FILTERS:
     case UPDATE_TAGS_FILTERS:
+    case UPDATE_CITIES_FILTERS:
     case UPDATE_SKILLLEVEL_FILTERS:
     case UPDATE_SEARCH_TEXT:
     case RESET_SEARCH_TEXT:
@@ -277,7 +294,8 @@ const filterState: Reducer<CatalogFilterState, AnyAction> = combineReducers({
   duration,
   skillLevel,
   catalogs,
-  price
+  price,
+  cities,
 });
 
 const catalog: Reducer<CatalogState, AnyAction> = combineReducers({

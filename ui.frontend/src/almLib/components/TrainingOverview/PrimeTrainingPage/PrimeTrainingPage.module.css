@@ -16,16 +16,18 @@ governing permissions and limitations under the License.
   padding-right: 80px;
   padding-bottom: 30px;
   float: left;
+  background-color: var(--prime-color-nc4);
 }
 
 .right {
   width: 256px;
   padding: 20px 0;
   float: left;
+  background-color: var(--prime-color-nc4);
 }
 .trainingOverviewContainer,
 .trainingOverviewPrequisite {
-  border: 1px solid var(--prime-color-nc6);
+  border: 1px solid var(--prime-color-nc2);
   border-radius: 6px;
   margin-bottom: 20px;
 }
@@ -37,6 +39,7 @@ governing permissions and limitations under the License.
 .trainingPrequisiteLabel {
   margin-bottom: 10px;
   margin-top: 10px;
+  color: var(--prime-color-nc3)
 }
 
 .sectionName {
@@ -58,14 +61,15 @@ governing permissions and limitations under the License.
 }
 
 .overview {
-  font-size: var(--prime-font-size-16);
-  color: var(--prime-color-nc1);
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-nc3);
   overflow: hidden;
   display: inline-block;
   width: 100%;
   padding: 10px 0 0 0;
   white-space: normal !important;
   height: auto;
+  font-family: 'source-sans-pro';
 }
 
 img {
@@ -84,6 +88,7 @@ img {
   width: var(--prime-container-width);
   margin: 0 auto;
   margin-top: 15px;
+  background-color: #efefef;
 }
 @media screen and (max-width: 1024px) {
   .headingContainer {
@@ -93,7 +98,7 @@ img {
   }
 }
 
-@media screen and (max-width: 414px) {
+@media screen and (max-width: 450px) {
   .left {
     order: 2;
     width: 100%;
@@ -108,6 +113,7 @@ img {
     flex-direction: column;
     width: 100%;
     max-width: var(--prime-container-max-width-mobile);
+    background-color: #efefef;
   }
   .trainingOverviewContainer {
     border: none;
@@ -124,7 +130,7 @@ img {
 
 .externalCertUploadInfo {
   max-width: 100%;
-  border: 1px solid var(--prime-color-nc6);
+  border: 1px solid var(--prime-color-nc4);
   clear: both;
   text-align: left !important;
   list-style: none;
@@ -203,4 +209,9 @@ img {
   width: 35px;
   fill: currentColor;
   padding-left: 10px;
+}
+.backgroundPage {
+  width: 100%;
+  background-color: var(--prime-color-nc4);
+  min-height: 850px;
 }

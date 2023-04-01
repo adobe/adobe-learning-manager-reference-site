@@ -22,13 +22,6 @@ input:placeholder-shown {
   font-style: italic;
 }
 
-@media (max-width: 414px) {
-  .primeCommunitySearchInput {
-    height: 35px;
-    padding: 10px 0px;
-    width: inherit;
-  }
-}
 
 .primeSearchButton {
   height: 100%;
@@ -56,7 +49,12 @@ input:placeholder-shown {
   box-shadow: 1px var(--prime-color-nc1);
 }
 
-@media (max-width: 414px) {
+@media (max-width: 450px) {
+  .primeCommunitySearchInput {
+    height: 35px;
+    padding: 10px 0px;
+    width: inherit;
+  }
   .primeSearchButton {
     height: 32px;
     width: 30px;

@@ -208,7 +208,7 @@ governing permissions and limitations under the License.
   }
 }
 
-@media screen and (max-width: 414px) {
+@media screen and (max-width: 450px) {
   #alm-header {
     width: 100%;
     max-width: 100%;

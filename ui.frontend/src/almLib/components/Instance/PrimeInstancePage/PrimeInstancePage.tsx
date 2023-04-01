@@ -33,6 +33,8 @@ import styles from "./PrimeInstancePage.module.css";
 import { ALMLoader } from "../../Common/ALMLoader";
 import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 import { ALMBackButton } from "../../Common/ALMBackButton";
+import { useTrainingPage } from "../../../hooks";
+import { ENGLISH_LOCALE } from "../../../utils/constants";
 //TO-DO move training id str to common
 const TRAINING_ID_STR = "trainingId";
 const CLASSROOM = "Classroom";
@@ -48,7 +50,7 @@ const PrimeInstancePage = () => {
   const { formatMessage } = useIntl();
   const [list, setList] = useState([] as any[]);
   const [isAscendingOrder, setIsAscendingOrder] = useState(true);
-  const locale = getALMObject().getALMConfig().locale;
+  const locale = getALMObject().getALMConfig().locale || ENGLISH_LOCALE;
   const {
     isLoading,
     training,
@@ -59,6 +61,7 @@ const PrimeInstancePage = () => {
     activeInstances,
     selectInstanceHandler,
   } = useInstancePage(trainingId);
+  const { updateBookMark } = useTrainingPage(trainingId);
 
   useEffect(() => {
     if (activeInstances && activeInstances.length) {
@@ -109,118 +112,114 @@ const PrimeInstancePage = () => {
   return (
     <ALMErrorBoundary>
       <Provider theme={lightTheme} colorScheme={"light"}>
-        <ALMBackButton />
-        <PrimeTrainingOverviewHeader
-          format={training.loType}
-          color={color}
-          title={name}
-          bannerUrl={bannerUrl}
-        />
-        <section className={styles.pageContainer}>
-          <h2 className={styles.courseInfoHeader}>{headerLabel}</h2>
-          {/* Hidden in mobile */}
-          <div className={styles.courseDetailsContainer}>
-            <div className={styles.card} style={{ ...cardBgStyle }}>
-              <div className={styles.band}></div>
-            </div>
-            <div className={styles.courseDetials}>
-              <h3 className={styles.title}>{name}</h3>
-              <p className={styles.type}>
-                {GetTranslation(`alm.catalog.card.${training.loType}`, true)}
-              </p>
-            </div>
-          </div>
-
-          {/* Shown only in Mobile */}
-          <div className={styles.selectInstanceContainer}>
-            <h3 className={styles.selectInstance}>
-              {formatMessage({
-                id: "alm.instance.select.instance",
-                defaultMessage: "Select An Instance",
-              })}
-            </h3>
-          </div>
-
-          {list!?.length > 0 && (
-            <>
-              <div className={styles.instancesContainer}>
-                <div className={styles.instancesHeaderSection}>
-                  <div
-                    className={`${styles.instanceNameWrapper} ${styles.commonHeader}`}
-                  >
-                    {formatMessage({
-                      id: "alm.instance.name",
-                      defaultMessage: "Instance Name",
-                    })}
-                    <span
-                      onClick={() => applySort("name")}
-                      className={styles.sortIcon}
-                    >
-                      {SORT_ORDER_SVG()}
-                    </span>
-                  </div>
-                  <div
-                    className={`${styles.dateWrapper} ${styles.commonHeader} `}
-                  >
-                    {formatMessage({
-                      id: "alm.instance.start.date",
-                      defaultMessage: "Start Date",
-                    })}
-
-                    <span
-                      onClick={() => applySort("date")}
-                      className={styles.sortIcon}
-                    >
-                      {SORT_ORDER_SVG()}
-                    </span>
-                  </div>
-                  <div
-                    className={`${styles.locationWrapper} ${styles.commonHeader}`}
-                  >
-                    {formatMessage({
-                      id: "alm.instance.location",
-                      defaultMessage: "Location",
-                    })}
-
-                    <span
-                      onClick={() => applySort("location")}
-                      className={styles.sortIcon}
-                    >
-                      {SORT_ORDER_SVG()}
-                    </span>
-                  </div>
-                  <div
-                    className={`${styles.priceWrapper} ${styles.commonHeader}`}
-                  >
-                    {formatMessage({
-                      id: "alm.instance.price",
-                      defaultMessage: "Price",
-                    })}
-                  </div>
-                  <div
-                    className={`${styles.action} ${styles.commonHeader}`}
-                  ></div>
-                </div>
+        <div className={styles.backgroundPage}>
+          {!getALMConfig().isTeamsApp && <ALMBackButton />}
+          <PrimeTrainingOverviewHeader
+            format={training.loFormat}
+            color={color}
+            title={name}
+            bannerUrl={bannerUrl}
+            training={training}
+            updateBookMark={updateBookMark}
+          />
+          <section className={styles.pageContainer}>
+            <h2 className={styles.courseInfoHeader}>{headerLabel}</h2>
+            {/* Hidden in mobile */}
+            <div className={styles.courseDetailsContainer}>
+              <div className={styles.card} style={{ ...cardBgStyle }}>
+                <div className={styles.band}></div>
               </div>
-              <ul className={styles.instanceList}>
-                {list!.map((item: any) => (
-                  <PrimeInstanceItem
-                    key={item.id}
-                    name={item.name}
-                    format={item.format}
-                    date={item.date}
-                    location={item.location}
-                    instructorsName={item.instructorsName}
-                    id={item.id}
-                    selectInstanceHandler={selectInstanceHandler}
-                    locale={locale}
-                    price={training.price}
-                  />
-                ))}
-              </ul>
-            </>
-          )}
-        </section>
+              <div className={styles.courseDetials}>
+                <h3 className={styles.title}>{name}</h3>
+                <p className={styles.type}>
+                  {GetTranslation(`alm.catalog.card.${training.loType}`, true)}
+                </p>
+              </div>
+            </div>
+
+            {/* Shown only in Mobile */}
+            <div className={styles.selectInstanceContainer}>
+              <h3 className={styles.selectInstance}>
+                {formatMessage({
+                  id: "alm.instance.select.instance",
+                  defaultMessage: "Select An Instance",
+                })}
+              </h3>
+            </div>
+
+            {list!?.length > 0 && (
+              <>
+                <div className={styles.instancesContainer}>
+                  <div className={styles.instancesHeaderSection}>
+                    <div
+                      className={`${styles.instanceNameWrapper} ${styles.commonHeader}`}>
+                      {formatMessage({
+                        id: "alm.instance.name",
+                        defaultMessage: "Instance Name",
+                      })}
+                      <span
+                        onClick={() => applySort("name")}
+                        className={styles.sortIcon}>
+                        {SORT_ORDER_SVG()}
+                      </span>
+                    </div>
+                    <div
+                      className={`${styles.dateWrapper} ${styles.commonHeader} `}>
+                      {formatMessage({
+                        id: "alm.instance.start.date",
+                        defaultMessage: "Start Date",
+                      })}
+
+                      <span
+                        onClick={() => applySort("date")}
+                        className={styles.sortIcon}>
+                        {SORT_ORDER_SVG()}
+                      </span>
+                    </div>
+                    <div
+                      className={`${styles.locationWrapper} ${styles.commonHeader}`}>
+                      {formatMessage({
+                        id: "alm.instance.location",
+                        defaultMessage: "Location",
+                      })}
+
+                      <span
+                        onClick={() => applySort("location")}
+                        className={styles.sortIcon}>
+                        {SORT_ORDER_SVG()}
+                      </span>
+                    </div>
+                    <div
+                      className={`${styles.priceWrapper} ${styles.commonHeader}`}>
+                      {formatMessage({
+                        id: "alm.instance.price",
+                        defaultMessage: "Price",
+                      })}
+                    </div>
+                    <div
+                      className={`${styles.action} ${styles.commonHeader}`}></div>
+                  </div>
+                </div>
+                <ul className={styles.instanceList}>
+                  {list!.map((item: any) => (
+                    <PrimeInstanceItem
+                      key={item.id}
+                      name={item.name}
+                      format={item.format}
+                      date={item.date}
+                      location={item.location}
+                      instructorsName={item.instructorsName}
+                      id={item.id}
+                      selectInstanceHandler={selectInstanceHandler}
+                      locale={locale}
+                      price={training.price}
+                    />
+                  ))}
+                </ul>
+              </>
+            )}
+          </section>
+        </div>
       </Provider>
     </ALMErrorBoundary>
   );
