@@ -68,7 +68,9 @@
                                 jcr:lastModified="{Date}2022-04-11T14:50:44.483+05:30"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="learning/components/categories">
+                                sling:resourceType="learning/components/categories"
+                                leftCarouselImgRef="/content/dam/learning/site/Carousel-Left.svg"
+                                rightCarouselImgRef="/content/dam/learning/site/Carousel-Right.svg">
                                 <categories jcr:primaryType="nt:unstructured">
                                     <item0
                                         jcr:primaryType="nt:unstructured"
@@ -163,7 +165,7 @@
                                 sling:resourceType="learning/components/teaser"
                                 actionsEnabled="true"
                                 descriptionFromPage="false"
-                                fileReference="/content/dam/learning/site/templates/Welcome-1.png"
+                                fileReference="/content/dam/learning/site/news/News-1.png"
                                 textIsRich="true"
                                 titleFromPage="false">
                                 <actions jcr:primaryType="nt:unstructured">
@@ -183,7 +185,7 @@
                                 sling:resourceType="learning/components/teaser"
                                 actionsEnabled="true"
                                 descriptionFromPage="false"
-                                fileReference="/content/dam/learning/site/templates/Welcome-1.png"
+                                fileReference="/content/dam/learning/site/news/News-2.png"
                                 textIsRich="true"
                                 titleFromPage="false">
                                 <actions jcr:primaryType="nt:unstructured">
@@ -227,7 +229,8 @@
                             skillsFilter="true"
                             skillsLevelFilter="true"
                             statusFilter="false"
-                            typeFilter="true"/>
+                            typeFilter="true"
+                            citiesFilter="false"/>
                     </container_2>
                 </container>
             </container>

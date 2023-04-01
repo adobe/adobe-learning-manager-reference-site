@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { useMemo } from "react";
-import { cardColors } from "../common/Theme";
+import { useAccount } from "../hooks/account/useAccount";
 import { CardBgStyle, InstanceBadge, Skill } from "../models/custom";
 import {
   PrimeLearningObject,
@@ -19,28 +19,52 @@ import {
   PrimeLocalizationMetadata,
   PrimeResource,
 } from "../models/PrimeModels";
+import { COURSE, LEARNING_PROGRAM } from "./constants";
+import { getALMConfig } from "./global";
+import { themesMap } from "./themes";
 import { getPreferredLocalizedMetadata } from "./translationService";
 
+interface CardIconDetials {
+  cardIconUrl: string;
+  color: string;
+  bannerUrl: string;
+  cardBgStyle: CardBgStyle;
+  listThumbnailBgStyle: CardBgStyle;
+}
+
 const useCardIcon = (training: PrimeLearningObject) => {
-  const cardIconDetials: { [key: string]: string } = useMemo(() => {
+  const cardIconDetials: CardIconDetials = useMemo(() => {
     if (!training) {
       return {
         cardIconUrl: "",
         color: "",
         bannerUrl: "",
+        cardBgStyle: {} as CardBgStyle,
+        listThumbnailBgStyle: {} as CardBgStyle,
       };
     }
-    //TO-DO pick from attributes or fall back to one default set of colors
-    const themeColors = cardColors["prime-default"];
+
+    const theme = getALMConfig().themeData;
+    const themeColors = theme
+      ? themesMap[theme.name]
+      : themesMap["Prime Default"];
     const colorCode = training
       ? parseInt(training.id?.split(":")[1], 10) % 12
       : 0;
 
+    const cardIconUrl = `https://cpcontents.adobe.com/public/images/default_card_icons/${colorCode}.svg`;
+    const color = themeColors[colorCode];
     return {
-      //TODO: updated the url to akamai from config
-      cardIconUrl: `https://cpcontents.adobe.com/public/images/default_card_icons/${colorCode}.svg`,
-      color: themeColors[colorCode],
+      cardIconUrl: cardIconUrl,
+      color: color,
       bannerUrl: training?.bannerUrl,
+      cardBgStyle: getCardBackgroundStyle(training, cardIconUrl, color, false),
+      listThumbnailBgStyle: getCardBackgroundStyle(
+        training,
+        cardIconUrl,
+        color,
+        true
+      ),
     };
   }, [training]);
 
@@ -49,29 +73,28 @@ const useCardIcon = (training: PrimeLearningObject) => {
   };
 };
 
-const useCardBackgroundStyle = (
+const getCardBackgroundStyle = (
   training: PrimeLearningObject,
   cardIconUrl: string,
-  color: string
+  color: string,
+  isListView?: boolean
 ): CardBgStyle => {
-  return useMemo(() => {
-    if (!training) {
-      return {};
-    }
-    return training.imageUrl
-      ? {
-          backgroundImage: `url(${training.imageUrl})`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-        }
-      : {
-          background: `${color} url(
+  if (!training) {
+    return {};
+  }
+  return training.imageUrl
+    ? {
+        backgroundImage: `url(${training.imageUrl})`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+      }
+    : {
+        background: `${color} url(
                   ${cardIconUrl}
               ) center center no-repeat`,
-          backgroundSize: "80px",
-        };
-  }, [cardIconUrl, color, training]);
+        backgroundSize: isListView ? "40px" : "80px",
+      };
 };
 
 const useTrainingSkills = (training: PrimeLearningObject): Skill[] => {
@@ -127,7 +150,7 @@ const getLocale = (
   if (trainingInstance && trainingInstance.loResources) {
     trainingInstance.loResources.forEach((loResource) => {
       loResource.resources?.forEach((resource) => {
-        if (resource?.locale != currentLocale) {
+        if (resource?.locale !== currentLocale) {
           locale.add(resource?.locale);
         }
       });
@@ -168,6 +191,14 @@ const filterLoReourcesBasedOnResourceType = (
   );
 };
 
+const useCanShowRating = (training: PrimeLearningObject) => {
+  const { account } = useAccount();
+  return (
+    (training.loType === LEARNING_PROGRAM || training.loType === COURSE) &&
+    account?.showRating
+  );
+};
+
 const filteredResource = (
   loResource: PrimeLearningObjectResource,
   locale: string
@@ -189,7 +220,6 @@ const useResource = (
 
 export {
   useCardIcon,
-  useCardBackgroundStyle,
   useTrainingSkills,
   useBadge,
   useLocalizedMetaData,
@@ -198,4 +228,5 @@ export {
   useResource,
   filteredResource,
   getLocale,
+  useCanShowRating,
 };

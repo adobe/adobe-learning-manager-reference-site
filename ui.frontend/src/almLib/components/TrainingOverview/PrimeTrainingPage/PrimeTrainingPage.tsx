@@ -14,6 +14,7 @@ import { useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import store from "../../../../store/APIStore";
 import { useTrainingPage } from "../../../hooks/catalog/useTrainingPage";
+import { account } from "../../../store/reducers";
 import {
   CERTIFICATION,
   COMPLETED,
@@ -51,14 +52,7 @@ import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
 import { PrimeTrainingPageMetadata } from "../PrimeTrainingPageMetadata";
 import styles from "./PrimeTrainingPage.module.css";
 
-const getTrainingOverviewAttributes = (config: PrimeConfig) => {
-  let cssSelector = config.mountingPoints.trainingOverviewPage;
-  let trainingOverviewAttributes = getConfigurableAttributes(cssSelector) || {};
-  setALMAttribute("trainingOverviewAttributes", trainingOverviewAttributes);
-  return trainingOverviewAttributes;
-};
-
-const PrimeTrainingPage = () => {
+const PrimeTrainingPage = (props: any) => {
   const config = getALMConfig();
   let trainingOverviewPath = config.trainingOverviewPath;
 
@@ -67,7 +61,7 @@ const PrimeTrainingPage = () => {
     TRAINING_INSTANCE_ID_STR,
   ]);
   let trainingId = pathParams[TRAINING_ID_STR];
-  let trainingInstanceId = pathParams[TRAINING_INSTANCE_ID_STR];
+  let trainingInstanceId = pathParams[TRAINING_INSTANCE_ID_STR]?.split("?")[0];
 
   const {
     name,
@@ -90,13 +84,13 @@ const PrimeTrainingPage = () => {
     isPreviewEnabled,
     alternateLanguages,
     updateFileSubmissionUrl,
+    updateRating,
+    updateBookMark,
+    trainingOverviewAttributes,
   } = useTrainingPage(trainingId, trainingInstanceId);
-  const locale = config.locale;
-  const { formatMessage } = useIntl();
-  const [{ showAuthorInfo, showDescription, showEnrollDeadline }] = useState(
-    () => getTrainingOverviewAttributes(config)
-  );
 
+  const { formatMessage, locale } = useIntl();
+  const loName = name;
   const inputRef = useRef<null | HTMLInputElement>(null);
   const state = store.getState();
   const [isUploading, setIsUploading] = useState(false);
@@ -229,8 +223,7 @@ const PrimeTrainingPage = () => {
         className={styles.submissionLink}
         href={url}
         target="_blank"
-        rel="noreferrer"
-      >
+        rel="noreferrer">
         {getSubmissionFileName(url)}
       </a>
     );
@@ -243,224 +236,232 @@ const PrimeTrainingPage = () => {
   return (
     <ALMErrorBoundary>
       <Provider theme={lightTheme} colorScheme={"light"}>
-        <ALMBackButton />
-        <PrimeTrainingOverviewHeader
-          format={training.loType}
-          color={color}
-          title={name}
-          bannerUrl={bannerUrl}
-          showProgressBar={true}
-          enrollment={training.enrollment}
-        />
-        <div className={styles.pageContainer}>
-          <div className={styles.left}>
-            {showDescription === "true" && (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: richTextOverview || overview || description,
-                }}
-                className={`${styles.overview} ql-editor`}
-              ></div>
-            )}
-            <span className={styles.duration}>
-              {formatMessage(
-                { id: "alm.overview.total.duration" },
-                { 0: convertSecondsToTimeText(training.duration) }
-              )}
-            </span>
+        <div className={styles.backgroundPage}>
+          {!getALMConfig().isTeamsApp && <ALMBackButton />}
+          <PrimeTrainingOverviewHeader
+            format={training.loFormat}
+            color={color}
+            title={name}
+            bannerUrl={bannerUrl}
+            showProgressBar={true}
+            enrollment={training.enrollment}
+            training={training}
+            updateBookMark={updateBookMark}
+          />
 
-            {showCertProof() && (
-              <>
-                <div className={styles.externalCertUploadInfo}>
-                  <span className={styles.externalCertUploadMessage}>
-                    {formatMessage({ id: "alm.overview.externalCertInfo" })}
-                  </span>
-                </div>
-                <hr className={styles.uploadUpperSeperator} />
-                {isUploading && (
-                  <div className={styles.progressArea}>
-                    <ProgressBar
-                      label={formatMessage({
-                        id: "alm.uploading.label",
-                        defaultMessage: "Uploading...",
-                      })}
-                      value={fileUploadProgress}
-                    />
-                    <button
-                      className={styles.primeStatusSvg}
-                      title={formatMessage({
-                        id: "alm.removeUpload.label",
-                        defaultMessage: "Remove upload",
-                      })}
-                      onClick={cancelClickHandler}
-                    >
-                      {SOCIAL_CANCEL_SVG()}
-                    </button>
+          <div className={styles.pageContainer}>
+            <div className={styles.left}>
+              {trainingOverviewAttributes.showDescription === "true" && (
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: richTextOverview || overview || description,
+                  }}
+                  className={`${styles.overview} ql-editor`}></div>
+              )}
+              {/* <span className={styles.duration}>
+                {formatMessage(
+                  { id: "alm.overview.total.duration" },
+                  { 0: convertSecondsToTimeText(training.duration) }
+                )}
+              </span> */}
+
+              {showCertProof() && (
+                <>
+                  <div className={styles.externalCertUploadInfo}>
+                    <span className={styles.externalCertUploadMessage}>
+                      {formatMessage({ id: "alm.overview.externalCertInfo" })}
+                    </span>
                   </div>
-                )}
-                {!isUploading && (
-                  <span className={styles.fileSubmissionContainer}>
-                    {getCertUploadSection(training.enrollment.state)}
-                  </span>
-                )}
-                <hr className={styles.uploadLowerSeperator} />
-                <div className={styles.fileUploadNote}>
+                  <hr className={styles.uploadUpperSeperator} />
+                  {isUploading && (
+                    <div className={styles.progressArea}>
+                      <ProgressBar
+                        label={formatMessage({
+                          id: "alm.uploading.label",
+                          defaultMessage: "Uploading...",
+                        })}
+                        value={fileUploadProgress}
+                      />
+                      <button
+                        className={styles.primeStatusSvg}
+                        title={formatMessage({
+                          id: "alm.removeUpload.label",
+                          defaultMessage: "Remove upload",
+                        })}
+                        onClick={cancelClickHandler}>
+                        {SOCIAL_CANCEL_SVG()}
+                      </button>
+                    </div>
+                  )}
+                  {!isUploading && (
+                    <span className={styles.fileSubmissionContainer}>
+                      {getCertUploadSection(training.enrollment.state)}
+                    </span>
+                  )}
+                  <hr className={styles.uploadLowerSeperator} />
+                  <div className={styles.fileUploadNote}>
+                    {formatMessage({
+                      id: "alm.overview.certUploadNote",
+                      defaultMessage:
+                        "Note: Only one document can be uploaded as a proof.",
+                    })}
+                  </div>
+                </>
+              )}
+
+              {prerequisiteLOs ? (
+                <div className={styles.trainingPrequisiteLabel}>
                   {formatMessage({
-                    id: "alm.overview.certUploadNote",
-                    defaultMessage:
-                      "Note: Only one document can be uploaded as a proof.",
+                    id: "alm.training.overviewPrequisite.label",
                   })}
                 </div>
-              </>
-            )}
+              ) : (
+                ""
+              )}
+              {prerequisiteLOs?.map((prerequisiteLO) => {
+                const { name, description, overview, richTextOverview } =
+                  getPreferredLocalizedMetadata(
+                    prerequisiteLO.localizedMetadata,
+                    locale
+                  );
 
-            {prerequisiteLOs ? (
-              <div className={styles.trainingPrequisiteLabel}>
-                {formatMessage({
-                  id: "alm.training.overviewPrequisite.label",
-                })}
-              </div>
-            ) : (
-              ""
-            )}
-            {prerequisiteLOs?.map((prerequisiteLO) => {
-              const { name, description, overview, richTextOverview } =
-                getPreferredLocalizedMetadata(
-                  prerequisiteLO.localizedMetadata,
-                  locale
-                );
-
-              let showMandatoryLabel = false;
-              let instance = prerequisiteLO.instances[0];
-              prequisiteConstraints?.forEach((prequisiteConstraints) => {
-                if (
-                  prequisiteConstraints.prerequisiteLOId === prerequisiteLO.id
-                ) {
-                  showMandatoryLabel = prequisiteConstraints.mandatory;
-                }
-              });
-              return (
-                <section className={styles.trainingOverviewPrequisite}>
-                  <PrimeTrainingItemContainerHeader
-                    name={name}
-                    description={description}
-                    training={prerequisiteLO}
-                    trainingInstance={instance}
-                    overview={overview}
-                    richTextOverview={richTextOverview}
-                    isPartOfLP={prerequisiteLO.loType === LEARNING_PROGRAM}
-                    showMandatoryLabel={showMandatoryLabel}
-                    isprerequisiteLO={true}
-                    isPreviewEnabled={isPreviewEnabled}
-                    isParentLOEnrolled={isEnrolled}
-                  />
-                </section>
-              );
-            })}
-
-            {loType === COURSE && (
-              <PrimeCourseOverview
-                training={training}
-                launchPlayerHandler={launchPlayerHandler}
-                trainingInstance={trainingInstance}
-                isPreviewEnabled={isPreviewEnabled}
-                updateFileSubmissionUrl={updateFileSubmissionUrl}
-                isParentLOEnrolled={isEnrolled}
-              />
-            )}
-            {loType === CERTIFICATION && (
-              <PrimeTrainingOverview
-                trainings={training.subLOs}
-                launchPlayerHandler={launchPlayerHandler}
-                isPreviewEnabled={isPreviewEnabled}
-                updateFileSubmissionUrl={updateFileSubmissionUrl}
-                isParentLOEnrolled={isEnrolled}
-              />
-            )}
-            {loType === LEARNING_PROGRAM &&
-              sections.map((section, index) => {
-                const trainingIds = section.loIds;
-                const { name } = getPreferredLocalizedMetadata(
-                  section.localizedMetadata,
-                  locale
-                );
-                const subLOs = training.subLOs.filter(
-                  (subLO) => trainingIds.indexOf(subLO.id) !== -1
-                );
-                subLOs.sort(
-                  (trainingId1, trainingId2) =>
-                    trainingIds.indexOf(trainingId1.id) -
-                    trainingIds.indexOf(trainingId2.id)
-                );
-
+                let showMandatoryLabel = false;
+                let instance = prerequisiteLO.instances[0];
+                prequisiteConstraints?.forEach((prequisiteConstraints) => {
+                  if (
+                    prequisiteConstraints.prerequisiteLOId === prerequisiteLO.id
+                  ) {
+                    showMandatoryLabel = prequisiteConstraints.mandatory;
+                  }
+                });
                 return (
-                  <section
-                    className={styles.trainingOverviewContainer}
-                    key={index}
-                  >
-                    <h3 className={styles.sectionName}>{name}</h3>
-                    {!section.mandatory ? (
-                      <div>
-                        <span className={styles.sectionOptional}>
-                          {formatMessage({
-                            id: "alm.overview.section.optional",
-                            defaultMessage: "Optional",
-                          })}
-                        </span>
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                    {section.mandatory &&
-                    section.mandatoryLOCount !== section.loIds?.length ? (
-                      <div>
-                        <span className={styles.sectionOptional}>
-                          {formatMessage(
-                            { id: "alm.overview.section.xOutOfy" },
-                            {
-                              0: section.mandatoryLOCount,
-                              1: section.loIds?.length,
-                            }
-                          )}
-                        </span>
-                      </div>
-                    ) : (
-                      ""
-                    )}
-
-                    <PrimeTrainingOverview
-                      trainings={subLOs}
-                      launchPlayerHandler={launchPlayerHandler}
-                      isPartOfLP={loType === LEARNING_PROGRAM}
-                      showMandatoryLabel={
-                        section.mandatory &&
-                        section.mandatoryLOCount === section.loIds?.length
-                      }
-                      isPreviewEnabled={isPreviewEnabled}
-                      updateFileSubmissionUrl={updateFileSubmissionUrl}
+                  <section className={styles.trainingOverviewPrequisite}>
+                    <PrimeTrainingItemContainerHeader
+                      name={name}
+                      description={description}
+                      training={prerequisiteLO}
+                      trainingInstance={instance}
+                      overview={overview}
+                      richTextOverview={richTextOverview}
+                      isPartOfLP={prerequisiteLO.loType === LEARNING_PROGRAM}
+                      showMandatoryLabel={showMandatoryLabel}
+                      isprerequisiteLO={true}
+                      isPreviewEnabled={false}
                       isParentLOEnrolled={isEnrolled}
                     />
                   </section>
                 );
               })}
-          </div>
-          <div className={styles.right}>
-            <PrimeTrainingPageMetadata
-              skills={skills}
-              training={training}
-              trainingInstance={trainingInstance}
-              badge={instanceBadge}
-              instanceSummary={instanceSummary}
-              showAuthorInfo={showAuthorInfo}
-              showEnrollDeadline={showEnrollDeadline}
-              enrollmentHandler={enrollmentHandler}
-              launchPlayerHandler={launchPlayerHandler}
-              unEnrollmentHandler={unEnrollmentHandler}
-              addToCartHandler={addToCartHandler}
-              jobAidClickHandler={jobAidClickHandler}
-              isPreviewEnabled={isPreviewEnabled}
-              alternateLanguages={alternateLanguages}
-            />
+
+              {loType === COURSE && (
+                <PrimeCourseOverview
+                  training={training}
+                  launchPlayerHandler={launchPlayerHandler}
+                  trainingInstance={trainingInstance}
+                  isPreviewEnabled={isPreviewEnabled}
+                  updateFileSubmissionUrl={updateFileSubmissionUrl}
+                  isParentLOEnrolled={isEnrolled}
+                />
+              )}
+              {loType === CERTIFICATION && (
+                <PrimeTrainingOverview
+                  trainings={training.subLOs}
+                  launchPlayerHandler={launchPlayerHandler}
+                  isPreviewEnabled={isPreviewEnabled}
+                  updateFileSubmissionUrl={updateFileSubmissionUrl}
+                  isParentLOEnrolled={isEnrolled}
+                  parentLoName={loName}
+                />
+              )}
+              {loType === LEARNING_PROGRAM &&
+                sections.map((section, index) => {
+                  const trainingIds = section.loIds;
+                  const { name } = getPreferredLocalizedMetadata(
+                    section.localizedMetadata,
+                    locale
+                  );
+                  const subLOs = training.subLOs.filter(
+                    (subLO) => trainingIds.indexOf(subLO.id) !== -1
+                  );
+                  subLOs.sort(
+                    (trainingId1, trainingId2) =>
+                      trainingIds.indexOf(trainingId1.id) -
+                      trainingIds.indexOf(trainingId2.id)
+                  );
+
+                  return (
+                    <section
+                      className={styles.trainingOverviewContainer}
+                      key={index}>
+                      <h3 className={styles.sectionName}>{name}</h3>
+                      {!section.mandatory ? (
+                        <div>
+                          <span className={styles.sectionOptional}>
+                            {formatMessage({
+                              id: "alm.overview.section.optional",
+                              defaultMessage: "Optional",
+                            })}
+                          </span>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                      {section.mandatory &&
+                      section.mandatoryLOCount !== section.loIds?.length ? (
+                        <div>
+                          <span className={styles.sectionOptional}>
+                            {formatMessage(
+                              { id: "alm.overview.section.xOutOfy" },
+                              {
+                                0: section.mandatoryLOCount,
+                                1: section.loIds?.length,
+                              }
+                            )}
+                          </span>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+
+                      <PrimeTrainingOverview
+                        trainings={subLOs}
+                        launchPlayerHandler={launchPlayerHandler}
+                        isPartOfLP={loType === LEARNING_PROGRAM}
+                        showMandatoryLabel={
+                          section.mandatory &&
+                          section.mandatoryLOCount === section.loIds?.length
+                        }
+                        isPreviewEnabled={isPreviewEnabled}
+                        updateFileSubmissionUrl={updateFileSubmissionUrl}
+                        isParentLOEnrolled={isEnrolled}
+                        parentLoName={loName}
+                      />
+                    </section>
+                  );
+                })}
+            </div>
+            <div className={styles.right}>
+              <PrimeTrainingPageMetadata
+                skills={skills}
+                training={training}
+                trainingInstance={trainingInstance}
+                badge={instanceBadge}
+                instanceSummary={instanceSummary}
+                showAuthorInfo={trainingOverviewAttributes.showAuthorInfo}
+                showEnrollDeadline={
+                  trainingOverviewAttributes.showEnrollDeadline
+                }
+                enrollmentHandler={enrollmentHandler}
+                launchPlayerHandler={launchPlayerHandler}
+                unEnrollmentHandler={unEnrollmentHandler}
+                addToCartHandler={addToCartHandler}
+                jobAidClickHandler={jobAidClickHandler}
+                isPreviewEnabled={isPreviewEnabled}
+                alternateLanguages={alternateLanguages}
+                updateRating={updateRating}
+                updateBookMark={updateBookMark}
+              />
+            </div>
           </div>
         </div>
       </Provider>

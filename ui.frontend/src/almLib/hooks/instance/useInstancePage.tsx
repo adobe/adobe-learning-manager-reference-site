@@ -10,14 +10,19 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useIntl } from "react-intl";
 import APIServiceInstance from "../../common/APIService";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
   PrimeLocalizationMetadata,
 } from "../../models/PrimeModels";
-import { getALMConfig, getALMObject } from "../../utils/global";
-import { useCardBackgroundStyle, useCardIcon } from "../../utils/hooks";
+import {
+  getALMConfig,
+  getALMObject,
+  navigateToLoInTeamsApp,
+} from "../../utils/global";
+import { useCardIcon } from "../../utils/hooks";
 import { checkIfEnrollmentDeadlineNotPassed } from "../../utils/instance";
 import { QueryParams } from "../../utils/restAdapter";
 import { getPreferredLocalizedMetadata } from "../../utils/translationService";
@@ -29,8 +34,7 @@ export const useInstancePage = (
   trainingId: string,
   params: QueryParams = {}
 ) => {
-  const { locale } = getALMConfig();
-
+  const { locale } = useIntl();
   const [currentState, setCurrentState] = useState({
     training: {} as PrimeLearningObject,
     isLoading: true,
@@ -89,12 +93,15 @@ export const useInstancePage = (
       : [];
   }, [training.instances]);
 
-  const { cardIconUrl, color, bannerUrl } = useCardIcon(training);
-  const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
+  const { cardIconUrl, color, bannerUrl, cardBgStyle } = useCardIcon(training);
 
   const selectInstanceHandler = useCallback(
     (instanceId: string) => {
-      getALMObject().navigateToTrainingOverviewPage(training.id, instanceId);
+      if (getALMConfig().isTeamsApp) {
+        navigateToLoInTeamsApp(training.id, instanceId);
+      } else {
+        getALMObject().navigateToTrainingOverviewPage(training.id, instanceId);
+      }
     },
     [training.id]
   );

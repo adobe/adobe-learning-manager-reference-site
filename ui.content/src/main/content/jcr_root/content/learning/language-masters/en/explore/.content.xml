@@ -83,6 +83,7 @@
                         statusFilter="false"
                         skillsLevelFilter="true"
                         typeFilter="true"
+                        citiesFilter="false"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="learning/components/catalog"/>
                 </container>

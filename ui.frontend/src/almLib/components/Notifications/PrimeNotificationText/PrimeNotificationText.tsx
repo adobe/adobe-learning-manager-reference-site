@@ -9,11 +9,10 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
+import { useIntl } from "react-intl";
 import { modifyTimeDDMMYY } from "../../../utils/dateTime";
-import { getALMConfig } from "../../../utils/global";
 import { ReplaceLoTypeWithAccountTerminology } from "../../../utils/translationService";
 import styles from "./PrimeNotificationText.module.css";
-
 
 const feedbackChannels: Array<string> = [
   "course::l1FeedbackPrompt",
@@ -26,33 +25,21 @@ const name1Var2Brace: String = "{{name1}}";
 const name0Var3Brace: String = "{{{name0}}}";
 const name0Var2Brace: String = "{{name0}}";
 
-
-const dateTimeStr : any = ["date", "time"];
+const dateTimeStr: any = ["date", "time"];
 const learningObjType: any = "learningObject";
 
-
 const PrimeNotificationText = (props: any) => {
-  const config = getALMConfig();
-
+  const { locale } = useIntl();
   const notif = props.notification;
   const redirectOverviewPage = props.redirectOverviewPage;
-  
-
 
   let message = notif.message
-        .replace(
-            "course",
-            ReplaceLoTypeWithAccountTerminology("course")
-        )
-        .replace(
-            "program",
-            ReplaceLoTypeWithAccountTerminology("learningProgram")
-        )
-        .replace(
-            "certification",
-            ReplaceLoTypeWithAccountTerminology("certification")
-        );
-
+    .replace("course", ReplaceLoTypeWithAccountTerminology("course"))
+    .replace("program", ReplaceLoTypeWithAccountTerminology("learningProgram"))
+    .replace(
+      "certification",
+      ReplaceLoTypeWithAccountTerminology("certification")
+    );
 
   let name1 = -1,
     name0 = -1,
@@ -84,12 +71,11 @@ const PrimeNotificationText = (props: any) => {
   }
   let subStrPart1;
   let loStr1;
-  let str1Type;  
+  let str1Type;
   let subStrPart2;
-  let loStr2; 
-  let str2Type; 
+  let loStr2;
+  let str2Type;
   let subStrPart3;
-
 
   /*
   Find 3 substrings from start to name0 , name0 to name1, name1 to end. 
@@ -99,61 +85,60 @@ const PrimeNotificationText = (props: any) => {
 
   if (name1 > name0 || name1 === -1) {
     subStrPart1 = name0 > 0 ? message.substring(0, name0) : null;
-    loStr1 = notif.modelNames[0] + " "; 
-    str1Type =  notif.modelTypes[0] ;
-    subStrPart2 = message.substring(endname0, name1 > 0 ? name1 : message.length);
-    loStr2 = notif.modelNames[1] + " "; 
+    loStr1 = notif.modelNames[0] + " ";
+    str1Type = notif.modelTypes[0];
+    subStrPart2 = message.substring(
+      endname0,
+      name1 > 0 ? name1 : message.length
+    );
+    loStr2 = notif.modelNames[1] + " ";
     str2Type = notif.modelTypes[1];
-    subStrPart3 = name1 !== -1 ? message.substring(endname1, message.length) : "";
+    subStrPart3 =
+      name1 !== -1 ? message.substring(endname1, message.length) : "";
   } else {
     subStrPart1 = name1 > 0 ? message.substring(0, name1) : "";
     loStr1 = notif.modelNames[1] + " ";
-    str1Type = notif.modelTypes[1]
-    subStrPart2 = message.substring(endname1, name0 > 0 ? name0 : message.length);
-    loStr2 = notif.modelNames[0] + " ";
-    str2Type = notif.modelTypes[0] 
-    subStrPart3 = name0 !== -1 ? message.substring(endname0, message.length) : "";
-  }
-
-  const getLearningObjClass  = (value: string) => {
-    let className = styles.loLink;
-    return value === learningObjType
-      ? className
-      : '';
-  }
-
-  const formattedNotificationText = (strType : string, loStr: string) => {
-    return (  
-    dateTimeStr.includes(strType) ? (
-        modifyTimeDDMMYY(loStr, config.locale)
-      ) : (
-        <span role="link"
-          className={getLearningObjClass(strType)}
-          onClick={() => {
-            redirectOverviewPage(notif);
-          }}
-        >
-          {loStr}
-        </span>
-      )
+    str1Type = notif.modelTypes[1];
+    subStrPart2 = message.substring(
+      endname1,
+      name0 > 0 ? name0 : message.length
     );
+    loStr2 = notif.modelNames[0] + " ";
+    str2Type = notif.modelTypes[0];
+    subStrPart3 =
+      name0 !== -1 ? message.substring(endname0, message.length) : "";
   }
 
+  const getLearningObjClass = (value: string) => {
+    let className = styles.loLink;
+    return value === learningObjType ? className : "";
+  };
+
+  const formattedNotificationText = (strType: string, loStr: string) => {
+    return dateTimeStr.includes(strType) ? (
+      modifyTimeDDMMYY(loStr, locale)
+    ) : (
+      <span
+        role="link"
+        className={getLearningObjClass(strType)}
+        onClick={() => {
+          redirectOverviewPage(notif);
+        }}
+      >
+        {loStr}
+      </span>
+    );
+  };
 
   return (
     <div>
       {subStrPart1}
-      {formattedNotificationText(str1Type, loStr1)}     
+      {formattedNotificationText(str1Type, loStr1)}
       {subStrPart2}
-      {name1 > 0 ? (
-      formattedNotificationText(str2Type, loStr2)
-      ) : null}
+      {name1 > 0 ? formattedNotificationText(str2Type, loStr2) : null}
       {subStrPart3}
     </div>
   );
-
-
-  
 };
 
 export default PrimeNotificationText;

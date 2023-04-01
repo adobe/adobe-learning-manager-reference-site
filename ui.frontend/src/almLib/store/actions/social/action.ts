@@ -11,6 +11,12 @@ governing permissions and limitations under the License.
 */
 import { AnyAction } from "redux";
 import {
+  PrimeBoard,
+  PrimePost,
+  PrimeComment,
+  PrimeReply,
+} from "../../../models/PrimeModels";
+import {
   LOAD_BOARD_DETAILS,
   LOAD_COMMENTS,
   LOAD_REPLIES,
@@ -19,14 +25,6 @@ import {
   SOCIAL_CMT_DELETE_SUCCESS,
   SOCIAL_POST_DELETE_SUCCESS,
   SOCIAL_REPLY_DELETE_SUCCESS,
-} from ".";
-import {
-  PrimeBoard,
-  PrimePost,
-  PrimeComment,
-  PrimeReply,
-} from "../../../models/PrimeModels";
-import {
   LOAD_SOCIAL_BOARD,
   LOAD_SOCIAL_BOARDS,
   PAGINATE_SOCIAL_BOARDS,

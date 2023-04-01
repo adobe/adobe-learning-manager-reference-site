@@ -54,7 +54,8 @@ public class CatalogImplTest {
 		assertTrue("false".equals(catalogComponent.getTypeFilter()));
 		assertTrue("false".equals(catalogComponent.getFormatFilter()));
 		assertTrue("false".equals(catalogComponent.getPriceFilter()));
-		assertTrue("false".equals(catalogComponent.getTagsFilter()));		
+		assertTrue("false".equals(catalogComponent.getTagsFilter()));	
+		assertTrue("false".equals(catalogComponent.getCitiesFilter()));	
 	}
 
 

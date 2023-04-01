@@ -1,0 +1,68 @@
+/**
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+@import "../../styles/variables.css";
+.starRating {
+  display: inline-block;
+}
+
+.givenRatingStars {
+  display: inline-block;
+  transform: scale(1.75);
+  margin: 8px;
+}
+
+.overviewAvgRating {
+  background-color: var(--prime-color-white);
+  width: fit-content;
+  height: 18px;
+  border-radius: 15px;
+  float: right;
+  text-shadow: none;
+  padding-left: 4px;
+}
+
+.averageRatingCount {
+  display: inline-block;
+  float: right;
+  padding: 0 7px;
+  color: var(--prime-color-nc3);
+  font-weight: 600;
+}
+
+.tbInfoBox {
+  min-width: 280px;
+  padding: 0 10px;
+  display: flex;
+  justify-content: center;
+  background: var(--prime-color-white);
+  align-items: center;
+  border-radius: 15px;
+  height: 30px;
+}
+
+.noRating {
+  padding: 4px 10px;
+  min-width: 2rem;
+  text-align: center;
+  border-radius: 3rem;
+  background-color: rgba(0, 0, 0, 0.45);
+  position: relative;
+  border: 0px;
+  text-align: center;
+}
+
+@media screen and (max-width: 450px) {
+  .overviewAvgRating {
+    font-size: var(--prime-font-size-14);
+    padding-bottom: 20px;
+  }
+}

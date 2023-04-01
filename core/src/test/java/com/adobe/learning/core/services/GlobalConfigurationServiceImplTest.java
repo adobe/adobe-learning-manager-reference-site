@@ -59,7 +59,7 @@ public class GlobalConfigurationServiceImplTest {
 
 	@Test
 	public void testGetAdminConfigs() {
-		//String expectedConfigs = "{\"testConfig\":\"test1\",\"clientId\":\"clientId\",\"clientSecret\":\"clientSecret\",\"almBaseURL\":\"https://learningmanagerqe.adobe.com\",\"refreshToken\":\"refreshToken\",\"theme.background\":\"transparent\",\"pageLocale\":\"en_IN\"}";
+		//String expectedConfigs = "{\"testConfig\":\"test1\",\"clientId\":\"clientId\",\"clientSecret\":\"clientSecret\",\"almBaseURL\":\"https://learningmanagerstage1.adobe.com\",\"refreshToken\":\"refreshToken\",\"theme.background\":\"transparent\",\"pageLocale\":\"en_IN\"}";
 		JsonObject j = globalConfigService.getAdminConfigs(ctx.currentPage());
 		assertTrue("test1".equals(j.get("testConfig").getAsString()));
 		assertTrue("clientId".equals(j.get("clientId").getAsString()));

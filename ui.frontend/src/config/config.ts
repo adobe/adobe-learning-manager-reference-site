@@ -21,6 +21,10 @@ const mountingPoints = {
   profilePageContainer: ".profile__container",
   userSkillsContainer: ".skills__container",
   activeFieldsContainer: ".activeFields__container",
+  navigationBarContainer: ".navigationBar__container",
+  mastHeadContainer: ".mastHead__container",
+  categoryBrowserContainer: ".categoryBrowser__container",
+  footerContainer: ".footer__container",
 };
 
 (window as any).ALM = (window as any).ALM || {};

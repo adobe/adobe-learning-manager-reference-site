@@ -1,0 +1,48 @@
+@import "../../styles/variables.css";
+
+.header {
+  height: 58px;
+  width: 100%;
+  position: relative;
+  z-index: 10;
+  background: var(--prime-color-nc1);
+  height: 70px;
+  margin-top: 20px;
+}
+
+.footer {
+  display: flex;
+  position: relative;
+  width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  height: inherit;
+}
+
+.footerMenu {
+  list-style-type: none;
+  display: flex;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.helpButton,
+.contactAdminButton {
+  border: none;
+  background: transparent;
+  color: var(--prime-color-nc4);
+  cursor: pointer;
+}
+
+.footerSeparator {
+  margin-left: 5px;
+  margin-right: 5px;
+  color: #fb704b;
+}
+
+@media (max-width: 820px) {
+  .footer {
+    max-width: 100%;
+    padding: 0px 10px;
+  }
+}

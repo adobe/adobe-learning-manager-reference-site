@@ -10,6 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { AlertType } from "../../common/Alert/AlertDialog";
 import { useAlert } from "../../common/Alert/useAlert";
@@ -21,12 +22,16 @@ import {
   PrimeLoInstanceSummary,
 } from "../../models/PrimeModels";
 import { getJobaidUrl, isJobaidContentTypeUrl } from "../../utils/catalog";
-import { getALMAccount, getALMConfig, getALMUser } from "../../utils/global";
+import {
+  getALMAccount,
+  getALMConfig,
+  getALMUser,
+  getPageAttributes,
+} from "../../utils/global";
 import {
   filterTrainingInstance,
   getLocale,
   useBadge,
-  useCardBackgroundStyle,
   useCardIcon,
   useLocalizedMetaData,
   useTrainingSkills,
@@ -37,13 +42,22 @@ import { QueryParams, RestAdapter } from "../../utils/restAdapter";
 import { GetTranslation } from "../../utils/translationService";
 
 const DEFAULT_INCLUDE_LO_OVERVIEW =
-  "enrollment.loInstance.loResources.resources,prerequisiteLOs,subLOs.prerequisiteLOs,subLOs.subLOs.prerequisiteLOs,authors,enrollment.loResourceGrades,subLOs.enrollment.loResourceGrades, subLOs.subLOs.enrollment.loResourceGrades, subLOs.subLOs.instances.loResources.resources, subLOs.instances.loResources.resources,instances.loResources.resources,supplementaryLOs.instances.loResources.resources,supplementaryResources,subLOs.enrollment,instances.badge, skills.skillLevel.badge,skills.skillLevel.skill";
+  "enrollment.loInstance.loResources.resources,prerequisiteLOs,subLOs.prerequisiteLOs,subLOs.subLOs.prerequisiteLOs,authors,enrollment.loResourceGrades,subLOs.enrollment.loResourceGrades, subLOs.subLOs.enrollment.loResourceGrades, subLOs.subLOs.instances.loResources.resources, subLOs.instances.loResources.resources,instances.loResources.resources,supplementaryLOs.instances.loResources.resources,supplementaryResources,subLOs.enrollment,instances.badge,skills.skillLevel.badge,skills.skillLevel.skill,instances.loResources.resources.room,subLOs.enrollment.loInstance.loResources.resources";
+
 export const useTrainingPage = (
   trainingId: string,
   instanceId: string = "",
   params: QueryParams = {}
 ) => {
-  const { locale } = getALMConfig();
+  const [trainingOverviewAttributes, setTrainingOverviewAttributes] = useState(
+    () =>
+      getPageAttributes("trainingOverviewPage", "trainingOverviewAttributes")
+  );
+  const updateTrainingOverviewAttributes = getPageAttributes(
+    "trainingOverviewPage",
+    "trainingOverviewAttributes"
+  );
+  const { locale } = useIntl();
   const [almAlert] = useAlert();
 
   const [currentState, setCurrentState] = useState({
@@ -52,20 +66,26 @@ export const useTrainingPage = (
     isLoading: true,
     errorCode: "",
   });
-
-  //const [error, setError] = useState(null);
-  const {
-    trainingInstance,
-    isPreviewEnabled,
-    isLoading,
-    errorCode,
-  } = currentState;
+  const { trainingInstance, isPreviewEnabled, isLoading, errorCode } =
+    currentState;
   const [instanceSummary, setInstanceSummary] = useState(
     {} as PrimeLoInstanceSummary
   );
   const [refreshTraining, setRefreshTraining] = useState(false);
   const training = trainingInstance.learningObject;
   const dispatch = useDispatch();
+
+  const [
+    renderTrainingOverviewAttributes,
+    setRenderTrainingOverviewAttributes,
+  ] = useState(false);
+
+  useEffect(() => {
+    if (training && !renderTrainingOverviewAttributes) {
+      setTrainingOverviewAttributes(updateTrainingOverviewAttributes);
+      setRenderTrainingOverviewAttributes(true);
+    }
+  }, [training]);
 
   useEffect(() => {
     if (!trainingId) return;
@@ -160,8 +180,11 @@ export const useTrainingPage = (
           setRefreshTraining((prevState) => !prevState);
         }
       } catch (error) {
-        almAlert(true, GetTranslation("alm.unenrollment.error"), AlertType.error);
-        //TODO : handle error
+        almAlert(
+          true,
+          GetTranslation("alm.unenrollment.error"),
+          AlertType.error
+        );
       }
     },
     []
@@ -175,7 +198,6 @@ export const useTrainingPage = (
     try {
       return await APIServiceInstance.addProductToCart(trainingInstance.id);
     } catch (error) {
-      // throw error;
       return { items: [], totalQuantity: 0, error: error };
     }
   }, [trainingInstance]);
@@ -247,8 +269,8 @@ export const useTrainingPage = (
     richTextOverview = "",
   } = useLocalizedMetaData(training, locale);
 
-  const { cardIconUrl, color, bannerUrl } = useCardIcon(training);
-  const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
+  const { cardIconUrl, color, bannerUrl, cardBgStyle } = useCardIcon(training);
+
   const skills = useTrainingSkills(training);
   const instanceBadge = useBadge(trainingInstance);
 
@@ -300,6 +322,29 @@ export const useTrainingPage = (
     [dispatch]
   );
 
+  const updateRating = useCallback(
+    async (rating: number, loInstanceId: any) => {
+      const baseApiUrl = getALMConfig().primeApiURL;
+      const userResponse = await getALMUser();
+      const userId = userResponse?.user?.id;
+      const body = {
+        rating: rating,
+      };
+      const headers = { "content-type": "application/json" };
+      try {
+        await RestAdapter.ajax({
+          url: `${baseApiUrl}enrollments/${loInstanceId}_${userId}/rate`,
+          method: "PATCH",
+          body: JSON.stringify(body),
+          headers: headers,
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [dispatch]
+  );
+
   const updateCertificationProofUrl = useCallback(
     async (fileUrl: any, loId: any, loInstanceId: any) => {
       const baseApiUrl = getALMConfig().primeApiURL;
@@ -341,6 +386,21 @@ export const useTrainingPage = (
     [dispatch]
   );
 
+  const updateBookMark = useCallback(
+    async (isBookMarked: boolean, loId: string) => {
+      const baseApiUrl = getALMConfig().primeApiURL;
+      try {
+        await RestAdapter.ajax({
+          url: `${baseApiUrl}/learningObjects/${loId}/bookmark`,
+          method: isBookMarked ? "POST" : "DELETE",
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [dispatch]
+  );
+
   return {
     name,
     description,
@@ -363,9 +423,12 @@ export const useTrainingPage = (
     jobAidClickHandler,
     addToCartHandler,
     errorCode,
+    updateRating,
     updateFileSubmissionUrl,
     updateCertificationProofUrl,
     alternateLanguages,
+    updateBookMark,
+    trainingOverviewAttributes,
   };
   //date create, published, duration
 };

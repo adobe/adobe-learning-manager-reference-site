@@ -18,23 +18,22 @@ import { useTrainingCard } from "../../../hooks/catalog/useTrainingCard";
 import { PrimeLearningObject } from "../../../models/PrimeModels";
 import { JOBAID } from "../../../utils/constants";
 import { modifyTimeDDMMYY } from "../../../utils/dateTime";
-import { getALMConfig } from "../../../utils/global";
+import { navigateToLogin } from "../../../utils/global";
 import { SEND_SVG, THREE_DOTS_MENU_SVG } from "../../../utils/inline_svg";
 import { getFormattedPrice, isCommerceEnabled } from "../../../utils/price";
-import { GetTranslation } from "../../../utils/translationService";
+import { formatMap, GetTranslation } from "../../../utils/translationService";
+import { ALMStarRating } from "../../ALMRatings";
 import styles from "./PrimeTrainingCard.module.css";
+import { useTrainingPage } from "../../../hooks";
+import { useJobAids } from "../../../hooks/useJobAids";
+import { useCanShowRating } from "../../../utils/hooks";
 
-export const formatMap: any = {
-  Elearning: "alm.catalog.card.self.paced",
-  Activity: "alm.catalog.card.activity",
-  Blended: "alm.catalog.card.blended",
-  "Virtual Classroom": "alm.catalog.card.virtual.classroom",
-  Classroom: "alm.catalog.card.classroom",
-  "Self Paced": "alm.catalog.card.self.paced",
-};
 const PrimeTrainingCard: React.FC<{
   training: PrimeLearningObject;
-}> = ({ training }) => {
+  guest?: boolean;
+  signUpURL?: string;
+  almDomain?: string;
+}> = ({ training, guest, signUpURL, almDomain }) => {
   const {
     format,
     type,
@@ -46,9 +45,28 @@ const PrimeTrainingCard: React.FC<{
     enrollment,
     cardClickHandler,
   } = useTrainingCard(training);
+
+  const { enrollmentHandler, unEnrollmentHandler, jobAidClickHandler } =
+    useTrainingPage(training.id);
+  const {
+    enroll,
+    unenroll,
+    jobAidAddToListMsg,
+    jobAidRemoveToListMsg,
+    nameClickHandler,
+    isEnrolled,
+    showAlert,
+  } = useJobAids(
+    training,
+    enrollmentHandler,
+    unEnrollmentHandler,
+    jobAidClickHandler
+  );
+
   const [isHovered, setIsHovered] = useState(false);
-  const { formatMessage } = useIntl();
-  const { locale } = getALMConfig();
+  const { formatMessage, locale } = useIntl();
+  const ratingsCount = training?.rating?.ratingsCount;
+  const avgRating = training?.rating?.averageRating;
 
   const onMouseEnterHandler = () => {
     setIsHovered(true);
@@ -58,12 +76,79 @@ const PrimeTrainingCard: React.FC<{
     setIsHovered(false);
   };
 
+  const addJobAid = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.stopPropagation();
+    enroll();
+  };
+
+  const removeJobAid = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.stopPropagation();
+    unenroll();
+  };
+
   const skillsAsString = skillNames;
   const descriptionHtml = description ? (
     <p className={styles.description}>{description}</p>
   ) : (
     ""
   );
+
+  const jobAidOptions =
+    training.loType === JOBAID ? (
+      <div>
+        <a href="#" role="button" onClick={nameClickHandler}>
+          <div className={styles.jobAidAction}>
+            {GetTranslation("alm.jobaid.view")}
+          </div>
+        </a>
+        {!isEnrolled ? (
+          <a
+            href="javascript:void(0)"
+            role="button"
+            onClick={(e) => {
+              addJobAid(e);
+            }}
+          >
+            <div className={styles.jobAidAction}>{jobAidAddToListMsg}</div>
+          </a>
+        ) : (
+          <a
+            href="javascript:void(0)"
+            role="button"
+            onClick={(e) => {
+              removeJobAid(e);
+            }}
+          >
+            <div className={styles.jobAidAction}>{jobAidRemoveToListMsg}</div>
+          </a>
+        )}
+        {isEnrolled &&
+          training.instances![0] !== undefined &&
+          training.instances![0].loResources !== undefined &&
+          training.instances![0].loResources![0].resources !== undefined &&
+          training.instances![0].loResources![0].resources![0].contentType !==
+            "OTHER" &&
+          training.instances![0].loResources![0].resources![0].downloadUrl && (
+            <a
+              href={
+                training.instances![0].loResources![0].resources![0].downloadUrl
+              }
+              role="button"
+              download
+              target="_blank"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <div className={styles.jobAidAction}>
+                {GetTranslation("alm.text.download")}
+              </div>
+            </a>
+          )}
+      </div>
+    ) : (
+      ""
+    );
   const enrollmentHtml = enrollment ? (
     <ProgressBar
       showValueLabel={false}
@@ -122,8 +207,13 @@ const PrimeTrainingCard: React.FC<{
         <div
           className={cardClass}
           onMouseLeave={onMouseLeaveHandler}
-          // href={"javascript:void(0)"}
-          onClick={cardClickHandler}
+          onClick={
+            guest
+              ? () => {
+                  navigateToLogin(signUpURL, training.id, almDomain);
+                }
+              : cardClickHandler
+          }
           tabIndex={0}
           aria-label={name}
         >
@@ -132,8 +222,6 @@ const PrimeTrainingCard: React.FC<{
           {imageUrl ? <div className={styles.backdrop}></div> : ""}
 
           <div className={styles.detailsContainer}>
-            
-
             <div className={styles.bottomBar}>
               <div className={styles.title}>{name}</div>
               <div className={styles.trainingType}>{trainingTypeLabel}</div>
@@ -163,6 +251,7 @@ const PrimeTrainingCard: React.FC<{
                     ))}
                 </div>
                 <div className={styles.showOnHover}>
+                  {jobAidOptions}
                   {descriptionHtml}
                   {completionDeadline ? (
                     <div className={styles.skillsContainer}>
@@ -181,7 +270,7 @@ const PrimeTrainingCard: React.FC<{
                     ""
                   )}
 
-                  {skillsAsString ? (
+                  {type !== JOBAID && skillsAsString ? (
                     <>
                       <div className={styles.skillsContainer}>
                         <span className={styles.skiillsLabel}>
@@ -224,6 +313,14 @@ const PrimeTrainingCard: React.FC<{
 
             <div className={styles.topBar}>
               <div className={styles.format}>{fomatLabel}</div>
+              {useCanShowRating(training) ? (
+                <ALMStarRating
+                  avgRating={avgRating}
+                  ratingsCount={ratingsCount}
+                />
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>

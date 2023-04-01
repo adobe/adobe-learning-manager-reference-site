@@ -1,0 +1,128 @@
+@import "../../styles/variables.css";
+.categoryBrowserSection {
+  width: 100%;
+}
+
+.categoryHeadingSection {
+  max-width: 716px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.primeCategoriesHeadline {
+  margin-top: 60px;
+  text-align: center;
+  font-size: var(--prime-font-size-28);
+  font-weight: 700;
+  letter-spacing: 0px;
+  color: var(--prime-color-nc1);
+}
+
+.primeCategoriesDescription {
+  text-align: center;
+  font-size: var(--prime-font-size-18);
+  letter-spacing: 0px;
+  color: var(--prime-color-nc1);
+}
+
+.carousel {
+  display: flex;
+  justify-content: center;
+}
+
+.categoriesWrapper {
+  display: flex;
+  padding: 40px 0px;
+  max-width: 1074px;
+  overflow: hidden;
+}
+
+.categoryList {
+  margin-right: 15px;
+  height: auto;
+  width: 348px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.categoryList:last-child {
+  margin-right: 0px;
+}
+
+.categoryImage {
+  width: 234px;
+  height: 234px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.categoryHeading {
+  font: normal normal bold 18px/23px source-sans-pro;
+  letter-spacing: 0;
+  color: var(--prime-color-nc1);
+  padding-top: 28px;
+  height: 50px;
+  overflow: hidden;
+}
+
+.categoryDescription {
+  font: normal normal normal 16px/26px source-sans-pro;
+  letter-spacing: 0;
+  color: var(--prime-color-nc1);
+  padding-top: 26px;
+  height: 100px;
+  overflow: hidden;
+}
+
+.exploreCategory {
+  margin-top: 32px;
+  background: var(--prime-color-primary) 0 0 no-repeat padding-box;
+  border-radius: 24px;
+  width: 160px;
+  height: 48px;
+  text-align: center;
+  font: normal normal 600 16px/22px source-sans-pro;
+  letter-spacing: 0;
+  color: var(--prime-color-nc4);
+  cursor: pointer;
+  border: 0;
+}
+
+.categoriesLeft,
+.categoriesRight {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.categoriesLeft {
+  margin-right: 15px;
+}
+
+.categoriesRight {
+  margin-left: 15px;
+}
+
+.categoriesLeftIcon,
+.categoriesRightIcon,
+.disabledButton {
+  background: transparent;
+  border: none;
+  width: 40px;
+}
+
+.categoriesLeftIcon:hover,
+.categoriesRightIcon:hover {
+  cursor: pointer;
+}
+
+.disabledButton {
+  opacity: 0.2;
+}
+
+@media (max-width: 820px) {
+  .categoryList {
+    max-width: 100%;
+  }
+}

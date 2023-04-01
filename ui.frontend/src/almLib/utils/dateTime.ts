@@ -9,26 +9,27 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
+import { GetTranslationReplaced, GetTranslation } from "./translationService";
 export const convertSecondsToTimeText = (time: number) => {
   if (!time || time === 0) {
-    return "0 mins";
+    return GetTranslationReplaced("alm.text.mins","0");
   }
   if (time === 1) {
-    return `1 sec`;
+    return GetTranslation("alm.text.1sec");
   }
   if (time > 1 && time < 60) {
-    return `${time} secs`;
+    return GetTranslationReplaced("alm.text.secs",`${time}`);
   }
   if (time === 60) {
-    return `1 min`;
+    return GetTranslation("alm.text.1min");
   }
   if (time < 3600) {
-    return `${Math.round(time / 60)} mins`;
+    return (time % 60)==0 ? GetTranslationReplaced("alm.text.mins",`${Math.floor(time / 60)}`) : GetTranslationReplaced("alm.text.mins",`${Math.floor(time / 60)}`)+" "+GetTranslationReplaced("alm.text.secs",`${(time % 60)}`);
   }
   const hours = Math.floor(time / 3600);
-  const hoursText = hours === 1 ? "1 hr" : `${hours} hrs`;
+  const hoursText = hours === 1 ? GetTranslation("alm.text.1hr") : GetTranslationReplaced("alm.text.hrs",`${hours}`);
   const mins = Math.round((time % 3600) / 60);
-  const minsText = mins === 0 ? "" : mins === 1 ? "1 min" : `${mins} mins`;
+  const minsText = mins === 0 ? "" : mins === 1 ? GetTranslation("alm.text.1min") : GetTranslationReplaced("alm.text.mins",`${mins}`);
 
   return `${hoursText} ${minsText}`;
 };
@@ -42,36 +43,36 @@ export const timeSince = (date: any) => {
 
   if (interval > 1) {
     return Math.floor(interval) === 1
-      ? "1 Year"
-      : Math.floor(interval) + " years";
+      ? GetTranslation("alm.text.1year")
+      : GetTranslationReplaced("alm.text.years",(Math.floor(interval)).toString());
   }
   interval = seconds / 2592000;
   if (interval > 1) {
     return Math.floor(interval) === 1
-      ? "1 month"
-      : Math.floor(interval) + " months";
+      ? GetTranslation("alm.text.1month")
+      : GetTranslationReplaced("alm.text.months",(Math.floor(interval)).toString());
   }
   interval = seconds / 86400;
   if (interval > 1) {
     return Math.floor(interval) === 1
-      ? "1 day"
-      : Math.floor(interval) + " days";
+      ? GetTranslation("alm.text.1day")
+      : GetTranslationReplaced("alm.text.days",(Math.floor(interval)).toString());
   }
   interval = seconds / 3600;
   if (interval > 1) {
     return Math.floor(interval) === 1
-      ? "1 hour"
-      : Math.floor(interval) + " hours";
+      ? GetTranslation("alm.text.1hour")
+      : GetTranslationReplaced("alm.text.hours",(Math.floor(interval)).toString());
   }
   interval = seconds / 60;
   if (interval > 1) {
     return Math.floor(interval) === 1
-      ? "1 minute"
-      : Math.floor(interval) + " minutes";
+      ? GetTranslation("alm.text.1minute")
+      : GetTranslationReplaced("alm.text.minutes",(Math.floor(interval)).toString());
   }
   return Math.floor(seconds) === 1
-    ? "1 second"
-    : Math.floor(interval) + " seconds";
+    ? GetTranslation("alm.text.1second")
+    : GetTranslationReplaced("alm.text.seconds",(Math.floor(interval)).toString());
 };
 
 export function modifyTime(dateToModify: string, locale: string) {

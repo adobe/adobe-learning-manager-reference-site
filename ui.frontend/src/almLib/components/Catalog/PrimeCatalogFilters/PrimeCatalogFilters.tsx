@@ -28,6 +28,7 @@ const PrimeCatalogFilters = (props: any) => {
     loFormat,
     isLoading,
     tagName,
+    cities,
     skillLevel,
     duration,
     catalogs,
@@ -60,8 +61,12 @@ const PrimeCatalogFilters = (props: any) => {
     return <ALMLoader />;
   }
 
-  const renderFilterList = (filter: any) => {
-    if (!filter || !filter.list || filter.list?.length <= 1) {
+  const renderFilterList = (filter: any, minimumValuesToDisplayFilter = 2) => {
+    if (
+      !filter ||
+      !filter.list ||
+      filter.list?.length < minimumValuesToDisplayFilter
+    ) {
       return "";
     }
     return catalogAttributes[filter.type] === "true" ? (
@@ -126,7 +131,10 @@ const PrimeCatalogFilters = (props: any) => {
   return (
     <>
       <div className={styles.primeFilterContainer}>
-        <h3 className={styles.filtersLabel}>Filters</h3>
+        <h3 className={styles.filtersLabel}>
+          {" "}
+          {GetTranslation("alm.catalog.filters")}
+        </h3>
         {/* catalog Filter start */}
         {renderFilterList(catalogs)}
         {/* catalog Filter ends */}
@@ -152,15 +160,22 @@ const PrimeCatalogFilters = (props: any) => {
         {/* skillLevel Filter ends */}
 
         {/* tagName Filter start */}
-        {renderFilterList(tagName)}
+        {renderFilterList(tagName, 1)}
         {/* tagName Filter ends */}
 
         {/* learnerState Filter start */}
         {isLoggedIn && renderFilterList(learnerState)}
         {/* learnerState Filter ends */}
 
+        {/* cities Filter start */}
+        {renderFilterList(cities)}
+        {/* cities Filter ends */}
+
         {/* Price Filter start */}
-        {isCommerceEnabled() && catalogAttributes["price"] === "true" && price && price.maxPrice ? (
+        {isCommerceEnabled() &&
+        catalogAttributes["price"] === "true" &&
+        price &&
+        price.maxPrice ? (
           <div key={"price"} className={styles.container}>
             <h3 className={`${styles.typeLabel} ${styles.price}`}>
               {GetTranslation("alm.catalog.filter.price.label", true)}

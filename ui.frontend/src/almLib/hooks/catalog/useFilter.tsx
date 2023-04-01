@@ -17,6 +17,7 @@ import { State } from "../../store/state";
 import {
   ActionMap,
   ACTION_MAP,
+  filtersDefaultState,
   FilterState,
   FilterType,
   UpdateFiltersEvent,
@@ -44,13 +45,13 @@ export const useFilter = () => {
     if (action && action instanceof Function) dispatch(action(payload));
   };
 
-  const updateFilters = (data: UpdateFiltersEvent) => {
-    const filters = filterState[data.filterType as keyof FilterState]!;
+  const updateFilters = (data: UpdateFiltersEvent, setToFalse?: boolean) => {
+    const filters = setToFalse ? filtersDefaultState[data.filterType as keyof FilterState] : filterState[data.filterType as keyof FilterState]!;
     let payload = "";
 
     filters.list?.forEach((item) => {
       if (item.label === data.label) {
-        item.checked = !item.checked;
+        item.checked = setToFalse ? false : !item.checked;
       }
       if (item.checked) {
         payload = payload ? `${payload},${item.value}` : `${item.value}`;
@@ -98,5 +99,6 @@ export const useFilter = () => {
     isLoading,
     filters: computedFilters,
     updatePriceFilter,
+    setFilterState,
   };
 };

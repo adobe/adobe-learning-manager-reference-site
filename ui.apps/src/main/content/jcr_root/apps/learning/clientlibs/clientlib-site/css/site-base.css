@@ -70,7 +70,7 @@ governing permissions and limitations under the License.
   margin-top: 14px;
 }
 
-@media screen and (max-width: 414px) {
+@media screen and (max-width: 450px) {
   .cmp-teaser .cmp-teaser__content {
     left: 20px;
   }
@@ -415,7 +415,7 @@ governing permissions and limitations under the License.
   }
 }
 
-@media screen and (max-width: 414px) {
+@media screen and (max-width: 450px) {
   #home-catalog-container,
   #catalog-page-container,
   #home-categories-container,

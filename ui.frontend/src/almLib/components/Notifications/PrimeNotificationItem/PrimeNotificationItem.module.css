@@ -17,7 +17,7 @@ governing permissions and limitations under the License.
   justify-content: space-between;
   font-weight: var(--prime-font-weight-600);
   font-size: var(--prime-font-size-14);
-  border: 1px solid var(--prime-color-nc5);
+  border: 1px solid var(--prime-color-nc4);
   opacity: 1;
   color: var(--prime-color-nc1);
   list-style-type: none;
@@ -36,7 +36,7 @@ governing permissions and limitations under the License.
 .notificationTime {
   /* margin-top: 8px; */
   border: 0;
-  color: var(--prime-color-nc4);
+  color: var(--prime-color-nc3);
   height: 20px;
   font-size: var(--prime-font-size-12);
 }

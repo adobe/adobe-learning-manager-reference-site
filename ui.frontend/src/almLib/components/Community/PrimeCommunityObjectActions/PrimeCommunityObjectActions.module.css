@@ -68,7 +68,7 @@ governing permissions and limitations under the License.
   font-size: 12px;
 }
 
-@media (max-width: 414px) {
+@media (max-width: 450px) {
   .primeObjectCommentsCount {
     margin-right: 10px;
   }

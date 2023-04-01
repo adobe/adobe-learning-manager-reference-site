@@ -94,7 +94,7 @@ export function GetPlayerURl(trainingId = "", moduleId = ""): string {
   const accessToken = getAccessToken();
   const authKey = `access_token=${accessToken}`;
   //to-do handle preview/guest
-  let url = `${hostName}${playerEndPoint}${key}&${authKey}&hostname=${hostName}&trapfocus=true`;
+  let url = `${hostName}${playerEndPoint}${key}&${authKey}&hostname=${hostName}&trapfocus=true&is_native=true`;
   if (moduleId) {
     url = `${url}&module_id=${moduleId}`;
   }

@@ -19,7 +19,7 @@ governing permissions and limitations under the License.
 }
 .name {
   display: inline-block;
-  max-width: 90%;
+  max-width: 70%;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -28,7 +28,7 @@ governing permissions and limitations under the License.
 }
 .jobAidIcon {
   display: inline-block;
-  width: 10%;
+  width: 30%;
   cursor: pointer;
 }
 .jobAidIcon svg {

@@ -13,6 +13,7 @@ import { Button } from "@adobe/react-spectrum";
 import ChevronDown from "@spectrum-icons/workflow/ChevronDown";
 import ChevronUp from "@spectrum-icons/workflow/ChevronUp";
 import React, { useMemo, useState } from "react";
+import { useIntl } from "react-intl";
 import {
   PrimeLearningObject,
   PrimeLocalizationMetadata,
@@ -31,6 +32,7 @@ const PrimeLPItemContainer: React.FC<{
   showMandatoryLabel?: boolean;
   isPreviewEnabled: boolean;
   updateFileSubmissionUrl: Function;
+  parentLoName: string;
 }> = (props) => {
   const {
     training,
@@ -40,17 +42,21 @@ const PrimeLPItemContainer: React.FC<{
     isPreviewEnabled = false,
     updateFileSubmissionUrl,
     isParentLOEnrolled,
+    parentLoName
   } = props;
 
   const [isCollapsed, setIsCollapsed] = useState(true);
-
-  const { locale } = getALMConfig();
+  const { locale } = useIntl();
 
   const trainingInstance = filterTrainingInstance(training);
-  const { name, description, overview, richTextOverview } =
-    useMemo((): PrimeLocalizationMetadata => {
-      return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
-    }, [training.localizedMetadata, locale]);
+  const {
+    name,
+    description,
+    overview,
+    richTextOverview,
+  } = useMemo((): PrimeLocalizationMetadata => {
+    return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
+  }, [training.localizedMetadata, locale]);
 
   const clickHandler = () => {
     setIsCollapsed((prevState) => !prevState);
@@ -72,7 +78,7 @@ const PrimeLPItemContainer: React.FC<{
         showMandatoryLabel={showMandatoryLabel}
         isPreviewEnabled={isPreviewEnabled}
         isParentLOEnrolled={isParentLOEnrolled}
-
+        parentLoName={parentLoName}
       />
       <div className={styles.collapsibleContainer}>
         <Button variant="overBackground" isQuiet onPress={clickHandler}>
@@ -92,6 +98,7 @@ const PrimeLPItemContainer: React.FC<{
                   isPreviewEnabled={isPreviewEnabled}
                   updateFileSubmissionUrl={updateFileSubmissionUrl}
                   isParentLOEnrolled={isParentLOEnrolled}
+                  parentLoName={parentLoName}
                 ></PrimeCourseItemContainer>
               </div>
             );

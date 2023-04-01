@@ -1,5 +1,13 @@
-import { PrimeLearningObject, PrimeLearningObjectInstanceEnrollment } from "../models";
-import { COMPLETED, PENDING_ACCEPTANCE, PENDING_APPROVAL, WAITING } from "./constants";
+import {
+  PrimeLearningObject,
+  PrimeLearningObjectInstanceEnrollment,
+} from "../models";
+import {
+  COMPLETED,
+  PENDING_ACCEPTANCE,
+  PENDING_APPROVAL,
+  WAITING,
+} from "./constants";
 import { getALMObject, updateURLParams } from "./global";
 
 export function checkIsEnrolled(

@@ -41,7 +41,7 @@ governing permissions and limitations under the License.
   border-color: var(--prime-color-nc3) !important;
 }
 
-@media screen and (max-width: 414px) {
+@media screen and (max-width: 450px) {
   .container {
     margin-left: auto;
     width: 70%;

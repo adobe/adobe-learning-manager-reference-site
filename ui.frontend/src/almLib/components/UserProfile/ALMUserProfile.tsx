@@ -112,8 +112,7 @@ const ALMUserProfile = () => {
                   isEditImageState()
                     ? styles.detailsContainerWithBottomPadding
                     : styles.detailsContainer
-                }
-              >
+                }>
                 <div className={styles.image}>
                   <div className={styles.imageWrapper}>
                     <img
@@ -126,9 +125,8 @@ const ALMUserProfile = () => {
                     <Button
                       variant="primary"
                       isQuiet
-                      UNSAFE_className={styles.button}
-                      onPress={changeImageClickHandler}
-                    >
+                      UNSAFE_className={styles.profileActionButton}
+                      onPress={changeImageClickHandler}>
                       {formatMessage({
                         id: "alm.profile.change.image",
                         defaultMessage: "Change image",
@@ -140,9 +138,8 @@ const ALMUserProfile = () => {
                       <Button
                         variant="primary"
                         isQuiet
-                        UNSAFE_className={styles.button}
-                        onPress={startFileUpload}
-                      >
+                        UNSAFE_className={styles.profileActionButton}
+                        onPress={startFileUpload}>
                         {formatMessage({
                           id: "alm.profile.edit.image",
                           defaultMessage: "Edit image",
@@ -152,9 +149,8 @@ const ALMUserProfile = () => {
                         <Button
                           variant="primary"
                           isQuiet
-                          UNSAFE_className={styles.button}
-                          onPress={deleteImage}
-                        >
+                          UNSAFE_className={styles.profileActionButton}
+                          onPress={deleteImage}>
                           {formatMessage({
                             id: "alm.profile.delete.image",
                             defaultMessage: "Delete image",
@@ -167,8 +163,7 @@ const ALMUserProfile = () => {
                     variant="cta"
                     isQuiet
                     UNSAFE_className={styles.editIcon}
-                    onPress={startFileUpload}
-                  >
+                    onPress={startFileUpload}>
                     <Edit />
                   </Button>
                   {isUploading && (
@@ -186,8 +181,7 @@ const ALMUserProfile = () => {
                           id: "alm.removeUpload.label",
                           defaultMessage: "Remove upload",
                         })}
-                        onClick={cancelClickHandler}
-                      >
+                        onClick={cancelClickHandler}>
                         {SOCIAL_CANCEL_SVG()}
                       </button>
                     </div>
@@ -201,8 +195,7 @@ const ALMUserProfile = () => {
                           id: "alm.removeUpload.label",
                           defaultMessage: "Remove upload",
                         })}
-                        onClick={cancelClickHandler}
-                      >
+                        onClick={cancelClickHandler}>
                         {SOCIAL_CANCEL_SVG()}
                       </button>
                     </div>

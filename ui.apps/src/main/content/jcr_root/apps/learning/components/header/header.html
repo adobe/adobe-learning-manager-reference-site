@@ -18,7 +18,7 @@ governing permissions and limitations under the License.
             <li>
                 <button class="vert-nav-close-button">
                     <span class="vert-nav-close-icon">
-                        <img src="/content/dam/learning/site/Smock_Close.png" />
+                        <img src="${properties.smokeImgRef}" />
                     </span>
                 </button>
             </li>
@@ -56,7 +56,7 @@ governing permissions and limitations under the License.
 <div class="alm-header-cont">
 
     <!-- Block for mobile immersive bar -->
-    <img class="alm-header-menu" src="/content/dam/learning/site/ShowMenu.svg" ></img>
+    <img class="alm-header-menu" src="${properties.showMenuImgRef}" ></img>
 
     <!-- block for image left align -->
     <img class="alm-header-logo" src="${properties.fileReference}"></img>
@@ -84,13 +84,12 @@ governing permissions and limitations under the License.
     <!-- block for icons right align -->
     <div class="alm-header-icons">
         <sly data-sly-resource="${resource.path @ resourceType='learning/components/notification', appendPath='/*'}"/>
-        <!-- <img class="alm-header-notification" src="/content/dam/learning/site/Smock_Bell.png" ></img> -->
         <div class="alm-header-cart-cont">
-            <img class="alm-header-cart" src="/content/dam/learning/site/cart-icon.svg" style="display: none;"></img>
+            <img class="alm-header-cart" src="${properties.cartIconImgRef}" style="display: none;"></img>
             <span class="alm-header-cart-counter"></span>
         </div>
         <img class="alm-header-profile" src="" ></img>
-        <img class="alm-header-down" src="/content/dam/learning/site/ChevronDown.svg"></img>
+        <img class="alm-header-down" src="${properties.downIconImgRef}"></img>
         <div class="alm-header-profile-options">
             <ul>
                 <li><span class="alm-profile__text">Your Profile</span></li>

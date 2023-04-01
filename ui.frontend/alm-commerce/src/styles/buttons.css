@@ -7,7 +7,7 @@
   display: block;
   font-size: var(--prime-font-size-16);
   font-weight: 600;
-  min-height: 32px;
+  min-height: 28px;
   min-width: 50px;
   padding: 5px 15px;
   border: 2px solid var(--prime-color-white);

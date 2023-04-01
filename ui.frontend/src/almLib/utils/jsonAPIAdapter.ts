@@ -10,6 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { ALMToCommerceTypes } from "../common/CommerceCustomHooks";
+import "../common/ESCustomHooks";
 import {
   CommercePrimeLearningObject,
   ESPrimeLearningObject,
@@ -20,6 +21,7 @@ import {
   PrimeLocalizationMetadata,
   PrimeRating,
 } from "../models";
+import { ENGLISH_LOCALE } from "./constants";
 import { getALMConfig } from "./global";
 
 let store: Store | undefined;
@@ -323,7 +325,7 @@ export function parseESResponse(
 ): PrimeLearningObject[] {
   let loResponse: PrimeLearningObject[] = [];
   response.forEach((item) => {
-    const locale = getALMConfig().locale;
+    const locale = getALMConfig().locale || ENGLISH_LOCALE;
     let lo: Partial<PrimeLearningObject> = {};
     let rating: PrimeRating;
     let localizedData: PrimeLocalizationMetadata;
@@ -385,6 +387,14 @@ export function parseESResponse(
   return loResponse;
 }
 
+const getIntRating = (rating: string) => {
+  let numRating = 0;
+  if (rating) {
+    numRating = parseInt(rating);
+  }
+  return numRating;
+};
+
 export function parseCommerceResponse(
   response: CommercePrimeLearningObject[],
   filtersFromStorage: any = []
@@ -415,7 +425,7 @@ export function parseCommerceResponse(
       _transient: "",
       description: item.description.html,
       id: "",
-      locale: getALMConfig().locale, //need to get from locale
+      locale: getALMConfig().locale || ENGLISH_LOCALE, //need to get from locale
       name: item.name,
       overview: "",
       richTextOverview: "",
@@ -424,8 +434,8 @@ export function parseCommerceResponse(
     lo.localizedMetadata = [localizedData];
 
     rating = {
-      averageRating: item.almavgrating,
-      ratingsCount: item.almratingscount,
+      averageRating: getIntRating(item.almavgrating),
+      ratingsCount: getIntRating(item.almratingscount),
       id: "",
       _transient: "",
     };

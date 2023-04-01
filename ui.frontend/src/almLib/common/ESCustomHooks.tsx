@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 */
 import { CatalogFilterState } from "../store/reducers/catalog";
 import { getRequestObjectForESApi } from "../utils/catalog";
+import { JOBAID } from "../utils/constants";
 import { getDefaultFiltersState, updateFilterList } from "../utils/filters";
 import {
   getALMConfig,
@@ -58,8 +59,17 @@ class ESCustomHooks implements ICustomHooks {
       sortMap[sort as keyof ISortMap],
       searchText
     );
+    //below if needed for alm-non-logged-in
+    if (!this.esBaseUrl) {
+      this.almConfig = getALMConfig();
+      this.primeCdnTrainingBaseEndpoint =
+        this.almConfig.primeCdnTrainingBaseEndpoint;
+      this.esBaseUrl = this.almConfig.esBaseUrl;
+      this.almCdnBaseUrl = this.almConfig.almCdnBaseUrl;
+    }
+
     let response: any = await RestAdapter.post({
-      url: `${this.esBaseUrl}/search?&size=${DEFAULT_PAGE_LIMIT}`,
+      url: `${this.esBaseUrl}/search?size=${DEFAULT_PAGE_LIMIT}`,
       method: "POST",
       headers,
       body: JSON.stringify(requestObject),
@@ -172,13 +182,24 @@ class ESCustomHooks implements ICustomHooks {
         checked: false,
       }));
       tagsList = updateFilterList(tagsList, queryParams, "tagName");
+
+      let citiesList = terms?.cities?.map((item: string) => ({
+        value: item,
+        label: item,
+        checked: false,
+      }));
+      citiesList = updateFilterList(citiesList, queryParams, "cities");
+
       let catalogList: any[] = terms?.catalogNames?.map((item: string) => ({
         value: item,
         label: item,
         checked: false,
       }));
       catalogList = updateFilterList(catalogList, queryParams, "catalogs");
-      const defaultFiltersState = getDefaultFiltersState();
+      const defaultFiltersState: any = getDefaultFiltersState();
+      defaultFiltersState["loTypes"].list = defaultFiltersState[
+        "loTypes"
+      ].list?.filter((item: any) => item.value !== JOBAID);
 
       return {
         ...defaultFiltersState,
@@ -193,6 +214,10 @@ class ESCustomHooks implements ICustomHooks {
         catalogs: {
           ...defaultFiltersState.catalogs,
           list: catalogList,
+        },
+        cities: {
+          ...defaultFiltersState.cities,
+          list: citiesList,
         },
       };
     }

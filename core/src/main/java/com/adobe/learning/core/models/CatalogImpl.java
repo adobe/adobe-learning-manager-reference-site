@@ -110,4 +110,12 @@ public class CatalogImpl implements Catalog {
     public String getTagsFilter() {
         return tagsFilter;
     }
+
+    @ValueMapValue
+    private String citiesFilter;
+
+    @Override
+    public String getCitiesFilter() {
+        return citiesFilter;
+    }
 }

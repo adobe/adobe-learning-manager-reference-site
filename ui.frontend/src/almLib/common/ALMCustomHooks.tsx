@@ -9,27 +9,30 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { MaxPrice, PrimeLearningObject } from "..";
+import { MaxPrice, PrimeLearningObject, PrimeUser } from "..";
 import { CatalogFilterState } from "../store/reducers/catalog";
 import {
   getOrUpdateCatalogFilters,
   getParamsForCatalogApi,
 } from "../utils/catalog";
+import { ENGLISH_LOCALE } from "../utils/constants";
 import { getDefaultFiltersState, updateFilterList } from "../utils/filters";
 import {
   getALMAttribute,
   getALMConfig,
+  getALMUser,
   getQueryParamsFromUrl,
 } from "../utils/global";
 import { JsonApiParse } from "../utils/jsonAPIAdapter";
 import { isCommerceEnabled } from "../utils/price";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
+import { getBrowserLocale } from "../utils/translationService";
 import APIServiceInstance from "./APIService";
 import ICustomHooks from "./ICustomHooks";
 
 export const DEFAULT_PAGE_LIMIT = 9;
 const DEFUALT_LO_INCLUDE =
-  "instances.loResources.resources,instances.badge,supplementaryResources,enrollment.loResourceGrades,skills.skillLevel.skill";
+  "instances.loResources.resources,instances.badge,supplementaryResources,enrollment.loResourceGrades,skills.skillLevel.skill,instances.loResources.resources.room";
 const DEFAULT_SEARCH_SNIPPETTYPE =
   "courseName,courseOverview,courseDescription,moduleName,certificationName,certificationOverview,certificationDescription,jobAidName,jobAidDescription,lpName,lpDescription,lpOverview,embedLpName,embedLpDesc,embedLpOverview,skillName,skillDescription,note,badgeName,courseTag,moduleTag,jobAidTag,lpTag,certificationTag,embedLpTag,discussion";
 const DEFAULT_SEARCH_INCLUDE =
@@ -37,11 +40,15 @@ const DEFAULT_SEARCH_INCLUDE =
 
 class ALMCustomHooks implements ICustomHooks {
   primeApiURL = getALMConfig().primeApiURL;
+  isTeamsApp = getALMConfig().isTeamsApp;
   async getTrainings(
     filterState: CatalogFilterState,
     sort: string,
     searchText: string
   ) {
+    const userResponse = await getALMUser();
+    const user = userResponse?.user || ({} as PrimeUser);
+
     const catalogAttributes = getALMAttribute("catalogAttributes");
     const params: QueryParams = await getParamsForCatalogApi(filterState);
     params["sort"] = sort;
@@ -52,10 +59,14 @@ class ALMCustomHooks implements ICustomHooks {
     let url = `${this.primeApiURL}/learningObjects`;
     if (searchText && catalogAttributes?.showSearch === "true") {
       url = `${this.primeApiURL}/search`;
+      params["sort"] = "relevance";
       params["query"] = searchText;
       //TO DO check the include if needed
       params["snippetType"] = DEFAULT_SEARCH_SNIPPETTYPE;
       params["include"] = DEFAULT_SEARCH_INCLUDE;
+      params["language"] = this.isTeamsApp
+        ? getBrowserLocale()
+        : user.contentLocale || getALMConfig().locale || ENGLISH_LOCALE;
     }
     const response = await RestAdapter.get({
       url,
@@ -92,14 +103,31 @@ class ALMCustomHooks implements ICustomHooks {
     });
     return JsonApiParse(response);
   }
+
+  //used in alm-teams
+  sendLoNotFoundEvent = () => {
+    window.postMessage("almLoNotFound");
+  };
+
   async getTraining(
     id: string,
     params: QueryParams
   ): Promise<PrimeLearningObject> {
-    const response = await RestAdapter.get({
-      url: `${this.primeApiURL}learningObjects/${id}`,
-      params: params,
-    });
+    let response;
+    try {
+      response = await RestAdapter.get({
+        url: `${this.primeApiURL}learningObjects/${id}`,
+        params: params,
+      });
+      //to-do: remove below if after PAPI-14919 is fixed
+      if (!response || JSON.parse(response as any).data === null) {
+        this.sendLoNotFoundEvent();
+      }
+    } catch (e: any) {
+      if (e.status === 400) {
+        this.sendLoNotFoundEvent();
+      }
+    }
     return JsonApiParse(response).learningObject;
   }
 
@@ -142,15 +170,19 @@ class ALMCustomHooks implements ICustomHooks {
       }
     }
 
-    const [skillsPromise, tagsPromise, catalogPromise] = await Promise.all([
-      RestAdapter.get({
-        url: `${config.primeApiURL}data?filter.skillName=true`,
-      }),
-      RestAdapter.get({
-        url: `${config.primeApiURL}data?filter.tagName=true`,
-      }),
-      getOrUpdateCatalogFilters(),
-    ]);
+    const [skillsPromise, tagsPromise, catalogPromise, citiesPromise] =
+      await Promise.all([
+        RestAdapter.get({
+          url: `${config.primeApiURL}data?filter.skillName=true`,
+        }),
+        RestAdapter.get({
+          url: `${config.primeApiURL}data?filter.tagName=true`,
+        }),
+        getOrUpdateCatalogFilters(),
+        RestAdapter.get({
+          url: `${config.primeApiURL}data?filter.cityName=true`,
+        }),
+      ]);
     const skills = JsonApiParse(skillsPromise)?.data?.names;
     let skillsList = skills?.map((item: string) => ({
       value: item,
@@ -166,6 +198,14 @@ class ALMCustomHooks implements ICustomHooks {
       checked: false,
     }));
     tagsList = updateFilterList(tagsList, queryParams, "tagName");
+
+    const cities = JsonApiParse(citiesPromise)?.data?.names;
+    let citiesList = cities?.map((item: string) => ({
+      value: item,
+      label: item,
+      checked: false,
+    }));
+    citiesList = updateFilterList(citiesList, queryParams, "cities");
 
     let catalogList = catalogPromise?.map((item: any) => ({
       value: item.name,
@@ -191,6 +231,10 @@ class ALMCustomHooks implements ICustomHooks {
       price: {
         ...defaultFiltersState.price,
         maxPrice: maxPrice,
+      },
+      cities: {
+        ...defaultFiltersState.cities,
+        list: citiesList,
       },
     };
     // return { skillsList, tagsList, catalogList };

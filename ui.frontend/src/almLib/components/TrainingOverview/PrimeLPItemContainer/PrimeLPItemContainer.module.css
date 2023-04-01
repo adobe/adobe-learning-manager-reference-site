@@ -14,7 +14,7 @@ governing permissions and limitations under the License.
 .container {
   max-width: 100%;
   /* margin: 0 auto; */
-  border: 1px solid var(--prime-color-nc6);
+  border: 1px solid var(--prime-color-nc2);
   clear: both;
   text-align: left !important;
   list-style: none;
@@ -22,6 +22,7 @@ governing permissions and limitations under the License.
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
+  background-color: var(--prime-color-white);
 }
 
 .moduleDescription {
@@ -68,15 +69,15 @@ governing permissions and limitations under the License.
 }
 
 .wrapperContainer {
-  background-color: var(--prime-color-nc5);
-  border-color: var(--prime-color-nc6);
+  background-color: var(--prime-color-nc4);
+  border-color: var(--prime-color-nc4);
   /* border: 1px solid #c9c9c9; */
 }
 
 .metaDataContainer {
   display: flex;
   flex-wrap: wrap;
-  background-color: var(--prime-color-nc5);
+  background-color: var(--prime-color-nc4);
 }
 
 .metadata {
@@ -93,15 +94,15 @@ governing permissions and limitations under the License.
 
 .isPartOfLP .lpListItemContainer {
   padding: 10px 10px 0 10px;
-  border: 1px solid var(--prime-color-nc6);
+  border: 1px solid var(--prime-color-nc4);
   border-radius: 5px;
   margin: 10px 10px 10px 0;
 }
 .isPartOfLP .headerContainer {
-  border: 1px solid var(--prime-color-nc6);
+  border: 1px solid var(--prime-color-nc4);
 }
 
-@media screen and (max-width: 414px) {
+@media screen and (max-width: 450px) {
   .metaDataContainer {
     display: flex;
     flex-direction: columns;
@@ -130,7 +131,7 @@ ul > li {
 }
 
 .collapsibleContainer {
-  background: no-repeat padding-box var(--prime-color-nc6);
+  background: no-repeat padding-box var(--prime-color-nc4);
   border: none;
   display: flex;
   justify-content: center;
@@ -142,6 +143,7 @@ ul > li {
   width: 100%;
   padding: 0;
   min-height: 19px;
+  border:transparent;
 }
 
 .collapsibleContainer > button > svg {

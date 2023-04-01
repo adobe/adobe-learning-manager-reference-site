@@ -18,12 +18,19 @@ import {
 } from "../../../models/PrimeModels";
 import { COMPLETED } from "../../../utils/constants";
 import { convertSecondsToTimeText } from "../../../utils/dateTime";
-import { getALMObject } from "../../../utils/global";
-import { useCardBackgroundStyle, useCardIcon } from "../../../utils/hooks";
+import {
+  getALMConfig,
+  getALMObject,
+  navigateToLoInTeamsApp,
+} from "../../../utils/global";
+import { useCardIcon } from "../../../utils/hooks";
 import { GetTranslation } from "../../../utils/translationService";
 import styles from "./PrimeTrainingItemContainerHeader.module.css";
 import Visibility from "@spectrum-icons/workflow/Visibility";
 import { checkIsEnrolled } from "../../../utils/overview";
+import { CardBgStyle } from "../../../models/custom";
+import { useEffect, useState } from "react";
+import { debounce } from "../../../utils/catalog";
 
 const PrimeTrainingItemContainerHeader: React.FC<{
   name: string;
@@ -38,6 +45,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
   isprerequisiteLO?: boolean;
   isPreviewEnabled?: boolean;
   isParentLOEnrolled?: boolean;
+  parentLoName?: string;
 }> = (props) => {
   const {
     name,
@@ -51,17 +59,20 @@ const PrimeTrainingItemContainerHeader: React.FC<{
     isprerequisiteLO = false,
     isPreviewEnabled = false,
     isParentLOEnrolled = false,
+    parentLoName,
   } = props;
   const { formatMessage } = useIntl();
   const authorNames = training.authorNames?.length
     ? training.authorNames.join(", ")
     : "";
 
-  const { cardIconUrl, color } = useCardIcon(training);
-  const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
+  const { cardBgStyle } = useCardIcon(training);
+
   let loType = training.loType;
+  let loFormat = training.loFormat;
   // const isEnrolled = checkIsEnrolled(training.enrollment);
-  const isPreviewable = isPreviewEnabled && training.hasPreview && !isParentLOEnrolled;
+  const isPreviewable =
+    isPreviewEnabled && training.hasPreview && !isParentLOEnrolled;
 
   const onClickHandler = (event: any) => {
     //NOTE: Don't open player in case training name is clicked
@@ -72,20 +83,51 @@ const PrimeTrainingItemContainerHeader: React.FC<{
         launchPlayerHandler({ id: training.id });
       }
     } else {
-      getALMObject().navigateToTrainingOverviewPage(
-        training.id,
-        trainingInstance.id
+      event.target?.classList.add(styles.disabled);
+      let url = window.location.href;
+      let parentLoId = url.split("trainingId/")[1];
+      parentLoId = parentLoId.substring(
+        0,
+        parentLoId.indexOf("/") > -1
+          ? parentLoId.indexOf("/")
+          : parentLoId.indexOf("?") > -1
+          ? parentLoId.indexOf("?")
+          : parentLoId.length
       );
+      let parentLoDetails = parentLoName
+        ? parentLoId + "::" + parentLoName
+        : "";
+      if (getALMConfig().isTeamsApp) {
+        navigateToLoInTeamsApp(
+          training.id,
+          trainingInstance.id,
+          parentLoDetails
+        );
+      } else {
+        getALMObject().navigateToTrainingOverviewPage(
+          training.id,
+          trainingInstance.id,
+          parentLoDetails
+        );
+      }
     }
   };
+
+  const loClickHandler = debounce(onClickHandler);
 
   let statusText = "";
   if (training.enrollment?.state) {
     const { state } = training.enrollment;
     if (state === "STARTED") {
-      statusText = "In Progress";
+      statusText = formatMessage({
+        id: "alm.overview.label.inProgress",
+        defaultMessage: "In Progress",
+      });
     } else if (state === COMPLETED) {
-      statusText = "Completed";
+      statusText = formatMessage({
+        id: "alm.overview.label.completed",
+        defaultMessage: "Completed",
+      });
     }
   }
   return (
@@ -93,12 +135,11 @@ const PrimeTrainingItemContainerHeader: React.FC<{
       className={`${styles.headerContainer} ${
         isPartOfLP ? styles.isPartOfLP : ""
       }`}
-      onClick={onClickHandler}
-    >
+      onClick={loClickHandler}>
       {/* <h2 className={styles.courseInfoHeader}>{name} </h2> */}
       <div className={styles.metadata}>
         <div className={styles.metadataContents}>
-          <div>{GetTranslation(`alm.training.${loType}`, true)}</div>
+          <div className={styles.authorNames}>{loFormat}</div>
           {isprerequisiteLO && !loType ? (
             ""
           ) : authorNames.length ? (
@@ -123,8 +164,8 @@ const PrimeTrainingItemContainerHeader: React.FC<{
             <>
               <span className={styles.mandatory}>
                 {formatMessage({
-                  id: "alm.overview.section.mandatory",
-                  defaultMessage: "Mandatory",
+                  id: "alm.overview.section.required",
+                  defaultMessage: "Required",
                 })}
               </span>
             </>
@@ -150,15 +191,9 @@ const PrimeTrainingItemContainerHeader: React.FC<{
           <a
             aria-label={name}
             className={styles.title}
-            href={"javascript:void(0)"}
-          >
+            href={"javascript:void(0)"}>
             {name}
           </a>
-          {/* <p
-            dangerouslySetInnerHTML={{
-              __html: richTextOverview || overview || description,
-            }}
-          ></p> */}
           <p className={styles.description}>{overview || description}</p>
         </div>
       </div>

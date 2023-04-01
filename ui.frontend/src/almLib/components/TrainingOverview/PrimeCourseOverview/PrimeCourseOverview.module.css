@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 @import "../../../styles/variables.css";
 .overviewcontainer {
   display: flex;
-  /* width: 50%; */
+  width: 100%;
   padding: 10px 0;
 }
 
@@ -23,6 +23,7 @@ governing permissions and limitations under the License.
 }
 .time {
   padding-right: 10px;
+  color:var(--prime-color-nc3);
 }
 
 .loResourceType {

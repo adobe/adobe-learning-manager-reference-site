@@ -13,6 +13,7 @@
        "priceFilter": "false",
        "skillsLevelFilter": "true",
        "tagsFilter": "false",
-       "statusFilter": "true"
+       "statusFilter": "true",
+       "citiesFilter": "false"
        }
 }

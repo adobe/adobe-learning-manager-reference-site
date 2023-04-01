@@ -44,20 +44,28 @@ governing permissions and limitations under the License.
 }
 
 #admin-configs-cont .coral-Form-fieldwrapper.account-config-heading2,
-#admin-configs-cont .account-config-heading2 .coral-Form-fieldlabel {
+#admin-configs-cont .account-config-heading2 .coral-Form-fieldlabel,
+#admin-configs-cont .coral-Form-fieldwrapper.config-rda-token-heading,
+#admin-configs-cont .config-rda-token-heading .coral-Form-fieldlabel {
     font: normal normal 600 14px/20px Source Sans Pro;
     display: inline-block;
     width: 90%;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
-.coral-Form-fieldwrapper.config-help-btn {
+#admin-configs-cont .coral-Form-fieldwrapper.config-rda-token-heading,
+#admin-configs-cont .config-rda-token-heading .coral-Form-fieldlabel {
+    width: 80%;
+}
+
+.coral-Form-fieldwrapper.config-help-btn,
+.coral-Form-fieldwrapper.config-rda-token-btn {
     display: inline-block;
     float: right;
-    margin-bottom: 30px;
 }
 
-.config-help-btn .coral-Form-fieldlabel {
+.config-help-btn .coral-Form-fieldlabel,
+.config-rda-token-btn .coral-Form-fieldlabel {
     color: #3471DE;
     cursor: pointer;
 }

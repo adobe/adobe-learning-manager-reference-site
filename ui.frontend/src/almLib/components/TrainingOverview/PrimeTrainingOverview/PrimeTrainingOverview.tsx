@@ -23,6 +23,7 @@ const PrimeTrainingOverview: React.FC<{
   showMandatoryLabel?: boolean;
   isPreviewEnabled: boolean;
   updateFileSubmissionUrl: Function;
+  parentLoName: string;
 }> = (props) => {
   const {
     trainings,
@@ -32,6 +33,7 @@ const PrimeTrainingOverview: React.FC<{
     isPreviewEnabled = false,
     updateFileSubmissionUrl,
     isParentLOEnrolled = false,
+    parentLoName,
   } = props;
   return (
     <>
@@ -48,7 +50,7 @@ const PrimeTrainingOverview: React.FC<{
               isPreviewEnabled={isPreviewEnabled}
               updateFileSubmissionUrl={updateFileSubmissionUrl}
               isParentLOEnrolled={isParentLOEnrolled}
-            ></PrimeCourseItemContainer>
+              parentLoName={parentLoName}></PrimeCourseItemContainer>
           );
         } else if (loType === LEARNING_PROGRAM) {
           return (
@@ -61,7 +63,7 @@ const PrimeTrainingOverview: React.FC<{
               isPreviewEnabled={isPreviewEnabled}
               updateFileSubmissionUrl={updateFileSubmissionUrl}
               isParentLOEnrolled={isParentLOEnrolled}
-            ></PrimeLPItemContainer>
+              parentLoName={parentLoName}></PrimeLPItemContainer>
           );
         }
         return <></>;

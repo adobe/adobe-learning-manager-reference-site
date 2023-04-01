@@ -57,18 +57,18 @@ public class EmbeddableLrngWidgetModelTest {
 		
 		assertTrue("com.adobe.captivateprime.primeStrip".equals(widgetModel.getSelectedRef()));
 		
-		assertTrue("https://learningmanagerqe.adobe.com/app/embeddablewidget?widgetRef=com.adobe.captivateprime.widgetcommunicator".equals(widgetModel.getWidgetCommunicatorUrl()));
+		assertTrue("https://learningmanagerstage1.adobe.com/app/embeddablewidget?widgetRef=com.adobe.captivateprime.widgetcommunicator".equals(widgetModel.getWidgetCommunicatorUrl()));
 		
-		String expectedConfigs = "{\"widgetRefSelected\":\"com.adobe.captivateprime.lostrip.trending\",\"commonConfig\":{\"emitPlayerLaunchEvent\":true,\"captivateHostName\":\"https://learningmanagerqe.adobe.com\",\"emitPageLinkEvents\":true,\"disableLinks\":false},\"auth\":{\"accessToken\":\"\"},\"test\":{\"boolean\":true},\"almBaseURL\":\"https://learningmanagerqe.adobe.com\",\"theme\":{\"primaryColor\":\"rgb(38,118,255)\",\"background\":\"transparent\"},\"type\":\"acapConfig\",\"accountId\":\"7110\",\"name\":\"Admin Recommendation\",\"widgetConfig\":{\"widgetRef\":\"com.adobe.captivateprime.lostrip.trending\"}}";
+		String expectedConfigs = "{\"widgetRefSelected\":\"com.adobe.captivateprime.lostrip.trending\",\"commonConfig\":{\"emitPlayerLaunchEvent\":true,\"captivateHostName\":\"https://learningmanagerstage1.adobe.com\",\"emitPageLinkEvents\":true,\"disableLinks\":false},\"auth\":{\"accessToken\":\"\"},\"test\":{\"boolean\":true},\"almBaseURL\":\"https://learningmanagerstage1.adobe.com\",\"theme\":{\"primaryColor\":\"rgb(38,118,255)\",\"background\":\"transparent\"},\"type\":\"acapConfig\",\"accountId\":\"7110\",\"name\":\"Admin Recommendation\",\"widgetConfig\":{\"widgetRef\":\"com.adobe.captivateprime.lostrip.trending\"}}";
 		assertTrue(JsonParser.parseString(expectedConfigs).equals(JsonParser.parseString(widgetModel.getWidgetConfigs())));
 		
-		assertTrue("https://learningmanagerqe.adobe.com/app/embeddablewidget?widgetRef=com.adobe.captivateprime.primeStrip&resourceType=html".equals(widgetModel.getWidgetSrcUrl()));
+		assertTrue("https://learningmanagerstage1.adobe.com/app/embeddablewidget?widgetRef=com.adobe.captivateprime.primeStrip&resourceType=html".equals(widgetModel.getWidgetSrcUrl()));
 	}
 	
 	private JsonObject getConfigs() {
 		JsonObject config = new JsonObject();
 		config.addProperty("accountId", "7110");
-		config.addProperty("almBaseURL", "https://learningmanagerqe.adobe.com");
+		config.addProperty("almBaseURL", "https://learningmanagerstage1.adobe.com");
 		return config;
 	}
 	

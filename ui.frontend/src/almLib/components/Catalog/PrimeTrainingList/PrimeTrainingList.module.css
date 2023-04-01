@@ -1,0 +1,165 @@
+/**
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+@import "../../../styles/variables.css";
+
+.listItem {
+  display: block;
+  font-size: var(--prime-font-size-16);
+  margin-top: 15px;
+}
+
+.listRow {
+  display: flex;
+}
+
+.loName {
+  color: var(--prime-color-primary);
+  cursor: pointer;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.loDetails {
+  margin-bottom: 25px;
+}
+
+.separatorDot {
+  width: 5px;
+  height: 5px;
+  margin: 1px 5px;
+  border-radius: 50%;
+  background-color: var(--prime-color-nc3);
+  display: inline-block;
+}
+
+.loAdditionalData {
+  margin-bottom: 20px;
+  display: flex;
+}
+
+.dueDateLabel {
+  margin-left: auto;
+}
+
+.primeVerticalSeperator {
+  border-left: 1px solid var(--prime-color-nc2);
+  height: 2rem;
+  margin-right: 10px;
+}
+
+.exploreButton {
+  color: var(--prime-color-primary);
+  background: var(--prime-color-white);
+  border: 0.1rem solid var(--prime-color-primary);
+  cursor: pointer;
+  border-radius: 20px;
+  padding: 5px 0px;
+  width: 90px;
+}
+
+.exploreButton:hover {
+  opacity: 0.7;
+}
+
+.loEnrollmentData {
+  display: flex;
+  width: 65%;
+}
+
+.loEnrollData {
+  width: 80%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.dueDateLabel {
+  display: flex;
+  margin-left: 50px;
+}
+
+.actionButton {
+  margin-left: auto;
+}
+
+.loSkillsData {
+  width: 35%;
+}
+
+.progressValueText {
+  margin-left: 10px;
+}
+
+.progressBar {
+  width: 80px;
+}
+
+.description {
+  margin-bottom: 15px;
+}
+
+.loThumbnail {
+  width: 55px;
+  height: 55px;
+  top: 0;
+  left: 0;
+  margin-right: 10px;
+  border-radius: 10px;
+}
+
+.priceDiv {
+  margin-left: auto;
+}
+
+.starRating {
+  margin-right: 20px;
+}
+
+@media screen and (max-width: 450px) {
+  .progressBar {
+    display: none;
+  }
+
+  .loSkillsData {
+    width: 25%;
+  }
+
+  .loEnrollmentData {
+    width: 75%;
+  }
+
+  .dueDateLabel {
+    display: flex;
+    margin-left: 15px;
+  }
+}
+
+@media screen and (max-width: 780px) {
+  .loAdditionalData,
+  .loEnrollmentData,
+  .loEnrollData {
+    display: inline;
+  }
+  .loSkillsData,
+  .loEnrollData {
+    width: 100%;
+    margin: 5px 0px;
+  }
+  .actionButton {
+    margin: 10px 0px;
+  }
+  .dueDateLabel {
+    margin: 5px 0px;
+  }
+  .progressBar {
+    margin: 11px 0px;
+  }
+}

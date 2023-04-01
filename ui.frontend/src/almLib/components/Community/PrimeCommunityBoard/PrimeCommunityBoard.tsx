@@ -35,16 +35,15 @@ import { AlertType } from "../../../common/Alert/AlertDialog";
 import { useAlert } from "../../../common/Alert/useAlert";
 import { useConfirmationAlert } from "../../../common/Alert/useConfirmationAlert";
 import { BOARD, HIGH, NORMAL, PRIVATE, PUBLIC } from "../../../utils/constants";
-import {
-  GetTranslation
-} from "../../../utils/translationService";
+import { GetTranslation } from "../../../utils/translationService";
 
 const PrimeCommunityBoard = (props: any) => {
-  const { formatMessage } = useIntl();
+  const { formatMessage, locale } = useIntl();
   let board = props.board;
   let showBoardOptions = false;
-  const [isBoardOptionsOpen, setIsBoardOptionsOpen] =
-    useState(showBoardOptions);
+  const [isBoardOptionsOpen, setIsBoardOptionsOpen] = useState(
+    showBoardOptions
+  );
   const { reportBoard } = useBoardOptions();
   const [almAlert] = useAlert();
   const [almConfirmationAlert] = useConfirmationAlert();
@@ -167,8 +166,8 @@ const PrimeCommunityBoard = (props: any) => {
             <div className={styles.primeBoardSkill}>
               {boardSkills && (
                 <span className={styles.primeBoardSkillNames}>
-                  {GetTranslation("alm.community.board.skills", true)}
-                  : {boardSkills}
+                  {GetTranslation("alm.community.board.skills", true)}:{" "}
+                  {boardSkills}
                 </span>
               )}
               <div
@@ -298,7 +297,7 @@ const PrimeCommunityBoard = (props: any) => {
                   id: "alm.community.board.createdOn.label",
                   defaultMessage: "Created on ",
                 })}
-                {GetFormattedDate(board.dateCreated, config.locale)}
+                {GetFormattedDate(board.dateCreated, locale)}
                 {formatMessage({
                   id: "alm.community.board.by.label",
                   defaultMessage: " by ",

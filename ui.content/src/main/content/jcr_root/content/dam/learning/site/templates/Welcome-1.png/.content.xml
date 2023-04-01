@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:dc="http://purl.org/dc/elements/1.1/"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="f7a83973-8b94-45d1-8178-d980527d3410">
+    jcr:uuid="23d83113-1d8a-4917-ad79-58402d1055e6">
     <jcr:content
         dam:assetState="processed"
-        jcr:lastModified="{Date}2022-04-21T11:37:39.036+05:30"
+        jcr:lastModified="{Date}2023-02-16T16:24:11.429+05:30"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
             dam:Bitsperpixel="{Long}32"
-            dam:Comments="Creation Time: 2022:04:21 06:05:18&#xa;"
-            dam:extracted="{Date}2022-04-21T11:37:38.014+05:30"
+            dam:extracted="{Date}2023-02-16T16:24:08.146+05:30"
             dam:Fileformat="PNG"
             dam:MIMEtype="image/png"
             dam:Numberofimages="{Long}1"
-            dam:Numberoftextualcomments="{Long}1"
-            dam:Physicalheightindpi="{Long}96"
-            dam:Physicalheightininches="{Decimal}6.730105876922607"
-            dam:Physicalwidthindpi="{Long}96"
-            dam:Physicalwidthininches="{Decimal}11.293243408203125"
+            dam:Numberoftextualcomments="{Long}0"
+            dam:Physicalheightindpi="{Long}-1"
+            dam:Physicalheightininches="{Decimal}-1.0"
+            dam:Physicalwidthindpi="{Long}-1"
+            dam:Physicalwidthininches="{Decimal}-1.0"
             dam:Progressive="no"
-            dam:sha1="dffdec25481965c09cf6031d58a17a2e3e3c34db"
-            dam:size="{Long}1008211"
+            dam:sha1="e21cb851358b6f59152bba4f675197aebe31b7e6"
+            dam:size="{Long}842961"
             dc:format="image/png"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"
-            tiff:ImageLength="{Long}646"
-            tiff:ImageWidth="{Long}1084"/>
+            tiff:ImageLength="{Long}350"
+            tiff:ImageWidth="{Long}1280"/>
         <related jcr:primaryType="nt:unstructured"/>
     </jcr:content>
 </jcr:root>

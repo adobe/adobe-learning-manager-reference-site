@@ -22,7 +22,7 @@ import { COMMENT, DELETE, POST, REPLY, UPDATE } from "../../../utils/constants";
 import { getALMConfig } from "../../../utils/global";
 
 const PrimeCommunityObjectHeader = (props: any) => {
-  const { formatMessage } = useIntl();
+  const { formatMessage, locale } = useIntl();
   const object = props.object;
   const parentPost = props.parentPost;
   const [showOptions, setShowOptions] = useState(false);
@@ -215,7 +215,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
         </span>
         <span className={styles.primePostDateSeperator}></span>
         <span className={styles.primePostDateCreated}>
-          {GetFormattedDate(object.dateCreated, config.locale)}
+          {GetFormattedDate(object.dateCreated, locale)}
         </span>
         <button
           className={styles.primeCommunityOptionsIcon}

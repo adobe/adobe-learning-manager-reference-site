@@ -9,27 +9,29 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import primeMessages from "../i18n/en-us.json";
+
 import { PrimeAccountTerminology } from "../models/PrimeModels";
+import { ENGLISH_LOCALE } from "./constants";
 interface AccountTerminology {
   name_lxpv: string;
   pluralName_lxpv: string;
 }
-let _translations: Record<string, string> = primeMessages;
+
+let _translations: Record<string, string>;
 const pluralRegex = /\|\|\|\s*(.*?)\s*\|\|\|/g;
 const singularRegex = /\|\|\s*(.*?)\s*\|\|/g;
 const pluralPrefix = /\|\|\|/g;
 const singularPrefix = /\|\|/g;
 
-const ENGLISH_LOCALE = "en-US";
 //let _userLocale: string | undefined = undefined;
 let accountTerminologyMap: { [key: string]: AccountTerminology };
 
-const langMap: { [key: string]: string } = {
+export const langMap: { [key: string]: string } = {
   de: "de-DE",
   en: "en-US",
   es: "es-ES",
   fr: "fr-FR",
+  id: "id-ID",
   it: "it-IT",
   ja: "ja-JP",
   ko: "ko-KR",
@@ -38,15 +40,17 @@ const langMap: { [key: string]: string } = {
   pl: "pl-PL",
   pt: "pt-BR",
   ru: "ru-RU",
+  sv: "sv-SE",
   tr: "tr-TR",
   zh: "zh-CN",
   zz: "zz-ZZ",
 };
-const availableLanguages = [
+export const availableLanguages = [
   "de",
   "en",
   "es",
   "fr",
+  "id",
   "it",
   "ja",
   "ko",
@@ -55,6 +59,7 @@ const availableLanguages = [
   "pl",
   "pt",
   "ru",
+  "sv",
   "tr",
   "zh",
   "zz",
@@ -82,13 +87,27 @@ export function getPreferredLocalizedMetadata<T>(
   if (!localizedMetadata) {
     return {} as T;
   }
-  let data = localizedMetadata.find((item: any) => item.locale === locale);
+  if (locale) {
+    locale = locale.replace("-", "_");
+  }
+  let data = localizedMetadata.find(
+    (item: any) =>
+      item.locale === locale || item.locale === locale.replace("_", "-")
+  );
 
   return (
     data ||
     localizedMetadata.find((item: any) => item.locale === ENGLISH_LOCALE)! ||
     localizedMetadata[0]
   );
+}
+
+export function SetupTranslations(translations: string): void {
+  _translations = JSON.parse(translations);
+}
+
+export function isTranslated(val: string): boolean {
+  return !pluralPrefix.test(val) && !singularPrefix.test(val);
 }
 
 export function GetTranslation(
@@ -160,6 +179,23 @@ export function ReplaceAccountTerminology(translation: string): string {
   return translation;
 }
 
+export function getBrowserLocale(): string {
+  let i = 0;
+  let language = undefined;
+  // support for other well known properties in browsers
+  console.log("Languages: " + window.navigator.languages);
+  for (i = 0; i < window.navigator.languages.length; i++) {
+    const navLocale = window.navigator.languages[i];
+    language = getLocale(navLocale);
+    if (language) {
+      break;
+    }
+  }
+
+  console.log("Selected lang " + language);
+  return language || ENGLISH_LOCALE;
+}
+
 export function SetupAccountTerminologies(
   accountTerminologies: PrimeAccountTerminology[] = defaultAccountTerminologies
 ): void {
@@ -174,19 +210,21 @@ export function SetupAccountTerminologies(
 
 export function ReplaceLoTypeWithAccountTerminology(term: string): string {
   const terminologiesLoType =
-        term === "learningProgram"
-            ? "LEARNING_PATH"
-            : term === "jobAid"
-            ? "JOB_AID"
-            : term === "certification"
-            ? "CERTIFICATION"
-            : term === "MODULES"
-            ? "MODULES"
-            : term === "MODULE"
-            ? "MODULE"
-            : "COURSE";
-  return accountTerminologyMap[terminologiesLoType]?accountTerminologyMap[terminologiesLoType]['name_lxpv']:term;
-} 
+    term === "learningProgram"
+      ? "LEARNING_PATH"
+      : term === "jobAid"
+      ? "JOB_AID"
+      : term === "certification"
+      ? "CERTIFICATION"
+      : term === "MODULES"
+      ? "MODULES"
+      : term === "MODULE"
+      ? "MODULE"
+      : "COURSE";
+  return accountTerminologyMap[terminologiesLoType]
+    ? accountTerminologyMap[terminologiesLoType]["name_lxpv"]
+    : term;
+}
 
 const defaultAccountTerminologies = [
   {
@@ -346,3 +384,12 @@ const defaultAccountTerminologies = [
     pluralName: "Social",
   },
 ] as PrimeAccountTerminology[];
+
+export const formatMap: any = {
+  Elearning: "alm.catalog.card.self.paced",
+  Activity: "alm.catalog.card.activity",
+  Blended: "alm.catalog.card.blended",
+  "Virtual Classroom": "alm.catalog.card.virtual.classroom",
+  Classroom: "alm.catalog.card.classroom",
+  "Self Paced": "alm.catalog.card.self.paced",
+};

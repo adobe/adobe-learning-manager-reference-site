@@ -20,6 +20,8 @@ import Money from "@spectrum-icons/workflow/Money";
 import PinOff from "@spectrum-icons/workflow/PinOff";
 import Send from "@spectrum-icons/workflow/Send";
 import UserGroup from "@spectrum-icons/workflow/UserGroup";
+import BookmarkSingleOutline from "@spectrum-icons/workflow/BookmarkSingleOutline";
+import BookmarkSingle from "@spectrum-icons/workflow/BookmarkSingle";
 import { useEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { AlertType } from "../../../common/Alert/AlertDialog";
@@ -43,6 +45,7 @@ import {
   PENDING_ACCEPTANCE,
   PENDING_APPROVAL,
   PREVIEW,
+  STARTED,
   WAITING,
 } from "../../../utils/constants";
 import { modifyTime } from "../../../utils/dateTime";
@@ -53,7 +56,10 @@ import {
   getQueryParamsFromUrl,
   updateURLParams,
 } from "../../../utils/global";
-import { filterLoReourcesBasedOnResourceType } from "../../../utils/hooks";
+import {
+  useCanShowRating,
+  filterLoReourcesBasedOnResourceType,
+} from "../../../utils/hooks";
 import { DEFAULT_USER_SVG, LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
 import {
   checkIsEnrolled,
@@ -64,9 +70,12 @@ import {
   GetTranslation,
   GetTranslationsReplaced,
 } from "../../../utils/translationService";
+// import { ALMStarRating } from "../../ALMRatings";
+import { StarRatingSubmitDialog } from "../../StarRatingSubmitDialog";
 import { ALMTooltip } from "../../Common/ALMTooltip";
 import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJobAids";
 import styles from "./PrimeTrainingPageMetadata.module.css";
+import { PrimeAccount } from "../../../models/PrimeModels";
 
 const PrimeTrainingPageMetaData: React.FC<{
   trainingInstance: PrimeLearningObjectInstance;
@@ -77,6 +86,14 @@ const PrimeTrainingPageMetaData: React.FC<{
   showAuthorInfo: string;
   showEnrollDeadline: string;
   enrollmentHandler: () => Promise<PrimeLearningObjectInstanceEnrollment>;
+  updateRating: (
+    rating: number,
+    loInstanceId: any
+  ) => Promise<void | undefined>;
+  updateBookMark: (
+    isBookmarked: boolean,
+    loId: any
+  ) => Promise<void | undefined>;
   alternateLanguages: Promise<string[]>;
   launchPlayerHandler: () => void;
   addToCartHandler: () => Promise<{
@@ -102,25 +119,50 @@ const PrimeTrainingPageMetaData: React.FC<{
   jobAidClickHandler,
   isPreviewEnabled,
   alternateLanguages,
+  updateRating,
+  updateBookMark,
 }) => {
   const [almAlert] = useAlert();
   const [almConfirmationAlert] = useConfirmationAlert();
-  const { formatMessage } = useIntl();
-  const config = getALMConfig();
-  const locale = config.locale;
+  const { formatMessage, locale } = useIntl();
   const enrollment = training.enrollment;
   const loType = training.loType;
   const isPrimeUserLoggedIn = getALMObject().isPrimeUserLoggedIn();
   const isPricingEnabled =
     training.price && getALMConfig().usageType === ADOBE_COMMERCE;
 
-  const [isTrainingNotSynced, setIsTrainingNotSynced] = useState(false);
+  const [isTrainingSynced, setIsTrainingSynced] = useState(true);
+  const [isBookMarked, setIsBookMarked] = useState(training.isBookmarked);
 
   const [alternativesLangAvailable, setAlternativesLangAvailable] = useState<
     string[]
   >([]);
 
   const isEnrolled = checkIsEnrolled(enrollment);
+
+  const toggle = () => {
+    setIsBookMarked((prevState) => !prevState);
+    updateBookMark(!isBookMarked, training.id);
+  };
+  const getBookMarkIcon = (
+    <span className={styles.bookMarkIcon}>
+      {isBookMarked ? <BookmarkSingle /> : <BookmarkSingleOutline />}
+    </span>
+  );
+  const getBookMarkStatusText = (
+    <span className={styles.bookMarkText}>
+      {isBookMarked
+        ? GetTranslation("alm.text.saved")
+        : GetTranslation("alm.text.save")}
+    </span>
+  );
+
+  const typeOfUnEnrollButton =
+    loType === "certification"
+      ? GetTranslation("alm.text.unenroll.certification",true)
+      : loType === "learningProgram"
+      ? GetTranslation("alm.text.unenroll.learningProgram",true)
+      : GetTranslation("alm.text.unenroll.course",true);
 
   let showPreviewButton =
     isPreviewEnabled && training.hasPreview && !isEnrolled;
@@ -134,6 +176,8 @@ const PrimeTrainingPageMetaData: React.FC<{
         return "pendingAcceptance";
       } else if (enrollment.state === WAITING) {
         return "waiting";
+      } else if (enrollment.state === STARTED) {
+        return "continue";
       } else if (enrollment.progressPercent === 0) {
         return "start";
       } else if (enrollment.progressPercent === 100) {
@@ -159,7 +203,7 @@ const PrimeTrainingPageMetaData: React.FC<{
     : true;
 
   const seatsAvailableText = trainingInstance.seatLimit ? (
-    seatsAvailable > 0 ? (
+    seatLimit && seatsAvailable > 0 ? (
       <p style={{ textAlign: "center" }} className={styles.label}>
         {formatMessage(
           {
@@ -169,6 +213,7 @@ const PrimeTrainingPageMetaData: React.FC<{
         )}
       </p>
     ) : (
+      seatLimit &&
       seatsAvailable <= 0 && (
         <p style={{ textAlign: "center" }} className={styles.errorText}>
           {formatMessage({
@@ -223,13 +268,22 @@ const PrimeTrainingPageMetaData: React.FC<{
   };
 
   const handleEnrollment = async () => {
-    storeActionInNonLoggedMode(ENROLL);
-    try {
-      const enrollment = await enrollmentHandler();
-      if (checkIsEnrolled(enrollment)) {
-        launchPlayerHandler();
-      }
-    } catch (e) {}
+    if (trainingInstance.isFlexible) {
+      const flexLpLink = `${
+        getALMConfig().almBaseURL
+      }/app/learner#/learningProgram/${training.id.split(":")[1]}/instance/${
+        trainingInstance.id.split("_")[1]
+      }`;
+      window.open(flexLpLink, "_blank");
+    } else {
+      storeActionInNonLoggedMode(ENROLL);
+      try {
+        const enrollment = await enrollmentHandler();
+        if (checkIsEnrolled(enrollment)) {
+          launchPlayerHandler();
+        }
+      } catch (e) {}
+    }
   };
 
   const previewHandler = async () => {
@@ -297,10 +351,15 @@ const PrimeTrainingPageMetaData: React.FC<{
   training.authors?.forEach((author) => {
     legacyAuthorNames.delete(author.name);
   });
-  const showCompletionDeadline =
-    showEnrollDeadline === "true" && trainingInstance.completionDeadline;
 
+  const completionDeadline = trainingInstance.completionDeadline;
+  const unenrollmentDeadline = trainingInstance.unenrollmentDeadline;
   const enrollmentDeadline = trainingInstance.enrollmentDeadline;
+
+  const showAfterEnrollmentDeadlines =
+    training.enrollment &&
+    showEnrollDeadline === "true" &&
+    (completionDeadline || unenrollmentDeadline);
   const showEnrollmentDeadline =
     !training.enrollment && trainingInstance.enrollmentDeadline;
 
@@ -355,32 +414,83 @@ const PrimeTrainingPageMetaData: React.FC<{
     );
   };
 
-  const showJobAids = training.enrollment && training.supplementaryLOs?.length;
+  const showJobAids = training.supplementaryLOs?.length;
   const showResource = training.supplementaryResources?.length;
-  const showUnenrollButton =
+  const canUnenroll =
     training.enrollment &&
     training.unenrollmentAllowed &&
     !(enrollment.progressPercent === 100);
   const showCertificationDeadline =
     training.enrollment && training.enrollment.completionDeadline;
-  const isCertification = loType === "certification";
+  const isCertification = loType === CERTIFICATION;
+
+  const enrollmentDeadlineContainer =
+    enrollmentDeadline && showEnrollmentDeadline ? (
+      <>
+        <div className={styles.subtleText}>
+          {GetTranslation(`alm.overview.enrollment.deadline`)}
+          {modifyTime(trainingInstance.enrollmentDeadline, locale)}
+        </div>
+      </>
+    ) : (
+      ""
+    );
+
+  const completionDeadlineContainer = completionDeadline ? (
+    <div className={styles.subtleText}>
+      {GetTranslation(`alm.overview.completion.deadline`)}
+      {/* <div className={styles.label}> */}
+      {loType === CERTIFICATION
+        ? !showCertificationDeadline
+          ? formatMessage(
+              {
+                id: "alm.overview.certification.deadline",
+              },
+              {
+                0: trainingInstance?.completionDeadline?.slice(0, -1),
+              }
+            )
+          : modifyTime(showCertificationDeadline, locale)?.slice(0, -10)
+        : modifyTime(trainingInstance.completionDeadline, locale)}
+      {/* </div> */}
+    </div>
+  ) : (
+    ""
+  );
+
+  const unenrollmentDeadlineContainer =
+    unenrollmentDeadline && !showEnrollmentDeadline && canUnenroll ? (
+      <>
+        <div className={styles.subtleText}>
+          {formatMessage({
+            id: "alm.overview.unenrollment.deadline",
+            defaultMessage: "Unenrollment - ",
+          })}
+          {modifyTime(trainingInstance.unenrollmentDeadline, locale)}
+        </div>
+      </>
+    ) : (
+      ""
+    );
 
   useEffect(() => {
     const computeIsSynced = async () => {
       const account = await getALMAccount();
       if (
-        new Date(training.dateCreated) >
-        new Date(account.lastSyncedDateCreatedForMagento)
+        !account ||
+        !isPrimeUserLoggedIn ||
+        new Date(training.dateCreated) <=
+          new Date(account.lastSyncedDateCreatedForMagento)
       ) {
-        setIsTrainingNotSynced(true);
+        setIsTrainingSynced(true);
       } else {
-        setIsTrainingNotSynced(false);
+        setIsTrainingSynced(false);
       }
     };
     computeIsSynced();
   }, [training.dateCreated, training.price]);
 
-  const trainingNotAvailableForPurchaseText = isTrainingNotSynced ? (
+  const trainingNotAvailableForPurchaseText = !isTrainingSynced ? (
     <p style={{ textAlign: "center" }} className={styles.label}>
       {formatMessage(
         {
@@ -538,24 +648,6 @@ const PrimeTrainingPageMetaData: React.FC<{
 
   return (
     <section className={styles.container}>
-      {showPreviewButton && (
-        <>
-          <button
-            className={`almButton secondary ${styles.commonButton}`}
-            onClick={previewHandler}
-          >
-            {formatMessage({
-              id: `alm.overview.button.preview`,
-            })}
-          </button>
-
-          <div className={styles.textOr}>
-            {formatMessage({
-              id: `alm.overview.text.or`,
-            })}
-          </div>
-        </>
-      )}
       <div className={styles.actionContainer}>
         {action === "registerInterest" && (
           <button className={`almButton secondary ${styles.commonButton}`}>
@@ -567,8 +659,7 @@ const PrimeTrainingPageMetaData: React.FC<{
             <button
               className={`almButton primary ${styles.commonButton}`}
               onClick={handleEnrollment}
-              disabled={!isSeatAvailable || hasEnrollmentDeadlinePassed}
-            >
+              disabled={hasEnrollmentDeadlinePassed}>
               {actionText}
             </button>
             {enrollmentDeadlinePassedText}
@@ -580,9 +671,8 @@ const PrimeTrainingPageMetaData: React.FC<{
           action === "revisit") && (
           <>
             <button
-              className={`almButton secondary ${styles.commonButton}`}
-              onClick={launchPlayerHandler}
-            >
+              className={`almButton primary ${styles.commonButton}`}
+              onClick={launchPlayerHandler}>
               {actionText}
             </button>
             {waitListText}
@@ -595,11 +685,10 @@ const PrimeTrainingPageMetaData: React.FC<{
               className={`almButton primary ${styles.commonButton}`}
               onClick={addToCart}
               disabled={
-                isTrainingNotSynced ||
+                !isTrainingSynced ||
                 !isSeatAvailable ||
                 hasEnrollmentDeadlinePassed
-              }
-            >
+              }>
               {actionText}
             </button>
             {trainingNotAvailableForPurchaseText}
@@ -611,8 +700,7 @@ const PrimeTrainingPageMetaData: React.FC<{
           <>
             <button
               className={`almButton secondary ${styles.commonButton}`}
-              disabled={true}
-            >
+              disabled={true}>
               {actionText}
             </button>
             <div className={styles.mangerPendingApprovalText}>
@@ -628,8 +716,7 @@ const PrimeTrainingPageMetaData: React.FC<{
           <>
             <button
               className={`almButton secondary ${styles.commonButton}`}
-              disabled={true}
-            >
+              disabled={true}>
               {actionText}
             </button>
 
@@ -640,8 +727,7 @@ const PrimeTrainingPageMetaData: React.FC<{
           <>
             <button
               className={`almButton secondary ${styles.commonButton}`}
-              disabled={true}
-            >
+              disabled={true}>
               {actionText}
             </button>
 
@@ -649,268 +735,292 @@ const PrimeTrainingPageMetaData: React.FC<{
           </>
         )}
       </div>
-      {showPriceDetails && (
-        <div className={styles.commonContainer}>
-          <span aria-hidden="true" className={styles.icon}>
-            <Money />
-          </span>
-          <div className={styles.innerContainer}>
-            <div>
+      {showPreviewButton && (
+        <div
+          className={` ${styles.actionContainer} ${styles.crsStsButtonPreBookSection}`}>
+          <div className={styles.backgroundButton}>
+            <button
+              className={`${styles.previewButton}`}
+              onClick={previewHandler}>
               {formatMessage({
-                id: "alm.purchase.details",
-                defaultMessage: "Purchase Details",
+                id: `alm.overview.button.preview`,
               })}
-            </div>
-            <div>
-              {formatMessage(
-                {
-                  id: "alm.training.price",
-                  defaultMessage: "Price",
-                },
-                { amount: getFormattedPrice(training.price) }
-              )}
-            </div>
-            <div>{modifyTime(enrollment.dateEnrolled, locale)}</div>
+            </button>
+          </div>
+          <div className={styles.preBmSeperator}></div>
+          <div className={styles.backgroundButton}>
+            <button className={` ${styles.previewButton}`} onClick={toggle}>
+              {getBookMarkIcon}
+              {getBookMarkStatusText}
+            </button>
           </div>
         </div>
       )}
-      {/* Alternate Languages */}
-      {alternativesLangAvailable.length > 0 && (
-        <div className={styles.commonContainer}>
-          <span aria-hidden="true" className={styles.altLangIcon}>
-            <GlobeGrid />
-          </span>
-          <div className={styles.innerContainer}>
-            <label className={styles.minimumCriteriaLabel}>
-              {formatMessage({
-                id: "alm.overview.alternativesAvailable",
-                defaultMessage: "Alternatives Available",
-              })}
-            </label>
-            <ALMTooltip
-              message={formatMessage({
-                id: "alm.overview.alternativesAvailable.toolTip",
-                defaultMessage:
-                  "You can change the language or the format of the content in the player.",
-              })}
-            ></ALMTooltip>
-            {alternativesLangAvailable?.map((language) => {
-              return <div key={language}>{language}</div>;
-            })}
-          </div>
-        </div>
-      )}
-      {/* Minimum Completion Criteria container */}
-      {showMinimumCompletion && (
-        <div className={styles.commonContainer}>
-          <span aria-hidden="true" className={styles.minimumCriteria}>
-            {minimumCriteria.value}
-          </span>
-          <div className={styles.innerContainer}>
-            <label className={styles.minimumCriteriaLabel}>
-              {formatMessage({
-                id: "alm.overview.minimum.completion.criteria",
-                defaultMessage: "Minimum Completion Criteria",
-              })}
-            </label>
-            <ALMTooltip message={minimumCriteria.label}></ALMTooltip>
-          </div>
+      {!showPreviewButton && (
+        <div className={styles.actionContainer}>
+          <button className={styles.bookMark} onClick={toggle}>
+            {getBookMarkIcon}
+            {getBookMarkStatusText}
+          </button>
         </div>
       )}
 
-      {/* Trainings Completed container */}
-      {isEnrolled && trainingsCompleted && (
-        <div className={styles.commonContainer}>
-          <span aria-hidden="true" className={styles.minimumCriteria}>
-            {trainingsCompleted}
-          </span>
-          <div className={styles.innerContainer}>
-            <label className={styles.minimumCriteriaLabel}>
-              {formatMessage({
-                id: "alm.overview.qminimum.completion.criteria",
-                defaultMessage: "Trainings Completed",
-              })}
-            </label>
-          </div>
-        </div>
-      )}
-
-      {/* Mandatory Modules container */}
-      {showMandatoryModulesCount && (
-        <div className={styles.commonContainer}>
-          <span aria-hidden="true" className={styles.mandatory}>
-            {mandatoryModulesCount}
-          </span>
-          <div className={styles.innerContainer}>
-            <label className={styles.minimumCriteriaLabel}>
-              {formatMessage({
-                id: "alm.overview.mandatory.modules",
-                defaultMessage: "Mandatory Modules",
-              })}
-            </label>
-            <ALMTooltip
-              message={formatMessage({
-                id: "alm.overview.mandatory.modules.tooltip",
-                defaultMessage:
-                  "Learners must complete all mandatory Modules (marked with a *) to achieve Course completion status",
-              })}
-            ></ALMTooltip>
-          </div>
-        </div>
-      )}
-      {/* CORE content completed container */}
-      {isEnrolled && coreContentCompleted && (
-        <div className={styles.commonContainer}>
-          <span aria-hidden="true" className={styles.minimumCriteria}>
-            {coreContentCompleted}
-          </span>
-          <div className={styles.innerContainer}>
-            <label className={styles.minimumCriteriaLabel}>
-              {formatMessage({
-                id: "alm.overview.course.core.completed",
-                defaultMessage: "Core Content Completed",
-              })}
-            </label>
-          </div>
-        </div>
-      )}
-      {/* Enrollment Deadline container */}
-      {showEnrollmentDeadline && (
-        <div className={styles.commonContainer}>
-          <span aria-hidden="true" className={styles.icon}>
-            <Calendar />
-          </span>
-          <div className={styles.innerContainer}>
-            <label className={styles.label}>
-              {formatMessage({
-                id: "alm.overview.enrollment.deadline",
-                defaultMessage: "Enrollment Deadline",
-              })}
-            </label>
-            <div>{modifyTime(trainingInstance.enrollmentDeadline, locale)}</div>
-          </div>
-        </div>
-      )}
-      {/* Completion Deadline container */}
-      {showCompletionDeadline && (
-        <div className={styles.commonContainer}>
-          <span aria-hidden="true" className={styles.icon}>
-            <Calendar />
-          </span>
-          <div className={styles.innerContainer}>
-            <label className={styles.label}>
-              {formatMessage({
-                id: "alm.overview.completion.deadline",
-                defaultMessage: "Completion Deadline",
-              })}
-            </label>
-            <div>
-              {loType === CERTIFICATION
-                ? !showCertificationDeadline
-                  ? formatMessage(
-                      {
-                        id: "alm.overview.certification.deadline",
-                      },
-                      {
-                        0: trainingInstance?.completionDeadline?.slice(0, -1),
-                      }
-                    )
-                  : modifyTime(showCertificationDeadline, locale)?.slice(0, -10)
-                : modifyTime(trainingInstance.completionDeadline, locale)}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Certificate Type container */}
-      {isCertification && (
-        <div className={styles.commonContainer}>
-          <span aria-hidden="true" className={styles.icon}>
-            <Clock />
-          </span>
-          <div className={styles.innerContainer}>
-            <label className={styles.label}>
-              {formatMessage({
-                id: "alm.overview.certification.type",
-                defaultMessage: "Type",
-              })}
-            </label>
-            <div>
-              {trainingInstance?.validity ? "Recurring" : "Non Recurring"}
-            </div>
-          </div>
-        </div>
-      )}
-      {/* Certificate Validity container */}
-      {isCertification && (
-        <div className={styles.commonContainer}>
-          <span aria-hidden="true" className={styles.icon}>
-            <ClockCheck />
-          </span>
-          <div className={styles.innerContainer}>
-            <label className={styles.label}>
-              {formatMessage({
-                id: "alm.overview.certification.validity",
-                defaultMessage: "Validity",
-              })}
-            </label>
-            <div>
-              {trainingInstance?.validity
-                ? formatMessage(
-                    { id: "alm.overview.certification.durationTime" },
-                    { 0: trainingInstance?.validity?.slice(0, -1) }
-                  )
-                : formatMessage({
-                    id: "alm.certification.type",
-                    defaultMessage: "Perpetual",
-                  })}
-            </div>
-          </div>
-        </div>
-      )}
-      {/* enrollment container */}
-      {showEnrollmentCount && (
-        <div className={styles.commonContainer}>
-          <span aria-hidden="true" className={styles.icon}>
-            <UserGroup />
-          </span>
-          <div className={styles.innerContainer}>
-            <label className={styles.label}>
-              {formatMessage(
-                {
-                  id: "alm.overview.enrollment.count",
-                },
-                {
-                  0: enrollmentCount,
-                }
-              )}
-            </label>
-          </div>
-        </div>
-      )}
-      {/* Badge Container */}
-      {showBadges && (
-        <div className={styles.commonContainer}>
-          <span aria-hidden="true" className={`${styles.icon} ${styles.badge}`}>
-            {LEARNER_BADGE_SVG()}
-          </span>
-          <div className={styles.innerContainer}>
-            <label className={styles.label}>
-              {GetTranslation("alm.overview.badge", true)}
-            </label>
-            {
-              <img
-                src={badge.badgeUrl}
-                alt="badge"
-                width={"50px"}
-                height={"50px"}
-              />
+      {/* Rating Container*/}
+      {useCanShowRating(training) && isEnrolled && (
+        <div
+          className={[styles.submitRatingBox, styles.borderContainer].join(
+            " "
+          )}>
+          <StarRatingSubmitDialog
+            ratingGiven={
+              training.enrollment.rating ? training.enrollment.rating : 0
             }
-          </div>
+            updateRating={updateRating}
+            training={training}
+            trainingInstance={trainingInstance}
+          />
         </div>
       )}
-      {/* Modules Completed container */}
-      {/* {showModulesCompleted && (
+      <section className={styles.borderContainer}>
+        {showPriceDetails && (
+          <div className={styles.commonContainer}>
+            <span aria-hidden="true" className={styles.icon}>
+              <Money />
+            </span>
+            <div className={styles.innerContainer}>
+              <div>
+                {formatMessage({
+                  id: "alm.purchase.details",
+                  defaultMessage: "Purchase Details",
+                })}
+              </div>
+              <div>
+                {formatMessage(
+                  {
+                    id: "alm.training.price",
+                    defaultMessage: "Price",
+                  },
+                  { amount: getFormattedPrice(training.price) }
+                )}
+              </div>
+              <div>{modifyTime(enrollment.dateEnrolled, locale)}</div>
+            </div>
+          </div>
+        )}
+
+        {/* Alternate Languages */}
+        {alternativesLangAvailable.length > 0 && (
+          <div className={styles.commonContainer}>
+            <span aria-hidden="true" className={styles.altLangIcon}>
+              <GlobeGrid />
+            </span>
+            <div className={styles.innerContainer}>
+              <label className={styles.subtleText}>
+                {formatMessage({
+                  id: "alm.overview.alternativesAvailable",
+                  defaultMessage: "Alternatives Available",
+                })}
+              </label>
+              <ALMTooltip
+                message={formatMessage({
+                  id: "alm.overview.alternativesAvailable.toolTip",
+                  defaultMessage:
+                    "You can change the language or the format of the content in the player.",
+                })}></ALMTooltip>
+              {alternativesLangAvailable?.map((language) => {
+                return (
+                  <div className={styles.altLang} key={language}>
+                    {language}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Minimum Completion Criteria container */}
+        {showMinimumCompletion && (
+          <div className={styles.commonContainer}>
+            <span aria-hidden="true" className={styles.minimumCriteria}>
+              {minimumCriteria.value}
+            </span>
+            <div className={styles.innerContainer}>
+              <label className={styles.subtleText}>
+                {formatMessage({
+                  id: "alm.overview.minimum.completion.criteria",
+                  defaultMessage: "Minimum Completion Criteria",
+                })}
+              </label>
+              <ALMTooltip message={minimumCriteria.label}></ALMTooltip>
+            </div>
+          </div>
+        )}
+
+        {/* Trainings Completed container */}
+        {isEnrolled && trainingsCompleted && (
+          <div className={styles.commonContainer}>
+            <span aria-hidden="true" className={styles.minimumCriteria}>
+              {trainingsCompleted}
+            </span>
+            <div className={styles.innerContainer}>
+              <label className={styles.subtleText}>
+                {formatMessage({
+                  id: "alm.overview.qminimum.completion.criteria",
+                  defaultMessage: "Trainings Completed",
+                })}
+              </label>
+            </div>
+          </div>
+        )}
+
+        {/* Mandatory Modules container */}
+        {showMandatoryModulesCount && (
+          <div className={styles.commonContainer}>
+            <span aria-hidden="true" className={styles.mandatory}>
+              {mandatoryModulesCount}
+            </span>
+            <div className={styles.innerContainer}>
+              <label className={styles.subtleText}>
+                {GetTranslation("alm.text.required.modules", true)}
+              </label>
+              <ALMTooltip
+                message={GetTranslation(
+                  "alm.text.required.modules.tooltip",
+                  true
+                )}></ALMTooltip>
+            </div>
+          </div>
+        )}
+
+        {/* CORE content completed container */}
+        {isEnrolled && coreContentCompleted && (
+          <div className={styles.commonContainer}>
+            <span aria-hidden="true" className={styles.minimumCriteria}>
+              {coreContentCompleted}
+            </span>
+            <div className={styles.innerContainer}>
+              <label className={styles.subtleText}>
+                {formatMessage({
+                  id: "alm.overview.course.core.completed",
+                  defaultMessage: "Core Content Completed",
+                })}
+              </label>
+            </div>
+          </div>
+        )}
+
+        {/*Deadline container */}
+        {(enrollmentDeadline || completionDeadline || unenrollmentDeadline) && (
+          <div className={styles.commonContainer}>
+            <span aria-hidden="true" className={styles.icon}>
+              <Calendar />
+            </span>
+            <div className={styles.innerContainer}>
+              <label className={styles.label}>
+                {formatMessage({
+                  id: "alm.overview.deadline",
+                  defaultMessage: "Deadline(s)",
+                })}
+              </label>
+              {enrollmentDeadlineContainer}
+              {unenrollmentDeadlineContainer}
+              {completionDeadlineContainer}
+            </div>
+          </div>
+        )}
+
+        {/* Certificate Type container */}
+        {isCertification && (
+          <div className={styles.commonContainer}>
+            <span aria-hidden="true" className={styles.icon}>
+              <Clock />
+            </span>
+            <div className={styles.innerContainer}>
+              <label className={styles.label}>
+                {formatMessage({
+                  id: "alm.overview.certification.type",
+                  defaultMessage: "Type",
+                })}
+              </label>
+              <div>
+                {trainingInstance?.validity ? "Recurring" : "Non Recurring"}
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Certificate Validity container */}
+        {isCertification && (
+          <div className={styles.commonContainer}>
+            <span aria-hidden="true" className={styles.icon}>
+              <ClockCheck />
+            </span>
+            <div className={styles.innerContainer}>
+              <label className={styles.label}>
+                {formatMessage({
+                  id: "alm.overview.certification.validity",
+                  defaultMessage: "Validity",
+                })}
+              </label>
+              <div>
+                {trainingInstance?.validity
+                  ? formatMessage(
+                      { id: "alm.overview.certification.durationTime" },
+                      { 0: trainingInstance?.validity?.slice(0, -1) }
+                    )
+                  : formatMessage({
+                      id: "alm.certification.type",
+                      defaultMessage: "Perpetual",
+                    })}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* enrollment container */}
+        {showEnrollmentCount && (
+          <div className={styles.commonContainer}>
+            <span aria-hidden="true" className={styles.icon}>
+              <UserGroup />
+            </span>
+            <div className={styles.innerContainer}>
+              <label className={styles.label}>
+                {formatMessage(
+                  {
+                    id: "alm.overview.enrollment.count",
+                  },
+                  {
+                    0: enrollmentCount,
+                  }
+                )}
+              </label>
+            </div>
+          </div>
+        )}
+        {/* Badge Container */}
+        {showBadges && (
+          <div className={styles.commonContainer}>
+            <span
+              aria-hidden="true"
+              className={`${styles.icon} ${styles.badge}`}>
+              {LEARNER_BADGE_SVG()}
+            </span>
+            <div className={styles.innerContainer}>
+              <label className={styles.label}>
+                {GetTranslation("alm.overview.badge", true)}
+              </label>
+              {
+                <img
+                  src={badge.badgeUrl}
+                  alt="badge"
+                  width={"50px"}
+                  height={"50px"}
+                />
+              }
+            </div>
+          </div>
+        )}
+        {/* Modules Completed container */}
+        {/* {showModulesCompleted && (
         <div className={styles.commonContainer}>
           <span className={styles.moduleCompleted}>0/1</span>
           <div className={styles.innerContainer}>
@@ -918,150 +1028,145 @@ const PrimeTrainingPageMetaData: React.FC<{
           </div>
         </div>
       )} */}
-      {/* Skills Container */}
-      <div className={styles.commonContainer}>
-        <span aria-hidden="true" className={styles.icon}>
-          <Send></Send>
-        </span>
-        <div className={styles.innerContainer}>
-          <label className={styles.label}>
-            {GetTranslation(
-              `alm.overview.skills.achieve.level.${loType}`,
-              true
-            )}
-          </label>
-          {filteredSkills?.map((skill) => {
-            return (
-              <div key={skill.name}>
-                {skill.name} - {skill.levelName}{" "}
-                {formatMessage(
-                  { id: "alm.training.skill.credits" },
-                  { x: skill.credits }
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-      {/* Author */}
-      {showAuthors && (
-        <div className={styles.authorContainer}>
-          {Array.from(legacyAuthorNames).map((legacyAuthorName) => {
-            return (
-              <div className={styles.authors}>
-                <span className={styles.cpauthorcircle}>
-                  {DEFAULT_USER_SVG()}
-                </span>
-                <div className={styles.innerContainer}>
-                  <label className={styles.label}>Author</label>
-                  <p className={styles.authorName}>{legacyAuthorName}</p>
+        {/* Skills Container */}
+        <div className={styles.commonContainer}>
+          <span aria-hidden="true" className={styles.sendIcon}>
+            <Send></Send>
+          </span>
+          <div className={styles.innerContainer}>
+            <label className={styles.label}>
+              {GetTranslation(
+                `alm.overview.skills.achieve.level.${loType}`,
+                true
+              )}
+            </label>
+            {filteredSkills?.map((skill) => {
+              return (
+                <div className={styles.subtleText} key={skill.name}>
+                  {skill.name} - {skill.levelName}{" "}
+                  {formatMessage(
+                    { id: "alm.training.skill.credits" },
+                    { x: skill.credits }
+                  )}
                 </div>
-              </div>
-            );
-          })}
-          {training.authors?.map((author) => {
-            return (
-              <div key={author.id}>
+              );
+            })}
+          </div>
+        </div>
+        {/* Author */}
+        {showAuthors && (
+          <div className={styles.authorContainer}>
+            <label className={styles.label}>
+              {GetTranslation("alm.text.author(s)")}
+            </label>
+            {Array.from(legacyAuthorNames).map((legacyAuthorName) => {
+              return (
                 <div className={styles.authors}>
-                  <span aria-hidden="true">
-                    <img src={author.avatarUrl} aria-hidden="true" alt="" />
+                  <span className={styles.cpauthorcircle}>
+                    {DEFAULT_USER_SVG()}
                   </span>
                   <div className={styles.innerContainer}>
-                    <label className={styles.label}>Author</label>
-                    <p className={styles.authorName}>{author.name}</p>
+                    <p className={styles.authorName}>{legacyAuthorName}</p>
                   </div>
                 </div>
-                <p className={styles.authorName}>{author.bio}</p>
+              );
+            })}
+            {training.authors?.map((author) => {
+              return (
+                <div key={author.id}>
+                  <div className={styles.authors}>
+                    <span aria-hidden="true">
+                      <img src={author.avatarUrl} aria-hidden="true" alt="" />
+                    </span>
+                    <div className={styles.innerContainer}>
+                      <p className={styles.subtleText}>{author.name}</p>
+                    </div>
+                  </div>
+                  {/* <p className={styles.authorName}>{author.bio}</p> */}
+                </div>
+              );
+            })}
+          </div>
+        )}
+        {/* JOB Aid container */}
+        {showJobAids && (
+          <div className={styles.commonContainer}>
+            <span aria-hidden="true" className={styles.icon}>
+              <PinOff />
+            </span>
+            <div className={styles.innerContainer}>
+              <label className={styles.label}>
+                {GetTranslation("alm.training.jobAid", true)}
+              </label>
+              <div>
+                {training.supplementaryLOs.map((item) => {
+                  return item.instances[0].loResources.map((loResource) => {
+                    return loResource.resources.map((resource) => (
+                      <PrimeTrainingPageExtraJobAid
+                        resource={resource}
+                        training={item}
+                        enrollmentHandler={enrollmentHandler}
+                        key={item.id}
+                        unEnrollmentHandler={unEnrollmentHandler}
+                        jobAidClickHandler={jobAidClickHandler}
+                      />
+                    ));
+                  });
+                })}
               </div>
-            );
-          })}
-        </div>
-      )}
-      {/* JOB Aid container */}
-      {showJobAids && (
-        <div className={styles.commonContainer}>
-          <span aria-hidden="true" className={styles.icon}>
-            <PinOff />
-          </span>
-          <div className={styles.innerContainer}>
-            <label className={styles.label}>
-              {GetTranslation("alm.training.jobAid", true)}
-            </label>
-            <div>
-              {training.supplementaryLOs.map((item) => {
-                return item.instances[0].loResources.map((loResource) => {
-                  return loResource.resources.map((resource) => (
-                    <PrimeTrainingPageExtraJobAid
-                      resource={resource}
-                      training={item}
-                      enrollmentHandler={enrollmentHandler}
-                      key={item.id}
-                      unEnrollmentHandler={unEnrollmentHandler}
-                      jobAidClickHandler={jobAidClickHandler}
-                    />
-                  ));
-                });
-              })}
             </div>
           </div>
-        </div>
-      )}
-      {/* Resources container */}
-      {showResource && (
-        <div className={styles.commonContainer}>
-          <span aria-hidden="true" className={styles.icon}>
-            <Download />
-          </span>
-          <div className={styles.innerContainer}>
-            <label className={styles.label}>
-              {formatMessage({
-                id: "sfdsfs",
-                defaultMessage: "Resources",
-              })}
-            </label>
-            <div>
-              {training.supplementaryResources.map((item) => {
-                return training.enrollment ? (
-                  <a
-                    href={item.location}
-                    download
-                    className={styles.supplymentaryLoName}
-                    target="_blank"
-                    rel="noreferrer"
-                    key={item.id}
-                  >
-                    <span className={styles.resourceName}>{item.name}</span>
-                  </a>
-                ) : (
-                  <span className={styles.resourceName}>{item.name}</span>
-                );
-              })}
+        )}
+        {/* Resources container */}
+        {showResource && (
+          <div className={styles.commonContainer}>
+            <span aria-hidden="true" className={styles.icon}>
+              <Download />
+            </span>
+            <div className={styles.innerContainer}>
+              <label className={styles.label}>
+                {formatMessage({
+                  id: "alm.text.resources",
+                  defaultMessage: "Resources",
+                })}
+              </label>
+              <div>
+                {training.supplementaryResources.map((item) => {
+                  return training.enrollment ? (
+                    <a
+                      href={item.location}
+                      download
+                      className={styles.supplymentaryLoName}
+                      target="_blank"
+                      rel="noreferrer"
+                      key={item.id}>
+                      <span className={styles.resourceName}>{item.name}</span>
+                    </a>
+                  ) : (
+                    <span className={styles.subtleText}>{item.name}</span>
+                  );
+                })}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </section>
+
       {/* UnEnroll button container */}
-      {showUnenrollButton && (
+      {canUnenroll && (
         <div className={styles.commonContainer}>
           <span
             aria-hidden="true"
             className={styles.icon}
-            style={{ visibility: "hidden" }}
-          >
+            style={{ visibility: "hidden" }}>
             <Download />
           </span>
-          <div className={styles.innerContainer}>
-            <a
-              href="javascript:void(0)"
-              className={styles.supplymentaryLoName}
-              onClick={unEnrollConfirmationClickHandler}
-            >
-              {loType === "certification"
-                ? "Unenroll from certification"
-                : loType === "learningProgram"
-                ? "Unenroll from learning Program"
-                : "Unenroll from course"}
-            </a>
+          <div className={styles.bottomContainer}>
+            <button
+              className={`almButton ${styles.unenrollButton}`}
+              onClick={unEnrollConfirmationClickHandler}>
+              {typeOfUnEnrollButton}
+            </button>
           </div>
         </div>
       )}

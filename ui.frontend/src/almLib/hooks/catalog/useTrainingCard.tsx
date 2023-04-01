@@ -10,6 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { useCallback, useMemo } from "react";
+import { useIntl } from "react-intl";
 import { AlertType } from "../../common/Alert/AlertDialog";
 import { useAlert } from "../../common/Alert/useAlert";
 import APIServiceInstance from "../../common/APIService";
@@ -24,16 +25,23 @@ import {
   isJobaid,
   isJobaidContentTypeUrl,
 } from "../../utils/catalog";
-import { getALMConfig, getALMObject } from "../../utils/global";
-import { useCardBackgroundStyle, useCardIcon } from "../../utils/hooks";
+import {
+  getALMConfig,
+  getALMObject,
+  navigateToLoInstanceInTeamsApp,
+  navigateToLoInTeamsApp,
+} from "../../utils/global";
+import { useCardIcon } from "../../utils/hooks";
 import { LaunchPlayer } from "../../utils/playback-utils";
 import { QueryParams } from "../../utils/restAdapter";
-import { getPreferredLocalizedMetadata, GetTranslation } from "../../utils/translationService";
+import {
+  getPreferredLocalizedMetadata,
+  GetTranslation,
+} from "../../utils/translationService";
 
 export const useTrainingCard = (training: PrimeLearningObject) => {
   const [almAlert] = useAlert();
-  const { locale } = getALMConfig();
-
+  const { locale } = useIntl();
   let {
     loFormat: format,
     loType: type,
@@ -53,11 +61,8 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
       return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
     }, [training.localizedMetadata, locale]);
 
-  const {
-    cardIconUrl = "",
-    color = "",
-    bannerUrl = "",
-  } = useCardIcon(training);
+  const { cardIconUrl, color, bannerUrl, cardBgStyle, listThumbnailBgStyle } =
+    useCardIcon(training);
 
   const computedSkillsName = useMemo(() => {
     if (skillNames!?.length > 0) {
@@ -68,9 +73,7 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
       tempSkillNames.add(item.skillLevel?.skill?.name);
     });
     return Array.from(tempSkillNames).join(", ");
-    // return skills?.map((item) => item.skillLevel?.skill?.name)
   }, [skillNames, skills]);
-  const cardBgStyle = useCardBackgroundStyle(training, cardIconUrl, color);
 
   const cardClickHandler = useCallback(async () => {
     if (!training) return;
@@ -79,9 +82,17 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
       //Does ES have instances in response
       const activeInstances = getActiveInstances(training);
       if (!activeInstances || activeInstances?.length === 1) {
-        alm.navigateToTrainingOverviewPage(training.id);
+        if (getALMConfig().isTeamsApp) {
+          navigateToLoInTeamsApp(training.id);
+        } else {
+          alm.navigateToTrainingOverviewPage(training.id);
+        }
       } else {
-        alm.navigateToInstancePage(training.id);
+        if (getALMConfig().isTeamsApp) {
+          navigateToLoInstanceInTeamsApp(training.id);
+        } else {
+          alm.navigateToInstancePage(training.id);
+        }
       }
       return;
     }
@@ -109,23 +120,39 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     }
 
     if (training.enrollment) {
-      alm.navigateToTrainingOverviewPage(
-        training.id,
-        training.enrollment.loInstance.id
-      );
+      if (getALMConfig().isTeamsApp) {
+        navigateToLoInTeamsApp(training.id, training.enrollment.loInstance.id);
+      } else {
+        alm.navigateToTrainingOverviewPage(
+          training.id,
+          training.enrollment.loInstance.id
+        );
+      }
       return;
     }
     const activeInstances = getActiveInstances(training);
     if (activeInstances?.length === 1) {
-      alm.navigateToTrainingOverviewPage(training.id, activeInstances[0].id);
+      if (getALMConfig().isTeamsApp) {
+        navigateToLoInTeamsApp(training.id, activeInstances[0].id);
+      } else {
+        alm.navigateToTrainingOverviewPage(training.id, activeInstances[0].id);
+      }
       return;
     }
     if (activeInstances?.length === 0) {
       const defaultInstance = getDefaultIntsance(training);
-      alm.navigateToTrainingOverviewPage(training.id, defaultInstance[0]?.id);
+      if (getALMConfig().isTeamsApp) {
+        navigateToLoInTeamsApp(training.id, defaultInstance[0]?.id);
+      } else {
+        alm.navigateToTrainingOverviewPage(training.id, defaultInstance[0]?.id);
+      }
       return;
     }
-    alm.navigateToInstancePage(training.id);
+    if (getALMConfig().isTeamsApp) {
+      navigateToLoInstanceInTeamsApp(training.id);
+    } else {
+      alm.navigateToInstancePage(training.id);
+    }
   }, [training]);
 
   return {
@@ -145,6 +172,7 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     cardIconUrl,
     color,
     cardBgStyle,
+    listThumbnailBgStyle,
     enrollment,
     cardClickHandler,
     training,

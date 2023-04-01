@@ -49,6 +49,18 @@
                         sling:resourceType="granite/ui/components/coral/foundation/form/field"
                         fieldLabel="Help"
                         wrapperClass="config-help-btn"/>
+                    <configRdaTokenHeading
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/field"
+                        fieldLabel="Configure the Refresh Token"
+                        wrapperClass="config-rda-token-heading"/>
+                    <configRdaTokenBtn
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/field"
+                        fieldLabel="Get Refresh Token"
+                        wrapperClass="config-rda-token-btn"/>
                     <usage
                         cq:showOnCreate="{Boolean}true"
                         granite:id="alm-usage-type-select"
@@ -281,6 +293,12 @@
                         sling:resourceType="granite/ui/components/foundation/form/hidden"
                         name="./configHelpURL"
                         value="https://helpx.adobe.com/captivate-prime/integrate-aem-captivate-prime.html"/>
+                    <configRdaTokenURL
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/foundation/form/hidden"
+                        name="./configRdaTokenURL"
+                        value=""/>
                 </items>
             </column>
         </items>

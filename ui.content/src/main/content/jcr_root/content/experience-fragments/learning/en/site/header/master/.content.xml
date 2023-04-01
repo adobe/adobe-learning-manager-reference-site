@@ -23,7 +23,11 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="learning/components/header"
-                    fileReference="/content/dam/learning/site/lrng-logo.png"/>
+                    fileReference="/content/dam/learning/site/lrng-logo.png"
+                    smokeImgRef="/content/dam/learning/site/Smock_Close.png"
+                    showMenuImgRef="/content/dam/learning/site/ShowMenu.svg"
+                    cartIconImgRef="/content/dam/learning/site/cart-icon.svg"
+                    downIconImgRef="/content/dam/learning/site/ChevronDown.svg"/>
             </container>
         </root>
     </jcr:content>

@@ -25,6 +25,9 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <script>
+      var isAlmLocalEnv = true;
+    </script>
+    <script>
       class NamespacedSessionStorage {
         constructor(sessionStorage, key) {
           this.sessionStorage = sessionStorage;
@@ -326,7 +329,8 @@
       window.ALM.ALMConfig = ALMConfig; //window.ALM.ALMConfig || primeConfig;
       window.ALM.getALMConfig = getALMConfig;
       window.ALM.handleLogIn = handleLogIn;
-      window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
+      window.ALM.navigateToTrainingOverviewPage =
+        navigateToTrainingOverviewPage;
       window.ALM.navigateToInstancePage = navigateToInstancePage;
       window.ALM.navigateToBoardDetailsPage = navigateToBoardDetailsPage;
       window.ALM.navigateToCommerceSignInPage = navigateToCommerceSignInPage;
@@ -335,7 +339,8 @@
       window.ALM.getCommerceToken = getCommerceToken;
       window.ALM.getALMUser = getALMUser;
       window.ALM.getAccountActiveFields = getAccountActiveFields;
-      window.ALM.updateAccountActiveFieldsDetails = updateAccountActiveFieldsDetails;
+      window.ALM.updateAccountActiveFieldsDetails =
+        updateAccountActiveFieldsDetails;
       window.ALM.updateALMUser = updateALMUser;
       window.ALM.storage = window.ALM.storage || new BrowserPersistence();
       window.ALM.updateCart = function (value) {
@@ -365,6 +370,7 @@
       data-learner-state="true"
       data-tag-name="true"
       data-skill-level="true"
+      data-cities="true"
     ></div> */-->
 
     <!--/* <div class="profile__container"></div>

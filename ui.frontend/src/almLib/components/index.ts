@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 */
 export * from "./ActiveFields";
 export * from "./ALMSkills";
+export * from "./CategoryBrowser";
 export * from "./Catalog/PrimeCatalogContainer";
 export * from "./Community/PrimeAlertDialog";
 export * from "./Community/PrimeCommunityAddPost";
@@ -48,7 +49,10 @@ export * from "./Community/PrimeCommunityReplies";
 export * from "./Community/PrimeCommunityReply";
 export * from "./Community/PrimeCommunitySearch";
 export * from "./Community/PrimeDropdown";
+export * from "./Footer";
 export * from "./Instance/PrimeInstancePage";
+export * from "./Masthead";
+export * from "./NavigationBar";
 export * from "./Notifications/PrimeNotificationContainer";
 export * from "./Portal";
 export * from "./TrainingOverview/PrimeTrainingPage";

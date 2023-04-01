@@ -109,12 +109,13 @@ public class CPTokenServiceImpl implements CPTokenService {
 	@Override
 	public String fetchLearnerToken(String almURL, String clientId, String clientSecret, String refreshToken, String email)
 	{
-		LOGGER.debug("CPPrime::CPTokenServiceImpl::fetchLearnerToken almURL {}, email {}", almURL, email);
+		LOGGER.debug("CPPrime::CPTokenServiceImpl::fetchLearnerToken new almURL {}, email {}", almURL, email);
 		try
 		{
 			String url = almURL + Constants.Config.LEARNER_TOKEN_URL.replace("{email}", URLEncoder.encode(email, "UTF-8")).replace("{min_validity_sec}", String.valueOf(Constants.Config.LEARNER_TOKEN_MIN_VALIDITY_SEC));
 			HttpPost post = new HttpPost(url);
 			post.setHeader("Content-Type", "application/json");
+			post.setHeader("Accept", "application/json");
 
 			Map<String, String> requestBodyMap = new HashMap<String, String>();
 			requestBodyMap.put("client_id", clientId);

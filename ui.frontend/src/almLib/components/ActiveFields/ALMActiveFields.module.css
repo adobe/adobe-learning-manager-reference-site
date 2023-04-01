@@ -94,7 +94,7 @@ governing permissions and limitations under the License.
   }
 }
 
-@media (max-width: 414px) {
+@media (max-width: 450px) {
   .activeFields {
     padding-left: 20px;
   }
