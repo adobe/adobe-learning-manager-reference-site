@@ -26,16 +26,18 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.apache.http.util.EntityUtils;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +49,10 @@ import com.google.gson.JsonObject;
 public class CPTokenServiceImpl implements CPTokenService {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(CPTokenServiceImpl.class);
+	
+	@Reference
+	private HttpClientBuilderFactory clientBuilderFactory;
+	
 
 	@Override
 	public Pair<String, Integer> getAccessTokenFromCode(String almURL, String clientId, String clientSecret, String code)
@@ -123,7 +129,7 @@ public class CPTokenServiceImpl implements CPTokenService {
 			requestBodyMap.put("refresh_token", refreshToken);
 			post.setEntity(new StringEntity(new Gson().toJson(requestBodyMap), ContentType.APPLICATION_JSON));
 
-			try (CloseableHttpClient httpClient = HttpClients.createDefault(); CloseableHttpResponse response = httpClient.execute(post))
+			try (CloseableHttpClient httpClient = clientBuilderFactory.newBuilder().setDefaultRequestConfig(getRequestConfig()).build(); CloseableHttpResponse response = httpClient.execute(post))
 			{
 				return EntityUtils.toString(response.getEntity());
 			} catch (ParseException | IOException e)
@@ -142,7 +148,7 @@ public class CPTokenServiceImpl implements CPTokenService {
 	{
 		HttpPost post = new HttpPost(url);
 		post.setEntity(new UrlEncodedFormEntity(params, StandardCharsets.UTF_8));
-		try (CloseableHttpClient httpClient = HttpClients.createDefault(); CloseableHttpResponse response = httpClient.execute(post))
+		try (CloseableHttpClient httpClient = clientBuilderFactory.newBuilder().setDefaultRequestConfig(getRequestConfig()).build(); CloseableHttpResponse response = httpClient.execute(post))
 		{
 			return EntityUtils.toString(response.getEntity());
 		} catch (ParseException | IOException e)
@@ -157,5 +163,13 @@ public class CPTokenServiceImpl implements CPTokenService {
 		String accessToken = jsonObject.get("access_token").getAsString();
 		Integer expirySecond = jsonObject.get("expires_in").getAsInt();
 		return new ImmutablePair<String, Integer>(accessToken, expirySecond);
+	}
+	
+	private RequestConfig getRequestConfig() {
+		return RequestConfig.custom()
+        .setConnectTimeout(10000)
+        .setConnectionRequestTimeout(10000)
+        .setSocketTimeout(10000)
+        .build();
 	}
 }

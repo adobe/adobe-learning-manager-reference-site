@@ -23,10 +23,12 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpStatus;
 import org.apache.http.ParseException;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.apache.http.util.EntityUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
@@ -65,6 +67,9 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
 
 	@Reference
 	private transient CPTokenService tokenService;
+	
+	@Reference
+	private HttpClientBuilderFactory clientBuilderFactory;
 
 	@Override
 	protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response)
@@ -167,7 +172,7 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
 		HttpGet getCall = new HttpGet(getUserURL);
 		getCall.setHeader("Authorization", "oauth " + accessToken);
 
-		try (CloseableHttpClient httpClient = HttpClients.createDefault(); CloseableHttpResponse response = httpClient.execute(getCall)) {
+		try (CloseableHttpClient httpClient = clientBuilderFactory.newBuilder().setDefaultRequestConfig(getRequestConfig()).build(); CloseableHttpResponse response = httpClient.execute(getCall)) {
 			if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode())
 			{
 				String configResponse = EntityUtils.toString(response.getEntity());
@@ -198,5 +203,13 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
 			page = pageRsc.adaptTo(Page.class);
 		}
 		return page;
+	}
+	
+	private RequestConfig getRequestConfig() {
+		return RequestConfig.custom()
+        .setConnectTimeout(10000)
+        .setConnectionRequestTimeout(10000)
+        .setSocketTimeout(10000)
+        .build();
 	}
 }

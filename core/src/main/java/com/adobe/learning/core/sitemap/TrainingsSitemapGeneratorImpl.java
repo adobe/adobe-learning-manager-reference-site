@@ -22,10 +22,12 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.apache.http.util.EntityUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -57,6 +59,9 @@ public class TrainingsSitemapGeneratorImpl implements SitemapGenerator {
 
 	@Reference
 	private SitemapLinkExternalizer externalizerService;
+	
+	@Reference
+	private HttpClientBuilderFactory clientBuilderFactory;
 
 	private static final String TRAINING_URL_FORMAT = "{trainingPage}.html/trainingId/{loType}:{loId}";
 
@@ -195,7 +200,7 @@ public class TrainingsSitemapGeneratorImpl implements SitemapGenerator {
 			String getURL = commerceGraphqlURL + "?query=" + query;
 			HttpGet getCall = new HttpGet(getURL);
 
-			try (CloseableHttpClient httpClient = HttpClients.createDefault(); CloseableHttpResponse response = httpClient.execute(getCall)) {
+			try (CloseableHttpClient httpClient = clientBuilderFactory.newBuilder().setDefaultRequestConfig(getRequestConfig()).build(); CloseableHttpResponse response = httpClient.execute(getCall)) {
 				String responseStr = EntityUtils.toString(response.getEntity());
 				Gson gson = new Gson();
 				JsonObject jsonObj = gson.fromJson(responseStr, JsonObject.class);
@@ -225,7 +230,7 @@ public class TrainingsSitemapGeneratorImpl implements SitemapGenerator {
 
 			HttpGet getCall = new HttpGet(esBaseURL);
 
-			try (CloseableHttpClient httpClient = HttpClients.createDefault(); CloseableHttpResponse response = httpClient.execute(getCall))
+			try (CloseableHttpClient httpClient = clientBuilderFactory.newBuilder().setDefaultRequestConfig(getRequestConfig()).build(); CloseableHttpResponse response = httpClient.execute(getCall))
 			{
 				if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode())
 				{
@@ -255,5 +260,13 @@ public class TrainingsSitemapGeneratorImpl implements SitemapGenerator {
 		{
 			LOGGER.error("CPPrime::TrainingsSitemapGeneratorImpl::generateForESUsage Exception while query for trainings", ioe);
 		}
+	}
+	
+	private RequestConfig getRequestConfig() {
+		return RequestConfig.custom()
+        .setConnectTimeout(10000)
+        .setConnectionRequestTimeout(10000)
+        .setSocketTimeout(10000)
+        .build();
 	}
 }

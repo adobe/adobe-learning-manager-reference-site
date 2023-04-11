@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.Servlet;
 
+import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
@@ -48,6 +49,9 @@ public class EmbeddableLrngWidgetListDS extends SlingAllMethodsServlet {
 
 	@Reference
 	private transient GlobalConfigurationService configService;
+	
+	@Reference
+	private static HttpClientBuilderFactory clientBuilderFactory;
 
 	@Override
 	protected void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response)
@@ -71,7 +75,7 @@ public class EmbeddableLrngWidgetListDS extends SlingAllMethodsServlet {
 					JsonObject adminObj = configService.getAdminConfigs(currentPage);
 					String hostName = adminObj.get(Constants.Config.ALM_BASE_URL).getAsString();
 
-					List<EmbeddableLrngWidgetConfig> widgets = EmbeddableLrngWidgetUtils.getEmbeddableWidgetsConfig(hostName);
+					List<EmbeddableLrngWidgetConfig> widgets = EmbeddableLrngWidgetUtils.getEmbeddableWidgetsConfig(hostName, clientBuilderFactory);
 					List<EmbeddableLrngWidgetConfig> availableWidgetsList = getAvailableWidgets(widgets);
 
 					for (EmbeddableLrngWidgetConfig widgetConfig : availableWidgetsList)

@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.Servlet;
 
+import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
@@ -51,6 +52,9 @@ public class EmbeddableLrngWidgetDatasource extends SlingAllMethodsServlet
 
 	@Reference
 	private transient GlobalConfigurationService configService;
+	
+	@Reference
+	private static HttpClientBuilderFactory clientBuilderFactory;
 
 	final static String RESOURCE_TYPE = "alm/widgets/datasource/widgetsdatasource";
 
@@ -79,7 +83,7 @@ public class EmbeddableLrngWidgetDatasource extends SlingAllMethodsServlet
 
 					String hostName = adminObj.get(Constants.Config.ALM_BASE_URL).getAsString();
 
-					List<EmbeddableLrngWidgetConfig> widgets = EmbeddableLrngWidgetUtils.getEmbeddableWidgetsConfig(hostName);
+					List<EmbeddableLrngWidgetConfig> widgets = EmbeddableLrngWidgetUtils.getEmbeddableWidgetsConfig(hostName, clientBuilderFactory);
 					List<EmbeddableLrngWidgetConfig> availableWidgetsList = getAvailableWidgets(widgets);
 					String selectedWidgetRef = valueMap.get(Constants.EmbeddableWidgetConfig.SELECTED_WIDGET_REF) != null ? valueMap.get(Constants.EmbeddableWidgetConfig.SELECTED_WIDGET_REF).toString() : null;
 					if (selectedWidgetRef == null)

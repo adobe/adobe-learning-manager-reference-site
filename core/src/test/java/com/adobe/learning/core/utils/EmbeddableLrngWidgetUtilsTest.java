@@ -7,8 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.osgi.services.HttpClientBuilderFactory;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.osgi.service.component.annotations.Reference;
 
 import com.adobe.learning.core.entity.EmbeddableLrngWidgetConfig;
 import com.google.gson.JsonObject;
@@ -17,6 +20,9 @@ public class EmbeddableLrngWidgetUtilsTest {
 
 	private String hostName;
 	private Map<String, Object> widgetObject;
+	
+	@Reference
+	private static HttpClientBuilderFactory clientBuilderFactory;
 
 	@BeforeEach
 	public void setUp()
@@ -53,7 +59,7 @@ public class EmbeddableLrngWidgetUtilsTest {
 	@Test
 	public void testGetEmbeddableWidgetsConfig()
 	{
-		List<EmbeddableLrngWidgetConfig> widgetsConfig = EmbeddableLrngWidgetUtils.getEmbeddableWidgetsConfig(hostName);
+		List<EmbeddableLrngWidgetConfig> widgetsConfig = EmbeddableLrngWidgetUtils.getEmbeddableWidgetsConfig(hostName, clientBuilderFactory);
 		assertNotNull(widgetsConfig);
 		assertTrue(widgetsConfig.size() > 0);
 	}

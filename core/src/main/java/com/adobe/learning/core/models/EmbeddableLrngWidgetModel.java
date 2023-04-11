@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
@@ -54,6 +55,9 @@ public class EmbeddableLrngWidgetModel {
 
 	@Self
 	private SlingHttpServletRequest request;
+	
+	@OSGiService
+	private static HttpClientBuilderFactory clientBuilderFactory;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(EmbeddableLrngWidgetModel.class);
 
@@ -83,7 +87,7 @@ public class EmbeddableLrngWidgetModel {
 
 		if (map != null)
 		{
-			List<EmbeddableLrngWidgetConfig> widgets = EmbeddableLrngWidgetUtils.getEmbeddableWidgetsConfig(hostName);
+			List<EmbeddableLrngWidgetConfig> widgets = EmbeddableLrngWidgetUtils.getEmbeddableWidgetsConfig(hostName, clientBuilderFactory);
 			LOGGER.trace("EmbeddableWidgetModel Init:: Widgets from CP {}", new Gson().toJson(widgets));
 			List<EmbeddableLrngWidgetConfig> availableWidgetsList = getAvailableWidgets(widgets);
 			selectedWidgetRef = map.get(Constants.EmbeddableWidgetConfig.SELECTED_WIDGET_REF) != null ? map.get(Constants.EmbeddableWidgetConfig.SELECTED_WIDGET_REF).toString() : null;

@@ -24,12 +24,14 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpStatus;
 import org.apache.http.ParseException;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.apache.http.util.EntityUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
@@ -73,6 +75,9 @@ public class FetchCommerceAccessTokenServlet extends SlingAllMethodsServlet {
 
 	@Reference
 	private transient CPTokenService tokenService;
+	
+	@Reference
+	private HttpClientBuilderFactory clientBuilderFactory;
 
 	@Override
 	protected void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response)
@@ -165,7 +170,7 @@ public class FetchCommerceAccessTokenServlet extends SlingAllMethodsServlet {
 			String requestBody = ALM_CREATE_USER_BODY.replace("{email}", email).replace("{name}", firstName + " " + lastName);
 			post.setEntity(new StringEntity(requestBody, ContentType.APPLICATION_JSON));
 
-			try (CloseableHttpClient httpClient = HttpClients.createDefault(); CloseableHttpResponse response = httpClient.execute(post))
+			try (CloseableHttpClient httpClient = clientBuilderFactory.newBuilder().setDefaultRequestConfig(getRequestConfig()).build(); CloseableHttpResponse response = httpClient.execute(post))
 			{
 				if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode())
 					return true;
@@ -213,7 +218,7 @@ public class FetchCommerceAccessTokenServlet extends SlingAllMethodsServlet {
 			httpPost.setHeader("Content-type", "application/json");
 			httpPost.setHeader("Authorization", "Bearer " + token);
 
-			try (CloseableHttpClient httpClient = HttpClients.createDefault(); CloseableHttpResponse response = httpClient.execute(httpPost))
+			try (CloseableHttpClient httpClient = clientBuilderFactory.newBuilder().setDefaultRequestConfig(getRequestConfig()).build(); CloseableHttpResponse response = httpClient.execute(httpPost))
 			{
 				String responseStr = EntityUtils.toString(response.getEntity());
 				if (StringUtils.isNotBlank(responseStr) && HttpStatus.SC_OK == response.getStatusLine().getStatusCode())
@@ -261,6 +266,14 @@ public class FetchCommerceAccessTokenServlet extends SlingAllMethodsServlet {
 			page = pageRsc.adaptTo(Page.class);
 		}
 		return page;
+	}
+	
+	private RequestConfig getRequestConfig() {
+		return RequestConfig.custom()
+        .setConnectTimeout(10000)
+        .setConnectionRequestTimeout(10000)
+        .setSocketTimeout(10000)
+        .build();
 	}
 
 }

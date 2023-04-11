@@ -22,11 +22,14 @@ import java.util.Map.Entry;
 
 import org.apache.http.HttpStatus;
 import org.apache.http.ParseException;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.apache.http.util.EntityUtils;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,10 +46,10 @@ public final class EmbeddableLrngWidgetUtils {
 	private static long lastUpdated = 0;
 	private static String widgetsConfigResponse = "";
 
-	public static List<EmbeddableLrngWidgetConfig> getEmbeddableWidgetsConfig(String hostName)
+	public static List<EmbeddableLrngWidgetConfig> getEmbeddableWidgetsConfig(String hostName, HttpClientBuilderFactory clientBuilderFactory)
 	{
 		String url = hostName + Constants.CPUrl.CONFIG_URL;
-		String configs = getWidgetsConfig(url);
+		String configs = getWidgetsConfig(url, clientBuilderFactory);
 		LOGGER.trace("EmbeddableWidgetConfigUtils getEmbeddableWidgetsConfig:: Configs from CP {}", configs);
 		if (configs != null && configs.length() > 0)
 		{
@@ -106,7 +109,7 @@ public final class EmbeddableLrngWidgetUtils {
 		return widgetConfigObject;
 	}
 
-	private static String getWidgetsConfig(String url)
+	private static String getWidgetsConfig(String url, HttpClientBuilderFactory clientBuilderFactory)
 	{
 		long currentTime = currentTimeMillis();
 		LOGGER.trace("EmbeddableWidgetConfigUtils getWidgetsConfig:: lastUpdated {} currentTime {} ", lastUpdated, currentTime);
@@ -114,7 +117,7 @@ public final class EmbeddableLrngWidgetUtils {
 		{
 			HttpGet getCall = new HttpGet(url);
 
-			try (CloseableHttpClient httpClient = HttpClients.createDefault(); CloseableHttpResponse response = httpClient.execute(getCall))
+			try (CloseableHttpClient httpClient = clientBuilderFactory.newBuilder().setDefaultRequestConfig(getRequestConfig()).build(); CloseableHttpResponse response = httpClient.execute(getCall))
 			{
 				if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
 					String configResponse = EntityUtils.toString(response.getEntity());
@@ -153,5 +156,13 @@ public final class EmbeddableLrngWidgetUtils {
 	private static void setResponse(String response)
 	{
 		widgetsConfigResponse = response;
+	}
+	
+	private static RequestConfig getRequestConfig() {
+		return RequestConfig.custom()
+        .setConnectTimeout(10000)
+        .setConnectionRequestTimeout(10000)
+        .setSocketTimeout(10000)
+        .build();
 	}
 }
