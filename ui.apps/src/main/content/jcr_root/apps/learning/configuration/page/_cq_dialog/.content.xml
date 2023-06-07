@@ -232,6 +232,20 @@
                         sling:resourceType="granite/ui/components/coral/foundation/button"
                         text="Sync"
                         variant="primary"/>
+                    <authorAlmProxy
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                        name="./authorAlmProxy"
+                        text="Enable proxy for author instance."
+                        value="true"/>
+                    <publishAlmProxy
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                        name="./publishAlmProxy"
+                        text="Enable proxy for publish instance."
+                        value="true"/>
                     <embWidgetSection
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/field"

@@ -10,7 +10,54 @@ Include conf.d/variables/custom.vars
             ProxyPass        ${ALM_COMMERCE_ENDPOINT}
             ProxyPassReverse ${ALM_COMMERCE_ENDPOINT}
             RewriteEngine Off
+
+            SetEnvIfNoCase Cookie "(^| )alm_commerce_token=([^;]*)" ALM_COMMERCE_TOKEN=$2
+            RequestHeader set Authorization "Bearer %{ALM_COMMERCE_TOKEN}e" env=ALM_COMMERCE_TOKEN
+
+            SetEnvIfNoCase Cookie "(^| )store=([^;]*)" ALM_COMMERCE_STORE=$2
+            RequestHeader set Store "%{ALM_COMMERCE_STORE}e" env=ALM_COMMERCE_STORE
+            RequestHeader unset Cookie
     </LocationMatch>
+</IfDefine>
+
+<IfDefine ALM_ENDPOINT>
+
+        SSLProxyEngine on
+
+        <LocationMatch "/primeapi">
+                ProxyPass        ${ALM_ENDPOINT}
+                ProxyPassReverse ${ALM_ENDPOINT}
+
+                RewriteEngine 	 Off
+
+                SetEnvIfNoCase Cookie "(^| )alm_cp_token=([^;]*)" ALM_CP_TOKEN=$2
+                RequestHeader set Authorization "oauth %{ALM_CP_TOKEN}e" env=ALM_CP_TOKEN
+
+                RequestHeader unset Cookie
+        </LocationMatch>
+
+        <LocationMatch "/almLogin">
+                RewriteEngine 	 On
+                RewriteCond %{HTTP_COOKIE} !(^|;\s*)alm_cp_token=([^;]+) [NC]
+                RewriteRule ^ - [R=403,L]
+                RewriteRule ^ - [R=204,L]
+        </LocationMatch>
+
+        <LocationMatch "/almCommerceLogin">
+                RewriteEngine 	 On
+                RewriteCond %{HTTP_COOKIE} !(^|;\s*)alm_commerce_token=([^;]+) [NC]
+                RewriteRule ^ - [R=403,L]
+                RewriteRule ^ - [R=204,L]
+        </LocationMatch>
+
+        <LocationMatch "/almLogout">
+                RewriteEngine 	 On
+                Header add Set-Cookie "alm_cp_token=; Expires=Thu, 01 Jan 1970 00:00:01 GMT"
+                Header always add Cookie "alm_cp_token=; Expires=Thu, 01 Jan 1970 00:00:01 GMT"
+                Header always add Cookie "alm_commerce_token=; Expires=Thu, 01 Jan 1970 00:00:01 GMT"
+                RewriteRule ^ - [R=204,L]
+        </LocationMatch>
+
 </IfDefine>
 
 <VirtualHost *:80>

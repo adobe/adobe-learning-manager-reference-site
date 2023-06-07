@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-@Version("1.0")
+@Version("1.1")
 package com.adobe.learning.core.sitemap;
 
 import org.osgi.annotation.versioning.Version;
