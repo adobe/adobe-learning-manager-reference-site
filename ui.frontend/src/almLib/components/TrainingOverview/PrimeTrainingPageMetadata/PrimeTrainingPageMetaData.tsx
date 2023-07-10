@@ -36,16 +36,22 @@ import {
   PrimeLoInstanceSummary,
 } from "../../../models/PrimeModels";
 import {
+  ACTIVITY,
   ADD_TO_CART,
   ADOBE_COMMERCE,
   CERTIFICATION,
+  CLASSROOM,
+  COMPLETED,
   COURSE,
   ENROLL,
   LEARNING_PROGRAM,
+  MANAGER_APPROVAL,
   PENDING_ACCEPTANCE,
   PENDING_APPROVAL,
   PREVIEW,
+  RETIRED,
   STARTED,
+  VIRTUAL_CLASSROOM,
   WAITING,
 } from "../../../utils/constants";
 import { modifyTime } from "../../../utils/dateTime";
@@ -59,8 +65,16 @@ import {
 import {
   useCanShowRating,
   filterLoReourcesBasedOnResourceType,
+  hasSingleActiveInstance,
+  getEnrolledInstancesCount,
+  getEnrollment,
+  isEnrolledInAutoInstance,
 } from "../../../utils/hooks";
-import { DEFAULT_USER_SVG, LEARNER_BADGE_SVG } from "../../../utils/inline_svg";
+import {
+  DEFAULT_USER_SVG,
+  INSTANCE_ICON,
+  LEARNER_BADGE_SVG,
+} from "../../../utils/inline_svg";
 import {
   checkIsEnrolled,
   storeActionInNonLoggedMode,
@@ -75,7 +89,8 @@ import { StarRatingSubmitDialog } from "../../StarRatingSubmitDialog";
 import { ALMTooltip } from "../../Common/ALMTooltip";
 import { PrimeTrainingPageExtraJobAid } from "../PrimeTrainingPageExtraDetailsJobAids";
 import styles from "./PrimeTrainingPageMetadata.module.css";
-import { PrimeAccount } from "../../../models/PrimeModels";
+import React from "react";
+import { checkIfEnrollmentDeadlineNotPassed, checkIfUnenrollmentDeadlinePassed } from "../../../utils/instance";
 
 const PrimeTrainingPageMetaData: React.FC<{
   trainingInstance: PrimeLearningObjectInstance;
@@ -85,7 +100,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   instanceSummary: PrimeLoInstanceSummary;
   showAuthorInfo: string;
   showEnrollDeadline: string;
-  enrollmentHandler: () => Promise<PrimeLearningObjectInstanceEnrollment>;
+  enrollmentHandler: Function;
   updateRating: (
     rating: number,
     loInstanceId: any
@@ -95,15 +110,17 @@ const PrimeTrainingPageMetaData: React.FC<{
     loId: any
   ) => Promise<void | undefined>;
   alternateLanguages: Promise<string[]>;
-  launchPlayerHandler: () => void;
+  launchPlayerHandler: Function;
   addToCartHandler: () => Promise<{
     items: any;
     totalQuantity: Number;
     error: any;
   }>;
+  updateEnrollmentHandler: Function;
   unEnrollmentHandler: Function;
   jobAidClickHandler: Function;
   isPreviewEnabled: boolean;
+  waitlistPosition: string;
 }> = ({
   trainingInstance,
   skills,
@@ -115,21 +132,29 @@ const PrimeTrainingPageMetaData: React.FC<{
   enrollmentHandler,
   launchPlayerHandler,
   addToCartHandler,
+  updateEnrollmentHandler,
   unEnrollmentHandler,
   jobAidClickHandler,
   isPreviewEnabled,
   alternateLanguages,
   updateRating,
   updateBookMark,
+  waitlistPosition,
 }) => {
   const [almAlert] = useAlert();
   const [almConfirmationAlert] = useConfirmationAlert();
   const { formatMessage, locale } = useIntl();
-  const enrollment = training.enrollment;
+
+  const primaryEnrollment = training.enrollment;
+  const enrollment = getEnrollment(training, trainingInstance);
+  const enrolledInstancesCount = getEnrolledInstancesCount(training);
+
   const loType = training.loType;
+  const subLOs = training.subLOs;
   const isPrimeUserLoggedIn = getALMObject().isPrimeUserLoggedIn();
   const isPricingEnabled =
     training.price && getALMConfig().usageType === ADOBE_COMMERCE;
+  const isAutoInstanceEnrolled = isEnrolledInAutoInstance(training);
 
   const [isTrainingSynced, setIsTrainingSynced] = useState(true);
   const [isBookMarked, setIsBookMarked] = useState(training.isBookmarked);
@@ -157,12 +182,25 @@ const PrimeTrainingPageMetaData: React.FC<{
     </span>
   );
 
+  const isInstanceSwitchEnabled =
+    training.instanceSwitchEnabled && primaryEnrollment?.state !== COMPLETED;
+  const isMultiEnrollmentEnabled = training.multienrollmentEnabled;
+  const hasMultipleInstances = !hasSingleActiveInstance(training);
+
+  const isPendingApproval = primaryEnrollment?.state === PENDING_APPROVAL;
+  const requireManagerApproval = training.enrollmentType === MANAGER_APPROVAL;
+  const isPrimaryEnrollmentWaitlisted = primaryEnrollment?.state === WAITING;
+
   const typeOfUnEnrollButton =
-    loType === "certification"
-      ? GetTranslation("alm.text.unenroll.certification",true)
-      : loType === "learningProgram"
-      ? GetTranslation("alm.text.unenroll.learningProgram",true)
-      : GetTranslation("alm.text.unenroll.course",true);
+    loType === CERTIFICATION
+      ? GetTranslation("alm.text.unenroll.certification", true)
+      : loType === LEARNING_PROGRAM
+      ? GetTranslation("alm.text.unenroll.learningProgram", true)
+      : hasMultipleInstances &&
+        isMultiEnrollmentEnabled &&
+        enrolledInstancesCount > 1
+      ? GetTranslation("alm.text.unenroll.instance", true)
+      : GetTranslation("alm.text.unenroll.course", true);
 
   let showPreviewButton =
     isPreviewEnabled && training.hasPreview && !isEnrolled;
@@ -184,14 +222,20 @@ const PrimeTrainingPageMetaData: React.FC<{
         return "revisit";
       }
       return "continue";
-    } else if (trainingInstance.state === "Retired") {
+    } else if (trainingInstance.state === RETIRED) {
       return "registerInterest";
     } else if (isPricingEnabled) {
       return "addToCart";
+    } else if (isPrimaryEnrollmentWaitlisted) {
+      return "updateEnrollment";
     } else {
       return "enroll";
     }
   }, [enrollment, trainingInstance.state, isPricingEnabled]);
+
+  const completionDeadline = trainingInstance.completionDeadline;
+  const unenrollmentDeadline = trainingInstance.unenrollmentDeadline;
+  const enrollmentDeadline = trainingInstance.enrollmentDeadline;
 
   const enrollmentCount = instanceSummary?.enrollmentCount;
   const seatLimit = instanceSummary?.seatLimit;
@@ -202,9 +246,28 @@ const PrimeTrainingPageMetaData: React.FC<{
     ? trainingInstance.seatLimit > 0 && seatsAvailable > 0
     : true;
 
+  const isEnrollingToWaitlisted =
+    !enrollment && seatLimit !== undefined && !isSeatAvailable;
+
+  const hasEnrollmentDeadlinePassed = enrollmentDeadline
+    ? new Date(enrollmentDeadline) < new Date()
+    : false;
+
+  const isEnrollButtonDisabled =
+    hasEnrollmentDeadlinePassed ||
+    (primaryEnrollment &&
+      !isPrimaryEnrollmentWaitlisted &&
+      isEnrollingToWaitlisted) ||
+    (!isInstanceSwitchEnabled &&
+      !isMultiEnrollmentEnabled &&
+      primaryEnrollment &&
+      primaryEnrollment?.loInstance.id !== trainingInstance.id &&
+      !isPrimaryEnrollmentWaitlisted) ||
+    isPendingApproval;
+
   const seatsAvailableText = trainingInstance.seatLimit ? (
     seatLimit && seatsAvailable > 0 ? (
-      <p style={{ textAlign: "center" }} className={styles.label}>
+      <p className={`${styles.label} ${styles.centerAlign}`}>
         {formatMessage(
           {
             id: `alm.overview.seatsAvailable`,
@@ -215,11 +278,20 @@ const PrimeTrainingPageMetaData: React.FC<{
     ) : (
       seatLimit &&
       seatsAvailable <= 0 && (
-        <p style={{ textAlign: "center" }} className={styles.errorText}>
-          {formatMessage({
-            id: `alm.overview.no.seats.available`,
-          })}
-        </p>
+        <>
+          <p className={`${styles.errorText} ${styles.centerAlign}`}>
+            {formatMessage({
+              id: `alm.overview.no.seats.available`,
+            })}
+          </p>
+          {!isEnrollButtonDisabled && (
+            <p className={styles.centerAlign}>
+              {formatMessage({
+                id: `alm.overview.to.be.waitlisted`,
+              })}
+            </p>
+          )}
+        </>
       )
     )
   ) : (
@@ -228,10 +300,11 @@ const PrimeTrainingPageMetaData: React.FC<{
 
   const waitListText =
     enrollment && enrollment.state === WAITING ? (
-      <p style={{ textAlign: "center" }} className={styles.label}>
+      <p className={`${styles.label} ${styles.centerAlign}`}>
         {formatMessage({
-          id: `alm.overview.waitlist`,
+          id: `alm.overview.waitlist.position`,
         })}
+        {waitlistPosition}
       </p>
     ) : (
       ""
@@ -263,32 +336,200 @@ const PrimeTrainingPageMetaData: React.FC<{
     return filteredSkills;
   }, [skills]);
 
-  const unEnrollClickHandler = () => {
-    unEnrollmentHandler({ enrollmentId: training.enrollment.id });
+  const unEnrollmentClickHandler = async () => {
+    try {
+      const response = await unEnrollmentHandler({
+        enrollmentId: enrollment.id,
+      });
+      if (hasMultipleInstances && response) {
+        viewAllInstanceHandler();
+      }
+    } catch (e) {}
   };
 
+  const instanceSwitchClickHandler = () => {
+    const instanceEnrollList = {
+      enroll: {
+        [training.id]: trainingInstance.id,
+      },
+    };
+    updateEnrollmentHandler({
+      enrollmentId: primaryEnrollment.id,
+      instanceEnrollList: instanceEnrollList
+    });
+  };
+
+  const enrollmentClickHandler = async () => {
+    try {
+      const newEnrollment = await enrollmentHandler({
+        allowMultiEnrollment: isMultiEnrollmentEnabled,
+      });
+      if (checkIsEnrolled(newEnrollment)) {
+        if (isFirstModuleCrOrVc() || isFirstResourceType(ACTIVITY)) {
+          return;
+        }
+        playerHandler(newEnrollment);
+      }
+    } catch (e) {}
+  };
+
+  // Need to update this later
+  const updateEnrollmentClickHandler = () => {
+    unEnrollmentHandler({ enrollmentId: primaryEnrollment.id }).then(() => {
+      enrollmentClickHandler();
+    });
+  };
+
+  const instanceSwitchConfirmationClickHandler = () => {
+    almConfirmationAlert(
+      formatMessage({
+        id: "alm.community.board.confirmationRequired",
+        defaultMessage: "Confirmation Required",
+      }),
+      GetTranslationsReplaced(
+        "alm.instance.switch.confirmation",
+        {
+          x: primaryEnrollment?.loInstance.localizedMetadata[0].name,
+          y: trainingInstance.localizedMetadata[0].name,
+        },
+        true
+      ),
+      formatMessage({
+        id: "alm.overview.confirm",
+      }),
+      formatMessage({
+        id: "alm.overview.cancel",
+      }),
+      instanceSwitchClickHandler
+    );
+  };
+
+  const multiEnrollmentConfirmationClickHandler = () => {
+    almConfirmationAlert(
+      formatMessage({
+        id: "alm.community.board.confirmationRequired",
+        defaultMessage: "Confirmation Required",
+      }),
+      formatMessage({
+        id: "alm.multi.enrollment.confirmation",
+      }),
+      formatMessage({
+        id: "alm.overview.confirm",
+      }),
+      formatMessage({
+        id: "alm.overview.cancel",
+      }),
+      enrollmentClickHandler
+    );
+  };
+
+  const updateEnrollmentConfirmationClickHandler = () => {
+    almConfirmationAlert(
+      formatMessage({
+        id: "alm.update.enrollment.confirmationRequired",
+      }),
+      formatMessage({
+        id: "alm.update.enrollment.confirmationInfo",
+      }),
+      formatMessage({
+        id: "alm.overview.confirm",
+      }),
+      formatMessage({
+        id: "alm.overview.cancel",
+      }),
+      updateEnrollmentClickHandler
+    );
+  };
+
+  let instancePageLink =
+    window.location.href.split(getALMConfig().trainingOverviewPath)[0] +
+    getALMConfig().instancePath +
+    "/trainingId/" +
+    training.id;
+
+  const getInstanceUnenrollmentConfirmationString = () => {
+    return (
+      <p
+        dangerouslySetInnerHTML={{
+          __html: GetTranslationsReplaced(
+            "alm.overview.instance.switch.unenroll.confirmation",
+            {
+              url: instancePageLink,
+            },
+            true
+          ),
+        }}
+      />
+    );
+  };
+
+  const instanceUnenrollConfirmationClickHandler = () => {
+    const confirmationMessage: any =
+      getInstanceUnenrollmentConfirmationString();
+    almConfirmationAlert(
+      formatMessage({
+        id: "alm.community.board.confirmationRequired",
+        defaultMessage: "Confirmation Required",
+      }),
+      confirmationMessage,
+      formatMessage({
+        id: "alm.overview.confirm.unenrollment",
+      }),
+      formatMessage({
+        id: "alm.overview.cancel",
+      }),
+      unEnrollmentClickHandler
+    );
+  };
+
+  const viewAllInstanceHandler = () => {
+    alm.navigateToInstancePage(training.id);
+  };
+  const viewPrimaryEnrollment = () => {
+    alm.navigateToTrainingOverviewPage(
+      training.id,
+      primaryEnrollment.loInstance.id
+    );
+  };
+
+  const alm = getALMObject();
+
   const handleEnrollment = async () => {
-    if (trainingInstance.isFlexible) {
-      const flexLpLink = `${
-        getALMConfig().almBaseURL
-      }/app/learner#/learningProgram/${training.id.split(":")[1]}/instance/${
-        trainingInstance.id.split("_")[1]
-      }`;
-      window.open(flexLpLink, "_blank");
+    if (hasMultipleInstances && primaryEnrollment) {
+      if (primaryEnrollment.state === WAITING) {
+        updateEnrollmentConfirmationClickHandler();
+      } else if (isInstanceSwitchEnabled) {
+        instanceSwitchConfirmationClickHandler();
+      } else if (isMultiEnrollmentEnabled) {
+        multiEnrollmentConfirmationClickHandler();
+      }
     } else {
       storeActionInNonLoggedMode(ENROLL);
-      try {
-        const enrollment = await enrollmentHandler();
-        if (checkIsEnrolled(enrollment)) {
-          launchPlayerHandler();
-        }
-      } catch (e) {}
+      enrollmentClickHandler();
     }
   };
 
   const previewHandler = async () => {
     storeActionInNonLoggedMode(PREVIEW);
-    launchPlayerHandler();
+    playerHandler();
+  };
+
+  const playerHandler = (
+    newEnrollment?: PrimeLearningObjectInstanceEnrollment
+  ) => {
+    if (isMultiEnrollmentEnabled) {
+      const isMultienrolled =
+        getEnrolledInstancesCount(training) > 1 ||
+        (newEnrollment && primaryEnrollment !== newEnrollment);
+      launchPlayerHandler({
+        id: training.id,
+        moduleId: "",
+        trainingInstanceId: trainingInstance.id,
+        isMultienrolled: isMultienrolled,
+      });
+    } else {
+      launchPlayerHandler();
+    }
   };
 
   useEffect(() => {
@@ -336,38 +577,38 @@ const PrimeTrainingPageMetaData: React.FC<{
 
   //show only if not enrolled
   const showEnrollmentCount =
-    !trainingInstance.learningObject.enrollment && enrollmentCount !== undefined
-      ? true
-      : false;
+    !enrollment && enrollmentCount !== undefined ? true : false;
 
-  const showBadges =
-    !trainingInstance.learningObject.enrollment && badge?.badgeUrl;
+  const showBadges = enrollment && badge?.badgeUrl;
 
   const showAuthors =
     showAuthorInfo === "true" &&
-    training.authors?.length > 0 &&
+    training.authorNames?.length > 0 &&
     getALMObject().isPrimeUserLoggedIn();
   var legacyAuthorNames = new Set(training.authorNames);
   training.authors?.forEach((author) => {
     legacyAuthorNames.delete(author.name);
   });
 
-  const completionDeadline = trainingInstance.completionDeadline;
-  const unenrollmentDeadline = trainingInstance.unenrollmentDeadline;
-  const enrollmentDeadline = trainingInstance.enrollmentDeadline;
-
-  const showAfterEnrollmentDeadlines =
-    training.enrollment &&
-    showEnrollDeadline === "true" &&
-    (completionDeadline || unenrollmentDeadline);
+  // const showAfterEnrollmentDeadlines =
+  //   training.enrollment &&
+  //   showEnrollDeadline === "true" &&
+  //   (completionDeadline || unenrollmentDeadline);
   const showEnrollmentDeadline =
-    !training.enrollment && trainingInstance.enrollmentDeadline;
-
-  const hasEnrollmentDeadlinePassed = enrollmentDeadline
-    ? new Date(enrollmentDeadline) < new Date()
-    : false;
+    !enrollment && trainingInstance.enrollmentDeadline;
 
   const getUnenrollmentConfirmationString = () => {
+    if (isMultiEnrollmentEnabled && hasMultipleInstances) {
+      return (
+        <div
+          dangerouslySetInnerHTML={{
+            __html: formatMessage({
+              id: "alm.overview.instance.multi.unenroll.confirmation",
+            }),
+          }}
+        />
+      );
+    }
     if (isPricingEnabled) {
       return (
         <div
@@ -410,18 +651,39 @@ const PrimeTrainingPageMetaData: React.FC<{
         id: "alm.overview.unenrollment.confirmationNo",
         defaultMessage: "No",
       }),
-      unEnrollClickHandler
+      unEnrollmentClickHandler
     );
   };
 
-  const showJobAids = training.supplementaryLOs?.length;
-  const showResource = training.supplementaryResources?.length;
+  const childLpHasResource = () => {
+    let displayResource: any = false;
+    if (training.subLOs?.length) {
+      const subLOs = training.subLOs;
+      displayResource = subLOs.map((item) => {
+        //when the sub LO is a learing program only then we show the resources from a sub LO
+        if (
+          item.loType === "learningProgram" &&
+          item.supplementaryResources?.length
+        ) {
+          return true;
+        }
+      });
+    }
+    return displayResource;
+  };
+
+  // Job aids not supported in non-logged 
+  const showJobAids = training.supplementaryLOs?.length && isPrimeUserLoggedIn;
+  const showResource =
+    training.supplementaryResources?.length || childLpHasResource();
+
+  const isUnenrollmentDeadlinePassed = trainingInstance.unenrollmentDeadline ? checkIfUnenrollmentDeadlinePassed(trainingInstance) : false;
+
   const canUnenroll =
-    training.enrollment &&
-    training.unenrollmentAllowed &&
-    !(enrollment.progressPercent === 100);
+    ((enrollment && training.unenrollmentAllowed && !(enrollment?.progressPercent === 100)) ||
+      isPendingApproval);
   const showCertificationDeadline =
-    training.enrollment && training.enrollment.completionDeadline;
+    primaryEnrollment && primaryEnrollment.completionDeadline;
   const isCertification = loType === CERTIFICATION;
 
   const enrollmentDeadlineContainer =
@@ -491,7 +753,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   }, [training.dateCreated, training.price]);
 
   const trainingNotAvailableForPurchaseText = !isTrainingSynced ? (
-    <p style={{ textAlign: "center" }} className={styles.label}>
+    <p className={`${styles.label} ${styles.centerAlign}`}>
       {formatMessage(
         {
           id: "alm.training.overview.not.available",
@@ -504,7 +766,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   );
 
   const enrollmentDeadlinePassedText = hasEnrollmentDeadlinePassed ? (
-    <p style={{ textAlign: "center" }} className={styles.errorText}>
+    <p className={`${styles.errorText} ${styles.centerAlign}`}>
       {formatMessage({
         id: "alm.training.overview.enrollmentDeadline.passed",
       })}
@@ -513,6 +775,45 @@ const PrimeTrainingPageMetaData: React.FC<{
     ""
   );
 
+  const showInstanceContainerDetail = () => {
+    const progressMessage = GetTranslation(
+      `alm.overview.instanceSwitch.tooltip`,
+      true
+    );
+
+    if (isAutoInstanceEnrolled) {
+      return "";
+    }
+    return (
+      <>
+        {primaryEnrollment && isInstanceSwitchEnabled && (
+          <div>
+            <label className={styles.subtleText}>
+              {GetTranslation(`alm.instance.switch.detail`, true)}
+            </label>
+            <ALMTooltip message={progressMessage}></ALMTooltip>
+          </div>
+        )}
+        {primaryEnrollment &&
+          isMultiEnrollmentEnabled &&
+          !isEnrollButtonDisabled && (
+            <div>
+              <label className={styles.subtleText}>
+                {enrollment
+                  ? GetTranslation(
+                      `alm.multi.enrollment.enrolled.instance.detail`,
+                      true
+                    )
+                  : GetTranslation(
+                      `alm.multi.enrollment.unenrolled.instance.detail`,
+                      true
+                    )}
+              </label>
+            </div>
+          )}
+      </>
+    );
+  };
   const mandatoryModulesCount = useMemo(() => {
     let count = 0;
     trainingInstance?.loResources?.forEach((resource) => {
@@ -539,7 +840,7 @@ const PrimeTrainingPageMetaData: React.FC<{
     let completionCount = training.loResourceCompletionCount;
 
     if (training.loType === COURSE) {
-      const totalCount = coreContentModules.length;
+      const totalCount = coreContentModules?.length;
       label = GetTranslationsReplaced(
         "alm.overview.course.minimum.criteria.label",
         {
@@ -579,9 +880,9 @@ const PrimeTrainingPageMetaData: React.FC<{
       return value;
     }
     if (training.loType === COURSE) {
-      const totalCount = coreContentModules.length;
+      const totalCount = coreContentModules?.length;
       let completionCount = 0;
-      training.enrollment?.loResourceGrades.forEach(
+      enrollment?.loResourceGrades?.forEach(
         (item: PrimeLearningObjectResourceGrade) => {
           if (item.hasPassed) {
             completionCount += 1;
@@ -589,13 +890,13 @@ const PrimeTrainingPageMetaData: React.FC<{
         }
       );
 
-      value = `${completionCount}/${totalCount}`;
+      value = `${completionCount}/${totalCount || 0}`;
     }
     return value;
   }, [
     coreContentModules?.length,
     isEnrolled,
-    training.enrollment?.loResourceGrades,
+    enrollment?.loResourceGrades,
     training.loType,
   ]);
   const trainingsCompleted = useMemo(() => {
@@ -623,6 +924,39 @@ const PrimeTrainingPageMetaData: React.FC<{
     return value;
   }, [isEnrolled, training.loType, training.subLOs]);
 
+  const renderResources = (training: PrimeLearningObject) => {
+    return training?.supplementaryResources?.map((item) => {
+      if (enrollment) {
+        return (
+          <a
+            href={item.location}
+            download
+            className={styles.supplymentaryLoName}
+            target="_blank"
+            rel="noreferrer"
+            key={item.id}
+          >
+            <span className={styles.resourceName}>{item.name}</span>
+          </a>
+        );
+      } else {
+        return <span className={styles.subtleText}>{item.name}</span>;
+      }
+    });
+  };
+
+  const renderResourcesFromChildLP = (training: PrimeLearningObject) => {
+    //if LP has resources don't render resources from child lp
+    if (training?.supplementaryResources?.length) {
+      return;
+    }
+    return subLOs?.map((loItem: any) => {
+      if (loItem.loType === "learningProgram") {
+        return renderResources(loItem);
+      }
+    });
+  };
+
   useEffect(() => {
     const queryParams = getQueryParamsFromUrl();
     if (
@@ -634,7 +968,7 @@ const PrimeTrainingPageMetaData: React.FC<{
       const action = queryParams.action;
       switch (action) {
         case PREVIEW:
-          launchPlayerHandler();
+          playerHandler();
           break;
         case ADD_TO_CART:
           addToCart();
@@ -646,6 +980,145 @@ const PrimeTrainingPageMetaData: React.FC<{
     }
   }, []);
 
+  const changeInstanceText = hasMultipleInstances && (
+    <a
+      className={`${styles.allInstances} ${styles.centerAlign}`}
+      onClick={viewAllInstanceHandler}
+    >
+      {GetTranslation(`alm.overview.waitlist.change.instance`, true)}
+    </a>
+  );
+
+  const enrollmentDisabledInfoText = (
+    <p className={`${styles.label} ${styles.centerAlign}`}>
+      {formatMessage({
+        id:
+          primaryEnrollment?.state === COMPLETED
+            ? "alm.instance.completed"
+            : "alm.instance.enrolled",
+      })}
+    </p>
+  );
+
+  const navigateToEnrolledInstance = (
+    <a
+      className={`${styles.allInstances} ${styles.centerAlign}`}
+      onClick={viewPrimaryEnrollment}
+    >
+      {GetTranslation(`alm.visit.enrolled.instance`, true)}
+    </a>
+  );
+
+  const requireManagerApprovalText = (
+    <p className={`${styles.label} ${styles.centerAlign}`}>
+      {formatMessage({
+        id: "alm.overview.request.manager.approval",
+      })}
+    </p>
+  );
+
+  const pendingApprovalText = (
+    <p className={`${styles.label} ${styles.centerAlign}`}>
+      {formatMessage({
+        id: "alm.overview.pending.approval",
+      })}
+    </p>
+  );
+
+  const showEnrollmentInfoText = () => {
+    if (isPendingApproval && enrollment?.state !== PENDING_APPROVAL) {
+      return (
+        <>
+          {pendingApprovalText}
+          {navigateToEnrolledInstance}
+        </>
+      );
+    } else if (primaryEnrollment?.state === WAITING) {
+      return enrollment?.state === WAITING ? (
+        <div>
+          {waitListText}
+          {changeInstanceText}
+        </div>
+      ) : (
+        <div>
+          {enrollmentDisabledInfoText}
+          {changeInstanceText}
+        </div>
+      );
+    } else if (!primaryEnrollment && requireManagerApproval) {
+      return <div>{requireManagerApprovalText}</div>;
+    } else if (
+      !primaryEnrollment ||
+      (primaryEnrollment &&
+        (isInstanceSwitchEnabled || isMultiEnrollmentEnabled) &&
+        enrollment === undefined)
+    ) {
+      return (
+        <div>
+          {enrollmentDeadlinePassedText}
+          {seatsAvailableText}
+        </div>
+      );
+    } else if (primaryEnrollment && enrollment === undefined) {
+      return (
+        <>
+          {enrollmentDisabledInfoText}
+          {navigateToEnrolledInstance}
+        </>
+      );
+    }
+    return;
+  };
+
+  const pendingApprovalMssgId = () => {
+    if (hasSingleActiveInstance(training)) {
+      return "alm.overview.manager.approval.pending.singleInstance";
+    } else if (!checkIfEnrollmentDeadlineNotPassed(trainingInstance)) {
+      return "alm.overview.manager.approval.pending.deadline.passed";
+    } else if (trainingInstance.state === RETIRED) {
+      return "alm.overview.manager.approval.pending.instance.retired";
+    } else {
+      return "alm.overview.manager.approval.pending";
+    }
+  };
+
+  const hasContentModule = () => {
+    return coreContentModules && coreContentModules[0];
+  };
+
+  const isLpOrCert = () => {
+    return training.subLOs && training.subLOs[0];
+  };
+
+  const hasFirstSubLoAsLP = () => {
+    return training.subLOs[0].loType === "learningProgram";
+  };
+
+  const getModuleTypeOfFirstSubLo = () => {
+    let firstLoInstance = training.subLOs[0].instances[0];
+    if (hasFirstSubLoAsLP()) {
+      firstLoInstance = firstLoInstance.subLoInstances[0];
+    }
+    return firstLoInstance.loResources[0].resourceType;
+  };
+
+  const isFirstResourceType = (type: string) => {
+    return (
+      (hasContentModule() && coreContentModules[0].resourceType === type) ||
+      (isLpOrCert() && type === getModuleTypeOfFirstSubLo())
+    );
+  };
+
+  const isFirstModuleCrOrVc = () => {
+    return (
+      isFirstResourceType(CLASSROOM) || isFirstResourceType(VIRTUAL_CLASSROOM)
+    );
+  };
+
+  const isButtonDisabled = () => {
+    return action === "start" && isFirstModuleCrOrVc();
+  };
+
   return (
     <section className={styles.container}>
       <div className={styles.actionContainer}>
@@ -654,17 +1127,14 @@ const PrimeTrainingPageMetaData: React.FC<{
             {actionText}
           </button>
         )}
-        {action === "enroll" && (
-          <>
-            <button
-              className={`almButton primary ${styles.commonButton}`}
-              onClick={handleEnrollment}
-              disabled={hasEnrollmentDeadlinePassed}>
-              {actionText}
-            </button>
-            {enrollmentDeadlinePassedText}
-            {seatsAvailableText}
-          </>
+        {(action === "enroll" || action === "updateEnrollment") && (
+          <button
+            className={`almButton primary ${styles.commonButton}`}
+            onClick={handleEnrollment}
+            disabled={isEnrollButtonDisabled || false}
+          >
+            {actionText}
+          </button>
         )}
         {(action === "start" ||
           action === "continue" ||
@@ -672,7 +1142,9 @@ const PrimeTrainingPageMetaData: React.FC<{
           <>
             <button
               className={`almButton primary ${styles.commonButton}`}
-              onClick={launchPlayerHandler}>
+              onClick={() => playerHandler()}
+              disabled={isButtonDisabled()}
+            >
               {actionText}
             </button>
             {waitListText}
@@ -688,7 +1160,8 @@ const PrimeTrainingPageMetaData: React.FC<{
                 !isTrainingSynced ||
                 !isSeatAvailable ||
                 hasEnrollmentDeadlinePassed
-              }>
+              }
+            >
               {actionText}
             </button>
             {trainingNotAvailableForPurchaseText}
@@ -700,12 +1173,13 @@ const PrimeTrainingPageMetaData: React.FC<{
           <>
             <button
               className={`almButton secondary ${styles.commonButton}`}
-              disabled={true}>
+              disabled={true}
+            >
               {actionText}
             </button>
             <div className={styles.mangerPendingApprovalText}>
               {formatMessage({
-                id: "alm.overview.manager.approval.pending",
+                id: pendingApprovalMssgId(),
               })}
             </div>
             {seatsAvailableText}
@@ -716,7 +1190,8 @@ const PrimeTrainingPageMetaData: React.FC<{
           <>
             <button
               className={`almButton secondary ${styles.commonButton}`}
-              disabled={true}>
+              disabled={true}
+            >
               {actionText}
             </button>
 
@@ -724,24 +1199,23 @@ const PrimeTrainingPageMetaData: React.FC<{
           </>
         )}
         {action === "waiting" && (
-          <>
-            <button
-              className={`almButton secondary ${styles.commonButton}`}
-              disabled={true}>
-              {actionText}
-            </button>
-
-            {waitListText}
-          </>
+          <button
+            className={`almButton secondary ${styles.commonButton}`}
+            disabled={true}
+          >
+            {actionText}
+          </button>
         )}
       </div>
       {showPreviewButton && (
         <div
-          className={` ${styles.actionContainer} ${styles.crsStsButtonPreBookSection}`}>
+          className={` ${styles.actionContainer} ${styles.crsStsButtonPreBookSection}`}
+        >
           <div className={styles.backgroundButton}>
             <button
               className={`${styles.previewButton}`}
-              onClick={previewHandler}>
+              onClick={previewHandler}
+            >
               {formatMessage({
                 id: `alm.overview.button.preview`,
               })}
@@ -765,19 +1239,24 @@ const PrimeTrainingPageMetaData: React.FC<{
         </div>
       )}
 
+      {/* Enrollment information */}
+      {training.loType === COURSE && (
+        <div className={styles.actionContainer}>{showEnrollmentInfoText()}</div>
+      )}
+
       {/* Rating Container*/}
       {useCanShowRating(training) && isEnrolled && (
         <div
-          className={[styles.submitRatingBox, styles.borderContainer].join(
-            " "
-          )}>
+          className={[styles.submitRatingBox, styles.borderContainer].join(" ")}
+        >
           <StarRatingSubmitDialog
             ratingGiven={
-              training.enrollment.rating ? training.enrollment.rating : 0
+              primaryEnrollment.rating ? primaryEnrollment.rating : 0
             }
             updateRating={updateRating}
             training={training}
             trainingInstance={trainingInstance}
+            loType={training.loType}
           />
         </div>
       )}
@@ -808,6 +1287,56 @@ const PrimeTrainingPageMetaData: React.FC<{
           </div>
         )}
 
+        {/*Deadline container */}
+        {(enrollmentDeadline || completionDeadline || unenrollmentDeadline) && (
+          <div className={styles.commonContainer}>
+            <span aria-hidden="true" className={styles.icon}>
+              <Calendar />
+            </span>
+            <div className={styles.innerContainer}>
+              <label className={styles.label}>
+                {formatMessage({
+                  id: "alm.overview.deadline",
+                  defaultMessage: "Deadline(s)",
+                })}
+              </label>
+              {enrollmentDeadlineContainer}
+              {unenrollmentDeadlineContainer}
+              {completionDeadlineContainer}
+            </div>
+          </div>
+        )}
+
+        {/* Instance Switch Container */}
+        {(hasMultipleInstances || isAutoInstanceEnrolled) &&
+          training.loType === COURSE && (
+            <div className={styles.commonContainer}>
+              <span className={styles.instanceIcon}>{INSTANCE_ICON()}</span>
+              <div className={styles.innerContainer}>
+                <label className={styles.label}>
+                  {GetTranslation(`alm.instance.details`, true)}
+                </label>
+                <label className={styles.instanceName}>
+                  {isAutoInstanceEnrolled ? (
+                    GetTranslation("alm.text.autoInstance")
+                  ) : (
+                    <>
+                      {trainingInstance.localizedMetadata[0].name}
+                      <a
+                        className={styles.allInstances}
+                        onClick={viewAllInstanceHandler}
+                      >
+                        {GetTranslation(`alm.instances`, true)}
+                      </a>
+                    </>
+                  )}
+                </label>
+                {!isPrimaryEnrollmentWaitlisted &&
+                  showInstanceContainerDetail()}
+              </div>
+            </div>
+          )}
+
         {/* Alternate Languages */}
         {alternativesLangAvailable.length > 0 && (
           <div className={styles.commonContainer}>
@@ -826,7 +1355,8 @@ const PrimeTrainingPageMetaData: React.FC<{
                   id: "alm.overview.alternativesAvailable.toolTip",
                   defaultMessage:
                     "You can change the language or the format of the content in the player.",
-                })}></ALMTooltip>
+                })}
+              ></ALMTooltip>
               {alternativesLangAvailable?.map((language) => {
                 return (
                   <div className={styles.altLang} key={language}>
@@ -887,7 +1417,8 @@ const PrimeTrainingPageMetaData: React.FC<{
                 message={GetTranslation(
                   "alm.text.required.modules.tooltip",
                   true
-                )}></ALMTooltip>
+                )}
+              ></ALMTooltip>
             </div>
           </div>
         )}
@@ -905,26 +1436,6 @@ const PrimeTrainingPageMetaData: React.FC<{
                   defaultMessage: "Core Content Completed",
                 })}
               </label>
-            </div>
-          </div>
-        )}
-
-        {/*Deadline container */}
-        {(enrollmentDeadline || completionDeadline || unenrollmentDeadline) && (
-          <div className={styles.commonContainer}>
-            <span aria-hidden="true" className={styles.icon}>
-              <Calendar />
-            </span>
-            <div className={styles.innerContainer}>
-              <label className={styles.label}>
-                {formatMessage({
-                  id: "alm.overview.deadline",
-                  defaultMessage: "Deadline(s)",
-                })}
-              </label>
-              {enrollmentDeadlineContainer}
-              {unenrollmentDeadlineContainer}
-              {completionDeadlineContainer}
             </div>
           </div>
         )}
@@ -1001,7 +1512,8 @@ const PrimeTrainingPageMetaData: React.FC<{
           <div className={styles.commonContainer}>
             <span
               aria-hidden="true"
-              className={`${styles.icon} ${styles.badge}`}>
+              className={`${styles.icon} ${styles.badge}`}
+            >
               {LEARNER_BADGE_SVG()}
             </span>
             <div className={styles.innerContainer}>
@@ -1053,41 +1565,6 @@ const PrimeTrainingPageMetaData: React.FC<{
             })}
           </div>
         </div>
-        {/* Author */}
-        {showAuthors && (
-          <div className={styles.authorContainer}>
-            <label className={styles.label}>
-              {GetTranslation("alm.text.author(s)")}
-            </label>
-            {Array.from(legacyAuthorNames).map((legacyAuthorName) => {
-              return (
-                <div className={styles.authors}>
-                  <span className={styles.cpauthorcircle}>
-                    {DEFAULT_USER_SVG()}
-                  </span>
-                  <div className={styles.innerContainer}>
-                    <p className={styles.authorName}>{legacyAuthorName}</p>
-                  </div>
-                </div>
-              );
-            })}
-            {training.authors?.map((author) => {
-              return (
-                <div key={author.id}>
-                  <div className={styles.authors}>
-                    <span aria-hidden="true">
-                      <img src={author.avatarUrl} aria-hidden="true" alt="" />
-                    </span>
-                    <div className={styles.innerContainer}>
-                      <p className={styles.subtleText}>{author.name}</p>
-                    </div>
-                  </div>
-                  {/* <p className={styles.authorName}>{author.bio}</p> */}
-                </div>
-              );
-            })}
-          </div>
-        )}
         {/* JOB Aid container */}
         {showJobAids && (
           <div className={styles.commonContainer}>
@@ -1130,24 +1607,49 @@ const PrimeTrainingPageMetaData: React.FC<{
                   defaultMessage: "Resources",
                 })}
               </label>
-              <div>
-                {training.supplementaryResources.map((item) => {
-                  return training.enrollment ? (
-                    <a
-                      href={item.location}
-                      download
-                      className={styles.supplymentaryLoName}
-                      target="_blank"
-                      rel="noreferrer"
-                      key={item.id}>
-                      <span className={styles.resourceName}>{item.name}</span>
-                    </a>
-                  ) : (
-                    <span className={styles.subtleText}>{item.name}</span>
-                  );
-                })}
+              <div style={{ display: "grid" }}>
+                {renderResources(training)}
+                {renderResourcesFromChildLP(training)}
               </div>
             </div>
+          </div>
+        )}
+        {/* Author */}
+        {showAuthors && (
+          <div className={styles.authorContainer}>
+            <label className={styles.label}>
+              {GetTranslation("alm.text.author(s)")}
+            </label>
+            {Array.from(legacyAuthorNames).map((legacyAuthorName) => {
+              return (
+                <div
+                  className={styles.authors}
+                  key={`authors-${legacyAuthorName}`}
+                >
+                  <span className={styles.cpauthorcircle}>
+                    {DEFAULT_USER_SVG()}
+                  </span>
+                  <div className={styles.innerContainer}>
+                    <p className={styles.subtleText}>{legacyAuthorName}</p>
+                  </div>
+                </div>
+              );
+            })}
+            {training.authors?.map((author) => {
+              return (
+                <div key={author.id}>
+                  <div className={styles.authors}>
+                    <span aria-hidden="true">
+                      <img src={author.avatarUrl} aria-hidden="true" alt="" />
+                    </span>
+                    <div className={styles.innerContainer}>
+                      <p className={styles.subtleText}>{author.name}</p>
+                    </div>
+                  </div>
+                  {/* <p className={styles.authorName}>{author.bio}</p> */}
+                </div>
+              );
+            })}
           </div>
         )}
       </section>
@@ -1158,13 +1660,20 @@ const PrimeTrainingPageMetaData: React.FC<{
           <span
             aria-hidden="true"
             className={styles.icon}
-            style={{ visibility: "hidden" }}>
+            style={{ visibility: "hidden" }}
+          >
             <Download />
           </span>
           <div className={styles.bottomContainer}>
             <button
-              className={`almButton ${styles.unenrollButton}`}
-              onClick={unEnrollConfirmationClickHandler}>
+              className={`almButton secondary ${styles.unenrollButton}`}
+              disabled={isUnenrollmentDeadlinePassed}
+              onClick={
+                hasMultipleInstances && isInstanceSwitchEnabled
+                  ? instanceUnenrollConfirmationClickHandler
+                  : unEnrollConfirmationClickHandler
+              }
+            >
               {typeOfUnEnrollButton}
             </button>
           </div>

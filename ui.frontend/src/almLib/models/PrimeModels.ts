@@ -28,6 +28,7 @@ export interface PrimeAccount {
   exploreSkills: boolean;
   gamificationEnabled: boolean;
   hideRetiredTrainings: boolean;
+  instanceSwitchEnabled: boolean;
   learnerLayout: string;
   locale: string;
   loginInBrowser: boolean;
@@ -35,6 +36,7 @@ export interface PrimeAccount {
   logoStyling: string;
   logoUrl: string;
   moduleResetEnabled: boolean;
+  multienrollmentEnabled: boolean;
   lastSyncedDateCreatedForMagento: string;
   name: string;
   pageSetting: string;
@@ -344,6 +346,7 @@ export interface PrimeLearningObject {
   externalSkillNames: string[];
   hasOptionalLoResources: boolean;
   imageUrl: string;
+  instanceSwitchEnabled: boolean;
   isEnhancedLP: boolean;
   isExternal: boolean;
   isMqaEnabled: boolean;
@@ -352,6 +355,7 @@ export interface PrimeLearningObject {
   loFormat: string;
   loType: string;
   moduleResetEnabled: boolean;
+  multienrollmentEnabled: boolean;
   rootCertificationId: string;
   state: string;
   tags: string[];
@@ -402,6 +406,7 @@ export interface PrimeLearningObjectInstance {
   learningObject: PrimeLearningObject;
   loResources: PrimeLearningObjectResource[];
   subLoInstances: PrimeLearningObjectInstance[];
+  enrollment: PrimeLearningObjectInstanceEnrollment;
 }
 
 export interface PrimeLearningObjectInstanceEnrollment {

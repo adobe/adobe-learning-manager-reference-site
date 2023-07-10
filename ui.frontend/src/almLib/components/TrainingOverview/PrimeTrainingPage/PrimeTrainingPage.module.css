@@ -69,7 +69,7 @@ governing permissions and limitations under the License.
   padding: 10px 0 0 0;
   white-space: normal !important;
   height: auto;
-  font-family: 'source-sans-pro';
+  font-family: var(--prime-font-family);
 }
 
 img {

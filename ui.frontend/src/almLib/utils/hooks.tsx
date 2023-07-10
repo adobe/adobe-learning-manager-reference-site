@@ -19,8 +19,9 @@ import {
   PrimeLocalizationMetadata,
   PrimeResource,
 } from "../models/PrimeModels";
-import { COURSE, LEARNING_PROGRAM } from "./constants";
-import { getALMConfig } from "./global";
+import { COURSE, LEARNING_PROGRAM, TRAINING_INSTANCE_ID_STR } from "./constants";
+import { getALMConfig, getALMObject } from "./global";
+import { checkIfCompletionDeadlineNotPassed } from "./instance";
 import { themesMap } from "./themes";
 import { getPreferredLocalizedMetadata } from "./translationService";
 
@@ -158,21 +159,30 @@ const getLocale = (
   }
 };
 
+const getEnrollment = (
+  training: PrimeLearningObject,
+  trainingInstance: PrimeLearningObjectInstance
+) => {
+
+  return ((training.loType === COURSE && trainingInstance) ? trainingInstance.enrollment : training.enrollment);
+};
+
 const filterTrainingInstance = (
   training: PrimeLearningObject,
   instanceId: string = ""
 ) => {
-  const enrollment = training.enrollment;
-  instanceId = enrollment?.loInstance.id || instanceId;
+  const primaryEnrollment = training.enrollment;
 
   let instances = training.instances;
-  if (enrollment) {
-    instances = [...instances, enrollment.loInstance];
+  if (primaryEnrollment) {
+    instances = [...instances, primaryEnrollment.loInstance];
   }
 
   const trainingInstances = instances.filter((instance) => {
     if (instanceId) {
       return instance.id === instanceId;
+    } else if (primaryEnrollment) {
+      return instance.id === primaryEnrollment.loInstance.id;
     } else {
       return instance.isDefault; //&& instance.state == "Active";
     }
@@ -218,6 +228,92 @@ const useResource = (
   }, [loResource, locale]);
 };
 
+const getLoId = (loDetails: string) => {
+  return loDetails.split("::")[0];
+};
+
+const getLoName = (loDetails: string) => {
+  return loDetails.split("::")[1];
+};
+
+const hasSingleActiveInstance = (learningObject: PrimeLearningObject) => {
+  const instances = learningObject.instances;
+  if(instances.length === 1){
+    return true;
+  }
+  let count = 0;
+  for (let i = 0; i < instances.length; i++) {
+      const instance = instances[i];
+      if ((instance.state === "Active" && checkIfCompletionDeadlineNotPassed(instance)) || instance.enrollment ) {
+          count++;
+      }
+      if (count > 1) {
+          return false;
+      }
+  }
+  return count === 0 ? false : true;
+}
+
+const getEnrolledInstancesCount = (training: PrimeLearningObject) => {
+
+  const instances = training.instances;
+  let count = 0;
+  for (let i = 0; i < instances.length; i++) {
+      const instance = instances[i];
+      if (instance.enrollment) {
+          count++;
+      }
+  }
+  return count;
+
+}
+
+const isEnrolledInAutoInstance = (training: PrimeLearningObject) => {
+  return training.enrollment?.enrollmentSource === "AUTO_ENROLL" && 
+  (training.instances!.findIndex((item) => item.id === training.enrollment.loInstance.id) === -1 ? true:false);
+}
+
+const getParentPathStack=() => {
+  let parentPathString = getALMObject().storage.getItem("parentPath") || "";
+  if (!parentPathString) {
+    return [];
+  }
+  return JSON.parse(parentPathString);
+}
+
+const pushToParentPathStack = (path: string) => {
+
+  let parentPathStack = getParentPathStack();
+  parentPathStack.push(path);
+  getALMObject().storage.setItem("parentPath", JSON.stringify(parentPathStack));
+  
+}
+
+const popFromParentPathStack = (loId: string) => {
+
+  let parentPathStack = getParentPathStack();
+
+  while (parentPathStack.length > 0) {
+    let item = parentPathStack.pop();
+    if (item.startsWith(loId)) {
+      getALMObject().storage.setItem("parentPath", JSON.stringify(parentPathStack));
+      return;
+    }
+  }
+}
+
+const clearParentLoDetails = () => {
+  getALMObject().storage.removeItem("parentPath");
+}
+
+const getTrainingUrl = (url : string) => {
+
+  if(url.includes(`/${TRAINING_INSTANCE_ID_STR}`)){
+    url = url.substring(0,url.indexOf(`/${TRAINING_INSTANCE_ID_STR}`));
+  }
+  return url;
+}
+
 export {
   useCardIcon,
   useTrainingSkills,
@@ -229,4 +325,15 @@ export {
   filteredResource,
   getLocale,
   useCanShowRating,
+  getLoName,
+  getLoId,
+  hasSingleActiveInstance,
+  getEnrolledInstancesCount,
+  getEnrollment,
+  isEnrolledInAutoInstance,
+  getParentPathStack,
+  pushToParentPathStack,
+  popFromParentPathStack,
+  clearParentLoDetails,
+  getTrainingUrl
 };

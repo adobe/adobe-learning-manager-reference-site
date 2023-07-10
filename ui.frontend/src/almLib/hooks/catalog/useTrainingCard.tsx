@@ -25,13 +25,9 @@ import {
   isJobaid,
   isJobaidContentTypeUrl,
 } from "../../utils/catalog";
-import {
-  getALMConfig,
-  getALMObject,
-  navigateToLoInstanceInTeamsApp,
-  navigateToLoInTeamsApp,
-} from "../../utils/global";
-import { useCardIcon } from "../../utils/hooks";
+import { COURSE } from "../../utils/constants";
+import { getALMObject } from "../../utils/global";
+import { clearParentLoDetails, getEnrolledInstancesCount, hasSingleActiveInstance, isEnrolledInAutoInstance, useCardIcon } from "../../utils/hooks";
 import { LaunchPlayer } from "../../utils/playback-utils";
 import { QueryParams } from "../../utils/restAdapter";
 import {
@@ -78,21 +74,14 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
   const cardClickHandler = useCallback(async () => {
     if (!training) return;
     let alm = getALMObject();
+    clearParentLoDetails();
     if (!alm.isPrimeUserLoggedIn()) {
       //Does ES have instances in response
       const activeInstances = getActiveInstances(training);
       if (!activeInstances || activeInstances?.length === 1) {
-        if (getALMConfig().isTeamsApp) {
-          navigateToLoInTeamsApp(training.id);
-        } else {
-          alm.navigateToTrainingOverviewPage(training.id);
-        }
+        alm.navigateToTrainingOverviewPage(training.id);
       } else {
-        if (getALMConfig().isTeamsApp) {
-          navigateToLoInstanceInTeamsApp(training.id);
-        } else {
-          alm.navigateToInstancePage(training.id);
-        }
+        alm.navigateToInstancePage(training.id);
       }
       return;
     }
@@ -120,9 +109,16 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     }
 
     if (training.enrollment) {
-      if (getALMConfig().isTeamsApp) {
-        navigateToLoInTeamsApp(training.id, training.enrollment.loInstance.id);
-      } else {
+      const hasMultipleInstances = !hasSingleActiveInstance(training);
+      const enrollmentCount = getEnrolledInstancesCount(training);
+
+      // AUTO INSTANCE CASE
+      const isAutoInstanceEnrolled = isEnrolledInAutoInstance(training);
+
+      if(enrollmentCount !== 1 && hasMultipleInstances && !isAutoInstanceEnrolled && training.loType === COURSE){
+        alm.navigateToInstancePage(training.id);
+      }
+      else {
         alm.navigateToTrainingOverviewPage(
           training.id,
           training.enrollment.loInstance.id
@@ -132,27 +128,15 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
     }
     const activeInstances = getActiveInstances(training);
     if (activeInstances?.length === 1) {
-      if (getALMConfig().isTeamsApp) {
-        navigateToLoInTeamsApp(training.id, activeInstances[0].id);
-      } else {
-        alm.navigateToTrainingOverviewPage(training.id, activeInstances[0].id);
-      }
+      alm.navigateToTrainingOverviewPage(training.id, activeInstances[0].id);
       return;
     }
     if (activeInstances?.length === 0) {
       const defaultInstance = getDefaultIntsance(training);
-      if (getALMConfig().isTeamsApp) {
-        navigateToLoInTeamsApp(training.id, defaultInstance[0]?.id);
-      } else {
-        alm.navigateToTrainingOverviewPage(training.id, defaultInstance[0]?.id);
-      }
+      alm.navigateToTrainingOverviewPage(training.id, defaultInstance[0]?.id);
       return;
     }
-    if (getALMConfig().isTeamsApp) {
-      navigateToLoInstanceInTeamsApp(training.id);
-    } else {
-      alm.navigateToInstancePage(training.id);
-    }
+    alm.navigateToInstancePage(training.id);
   }, [training]);
 
   return {

@@ -35,16 +35,18 @@ const PrimeCatalogContainer = (props: any) => {
     query,
     handleSearch,
     resetSearch,
+    getSearchSuggestions,
     filterState,
     updateFilters,
     catalogAttributes,
     isLoading,
     hasMoreItems,
     updatePriceFilter,
+    updateSnippet,
   } = useCatalog();
   const { formatMessage } = useIntl();
   const [showFiltersOnMobile, setShowFiltersOnMobile] = useState(false);
-  const isTeamsApp = getALMConfig().isTeamsApp;
+  const hideSearchInput = getALMConfig().hideSearchInput;
   const defaultCatalogHeading = isTranslated(
     GetTranslation("alm.catalog.header", true)
   )
@@ -71,7 +73,7 @@ const PrimeCatalogContainer = (props: any) => {
 
   const filtersCss = `${styles.filtersContainer} ${
     showFiltersOnMobile ? styles.onMobile : ""
-  } ${isTeamsApp ? styles.teamsExtraTopMargin : ""}`;
+  } ${hideSearchInput ? styles.teamsExtraTopMargin : ""}`;
 
   const toggleFiltersonMobile = () => {
     setShowFiltersOnMobile((prevState) => !prevState);
@@ -84,14 +86,16 @@ const PrimeCatalogContainer = (props: any) => {
           UNSAFE_className={styles.closeIcon}
           variant="primary"
           isQuiet
-          onPress={toggleFiltersonMobile}>
+          onPress={toggleFiltersonMobile}
+        >
           <Close aria-label="Close" />
         </Button>
         <PrimeCatalogFilters
           filterState={filterState}
           updateFilters={updateFilters}
           catalogAttributes={catalogAttributes}
-          updatePriceFilter={updatePriceFilter}></PrimeCatalogFilters>
+          updatePriceFilter={updatePriceFilter}
+        ></PrimeCatalogFilters>
       </div>
     ) : (
       ""
@@ -102,7 +106,8 @@ const PrimeCatalogContainer = (props: any) => {
       <Button
         variant="primary"
         UNSAFE_className={styles.button}
-        onPress={toggleFiltersonMobile}>
+        onPress={toggleFiltersonMobile}
+      >
         {formatMessage({
           id: "alm.catalog.filter",
           defaultMessage: "Filters",
@@ -114,7 +119,12 @@ const PrimeCatalogContainer = (props: any) => {
     );
   const searchHtml =
     catalogAttributes?.showSearch === "true" ? (
-      <PrimeCatalogSearch query={query} handleSearch={handleSearch} />
+      <PrimeCatalogSearch
+        query={query}
+        handleSearch={handleSearch}
+        getSearchSuggestions={getSearchSuggestions}
+        updateSnippet={updateSnippet}
+      />
     ) : (
       ""
     );
@@ -132,7 +142,7 @@ const PrimeCatalogContainer = (props: any) => {
                 {props.heading ? props.heading : defaultCatalogHeading}
               </h1>
               {filtersButtonForMobileHTML}
-              {!isTeamsApp && searchContainerHTML}
+              {!hideSearchInput && searchContainerHTML}
             </div>
             {props.description && (
               <div className={styles.catalogDescription}>
@@ -145,7 +155,8 @@ const PrimeCatalogContainer = (props: any) => {
             {filtersHtml}
             <div
               className={listContainerCss}
-              aria-hidden={showFiltersOnMobile ? "true" : "false"}>
+              aria-hidden={showFiltersOnMobile ? "true" : "false"}
+            >
               {isLoading ? (
                 <ALMLoader classes={styles.loader} />
               ) : (
@@ -155,7 +166,8 @@ const PrimeCatalogContainer = (props: any) => {
                   hasMoreItems={hasMoreItems}
                   guest={props.guest}
                   signUpURL={props.signUpURL}
-                  almDomain={props.almDomain}></PrimeTrainingsContainer>
+                  almDomain={props.almDomain}
+                ></PrimeTrainingsContainer>
               )}
             </div>
           </div>

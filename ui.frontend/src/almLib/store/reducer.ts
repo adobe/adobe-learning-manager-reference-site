@@ -10,7 +10,18 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { combineReducers } from "redux";
-import { accessToken, user, account, catalog, social, fileUpload, notification, userSkillInterest, skill } from "./reducers";
+import {
+  accessToken,
+  user,
+  account,
+  catalog,
+  social,
+  fileUpload,
+  notification,
+  userSkillInterest,
+  skill,
+  search,
+} from "./reducers";
 
 const reducer = combineReducers({
   accessToken,
@@ -21,6 +32,7 @@ const reducer = combineReducers({
   social,
   fileUpload,
   userSkillInterest,
-  skill
+  skill,
+  search,
 });
 export default reducer;

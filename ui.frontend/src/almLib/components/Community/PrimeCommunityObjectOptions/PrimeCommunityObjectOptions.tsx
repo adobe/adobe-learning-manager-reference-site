@@ -144,7 +144,7 @@ const PrimeCommunityObjectOptions = (props: any) => {
             onClick={deleteObjectHandler}
           >
             {formatMessage({
-              id: "alm.community.board.delete",
+              id: "alm.text.delete",
               defaultMessage: "Delete",
             })}
           </div>

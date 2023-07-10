@@ -47,6 +47,8 @@ governing permissions and limitations under the License.
   --prime-container-max-width-desktop: 1084px;
   --prime-container-max-width-above-desktop: 1084px;
   --prime-container-width: 90%;
+
+  --prime-font-family:"source-sans-pro";
 }
 
 body {

@@ -14,28 +14,27 @@ package com.adobe.learning.core.models;
 
 public interface Catalog {
 
-    String getShowFilters();
+  String getShowFilters();
 
-    String getShowSearch();
+  String getShowSearch();
 
-    String getShowCatalogFilter();
+  String getShowCatalogFilter();
 
-    String getTypeFilter();
+  String getTypeFilter();
 
-    String getSkillsFilter();
+  String getSkillsFilter();
 
-    String getFormatFilter();
+  String getFormatFilter();
 
-    String getDurationFilter();
+  String getDurationFilter();
 
-    String getPriceFilter();
+  String getPriceFilter();
 
-    String getSkillsLevelFilter();
+  String getSkillsLevelFilter();
 
-    String getStatusFilter();
+  String getStatusFilter();
 
-    String getTagsFilter();
+  String getTagsFilter();
 
-    String getCitiesFilter();
-
+  String getCitiesFilter();
 }

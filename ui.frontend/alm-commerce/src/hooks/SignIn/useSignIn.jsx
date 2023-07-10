@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getALMObject, getCommerceToken, setCartId } from "../../utils/global";
+import { getALMObject, getCommerceToken, setCartId, handlePageLoad } from "../../utils/global";
 import {
   CREATE_ACCOUNT,
   CREATE_CART,
@@ -99,6 +99,7 @@ export const useAlmSignIn = (props) => {
           await fetch(
             `/cpoauth.commerceToken.html?token=${token}&pagePath=${window.location.pathname}`
           );
+          await handlePageLoad();
         }
         setIsLoading(false);
         setIsloggedIn(true);

@@ -26,7 +26,11 @@ import {
   UPDATE_SKILLLEVEL_FILTERS,
   UPDATE_DURATION_FILTERS,
   UPDATE_CATALOGS_FILTERS,
-  UPDATE_PRICE_FILTERS
+  UPDATE_PRICE_FILTERS,
+  UPDATE_SNIPPET_TYPE,
+  UPDATE_SNIPPET_ON_LOAD,
+  OPEN_SNIPPET_TYPE_DIALOG,
+  CLOSE_SNIPPET_TYPE_DIALOG,
 } from "./actionTypes";
 
 export const loadTrainings = (payload: any): AnyAction => ({
@@ -86,14 +90,13 @@ export const updateSearchText = (payload: string): AnyAction => ({
 
 export const resetSearchText = (): AnyAction => ({
   type: RESET_SEARCH_TEXT,
-  payload: ""
+  payload: "",
 });
 
 export const updateFiltersOnLoad = (payload: any): AnyAction => ({
   type: UPDATE_FILTERS_ON_LOAD,
   payload,
 });
-
 
 export const paginateTrainings = (payload: {
   trainings: PrimeLearningObject[];
@@ -103,8 +106,26 @@ export const paginateTrainings = (payload: {
   payload,
 });
 
-
 export const updatePriceFilter = (payload: any): AnyAction => ({
   type: UPDATE_PRICE_FILTERS,
   payload,
+});
+
+export const updateSnippetType = (payload: any): AnyAction => ({
+  type: UPDATE_SNIPPET_TYPE,
+  payload,
+});
+
+export const updateSnippetOnLoad = (payload: any): AnyAction => ({
+  type: UPDATE_SNIPPET_ON_LOAD,
+  payload,
+});
+
+export const onOpenSearchInList = (payload: any): AnyAction => ({
+  type: OPEN_SNIPPET_TYPE_DIALOG,
+  payload,
+});
+
+export const onCloseSearchInList = (): AnyAction => ({
+  type: CLOSE_SNIPPET_TYPE_DIALOG,
 });

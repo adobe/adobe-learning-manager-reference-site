@@ -2,7 +2,7 @@
  * Copyright 2021 Adobe. All rights reserved. This file is licensed to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except in compliance with the License. You
  * may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing permissions and
@@ -14,25 +14,22 @@ package com.adobe.learning.core.entity;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.google.gson.Gson;
-
-public class CustomerCommerceEntityTest
-{
+public class CustomerCommerceEntityTest {
 
   private String data;
 
   @BeforeEach
-  public void setUp()
-  {
-    data = "{\"firstname\":\"Adobe CP\",\"lastname\":\"Test\",\"email\":\"adobetestcp@adobetest.com\"}";
+  public void setUp() {
+    data =
+        "{\"firstname\":\"Adobe CP\",\"lastname\":\"Test\",\"email\":\"adobetestcp@adobetest.com\"}";
   }
 
   @Test
-  public void testCommerceEntity()
-  {
+  public void testCommerceEntity() {
     Gson gson = new Gson();
     CustomerCommerceEntity entity = gson.fromJson(data, CustomerCommerceEntity.class);
     assertNotNull(entity);

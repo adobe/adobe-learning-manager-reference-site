@@ -15,7 +15,24 @@ governing permissions and limitations under the License.
   width: 100%;
   padding: 10px 0;
 }
-
+.moduleContainer{
+  padding-bottom: 10px;
+  color:var(--prime-color-nc3);
+  display: inline-flex;
+  width: 50%;
+}
+.notesActions{
+  display: inline-flex;
+  cursor: pointer;
+  float:right;
+}
+.notesActions p{
+  margin-left: 20px;
+  color: var(--prime-color-nc3);
+}
+.notesNotPresent{
+  color: var(--prime-color-nc3);
+}
 .header {
   display: flex;
   width: 100%;
@@ -39,7 +56,8 @@ governing permissions and limitations under the License.
 }
 
 .tablist > div[role="tablist"] {
-  border-bottom-color: transparent;
+  border-bottom-color: var(--prime-color-nc2);
+  margin-bottom: 30px;
 }
 
 .tablist div[role="presentation"] {
@@ -52,3 +70,20 @@ governing permissions and limitations under the License.
 .isPartOfLP .tabPanels {
   border: none;
 }
+.tabPanels {
+  border: none !important;
+}
+.icon,
+.mailIcon,
+.downloadIcon {
+  margin-right: 5px;
+}
+.icon svg,
+.mailIcon svg,
+.downloadIcon svg {
+  fill: var(--prime-color-nc3);
+  width: 14px;
+  float: left;
+  padding-bottom: 3px;
+}
+

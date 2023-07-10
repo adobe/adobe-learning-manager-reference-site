@@ -101,7 +101,7 @@ const PrimeCommunityBoardOptions = (props: any) => {
         {/* <div className={styles.primeBoardCriticalOption} onClick={deleteBoardHandler}>
                 {
                     formatMessage({
-                    id: "alm.community.board.delete",
+                    id: "alm.text.delete",
                     defaultMessage: "Delete",
                     })
                 }

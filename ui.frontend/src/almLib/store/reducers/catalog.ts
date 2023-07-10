@@ -27,12 +27,60 @@ import {
   UPDATE_SKILLLEVEL_FILTERS,
   UPDATE_SKILLNAME_FILTERS,
   UPDATE_TAGS_FILTERS,
-  UPDATE_CITIES_FILTERS
+  UPDATE_CITIES_FILTERS,
+  UPDATE_SNIPPET_TYPE,
+  UPDATE_SNIPPET_ON_LOAD,
+  OPEN_SNIPPET_TYPE_DIALOG,
+  CLOSE_SNIPPET_TYPE_DIALOG,
 } from "../actions/catalog/actionTypes";
 
 export const DEFUALT_FILTERS_VALUE = {
   loTypes: "course,learningProgram,certification,jobAid",
 };
+
+const COURSE_METADATA_SNIPPET =
+  "courseName,courseOverview,courseDescription,moduleName,certificationName,certificationOverview,certificationDescription,jobAidName,jobAidDescription,lpName,lpDescription,lpOverview,embedLpName,embedLpDesc,embedLpOverview";
+const NOTES_SNIPPET = "note";
+const SKILL_SNIPPET = "skillName,skillDescription";
+const BADGES_SNIPPET = "badgeName";
+const TAGS_SNIPPET =
+  "courseTag,moduleTag,jobAidTag,lpTag,certificationTag,embedLpTag";
+const DISCUSSION_SNIPPET = "discussion";
+
+export interface SearchDropdownFilterItem {
+  value: string;
+  label: string;
+  checked: boolean;
+}
+
+export const defaultSearchInDropdownList = [
+  {
+    value: COURSE_METADATA_SNIPPET,
+    label: "alm.text.courseMetadata",
+    checked: true,
+  },
+  {
+    value: NOTES_SNIPPET,
+    label: "alm.text.notes",
+    checked: true,
+  },
+  {
+    value: SKILL_SNIPPET,
+    label: "alm.catalog.filter.skills.label",
+    checked: true,
+  },
+  {
+    value: BADGES_SNIPPET,
+    label: "alm.overview.badge",
+    checked: true,
+  },
+  {
+    value: TAGS_SNIPPET,
+    label: "alm.catalog.filter.tags.label",
+    checked: true,
+  },
+];
+
 export interface CatalogFilterState {
   skillName: string;
   tagName: string;
@@ -50,16 +98,18 @@ export interface CatalogState {
   trainings: PrimeLearningObject[] | null;
   filterState: CatalogFilterState;
   sort:
-  | "name"
-  | "date"
-  | "-name"
-  | "-date"
-  | "effectiveness"
-  | "rating"
-  | "-rating"
-  | "dueDate";
+    | "name"
+    | "date"
+    | "-name"
+    | "-date"
+    | "effectiveness"
+    | "rating"
+    | "-rating"
+    | "dueDate";
   next: string;
   query: string;
+  snippetType: string;
+  openSearchInDialog: boolean;
   // paginating: boolean;
 }
 
@@ -100,11 +150,11 @@ const sort: Reducer<
     | undefined,
   action: AnyAction
 ) => {
-    switch (action.type) {
-      default:
-        return state || "-date";
-    }
-  };
+  switch (action.type) {
+    default:
+      return state || "-date";
+  }
+};
 
 const skillName: Reducer<string, AnyAction> = (
   state: string | undefined,
@@ -232,6 +282,38 @@ const query: Reducer<string, AnyAction> = (
   }
 };
 
+const snippetType: Reducer<string, AnyAction> = (
+  state: string | undefined,
+  action: AnyAction
+) => {
+  switch (action.type) {
+    case UPDATE_SNIPPET_TYPE:
+      if (action.payload) {
+        return `${action.payload},${DISCUSSION_SNIPPET}`;
+      } else {
+        return DISCUSSION_SNIPPET;
+      }
+    case UPDATE_SNIPPET_ON_LOAD:
+      return action.payload;
+    default:
+      return state || "";
+  }
+};
+
+const openSearchInDialog: Reducer<boolean, AnyAction> = (
+  state: boolean | undefined,
+  action: AnyAction
+) => {
+  switch (action.type) {
+    case OPEN_SNIPPET_TYPE_DIALOG:
+      return true;
+    case CLOSE_SNIPPET_TYPE_DIALOG:
+      return false;
+    default:
+      return state ? state : false;
+  }
+};
+
 const next: Reducer<string, AnyAction> = (
   state: string | undefined,
   action: AnyAction
@@ -303,7 +385,9 @@ const catalog: Reducer<CatalogState, AnyAction> = combineReducers({
   sort,
   filterState,
   next,
-  query
+  query,
+  snippetType,
+  openSearchInDialog,
 });
 
 export default catalog;

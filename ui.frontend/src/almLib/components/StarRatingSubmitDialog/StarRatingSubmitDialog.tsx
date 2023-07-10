@@ -7,20 +7,24 @@ import {
 } from "../../models/PrimeModels";
 import { GetTranslation } from "../../utils/translationService";
 import { ADDED_TICK_SVG } from "../../utils/inline_svg";
+import { useIntl } from "react-intl";
 
 interface rating {
   ratingGiven: number;
   updateRating: (rating: any, loInstanceId: any) => Promise<void | undefined>;
   training: PrimeLearningObject;
   trainingInstance: PrimeLearningObjectInstance;
+  loType: String;
 }
 
 const StarRatingSubmitDialog = (props: rating) => {
-  const { ratingGiven, updateRating, trainingInstance } = props;
+  const { ratingGiven, updateRating, trainingInstance, training, loType } =
+    props;
   const [submittedSuccessfully, setSubmittedSuccessfully] = useState(false);
   const [showElement, setShowElement] = useState(false);
   const [errorOnSubmit, setErrorOnSubmit] = useState(false);
   const [rating, setRating] = useState(ratingGiven);
+  const { formatMessage } = useIntl();
 
   useEffect(() => {
     if (submittedSuccessfully) {
@@ -36,6 +40,9 @@ const StarRatingSubmitDialog = (props: rating) => {
   }, [ratingGiven]);
 
   const handleSubmitHelper = async () => {
+    if (rating === ratingGiven) {
+      return;
+    }
     if (rating) {
       await updateRating(rating, trainingInstance.id);
       setSubmittedSuccessfully(true);
@@ -64,7 +71,12 @@ const StarRatingSubmitDialog = (props: rating) => {
     <div className={[styles.commonContainer, styles.submitRating].join(" ")}>
       <div className={styles.rateTheTrainingBlock}>
         <h3 className={styles.ratingHeading}>
-          {GetTranslation("alm.text.provideRating")}
+          {formatMessage(
+            {
+              id: "alm.text.provideRating",
+            },
+            { training: GetTranslation(`alm.training.${props.loType}`, true) }
+          )}
         </h3>
         <ALMStarRating ratingGiven={rating} submitRating={setRating} />
       </div>

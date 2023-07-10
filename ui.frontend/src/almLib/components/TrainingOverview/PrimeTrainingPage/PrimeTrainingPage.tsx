@@ -10,11 +10,10 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { lightTheme, ProgressBar, Provider } from "@adobe/react-spectrum";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import store from "../../../../store/APIStore";
 import { useTrainingPage } from "../../../hooks/catalog/useTrainingPage";
-import { account } from "../../../store/reducers";
 import {
   CERTIFICATION,
   COMPLETED,
@@ -26,14 +25,12 @@ import {
   TRAINING_ID_STR,
   TRAINING_INSTANCE_ID_STR,
 } from "../../../utils/constants";
-import { convertSecondsToTimeText } from "../../../utils/dateTime";
 import {
   getALMConfig,
-  getConfigurableAttributes,
+  getALMObject,
   getPathParams,
-  PrimeConfig,
-  setALMAttribute,
 } from "../../../utils/global";
+import { getEnrolledInstancesCount, getEnrollment, hasSingleActiveInstance, isEnrolledInAutoInstance } from "../../../utils/hooks";
 import { SOCIAL_CANCEL_SVG } from "../../../utils/inline_svg";
 import { checkIsEnrolled } from "../../../utils/overview";
 import { getPreferredLocalizedMetadata } from "../../../utils/translationService";
@@ -78,6 +75,7 @@ const PrimeTrainingPage = (props: any) => {
     instanceSummary,
     enrollmentHandler,
     launchPlayerHandler,
+    updateEnrollmentHandler,
     unEnrollmentHandler,
     jobAidClickHandler,
     addToCartHandler,
@@ -86,8 +84,41 @@ const PrimeTrainingPage = (props: any) => {
     updateFileSubmissionUrl,
     updateRating,
     updateBookMark,
+    notes,
+    updateNote,
+    deleteNote,
     trainingOverviewAttributes,
+    updateCertificationProofUrl,
+    downloadNotes,
+    sendNotesOnMail,
+    lastPlayingLoResourceId,
+    waitlistPosition
   } = useTrainingPage(trainingId, trainingInstanceId);
+
+  const [isInstancePageLoading, setIsInstancePageLoading] = useState(true);
+  
+  // Navigating to instance page in case of multiple instances
+  useEffect(() => {
+    if (training) {
+      const enrollmentCount = getEnrolledInstancesCount(training);
+      const hasMultipleInstances = !hasSingleActiveInstance(training);
+
+      //Auto Instance scenario
+      const isAutoInstanceEnrolled = isEnrolledInAutoInstance(training);
+      const redirectToTrainingPage = enrollmentCount === 1 || !hasMultipleInstances || isAutoInstanceEnrolled;
+      const urlContainsInstanceId = window.location.href.includes(`/${TRAINING_INSTANCE_ID_STR}`);
+
+      //Enrollments not coming under LP's instances, fix later
+      if (!urlContainsInstanceId && (
+        (training.loType === COURSE && !redirectToTrainingPage) ||
+        (training.loType === LEARNING_PROGRAM && hasMultipleInstances && !training.enrollment)
+        )) {
+          getALMObject().navigateToInstancePage(training.id);
+          return;
+        }
+        setIsInstancePageLoading(false);
+      }
+    }, [training?.id]);
 
   const { formatMessage, locale } = useIntl();
   const loName = name;
@@ -98,16 +129,17 @@ const PrimeTrainingPage = (props: any) => {
   const [fileUploadProgress, setFileUploadProgress] = useState(
     state.fileUpload.uploadProgress
   );
-  const { updateCertificationProofUrl } = useTrainingPage("", "");
 
-  if (isLoading || !training) {
+
+  if (isLoading || !training || isInstancePageLoading) {
     return <ALMLoader classes={styles.loader} />;
   }
   const loType = training.loType;
   const sections = training.sections;
   const prerequisiteLOs = training.prerequisiteLOs;
   const prequisiteConstraints = training.prequisiteConstraints;
-  const isEnrolled = checkIsEnrolled(training?.enrollment);
+  const enrollment = getEnrollment(training, trainingInstance);
+  const isEnrolled = checkIsEnrolled(enrollment);
 
   const startFileUpload = () => {
     (inputRef?.current as HTMLInputElement)?.click();
@@ -217,34 +249,35 @@ const PrimeTrainingPage = (props: any) => {
   };
 
   const getUploadedFileSection = () => {
-    const url = submissionUrl || training.enrollment.url;
+    const url = submissionUrl || enrollment.url;
     return (
       <a
         className={styles.submissionLink}
         href={url}
         target="_blank"
-        rel="noreferrer">
+        rel="noreferrer"
+      >
         {getSubmissionFileName(url)}
       </a>
     );
   };
 
   const showCertProof = () => {
-    return training.loType && training.isExternal && training.enrollment;
+    return training.loType && training.isExternal && enrollment;
   };
 
   return (
     <ALMErrorBoundary>
       <Provider theme={lightTheme} colorScheme={"light"}>
         <div className={styles.backgroundPage}>
-          {!getALMConfig().isTeamsApp && <ALMBackButton />}
+          {!getALMConfig().hideBackButton && <ALMBackButton />}
           <PrimeTrainingOverviewHeader
             format={training.loFormat}
             color={color}
             title={name}
             bannerUrl={bannerUrl}
-            showProgressBar={true}
-            enrollment={training.enrollment}
+            showProgressBar={isEnrolled}
+            enrollment={enrollment}
             training={training}
             updateBookMark={updateBookMark}
           />
@@ -256,7 +289,8 @@ const PrimeTrainingPage = (props: any) => {
                   dangerouslySetInnerHTML={{
                     __html: richTextOverview || overview || description,
                   }}
-                  className={`${styles.overview} ql-editor`}></div>
+                  className={`${styles.overview} ql-editor`}
+                ></div>
               )}
               {/* <span className={styles.duration}>
                 {formatMessage(
@@ -288,14 +322,15 @@ const PrimeTrainingPage = (props: any) => {
                           id: "alm.removeUpload.label",
                           defaultMessage: "Remove upload",
                         })}
-                        onClick={cancelClickHandler}>
+                        onClick={cancelClickHandler}
+                      >
                         {SOCIAL_CANCEL_SVG()}
                       </button>
                     </div>
                   )}
                   {!isUploading && (
                     <span className={styles.fileSubmissionContainer}>
-                      {getCertUploadSection(training.enrollment.state)}
+                      {getCertUploadSection(enrollment.state)}
                     </span>
                   )}
                   <hr className={styles.uploadLowerSeperator} />
@@ -348,6 +383,8 @@ const PrimeTrainingPage = (props: any) => {
                       isprerequisiteLO={true}
                       isPreviewEnabled={false}
                       isParentLOEnrolled={isEnrolled}
+                      parentLoName={loName}
+                      key={name}
                     />
                   </section>
                 );
@@ -361,6 +398,13 @@ const PrimeTrainingPage = (props: any) => {
                   isPreviewEnabled={isPreviewEnabled}
                   updateFileSubmissionUrl={updateFileSubmissionUrl}
                   isParentLOEnrolled={isEnrolled}
+                  showNotes={isEnrolled}
+                  notes={notes}
+                  updateNote={updateNote}
+                  deleteNote={deleteNote}
+                  downloadNotes={downloadNotes}
+                  sendNotesOnMail={sendNotesOnMail}
+                  lastPlayingLoResourceId={lastPlayingLoResourceId}
                 />
               )}
               {loType === CERTIFICATION && (
@@ -371,6 +415,7 @@ const PrimeTrainingPage = (props: any) => {
                   updateFileSubmissionUrl={updateFileSubmissionUrl}
                   isParentLOEnrolled={isEnrolled}
                   parentLoName={loName}
+                  isPartOfLP={loType === CERTIFICATION}
                 />
               )}
               {loType === LEARNING_PROGRAM &&
@@ -392,7 +437,8 @@ const PrimeTrainingPage = (props: any) => {
                   return (
                     <section
                       className={styles.trainingOverviewContainer}
-                      key={index}>
+                      key={index}
+                    >
                       <h3 className={styles.sectionName}>{name}</h3>
                       {!section.mandatory ? (
                         <div>
@@ -455,11 +501,13 @@ const PrimeTrainingPage = (props: any) => {
                 launchPlayerHandler={launchPlayerHandler}
                 unEnrollmentHandler={unEnrollmentHandler}
                 addToCartHandler={addToCartHandler}
+                updateEnrollmentHandler={updateEnrollmentHandler}
                 jobAidClickHandler={jobAidClickHandler}
                 isPreviewEnabled={isPreviewEnabled}
                 alternateLanguages={alternateLanguages}
                 updateRating={updateRating}
                 updateBookMark={updateBookMark}
+                waitlistPosition={waitlistPosition}
               />
             </div>
           </div>

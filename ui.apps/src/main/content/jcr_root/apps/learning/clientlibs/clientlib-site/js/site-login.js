@@ -13,266 +13,30 @@ governing permissions and limitations under the License.
 window.ALM = window.ALM || {};
 window.ALM.ALMConfig = window.ALM.ALMConfig || {};
 
-(function (window, document, Granite, $) {
+(async function (window, document, Granite, $) {
   "use strict";
-
-  const ACCESS_TOKEN_COOKIE_NAME = "alm_cp_token";
-  const COMMERCE_TOKEN_COOKIE_NAME = "alm_commerce_token";
-  const CP_OAUTH_URL =
-    "{almBaseURL}/oauth/o/authorize?account={accountId}&client_id={clientId}&redirect_uri={redirectUri}&state={state}&scope=learner:read,learner:write&response_type=CODE&client_identifier=aemsite&logoutAfterAuthorize=true";
-  const ES_REGISTER_URL =
-    "{almBaseURL}/oauth/o/authorize?client_id={clientId}&redirect_uri={redirectUri}&state={state}&scope=learner:read,learner:write&response_type=CODE&client_identifier=aemsite&logoutAfterAuthorize=true&loginUrl={loginUrl}";
-  const CP_OAUTH_STATE = "cpState";
-  const ES_REGISTER_STATE = "esRegisterState";
-
-  const WCM_AUTHOR_MODE = "author";
-  const WCM_NON_AUTHOR_MODE = "non-author";
-
-  const CP_ACCESS_TOKEN_URL = "/cpoauth.cpAccessToken.html";
 
   const PRIME_USAGE_TYPE = "aem-sites";
   const ES_USAGE_TYPE = "aem-es";
   const COMMERCE_USAGE_TYPE = "aem-commerce";
   const DEFAULT_USAGE = "aem-default";
 
-  const ALM_AUTHENTICATION_ERROR_ID = "alm-authentication-validator";
-
   const CURRENT_USAGE_TYPE = window.ALM.ALMConfig.usageType || DEFAULT_USAGE;
 
-  const cleanUpUserData = () => {
-    document.cookie =
-      ACCESS_TOKEN_COOKIE_NAME +
-      "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-    document.cookie =
-      COMMERCE_TOKEN_COOKIE_NAME +
-      "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-    window.ALM.storage.removeItem("user");
-    window.ALM.storage.removeItem("CART_ID");
-    window.ALM.storage.removeItem("PRIME_CATALOG_FILTER");
-    window.ALM.storage.removeItem("COMMERCE_FILTERS");
+  const loginImpls = window.ALM.loginImpls;
+  const usageMap = {
+    [PRIME_USAGE_TYPE]: loginImpls["AlmPrimeLogin"],
+    [DEFAULT_USAGE]: loginImpls["AlmPrimeLogin"],
+    [ES_USAGE_TYPE]: loginImpls["AlmEsLogin"],
+    [COMMERCE_USAGE_TYPE]: loginImpls["AlmCommerceLogin"],
   };
 
-  const handleCommerceLogIn = () => {
-    if (isAuthor()) {
-      // for Author mode, behavior should be same as AEM+ALM
-      handlePrimeLogIn();
-    } else if (!isPrimeUserLoggedIn()) {
-      if (isLearningPage()) {
-        window.ALM.navigateToExplorePage();
-      } else if (isCommunityPage() || isBoardDetailsPage() || isBoardsPage() || isProfilePage()) {
-        window.ALM.navigateToCommerceSignInPage();
-      }
-    }
-  };
-
-  const handleESLogIn = () => {
-    const currentUrl = new URL(window.location.href);
-    const state = currentUrl.searchParams.get("state");
-    const code = currentUrl.searchParams.get("code");
-    const pathName = currentUrl.pathname;
-
-    // For author mode, behavior same as AEM+ALM
-
-    if (isAuthor()) {
-      handlePrimeLogIn();
-    } else {
-      if (ES_REGISTER_STATE == state && code) {
-        // Handle User registration
-        const data = {
-          _charset_: "UTF-8",
-          mode: WCM_NON_AUTHOR_MODE,
-          code: code,
-          pagePath: pathName,
-        };
-        fetchAccessToken(data);
-      } else if (isCommunityPage() || isBoardDetailsPage() || isBoardsPage() || isProfilePage() || (CP_OAUTH_STATE == state && code)) {
-        // Auto-login like Prime Usage only if user navigates to Community page.
-        // For rest pages, show non-logged in behavior
-        handlePrimeLogIn();
-      } else if (!isPrimeUserLoggedIn()) {
-        if (isLearningPage()) {
-          window.ALM.navigateToExplorePage();
-        }
-      }
-    }
-  };
-
-  const handlePrimeLogIn = () => {
-    if (!isPrimeUserLoggedIn()) {
-      const currentUrl = new URL(window.location.href);
-      const pathName = currentUrl.pathname;
-      if (isAuthor()) {
-        let data = {
-          _charset_: "UTF-8",
-          mode: WCM_AUTHOR_MODE,
-          pagePath: pathName,
-        };
-        fetchAccessToken(data);
-      } else {
-        const oauthState = currentUrl.searchParams.get("state");
-        const code = currentUrl.searchParams.get("code");
-        if (CP_OAUTH_STATE == oauthState && code) {
-          let data = {
-            _charset_: "UTF-8",
-            mode: WCM_NON_AUTHOR_MODE,
-            code: code,
-            pagePath: pathName,
-          };
-          fetchAccessToken(data);
-        } else {
-          const cpOauth = getCpOauthUrl();
-          document.location.href = cpOauth;
-        }
-      }
-    }
-  };
-
-  const isSignOutPage = () =>
-    window.location.pathname === window.ALM.getALMConfig().signOutPath;
-
-  const isCommunityPage = () =>
-    window.location.pathname === window.ALM.getALMConfig().communityPath;
-
-  const isCommerceSignInPage = () =>
-    window.location.pathname === window.ALM.getALMConfig().commerceSignInPath;
-
-  const isLearningPage = () =>
-    window.location.pathname === window.ALM.getALMConfig().learningPath;
-
-  const isEmailRedirectPage = () =>
-    window.location.pathname === window.ALM.getALMConfig().emailRedirectPath;
-
-  const isBoardsPage = () =>
-    window.location.pathname.includes(window.ALM.getALMConfig().communityBoardsPath);
-
-  const isBoardDetailsPage = () =>
-    window.location.pathname.includes(window.ALM.getALMConfig().communityBoardDetailsPath);
-
-  const isProfilePage = () =>
-    window.location.pathname.includes(window.ALM.getALMConfig().profilePath);
-
-  const handlePageLoad = () => {
-    if (!isPrimeUserLoggedIn() || 
-        (!isAuthor() && CURRENT_USAGE_TYPE === COMMERCE_USAGE_TYPE && !isCommerceLoggedIn())) {
-      cleanUpUserData();
-    }
-    // If sign-out or sign-in Page do nothing
-    if (isSignOutPage() || isCommerceSignInPage() || isEmailRedirectPage()) {
-      return;
-    }
-
-    switch (CURRENT_USAGE_TYPE) {
-      case PRIME_USAGE_TYPE:
-        handlePrimeLogIn();
-        break;
-
-      case ES_USAGE_TYPE:
-        handleESLogIn();
-        break;
-
-      case COMMERCE_USAGE_TYPE:
-        handleCommerceLogIn();
-        break;
-
-      case DEFAULT_USAGE:
-      default:
-        break;
-    }
-  };
-
-  const isAuthor = () => window.ALM.ALMConfig.authorMode == true;
-
-  const showPopup = (errorMsg, variant, header) => {
-    let dialogElem = $("#" + ALM_AUTHENTICATION_ERROR_ID);
-    let dialogModal;
-    let bodyClasses = $("body").attr("class").split(/\s+/);
-    let isCoralLightClassPresent = bodyClasses.includes("coral--light");
-    if (!isCoralLightClassPresent) {
-      $("body").addClass("coral--light");
-    }
-
-    if(dialogElem.is(":visible"))
-    {
-      return;
-    }
-
-    dialogModal = new Coral.Dialog().set({
-      id: ALM_AUTHENTICATION_ERROR_ID,
-      variant: variant,
-      closable: "on",
-      header: {
-        innerHTML: header
-      },
-      content: {
-        innerHTML: errorMsg
-      },
-      footer: {
-        innerHTML: '<button is="coral-button" variant="default" coral-close>OK</button>'
-      }
-    });
-
-    dialogModal.on('coral-overlay:close', function (event) {
-      if (!isCoralLightClassPresent) {
-        $("body").removeClass("coral--light");
-      }
-      $("#" + ALM_AUTHENTICATION_ERROR_ID).remove();
-    });
-
-    document.body.appendChild(dialogModal);
-    dialogModal.show();
+  async function handlePageLoad() {
+    await usageMap[CURRENT_USAGE_TYPE].handlePageLoad();
   }
-
-  function getCpOauthUrl() {
-    const almBaseURL = window.ALM.ALMConfig.almBaseURL;
-    const clientId = window.ALM.ALMConfig.clientId;
-    const accountId = window.ALM.ALMConfig.accountId;
-    return CP_OAUTH_URL.replace("{almBaseURL}", almBaseURL)
-      .replace("{accountId}", accountId)
-      .replace("{clientId}", clientId)
-      .replace("{redirectUri}", window.location.href)
-      .replace("{state}", CP_OAUTH_STATE);
-  }
-
-  function getESRegisterUrl() {
-    const almBaseURL = window.ALM.ALMConfig.almBaseURL;
-    const clientId = window.ALM.ALMConfig.clientId;
-    const registerUrl = window.ALM.ALMConfig.almRegisterUrl;
-    return ES_REGISTER_URL.replace("{almBaseURL}", almBaseURL)
-      .replace("{clientId}", clientId)
-      .replace("{redirectUri}", window.location.href)
-      .replace("{state}", ES_REGISTER_STATE)
-      .replace("{loginUrl}", encodeURIComponent(registerUrl));
-  }
-
-  // fetch access_token from AEM
-  const fetchAccessToken = (data) => {
-    const ACCESS_TOKEN_URL = Granite.HTTP.externalize(CP_ACCESS_TOKEN_URL);
-
-    $.ajax({
-      url: ACCESS_TOKEN_URL,
-      type: "POST",
-      async: false,
-      data: data,
-      success: () => {
-        const currentUrl = new URL(window.location.href);
-        currentUrl.searchParams.delete("PRIME_BASE");
-        currentUrl.searchParams.delete("code");
-        currentUrl.searchParams.delete("state");
-        getALMUser();
-        if (isSignOutPage()) {
-          window.ALM.navigateToHomePage();
-        } else {
-          document.location.href = currentUrl.href;
-        }
-      },
-      error: () => {
-        showPopup("Failed to authenticate.", "error", "Error");
-      },
-    });
-  };
 
   async function getALMUser() {
-    if (!window.ALM.isPrimeUserLoggedIn()) {
+    if (!isPrimeUserLoggedIn()) {
       window.ALM.storage.removeItem("user");
       return;
     }
@@ -366,75 +130,28 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   };
 
   const getAccessToken = () => {
-    let cookieValues = document.cookie.match(
-      `(^|[^;]+)\\s*${ACCESS_TOKEN_COOKIE_NAME}\\s*=\\s*([^;]+)`
-    );
-    return cookieValues ? cookieValues.pop() : "";
+    return usageMap[CURRENT_USAGE_TYPE].getAccessToken();
   };
 
   const getCommerceToken = () => {
-    let cookieValues = document.cookie.match(
-      `(^|[^;]+)\\s*${COMMERCE_TOKEN_COOKIE_NAME}\\s*=\\s*([^;]+)`
-    );
-    return cookieValues ? cookieValues.pop() : "";
+    return usageMap[COMMERCE_USAGE_TYPE].getCommerceToken();
   };
 
-  const isCommerceLoggedIn = () => (getCommerceToken() === "" ? false : true);
-
-  const isPrimeUserLoggedIn = () => (getAccessToken() === "" ? false : true);
-
-  const handleLogOut = () => {
-    cleanUpUserData();
-    switch (CURRENT_USAGE_TYPE) {
-      case PRIME_USAGE_TYPE:
-        window.ALM.navigateToSignOutPage();
-        break;
-
-      case ES_USAGE_TYPE:
-      case COMMERCE_USAGE_TYPE:
-        window.ALM.navigateToHomePage();
-        break;
-
-      default:
-        break;
-    }
+  const isPrimeUserLoggedIn = () => {
+    const isLoggedIn = usageMap[CURRENT_USAGE_TYPE].isLoggedIn();
+    return isLoggedIn;
   };
 
-  const handleLogIn = (queryParams) => {
-    cleanUpUserData();
-    switch (CURRENT_USAGE_TYPE) {
-      case PRIME_USAGE_TYPE:
-      case ES_USAGE_TYPE:
-        handlePrimeLogIn();
-        break;
-
-      case COMMERCE_USAGE_TYPE:
-        window.ALM.navigateToCommerceSignInPage();
-        break;
-
-      default:
-        break;
-    }
+  const handleLogIn = async (queryParams) => {
+    await usageMap[CURRENT_USAGE_TYPE].handleLogIn();
   };
 
-  const handleESRegister = () => {
-    const registerUrl = getESRegisterUrl();
-    document.location.href = registerUrl;
+  const handleLogOut = async () => {
+    await usageMap[CURRENT_USAGE_TYPE].handleLogOut();
   };
 
   const handleRegister = () => {
-    switch (CURRENT_USAGE_TYPE) {
-      case ES_USAGE_TYPE:
-        handleESRegister();
-        break;
-
-      case COMMERCE_USAGE_TYPE:
-        window.ALM.navigateToCommerceSignInPage();
-        break;
-
-      default:
-        break;
-    }
+    usageMap[CURRENT_USAGE_TYPE].handleRegister();
   };
 
   window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
@@ -447,6 +164,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.handleLogOut = handleLogOut;
   window.ALM.handleRegister = handleRegister;
   window.ALM.getAccountActiveFields = getAccountActiveFields;
+  window.ALM.handlePageLoad = handlePageLoad;
 
-  handlePageLoad();
+  await handlePageLoad();
 })(window, document, Granite, jQuery);

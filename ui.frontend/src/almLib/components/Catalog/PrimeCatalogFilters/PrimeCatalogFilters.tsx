@@ -61,7 +61,7 @@ const PrimeCatalogFilters = (props: any) => {
     return <ALMLoader />;
   }
 
-  const renderFilterList = (filter: any, minimumValuesToDisplayFilter = 2) => {
+  const renderFilterList = (filter: any, minimumValuesToDisplayFilter = 1) => {
     if (
       !filter ||
       !filter.list ||

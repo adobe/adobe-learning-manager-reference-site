@@ -28,7 +28,3 @@ governing permissions and limitations under the License.
   data-sly-attribute.data-cities="${data.citiesFilter}"
 ></div>
 <sly data-sly-call="${placeholderTemplate.placeholder @ isEmpty=true}"></sly>
-<sly 
-  data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"
-  data-sly-call="${clientlib.all @ categories='learning.site'}"
-/>

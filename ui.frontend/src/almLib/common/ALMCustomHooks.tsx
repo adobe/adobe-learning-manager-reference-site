@@ -10,6 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { MaxPrice, PrimeLearningObject, PrimeUser } from "..";
+import store from "../../store/APIStore";
 import { CatalogFilterState } from "../store/reducers/catalog";
 import {
   getOrUpdateCatalogFilters,
@@ -22,6 +23,7 @@ import {
   getALMConfig,
   getALMUser,
   getQueryParamsFromUrl,
+  updateURLParams,
 } from "../utils/global";
 import { JsonApiParse } from "../utils/jsonAPIAdapter";
 import { isCommerceEnabled } from "../utils/price";
@@ -40,7 +42,6 @@ const DEFAULT_SEARCH_INCLUDE =
 
 class ALMCustomHooks implements ICustomHooks {
   primeApiURL = getALMConfig().primeApiURL;
-  isTeamsApp = getALMConfig().isTeamsApp;
   async getTrainings(
     filterState: CatalogFilterState,
     sort: string,
@@ -48,8 +49,14 @@ class ALMCustomHooks implements ICustomHooks {
   ) {
     const userResponse = await getALMUser();
     const user = userResponse?.user || ({} as PrimeUser);
+    const storeState = store.getState();
+    const catalogState = storeState.catalog;
+    const snippetType = catalogState.snippetType
+      ? catalogState.snippetType
+      : DEFAULT_SEARCH_SNIPPETTYPE;
 
     const catalogAttributes = getALMAttribute("catalogAttributes");
+
     const params: QueryParams = await getParamsForCatalogApi(filterState);
     params["sort"] = sort;
     params["page[limit]"] = DEFAULT_PAGE_LIMIT;
@@ -58,14 +65,16 @@ class ALMCustomHooks implements ICustomHooks {
 
     let url = `${this.primeApiURL}/learningObjects`;
     if (searchText && catalogAttributes?.showSearch === "true") {
+      updateURLParams({ snippetType: snippetType });
+
       url = `${this.primeApiURL}/search`;
       params["sort"] = "relevance";
       params["query"] = searchText;
       //TO DO check the include if needed
-      params["snippetType"] = DEFAULT_SEARCH_SNIPPETTYPE;
+      params["snippetType"] = snippetType;
       params["include"] = DEFAULT_SEARCH_INCLUDE;
-      params["language"] = this.isTeamsApp
-        ? getBrowserLocale()
+      params["language"] = getALMConfig().useConfigLocale
+        ? getALMConfig().locale
         : user.contentLocale || getALMConfig().locale || ENGLISH_LOCALE;
     }
     const response = await RestAdapter.get({

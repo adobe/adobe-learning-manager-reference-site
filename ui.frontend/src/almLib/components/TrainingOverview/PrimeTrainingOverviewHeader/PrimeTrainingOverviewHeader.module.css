@@ -176,7 +176,7 @@ governing permissions and limitations under the License.
   max-width: var(--prime-container-max-width-desktop);
   width: var(--prime-container-width);
 }
-.share {
+.share, .disableShareInTeamsMobile  {
   display: none;
 }
 .box {
@@ -199,12 +199,28 @@ governing permissions and limitations under the License.
 .breadcrumbLink {
   color: var(--prime-color-white);
   cursor: pointer;
+  max-width: 165px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-decoration: none;
+}
+.breadcrumbLink:hover  {
+  text-decoration: underline;
+}
+.breadcrumbArrow {
+  color: var(--prime-color-white);
+  cursor: pointer;
 }
 .breadcrumbDesktop {
   display: flex;
 }
 .breadcrumbMobile {
   display: none;
+}
+.progressLabel {
+  margin: -10px 10px 0px 0px;
+  color: var(--prime-color-white);
 }
 
 @media screen and (max-width: 1024px) {
@@ -240,7 +256,7 @@ governing permissions and limitations under the License.
   .shareButton {
     display: none;
   }
-  .share {
+  .share, .disableShareInTeamsMobile {
     display: block;
     height: 3rem;
     width: 3rem;
@@ -250,6 +266,11 @@ governing permissions and limitations under the License.
     border: 0.1rem solid var(--prime-color-white);
     float: right;
     margin-bottom: 0.5rem;
+  }
+  /*CPRIME-64683*/
+  .disableShareInTeamsMobile {
+    pointer-events: none;
+    opacity: 0.5;
   }
 
   .boxButton {
@@ -353,16 +374,33 @@ governing permissions and limitations under the License.
     fill: var(--prime-color-white);
     stroke: var(--prime-color-white);
   }
+
+  .breadcrumbParent {
+    display: flex;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    padding-left: 13px;
+    margin-bottom: 10px;
+  }
+  .breadcrumbLink {
+    color: var(--prime-color-black);
+    max-width: 135px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-decoration: none;
+  }
+  
+  .breadcrumbArrow {
+    color: var(--prime-color-black);
+    padding-right: 5px;
+  }
   .breadcrumbMobile {
     display: block;
   }
   .breadcrumbDesktop {
     display: none;
-  }
-  .breadcrumbParent {
-    display: block;
-    position: relative;
-    margin-left: 20px;
   }
   .breadcrumbLink {
     color: var(--prime-color-black);

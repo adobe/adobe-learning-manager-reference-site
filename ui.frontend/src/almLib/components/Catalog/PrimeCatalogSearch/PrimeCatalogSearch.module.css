@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 @import "../../../styles/variables.css";
 .container {
   position: relative;
+  flex-grow: 1;
 }
 
 .input {
@@ -39,11 +40,107 @@ governing permissions and limitations under the License.
   height: 100%;
   font-size: var(--prime-font-size-14);
   border-color: var(--prime-color-nc3) !important;
+  border-radius: 0px 3px 3px 0px;
 }
 
+.searchContainer {
+  display: flex;
+}
+
+.searchDropdown {
+  border-radius: 0 5px 5px;
+  background: var(--prime-color-white);
+  box-sizing: border-box;
+  position: absolute;
+  border: 1px solid var(--prime-color-nc2);
+  z-index: 1;
+  box-shadow: 0 0 5px rgb(0 0 0 / 20%);
+  top: 32px;
+  width: 100%;
+}
+
+.searchDropdownFilterContainer {
+  left: -32px;
+  width: 80%;
+}
+
+.searchDropdownFilterIcon {
+  cursor: pointer;
+  height: 38px;
+  width: 32px;
+  border: 1px solid var(--prime-color-nc3);
+  border-radius: 3px 0 0 3px;
+  display: inline-block;
+  background: var(--prime-color-white);
+  padding: 9px 5px;
+  border-right-style: none;
+}
+
+.hide {
+  display: none;
+}
+
+.searchSuggestionIcons {
+  width: 18px;
+  height: 18px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.searchSeparator {
+  height: 2px;
+  margin: 0 10px 10px;
+}
+
+.searchDropdownContainer a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+.searchDropdownContainer h4 {
+  padding-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.searchDropdownContainer ul {
+  margin-bottom: 5px;
+  list-style-type: none;
+  color: var(--prime-color-nc3);
+  cursor: pointer;
+}
+
+.searchDropdownContainer input[type="checkbox"]{
+  cursor: pointer;
+}
+
+.searchDropdownFilterContainer ul {
+  padding-left: 10px;
+}
+
+.searchInDropdownList {
+  list-style-type: none;
+  color: var(--prime-color-nc3);
+}
+.primeCheckbox {
+  margin-bottom: 5px;
+  list-style-type: none;
+  color: var(--prime-color-nc3);
+}
 @media screen and (max-width: 450px) {
   .container {
     margin-left: auto;
     width: 70%;
+  }
+
+  .searchDropdownContainer ul {
+    font-size: 14px;
+  }
+
+  .searchInListItem {
+    font-size: 14px;
+  }
+  .searchDropdownContainer h4 {
+    font-size: 18px;
   }
 }

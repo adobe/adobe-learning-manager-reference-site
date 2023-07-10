@@ -1,0 +1,7 @@
+.moduleNotesContainer {
+  border: 1px solid var(--prime-color-nc5);
+  margin-bottom: 15px;
+}
+.noteItemList {
+  box-sizing: border-box;
+}

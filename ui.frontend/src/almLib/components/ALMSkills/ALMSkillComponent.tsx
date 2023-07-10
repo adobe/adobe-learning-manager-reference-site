@@ -148,7 +148,7 @@ const ALMSkillComponent = (props: any) => {
     else if (source === "LO_ENROLL")
       return formatMessage({
         id: "alm.profile.skills.loEnroll",
-        defaultMessage: "Added based on trainings taken",
+        defaultMessage: "Added based on your learnings",
       });
     else if (source === "USER_SELECTED")
       return formatMessage({

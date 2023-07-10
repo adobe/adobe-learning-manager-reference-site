@@ -252,6 +252,7 @@ a.details {
 .submissionLink {
   color: #4283d0;
   text-decoration: none;
+  display: initial;
 }
 
 .fileApproved {
@@ -292,4 +293,9 @@ a.details {
 
 .sessionRecordingInfo {
   display: grid;
+}
+
+.lastVisitedMssg{
+  color: rgb(251, 112, 75);
+  font-size: 12px;
 }

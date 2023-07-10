@@ -84,10 +84,10 @@ governing permissions and limitations under the License.
   height: 16px;
 }
 .button {
-  display: none!important;
+  display: none !important;
 }
 .closeIcon {
-  display: none!important;
+  display: none !important;
 }
 .loader {
   margin: 20px 0;
@@ -116,9 +116,9 @@ governing permissions and limitations under the License.
     margin-bottom: 20px;
   }
   .searchContainer {
-    display: flex;
     width: 100%;
     align-items: center;
+    padding: 0;
   }
   .button {
     cursor: pointer;
@@ -130,7 +130,8 @@ governing permissions and limitations under the License.
     font-weight: normal;
     padding: 5px 12px;
     min-width: 70px;
-    display: block!important;
+    display: block !important;
+    margin-bottom: 10px !important;
   }
   .button:hover,
   .button:focus,
@@ -197,11 +198,11 @@ governing permissions and limitations under the License.
     margin-top: 30px;
   }
   .closeIcon {
-    display: flex!important;
-    margin-left: auto!important;
-    min-width: auto!important;
-    padding: 0!important;
-    min-height: 24px!important;
+    display: flex !important;
+    margin-left: auto !important;
+    min-width: auto !important;
+    padding: 0 !important;
+    min-height: 24px !important;
   }
   .pageContainer {
     width: 100%;

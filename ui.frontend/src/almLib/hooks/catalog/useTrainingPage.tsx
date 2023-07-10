@@ -19,10 +19,14 @@ import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
   PrimeLearningObjectInstanceEnrollment,
+  PrimeLearningObjectResource,
   PrimeLoInstanceSummary,
+  PrimeNote,
 } from "../../models/PrimeModels";
 import { getJobaidUrl, isJobaidContentTypeUrl } from "../../utils/catalog";
+import { WAITING } from "../../utils/constants";
 import {
+  getAccessToken,
   getALMAccount,
   getALMConfig,
   getALMUser,
@@ -31,6 +35,7 @@ import {
 import {
   filterTrainingInstance,
   getLocale,
+  popFromParentPathStack,
   useBadge,
   useCardIcon,
   useLocalizedMetaData,
@@ -42,22 +47,25 @@ import { QueryParams, RestAdapter } from "../../utils/restAdapter";
 import { GetTranslation } from "../../utils/translationService";
 
 const DEFAULT_INCLUDE_LO_OVERVIEW =
-  "enrollment.loInstance.loResources.resources,prerequisiteLOs,subLOs.prerequisiteLOs,subLOs.subLOs.prerequisiteLOs,authors,enrollment.loResourceGrades,subLOs.enrollment.loResourceGrades, subLOs.subLOs.enrollment.loResourceGrades, subLOs.subLOs.instances.loResources.resources, subLOs.instances.loResources.resources,instances.loResources.resources,supplementaryLOs.instances.loResources.resources,supplementaryResources,subLOs.enrollment,instances.badge,skills.skillLevel.badge,skills.skillLevel.skill,instances.loResources.resources.room,subLOs.enrollment.loInstance.loResources.resources";
+  "instances.enrollment.loResourceGrades,enrollment.loInstance.loResources.resources,prerequisiteLOs,subLOs.prerequisiteLOs,subLOs.subLOs.prerequisiteLOs,authors,subLOs.enrollment.loResourceGrades, subLOs.subLOs.enrollment.loResourceGrades, subLOs.subLOs.instances.loResources.resources, subLOs.instances.loResources.resources,instances.loResources.resources,supplementaryLOs.instances.loResources.resources,supplementaryResources,subLOs.supplementaryResources,subLOs.enrollment,instances.badge,skills.skillLevel.badge,skills.skillLevel.skill,instances.loResources.resources.room,subLOs.enrollment.loInstance.loResources.resources,prerequisiteLOs.enrollment";
 
 export const useTrainingPage = (
   trainingId: string,
   instanceId: string = "",
-  params: QueryParams = {}
+  params: QueryParams = {},
+  shouldSkipLOCalls: boolean = false
 ) => {
   const [trainingOverviewAttributes, setTrainingOverviewAttributes] = useState(
     () =>
       getPageAttributes("trainingOverviewPage", "trainingOverviewAttributes")
   );
+  const baseApiUrl = getALMConfig().primeApiURL;
+  const headers = { "content-type": "application/json" };
   const updateTrainingOverviewAttributes = getPageAttributes(
     "trainingOverviewPage",
     "trainingOverviewAttributes"
   );
-  const { locale } = useIntl();
+  const { formatMessage, locale } = useIntl();
   const [almAlert] = useAlert();
 
   const [currentState, setCurrentState] = useState({
@@ -71,8 +79,12 @@ export const useTrainingPage = (
   const [instanceSummary, setInstanceSummary] = useState(
     {} as PrimeLoInstanceSummary
   );
+  const [notes, setNotes] = useState([] as PrimeNote[]);
+  const [lastPlayingLoResourceId, setLastPlayingLoResourceId] = useState("");
+  const [refreshNotes, setRefreshNotes] = useState(false);
   const [refreshTraining, setRefreshTraining] = useState(false);
   const training = trainingInstance.learningObject;
+  const [waitlistPosition, setWaitlistPosition] = useState("");
   const dispatch = useDispatch();
 
   const [
@@ -121,7 +133,9 @@ export const useTrainingPage = (
         });
       }
     };
-    getTrainingInstance();
+    if (!shouldSkipLOCalls) {
+      getTrainingInstance();
+    }
   }, [trainingId, instanceId, params.include, refreshTraining]);
 
   useEffect(() => {
@@ -137,20 +151,42 @@ export const useTrainingPage = (
       try {
       } catch (error) {}
     };
-    if (trainingInstance?.id) {
+    if (trainingInstance?.id && !shouldSkipLOCalls) {
       getSummary();
     }
   }, [trainingInstance]);
+
+  const getWaitlistPosition = async ({
+    enrollmentId,
+  }: {
+    enrollmentId: string;
+  }) => {
+    try {
+      let response = await RestAdapter.ajax({
+        url: `${baseApiUrl}/enrollments/${enrollmentId}/waitlistPosition`,
+        method: "GET",
+        headers: headers,
+      });
+
+      if (response) {
+        setWaitlistPosition(response as string);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const enrollmentHandler = useCallback(
     async ({
       id,
       instanceId,
       isSupplementaryLO = false,
+      allowMultiEnrollment = false,
     } = {}): Promise<PrimeLearningObjectInstanceEnrollment> => {
       let queryParam: QueryParams = {
         loId: id || trainingId,
         loInstanceId: instanceId || trainingInstance.id,
+        allowMultiEnrollment: allowMultiEnrollment,
       };
       const emptyResponse = {} as PrimeLearningObjectInstanceEnrollment;
       try {
@@ -178,6 +214,7 @@ export const useTrainingPage = (
         if (!isSupplementaryLO) {
           //just to refresh the training data
           setRefreshTraining((prevState) => !prevState);
+          return true;
         }
       } catch (error) {
         almAlert(
@@ -188,6 +225,28 @@ export const useTrainingPage = (
       }
     },
     []
+  );
+
+  const updateEnrollmentHandler = useCallback(
+    async ({ enrollmentId, instanceEnrollList, isSupplementaryLO = false }) => {
+      const baseApiUrl = getALMConfig().primeApiURL;
+      const headers = { "content-type": "application/json" };
+
+      try {
+        await RestAdapter.ajax({
+          url: `${baseApiUrl}enrollments?enrollmentId=${enrollmentId}`,
+          method: "PATCH",
+          body: JSON.stringify(instanceEnrollList),
+          headers: headers,
+        });
+
+        setRefreshTraining((prevState) => !prevState);
+        setRefreshNotes((prevState) => !prevState);
+      } catch (error) {
+        almAlert(true, GetTranslation("alm.enrollment.error"), AlertType.error);
+      }
+    },
+    [dispatch]
   );
 
   const addToCartHandler = useCallback(async (): Promise<{
@@ -219,13 +278,75 @@ export const useTrainingPage = (
     []
   );
 
+  const getPlayerLoState = async ({
+    loId,
+    loInstanceId,
+  }: {
+    loId: string;
+    loInstanceId: string;
+  }) => {
+    try {
+      const userResponse = await getALMUser();
+      const userId = userResponse?.user?.id;
+      const response = await RestAdapter.ajax({
+        url: `${baseApiUrl}/users/${userId}/playerLOState?loId=${loId}&loInstanceId=${loInstanceId}`,
+        method: "GET",
+      });
+
+      if (typeof response === "string") {
+        const parsedResponse = JSON.parse(response);
+        setLastPlayingLoResourceId(parsedResponse.lastPlayingLoResourceId);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    if (trainingInstance?.enrollment && (instanceId || trainingInstance.id)) {
+      getPlayerLoState({
+        loId: trainingId,
+        loInstanceId: instanceId || trainingInstance.id,
+      });
+
+      if (trainingInstance.enrollment.state === WAITING) {
+        getWaitlistPosition({ enrollmentId: trainingInstance.enrollment.id });
+      }
+    }
+  }, [trainingInstance]);
+
+  useEffect(() => {
+    if (trainingInstance?.enrollment && !shouldSkipLOCalls) {
+      getNotes();
+    }
+  }, [trainingInstance, refreshNotes]);
+
   const launchPlayerHandler = useCallback(
-    async ({ id, moduleId } = {}) => {
-      const refreshTraining = () => {
+    async ({
+      id,
+      moduleId,
+      trainingInstanceId,
+      isMultienrolled,
+      note_id,
+      note_position,
+    } = {}) => {
+      const refreshTrainingandNotes = () => {
         setRefreshTraining((prevState) => !prevState);
+        setRefreshNotes((prevState) => !prevState);
       };
       const loId = id || trainingId;
-      LaunchPlayer({ trainingId: loId, callBackFn: refreshTraining, moduleId });
+      let loInstanceId =
+      trainingInstanceId || instanceId || trainingInstance.id;
+
+      LaunchPlayer({
+        trainingId: loId,
+        callBackFn: refreshTrainingandNotes,
+        moduleId,
+        instanceId: loInstanceId,
+        isMultienrolled: isMultienrolled,
+        note_id: note_id,
+        note_position: note_position,
+      });
     },
     [trainingId]
   );
@@ -275,8 +396,12 @@ export const useTrainingPage = (
   const instanceBadge = useBadge(trainingInstance);
 
   const updateFileSubmissionUrl = useCallback(
-    async (fileUrl: any, loId: any, loInstanceId: any, loResourceId: any) => {
-      const baseApiUrl = getALMConfig().primeApiURL;
+    async (
+      fileUrl: string,
+      loId: string,
+      loInstanceId: string,
+      loResourceId: string
+    ) => {
       const body = {
         data: {
           id: loResourceId,
@@ -286,7 +411,6 @@ export const useTrainingPage = (
           },
         },
       };
-      const headers = { "content-type": "application/json" };
 
       try {
         await RestAdapter.ajax({
@@ -296,7 +420,7 @@ export const useTrainingPage = (
           headers: headers,
         });
         const params: QueryParams = {};
-        params["include"] = "enrollment.loInstance.loResources.resources";
+        params["include"] = "instances.loResources.resources";
 
         let response = await RestAdapter.ajax({
           url: `${baseApiUrl}/learningObjects/${loId}`,
@@ -316,6 +440,7 @@ export const useTrainingPage = (
         });
         return loResource[0].submissionUrl;
       } catch (e) {
+        almAlert(true, GetTranslation("alm.enrollment.error"), AlertType.error);
         console.log(e);
       }
     },
@@ -323,14 +448,13 @@ export const useTrainingPage = (
   );
 
   const updateRating = useCallback(
-    async (rating: number, loInstanceId: any) => {
-      const baseApiUrl = getALMConfig().primeApiURL;
+    async (rating: number, loInstanceId: string) => {
       const userResponse = await getALMUser();
       const userId = userResponse?.user?.id;
       const body = {
         rating: rating,
       };
-      const headers = { "content-type": "application/json" };
+
       try {
         await RestAdapter.ajax({
           url: `${baseApiUrl}enrollments/${loInstanceId}_${userId}/rate`,
@@ -338,16 +462,157 @@ export const useTrainingPage = (
           body: JSON.stringify(body),
           headers: headers,
         });
+        setRefreshTraining((prevState) => !prevState);
       } catch (e) {
+        almAlert(true, GetTranslation("alm.enrollment.error"), AlertType.error);
+        console.log(e);
+      }
+    },
+    [dispatch]
+  );
+  const updateNote = useCallback(
+    async (
+      note: PrimeNote,
+      updatedText: string,
+      loId: string,
+      loResourceId: PrimeLearningObjectResource
+    ) => {
+      const body = {
+        data: {
+          id: note.id,
+          type: "note",
+          attributes: {
+            text: updatedText,
+          },
+          relationships: {
+            loResource: {
+              data: {
+                type: "learningObjectResource",
+                id: note.loResource.id,
+              },
+            },
+          },
+        },
+      };
+
+      try {
+        await RestAdapter.ajax({
+          url: `${baseApiUrl}learningObjects/${loId}/resources/${loResourceId.id}/note/${note.id}`,
+          method: "PATCH",
+          body: JSON.stringify(body),
+          headers: headers,
+        });
+        setRefreshNotes((prevState) => !prevState);
+      } catch (e) {
+        almAlert(true, GetTranslation("alm.enrollment.error"), AlertType.error);
+        console.log(e);
+      }
+    },
+    [dispatch]
+  );
+  const deleteNote = useCallback(
+    async (noteId: string, loId: string, loResourceId: string) => {
+      try {
+        await RestAdapter.ajax({
+          url: `${baseApiUrl}learningObjects/${loId}/resources/${loResourceId}/note/${noteId}`,
+          method: "DELETE",
+          headers: headers,
+        });
+        setRefreshNotes((prevState) => !prevState);
+      } catch (e) {
+        almAlert(true, GetTranslation("alm.enrollment.error"), AlertType.error);
+        console.log(e);
+      }
+    },
+    [dispatch]
+  );
+  const downloadNotes = useCallback(
+    async (loId: string, loInstanceId: string) => {
+      const url = `${
+        getALMConfig().primeApiURL
+      }learningObjects/${loId}/instances/${loInstanceId}/note/download`;
+      try {
+        const headers = {
+          Authorization: `oauth ${getAccessToken()}`,
+        };
+
+        const response = await fetch(url, { headers });
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.style.display = "none";
+        link.setAttribute("download", "");
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (error) {
+        console.error("Error downloading file:", error);
+      }
+    },
+    [dispatch]
+  );
+
+  const sendNotesOnMail = useCallback(
+    async (loId: string, loInstanceId: string) => {
+      try {
+        const response = await RestAdapter.ajax({
+          url: `${baseApiUrl}learningObjects/${loId}/instances/${loInstanceId}/note/email`,
+          method: "POST",
+          headers: headers,
+        });
+
+        almAlert(
+          true,
+          formatMessage({
+            id: "alm.text.notesSentMessage",
+            defaultMessage: "Notes have been mailed to your email account",
+          }),
+          AlertType.success
+        );
+      } catch (e) {
+        almAlert(true, GetTranslation("alm.enrollment.error"), AlertType.error);
         console.log(e);
       }
     },
     [dispatch]
   );
 
+  const getNotes = async () => {
+    const response = await getAllNotes();
+    if (response) {
+      setNotes(response);
+    } else {
+      setNotes([]);
+    }
+    try {
+    } catch (error) {}
+  };
+
+  const getAllNotes = useCallback(async () => {
+    try {
+      let url = "";
+      let loInstanceId = instanceId || training?.enrollment?.loInstance?.id;
+      if (loInstanceId) {
+        url = `${baseApiUrl}learningObjects/${trainingId}/instances/${loInstanceId}/note`;
+      } else {
+        url = `${baseApiUrl}learningObjects/${trainingId}/note`;
+      }
+      let response = await RestAdapter.ajax({
+        url: url,
+        method: "GET",
+        headers: headers,
+      });
+      const parsedResponse = JsonApiParse(response);
+      return parsedResponse.noteList;
+    } catch (e) {
+      console.log(e);
+    }
+  }, [dispatch]);
   const updateCertificationProofUrl = useCallback(
-    async (fileUrl: any, loId: any, loInstanceId: any) => {
-      const baseApiUrl = getALMConfig().primeApiURL;
+    async (fileUrl: string, loId: string, loInstanceId: string) => {
       const userResponse = await getALMUser();
       const userId = userResponse?.user?.id;
       const body = {
@@ -359,7 +624,6 @@ export const useTrainingPage = (
           },
         },
       };
-      const headers = { "content-type": "application/json" };
 
       try {
         await RestAdapter.ajax({
@@ -380,6 +644,7 @@ export const useTrainingPage = (
         const parsedResponse = JsonApiParse(response);
         return parsedResponse.learningObject.enrollment.url || "";
       } catch (e) {
+        almAlert(true, GetTranslation("alm.enrollment.error"), AlertType.error);
         console.log(e);
       }
     },
@@ -388,7 +653,6 @@ export const useTrainingPage = (
 
   const updateBookMark = useCallback(
     async (isBookMarked: boolean, loId: string) => {
-      const baseApiUrl = getALMConfig().primeApiURL;
       try {
         await RestAdapter.ajax({
           url: `${baseApiUrl}/learningObjects/${loId}/bookmark`,
@@ -400,6 +664,14 @@ export const useTrainingPage = (
     },
     [dispatch]
   );
+
+  // Removing current LO data from parent path stack
+  useEffect(() => {
+    if (trainingInstance?.id) {
+      const id = training?.id || trainingId;
+      popFromParentPathStack(id);
+    }
+  }, [trainingInstance]);
 
   return {
     name,
@@ -419,6 +691,7 @@ export const useTrainingPage = (
     isPreviewEnabled,
     enrollmentHandler,
     launchPlayerHandler,
+    updateEnrollmentHandler,
     unEnrollmentHandler,
     jobAidClickHandler,
     addToCartHandler,
@@ -429,6 +702,13 @@ export const useTrainingPage = (
     alternateLanguages,
     updateBookMark,
     trainingOverviewAttributes,
+    notes,
+    updateNote,
+    deleteNote,
+    downloadNotes,
+    sendNotesOnMail,
+    lastPlayingLoResourceId,
+    waitlistPosition,
   };
   //date create, published, duration
 };

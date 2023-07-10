@@ -24,6 +24,24 @@ export const checkIfEnrollmentDeadlineNotPassed = (
     : true;
 };
 
+export const checkIfCompletionDeadlineNotPassed = (
+  instance: PrimeLearningObjectInstance
+) => {
+  const completionDeadlineStr = instance.completionDeadline;
+  return completionDeadlineStr && new Date(completionDeadlineStr) < new Date()
+    ? false
+    : true;
+};
+
+export const checkIfUnenrollmentDeadlinePassed = (
+  instance: PrimeLearningObjectInstance
+) => {
+  const unenrollmentDeadlineStr = instance.unenrollmentDeadline;
+  return unenrollmentDeadlineStr && new Date(unenrollmentDeadlineStr) >= new Date()
+    ? false
+    : true;
+};
+
 export const getResourceBasedOnLocale = (
   loResource: PrimeLearningObjectResource,
   locale: string

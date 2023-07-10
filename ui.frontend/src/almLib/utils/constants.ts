@@ -1,6 +1,7 @@
 export const ADOBE_COMMERCE = "aem-commerce";
 export const CLASSROOM = "Classroom";
 export const VIRTUAL_CLASSROOM = "Virtual Classroom";
+export const ACTIVITY = "Activity";
 export const ELEARNING = "Elearning";
 export const PENDING_APPROVAL = "PENDING_APPROVAL";
 export const PENDING_ACCEPTANCE = "PENDING_ACCEPTANCE";
@@ -56,5 +57,17 @@ export const TILE_VIEW = "TILE_VIEW";
 export const LIST_VIEW = "LIST_VIEW";
 export const HOME = "home";
 export const CATALOG = "catalog";
-export const PARENT_PATH_QUERY_PARAM = "parentPath=";
+
+export const USERS_SUGGESTIONS = "USERSSUGGESTIONS";
+export const POPULAR_SUGGESTIONS = "POPULARSSUGGESTIONS";
+
 export const ENGLISH_LOCALE = "en-US";
+export const MANAGER_APPROVAL = "Manager Approval";
+export const RETIRED = "Retired";
+
+export const PR = "PR";
+export const CP = "CP";
+export const PDF = "PDF";
+export const DOC = "DOC";
+export const PPT = "PPT";
+export const XLS = "XLS";
