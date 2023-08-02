@@ -258,7 +258,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
           </button>
         </div>
       </Heading>
-      <Content>
+      <Content UNSAFE_className={styles.primeOverflowStyle}>
         <PrimeCommunityObjectInput
           ref={ref}
           inputPlaceholder={formatMessage({
@@ -273,6 +273,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
           disablePrimaryAction={() => {
             setSaveEnabled(false);
           }}
+          concisedToolbarOptions={false}
         ></PrimeCommunityObjectInput>
         {textMode && (
           <div className={styles.primeOptionsArea}>
@@ -421,37 +422,39 @@ const PrimeCommunityAddPostDialog = (props: any) => {
         )}
       </Content>
       <ButtonGroup>
-        <button
-          onClick={(close) => {
-            closeDialogHandler(close);
-          }}
-          className={`almButton secondary ${styles.button}`}
-        >
-          {formatMessage({
-            id: "alm.community.cancel.label",
-            defaultMessage: "Cancel",
-          })}
-        </button>
-        {saveEnabled ? (
+        <div className={styles.primePostButtonGroup}>
           <button
             onClick={(close) => {
-              savePostHandler(close);
+              closeDialogHandler(close);
             }}
-            className={`almButton primary`}
+            className={`almButton secondary ${styles.button}`}
           >
             {formatMessage({
-              id: "alm.community.post.label",
-              defaultMessage: "Post",
+              id: "alm.community.cancel.label",
+              defaultMessage: "Cancel",
             })}
           </button>
-        ) : (
-          <button disabled={true} className={`almButton primary`}>
-            {formatMessage({
-              id: "alm.community.post.label",
-              defaultMessage: "Post",
-            })}
-          </button>
-        )}
+          {saveEnabled ? (
+            <button
+              onClick={(close) => {
+                savePostHandler(close);
+              }}
+              className={`almButton primary`}
+            >
+              {formatMessage({
+                id: "alm.community.post.label",
+                defaultMessage: "Post",
+              })}
+            </button>
+          ) : (
+            <button disabled={true} className={`almButton primary`}>
+              {formatMessage({
+                id: "alm.community.post.label",
+                defaultMessage: "Post",
+              })}
+            </button>
+          )}
+        </div>
       </ButtonGroup>
     </Dialog>
   );

@@ -13,41 +13,46 @@ import Cancel from "@spectrum-icons/workflow/Cancel";
 import Send from "@spectrum-icons/workflow/Send";
 import React, { useEffect, useRef, useState } from "react";
 import { useIntl } from "react-intl";
+import ReactQuill from "react-quill";
 import { PrimeCommunityLinkPreview } from "../PrimeCommunityLinkPreview";
 import styles from "./PrimeCommunityObjectInput.module.css";
+import "react-quill/dist/quill.snow.css";
 // import { PrimeCommunityLoLinkPreview } from "../PrimeCommunityLoLinkPreview";
 
 const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
   const { formatMessage } = useIntl();
   const objectTextLimit = props.characterLimit ? props.characterLimit : 1000;
   const emptyString = "";
-  const [charactersRemaining, setCharactersRemaining] = useState(
-    objectTextLimit
-  );
+  const [charactersRemaining, setCharactersRemaining] =
+    useState(objectTextLimit);
   const [showLinkPreview, setShowLinkPreview] = useState(false);
   // const [ showLoLinkPreview, setShowLoLinkPreview ] = useState(false);
   const firstRun = useRef(true);
+  const [userInputText, setUserInputText] = useState(
+    props.defaultValue ? props.defaultValue : ""
+  );
+  const [characterCount, setCharacterCount] = useState(0);
 
   const exitActions = () => {
-    ref.current.value = emptyString;
+    setUserInputText(emptyString);
     setCharactersRemaining(objectTextLimit);
     setShowLinkPreview(false);
     // setShowLoLinkPreview(false);
   };
 
   const primaryActionHandler = () => {
-    if (ref && ref.current.value.length <= 0) {
+    if (characterCount <= 0) {
       return;
     }
     if (typeof props.primaryActionHandler === "function") {
-      props.primaryActionHandler(ref.current.value);
+      props.primaryActionHandler(userInputText);
       exitActions();
     }
   };
 
   const secondaryActionHandler = () => {
     if (typeof props.secondaryActionHandler === "function") {
-      props.secondaryActionHandler(ref.current.value);
+      props.secondaryActionHandler(userInputText);
       exitActions();
     }
   };
@@ -56,7 +61,7 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
     checkTextCount();
     if (!showLinkPreview) {
       setShowLinkPreview(true);
-    } else if (ref.current.value === emptyString) {
+    } else if (userInputText === emptyString) {
       setShowLinkPreview(false);
     }
     // if(showLoLinkPreview) {
@@ -67,22 +72,18 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
   };
 
   const checkTextCount = () => {
-    const currentInputLength =
-      ref && ref.current ? ref.current.value.length : 0;
-    setCharactersRemaining(
-      objectTextLimit < currentInputLength
-        ? 0
-        : objectTextLimit - currentInputLength
-    );
-    if (currentInputLength > 0) {
-      if (typeof props.enablePrimaryAction === "function") {
-        ref.current.value.trim() !== ""
-          ? props.enablePrimaryAction()
-          : props.disablePrimaryAction();
-      }
-    } else {
-      if (typeof props.disablePrimaryAction === "function") {
-        props.disablePrimaryAction();
+    if (ref.current && typeof ref.current.value !== 'undefined') {
+      const currentInputLength = stripHtmlTags(ref.current.value).length;
+      if (currentInputLength > 0) {
+        if (typeof props.enablePrimaryAction === "function") {
+          ref.current.value.trim() !== ""
+            ? props.enablePrimaryAction()
+            : props.disablePrimaryAction();
+        }
+      } else {
+        if (typeof props.disablePrimaryAction === "function") {
+          props.disablePrimaryAction();
+        }
       }
     }
   };
@@ -96,48 +97,121 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
     }
   }, [props.defaultValue]);
 
+  const handleEditorTextChange = (value: string) => {
+    const charCount = stripHtmlTags(value).length;
+    if (charCount <= objectTextLimit) {
+      setUserInputText(value);
+      setCharacterCount(charCount);
+      const charRemainingCount =
+        objectTextLimit < charCount ? 0 : objectTextLimit - charCount;
+      setCharactersRemaining(charRemainingCount);
+      
+    }
+    else {
+      const quillEditor = ref.current.getEditor();
+      quillEditor.history.undo();
+      setUserInputText(userInputText);
+      setCharacterCount(characterCount);
+      setCharactersRemaining(charactersRemaining);
+    }
+    processInput();
+  };
+
+
+  
+  const stripHtmlTags = (html: string) => {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    return div.textContent || div.innerText || "";
+  };
+
+  const toolbarOptions = props.concisedToolbarOptions
+    ? [
+        [{ size: ["small", false, "large", "huge"] }],
+        ["bold", "italic", "underline"],
+        [{ color: [] }],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["link"],
+        ["clean"],
+      ]
+    : [
+        [{ size: ["small", false, "large", "huge"] }],
+        ["bold", "italic", "underline"],
+        [{ color: [] }, { background: [] }],
+        [{ header: 1 }, { header: 2 }],
+        [{ list: "ordered" }, { list: "bullet" }],
+        [{ indent: "-1" }, { indent: "+1" }],
+        [{ align: [] }],
+        ["link"],
+        ["clean"],
+      ];
+
   return (
     <>
-      <div>
-        <div className={styles.primePostObjectWrapper}>
-          <textarea
-            ref={ref}
-            onKeyUp={processInput}
-            className={styles.primePostObjectInput}
-            defaultValue={props.defaultValue ? props.defaultValue : ""}
-            placeholder={props.inputPlaceholder}
-            maxLength={objectTextLimit}
-          ></textarea>
-          {props.primaryActionHandler && (
-            <button
-              className={styles.primeSaveObjectButton}
-              onClick={primaryActionHandler}
-            >
-              <Send UNSAFE_className={styles.postActionSvg} />
-            </button>
-          )}
-          {props.secondaryActionHandler && (
-            <button
-              className={styles.primeSaveObjectButton}
-              onClick={secondaryActionHandler}
-            >
-              <Cancel UNSAFE_className={styles.postActionSvg} />
-            </button>
-          )}
-          <div className={styles.primeTextAreaCountRemaining}>
-            {charactersRemaining}{" "}
-            {formatMessage({
-              id: "alm.community.post.charactersLeft",
-              defaultMessage: "characters left",
-            })}
-          </div>
+      <div className={styles.primePostObjectWrapper}>
+        <ReactQuill
+          value={userInputText}
+          onChange={handleEditorTextChange}
+          className={styles.primePostObjectInput}
+          placeholder={props.inputPlaceholder}
+          modules={{
+            toolbar: toolbarOptions,
+          }}
+          ref={ref}
+        />
+        <style>{`
+        .ql-toolbar.ql-snow .ql-formats {
+          margin-right: 10px;
+        }
+       
+        .ql-editor a {
+          text-decoration: none !important;
+          cursor: pointer;
+          width: fit-content;
+          
+        }
+        .ql-tooltip {
+          display:flex;
+          z-index:2000;
+          position:fixed !important;
+          top: 300px !important;
+        }
+        .ql-container.ql-snow {
+          max-height: fit-content !important;
+         }
+      `}</style>
+       <div className={styles.primeTextAreaCountRemaining}>
+          {charactersRemaining}{" "}
+          {formatMessage({
+            id: "alm.community.post.charactersLeft",
+            defaultMessage: "characters left",
+          })}
         </div>
+        {props.primaryActionHandler && (
+          <button
+            className={styles.primeSaveObjectButton}
+            onClick={primaryActionHandler}
+          >
+            <Send UNSAFE_className={styles.postActionSvg} />
+          </button>
+        )}
+        {props.secondaryActionHandler && (
+          <button
+            className={styles.primeSaveObjectButton}
+            onClick={secondaryActionHandler}
+          >
+            <Cancel UNSAFE_className={styles.postActionSvg} />
+          </button>
+        )}
+       
+      </div>
+      <div className={styles.primePreviewImage}>
         <PrimeCommunityLinkPreview
-          currentInput={ref?.current?.value}
+          currentInput={userInputText}
           showLinkPreview={showLinkPreview}
         ></PrimeCommunityLinkPreview>
-        {/* <PrimeCommunityLoLinkPreview currentInput={ref?.current?.value} showLoLinkPreview={showLoLinkPreview}></PrimeCommunityLoLinkPreview> */}
       </div>
+      {/* <PrimeCommunityLoLinkPreview currentInput={ref?.current?.value} showLoLinkPreview={showLoLinkPreview}></PrimeCommunityLoLinkPreview> */}
     </>
   );
 });

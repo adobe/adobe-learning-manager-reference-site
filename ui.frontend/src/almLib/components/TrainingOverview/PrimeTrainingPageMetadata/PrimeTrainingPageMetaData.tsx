@@ -656,10 +656,10 @@ const PrimeTrainingPageMetaData: React.FC<{
   };
 
   const childLpHasResource = () => {
-    let displayResource: any = false;
+    let displayResource: boolean = false;
     if (training.subLOs?.length) {
       const subLOs = training.subLOs;
-      displayResource = subLOs.map((item) => {
+      displayResource = subLOs.some((item) => {
         //when the sub LO is a learing program only then we show the resources from a sub LO
         if (
           item.loType === "learningProgram" &&
@@ -946,7 +946,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   };
 
   const renderResourcesFromChildLP = (training: PrimeLearningObject) => {
-    //if LP has resources don't render resources from child lp
+    //if parent LP has resources don't render resources from child lp
     if (training?.supplementaryResources?.length) {
       return;
     }

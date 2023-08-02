@@ -438,7 +438,7 @@ const getInstanceLocationAndInstructorsName = (
 
 const sortList = (list: any[], sortParam: string, sortOrder: any) => {
   let listCopy = [...list];
-  if (sortParam === "name" || sortParam === "location") {
+  if (sortParam === "name") {
     return sortOrder
       ? listCopy.sort((a: any, b: any) =>
           b[sortParam].localeCompare(a[sortParam])
@@ -448,18 +448,44 @@ const sortList = (list: any[], sortParam: string, sortOrder: any) => {
         );
   }
 
-  if (sortParam === "completionDate" || sortParam ==="startDate") {
+  if (sortParam === "location") {
+    return sortOrder
+      ? listCopy.sort((a: any, b: any) =>
+          b[sortParam][0].localeCompare(a[sortParam][0])
+        )
+      : listCopy.sort((a: any, b: any) =>
+          a[sortParam][0].localeCompare(b[sortParam][0])
+        );
+  }
+
+  if (sortParam === "completionDate" || sortParam === "startDate") {
     return sortOrder
       ? listCopy.sort((a, b) => {
-        const dateA = new Date(a[sortParam]);
-        const dateB = new Date(b[sortParam]);
-        return dateA.getTime() - dateB.getTime();
-      })
+          const dateA = a[sortParam] ? new Date(a[sortParam]) : null;
+          const dateB = b[sortParam] ? new Date(b[sortParam]) : null;
+  
+          if (dateA === null && dateB === null) {
+            return 0;
+          } else if (dateA === null) {
+            return 1; 
+          } else if (dateB === null) {
+            return -1; 
+          }
+          return dateA.getTime() - dateB.getTime();
+        })
       : listCopy.sort((a, b) => {
-        const dateA = new Date(a[sortParam]);
-        const dateB = new Date(b[sortParam]);
-        return dateB.getTime() - dateA.getTime();
-      })
+          const dateA = a[sortParam] ? new Date(a[sortParam]) : null;
+          const dateB = b[sortParam] ? new Date(b[sortParam]) : null;
+  
+          if (dateA === null && dateB === null) {
+            return 0;
+          } else if (dateA === null) {
+            return -1; 
+          } else if (dateB === null) {
+            return 1; 
+          }
+          return dateB.getTime() - dateA.getTime();
+        });
   }
 
 };

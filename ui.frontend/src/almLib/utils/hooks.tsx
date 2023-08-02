@@ -19,7 +19,12 @@ import {
   PrimeLocalizationMetadata,
   PrimeResource,
 } from "../models/PrimeModels";
-import { COURSE, LEARNING_PROGRAM, TRAINING_INSTANCE_ID_STR } from "./constants";
+import {
+  COURSE,
+  ENGLISH_LOCALE,
+  LEARNING_PROGRAM,
+  TRAINING_INSTANCE_ID_STR,
+} from "./constants";
 import { getALMConfig, getALMObject } from "./global";
 import { checkIfCompletionDeadlineNotPassed } from "./instance";
 import { themesMap } from "./themes";
@@ -163,8 +168,9 @@ const getEnrollment = (
   training: PrimeLearningObject,
   trainingInstance: PrimeLearningObjectInstance
 ) => {
-
-  return ((training.loType === COURSE && trainingInstance) ? trainingInstance.enrollment : training.enrollment);
+  return training.loType === COURSE && trainingInstance
+    ? trainingInstance.enrollment
+    : training.enrollment;
 };
 
 const filterTrainingInstance = (
@@ -238,80 +244,118 @@ const getLoName = (loDetails: string) => {
 
 const hasSingleActiveInstance = (learningObject: PrimeLearningObject) => {
   const instances = learningObject.instances;
-  if(instances.length === 1){
+  if (instances.length === 1) {
     return true;
   }
   let count = 0;
   for (let i = 0; i < instances.length; i++) {
-      const instance = instances[i];
-      if ((instance.state === "Active" && checkIfCompletionDeadlineNotPassed(instance)) || instance.enrollment ) {
-          count++;
-      }
-      if (count > 1) {
-          return false;
-      }
+    const instance = instances[i];
+    if (
+      (instance.state === "Active" &&
+        checkIfCompletionDeadlineNotPassed(instance)) ||
+      instance.enrollment
+    ) {
+      count++;
+    }
+    if (count > 1) {
+      return false;
+    }
   }
   return count === 0 ? false : true;
-}
+};
 
 const getEnrolledInstancesCount = (training: PrimeLearningObject) => {
-
   const instances = training.instances;
   let count = 0;
   for (let i = 0; i < instances.length; i++) {
-      const instance = instances[i];
-      if (instance.enrollment) {
-          count++;
-      }
+    const instance = instances[i];
+    if (instance.enrollment) {
+      count++;
+    }
   }
   return count;
-
-}
+};
 
 const isEnrolledInAutoInstance = (training: PrimeLearningObject) => {
-  return training.enrollment?.enrollmentSource === "AUTO_ENROLL" && 
-  (training.instances!.findIndex((item) => item.id === training.enrollment.loInstance.id) === -1 ? true:false);
-}
+  return (
+    training.enrollment?.enrollmentSource === "AUTO_ENROLL" &&
+    (training.instances!.findIndex(
+      (item) => item.id === training.enrollment.loInstance.id
+    ) === -1
+      ? true
+      : false)
+  );
+};
 
-const getParentPathStack=() => {
+const getParentPathStack = () => {
   let parentPathString = getALMObject().storage.getItem("parentPath") || "";
   if (!parentPathString) {
     return [];
   }
   return JSON.parse(parentPathString);
-}
+};
 
 const pushToParentPathStack = (path: string) => {
-
   let parentPathStack = getParentPathStack();
   parentPathStack.push(path);
   getALMObject().storage.setItem("parentPath", JSON.stringify(parentPathStack));
-  
-}
+};
 
 const popFromParentPathStack = (loId: string) => {
-
   let parentPathStack = getParentPathStack();
 
   while (parentPathStack.length > 0) {
     let item = parentPathStack.pop();
     if (item.startsWith(loId)) {
-      getALMObject().storage.setItem("parentPath", JSON.stringify(parentPathStack));
+      getALMObject().storage.setItem(
+        "parentPath",
+        JSON.stringify(parentPathStack)
+      );
       return;
     }
   }
-}
+};
 
 const clearParentLoDetails = () => {
   getALMObject().storage.removeItem("parentPath");
-}
+};
 
-const getTrainingUrl = (url : string) => {
-
-  if(url.includes(`/${TRAINING_INSTANCE_ID_STR}`)){
-    url = url.substring(0,url.indexOf(`/${TRAINING_INSTANCE_ID_STR}`));
+const getTrainingUrl = (url: string) => {
+  if (url.includes(`/${TRAINING_INSTANCE_ID_STR}`)) {
+    url = url.substring(0, url.indexOf(`/${TRAINING_INSTANCE_ID_STR}`));
   }
   return url;
+};
+
+const getLocalizedData = (
+  localizedMetadata: PrimeLocalizationMetadata[],
+  locale = ENGLISH_LOCALE
+) => {
+  if (localizedMetadata.length == 0) {
+    return {
+      description: "",
+      name: "",
+      overview: "",
+      locale: "unknown",
+      richTextOverview: "",
+    };
+  }
+
+  let ret: PrimeLocalizationMetadata = localizedMetadata[0];
+  localizedMetadata.forEach((lm) => {
+    if (lm.locale == locale) {
+      ret = lm;
+    }
+  });
+
+  return ret;
+};
+
+export function setHttp(link: string): string {
+  if (link.search(/^http[s]?:\/\//) == -1) {
+    link = 'http://' + link;
+  }
+  return link;
 }
 
 export {
@@ -335,5 +379,6 @@ export {
   pushToParentPathStack,
   popFromParentPathStack,
   clearParentLoDetails,
-  getTrainingUrl
+  getTrainingUrl,
+  getLocalizedData,
 };

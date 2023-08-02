@@ -217,6 +217,7 @@ const PrimeCommunityComment = (props: any) => {
                   defaultMessage: "Reply here",
                 })}
                 primaryActionHandler={(value: any) => saveReplyHandler(value)}
+                concisedToolbarOptions={true}
               ></PrimeCommunityObjectInput>
             )}
             {showReplies && (
@@ -241,6 +242,7 @@ const PrimeCommunityComment = (props: any) => {
           defaultValue={comment.richText}
           primaryActionHandler={(value: any) => updateComment(value)}
           secondaryActionHandler={() => setShowEditCommentView(false)}
+          concisedToolbarOptions={true}
         ></PrimeCommunityObjectInput>
       )}
     </>

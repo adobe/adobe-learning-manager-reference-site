@@ -110,6 +110,9 @@
   "alm.community.post.reportConfirmation": "Are you sure you want to report this post?",
   "alm.community.comment.reportConfirmation": "Are you sure you want to report this comment?",
   "alm.community.reply.reportConfirmation": "Are you sure you want to report this reply?",
+  "alm.community.post.thumbnail.description.course": "||COURSE||",
+  "alm.community.post.thumbnail.description.certification": "||CERTIFICATION||",
+  "alm.community.post.thumbnail.description.learningProgram": "||LEARNING_PATH||",
   "alm.overview.button.start": "Start",
   "alm.overview.button.revisit": "Revisit",
   "alm.overview.button.continue": "Continue",
@@ -118,7 +121,7 @@
   "alm.overview.button.enroll": "Enroll",
   "alm.overview.button.pendingApproval": "Pending",
   "alm.overview.manager.approval.pending": "Manager approval pending",
-  "alm.overview.manager.approval.pending.singleInstance":"Manager approval is pending and instance is retired.",
+  "alm.overview.manager.approval.pending.singleInstance": "Manager approval is pending and instance is retired.",
   "alm.overview.manager.approval.pending.instance.retired": "Manager approval is pending and instance is retired. You can unenroll and re-enroll to an available instance",
   "alm.overview.manager.approval.pending.deadline.passed": "Manager approval is pending and enrollment deadline has passed. You can unenroll and re-enroll to an available instance",
   "alm.overview.button.pendingAcceptance": "Awaiting Acceptance",
@@ -246,7 +249,7 @@
   "alm.overview.cancel": "Cancel",
   "alm.overview.confirm.unenrollment": "Unenroll",
   "alm.overview.request.manager.approval": "Manager approval required. 'Enroll' to request approval.",
-  "alm.overview.pending.approval":"Your enrollment is pending in another instance.",
+  "alm.overview.pending.approval": "Your enrollment is pending in another instance.",
   "alm.module.change": "Change",
   "alm.purchase.details": "Purchase details",
   "alm.training.price": "Price {amount}",
@@ -344,5 +347,7 @@
   "alm.text.moduleList": "||MODULE|| list",
   "alm.text.clickToEdit": "click to edit",
   "alm.text.autoInstance": "Auto Instance",
-  "alm.text.progress": "Progress"
+  "alm.text.progress": "Progress",
+  "alm.no.description.available": "No Description Available",
+  "alm.no.preview.available": "No Preview Available. <br> Click here to visit the page."
 }

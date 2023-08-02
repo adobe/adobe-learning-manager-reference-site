@@ -18,10 +18,12 @@ import {
 import { getUploadInfo } from "../../../utils/uploadUtils";
 import { PrimeCommunityAddPostDialog } from "../PrimeCommunityAddPostDialog";
 import styles from "./PrimeCommunityAddPostDialogTrigger.module.css";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 const PrimeCommunityAddPostDialogTrigger = (props: any) => {
   const showDialog = useRef(false);
+  const [isMobileDialogOpen, setMobileDialogOpen] = useState(false);
+
   useEffect(() => {
     if (props.openDialog && !showDialog.current) {
       const launchDialog = document.getElementById(
@@ -60,8 +62,11 @@ const PrimeCommunityAddPostDialogTrigger = (props: any) => {
     close();
   };
 
-  const onClickHandler = () => {
-    getUploadInfo();
+  const onClickHandler = async () => {
+    await getUploadInfo();
+    if(props.inMobileView){
+      setMobileDialogOpen((prevState) => !prevState)
+    }
   };
 
   return (
@@ -78,6 +83,7 @@ const PrimeCommunityAddPostDialogTrigger = (props: any) => {
             id="showAddPostDialog"
             UNSAFE_className={`almButton primary ${styles.primeDialogLaunchButton}`}
             onPress={onClickHandler}
+            isDisabled = {isMobileDialogOpen}
           >
             {props.buttonLabel}
           </ActionButton>
@@ -104,9 +110,15 @@ const PrimeCommunityAddPostDialogTrigger = (props: any) => {
                 pollOptions,
                 close
               );
+              if(props.inMobileView){
+                setMobileDialogOpen((prevState) => !prevState)
+              }
             }}
             closeHandler={() => {
               closeDialogHandler(close);
+              if(props.inMobileView){
+                setMobileDialogOpen((prevState) => !prevState)
+              }
             }}
           ></PrimeCommunityAddPostDialog>
         )}
