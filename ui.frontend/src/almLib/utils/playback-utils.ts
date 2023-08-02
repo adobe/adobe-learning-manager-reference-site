@@ -32,7 +32,7 @@ export function LaunchPlayer(props: any) {
     }
   };
   getWindowObject().addEventListener("message", ClosePlayer, false);
-  const playeURL: string = GetPlayerURl(props.trainingId, props.moduleId);
+  const playeURL: string = GetPlayerURl(props.trainingId, props.moduleId, props.instanceId, props.isMultienrolled, props.note_id, props.note_position);
   cleanUp();
   const overlay = document.createElement("div");
   overlay.id = "primePlayerOverlay";
@@ -86,7 +86,7 @@ function handlePlayerClose(trainingId: string) {
   cleanUp();
 }
 
-export function GetPlayerURl(trainingId = "", moduleId = ""): string {
+export function GetPlayerURl(trainingId = "", moduleId = "", instanceId = "", isMultienrolled: boolean, note_id: "", note_position: ""): string {
   const primeConfig = getALMConfig();
   const hostName = primeConfig.almBaseURL;
   const playerEndPoint = "/app/player?";
@@ -101,6 +101,15 @@ export function GetPlayerURl(trainingId = "", moduleId = ""): string {
   const locale = getLocale(primeConfig.pageLocale);
   if (locale) {
     url = `${url}&locale=${locale}`;
+  }
+  if(instanceId){
+    url = `${url}&instance_id=${instanceId}`
+    if(isMultienrolled){
+      url = `${url}&is_multienrolled=true`
+    } 
+  }
+  if(note_id && note_position){
+    url = `${url}&note_position=${note_position}&note_id=${note_id}`
   }
   return url;
 }

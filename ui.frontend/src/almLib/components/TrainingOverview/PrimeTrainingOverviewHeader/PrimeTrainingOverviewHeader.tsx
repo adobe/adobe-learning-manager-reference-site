@@ -34,17 +34,21 @@ import BookmarkSingleOutline from "@spectrum-icons/workflow/BookmarkSingleOutlin
 import BookmarkSingle from "@spectrum-icons/workflow/BookmarkSingle";
 import { transform } from "@babel/core";
 import { PrimeLearningObject } from "../../../models/PrimeModels";
-import {
+import { 
   getALMConfig,
-  getALMObject,
-  navigateToLoInTeamsApp,
+  getALMObject 
 } from "../../../utils/global";
 import {
-  COURSE,
-  LEARNING_PROGRAM,
-  PARENT_PATH_QUERY_PARAM,
+  COURSE, LEARNING_PROGRAM, TRAINING_INSTANCE_ID_STR,
 } from "../../../utils/constants";
-import { useCanShowRating } from "../../../utils/hooks";
+import {
+  getLoId,
+  getLoName,
+  getParentPathStack,
+  getTrainingUrl,
+  hasSingleActiveInstance,
+  useCanShowRating,
+} from "../../../utils/hooks";
 
 interface trainingOverviewProps {
   format: string;
@@ -82,6 +86,9 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
   const formatLabel = useMemo(() => {
     if (training.loType === COURSE) {
       return format ? GetTranslation(`${formatMap[format]}`, true) : "";
+    }
+    else if (training.loType === LEARNING_PROGRAM){
+      return GetTranslation(`alm.training.learningProgram`, true)
     }
   }, [format]);
 
@@ -122,7 +129,8 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
   }, []);
 
   function copyURL() {
-    navigator.clipboard.writeText(window.location.href);
+    let url = getTrainingUrl(window.location.href);
+    navigator.clipboard.writeText(url);
     setShowCopiedUrlMsg(true);
     setShowShareMenu(false);
     setTimeout(() => {
@@ -132,7 +140,7 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
 
   function sendEmail() {
     // const learnerAppOrigin = getALMConfig().almBaseURL;
-    const shareUrlLink = window.location.href;
+    let shareUrlLink = getTrainingUrl(window.location.href);
     const trainingOverview = getALMConfig().trainingOverviewPath;
     const trainingId = training.id;
     //const shareUrlLink = `${learnerAppOrigin}${trainingOverview}/trainingId/${trainingId}`;
@@ -142,13 +150,15 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
         id: "alm.text.training",
         defaultMessage: "Training",
       },
-      { subject: subject }
+      { training: GetTranslation(`alm.training.${training.loType}`, true),
+       subject: subject }
     )}&body=${formatMessage(
       {
         id: "alm.text.trainingLink",
         defaultMessage: "Training Link - ",
       },
-      { shareUrlLink: shareUrlLink }
+      { training: GetTranslation(`alm.training.${training.loType}`, true),
+      shareUrlLink: shareUrlLink }
     )}`;
     setShowShareMenu(false);
   }
@@ -163,7 +173,7 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
     const shareEvent = {
       eventType: "shareLoInTeams",
       data: {
-        url: window.location.href,
+        url: getTrainingUrl(window.location.href),
         name: name,
         description: description,
       },
@@ -173,7 +183,7 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
   };
 
   const shareHandler = () => {
-    if (getALMConfig().isTeamsApp) {
+    if (getALMConfig().handleShareExternally) {
       return almTrainingShareInTeams();
     }
     setShowShareMenu((prevState) => !prevState);
@@ -199,7 +209,14 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
           {GetTranslation("alm.text.share")}
         </button>
         {!showShareMenu && (
-          <button className={`${styles.share}`} onClick={shareHandler}>
+          <button
+            className={
+              getALMConfig().handleShareExternally
+                ? `${styles.disableShareInTeamsMobile}`
+                : `${styles.share}`
+            }
+            onClick={shareHandler}
+          >
             <span aria-hidden="true" className={styles.xshareIcon}>
               <Reply />
             </span>
@@ -240,58 +257,42 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
     );
   };
 
-  const isParentPathQueryParam = () => {
-    return window.location.href.indexOf(PARENT_PATH_QUERY_PARAM) > -1;
-  };
-
-  const getLoDetails = () => {
-    return window.location.href.split(PARENT_PATH_QUERY_PARAM)[1].split(",");
-  };
-
-  const getLoId = (loDetails: string) => {
-    return loDetails.split("::")[0];
-  };
-
-  const getLoName = (loDetails: string) => {
-    return loDetails.split("::")[1];
-  };
-
-  const navigateToLo = (trainingId: string, index: number) => {
-    let rootParent = index === 0;
-    let parentLoDetails = "";
-    if (!rootParent && isParentPathQueryParam()) {
-      parentLoDetails = getLoDetails()[0];
-    }
-    if (getALMConfig().isTeamsApp) {
-      navigateToLoInTeamsApp(trainingId, "", parentLoDetails, true);
-    } else {
-      getALMObject().navigateToTrainingOverviewPage(
-        trainingId,
-        "",
-        parentLoDetails,
-        true
-      );
-    }
-  };
+  const primaryEnrollment = training.enrollment;
+  const hasMultipleInstances = !hasSingleActiveInstance(training);
 
   const showParentBreadCrumbs = () => {
-    if (isParentPathQueryParam()) {
-      let loDetailsArray = getLoDetails();
-      return (
-        <div className={styles.breadcrumbParent}>
-          {loDetailsArray.map((loDetails, index) => {
-            return (
-              <a
-                className={styles.breadcrumbLink}
-                onClick={() => navigateToLo(getLoId(loDetails), index)}>
-                {decodeURI(getLoName(loDetails))}
-                {index < loDetailsArray.length - 1 && <span>&gt;</span>}
-              </a>
-            );
-          })}
-        </div>
-      );
+
+    const loDetailsArray = getParentPathStack();
+    if(loDetailsArray.length===0){
+      return;
     }
+    return (
+      <div className={styles.breadcrumbParent}>
+        {loDetailsArray.map((loDetails: string, index: number) => {
+          const loName = decodeURI(getLoName(loDetails));
+          const loId = getLoId(loDetails);
+          return (
+            <React.Fragment key={`breadcrumb-${index}`}>
+            <a className={styles.breadcrumbLink}
+              onClick={() => getALMObject().navigateToTrainingOverviewPage(loId)}
+              title={loName}>
+                {loName}
+              </a>
+              {index <= loDetailsArray.length - 1 && (
+                <b className={styles.breadcrumbArrow}>&nbsp; &gt; &nbsp;</b>
+              )}
+            </React.Fragment>
+
+          );
+        })}
+        {primaryEnrollment || !hasMultipleInstances ? ""
+          :(<a 
+            className={styles.breadcrumbLink} 
+            onClick={() =>  {
+            getALMObject().navigateToInstancePage(training.id)
+          }}>{GetTranslation("alm.breadcrumb.all.instances", true)}</a>)}
+      </div>
+    );
   };
 
   return (
@@ -330,6 +331,13 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
             </div>
             {showProgressBar && enrollment && checkIsEnrolled(enrollment) && (
               <div className={styles.progressContainer}>
+                <div className={styles.progressLabel}>
+                  {formatMessage({
+                    id: "alm.text.progress",
+                    defaultMessage: "Progress",
+                  })}
+                  :
+                </div>
                 <ProgressBar
                   showValueLabel={false}
                   value={enrollment.progressPercent}

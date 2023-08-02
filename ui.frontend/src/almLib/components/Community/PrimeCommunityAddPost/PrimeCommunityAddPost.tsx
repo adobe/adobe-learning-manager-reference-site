@@ -109,6 +109,7 @@ const PrimeCommunityAddPost = (props: any) => {
               pollOptions
             )
           }
+          inMobileView={true}
         ></PrimeCommunityAddPostButton>
       </div>
     </>

@@ -12,26 +12,6 @@ governing permissions and limitations under the License.
 
 package com.adobe.learning.core.models;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.annotation.PostConstruct;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
-import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.adobe.learning.core.entity.EmbeddableLrngWidgetConfig;
 import com.adobe.learning.core.services.GlobalConfigurationService;
 import com.adobe.learning.core.utils.Constants;
@@ -42,153 +22,178 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import javax.annotation.PostConstruct;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.osgi.services.HttpClientBuilderFactory;
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class})
 public class EmbeddableLrngWidgetModel {
 
-	@OSGiService
-	private transient GlobalConfigurationService configService;
+  @OSGiService private transient GlobalConfigurationService configService;
 
-	@ScriptVariable
-	private Page currentPage;
+  @ScriptVariable private Page currentPage;
 
-	@Self
-	private SlingHttpServletRequest request;
+  @Self private SlingHttpServletRequest request;
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(EmbeddableLrngWidgetModel.class);
+  @OSGiService private static HttpClientBuilderFactory clientBuilderFactory;
 
-	private Resource resource;
-	private String selectedWidgetRef = "";
-	private String selectedRef = "";
-	private String widgetConfigs = "";
-	private String widgetSrcUrl = "";
-	private String widgetCommunicatorUrl = "";
-	private ValueMap properties;
+  private static final Logger LOGGER = LoggerFactory.getLogger(EmbeddableLrngWidgetModel.class);
 
-	public EmbeddableLrngWidgetModel(final SlingHttpServletRequest request)
-	{
-	}
+  private Resource resource;
+  private String selectedWidgetRef = "";
+  private String selectedRef = "";
+  private String widgetConfigs = "";
+  private String widgetSrcUrl = "";
+  private String widgetCommunicatorUrl = "";
+  private ValueMap properties;
 
-	@PostConstruct
-	public void init()
-	{
-		resource = request.getResource();
-		properties = resource.getValueMap();
-		JsonObject adminConfigsObj = configService.getAdminConfigs(currentPage);
+  public EmbeddableLrngWidgetModel(final SlingHttpServletRequest request) {}
 
-		String hostName = adminConfigsObj.get(Constants.Config.ALM_BASE_URL).getAsString();
+  @PostConstruct
+  public void init() {
+    resource = request.getResource();
+    properties = resource.getValueMap();
+    JsonObject adminConfigsObj = configService.getAdminConfigs(currentPage);
 
-		LOGGER.debug("EmbeddableLrngWidgetModel Init:: currentPage {} hostName {}", currentPage.getPath(), hostName);
-		ValueMap map = resource.getValueMap();
+    String hostName = adminConfigsObj.get(Constants.Config.ALM_BASE_URL).getAsString();
 
-		if (map != null)
-		{
-			List<EmbeddableLrngWidgetConfig> widgets = EmbeddableLrngWidgetUtils.getEmbeddableWidgetsConfig(hostName);
-			LOGGER.trace("EmbeddableWidgetModel Init:: Widgets from CP {}", new Gson().toJson(widgets));
-			List<EmbeddableLrngWidgetConfig> availableWidgetsList = getAvailableWidgets(widgets);
-			selectedWidgetRef = map.get(Constants.EmbeddableWidgetConfig.SELECTED_WIDGET_REF) != null ? map.get(Constants.EmbeddableWidgetConfig.SELECTED_WIDGET_REF).toString() : null;
-			if (selectedWidgetRef == null)
-			{
-				selectedWidgetRef = availableWidgetsList.get(0).getWidgetRef();
-			}
-			Optional<EmbeddableLrngWidgetConfig> opSelectedWidgetConfig =
-					availableWidgetsList.stream().filter(widget -> widget.getWidgetRef().equals(selectedWidgetRef)).findFirst();
-			EmbeddableLrngWidgetConfig selectedWidgetConfig;
-			if (opSelectedWidgetConfig.isPresent())
-			{
-				selectedWidgetConfig = opSelectedWidgetConfig.get();
-			} else
-			{
-				selectedWidgetConfig = availableWidgetsList.get(0);
-			}
-			selectedRef = selectedWidgetConfig.getRef();
-			widgetSrcUrl = Constants.CPUrl.WIDGET_SRC_URL.replace("{hostName}", hostName).replace("{widgetRef}", selectedWidgetConfig.getRef());
-			widgetCommunicatorUrl = Constants.CPUrl.WIDGET_COMMUNICATOR_URL.replace("{hostName}", hostName);
-		}
+    LOGGER.debug(
+        "EmbeddableLrngWidgetModel Init:: currentPage {} hostName {}",
+        currentPage.getPath(),
+        hostName);
+    ValueMap map = resource.getValueMap();
 
-		GlobalConfigurationUtils.filterAdminConfigs(adminConfigsObj);
-		this.widgetConfigs = getWidgetConfig(map, selectedWidgetRef, adminConfigsObj);
-	}
+    if (map != null) {
+      List<EmbeddableLrngWidgetConfig> widgets =
+          EmbeddableLrngWidgetUtils.getEmbeddableWidgetsConfig(hostName, clientBuilderFactory);
+      LOGGER.trace("EmbeddableWidgetModel Init:: Widgets from CP {}", new Gson().toJson(widgets));
+      List<EmbeddableLrngWidgetConfig> availableWidgetsList = getAvailableWidgets(widgets);
+      selectedWidgetRef =
+          map.get(Constants.EmbeddableWidgetConfig.SELECTED_WIDGET_REF) != null
+              ? map.get(Constants.EmbeddableWidgetConfig.SELECTED_WIDGET_REF).toString()
+              : null;
+      if (selectedWidgetRef == null) {
+        selectedWidgetRef = availableWidgetsList.get(0).getWidgetRef();
+      }
+      Optional<EmbeddableLrngWidgetConfig> opSelectedWidgetConfig =
+          availableWidgetsList
+              .stream()
+              .filter(widget -> widget.getWidgetRef().equals(selectedWidgetRef))
+              .findFirst();
+      EmbeddableLrngWidgetConfig selectedWidgetConfig;
+      if (opSelectedWidgetConfig.isPresent()) {
+        selectedWidgetConfig = opSelectedWidgetConfig.get();
+      } else {
+        selectedWidgetConfig = availableWidgetsList.get(0);
+      }
+      selectedRef = selectedWidgetConfig.getRef();
+      widgetSrcUrl =
+          Constants.CPUrl.WIDGET_SRC_URL
+              .replace("{hostName}", hostName)
+              .replace("{widgetRef}", selectedWidgetConfig.getRef());
+      widgetCommunicatorUrl =
+          Constants.CPUrl.WIDGET_COMMUNICATOR_URL.replace("{hostName}", hostName);
+    }
 
-	private String getWidgetConfig(Map<String, Object> valueMap, String selectedWidgetRef, JsonObject adminConfigsObj)
-	{
-		List<String> aemNodePrefixes = Constants.Config.AEM_NODE_PROP_PREFIXES;
-		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-		Map<String, Object> widgetObject = new HashMap<>();
-		for (Entry<String, Object> e : valueMap.entrySet())
-		{
-			String key = e.getKey();
-			if (!StringUtils.startsWithAny(key, aemNodePrefixes.toArray(new CharSequence[aemNodePrefixes.size()])))
-			{
-				Object value = e.getValue();
-				if (value instanceof String)
-				{
-					widgetObject.put(key, value.toString());
-				} else if (value instanceof Integer)
-				{
-					widgetObject.put(key, (Integer) value);
-				} else if (value instanceof Boolean)
-				{
-					widgetObject.put(key, (Boolean) value);
-				} else
-				{
-					widgetObject.put(key, gson.toJson(value));
-				}
-			}
-		}
-		widgetObject.put("widgetConfig.widgetRef", selectedWidgetRef);
-		widgetObject.put(Constants.EmbeddableWidgetConfig.CONFIG_TYPE_KEY, Constants.EmbeddableWidgetConfig.CONFIG_TYPE_VALUE);
-		widgetObject.put(Constants.EmbeddableWidgetConfig.AUTH_ACCESS_TOKEN_KEY, "");
-		widgetObject.put(Constants.EmbeddableWidgetConfig.CP_HOST_NAME_PROP, adminConfigsObj.get(Constants.Config.ALM_BASE_URL).getAsString());
-		widgetObject.put(Constants.EmbeddableWidgetConfig.CP_EMIT_PLAYER_EVENT_PROP, Constants.EmbeddableWidgetConfig.CP_EMIT_PLAYER_EVENT_PROP_VALUE);
-		widgetObject.put(Constants.EmbeddableWidgetConfig.CP_EMIT_PAGELINK_EVENT_PROP, Constants.EmbeddableWidgetConfig.CP_EMIT_PAGELINK_EVENT_PROP_VALUE);
+    GlobalConfigurationUtils.filterAdminConfigs(adminConfigsObj);
+    this.widgetConfigs = getWidgetConfig(map, selectedWidgetRef, adminConfigsObj);
+  }
 
-		if (Constants.EmbeddableWidgetConfig.LEADERBOARD_WIDGET_REF.equals(selectedWidgetRef))
-		{
-			widgetObject.put(Constants.EmbeddableWidgetConfig.CP_DISABLE_LINKS_PROP, Constants.EmbeddableWidgetConfig.CP_DISABLE_LINKS_PROP_VALUE_TRUE);
-		}
-		else
-		{
-			widgetObject.put(Constants.EmbeddableWidgetConfig.CP_DISABLE_LINKS_PROP, Constants.EmbeddableWidgetConfig.CP_DISABLE_LINKS_PROP_DEFAULT_VALUE);
-		}
-		
-		for (Entry<String, JsonElement> e : adminConfigsObj.entrySet())
-		{
-			widgetObject.put(e.getKey(), e.getValue().getAsString());
-		}
+  private String getWidgetConfig(
+      Map<String, Object> valueMap, String selectedWidgetRef, JsonObject adminConfigsObj) {
+    List<String> aemNodePrefixes = Constants.Config.AEM_NODE_PROP_PREFIXES;
+    Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+    Map<String, Object> widgetObject = new HashMap<>();
+    for (Entry<String, Object> e : valueMap.entrySet()) {
+      String key = e.getKey();
+      if (!StringUtils.startsWithAny(
+          key, aemNodePrefixes.toArray(new CharSequence[aemNodePrefixes.size()]))) {
+        Object value = e.getValue();
+        if (value instanceof String) {
+          widgetObject.put(key, value.toString());
+        } else if (value instanceof Integer) {
+          widgetObject.put(key, (Integer) value);
+        } else if (value instanceof Boolean) {
+          widgetObject.put(key, (Boolean) value);
+        } else {
+          widgetObject.put(key, gson.toJson(value));
+        }
+      }
+    }
+    widgetObject.put("widgetConfig.widgetRef", selectedWidgetRef);
+    widgetObject.put(
+        Constants.EmbeddableWidgetConfig.CONFIG_TYPE_KEY,
+        Constants.EmbeddableWidgetConfig.CONFIG_TYPE_VALUE);
+    widgetObject.put(Constants.EmbeddableWidgetConfig.AUTH_ACCESS_TOKEN_KEY, "");
+    widgetObject.put(
+        Constants.EmbeddableWidgetConfig.CP_HOST_NAME_PROP,
+        adminConfigsObj.get(Constants.Config.ALM_BASE_URL).getAsString());
+    widgetObject.put(
+        Constants.EmbeddableWidgetConfig.CP_EMIT_PLAYER_EVENT_PROP,
+        Constants.EmbeddableWidgetConfig.CP_EMIT_PLAYER_EVENT_PROP_VALUE);
+    widgetObject.put(
+        Constants.EmbeddableWidgetConfig.CP_EMIT_PAGELINK_EVENT_PROP,
+        Constants.EmbeddableWidgetConfig.CP_EMIT_PAGELINK_EVENT_PROP_VALUE);
 
-		JsonObject obj = EmbeddableLrngWidgetUtils.getWidgetConfig(widgetObject);
+    if (Constants.EmbeddableWidgetConfig.LEADERBOARD_WIDGET_REF.equals(selectedWidgetRef)) {
+      widgetObject.put(
+          Constants.EmbeddableWidgetConfig.CP_DISABLE_LINKS_PROP,
+          Constants.EmbeddableWidgetConfig.CP_DISABLE_LINKS_PROP_VALUE_TRUE);
+    } else {
+      widgetObject.put(
+          Constants.EmbeddableWidgetConfig.CP_DISABLE_LINKS_PROP,
+          Constants.EmbeddableWidgetConfig.CP_DISABLE_LINKS_PROP_DEFAULT_VALUE);
+    }
 
-		return gson.toJson(obj);
-	}
+    for (Entry<String, JsonElement> e : adminConfigsObj.entrySet()) {
+      widgetObject.put(e.getKey(), e.getValue().getAsString());
+    }
 
-	public String getWidgetConfigs()
-	{
-		return widgetConfigs;
-	}
+    JsonObject obj = EmbeddableLrngWidgetUtils.getWidgetConfig(widgetObject);
 
-	public String getProperties()
-	{
-		return new Gson().toJson(properties);
-	}
+    return gson.toJson(obj);
+  }
 
-	public String getWidgetSrcUrl()
-	{
-		return widgetSrcUrl;
-	}
+  public String getWidgetConfigs() {
+    return widgetConfigs;
+  }
 
-	public String getSelectedRef()
-	{
-		return selectedRef;
-	}
+  public String getProperties() {
+    return new Gson().toJson(properties);
+  }
 
-	public String getWidgetCommunicatorUrl()
-	{
-		return widgetCommunicatorUrl;
-	}
+  public String getWidgetSrcUrl() {
+    return widgetSrcUrl;
+  }
 
-	private List<EmbeddableLrngWidgetConfig> getAvailableWidgets(List<EmbeddableLrngWidgetConfig> widgets)
-	{
-		return widgets.stream().filter(widget -> widget.getType().equals("widget")).collect(Collectors.toList());
-	}
+  public String getSelectedRef() {
+    return selectedRef;
+  }
+
+  public String getWidgetCommunicatorUrl() {
+    return widgetCommunicatorUrl;
+  }
+
+  private List<EmbeddableLrngWidgetConfig> getAvailableWidgets(
+      List<EmbeddableLrngWidgetConfig> widgets) {
+    return widgets
+        .stream()
+        .filter(widget -> widget.getType().equals("widget"))
+        .collect(Collectors.toList());
+  }
 }

@@ -19,6 +19,13 @@ const feedbackChannels: Array<string> = [
   "learningProgram::l1Feedback",
 ];
 
+const loReminderChannels: Array<string> = [
+  "course::sessionReminder",
+  "course::completionReminder",
+  "certification::completionReminder",
+  "learningProgram::completionReminder"
+]
+
 const name1Var3Brace: String = "{{{name1}}}";
 const name1Var2Brace: String = "{{name1}}";
 
@@ -115,7 +122,7 @@ const PrimeNotificationText = (props: any) => {
   };
 
   const formattedNotificationText = (strType: string, loStr: string) => {
-    return dateTimeStr.includes(strType) ? (
+    return (dateTimeStr.includes(strType) && !loReminderChannels.includes(notif.channel)) ? (
       modifyTimeDDMMYY(loStr, locale)
     ) : (
       <span

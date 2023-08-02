@@ -19,7 +19,7 @@ governing permissions and limitations under the License.
   line-height: 26px;
   letter-spacing: 0px;
   color: var(--prime-color-nc1);
-  margin: 40px 0;
+  margin: 20px 0;
   font-weight: normal;
 }
 .courseInfoHeader span {
@@ -28,6 +28,7 @@ governing permissions and limitations under the License.
 .courseDetailsContainer {
   display: flex;
   margin-bottom: 25px;
+  padding:60px 0 0 0;
 }
 
 .card {
@@ -64,15 +65,15 @@ governing permissions and limitations under the License.
 }
 
 .instancesContainer {
-  border-top: 2px solid #707070;
+  border: 2px solid #dbdbdb;
   opacity: 1;
 }
 .instancesHeaderSection {
   display: flex;
-  padding-bottom: 10px;
+  padding: 10px 20px;
   height: 60px;
-  align-items: flex-end;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  align-items: center;
+  /* border-bottom: 2px solid rgba(0, 0, 0, 0.1); */
 }
 .commonHeader {
   font-size: var(--prime-font-size-14);
@@ -86,25 +87,36 @@ governing permissions and limitations under the License.
   width: 45%;
 }
 .dateWrapper {
-  width: 15%;
+  width: 25%;
+
+}
+.completionDateWrapper {
+  width: 40%;
 }
 .priceWrapper {
-  width: 5%;
-}
-.locationWrapper {
   width: 15%;
 }
+.locationWrapper {
+  width: 25%;
+
+}
 .actionWrapper {
-  width: 20%;
-  display: flex;
-  justify-content: flex-end;
+  width: 15%;
   align-items: flex-start;
+  justify-content: flex-start;
+  display: flex;
+  padding-left: 40px;
 }
 
 .instanceList {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  border-left: 2px solid #dbdbdb;
+  border-right: 2px solid #dbdbdb;
+  border-top: none;
+  border-bottom: 1px solid #dbdbdb;;
+  background-color: var(--prime-color-white);
 }
 
 .sortIcon {
@@ -124,9 +136,9 @@ governing permissions and limitations under the License.
 
 .pageContainer {
   max-width: var(--prime-container-max-width-desktop);
-  width: var(--prime-container-width);
+  width: 950px;
   margin: 0 auto;
-  min-height: 650px;
+  min-height: 750px;
 }
 
 @media screen and (max-width: 1024px) {
@@ -166,6 +178,20 @@ governing permissions and limitations under the License.
     width: 100%;
     max-width: var(--prime-container-max-width-mobile);
   }
+  .breadcrumbMobile {
+    display: block;
+  }
+  .breadcrumbDesktop {
+    display: none;
+  }
+  .breadcrumbParent {
+    display: block;
+    position: relative;
+    margin-left: 20px;
+  }
+  .breadcrumbLink {
+    color: var(--prime-color-black);
+  }
 }
 
 .loader {
@@ -174,4 +200,28 @@ governing permissions and limitations under the License.
 .backgroundPage {
   width: 100%;
   background-color: var(--prime-color-nc4);
+}
+
+.breadcrumbParent {
+  display: flex;
+  padding-top: 25px;
+}
+.breadcrumbLink {
+  color: var(--prime-color-black);
+  cursor: pointer;
+  max-width: 165px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-decoration: none;
+}
+.breadcrumbLink:hover {
+  text-decoration: underline;
+}
+.breadcrumbArrow {
+  color: var(--prime-color-black);
+  cursor: pointer;
+}
+.breadcrumbDesktop {
+  display: flex;
 }

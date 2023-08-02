@@ -19,6 +19,8 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   const CONFIG_META_TAG_NAME = "cp-config";
   const COMMERCE_CART_COUNTER_REL = ".alm-header-cart-counter";
 
+  const isAuthor = () => window.ALM.ALMConfig.authorMode == true;
+
   const setALMConfig = () => {
     const cpConfigElmt = document.querySelector(
       'meta[name="' + CONFIG_META_TAG_NAME + '"]'
@@ -26,11 +28,14 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     if (cpConfigElmt) {
       window.ALM.ALMConfig = JSON.parse(cpConfigElmt.content);
       const primeBaseURL = window.ALM.ALMConfig["almBaseURL"];
-      const primeApiURL = `${primeBaseURL}/primeapi/v2/`;
+      
+      let primeApiURL = "";
+
+      primeApiURL = `${primeBaseURL}/primeapi/v2/`;
+
       window.ALM.ALMConfig["primeApiURL"] = primeApiURL;
     }
     window.ALM.ALMConfig["frontendResourcesPath"] = "/etc.clientlibs/learning/clientlibs/clientlib-alm/resources";
-    
   };
 
   const init = () => {
@@ -173,6 +178,35 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     }
   };
 
+  const isProxyEnabled = () => {
+    const {storeTokenInCookie} = getALMConfig();
+    return storeTokenInCookie === "true";
+  };
+
+  const isSignOutPage = () =>
+    window.location.pathname === window.ALM.getALMConfig().signOutPath;
+
+  const isCommunityPage = () =>
+    window.location.pathname === window.ALM.getALMConfig().communityPath;
+
+  const isCommerceSignInPage = () =>
+    window.location.pathname === window.ALM.getALMConfig().commerceSignInPath;
+
+  const isLearningPage = () =>
+    window.location.pathname === window.ALM.getALMConfig().learningPath;
+
+  const isEmailRedirectPage = () =>
+    window.location.pathname === window.ALM.getALMConfig().emailRedirectPath;
+
+  const isBoardsPage = () =>
+    window.location.pathname.includes(window.ALM.getALMConfig().communityBoardsPath);
+
+  const isBoardDetailsPage = () =>
+    window.location.pathname.includes(window.ALM.getALMConfig().communityBoardDetailsPath);
+
+  const isProfilePage = () =>
+    window.location.pathname.includes(window.ALM.getALMConfig().profilePath);
+
   init();
 
   window.ALM.getALMConfig = getALMConfig;
@@ -193,4 +227,15 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.navigateToCatalogPageFromCategory = navigateToCatalogPageFromCategory;
   window.ALM.navigateToCatalogPageForStates = navigateToCatalogPageForStates;
   window.ALM.updateCart = updateCart;
+  window.ALM.isProxyEnabled = isProxyEnabled;
+  window.ALM.isAuthor = isAuthor;
+  window.ALM.isSignOutPage = isSignOutPage;
+  window.ALM.isCommerceSignInPage = isCommerceSignInPage;
+  window.ALM.isEmailRedirectPage = isEmailRedirectPage;
+  window.ALM.isLearningPage = isLearningPage;
+  window.ALM.isCommunityPage = isCommunityPage;
+  window.ALM.isBoardDetailsPage = isBoardDetailsPage;
+  window.ALM.isBoardsPage = isBoardsPage;
+  window.ALM.isProfilePage = isProfilePage;
+  
 })(window, document, Granite, jQuery);

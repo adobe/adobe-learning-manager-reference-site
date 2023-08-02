@@ -43,6 +43,10 @@ export const getAccountActiveFields = async () => {
   return await getALMObject().getAccountActiveFields();
 };
 
+export const handlePageLoad = async () => {
+  return await getALMObject().handlePageLoad();
+};
+
 export const getRelativePath = (urlString) => {
   try {
     const url = new URL(urlString);

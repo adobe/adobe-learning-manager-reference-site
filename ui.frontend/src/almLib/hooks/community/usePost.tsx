@@ -30,6 +30,7 @@ export const usePost = () => {
     ) => {
       // try {
       const baseApiUrl = getALMConfig().primeApiURL;
+      const updatedInput = addHttpsToHref(input);
       const postBody: any = {
         data: {
           type: POST,
@@ -37,7 +38,7 @@ export const usePost = () => {
             postingType: postingType,
             resource: resource,
             state: "ACTIVE",
-            text: input,
+            text: updatedInput,
           },
         },
       };
@@ -62,6 +63,20 @@ export const usePost = () => {
     },
     []
   );
+  
+  function addHttpsToHref(htmlString: string): string {
+    const anchorRegex = /<a\s+(?:[^>]*?\s+)?href=["']([^"']*)["']/gi;
+
+    const modifiedHTML = htmlString.replace(anchorRegex, (match, url) => {
+      if (!/^https?:\/\//i.test(url)) {
+        return match.replace(url, `https://${url}`);
+      } else {
+        return match;
+      }
+    });
+  
+    return modifiedHTML;
+  }
 
   const getPollPostObject = (pollOptions: any[]) => {
     let otherData = [] as any;

@@ -17,3 +17,12 @@ $include "./default_filters.any"
 
 # Allow Commerce Access Token servlet
 /0105 { /type "allow" /method "GET" /extension "html" /selectors "commerceToken" /path "/cpoauth"}
+
+# Allow ALM Login Token servlet
+/0106 { /type "allow" /method "POST" /extension "html" /selectors "almLogin" /path "/cpoauth"}
+
+# Allow ALM Logout Token servlet
+/0107 { /type "allow" /method "POST" /extension "html" /selectors "almLogout" /path "/cpoauth"}
+
+# Allow Commerce Login Token servlet
+/0108 { /type "allow" /method "POST" /extension "html" /selectors "almCommerceLogin" /path "/cpoauth"}

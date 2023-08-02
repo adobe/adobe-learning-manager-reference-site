@@ -14,6 +14,7 @@ import ChevronDown from "@spectrum-icons/workflow/ChevronDown";
 import ChevronUp from "@spectrum-icons/workflow/ChevronUp";
 import React, { useMemo, useState } from "react";
 import { useIntl } from "react-intl";
+import { useTrainingPage } from "../../../hooks";
 import {
   PrimeLearningObject,
   PrimeLocalizationMetadata,
@@ -23,6 +24,7 @@ import {
   filterLoReourcesBasedOnResourceType,
   filterTrainingInstance,
 } from "../../../utils/hooks";
+import { checkIsEnrolled } from "../../../utils/overview";
 import { getPreferredLocalizedMetadata } from "../../../utils/translationService";
 import { PrimeCourseOverview } from "../PrimeCourseOverview";
 import { PrimeTrainingItemContainerHeader } from "../PrimeTrainingItemContainerHeader";
@@ -47,7 +49,7 @@ const PrimeCourseItemContainer: React.FC<{
     isParentLOEnrolled = false,
     parentLoName,
   } = props;
-
+  const { notes,updateNote,deleteNote, downloadNotes, sendNotesOnMail, lastPlayingLoResourceId } = useTrainingPage(training.id);
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const clickHandler = () => {
@@ -65,6 +67,7 @@ const PrimeCourseItemContainer: React.FC<{
     trainingInstance,
     "Content"
   ).length;
+  const isEnrolled = checkIsEnrolled(training?.enrollment);
 
   return (
     <li className={styles.container}>
@@ -87,12 +90,18 @@ const PrimeCourseItemContainer: React.FC<{
           training={training}
           trainingInstance={trainingInstance}
           showDuration={false}
-          showNotes={false}
+          showNotes={isEnrolled}
           launchPlayerHandler={launchPlayerHandler}
           isPartOfLP={isPartOfLP}
           isPreviewEnabled={isPreviewEnabled}
           updateFileSubmissionUrl={updateFileSubmissionUrl}
           isParentLOEnrolled={isParentLOEnrolled}
+          notes={notes}
+          updateNote={updateNote}
+          deleteNote={deleteNote}
+          downloadNotes={downloadNotes}
+          sendNotesOnMail={sendNotesOnMail}
+          lastPlayingLoResourceId={lastPlayingLoResourceId}
         />
       )}
 

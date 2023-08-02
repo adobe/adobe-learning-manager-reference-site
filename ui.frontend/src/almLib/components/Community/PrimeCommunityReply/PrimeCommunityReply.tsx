@@ -131,6 +131,7 @@ const PrimeCommunityReply = (props: any) => {
           defaultValue={reply.richText}
           primaryActionHandler={(value: any) => updateReply(value)}
           secondaryActionHandler={() => setShowEditReplyView(false)}
+          concisedToolbarOptions={true}
         ></PrimeCommunityObjectInput>
       )}
     </>

@@ -65,12 +65,13 @@ const PrimeCommunityPosts = (props: any) => {
     getPosts();
   };
   const sortFilterChangeHandler = async (sortValue: any) => {
-    getPosts(sortValue);
+    const ids = posts.map((post) => post.id).join(',');
+    getPosts(sortValue,ids);
   };
 
-  const getPosts = async (sortValue?: any) => {
+  const getPosts = async (sortValue?: any, ids="") => {
     setShowLoader(true);
-    await fetchPosts(board.id, sortValue);
+    await fetchPosts(board.id, sortValue, ids);
     setShowLoader(false);
   };
 

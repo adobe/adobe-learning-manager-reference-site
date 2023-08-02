@@ -55,17 +55,17 @@ export const filtersDefaultState: FilterState = {
     list: [
       {
         value: "enrolled",
-        label: "alm.catalog.filter.enrolled",
+        label: "alm.catalog.filter.yetToStart",
+        checked: false,
+      },
+      {
+        value: "started",
+        label: "alm.catalog.filter.inProgress",
         checked: false,
       },
       {
         value: "completed",
         label: "alm.catalog.filter.completed",
-        checked: false,
-      },
-      {
-        value: "started",
-        label: "alm.catalog.filter.started",
         checked: false,
       },
       {

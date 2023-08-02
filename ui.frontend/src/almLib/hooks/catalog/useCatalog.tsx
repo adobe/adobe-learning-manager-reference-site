@@ -16,9 +16,12 @@ import { PrimeLearningObject } from "../../models/PrimeModels";
 import {
   loadTrainings,
   paginateTrainings,
+  updateSnippetOnLoad,
+  updateSnippetType,
 } from "../../store/actions/catalog/action";
+import { defaultSearchInDropdownList } from "../../store/reducers/catalog";
 import { State } from "../../store/state";
-import { getPageAttributes } from "../../utils/global";
+import { getPageAttributes, getQueryParamsFromUrl } from "../../utils/global";
 
 import { useFilter } from "./useFilter";
 import { useSearch } from "./useSearch";
@@ -40,10 +43,33 @@ export const useCatalog = () => {
   const { trainings, sort, next } = useSelector(
     (state: State) => state.catalog
   );
-  const { query, handleSearch, resetSearch } = useSearch();
+  const { query, handleSearch, resetSearch, getSearchSuggestions } =
+    useSearch();
   const { filters, filterState, updateFilters, updatePriceFilter } =
     useFilter();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const queryParams = getQueryParamsFromUrl();
+    if (queryParams.snippetType) {
+      const updatedSnippetType = queryParams.snippetType;
+      dispatch(updateSnippetOnLoad(updatedSnippetType));
+    }
+  }, [dispatch]);
+
+  const updateSnippet = (checked: boolean, data: any) => {
+    let payload = "";
+
+    defaultSearchInDropdownList.forEach((item) => {
+      if (item.label === data.label) {
+        item.checked = checked;
+      }
+      if (item.checked) {
+        payload = payload ? `${payload},${item.value}` : `${item.value}`;
+      }
+    });
+    dispatch(updateSnippetType(payload));
+  };
 
   const fetchTrainings = useCallback(async () => {
     try {
@@ -127,6 +153,7 @@ export const useCatalog = () => {
     query,
     handleSearch,
     resetSearch,
+    getSearchSuggestions,
     filters,
     filterState,
     updateFilters,
@@ -136,5 +163,6 @@ export const useCatalog = () => {
     errorCode,
     hasMoreItems: Boolean(next),
     updatePriceFilter,
+    updateSnippet,
   };
 };

@@ -103,6 +103,18 @@ export function modifyTimeDDMMYY(dateToModify: string, locale: string) {
   return local;
 }
 
+export function formatTime(dateString: string, locale: string){
+    const date = new Date(dateString);
+
+    const time =  date.toLocaleTimeString(locale, {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+
+    return time;
+}
+
 export function GetFormattedDate(dateStr: string, getUserLocale: string) {
   if (isNaN(Date.parse(dateStr))) {
     return "";

@@ -232,6 +232,15 @@
                         sling:resourceType="granite/ui/components/coral/foundation/button"
                         text="Sync"
                         variant="primary"/>
+                    <storeTokenInCookie
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                        name="./storeTokenInCookie"
+                        text="Do not store token in the cookie"
+                        checked="false"
+                        uncheckedValue="false"
+                        value="true"/>
                     <embWidgetSection
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/field"

@@ -47,7 +47,7 @@ const PrimeTrainingCard: React.FC<{
   } = useTrainingCard(training);
 
   const { enrollmentHandler, unEnrollmentHandler, jobAidClickHandler } =
-    useTrainingPage(training.id);
+    useTrainingPage(training.id, "", {}, true);
   const {
     enroll,
     unenroll,
@@ -96,11 +96,9 @@ const PrimeTrainingCard: React.FC<{
   const jobAidOptions =
     training.loType === JOBAID ? (
       <div>
-        <a href="#" role="button" onClick={nameClickHandler}>
-          <div className={styles.jobAidAction}>
-            {GetTranslation("alm.jobaid.view")}
-          </div>
-        </a>
+        <div onClick={nameClickHandler} className={styles.jobAidAction}>
+          {GetTranslation("alm.jobaid.view")}
+        </div>
         {!isEnrolled ? (
           <a
             href="javascript:void(0)"

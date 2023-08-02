@@ -1,0 +1,111 @@
+.noteMarkerContainer{
+    font-size: var(--prime-font-size-14);
+    color: var(--prime-color-nc3);
+    width: 100%;
+    margin-top: 10px;
+    font-family: var(--prime-font-family);
+}
+.noteContentWithoutMarker{
+    color: var(--prime-color-nc3);
+    font-size: var(--prime-font-size-14);
+    padding-bottom: 10px;
+    display: flex;
+    font-family: var(--prime-font-family);
+}
+.icon,
+.noteIcon {
+  margin-right: 5px;
+}
+.icon svg,
+.noteIcon svg {
+    stroke: var(--prime-icon-color);
+    text-align: center;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    margin-left: 10px;
+    vertical-align: middle;
+    fill: var(--prime-icon-color);
+}
+.noteIcon {
+  margin-top: 10px;
+}
+.markerText{
+    color: var(--prime-color-primary);
+    font-family: var(--prime-font-family);
+    cursor: pointer;
+}
+.noteContent{
+    color: var(--prime-color-nc3);
+    font-size: var(--prime-font-size-14);
+    margin-left: 45px;
+    padding-bottom: 10px;
+}
+.noteTextWithoutMarker{
+    color: var(--prime-color-nc3);
+    font-size: var(--prime-font-size-14);
+    margin-top:10px;
+}
+.noteSeperatorDiv{
+    width: 100%;
+}
+.noteSeperatorLine{
+    position: relative;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    border-top: 1px solid var(--prime-color-nc2);
+}
+.noteEditContent{
+    word-wrap: break-word;
+    display: inline-block;
+    left: 45px;
+    position: relative;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    width: calc(100% - 60px);
+    padding: 5px;
+    resize: none;
+}
+.noteEditContentWithoutMarker{
+    word-wrap: break-word;
+    display: inline-block;
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 96%;
+    padding: 5px;
+    resize: none;
+}
+.noteControlActions{
+    position: relative;
+    height: 40px;
+    padding-bottom: 10px;
+}
+.noteControlActionsWithoutMarker{
+    position: relative;
+}
+.actionButton{
+    text-align: center;
+    color: var(--prime-color-nc3);
+    float: right;
+    margin-right: 30px;
+    cursor: pointer;
+    box-sizing: border-box;
+    border-radius: 5rem;
+    display: block;
+    font-size: var(--prime-font-size-14);
+    font-weight: var(--prime-font-weight-400);
+    min-height: 30px;
+    border: 0.1rem solid var(--prime-color-nc4);
+    background-color: transparent;
+}
+.actionButton:hover,
+.actionButton:focus,
+.actionButton:focus-visible {
+    background: var(--prime-color-nc2);
+}
+.noteContainerWithoutMarker{
+    width: 100%;
+}

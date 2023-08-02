@@ -15,25 +15,28 @@ governing permissions and limitations under the License.
   width: 45%;
 }
 .dateWrapper {
-  width: 15%;
+  width: 25%;
+}
+.completionDateWrapper {
+  width: 40%;
 }
 .locationWrapper {
-  width: 15%;
+  width: 25%;
   word-break: break-all;
 }
 .actionWrapper {
-  width: 20%;
-  display: flex;
-  justify-content: flex-end;
+  width: 15%;
   align-items: flex-start;
+  justify-content: center;
+  display: flex;
 }
 
 .priceWrapper {
-  width: 5%;
+  width: 15%;
 }
 
 .instanceListItem {
-  padding: 20px 0 12px 0;
+  padding: 20px 20px 12px 20px;
   display: flex;
   border-bottom: 1px solid var(--prime-color-nc2);
 }
@@ -49,14 +52,21 @@ governing permissions and limitations under the License.
   cursor: pointer;
 }
 .instanceLoFormat {
+  display: flex;
   font-size: var(--prime-font-size-14);
   line-height: 19px;
   letter-spacing: 0px;
   color: var(--prime-color-nc3);
   opacity: 1;
-  margin: 0 0 20px 0;
+  margin: 0 0 5px 0;
 }
-.startDate {
+.seatAvailable{
+  color: var(--prime-success-color);
+}
+.seatNotAvailable{
+  color: var(--prime-error-color);
+}
+.startDate, .completionDate {
   font-size: var(--prime-font-size-14);
   line-height: 15px;
   letter-spacing: 0px;
@@ -78,10 +88,37 @@ governing permissions and limitations under the License.
   letter-spacing: 0px;
   color: var(--prime-color-nc1);
   opacity: 1;
-  margin: 0;
+  margin: 0 0 5px 0;
 }
 .mobileOnly {
   display: none;
+}
+.progressContainer {
+  font-size: var(--prime-font-size-10);
+  width: 20%;
+  display: flex;
+}
+.progressBar div[class^="spectrum-BarLoader-fill"] {
+  background: var(--prime-success-color);
+}
+.percent {
+  position: relative;
+  color: var(--prime-color-black);
+  padding-left: 5px;
+}
+.completed{
+  color: var(--prime-success-color);
+}
+.courseCompleted svg {
+  fill: var(--prime-success-color);
+  width: 13px;
+  height: 13px;
+}
+.courseCompleted {
+  background-size: contain;
+  border-radius: 30px;
+  line-height: 40%;
+  background-color: var(--prime-color-white);
 }
 
 @media screen and (max-width: 450px) {
@@ -160,5 +197,9 @@ governing permissions and limitations under the License.
   }
   .aboveMobile {
     display: none;
+  }
+  .progressContainer {
+    padding-top: 0px;
+    width: 100%;
   }
 }

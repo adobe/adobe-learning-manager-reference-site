@@ -18,12 +18,8 @@ import {
 } from "../../../models/PrimeModels";
 import { COMPLETED } from "../../../utils/constants";
 import { convertSecondsToTimeText } from "../../../utils/dateTime";
-import {
-  getALMConfig,
-  getALMObject,
-  navigateToLoInTeamsApp,
-} from "../../../utils/global";
-import { useCardIcon } from "../../../utils/hooks";
+import { getALMObject } from "../../../utils/global";
+import { getEnrolledInstancesCount, hasSingleActiveInstance, pushToParentPathStack, useCardIcon } from "../../../utils/hooks";
 import { GetTranslation } from "../../../utils/translationService";
 import styles from "./PrimeTrainingItemContainerHeader.module.css";
 import Visibility from "@spectrum-icons/workflow/Visibility";
@@ -84,30 +80,19 @@ const PrimeTrainingItemContainerHeader: React.FC<{
       }
     } else {
       event.target?.classList.add(styles.disabled);
-      let url = window.location.href;
-      let parentLoId = url.split("trainingId/")[1];
-      parentLoId = parentLoId.substring(
-        0,
-        parentLoId.indexOf("/") > -1
-          ? parentLoId.indexOf("/")
-          : parentLoId.indexOf("?") > -1
-          ? parentLoId.indexOf("?")
-          : parentLoId.length
-      );
-      let parentLoDetails = parentLoName
-        ? parentLoId + "::" + parentLoName
-        : "";
-      if (getALMConfig().isTeamsApp) {
-        navigateToLoInTeamsApp(
-          training.id,
-          trainingInstance.id,
-          parentLoDetails
-        );
-      } else {
+      const hasMultipleInstances = !hasSingleActiveInstance(training);
+
+      let parentLoId = window.location.href.split("trainingId/")[1];
+      let parentDetails = parentLoName? parentLoId + "::" + parentLoName: "";
+      pushToParentPathStack(parentDetails);
+
+      if ((!training.enrollment || (training.multienrollmentEnabled && getEnrolledInstancesCount(training)>1)) && hasMultipleInstances) {
+        getALMObject().navigateToInstancePage(training.id);
+      }
+      else{
         getALMObject().navigateToTrainingOverviewPage(
           training.id,
-          trainingInstance.id,
-          parentLoDetails
+          trainingInstance.id
         );
       }
     }
@@ -190,8 +175,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
           {/* Change it to button and role="link" */}
           <a
             aria-label={name}
-            className={styles.title}
-            href={"javascript:void(0)"}>
+            className={styles.title}>
             {name}
           </a>
           <p className={styles.description}>{overview || description}</p>

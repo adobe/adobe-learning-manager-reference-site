@@ -13,109 +13,100 @@ governing permissions and limitations under the License.
 package com.adobe.learning.core.models;
 
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
+import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
-@Model(adaptables = { SlingHttpServletRequest.class }, adapters = { Catalog.class }, resourceType = {
-        CatalogImpl.RESOURCE_TYPE }, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
+@Model(
+    adaptables = {SlingHttpServletRequest.class},
+    adapters = {Catalog.class},
+    resourceType = {CatalogImpl.RESOURCE_TYPE},
+    defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
 public class CatalogImpl implements Catalog {
 
-    protected static final String RESOURCE_TYPE = "learning/components/catalog";
+  protected static final String RESOURCE_TYPE = "learning/components/catalog";
 
-    @ValueMapValue
-    String showSearch;
+  @ValueMapValue String showSearch;
 
-    @Override
-    public String getShowSearch() {
-        return showSearch;
-    }
+  @Override
+  public String getShowSearch() {
+    return showSearch;
+  }
 
-    @ValueMapValue
-    String showFilters;
+  @ValueMapValue String showFilters;
 
-    @Override
-    public String getShowFilters() {
-        return showFilters;
-    }
+  @Override
+  public String getShowFilters() {
+    return showFilters;
+  }
 
-    @ValueMapValue
-    String showCatalogFilter;
+  @ValueMapValue String showCatalogFilter;
 
-    @Override
-    public String getShowCatalogFilter() {
-        return showCatalogFilter;
-    }
-    
-    @ValueMapValue
-    private String typeFilter;
+  @Override
+  public String getShowCatalogFilter() {
+    return showCatalogFilter;
+  }
 
-    @Override
-    public String getTypeFilter() {
-        return typeFilter;
-    }
+  @ValueMapValue private String typeFilter;
 
-    @ValueMapValue
-    private String skillsFilter;
+  @Override
+  public String getTypeFilter() {
+    return typeFilter;
+  }
 
-    @Override
-    public String getSkillsFilter() {
-        return skillsFilter;
-    }
+  @ValueMapValue private String skillsFilter;
 
-    @ValueMapValue
-    private String formatFilter;
+  @Override
+  public String getSkillsFilter() {
+    return skillsFilter;
+  }
 
-    @Override
-    public String getFormatFilter() {
-        return formatFilter;
-    }
+  @ValueMapValue private String formatFilter;
 
-    @ValueMapValue
-    private String durationFilter;
+  @Override
+  public String getFormatFilter() {
+    return formatFilter;
+  }
 
-    @Override
-    public String getDurationFilter() {
-        return durationFilter;
-    }
+  @ValueMapValue private String durationFilter;
 
-    @ValueMapValue
-    private String priceFilter;
+  @Override
+  public String getDurationFilter() {
+    return durationFilter;
+  }
 
-    @Override
-    public String getPriceFilter() {
-        return priceFilter;
-    }
+  @ValueMapValue private String priceFilter;
 
-    @ValueMapValue
-    private String skillsLevelFilter;
+  @Override
+  public String getPriceFilter() {
+    return priceFilter;
+  }
 
-    @Override
-    public String getSkillsLevelFilter() {
-        return skillsLevelFilter;
-    }
+  @ValueMapValue private String skillsLevelFilter;
 
-    @ValueMapValue
-    private String statusFilter;
+  @Override
+  public String getSkillsLevelFilter() {
+    return skillsLevelFilter;
+  }
 
-    @Override
-    public String getStatusFilter() {
-        return statusFilter;
-    }
+  @ValueMapValue private String statusFilter;
 
-    @ValueMapValue
-    private String tagsFilter;
+  @Override
+  public String getStatusFilter() {
+    return statusFilter;
+  }
 
-    @Override
-    public String getTagsFilter() {
-        return tagsFilter;
-    }
+  @ValueMapValue private String tagsFilter;
 
-    @ValueMapValue
-    private String citiesFilter;
+  @Override
+  public String getTagsFilter() {
+    return tagsFilter;
+  }
 
-    @Override
-    public String getCitiesFilter() {
-        return citiesFilter;
-    }
+  @ValueMapValue private String citiesFilter;
+
+  @Override
+  public String getCitiesFilter() {
+    return citiesFilter;
+  }
 }

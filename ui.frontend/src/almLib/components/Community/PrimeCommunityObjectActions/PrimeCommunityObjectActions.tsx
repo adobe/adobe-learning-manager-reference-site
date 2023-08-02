@@ -14,6 +14,7 @@ import {
   SOCIAL_LIKE_FILLED_SVG,
   SOCIAL_DISLIKE_SVG,
   SOCIAL_DISLIKE_FILLED_SVG,
+  DOWNLOAD_ICON,
 } from "../../../utils/inline_svg";
 import { useIntl } from "react-intl";
 import styles from "./PrimeCommunityObjectActions.module.css";
@@ -48,52 +49,61 @@ const PrimeCommunityObjectActions = (props: any) => {
   return (
     <>
       <div className={styles.primeObjectOptions}>
-        {props.type === COMMENT && (
+        <div style={{display:"flex"}}>
+          {props.type === COMMENT && (
+            <button
+              className={styles.primeObjectCommentsCount}
+              onClick={actionClickHandler}
+            >
+              {props.actionLabel}
+            </button>
+          )}
+          {props.type !== REPLY && (
+            <button
+              className={styles.primeObjectCommentsCount}
+              onClick={viewButtonClickHandler}
+            >
+              {props.buttonLabel} ({props.buttonCount})
+            </button>
+          )}
           <button
-            className={styles.primeObjectCommentsCount}
-            onClick={actionClickHandler}
+            className={styles.primeObjectUpVoteIcon}
+            onClick={upVoteButtonClickHandler}
           >
-            {props.actionLabel}
+            {props.myUpVoteStatus === true
+              ? SOCIAL_LIKE_FILLED_SVG()
+              : SOCIAL_LIKE_SVG()}
+            <span className={styles.primeObjectUpVoteCount}>
+              {props.upVoteCount}
+            </span>
           </button>
-        )}
-        {props.type !== REPLY && (
           <button
-            className={styles.primeObjectCommentsCount}
-            onClick={viewButtonClickHandler}
+            className={styles.primeObjectDownVoteIcon}
+            onClick={downVoteButtonClickHandler}
           >
-            {props.buttonLabel} ({props.buttonCount})
+            {props.myDownVoteStatus
+              ? SOCIAL_DISLIKE_FILLED_SVG()
+              : SOCIAL_DISLIKE_SVG()}{" "}
+            <span className={styles.primeObjectDownVoteCount}>
+              {props.downVoteCount}
+            </span>
           </button>
-        )}
-        <button
-          className={styles.primeObjectUpVoteIcon}
-          onClick={upVoteButtonClickHandler}
-        >
-          {props.myUpVoteStatus === true
-            ? SOCIAL_LIKE_FILLED_SVG()
-            : SOCIAL_LIKE_SVG()}
-          <span className={styles.primeObjectUpVoteCount}>
-            {props.upVoteCount}
-          </span>
-        </button>
-        <button
-          className={styles.primeObjectDownVoteIcon}
-          onClick={downVoteButtonClickHandler}
-        >
-          {props.myDownVoteStatus
-            ? SOCIAL_DISLIKE_FILLED_SVG()
-            : SOCIAL_DISLIKE_SVG()}{" "}
-          <span className={styles.primeObjectDownVoteCount}>
-            {props.downVoteCount}
-          </span>
-        </button>
-        {props.object && props.object.id === props.answerCommentId && (
-          <div className={styles.primeObjectRightAnswer}>
-            {formatMessage({
-              id: "alm.community.comment.rightAnswer",
-              defaultMessage: "RIGHT ANSWER",
-            })}
+          {props.object && props.object.id === props.answerCommentId && (
+            <div className={styles.primeObjectRightAnswer}>
+              {formatMessage({
+                id: "alm.community.comment.rightAnswer",
+                defaultMessage: "RIGHT ANSWER",
+              })}
+            </div>
+          )}
+        </div>
+        
+        {/* PAPI-19269 - Download not supported from public api */}
+        {/* {props.resource && (
+          <div className={styles.primeResourceDownload}>    
+            <a href={props.resource.sourceUrl} target="_black">{DOWNLOAD_ICON()}</a>
           </div>
-        )}
+          )} */}
       </div>
     </>
   );

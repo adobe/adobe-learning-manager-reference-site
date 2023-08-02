@@ -230,6 +230,7 @@ const PrimeCommunityPost = (props: any) => {
           myDownVoteStatus={myDownVoteStatus}
           downVoteCount={downVoteCount}
           downVoteButtonClickHandler={downVoteButtonClickHandler}
+          resource={post.resource ? post.resource : null}
         ></PrimeCommunityObjectActions>
         <div className={styles.primeCommentInputWrapper}>
           <PrimeCommunityObjectInput
@@ -240,6 +241,7 @@ const PrimeCommunityPost = (props: any) => {
               defaultMessage: "Comment here",
             })}
             primaryActionHandler={(value: any) => saveCommentHandler(value)}
+            concisedToolbarOptions={true}
           ></PrimeCommunityObjectInput>
         </div>
         {showComments && (

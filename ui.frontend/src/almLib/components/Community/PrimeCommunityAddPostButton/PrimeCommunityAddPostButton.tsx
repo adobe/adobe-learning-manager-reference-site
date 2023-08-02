@@ -54,6 +54,7 @@ const PrimeCommunityAddPostButton = (props: any) => {
             pollOptions
           );
         }}
+        inMobileView={props.inMobileView}
       ></PrimeCommunityAddPostDialogTrigger>
     </>
   );

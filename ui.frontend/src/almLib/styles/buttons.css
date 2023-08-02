@@ -28,10 +28,9 @@
 }
 
 .primary:disabled {
-  background: var(--prime-color-nc4);
-  border-color: var(--prime-color-nc4);
-  color: var(--prime-color-nc5);
-  cursor: not-allowed;
+  cursor: default;
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .secondary {

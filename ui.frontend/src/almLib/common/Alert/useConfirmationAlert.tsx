@@ -35,18 +35,24 @@ const useConfirmationAlert = (): [
     alertSecondaryActionLabel = secondaryActionLabel || "";
     primaryActionHandler = onPrimaryAction || function () {};
     secondaryActionHandler = onSecondaryAction || function () {};
-    setShowConfirmation(true);
+    handleShowConfirmation(true);
   };
 
+  const handleShowConfirmation = (value: boolean) => {
+    setShowConfirmation(value);
+    let backgroundEvent = new Event(value ? "almDisableBackground" : "almEnableBackground");
+    document.dispatchEvent(backgroundEvent);
+  }
+
   const onPrimaryActionHandler = () => {
-    setShowConfirmation(false);
+    handleShowConfirmation(false);
     if (typeof primaryActionHandler === "function") {
       primaryActionHandler();
     }
   };
 
   const onSecondaryActionHandler = () => {
-    setShowConfirmation(false);
+    handleShowConfirmation(false);
     if (typeof secondaryActionHandler === "function") {
       secondaryActionHandler();
     }

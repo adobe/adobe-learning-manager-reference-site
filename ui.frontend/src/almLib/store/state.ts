@@ -14,8 +14,9 @@ import { CatalogState } from "./reducers/catalog";
 import { NotificationState } from "./reducers/notification";
 import { SocialState } from "./reducers/social";
 import { FileUpload } from "./reducers/fileUpload";
-import { UserSkillInterestState } from "./reducers/userSkillInterest"
-import { SkillState } from "./reducers/skill"
+import { UserSkillInterestState } from "./reducers/userSkillInterest";
+import { SkillState } from "./reducers/skill";
+import { SearchState } from "./reducers/search";
 export interface Authentication {
   accessToken: string;
 }
@@ -30,4 +31,5 @@ export interface State {
   fileUpload: FileUpload;
   userSkillInterest: UserSkillInterestState;
   skill: SkillState;
+  search: SearchState;
 }

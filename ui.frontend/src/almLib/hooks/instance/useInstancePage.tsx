@@ -17,18 +17,14 @@ import {
   PrimeLearningObjectInstance,
   PrimeLocalizationMetadata,
 } from "../../models/PrimeModels";
-import {
-  getALMConfig,
-  getALMObject,
-  navigateToLoInTeamsApp,
-} from "../../utils/global";
+import { getALMObject } from "../../utils/global";
 import { useCardIcon } from "../../utils/hooks";
-import { checkIfEnrollmentDeadlineNotPassed } from "../../utils/instance";
+import { checkIfCompletionDeadlineNotPassed } from "../../utils/instance";
 import { QueryParams } from "../../utils/restAdapter";
 import { getPreferredLocalizedMetadata } from "../../utils/translationService";
 
 const DEFAULT_INCLUDE_LO_OVERVIEW =
-  "enrollment,instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge";
+  "enrollment,instances.enrollment, instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge, instances.loResources.resources.room, enrollment.loInstance";
 
 export const useInstancePage = (
   trainingId: string,
@@ -87,8 +83,8 @@ export const useInstancePage = (
     return instances?.length
       ? instances?.filter(
           (instance) =>
-            instance.state === "Active" &&
-            checkIfEnrollmentDeadlineNotPassed(instance)
+            ((instance.state === "Active" &&
+            checkIfCompletionDeadlineNotPassed(instance)) || (instance.enrollment ))
         )
       : [];
   }, [training.instances]);
@@ -97,14 +93,19 @@ export const useInstancePage = (
 
   const selectInstanceHandler = useCallback(
     (instanceId: string) => {
-      if (getALMConfig().isTeamsApp) {
-        navigateToLoInTeamsApp(training.id, instanceId);
-      } else {
-        getALMObject().navigateToTrainingOverviewPage(training.id, instanceId);
-      }
+      getALMObject().navigateToTrainingOverviewPage(training.id, instanceId);
     },
     [training.id]
   );
+
+  const getSummary = async (trainingInstance: PrimeLearningObjectInstance) => {
+    
+    return await APIServiceInstance.getTrainingInstanceSummary(
+      trainingInstance.learningObject.id,
+      trainingInstance.id
+    ).then(response => response?.loInstanceSummary)
+    .catch(error => console.log(error));
+  };
 
   return {
     isLoading,
@@ -120,5 +121,6 @@ export const useInstancePage = (
     activeInstances,
     selectInstanceHandler,
     errorCode,
+    getSummary
   };
 };

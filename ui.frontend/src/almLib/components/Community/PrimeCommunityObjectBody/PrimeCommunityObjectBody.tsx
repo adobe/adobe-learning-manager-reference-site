@@ -16,6 +16,8 @@ import { useIntl } from "react-intl";
 import Question from "@spectrum-icons/workflow/Question";
 import { PrimeCommunityLinkPreview } from "../PrimeCommunityLinkPreview";
 import { PrimeCommunityPoll } from "../PrimeCommunityPoll";
+import linkifyHtml from "linkify-html";
+
 import {
   AUDIO,
   BOARD,
@@ -27,6 +29,7 @@ import {
   REPLY,
   VIDEO,
 } from "../../../utils/constants";
+import { FULLSCREEN_SVG, FULLSCREEN_EXIT_SVG } from "../../../utils/inline_svg";
 
 const PrimeCommunityObjectBody = (props: any) => {
   const { formatMessage } = useIntl();
@@ -50,39 +53,12 @@ const PrimeCommunityObjectBody = (props: any) => {
   };
 
   const getFormattedDescription = (description: string) => {
-    if (description !== "") {
-      let inputParts = description.split(" ");
-      let url = "";
-      //checking if any part of input contains url
-      for (let input of inputParts) {
-        if (isValidUrl(input)) {
-          url = input;
-          if (url !== "") {
-            let urlStrings: any = [];
-            //checking if any part of url contains new line before or after
-            if (url.indexOf("\r") > -1) {
-              urlStrings = url.split("\r");
-            } else if (url.indexOf("\n") > -1) {
-              urlStrings = url.split("\n");
-            }
-            if (urlStrings.length > 0) {
-              for (let input of urlStrings) {
-                if (isValidUrl(input)) {
-                  url = input;
-                  break;
-                }
-              }
-            }
-            description = description.replace(
-              url,
-              `<a class="${styles.objectbodyLink}" href="${formatUrl(
-                url
-              )}" target="_blank" rel="noopener noreferrer">${url}</a>`
-            );
-            console.log("found " + url);
-          }
-        }
-      }
+    if (description && description !== "") {
+      description = linkifyHtml(description);
+      description = description.replace(
+        /<a\b/g,
+        `<a class="${styles.objectbodyLink}" target="_blank" rel="noopener noreferrer"`
+      );
     }
     return description;
   };
@@ -91,7 +67,7 @@ const PrimeCommunityObjectBody = (props: any) => {
       case BOARD:
         return getFormattedDescription(object.richTextdescription);
       case POST:
-        return getFormattedDescription(object.richText);
+        return getFormattedDescription(props.description);
       case COMMENT:
         return getFormattedDescription(props.text);
       case REPLY:
@@ -139,15 +115,48 @@ const PrimeCommunityObjectBody = (props: any) => {
 
   useEffect(() => {
     if (props.description) {
-      setFullDescription(props.description);
+      const fullDesc = getDescription();
+      setFullDescription(fullDesc);
       setCurrentDescription(
-        props.description?.length > MAX_CHAR_SHOWN
-          ? props.description.substring(0, MAX_CHAR_SHOWN)
-          : props.description
+        fullDesc.length > MAX_CHAR_SHOWN
+          ? fullDesc.substring(0, MAX_CHAR_SHOWN)
+          : fullDesc
       );
       setViewMore(props.description?.length > MAX_CHAR_SHOWN);
     }
   }, [props.description]);
+
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const handleExpandButtonClick = () => {
+    if (!isFullScreen) {
+      const element = document.documentElement;
+      if (element.requestFullscreen) {
+        element.requestFullscreen();
+      }
+      document.body.style.overflow = "hidden";
+    } else {
+      if (document.fullscreenElement && document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+      document.body.style.overflow = "";
+    }
+    setIsFullScreen(!isFullScreen);
+  };
+
+  const handleFullScreenChange = () => {
+    if (!document.fullscreenElement) {
+      setIsFullScreen(false);
+      document.body.style.overflow = "";
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("fullscreenchange", handleFullScreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullScreenChange);
+    };
+  }, []);
 
   return (
     <>
@@ -166,7 +175,7 @@ const PrimeCommunityObjectBody = (props: any) => {
           </div>
         )}
         <div
-          className={styles.primePostDescriptionText}
+          className={`${styles.primePostDescriptionText} ql-editor`}
           dangerouslySetInnerHTML={{ __html: currentDescription }}
         ></div>
       </div>
@@ -217,14 +226,34 @@ const PrimeCommunityObjectBody = (props: any) => {
           )}
 
           {object.resource && object.resource.contentType === IMAGE && (
-            <div className={styles.primeCommunityImageBox}>
+            <div
+              className={
+                isFullScreen
+                  ? styles.fullScreenImageBox
+                  : styles.primeCommunityImageBox
+              }
+            >
               <div className={styles.primeCommunityImageContainer}>
                 <img
                   src={object.resource.data!}
                   loading="lazy"
-                  className={styles.primePostImage}
+                  className={
+                    isFullScreen
+                      ? styles.fullScreenImage
+                      : styles.primePostImage
+                  }
                   alt="primePostImage"
                 />
+              </div>
+              <div
+                className={isFullScreen ? "" : styles.primeCommunityResourceExpand}
+              >
+                <button
+                  className={styles.primeCommunityResourceExpandButton}
+                  onClick={handleExpandButtonClick}
+                >
+                  {isFullScreen ? FULLSCREEN_EXIT_SVG() : FULLSCREEN_SVG()}
+                </button>
               </div>
             </div>
           )}

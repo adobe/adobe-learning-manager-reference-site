@@ -49,7 +49,7 @@ import {
   GetFormattedDate,
 } from "../../../utils/dateTime";
 import { getALMConfig, getALMObject } from "../../../utils/global";
-import { useResource } from "../../../utils/hooks";
+import { getEnrolledInstancesCount, getEnrollment, useResource } from "../../../utils/hooks";
 import {
   ACTIVITY_SVG,
   AUDIO_SVG,
@@ -87,7 +87,7 @@ interface ActionMap {
 }
 const moduleIconMap = {
   Classroom: CLASSROOM_SVG(),
-  VIRTUAL_CLASSROOM: VIRTUAL_CLASSROOM_SVG(),
+  [VIRTUAL_CLASSROOM]: VIRTUAL_CLASSROOM_SVG(),
   Elearning: SCORM_SVG(),
   Activity: ACTIVITY_SVG(),
   VIDEO: VIDEO_SVG(),
@@ -111,6 +111,7 @@ const PrimeModuleItem: React.FC<{
   updateFileSubmissionUrl: Function;
   isPartOfLP: boolean;
   isParentLOEnrolled: boolean;
+  lastPlayingLoResourceId: String;
 }> = (props) => {
   const {
     training,
@@ -122,6 +123,7 @@ const PrimeModuleItem: React.FC<{
     updateFileSubmissionUrl,
     isPartOfLP = false,
     isParentLOEnrolled = false,
+    lastPlayingLoResourceId
   } = props;
   const { formatMessage, locale } = useIntl();
 
@@ -153,7 +155,7 @@ const PrimeModuleItem: React.FC<{
     localizedMetadata,
     locale
   );
-  const enrollment = training.enrollment;
+  const enrollment = getEnrollment(training, trainingInstance);
   const isEnrolled = checkIsEnrolled(enrollment);
 
   const resource = useResource(loResource, locale);
@@ -230,7 +232,8 @@ const PrimeModuleItem: React.FC<{
       (isEnrolled && !isClassroomOrVC) ||
       (isModulePreviewAble && isPrimeUserLoggedIn)
     ) {
-      launchPlayerHandler({ id: training.id, moduleId: loResource.id });
+      const isMultienrolled = getEnrolledInstancesCount(training)>1;
+      launchPlayerHandler({ id: training.id, moduleId: loResource.id, trainingInstanceId: trainingInstance.id, isMultienrolled: isMultienrolled });
     }
   };
   const keyDownHandler = (event: any) => {
@@ -284,6 +287,11 @@ const PrimeModuleItem: React.FC<{
   const updateFileUpdateProgress = () => {
     setFileUploadProgress(store.getState().fileUpload.uploadProgress);
   };
+
+  useEffect(() => {
+    setSubmissionState(loResource.submissionState);
+    setSubmissionUrl(loResource.submissionUrl);
+  }, [loResource.submissionState, loResource.submissionUrl]);
 
   const inputElementId = loResource.id + "-uploadFileSubmission";
 
@@ -446,6 +454,10 @@ const PrimeModuleItem: React.FC<{
     event?.stopPropagation();
   };
 
+  const isLastPlayedModule = enrollment &&
+      ( loResource.id === lastPlayingLoResourceId ||
+        loResource?.id.split("_")[2] === lastPlayingLoResourceId?.split("_")[2]); 
+
   return (
     <>
       <li className={styles.container}>
@@ -489,6 +501,10 @@ const PrimeModuleItem: React.FC<{
                     })
                   : ""}
               </span>
+              {isLastPlayedModule? 
+              <span className={styles.lastVisitedMssg}>
+                {formatMessage({id:"alm.module.lastVisited"})}
+                </span>: ""}
               {isModulePreviewAble && (
                 <span className={styles.previewable}>
                   {formatMessage({

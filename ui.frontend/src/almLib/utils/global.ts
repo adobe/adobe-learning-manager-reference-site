@@ -54,7 +54,10 @@ export interface PrimeConfig {
     [key: string]: string;
   };
   themeData: PrimeThemeData;
-  isTeamsApp: boolean;
+  hideBackButton: boolean;
+  hideSearchInput: boolean;
+  handleShareExternally: boolean;
+  useConfigLocale: boolean;
 }
 
 export interface ALM {
@@ -73,6 +76,7 @@ export interface ALM {
   updateUserProfileImage: Function;
   updateCart: Function;
   getAccountActiveFields: Function;
+  handlePageLoad: Function;
   updateAccountActiveFieldsDetails: Function;
   handleLogIn: Function;
   handleLogOut: Function;
@@ -303,40 +307,4 @@ export function getPageAttributes(
     setALMAttribute(pageAttributeName, attributes);
     return attributes;
   }
-}
-
-function getEventForTeams(type: string) {
-  return {
-    type: type,
-  };
-}
-
-function sendEvent(eventDetails: any) {
-  window.postMessage(eventDetails, "*");
-}
-
-export function navigateToLoInTeamsApp(
-  trainingId: string,
-  trainingInstanceId?: string,
-  parentLoDetails?: string,
-  clearParentLoDetails?: boolean
-) {
-  let eventDetails: any = getEventForTeams("almNavigateToLoInTeamsApp");
-  eventDetails.trainingId = trainingId;
-  if (trainingInstanceId) {
-    eventDetails.trainingInstanceId = trainingInstanceId;
-  }
-  if (parentLoDetails) {
-    eventDetails.parentLoDetails = parentLoDetails;
-  }
-  if (clearParentLoDetails) {
-    eventDetails.clearParentLoDetails = clearParentLoDetails;
-  }
-  sendEvent(eventDetails);
-}
-
-export function navigateToLoInstanceInTeamsApp(trainingId: string) {
-  let eventDetails: any = getEventForTeams("almNavigateToLoInstanceInTeamsApp");
-  eventDetails.trainingId = trainingId;
-  sendEvent(eventDetails);
 }

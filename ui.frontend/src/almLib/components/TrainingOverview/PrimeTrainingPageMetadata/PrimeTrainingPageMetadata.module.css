@@ -66,7 +66,7 @@ governing permissions and limitations under the License.
 .icon,
 .altLangIcon {
   margin-right: 10px;
-  margin-left: 10px;
+  margin-left: 5px;
 }
 .icon svg,
 .altLangIcon svg {
@@ -82,7 +82,7 @@ governing permissions and limitations under the License.
 .icon,
 .sendIcon {
   margin-right: 10px;
-  margin-left: 10px;
+  margin-left: 5px;
 }
 .icon svg,
 .sendIcon svg {
@@ -97,10 +97,27 @@ governing permissions and limitations under the License.
   margin-top: 8px;
 }
 
+.icon,
+.instanceIcon {
+  margin-right: 10px;
+  margin-left: 5px;
+}
+.icon svg,
+.instanceIcon svg {
+  stroke: var(--prime-icon-color);
+  width: 26px;
+  height: 26px;
+  fill: transparent;
+}
+
+.instanceIcon {
+  margin-top: 8px;
+}
+
 .minimumCriteria {
   font-size: 20px;
   margin-right: 10px;
-  margin-left: 10px;
+  margin-left: 5px;
   color: var(--prime-icon-color);
 }
 .mandatory {
@@ -113,7 +130,6 @@ governing permissions and limitations under the License.
 }
 .innerContainer {
   margin-top: 3px;
-  margin-left: 10px;
   font-size: var(--prime-font-size-14);
 }
 .label {
@@ -138,8 +154,11 @@ governing permissions and limitations under the License.
   width: 100%;
   font-family: "source-sans-pro";
 }
+.instanceName{
+  color:var(--prime-color-nc3);
+}
 .errorText {
-  font-size: var(--prime-font-size-12);
+  font-size: var(--prime-font-size-14);
   color: var(--prime-error-color);
   font-weight: var(--prime-font-weight-600);
   padding-top: 5px;
@@ -154,7 +173,7 @@ governing permissions and limitations under the License.
 .authorContainer {
   display: flex;
   flex-direction: column;
-  margin-left: 10px;
+  margin-left: 5px;
 }
 .authors {
   display: flex;
@@ -198,6 +217,21 @@ governing permissions and limitations under the License.
   overflow: hidden;
   color: var(--prime-color-primary);
   text-decoration: none;
+}
+
+.allInstances {
+  display: block;
+  overflow: hidden;
+  color: var(--prime-color-primary);
+  text-decoration: none;
+  font-size: var(--prime-font-size-14);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  cursor: pointer;
 }
 
 .mangerPendingApprovalText {
@@ -298,6 +332,10 @@ governing permissions and limitations under the License.
 
 .deadlines {
   width: inherit;
+}
+
+.centerAlign {
+  text-align: center;
 }
 
 @media screen and (max-width: 450px) {

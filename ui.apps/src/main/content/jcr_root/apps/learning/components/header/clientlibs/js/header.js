@@ -221,8 +221,8 @@ governing permissions and limitations under the License.
                 $(HEADER_PROFILE_OPTIONS_CONT_SEL).hide();
         }
     }
-
-    $(document).ready(function () {
+    
+    document.addEventListener("DOMContentLoaded", async function () {
         renderLoginButtons();
         highlightNavigationButtons();
         renderCommerceSpecificUI();

@@ -15,6 +15,8 @@ import {
   PrimeLearningObjectInstance,
   PrimeLearningObjectResource,
 } from "../../../models/PrimeModels";
+import { PREWORK, TESTOUT } from "../../../utils/constants";
+import { getEnrollment } from "../../../utils/hooks";
 import { arePrerequisiteEnforcedAndCompleted } from "../../../utils/overview";
 import { PrimeModuleItem } from "../PrimeModuleItem";
 import styles from "./PrimeModuleList.module.css";
@@ -29,6 +31,7 @@ const PrimeModuleList: React.FC<{
   isContent?: boolean;
   isPreviewEnabled: boolean;
   updateFileSubmissionUrl: Function;
+  lastPlayingLoResourceId: String;
 }> = (props) => {
   const {
     loResources,
@@ -40,6 +43,7 @@ const PrimeModuleList: React.FC<{
     isContent,
     isPreviewEnabled,
     updateFileSubmissionUrl,
+    lastPlayingLoResourceId
   } = props;
 
   const isModuleLocked = (
@@ -52,11 +56,17 @@ const PrimeModuleList: React.FC<{
     if (!training.isSubLoOrderEnforced) {
       return false;
     }
-    if (!training.enrollment) {
+    const enrollment = getEnrollment(training, trainingInstance);
+    
+    if (!enrollment) {
       return true;
     }
+    const loResourceGrades = enrollment.loResourceGrades;
+    
+    if(loResource.loResourceType === TESTOUT || loResource.loResourceType === PREWORK){
+      return false;
+    }
 
-    const loResourceGrades = training.enrollment.loResourceGrades;
     if (index === 0) {
       return false;
     }
@@ -80,7 +90,7 @@ const PrimeModuleList: React.FC<{
         isPartOfLP ? styles.isPartOfLP : ""
       }`}
     >
-      {loResources.map((loResource, index) => (
+      {loResources?.map((loResource, index) => (
         <PrimeModuleItem
           loResource={loResource}
           key={loResource.id}
@@ -93,6 +103,7 @@ const PrimeModuleList: React.FC<{
           updateFileSubmissionUrl={updateFileSubmissionUrl}
           isPartOfLP={isPartOfLP}
           isParentLOEnrolled={isParentLOEnrolled}
+          lastPlayingLoResourceId = {lastPlayingLoResourceId}
         ></PrimeModuleItem>
       ))}
     </ul>

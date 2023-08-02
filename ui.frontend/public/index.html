@@ -88,10 +88,10 @@
     </script>
     <script>
       const ALMConfig = {
-        almBaseURL: "https://learningmanager.adobe.com",
-        primeApiURL: "https://learningmanager.adobe.com/primeapi/v2/",
+        almBaseURL: "https://captivateprimestage1.adobe.com",
+        primeApiURL: "https://captivateprimestage1.adobe.com/primeapi/v2/",
         locale: "en-US",
-        cdnBaseUrl: "https://cpcontents.adobe.com",
+        cdnBaseUrl: "https://cpcontentsdev.adobe.com",
         usageType: "aem-commerce",
         accountData: "{}",
         esBaseUrl: "xxxxx",
@@ -134,22 +134,26 @@
 
       const navigateToTrainingOverviewPage = (
         trainingId,
-        trainingInstanceId = ""
+        trainingInstanceId = "",
       ) => {
         let { trainingOverviewPath } = getALMConfig();
         trainingOverviewPath = getUrl(trainingOverviewPath, {
           trainingId: trainingId,
         });
-        window.location = trainingInstanceId
+        trainingOverviewPath = trainingInstanceId
           ? getUrl(trainingOverviewPath, {
               trainingInstanceId: trainingInstanceId,
             })
           : trainingOverviewPath;
+        window.location = trainingOverviewPath;
       };
 
-      const navigateToInstancePage = (trainingId) => {
+      const navigateToInstancePage = (
+        trainingId,
+      ) => {
         let { instancePath } = getALMConfig();
-        window.location = getUrl(instancePath, { trainingId: trainingId });
+        let url = getUrl(instancePath, { trainingId: trainingId });
+        window.location = url;
       };
 
       const navigateToBoardDetailsPage = (boardId) => {

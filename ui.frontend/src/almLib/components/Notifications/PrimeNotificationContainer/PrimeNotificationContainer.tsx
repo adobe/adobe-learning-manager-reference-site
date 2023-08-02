@@ -45,6 +45,11 @@ const PrimeNotificationContainer = () => {
     }
   };
 
+  const redirectToLoPage = async (notif: any) => {
+    await markReadNotification();
+    redirectOverviewPage(notif);
+  }
+
   useEffect(() => {
     let timer: any;
     document.addEventListener("click", handleClickOutside, false);
@@ -90,7 +95,7 @@ const PrimeNotificationContainer = () => {
             unreadCount={unreadCount}
             isLoading={isLoading}
             loadMoreNotifications={loadMoreNotifications}
-            redirectOverviewPage={redirectOverviewPage}
+            redirectOverviewPage={redirectToLoPage}
           />
         )}
       </div>

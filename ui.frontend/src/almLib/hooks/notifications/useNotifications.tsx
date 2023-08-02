@@ -19,6 +19,7 @@ import {
 } from "../../store/actions/notification/action";
 import { State } from "../../store/state";
 import { getALMConfig, getALMObject, getALMUser } from "../../utils/global";
+import { clearParentLoDetails } from "../../utils/hooks";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { LaunchPlayer } from "../../utils/playback-utils";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
@@ -186,6 +187,7 @@ export const useNotifications = () => {
   const redirectOverviewPage = useCallback((notif) => {
     let alm = getALMObject();
     let trainingId = notif.modelIds[0];
+    let trainingInstanceId = (notif.metadata ? notif.metadata[0].id : "");
     let isJobAid = false;
     if (notif.modelTypes[0] === "learningObject") {
       notif.modelIds!.forEach((item: string) => {
@@ -196,7 +198,9 @@ export const useNotifications = () => {
       });
     }
     if (isJobAid) return;
-    alm.navigateToTrainingOverviewPage(trainingId);
+
+    clearParentLoDetails();
+    alm.navigateToTrainingOverviewPage(trainingId, trainingInstanceId);
     return;
   }, []);
 
