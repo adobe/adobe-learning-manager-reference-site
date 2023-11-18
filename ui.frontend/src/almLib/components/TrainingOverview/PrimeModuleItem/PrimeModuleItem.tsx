@@ -20,6 +20,8 @@ import LockClosed from "@spectrum-icons/workflow/LockClosed";
 import Seat from "@spectrum-icons/workflow/Seat";
 import User from "@spectrum-icons/workflow/User";
 import Visibility from "@spectrum-icons/workflow/Visibility";
+import MovieCamera from "@spectrum-icons/workflow/MovieCamera";
+import RailBottom from "@spectrum-icons/workflow/RailBottom";
 import React, { useEffect, useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import store from "../../../../store/APIStore";
@@ -48,8 +50,13 @@ import {
   convertSecondsToTimeText,
   GetFormattedDate,
 } from "../../../utils/dateTime";
-import { getALMConfig, getALMObject } from "../../../utils/global";
-import { getEnrolledInstancesCount, getEnrollment, useResource } from "../../../utils/hooks";
+import { getALMObject } from "../../../utils/global";
+import {
+  getEnrolledInstancesCount,
+  getEnrollment,
+  useResource,
+} from "../../../utils/hooks";
+import { checkIfLinkedInLearningCourse, getALMConfig, launchContentUrlInNewWindow } from "../../../utils/global";
 import {
   ACTIVITY_SVG,
   AUDIO_SVG,
@@ -59,6 +66,7 @@ import {
   PDF_SVG,
   PPT_SVG,
   PRESENTER_SVG,
+  QUIZ_SVG,
   SCORM_SVG,
   SOCIAL_CANCEL_SVG,
   VIDEO_SVG,
@@ -74,6 +82,7 @@ import {
   getPreferredLocalizedMetadata,
   GetTranslation,
   formatMap,
+  GetTranslationReplaced,
 } from "../../../utils/translationService";
 import {
   cancelUploadFile,
@@ -81,7 +90,7 @@ import {
   uploadFile,
 } from "../../../utils/uploadUtils";
 import styles from "./PrimeModuleItem.module.css";
-
+import Refresh from "@spectrum-icons/workflow/Refresh";
 interface ActionMap {
   Classroom: string;
 }
@@ -98,6 +107,7 @@ const moduleIconMap = {
   AUDIO: AUDIO_SVG(),
   CP: CAPTIVATE_SVG(),
   PR: PRESENTER_SVG(),
+  QUIZ: QUIZ_SVG(),
 };
 
 const PrimeModuleItem: React.FC<{
@@ -111,7 +121,10 @@ const PrimeModuleItem: React.FC<{
   updateFileSubmissionUrl: Function;
   isPartOfLP: boolean;
   isParentLOEnrolled: boolean;
+  isParentFlexLP: boolean;
   lastPlayingLoResourceId: String;
+  setTimeBetweenAttemptEnabled: Function;
+  timeBetweenAttemptEnabled: boolean;
 }> = (props) => {
   const {
     training,
@@ -123,7 +136,10 @@ const PrimeModuleItem: React.FC<{
     updateFileSubmissionUrl,
     isPartOfLP = false,
     isParentLOEnrolled = false,
-    lastPlayingLoResourceId
+    isParentFlexLP = false,
+    lastPlayingLoResourceId,
+    setTimeBetweenAttemptEnabled,
+    timeBetweenAttemptEnabled,
   } = props;
   const { formatMessage, locale } = useIntl();
 
@@ -133,6 +149,7 @@ const PrimeModuleItem: React.FC<{
 
   const showPreWorkLabel = loResource.loResourceType === PREWORK && isPartOfLP;
   const isPreworkModule = loResource.loResourceType === PREWORK;
+  const isPrimeUserLoggedIn = getALMObject().isPrimeUserLoggedIn();
 
   useEffect(() => {
     if (showCannotSkipDialog) {
@@ -150,6 +167,19 @@ const PrimeModuleItem: React.FC<{
     }
   }, [almAlert, showCannotSkipDialog]);
 
+  const [isMobileScreen, setIsMobileScreen] = useState(false);
+
+  useEffect(() => {
+    setIsMobileScreen(window.innerWidth <= 414);
+    const handleResize = () => {
+      setIsMobileScreen(window.innerWidth <= 414);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   let localizedMetadata = loResource.localizedMetadata;
   const { name, description, overview } = getPreferredLocalizedMetadata(
     localizedMetadata,
@@ -160,6 +190,19 @@ const PrimeModuleItem: React.FC<{
 
   const resource = useResource(loResource, locale);
 
+  const multipleAttempt = loResource?.multipleAttempt;
+  const maxAttemptCount = multipleAttempt?.maxAttemptCount;
+  const infiniteAttempts = multipleAttempt?.infiniteAttempts;
+  const stopAttemptOnSuccessfulComplete =
+    multipleAttempt?.stopAttemptOnSuccessfulComplete;
+  const attemptDuration = multipleAttempt?.attemptDuration || 0;
+  const timeBetweenAttempts = multipleAttempt?.timeBetweenAttempts || 0;
+  const learnerAttemptInfo = loResource?.learnerAttemptInfo;
+  const completionCriteria = multipleAttempt?.attemptEndCriteria;
+
+  // Reattempt By default is true
+  let isResetRequired = true;
+
   const isModulePreviewAble =
     isPreviewEnabled && !isParentLOEnrolled && loResource.previewEnabled;
 
@@ -167,7 +210,7 @@ const PrimeModuleItem: React.FC<{
     loResource.resourceType === CLASSROOM ||
     loResource.resourceType === VIRTUAL_CLASSROOM;
 
-  const isModuleClicable: boolean = isEnrolled || isModulePreviewAble;
+  const isModuleClickable: boolean = isEnrolled || isModulePreviewAble;
 
   const isVC = loResource.resourceType === VIRTUAL_CLASSROOM;
 
@@ -176,12 +219,94 @@ const PrimeModuleItem: React.FC<{
   const hasSessionDetails =
     resource.dateStart && resource.completionDeadline ? true : false;
 
+  const [attemptsDone, setAttemptsDone] = useState(
+    loResource.learnerAttemptInfo?.attemptsFinishedCount as number
+  );
+
+  const filteredResourceGrades = enrollment?.loResourceGrades.filter(
+    (loResourceGrade) => loResourceGrade.id.search(loResource.id) !== -1
+  );
+
+  const loResourceGrade = filteredResourceGrades?.length
+    ? filteredResourceGrades[0]
+    : ({} as PrimeLearningObjectResourceGrade);
+
+  useEffect(() => {
+    if (attemptsDone === undefined) {
+      setAttemptsDone(0);
+    }
+  }, [attemptsDone]);
+  function showReattemptButton() {
+    if (isPrimeUserLoggedIn) {
+      return (
+        <button
+          onClick={reattemptHandler}
+          className={
+            moduleLockedBetweenAttempt()
+              ? styles.reattemptButtonDisabled
+              : styles.reattemptButton
+          }
+          tabIndex={0}
+        >
+          <span className={styles.refresh}>
+            <Refresh />
+          </span>
+          <span className={styles.reattempt}>
+            {GetTranslation("alm.mqa.reattempt", true)}
+          </span>
+        </button>
+      );
+    }
+  }
+  function timeComparison() {
+    const lastAttemptDate = new Date(
+      loResource.learnerAttemptInfo?.lastAttemptEndTime
+    );
+    const currentDate = new Date();
+    lastAttemptDate.setTime(
+      lastAttemptDate.getTime() + timeBetweenAttempts * 60000
+    );
+    if (lastAttemptDate < currentDate) {
+      setTimeBetweenAttemptEnabled(false);
+      setAttemptsDone(
+        loResource.learnerAttemptInfo?.attemptsFinishedCount as number
+      );
+    } else {
+      setTimeBetweenAttemptEnabled(true);
+    }
+  }
+
+  useEffect(() => {
+    if (loResource.multipleAttemptEnabled) {
+      if (
+        loResource.learnerAttemptInfo?.attemptsFinishedCount &&
+        timeBetweenAttempts
+      ) {
+        timeComparison();
+      }
+      else{
+        setTimeBetweenAttemptEnabled(false);
+      }
+    }
+  }, [loResource]);
+
   const durationText = convertSecondsToTimeText(
     resource.authorDesiredDuration || resource.desiredDuration || 0
   );
 
   const moduleIcon =
     moduleIconMap[resource.contentType as keyof ActionMap] || SCORM_SVG();
+
+  const showSessionTranscript = (): boolean => {
+    if (loResource.sessionRecordingInfo?.length > 0) {
+      for (let i = 0; i < loResource.sessionRecordingInfo.length; i++) {
+        if (loResource.sessionRecordingInfo[i].transcriptUrl) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
 
   const sessionsTemplate = getSessionsTemplate(
     styles,
@@ -193,7 +318,9 @@ const PrimeModuleItem: React.FC<{
     isVC,
     isEnrolled,
     formatMessage,
-    locale
+    locale,
+    showSessionTranscript,
+    isParentFlexLP
   );
 
   let descriptionTextHTML = getDescriptionTemplate(
@@ -213,7 +340,7 @@ const PrimeModuleItem: React.FC<{
     return false;
   };
 
-  const itemClickHandler = (event: any) => {
+  const itemClickHandler = (event: any, reattemptButtonClicked = false) => {
     if (isPartOfLP && !isParentLOEnrolled && !isModulePreviewAble) {
       return;
     }
@@ -222,18 +349,42 @@ const PrimeModuleItem: React.FC<{
       setTimeout(() => setShowCannotSkipDialog(false), 3000);
       return;
     }
-    const isPrimeUserLoggedIn = getALMObject().isPrimeUserLoggedIn();
+
     if (isModulePreviewAble && !isPrimeUserLoggedIn) {
       storeActionInNonLoggedMode(PREVIEW);
       launchPlayerHandler();
+      return;
+    }
+
+    // Case when no attempt is left
+    if (multipleAttempt && attemptsLeft <= 0 && !infiniteAttempts) {
+      return;
+    }
+
+    // Case when module is completed
+    if (moduleStopOnSuccessfulComplete() && reattemptButtonClicked) {
       return;
     }
     if (
       (isEnrolled && !isClassroomOrVC) ||
       (isModulePreviewAble && isPrimeUserLoggedIn)
     ) {
-      const isMultienrolled = getEnrolledInstancesCount(training)>1;
-      launchPlayerHandler({ id: training.id, moduleId: loResource.id, trainingInstanceId: trainingInstance.id, isMultienrolled: isMultienrolled });
+      if (checkIfLinkedInLearningCourse(training) && getALMConfig().handleLinkedInContentExternally) {
+        return launchContentUrlInNewWindow(training, loResource);
+      }
+      const isMultienrolled = getEnrolledInstancesCount(training) > 1;
+      const isResetReattemptRequired =
+      reattemptButtonClicked
+        ? isResetRequired
+        : !loResource.learnerAttemptInfo && !infiniteAttempts;
+
+      launchPlayerHandler({
+        id: training.id,
+        moduleId: loResource.id,
+        trainingInstanceId: trainingInstance.id,
+        isMultienrolled: isMultienrolled,
+        isResetRequired: isResetReattemptRequired,
+      });
     }
   };
   const keyDownHandler = (event: any) => {
@@ -251,15 +402,6 @@ const PrimeModuleItem: React.FC<{
     if (!enrollment) {
       return false;
     }
-
-    const loResourceGrades = enrollment.loResourceGrades;
-    const filteredResourceGrades = loResourceGrades.filter(
-      (loResourceGrade) => loResourceGrade.id.search(loResource.id) !== -1
-    );
-
-    const loResourceGrade = filteredResourceGrades.length
-      ? filteredResourceGrades[0]
-      : ({} as PrimeLearningObjectResourceGrade);
 
     if (loResourceGrade.hasPassed) {
       return true;
@@ -442,7 +584,8 @@ const PrimeModuleItem: React.FC<{
           href={submissionUrl}
           target="_blank"
           rel="noreferrer"
-          onClick={(event: any) => stopClickPropagation(event)}>
+          onClick={(event: any) => stopClickPropagation(event)}
+        >
           {getSubmissionFileName(submissionUrl)}
         </a>
         {changeAllowed && getUploadFileSection(hasSession, CHANGE)}
@@ -454,22 +597,318 @@ const PrimeModuleItem: React.FC<{
     event?.stopPropagation();
   };
 
-  const isLastPlayedModule = enrollment &&
-      ( loResource.id === lastPlayingLoResourceId ||
-        loResource?.id.split("_")[2] === lastPlayingLoResourceId?.split("_")[2]); 
+  const isLastPlayedModule =
+    enrollment &&
+    (loResource.id === lastPlayingLoResourceId ||
+      loResource?.id.split("_")[2] === lastPlayingLoResourceId?.split("_")[2]);
+
+  // For attemptEndCriteria === "NONE" || attemptEndCriteria === "PLAYER_CLOSE"
+  let attemptsLeft =
+    (maxAttemptCount || 0) -
+    (learnerAttemptInfo?.currentAttemptNumber ||
+      learnerAttemptInfo?.attemptsFinishedCount ||
+      0);
+
+  if (infiniteAttempts) {
+    attemptsLeft = 0;
+  }
+
+  if (
+    !infiniteAttempts &&
+    multipleAttempt?.attemptEndCriteria === "COMPLETION"
+  ) {
+    if (
+      loResourceGrade?.hasPassed &&
+      loResourceGrade?.progressPercent !== 100
+    ) {
+      if (loResourceGrade?.duration === 0) {
+        attemptsLeft =
+          (maxAttemptCount || 0) -
+          (learnerAttemptInfo?.attemptsFinishedCount || 0);
+      } else {
+        attemptsLeft =
+          (maxAttemptCount || 0) -
+          (learnerAttemptInfo?.currentAttemptNumber || 0);
+      }
+    } else if (
+      loResourceGrade?.hasPassed &&
+      loResourceGrade?.progressPercent === 100
+    ) {
+      attemptsLeft =
+        (maxAttemptCount || 0) -
+        (learnerAttemptInfo?.currentAttemptNumber ||
+          learnerAttemptInfo?.attemptsFinishedCount ||
+          0);
+    } else if (
+      !loResourceGrade?.hasPassed &&
+      loResourceGrade?.progressPercent !== 100
+    ) {
+      if (loResourceGrade?.duration === 0) {
+        attemptsLeft =
+          (maxAttemptCount || 0) -
+          (learnerAttemptInfo?.attemptsFinishedCount || 0);
+      } else {
+        attemptsLeft =
+          (maxAttemptCount || 0) -
+          (learnerAttemptInfo?.currentAttemptNumber || 0);
+      }
+    } else if (
+      !loResourceGrade?.hasPassed &&
+      loResourceGrade?.progressPercent === 100
+    ) {
+      attemptsLeft =
+        (maxAttemptCount || 0) -
+        (learnerAttemptInfo?.currentAttemptNumber ||
+          learnerAttemptInfo?.attemptsFinishedCount ||
+          0);
+    }
+  }
+
+  // Reset Modules
+  if (
+    attemptsLeft < 0 &&
+    !learnerAttemptInfo?.currentAttemptStartTime &&
+    !learnerAttemptInfo?.currentAttemptEndTime
+  ) {
+    attemptsLeft = 1;
+    isResetRequired = false;
+  }
+
+  const moduleStopOnSuccessfulComplete = () => {
+    if (stopAttemptOnSuccessfulComplete && loResourceGrade?.hasPassed) {
+      return true;
+    }
+    return false;
+  };
+
+  const resourceClickHandler = (event: any) => {
+    if (
+      !(
+        loResource.multipleAttemptEnabled &&
+        loResource.learnerAttemptInfo &&
+        moduleLockedBetweenAttempt()
+      )
+    ) {
+      itemClickHandler(event);
+    } else {
+      almAlert(
+        true,
+        GetTranslation("alm.mqa.module.locked.message"),
+        AlertType.error
+      );
+    }
+  };
+
+  if (loResource.learnerAttemptInfo) {
+    if (
+      attemptsDone < loResource.learnerAttemptInfo.attemptsFinishedCount &&
+      !gradeHasPassed()
+    ) {
+      if (timeBetweenAttempts) {
+        setTimeBetweenAttemptEnabled(true);
+      }
+    }
+  }
+
+  const moduleLockedBetweenAttempt = () => {
+    if (timeBetweenAttempts === 0 || !timeBetweenAttempts) {
+      return false;
+    }
+    const lastAttemptEndTime =
+      new Date(
+        loResource.learnerAttemptInfo?.currentAttemptEndTime ||
+          loResource.learnerAttemptInfo?.lastAttemptEndTime ||
+          0
+      ).getTime() || 0;
+
+    const attemptStartTime =
+      lastAttemptEndTime + timeBetweenAttempts * 60 * 1000;
+
+    const now = new Date().getTime();
+
+    return now < attemptStartTime;
+  };
+
+  const reattemptHandler = (event: any) => {
+    event.stopPropagation();
+    if (moduleLockedBetweenAttempt()) {
+      almAlert(
+        true,
+        GetTranslation("alm.mqa.module.locked.message"),
+        AlertType.error
+      );
+    }
+    else {
+      itemClickHandler(event, true);
+    }
+  };
+
+  const attemptDescription = () => {
+    if (loResource.multipleAttemptEnabled) {
+      if (gradeHasPassed() && stopAttemptOnSuccessfulComplete) {
+        return (
+          <span className={styles.attemptDescriptionContainer}>
+            <span className={styles.completedRefresh}>
+              <Refresh />
+            </span>
+            <span className={styles.initialAttempts}>
+              {GetTranslation("alm.mqa.moduleCompletes", true)}
+            </span>
+            {/* {setTimeBetweenAttemptEnabled(true)} */}
+            {attemptDuration !== 0 && (
+              <span className={styles.attemptsDuration}>
+                {isMobileScreen ? `| ` : ``}
+                {GetTranslationReplaced(
+                  "alm.mqa.attemptDuration",
+                  attemptDuration.toString(),
+                  true
+                )}
+              </span>
+            )}
+          </span>
+        );
+      }
+      if (infiniteAttempts) {
+        if (!loResource.learnerAttemptInfo) {
+          return (
+            <span className={styles.attemptDescriptionContainer}>
+              <span className={styles.attemptsDuration}>
+                {GetTranslation("alm.mqa.attempt", true)}
+              </span>
+              <span className={styles.initialAttempts}>No Limit</span>
+              {attemptDuration !== 0 && (
+                <span className={styles.attemptsDuration}>
+                  {isMobileScreen ? `| ` : ``}
+                  {GetTranslationReplaced(
+                    "alm.mqa.attemptDuration",
+                    attemptDuration.toString(),
+                    true
+                  )}
+                </span>
+              )}
+            </span>
+          );
+        } else {
+          return (
+            <span className={styles.attemptDescriptionContainer}>
+              {showReattemptButton()}
+              {attemptDuration !== 0 && (
+                <span className={styles.attemptsDuration}>
+                  {isMobileScreen ? `| ` : ``}
+                  {GetTranslationReplaced(
+                    "alm.mqa.attemptDuration",
+                    attemptDuration.toString(),
+                    true
+                  )}
+                </span>
+              )}
+            </span>
+          );
+        }
+      } else {
+        if (loResource.learnerAttemptInfo) {
+          return (
+            <span className={styles.attemptDescriptionContainer}>
+              {attemptsLeft <= 0 ? (
+                <>
+                  <span className={styles.completedRefresh}>
+                    <Refresh />
+                  </span>
+                  <span className={styles.noAttemptLeft}>
+                    {GetTranslation("alm.mqa.noAttemptLeft", true)}
+                  </span>
+                  {attemptDuration > 0 && (
+                    <span className={styles.attemptsDuration}>
+                      {isMobileScreen ? `| ` : ``}
+                      {GetTranslationReplaced(
+                        "alm.mqa.attemptDuration",
+                        attemptDuration.toString(),
+                        true
+                      )}
+                    </span>
+                  )}
+                </>
+              ) : (
+                <span className={styles.attemptDescriptionContainer}>
+                  <button
+                    onClick={reattemptHandler}
+                    className={
+                      moduleLockedBetweenAttempt()
+                        ? styles.reattemptButtonDisabled
+                        : styles.reattemptButton
+                    }
+                    disabled={attemptsLeft === 0}
+                    tabIndex={0}
+                  >
+                    <span className={styles.refresh}>
+                      <Refresh />
+                    </span>
+                    <span className={styles.reattempt}>
+                      {GetTranslation("alm.mqa.reattempt", true)}
+                    </span>
+                  </button>
+                  <span className={styles.attemptsLeft}>
+                    {GetTranslationReplaced(
+                      "alm.mqa.attemptsLeft",
+                      attemptsLeft > 0 ? attemptsLeft.toString() : "1",
+                      true
+                    )}
+                  </span>
+                  {attemptDuration !== 0 && (
+                    <span className={styles.attemptsDuration}>
+                      {isMobileScreen ? `| ` : ``}
+                      {GetTranslationReplaced(
+                        "alm.mqa.attemptDuration",
+                        attemptDuration.toString(),
+                        true
+                      )}
+                    </span>
+                  )}
+                </span>
+              )}
+            </span>
+          );
+        } else {
+          return (
+            <span className={styles.attemptDescriptionContainer}>
+              <span className={styles.attemptsDuration}>
+                {GetTranslation("alm.mqa.attempt", true)}
+              </span>
+              <span className={styles.initialAttempts}>{maxAttemptCount}</span>
+              {attemptDuration !== 0 && (
+                <span className={styles.attemptsDuration}>
+                  {isMobileScreen ? `| ` : ``}
+                  {GetTranslationReplaced(
+                    "alm.mqa.attemptDuration",
+                    attemptDuration.toString(),
+                    true
+                  )}
+                </span>
+              )}
+            </span>
+          );
+        }
+      }
+    }
+  };
 
   return (
     <>
-      <li className={styles.container}>
+      <li
+        className={`${styles.container} ${
+          loResourceMandatory() ? styles.mandatoryModuleContainer : ``
+        }`}
+      >
         <div
           className={`${styles.headerContainer} ${
-            isModuleClicable ? styles.cursor : ""
+            isModuleClickable ? styles.cursor : ""
           }`}
           tabIndex={0}
           data-test={loResource.id}
-          onClick={itemClickHandler}
+          onClick={resourceClickHandler}
           onKeyDown={keyDownHandler}
-          role="button">
+          role="button"
+        >
           <div className={styles.icon} aria-hidden="true">
             {loResourceMandatory() ? (
               <span className={styles.mandatoryModule}>
@@ -479,11 +918,12 @@ const PrimeModuleItem: React.FC<{
               ""
             )}
             {moduleIcon}
+
             {gradeHasPassed() ? (
               <span className={styles.modulePassed}>
                 <CheckmarkCircle aria-hidden="true" />
               </span>
-            ) : (!canPlay && !isPreworkModule) ? (
+            ) : !canPlay && !isPreworkModule ? (
               <span className={styles.moduleLocked}>
                 <LockClosed aria-hidden="true" />
               </span>
@@ -494,6 +934,7 @@ const PrimeModuleItem: React.FC<{
           <div className={styles.headerWrapper}>
             <div className={styles.titleContainer}>
               <span className={styles.title}>
+                <span aria-label={resource.contentType}></span>
                 {name}{" "}
                 {showPreWorkLabel
                   ? formatMessage({
@@ -501,10 +942,13 @@ const PrimeModuleItem: React.FC<{
                     })
                   : ""}
               </span>
-              {isLastPlayedModule? 
-              <span className={styles.lastVisitedMssg}>
-                {formatMessage({id:"alm.module.lastVisited"})}
-                </span>: ""}
+              {isLastPlayedModule ? (
+                <span className={styles.lastVisitedMssg}>
+                  {formatMessage({ id: "alm.module.lastVisited" })}
+                </span>
+              ) : (
+                ""
+              )}
               {isModulePreviewAble && (
                 <span className={styles.previewable}>
                   {formatMessage({
@@ -533,7 +977,8 @@ const PrimeModuleItem: React.FC<{
                         id: "alm.removeUpload.label",
                         defaultMessage: "Remove upload",
                       })}
-                      onClick={cancelClickHandler}>
+                      onClick={cancelClickHandler}
+                    >
                       {SOCIAL_CANCEL_SVG()}
                     </button>
                   </div>
@@ -541,6 +986,8 @@ const PrimeModuleItem: React.FC<{
                 {!isUploading &&
                   showFileSubmission() &&
                   getFileUploadSection(isClassroomOrVC, submissionState)}
+                {((isPartOfLP && isParentLOEnrolled) || !isPartOfLP) &&
+                  attemptDescription()}
               </span>
               <span>{durationText}</span>
             </div>
@@ -600,7 +1047,9 @@ const getSessionsTemplate = (
   isVC: boolean = false,
   isEnrolled: boolean,
   formatMessage: Function,
-  locale: string
+  locale: string,
+  showSessionTranscript: Function,
+  isParentFlexLP: boolean
 ) => {
   if (!isClassroomOrVC || (isClassroomOrVC && !hasSessionDetails)) {
     return "";
@@ -646,45 +1095,105 @@ const getSessionsTemplate = (
           </div>
         </div>
       )}
+      {!showSeatLimit && isClassroomOrVC && (
+        <div className={styles.metadata}>
+          <div className={styles.spectrumIcon}>
+            <Seat aria-hidden="true" />
+          </div>
+          <div className={styles.details}>
+            {GetTranslation("alm.overview.no.seat.limit", true)}
+          </div>
+        </div>
+      )}
       <div className={styles.metadata}>
         <div className={styles.spectrumIcon}>
           <User aria-hidden="true" />
         </div>
         <div className={styles.details}>{instructorNames}</div>
       </div>
-      {isVC && isEnrolled && (
+      {isVC && (isEnrolled || isParentFlexLP) && (
         <>
           {loResource.sessionRecordingInfo?.length > 0 && (
-            <div className={styles.metadata}>
-              <div className={styles.spectrumIcon}>
-                <Link aria-hidden="true" />
-              </div>
-              <div className={styles.sessionRecordingInfo}>
-                <span>
-                  {formatMessage({
-                    id: "alm.overview.vc.sessionRecordingInfo",
-                    defaultMessage: "Session Recordings",
-                  })}
-                </span>
-                <span>
-                  <a
-                    className={styles.details}
-                    href={loResource.sessionRecordingInfo[0].url}
-                    target="_blank"
-                    rel="noreferrer">
-                    {loResource.sessionRecordingInfo[0].name}
-                  </a>
-                </span>
+            <>
+              <div className={styles.metadata}>
+                <div className={styles.spectrumIcon}>
+                  <MovieCamera aria-hidden="true" />
+                </div>
+                <div className={styles.sessionRecordingInfo}>
+                  <span>
+                    {formatMessage({
+                      id: "alm.overview.vc.sessionRecordingInfo",
+                      defaultMessage: "Session Recordings",
+                    })}
+                  </span>
+                  {loResource.sessionRecordingInfo.map(
+                    (sessionRecordingInfo) => {
+                      return (
+                        <>
+                          <span>
+                            <a
+                              className={styles.details}
+                              href={sessionRecordingInfo.url}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              {sessionRecordingInfo.name}
+                            </a>
+                          </span>
 
-                <span>
-                  {formatMessage({
-                    id: "alm.overview.vc.sessionRecordingPasscode",
-                    defaultMessage: "Passcode",
-                  })}
-                  : {loResource.sessionRecordingInfo[0].passcode}
-                </span>
+                          <span>
+                            {formatMessage({
+                              id: "alm.overview.vc.sessionRecordingPasscode",
+                              defaultMessage: "Passcode",
+                            })}
+                            : {sessionRecordingInfo.passcode}
+                          </span>
+                        </>
+                      );
+                    }
+                  )}
+                </div>
               </div>
-            </div>
+              {showSessionTranscript() && (
+                <div className={styles.metadata}>
+                  <div className={styles.spectrumIcon}>
+                    <RailBottom aria-hidden="true" />
+                  </div>
+                  <div className={styles.sessionRecordingInfo}>
+                    <span>
+                      {formatMessage({
+                        id: "alm.overview.vc.sessionRecordingInfoTranscripts",
+                        defaultMessage: "Session Recordings Transcripts",
+                      })}
+                    </span>
+                    {loResource.sessionRecordingInfo.map(
+                      (sessionRecordingInfo) =>
+                        sessionRecordingInfo.transcriptUrl && (
+                          <span>
+                            <a
+                              href={sessionRecordingInfo.transcriptUrl}
+                              download
+                              target={
+                                getALMConfig().handleLinkedInContentExternally
+                                  ? ""
+                                  : "_blank"
+                              }
+                              className={styles.details}
+                              rel="noreferrer"
+                            >
+                              {GetTranslationReplaced(
+                                `alm.overview.vc.sessionRecordingInfoTranscriptsName`,
+                                `${sessionRecordingInfo.name}`
+                              )}
+                              {/* {sessionRecordingInfo.name}_transcript */}
+                            </a>
+                          </span>
+                        )
+                    )}
+                  </div>
+                </div>
+              )}
+            </>
           )}
           <div className={styles.metadata}>
             <div className={styles.spectrumIcon}>
@@ -694,7 +1203,8 @@ const getSessionsTemplate = (
               className={styles.details}
               href={resource.location}
               target="_blank"
-              rel="noreferrer">
+              rel="noreferrer"
+            >
               {GetTranslation("alm.overview.vc.url", true)}
             </a>
           </div>
@@ -716,7 +1226,8 @@ const getSessionsTemplate = (
                 <a
                   className={styles.roomUrl}
                   href={resource.room.url}
-                  target="_blank">
+                  target="_blank"
+                >
                   {formatMessage({
                     id: "alm.overview.locationDetails",
                     defaultMessage: "Location Details",

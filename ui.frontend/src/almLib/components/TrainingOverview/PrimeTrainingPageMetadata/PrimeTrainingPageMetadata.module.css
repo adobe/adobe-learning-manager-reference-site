@@ -36,22 +36,10 @@ governing permissions and limitations under the License.
   flex: 1 1 auto;
 }
 .previewButton {
-  display: flex;
-  box-sizing: border-box;
-  border-radius: 24px;
-  font-size: var(--prime-font-size-14);
-  font-weight: 400;
-  min-height: 28px;
-  min-width: 50px;
-  padding: 0 15px;
-  border: 1.5px solid var(--prime-color-white);
-  color: var(--prime-color-primary);
-  border-color: var(--prime-color-primary);
   width: 100%;
-  color: var(--prime-color-black);
-  justify-content: center;
+  display: flex !important;
+  justify-content: center !important;
   align-items: center;
-  font-family: "source-sans-pro";
 }
 
 .preBmSeperator {
@@ -96,6 +84,7 @@ governing permissions and limitations under the License.
 .sendIcon {
   margin-top: 8px;
 }
+
 
 .icon,
 .instanceIcon {
@@ -145,7 +134,7 @@ governing permissions and limitations under the License.
 .bottomContainer {
   margin-top: 2rem;
   min-width: 280px;
-  position: absolute;
+  width: 100%;
 }
 .unenrollButton {
   color: var(--prime-color-black);
@@ -154,8 +143,8 @@ governing permissions and limitations under the License.
   width: 100%;
   font-family: "source-sans-pro";
 }
-.instanceName{
-  color:var(--prime-color-nc3);
+.instanceName {
+  color: var(--prime-color-nc3);
 }
 .errorText {
   font-size: var(--prime-font-size-14);
@@ -338,6 +327,34 @@ governing permissions and limitations under the License.
   text-align: center;
 }
 
+.dialogBoxMessage {
+  padding-bottom: 10px;
+}
+
+.dialogBoxColon {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.warningIcon {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  vertical-align: bottom;
+}
+
+.courseListInFlexLp{
+  margin-bottom: 15px;
+}
+
+.flexLpDialogList{
+  padding-left: 15px;
+}
+
+.notSelected {
+  color: #f9d171;
+}
+
 @media screen and (max-width: 450px) {
   .container .commonContainer {
     padding-bottom: 10px;
@@ -355,7 +372,10 @@ governing permissions and limitations under the License.
   .bookMarkIcon {
     display: none;
   }
-  .crsStsButtonPreBookSection {
+  .preBmSeperator{
+    display: none;
+  }
+  .bookmarkContainer{
     display: none;
   }
   .previewButton {

@@ -17,8 +17,10 @@ import { useTrainingPage } from "../../../hooks/catalog/useTrainingPage";
 import {
   CERTIFICATION,
   COMPLETED,
+  CONTENT,
   COURSE,
   ENROLLED,
+  FLEX_LP_COURSE_INFO,
   LEARNING_PROGRAM,
   PENDING_APPROVAL,
   REJECTED,
@@ -28,12 +30,28 @@ import {
 import {
   getALMConfig,
   getALMObject,
+  getALMUser,
   getPathParams,
+  getQueryParamsFromUrl,
 } from "../../../utils/global";
-import { getEnrolledInstancesCount, getEnrollment, hasSingleActiveInstance, isEnrolledInAutoInstance } from "../../../utils/hooks";
+import {
+  filterLoReourcesBasedOnResourceType,
+  findCoursesInsideFlexLP,
+  findRetiredCoursesInsideFlexLP,
+  getDuration,
+  getEnrolledInstancesCount,
+  getEnrollment,
+  hasSingleActiveInstance,
+  isEnrolledInAutoInstance,
+} from "../../../utils/hooks";
 import { SOCIAL_CANCEL_SVG } from "../../../utils/inline_svg";
 import { checkIsEnrolled } from "../../../utils/overview";
-import { getPreferredLocalizedMetadata } from "../../../utils/translationService";
+import {
+  getPreferredLocalizedMetadata,
+  GetTranslation,
+  GetTranslationReplaced,
+  GetTranslationsReplaced,
+} from "../../../utils/translationService";
 import {
   cancelUploadFile,
   getUploadInfo,
@@ -47,10 +65,29 @@ import { PrimeTrainingItemContainerHeader } from "../PrimeTrainingItemContainerH
 import { PrimeTrainingOverview } from "../PrimeTrainingOverview";
 import { PrimeTrainingOverviewHeader } from "../PrimeTrainingOverviewHeader";
 import { PrimeTrainingPageMetadata } from "../PrimeTrainingPageMetadata";
+import { convertSecondsToTimeText } from "../../../utils/dateTime";
 import styles from "./PrimeTrainingPage.module.css";
+import {
+  EXTENSION_LAUNCH_TYPE,
+  getExtensionAppUrl,
+  getParsedJwt,
+  InvocationType,
+  openExtensionInNewTab,
+  openExtensionInSameTab,
+  removeExtraQPFromExtension,
+} from "../../../utils/native-extensibility";
+import { useAlert } from "../../../common/Alert/useAlert";
+import { AlertType } from "../../../common/Alert/AlertDialog";
+import { ALMExtensionIframeDialog } from "../../Common/ALMExtensionIframeDialog";
+import { useAccount } from "../../../hooks";
+import { PrimeExtension, PrimeSections } from "../../../models";
+import Info from "@spectrum-icons/workflow/Info";
+import Refresh from "@spectrum-icons/workflow/Refresh";
+import { RadioGroup, Radio } from "@adobe/react-spectrum";
 
 const PrimeTrainingPage = (props: any) => {
   const config = getALMConfig();
+  const { account } = useAccount();
   let trainingOverviewPath = config.trainingOverviewPath;
 
   let pathParams = getPathParams(trainingOverviewPath, [
@@ -59,7 +96,7 @@ const PrimeTrainingPage = (props: any) => {
   ]);
   let trainingId = pathParams[TRAINING_ID_STR];
   let trainingInstanceId = pathParams[TRAINING_INSTANCE_ID_STR]?.split("?")[0];
-
+  const { formatMessage, locale } = useIntl();
   const {
     name,
     description,
@@ -92,11 +129,95 @@ const PrimeTrainingPage = (props: any) => {
     downloadNotes,
     sendNotesOnMail,
     lastPlayingLoResourceId,
-    waitlistPosition
+    waitlistPosition,
+    sendInstanceId,
+    selectedInstanceInfo,
+    flexLpEnrollHandler,
+    setInstancesForFlexLPOnLoad,
+    setSelectedLoList,
+    selectedLoList
   } = useTrainingPage(trainingId, trainingInstanceId);
 
   const [isInstancePageLoading, setIsInstancePageLoading] = useState(true);
-  
+  const [almAlert] = useAlert();
+  //extesnion APP
+  const [activeExtension, setActiveExtension] = useState<PrimeExtension>();
+  const [extensionAppIframeUrl, setExtensionAppIframeUrl] = useState("");
+
+  useEffect(() => {
+    async function handleExtensionApp() {
+      if (activeExtension) {
+        const userResponse = await getALMUser();
+        const userId = userResponse?.user?.id;
+        let requestObj: any = {
+          userId,
+          loId: training?.id,
+          loInstanceId: trainingInstance?.id,
+          authToken: getALMObject().getAccessToken(),
+          locale,
+          invokePoint: activeExtension.invocationType,
+        };
+        const { launchType, invocationType } = activeExtension;
+        if (invocationType === InvocationType.LEARNER_ENROLL) {
+          requestObj.callbackUrl = encodeURIComponent(window.location.href);
+        }
+
+        if (launchType === EXTENSION_LAUNCH_TYPE.IN_APP) {
+          const url = getExtensionAppUrl(activeExtension.url, requestObj);
+          setExtensionAppIframeUrl(url.href);
+        } else if (launchType === EXTENSION_LAUNCH_TYPE.SAME_TAB) {
+          openExtensionInSameTab(activeExtension.url, requestObj);
+        } else if (launchType === EXTENSION_LAUNCH_TYPE.NEW_TAB) {
+          openExtensionInNewTab(activeExtension.url, requestObj);
+          setActiveExtension(undefined);
+        }
+      }
+    }
+    handleExtensionApp();
+  }, [activeExtension, training?.id, trainingInstance?.id]);
+
+  useEffect(() => {
+    if (training?.id) {
+      //Note This settimeout is added to handle the extension app scenario
+      setTimeout(() => {
+        const queryParams = getQueryParamsFromUrl();
+        if (queryParams?.extToken) {
+          removeExtraQPFromExtension();
+          const token = getParsedJwt(queryParams.extToken);
+          if (token?.invokePoint === InvocationType.LEARNER_ENROLL) {
+            const lpCourseInstancesinfo =
+              getALMObject().storage.getItem(FLEX_LP_COURSE_INFO) || {};
+            setInstancesForFlexLPOnLoad(lpCourseInstancesinfo);
+            if (token.extResult == 1) {
+              const headers = {
+                "X-acap-extension-token": queryParams.extToken,
+              };
+              if (trainingInstance && trainingInstance.isFlexible) {
+                const enroll: any = {};
+                Object.keys(lpCourseInstancesinfo)?.forEach((key) => {
+                  enroll[key] = lpCourseInstancesinfo[key].instanceId;
+                });
+                flexLpEnrollHandler({ headers, body: { enroll } });
+              } else {
+                enrollmentHandler({ headers, allowMultiEnrollment: training.multienrollmentEnabled });
+              }
+              return;
+            }
+            getALMObject().storage.removeItem(FLEX_LP_COURSE_INFO);
+
+            almAlert(
+              true,
+              `${GetTranslation("alm.enrollment.failed.for.extension")} ${
+                token?.extError || ""
+              }`,
+              AlertType.error
+            );
+          }
+        }
+      }, 0);
+    }
+  }, [training?.id, trainingInstance]);
+
   // Navigating to instance page in case of multiple instances
   useEffect(() => {
     if (training) {
@@ -105,22 +226,29 @@ const PrimeTrainingPage = (props: any) => {
 
       //Auto Instance scenario
       const isAutoInstanceEnrolled = isEnrolledInAutoInstance(training);
-      const redirectToTrainingPage = enrollmentCount === 1 || !hasMultipleInstances || isAutoInstanceEnrolled;
-      const urlContainsInstanceId = window.location.href.includes(`/${TRAINING_INSTANCE_ID_STR}`);
+      const redirectToTrainingPage =
+        enrollmentCount === 1 ||
+        !hasMultipleInstances ||
+        isAutoInstanceEnrolled;
+      const urlContainsInstanceId = window.location.href.includes(
+        `/${TRAINING_INSTANCE_ID_STR}`
+      );
 
       //Enrollments not coming under LP's instances, fix later
-      if (!urlContainsInstanceId && (
-        (training.loType === COURSE && !redirectToTrainingPage) ||
-        (training.loType === LEARNING_PROGRAM && hasMultipleInstances && !training.enrollment)
-        )) {
-          getALMObject().navigateToInstancePage(training.id);
-          return;
-        }
-        setIsInstancePageLoading(false);
+      if (
+        !urlContainsInstanceId &&
+        ((training.loType === COURSE && !redirectToTrainingPage) ||
+          (training.loType === LEARNING_PROGRAM &&
+            hasMultipleInstances &&
+            !training.enrollment))
+      ) {
+        getALMObject().navigateToInstancePage(training.id);
+        return;
       }
-    }, [training?.id]);
+      setIsInstancePageLoading(false);
+    }
+  }, [training?.id]);
 
-  const { formatMessage, locale } = useIntl();
   const loName = name;
   const inputRef = useRef<null | HTMLInputElement>(null);
   const state = store.getState();
@@ -130,6 +258,64 @@ const PrimeTrainingPage = (props: any) => {
     state.fileUpload.uploadProgress
   );
 
+  const [timeBetweenAttemptEnabled, setTimeBetweenAttemptEnabled] =
+    useState(false);
+
+  const [showAll, setShowAll] = useState(true);
+  const [selectedCourses, setSelectedCourses] = useState({} as any);
+  const [showUnselectedLOs, setShowUnselectedLOs] = useState(false);
+
+  function coursesViewHandler(value: string) {
+    if (value === "yes") {
+      setSelectedCourses({});
+      setShowUnselectedLOs(false);
+    } else {
+      setSelectedCourses(selectedInstanceInfo);
+      setShowUnselectedLOs(true);
+    }
+    setSelectedLoList(selectedInstanceInfo);
+  }
+
+  const areAllInstancesSelectedHandler = () => {
+    if (training?.id) {
+      const areAllCoursesSelected =
+        Object.keys(selectedInstanceInfo)?.length === coursesInsideFlexLPCount;
+      if (areAllCoursesSelected && showAll) {
+        clearInstanceSelected();
+        setShowAll(false);
+      }
+      return areAllCoursesSelected;
+    }
+  };
+
+  function setInstanceSelected() {
+    let radioButton2 = document.getElementById(
+      "RadioButton2"
+    ) as HTMLInputElement;
+    if (radioButton2?.checked) {
+      setSelectedCourses(selectedInstanceInfo);
+      setSelectedLoList(selectedInstanceInfo);
+    }
+  }
+
+  function clearInstanceSelected() {
+    setSelectedCourses({});
+    setShowUnselectedLOs(false);
+  }
+
+  const timeDuration = () => {
+    if (training?.id) {
+      if (areAllInstancesSelectedHandler()) {
+        return training.duration;
+      }
+      let sum = 0;
+      Object.values(selectedInstanceInfo)?.forEach((items: any) => {
+        sum += items.courseDuration;
+      });
+      return sum;
+    }
+    return 0;
+  };
 
   if (isLoading || !training || isInstancePageLoading) {
     return <ALMLoader classes={styles.loader} />;
@@ -140,6 +326,12 @@ const PrimeTrainingPage = (props: any) => {
   const prequisiteConstraints = training.prequisiteConstraints;
   const enrollment = getEnrollment(training, trainingInstance);
   const isEnrolled = checkIsEnrolled(enrollment);
+  const isFlexible = trainingInstance.isFlexible;
+
+  //FLEX LP list initialisation
+  const allCoursesInsideFlexLP = findCoursesInsideFlexLP(training, isFlexible);
+  const coursesInsideFlexLPCount=allCoursesInsideFlexLP.length;
+  const retiredCoursesInsideFlexLP = findRetiredCoursesInsideFlexLP(training, isFlexible);
 
   const startFileUpload = () => {
     (inputRef?.current as HTMLInputElement)?.click();
@@ -262,9 +454,78 @@ const PrimeTrainingPage = (props: any) => {
     );
   };
 
+  const iframeCloseHandler = (event: any) => {
+    setExtensionAppIframeUrl("");
+    setActiveExtension(undefined);
+    if (typeof event === "string" && event.length) {
+      almAlert(
+        true,
+        `${formatMessage({
+          id: "alm.enrollment.failed.for.extension",
+        })} ${event || ""}`,
+        AlertType.error
+      );
+    }
+  };
+
+  const iframeProceedHandler = (token: string) => {
+    const headers = {
+      "X-acap-extension-token": token,
+    };
+    enrollmentHandler({ headers , allowMultiEnrollment: training.multienrollmentEnabled});
+    if (trainingInstance && trainingInstance.isFlexible) {
+      const lpCourseInstancesinfo =
+        getALMObject().storage.getItem(FLEX_LP_COURSE_INFO) || {};
+      setInstancesForFlexLPOnLoad(lpCourseInstancesinfo);
+      const enroll: any = {};
+      Object.keys(lpCourseInstancesinfo)?.forEach((key) => {
+        enroll[key] = lpCourseInstancesinfo[key].instanceId;
+      });
+      flexLpEnrollHandler({ headers, body: { enroll } });
+    } else {
+      enrollmentHandler({ headers, allowMultiEnrollment: training.multienrollmentEnabled });
+    }
+    setExtensionAppIframeUrl("");
+    setActiveExtension(undefined);
+    getALMObject().storage.removeItem(FLEX_LP_COURSE_INFO);
+  };
+
   const showCertProof = () => {
     return training.loType && training.isExternal && enrollment;
   };
+  
+
+  const isFullSectionSelected = (section: PrimeSections, index: number)=>{
+
+    if(!showUnselectedLOs){
+      return false;
+    }
+
+    const courseIdList = Object.keys(selectedLoList);
+    let allSelected = false;
+
+    if(courseIdList.length!==0){
+
+      allSelected = section.loIds.every((id)=>{
+
+        if(courseIdList.includes(id)){
+          return true;
+        }
+  
+        const subLo = allCoursesInsideFlexLP.find((subLO) =>{
+            return subLO.id === id;
+        });
+  
+        if(subLo?.enrollment && subLo.enrollment.state!=COMPLETED && subLo.enrollment.loInstance){
+          return true;
+        }
+  
+      });
+
+    }
+    return allSelected;
+  }
+
 
   return (
     <ALMErrorBoundary>
@@ -280,6 +541,8 @@ const PrimeTrainingPage = (props: any) => {
             enrollment={enrollment}
             training={training}
             updateBookMark={updateBookMark}
+            instanceSummary={instanceSummary}
+            isFlexible={isFlexible}
           />
 
           <div className={styles.pageContainer}>
@@ -292,13 +555,83 @@ const PrimeTrainingPage = (props: any) => {
                   className={`${styles.overview} ql-editor`}
                 ></div>
               )}
-              {/* <span className={styles.duration}>
-                {formatMessage(
-                  { id: "alm.overview.total.duration" },
-                  { 0: convertSecondsToTimeText(training.duration) }
+              <span className={styles.duration}>
+                {!isFlexible ? (
+                  <>
+                    {formatMessage(
+                      { id: "alm.overview.total.duration" },
+                      { 0: convertSecondsToTimeText(training.duration) }
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {formatMessage(
+                      { id: "alm.overview.total.duration" },
+                      { 0: convertSecondsToTimeText(timeDuration()) }
+                    )}
+                  </>
                 )}
-              </span> */}
-
+              </span>
+              {isFlexible &&
+                !areAllInstancesSelectedHandler() && (
+                  <section className={styles.coursesViewMenu}>
+                    <span className={styles.info}>
+                      <Info />
+                    </span>
+                    <span>
+                      <div className={styles.script}>
+                        {GetTranslation(
+                          "alm.training.flexLp.courseViewLable",
+                          true
+                        )}
+                      </div>
+                    </span>
+                    <div className={styles.radioGroup}>
+                      <RadioGroup
+                        defaultValue="yes"
+                        onChange={coursesViewHandler}
+                        orientation="horizontal"
+                        isEmphasized
+                      >
+                        <Radio id="RadioButton1" value="yes">
+                          {GetTranslationsReplaced(
+                            "alm.training.flexLp.showAllView",
+                            { x: coursesInsideFlexLPCount.toString() },
+                            true
+                          )}
+                        </Radio>
+                        <Radio id="RadioButton2" value="no">
+                          {GetTranslationsReplaced(
+                            "alm.training.flexLp.unselectedView",
+                            {
+                              x:
+                              coursesInsideFlexLPCount -
+                                Object.keys(selectedInstanceInfo).length- retiredCoursesInsideFlexLP.length,
+                            },
+                            true
+                          )}
+                        </Radio>
+                      </RadioGroup>
+                    </div>
+                    <button
+                      className={styles.refreshDiv}
+                      aria-label={GetTranslation(
+                        "alm.training.flexlp.refreshArialLabel",
+                        true
+                      )}
+                      tabIndex={0}
+                      onClick={setInstanceSelected}
+                      title={GetTranslation(
+                        "alm.training.flexlp.refreshArialLabel",
+                        true
+                      )}
+                    >
+                      <span className={styles.refresh}>
+                        <Refresh />
+                      </span>
+                    </button>
+                  </section>
+                )}
               {showCertProof() && (
                 <>
                   <div className={styles.externalCertUploadInfo}>
@@ -385,6 +718,7 @@ const PrimeTrainingPage = (props: any) => {
                       isParentLOEnrolled={isEnrolled}
                       parentLoName={loName}
                       key={name}
+                      isFlexible={isFlexible}
                     />
                   </section>
                 );
@@ -405,6 +739,8 @@ const PrimeTrainingPage = (props: any) => {
                   downloadNotes={downloadNotes}
                   sendNotesOnMail={sendNotesOnMail}
                   lastPlayingLoResourceId={lastPlayingLoResourceId}
+                  setTimeBetweenAttemptEnabled={setTimeBetweenAttemptEnabled}
+                  timeBetweenAttemptEnabled={timeBetweenAttemptEnabled}
                 />
               )}
               {loType === CERTIFICATION && (
@@ -416,10 +752,28 @@ const PrimeTrainingPage = (props: any) => {
                   isParentLOEnrolled={isEnrolled}
                   parentLoName={loName}
                   isPartOfLP={loType === CERTIFICATION}
+                  setTimeBetweenAttemptEnabled={setTimeBetweenAttemptEnabled}
+                  timeBetweenAttemptEnabled={timeBetweenAttemptEnabled}
+                  sendInstanceId={sendInstanceId}
+                  selectedCourses={selectedCourses}
+                  isFlexible={isFlexible}
+                  notes={notes}
+                  updateNote={updateNote}
+                  deleteNote={deleteNote}
+                  downloadNotes={downloadNotes}
+                  sendNotesOnMail={sendNotesOnMail}
+                  lastPlayingLoResourceId={lastPlayingLoResourceId}
+                  showUnselectedLOs={showUnselectedLOs}
                 />
               )}
               {loType === LEARNING_PROGRAM &&
                 sections.map((section, index) => {
+
+                  //Flex LP case - If all LO instances inside section is either selected or completed 
+                  const fullSectionSelected = isFullSectionSelected(section, index);
+                  if(fullSectionSelected){
+                    return;
+                  }
                   const trainingIds = section.loIds;
                   const { name } = getPreferredLocalizedMetadata(
                     section.localizedMetadata,
@@ -481,6 +835,21 @@ const PrimeTrainingPage = (props: any) => {
                         updateFileSubmissionUrl={updateFileSubmissionUrl}
                         isParentLOEnrolled={isEnrolled}
                         parentLoName={loName}
+                        setTimeBetweenAttemptEnabled={
+                          setTimeBetweenAttemptEnabled
+                        }
+                        timeBetweenAttemptEnabled={timeBetweenAttemptEnabled}
+                        sendInstanceId={sendInstanceId}
+                        selectedCourses={selectedCourses}
+                        isFlexible={isFlexible}
+                        selectedInstanceInfo={selectedInstanceInfo}
+                        notes={notes}
+                        updateNote={updateNote}
+                        deleteNote={deleteNote}
+                        downloadNotes={downloadNotes}
+                        sendNotesOnMail={sendNotesOnMail}
+                        lastPlayingLoResourceId={lastPlayingLoResourceId}
+                        showUnselectedLOs={showUnselectedLOs}
                       />
                     </section>
                   );
@@ -508,10 +877,31 @@ const PrimeTrainingPage = (props: any) => {
                 updateRating={updateRating}
                 updateBookMark={updateBookMark}
                 waitlistPosition={waitlistPosition}
+                setActiveExtension={setActiveExtension}
+                timeBetweenAttemptEnabled={timeBetweenAttemptEnabled}
+                selectedInstanceInfo={selectedInstanceInfo}
+                flexLpEnrollHandler={flexLpEnrollHandler}
+                isFlexible={isFlexible}
+                areAllInstancesSelectedHandler={areAllInstancesSelectedHandler}
+                lastPlayingLoResourceId={lastPlayingLoResourceId}
               />
             </div>
           </div>
         </div>
+        {activeExtension && extensionAppIframeUrl?.length ? (
+          <ALMExtensionIframeDialog
+            href={extensionAppIframeUrl}
+            classes="extensionDialog"
+            onClose={iframeCloseHandler}
+            onProceed={iframeProceedHandler}
+            action={InvocationType.LEARNER_ENROLL}
+            width={`${activeExtension.width}`}
+            height={`${activeExtension.height}`}
+            extension={activeExtension}
+          ></ALMExtensionIframeDialog>
+        ) : (
+          ""
+        )}
       </Provider>
     </ALMErrorBoundary>
   );

@@ -1,0 +1,94 @@
+@import "../../../styles/variables.css";
+
+.dashboardcontainer {
+  background: var(--prime-color-nc4);
+  margin: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 80px;
+  height: 100vh;
+  overflow-x: auto;
+  padding-top: 57px;
+  display: block;
+  box-sizing: inherit;
+  overflow-y: auto;
+}
+
+.pagecontainer {
+  margin: 0 auto;
+  padding: 0 15px;
+  box-sizing: inherit;
+  font-weight: normal;
+}
+
+@media screen and (min-width: 1050px) {
+  .pagecontainer {
+    width: 1050px;
+  }
+}
+
+.heading {
+  color: var(--prime-color-nc3);
+  font-weight: normal;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 29px;
+  margin: 20px 0 10px;
+  font-weight: 400;
+  line-height: 1.1;
+  font-style: normal;
+  font-family: var(--prime-font-family);
+}
+
+.badgebody {
+  background-color: var(--prime-color-white);
+  border: 1px solid var(--prime-color-nc6);
+  border-radius: 5px;
+  margin-top: 25px;
+  min-height: 300px;
+  padding: 10px 25px;
+}
+
+.headingContainer {
+  box-sizing: inherit;
+  display: block;
+}
+
+.text {
+  color: var(--prime-color-nc3);
+  font-family: var(--prime-font-family);
+}
+
+.badgecontainer {
+  color: var(--prime-color-nc3);
+  font-family: var(--prime-font-family);
+}
+
+.listitem {
+  list-style: none;
+}
+
+.rightaligned {
+  float: right;
+}
+
+.rightpadding {
+  padding-right: 10px;
+}
+
+.flex {
+  display: flex;
+}
+
+.loader {
+  margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+  .text {
+    font-size: 14px;
+  }
+  .heading {
+    font-size: 25px;
+  }
+}

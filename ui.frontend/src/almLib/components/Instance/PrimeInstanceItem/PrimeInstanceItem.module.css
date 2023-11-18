@@ -26,9 +26,10 @@ governing permissions and limitations under the License.
 }
 .actionWrapper {
   width: 15%;
-  align-items: flex-start;
+  align-items: end;
   justify-content: center;
   display: flex;
+  flex-direction: column;
 }
 
 .priceWrapper {
@@ -121,6 +122,19 @@ governing permissions and limitations under the License.
   background-color: var(--prime-color-white);
 }
 
+.extensionLabel {
+  font-size: var(--prime-font-size-14);
+  line-height: 18px;
+  letter-spacing: 0px;
+  color: var(--prime-color-primary);
+  opacity: 1;
+  margin: 15px 0 5px 0;
+  display: inline-flex;
+  text-decoration: none;
+  cursor: pointer;
+  word-break: break-word;
+}
+
 @media screen and (max-width: 450px) {
   .instanceListItem {
     background: var(--prime-color-nc4);
@@ -128,6 +142,7 @@ governing permissions and limitations under the License.
     padding: 18px 20px;
     flex-direction: column;
     margin-bottom: 3px;
+    font-size: 14px;
   }
   .instanceNameWrapper {
     width: 60%;
@@ -142,9 +157,12 @@ governing permissions and limitations under the License.
     width: 100%;
   }
   .actionWrapper {
-    position: absolute;
-    right: 20px;
-    width: auto;
+    width: 30%;
+    align-items: end;
+    display: flex;
+    align-self: flex-end;
+    position: relative;
+    top: -30px;
   }
   .actionWrapper button {
     min-height: 32px;
@@ -164,6 +182,19 @@ governing permissions and limitations under the License.
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  .extensionLabel {
+    margin: 15px 0 8px 0;
+    font-size: var(--prime-font-size-16);
+    line-height: 22px;
+    letter-spacing: 0px;
+    color: var(--prime-color-primary);
+    opacity: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-word;
+  }
   .instanceLoFormat {
     display: none;
   }
@@ -182,7 +213,6 @@ governing permissions and limitations under the License.
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
-    overflow: hidden;
   }
   .mobileOnly {
     display: inline-block;
@@ -201,5 +231,8 @@ governing permissions and limitations under the License.
   .progressContainer {
     padding-top: 0px;
     width: 100%;
+  }
+  .completionDateWrapper{
+    width: inherit;
   }
 }

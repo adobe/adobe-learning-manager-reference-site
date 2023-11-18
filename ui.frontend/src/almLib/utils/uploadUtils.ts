@@ -10,10 +10,11 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import Evaporate from "evaporate";
-import sparkMD5 from 'spark-md5';
+
 import { sha256 as SHA256 } from 'js-sha256';
 import store from "../../store/APIStore";
 import { PrimeUploadInfo } from "../models/PrimeModels";
+
 import {
   RESET_UPLOAD,
   SET_UPLOAD_NAME,
@@ -21,6 +22,8 @@ import {
 } from "../store/actions/fileUpload/actionTypes";
 import { getALMConfig, getALMObject } from "./global";
 import { RestAdapter } from "./restAdapter";
+
+const sparkMD5 =require('spark-md5');
 
 let evaporateInstance: any;
 let awsCredJsonObj: PrimeUploadInfo = {

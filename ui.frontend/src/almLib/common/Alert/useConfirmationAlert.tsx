@@ -12,7 +12,7 @@ let secondaryActionHandler: Function;
 const useConfirmationAlert = (): [
   (
     title: String,
-    body: String,
+    body: any,
     primaryActionLabel: String,
     secondaryActionLabel?: String,
     onPrimaryAction?: Function,
@@ -23,7 +23,7 @@ const useConfirmationAlert = (): [
 
   const almConfirmationAlert = (
     title: String,
-    body: String,
+    body: any,
     primaryActionLabel: String,
     secondaryActionLabel?: String,
     onPrimaryAction?: Function,

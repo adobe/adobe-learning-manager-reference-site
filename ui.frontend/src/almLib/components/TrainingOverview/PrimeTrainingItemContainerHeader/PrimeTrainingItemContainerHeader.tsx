@@ -17,15 +17,16 @@ import {
   PrimeLearningObjectInstance,
 } from "../../../models/PrimeModels";
 import { COMPLETED } from "../../../utils/constants";
-import { convertSecondsToTimeText } from "../../../utils/dateTime";
+import { calculateSecondsToTime, convertSecondsToTimeText } from "../../../utils/dateTime";
 import { getALMObject } from "../../../utils/global";
-import { getEnrolledInstancesCount, hasSingleActiveInstance, pushToParentPathStack, useCardIcon } from "../../../utils/hooks";
-import { GetTranslation } from "../../../utils/translationService";
+import {
+  getEnrolledInstancesCount,
+  hasSingleActiveInstance,
+  pushToParentPathStack,
+  useCardIcon,
+} from "../../../utils/hooks";
 import styles from "./PrimeTrainingItemContainerHeader.module.css";
 import Visibility from "@spectrum-icons/workflow/Visibility";
-import { checkIsEnrolled } from "../../../utils/overview";
-import { CardBgStyle } from "../../../models/custom";
-import { useEffect, useState } from "react";
 import { debounce } from "../../../utils/catalog";
 
 const PrimeTrainingItemContainerHeader: React.FC<{
@@ -42,6 +43,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
   isPreviewEnabled?: boolean;
   isParentLOEnrolled?: boolean;
   parentLoName?: string;
+  isFlexible: boolean;
 }> = (props) => {
   const {
     name,
@@ -56,6 +58,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
     isPreviewEnabled = false,
     isParentLOEnrolled = false,
     parentLoName,
+    isFlexible,
   } = props;
   const { formatMessage } = useIntl();
   const authorNames = training.authorNames?.length
@@ -75,7 +78,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
 
     // For prerequisiteLOs never open the Launch Player.
     if (event.target?.tagName !== "A" && !isprerequisiteLO) {
-      if (training.enrollment && launchPlayerHandler != undefined) {
+      if (training.enrollment && launchPlayerHandler !== undefined) {
         launchPlayerHandler({ id: training.id });
       }
     } else {
@@ -83,13 +86,17 @@ const PrimeTrainingItemContainerHeader: React.FC<{
       const hasMultipleInstances = !hasSingleActiveInstance(training);
 
       let parentLoId = window.location.href.split("trainingId/")[1];
-      let parentDetails = parentLoName? parentLoId + "::" + parentLoName: "";
+      let parentDetails = parentLoName ? parentLoId + "::" + parentLoName : "";
       pushToParentPathStack(parentDetails);
 
-      if ((!training.enrollment || (training.multienrollmentEnabled && getEnrolledInstancesCount(training)>1)) && hasMultipleInstances) {
+      if (
+        (!training.enrollment ||
+          (training.multienrollmentEnabled &&
+            getEnrolledInstancesCount(training) > 1)) &&
+        hasMultipleInstances
+      ) {
         getALMObject().navigateToInstancePage(training.id);
-      }
-      else{
+      } else {
         getALMObject().navigateToTrainingOverviewPage(
           training.id,
           trainingInstance.id
@@ -120,11 +127,11 @@ const PrimeTrainingItemContainerHeader: React.FC<{
       className={`${styles.headerContainer} ${
         isPartOfLP ? styles.isPartOfLP : ""
       }`}
-      onClick={loClickHandler}>
+    >
       {/* <h2 className={styles.courseInfoHeader}>{name} </h2> */}
       <div className={styles.metadata}>
         <div className={styles.metadataContents}>
-          <div className={styles.authorNames}>{loFormat}</div>
+          <div className={styles.authorNames}>{formatMessage({ id: `alm.text.${loType}`})}</div>
           {isprerequisiteLO && !loType ? (
             ""
           ) : authorNames.length ? (
@@ -140,7 +147,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
           ) : training.duration ? (
             <>
               <div className={styles.metadata__separator}></div>
-              <div>{convertSecondsToTimeText(training.duration)}</div>
+              <div>{calculateSecondsToTime(training.duration)}</div>
             </>
           ) : (
             ""
@@ -167,15 +174,26 @@ const PrimeTrainingItemContainerHeader: React.FC<{
         ) : (
           ""
         )}
-        {statusText && <div className={styles.status}>{statusText}</div>}
+        {isFlexible ? (
+          <>
+            {statusText && isParentLOEnrolled && (
+              <div className={styles.status}>{statusText}</div>
+            )}
+          </>
+        ) : (
+          <>{statusText && <div className={styles.status}>{statusText}</div>}</>
+        )}
       </div>
       <div className={styles.trainingDetailsContainer}>
-        <div className={styles.card} style={{ ...cardBgStyle }}></div>
+        <a className={styles.card} style={{ ...cardBgStyle }} onClick={loClickHandler}></a>
         <div className={styles.trainingDetials}>
           {/* Change it to button and role="link" */}
           <a
             aria-label={name}
-            className={styles.title}>
+            className={styles.title}
+            tabIndex={0}
+            role="link"
+            onClick={loClickHandler}>
             {name}
           </a>
           <p className={styles.description}>{overview || description}</p>

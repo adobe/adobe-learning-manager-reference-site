@@ -20,7 +20,7 @@ import {
 } from "../../store/actions/social/action";
 import { State } from "../../store/state";
 import { REPLY } from "../../utils/constants";
-import { getALMConfig } from "../../utils/global";
+import { addHttpsToHref, getALMConfig } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
 
@@ -62,13 +62,14 @@ export const useReplies = (commentId: any) => {
   const patchReply = useCallback(
     async (replyId: any, input: any) => {
       const baseApiUrl = getALMConfig().primeApiURL;
+      const updatedInput = addHttpsToHref(input);
       const body = {
         data: {
           type: REPLY,
           id: replyId,
           attributes: {
             state: "ACTIVE",
-            text: input,
+            text: updatedInput,
           },
         },
       };
@@ -91,12 +92,13 @@ export const useReplies = (commentId: any) => {
 
   const addReply = useCallback(async (commentId: any, input: any) => {
     const baseApiUrl = getALMConfig().primeApiURL;
+    const updatedInput = addHttpsToHref(input);
     const postBody = {
       data: {
         type: REPLY,
         attributes: {
           state: "ACTIVE",
-          text: input,
+          text: updatedInput,
         },
       },
     };

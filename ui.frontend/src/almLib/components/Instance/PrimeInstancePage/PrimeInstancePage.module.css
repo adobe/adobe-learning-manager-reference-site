@@ -25,10 +25,13 @@ governing permissions and limitations under the License.
 .courseInfoHeader span {
   font-weight: bold;
 }
+.courseInfoHeaderBlock{
+  width: 90%;
+}
 .courseDetailsContainer {
   display: flex;
   margin-bottom: 25px;
-  padding:60px 0 0 0;
+  padding: 60px 0 0 0;
 }
 
 .card {
@@ -39,6 +42,21 @@ governing permissions and limitations under the License.
   display: flex;
   align-items: flex-end;
 }
+
+.detailsContainer {
+  z-index: 1;
+  background: transparent;
+}
+
+.bottomBar {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  padding: 0px 10px;
+  color: var(--prime-color-white);
+  bottom: 0;
+}
+
 .band {
   background: rgba(255, 255, 255, 0.3);
   border-radius: 0px 0px 3px 3px;
@@ -67,6 +85,7 @@ governing permissions and limitations under the License.
 .instancesContainer {
   border: 2px solid #dbdbdb;
   opacity: 1;
+  margin-top: 50px;
 }
 .instancesHeaderSection {
   display: flex;
@@ -88,7 +107,6 @@ governing permissions and limitations under the License.
 }
 .dateWrapper {
   width: 25%;
-
 }
 .completionDateWrapper {
   width: 40%;
@@ -98,14 +116,12 @@ governing permissions and limitations under the License.
 }
 .locationWrapper {
   width: 25%;
-
 }
 .actionWrapper {
   width: 15%;
   align-items: flex-start;
-  justify-content: flex-start;
+  justify-content: flex-end;
   display: flex;
-  padding-left: 40px;
 }
 
 .instanceList {
@@ -115,7 +131,7 @@ governing permissions and limitations under the License.
   border-left: 2px solid #dbdbdb;
   border-right: 2px solid #dbdbdb;
   border-top: none;
-  border-bottom: 1px solid #dbdbdb;;
+  border-bottom: 1px solid #dbdbdb;
   background-color: var(--prime-color-white);
 }
 
@@ -149,6 +165,10 @@ governing permissions and limitations under the License.
   }
 }
 @media screen and (max-width: 450px) {
+
+  .pageContainerBackground {
+    width: 100% !important;
+  }
   .courseInfoHeader {
     margin: 30px 20px 20px 20px;
     line-height: 20px;
@@ -192,14 +212,55 @@ governing permissions and limitations under the License.
   .breadcrumbLink {
     color: var(--prime-color-black);
   }
+
+  .viewButtonShaded svg{
+    width: inherit;
+    height: inherit;
+  }
+
+  .viewButton svg{
+    width: inherit;
+    height: inherit;
+  }
+
+  .viewButtonBox{
+    margin-right: 5px;
+    position: inherit;
+  }
+
+  .primeTrainingsCards{
+    margin-left: 20px !important;
+  }
+
+  .instancePageHeading{
+    margin: 20px !important;
+    display: inline !important;
+  }
 }
 
 .loader {
   height: 200px;
 }
+
+.listItem * {
+  box-sizing: border-box;
+}
+
 .backgroundPage {
   width: 100%;
   background-color: var(--prime-color-nc4);
+}
+
+.primeTrainingsCards {
+  display: flex;
+  flex-wrap: wrap;
+  align-self: self-start;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  gap: 20px;
+  margin-top: 70px;
 }
 
 .breadcrumbParent {
@@ -224,4 +285,75 @@ governing permissions and limitations under the License.
 }
 .breadcrumbDesktop {
   display: flex;
+}
+
+.viewButton svg {
+  transform: scale(0.6);
+  fill: #777;
+  position: relative;
+  right: 8px;
+}
+
+.viewButtonShaded svg {
+  transform: scale(0.6);
+  fill: #777;
+  position: relative;
+  right: 8px;
+}
+
+.pageContainerBackground {
+  max-width: var(--prime-container-max-width-desktop);
+  margin: 0 auto;
+  min-height: 750px;
+}
+
+.viewButtonShaded {
+  width: 24px;
+  height: 28px;
+  cursor: pointer;
+  margin: 0;
+  background-color: var(--prime-color-nc2);
+  background-size: 15px;
+  border-color: transparent;
+  position: relative;
+  align-items: center;
+}
+
+.viewButtonBox {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  float: right;
+  width: 64px;
+  height: 32px;
+  background: no-repeat padding-box var(--prime-color-white);
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position:relative;
+  bottom: 30px;
+  /* margin-top: 0px; */
+}
+
+.instancesContainerBox {
+  background-color: var(--prime-color-white);
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-top: 25px;
+  min-height: 300px;
+  padding: 20px 25px;
+}
+
+.viewButton {
+  width: 24px;
+  height: 28px;
+  cursor: pointer;
+  margin: 0;
+  background-color: transparent;
+  border-color: transparent;
+  position: relative;
+  align-items: center;
+}
+
+.instancePageHeading{
+  display: none;
 }

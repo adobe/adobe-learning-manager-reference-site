@@ -55,7 +55,6 @@ const PrimeTrainingCard: React.FC<{
     jobAidRemoveToListMsg,
     nameClickHandler,
     isEnrolled,
-    showAlert,
   } = useJobAids(
     training,
     enrollmentHandler,
@@ -88,7 +87,7 @@ const PrimeTrainingCard: React.FC<{
 
   const skillsAsString = skillNames;
   const descriptionHtml = description ? (
-    <p className={styles.description}>{description}</p>
+    <p className={styles.description} aria-label={formatMessage({id:'alm.text.description'},{description:description})} tabIndex={0}>{description}</p>
   ) : (
     ""
   );
@@ -206,14 +205,15 @@ const PrimeTrainingCard: React.FC<{
           className={cardClass}
           onMouseLeave={onMouseLeaveHandler}
           onClick={
-            guest
+            guest 
               ? () => {
                   navigateToLogin(signUpURL, training.id, almDomain);
                 }
               : cardClickHandler
           }
           tabIndex={0}
-          aria-label={name}
+          aria-label={formatMessage({id:"alm.label.view"},{name:name})}
+          role='link'
         >
           <div style={{ ...cardBgStyle }} className={styles.thumbnail}></div>
 

@@ -14,6 +14,7 @@ import { getALMConfig } from "../utils/global";
 import { QueryParams } from "../utils/restAdapter";
 // import ALMCustomHooksInstance from "./ALMCustomHooks";
 import ICustomHooks from "./ICustomHooks";
+import { PrimeUserBadge } from "../models";
 
 class APIService {
   customHooks: ICustomHooks | null;
@@ -64,8 +65,11 @@ class APIService {
   ) {
     return this.customHooks?.getTrainingInstanceSummary(trainingId, instanceId);
   }
-  public async enrollToTraining(params: QueryParams = {}) {
-    return this.customHooks?.enrollToTraining(params);
+  public async enrollToTraining(
+    params: QueryParams = {},
+    headers: Record<string, string> = {}
+  ) {
+    return this.customHooks?.enrollToTraining(params, headers);
   }
   public async unenrollFromTraining(enrollmentId: string = "") {
     return this.customHooks?.unenrollFromTraining(enrollmentId);
@@ -82,6 +86,17 @@ class APIService {
       return { ...defaultCartValues, error: true };
     }
     return this.customHooks.addProductToCart(sku);
+  }
+  public async getUsersBadges(userId: string, params: QueryParams = {}):Promise< {
+      badgeList : PrimeUserBadge[];
+      links: {next: any}
+  }
+  | undefined
+> {
+    return this.customHooks?.getUsersBadges(userId, params);
+  }
+  public async loadMoreBadges(url: string){
+    return this.customHooks?.loadMoreBadges(url);
   }
 }
 

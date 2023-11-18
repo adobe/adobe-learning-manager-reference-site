@@ -36,10 +36,18 @@ governing permissions and limitations under the License.
   padding: 10px;
 }
 
+.coursesViewMenu {
+  border: 1px solid var(--prime-color-nc2);
+  margin-bottom: 20px;
+  padding-top: 5px;
+  position: relative;
+  background-color: var(--prime-color-white);
+}
+
 .trainingPrequisiteLabel {
   margin-bottom: 10px;
   margin-top: 10px;
-  color: var(--prime-color-nc3)
+  color: var(--prime-color-nc3);
 }
 
 .sectionName {
@@ -214,4 +222,68 @@ img {
   width: 100%;
   background-color: var(--prime-color-nc4);
   min-height: 850px;
+}
+
+.info {
+  display: flex;
+  width: fit-content;
+}
+
+.info svg {
+  color: var(--prime-color-primary);
+  transform: scale(0.6);
+  width: 30px;
+  height: 30px;
+  margin-left: 0px;
+}
+
+.script {
+  position: relative;
+  bottom: 28px;
+  padding-left: 35px;
+}
+
+.radioButton {
+  position: relative;
+  transform: scale(1.25);
+  margin-left: 35px;
+  bottom: 15px;
+}
+
+.labelText {
+  position: relative;
+  bottom: 17px;
+  margin-left: 2px;
+}
+
+.refreshDiv {
+  box-sizing: border-box;
+  display: inline;
+  position: absolute;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  border-top: none;
+  border-left: none;
+  border-bottom: none;
+  border-right: none;
+  background-color: transparent;
+  right: 5px;
+  bottom: 5px;
+  cursor: pointer;
+}
+
+.refresh svg {
+  stroke: var(--prime-color-nc5);
+  width: 18px;
+  height: 18px;
+  fill: var(--prime-color-nc5);
+  stroke-width: 2;
+  transform: scale(0.85);
+}
+
+.radioGroup {
+  position: relative;
+  margin-left: 35px;
+  margin-bottom: 15px;
+  padding-right: 3px;
 }

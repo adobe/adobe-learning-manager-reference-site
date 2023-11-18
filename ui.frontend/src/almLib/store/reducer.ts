@@ -21,6 +21,7 @@ import {
   userSkillInterest,
   skill,
   search,
+  badge,
 } from "./reducers";
 
 const reducer = combineReducers({
@@ -34,5 +35,6 @@ const reducer = combineReducers({
   userSkillInterest,
   skill,
   search,
+  badge,
 });
 export default reducer;

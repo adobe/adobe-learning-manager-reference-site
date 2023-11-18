@@ -26,8 +26,13 @@ governing permissions and limitations under the License.
   box-shadow: 0 0 5px rgb(0 0 0 / 20%);
   scrollbar-color: var(--prime-color-nc5) var(--prime-color-nc4);
   scrollbar-width: thin;
-}
 
+}
+.icon{
+  width: 13px;
+  height: 13px;
+  margin: 2px;
+}
 .notificationList {
   margin: 0px;
   padding: 0px;

@@ -207,6 +207,9 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   const isProfilePage = () =>
     window.location.pathname.includes(window.ALM.getALMConfig().profilePath);
 
+  const isExtensionAllowed = (extension) => {
+    return Boolean(extension);
+  };
   init();
 
   window.ALM.getALMConfig = getALMConfig;
@@ -224,7 +227,8 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.navigateToCommerceCartPage = navigateToCommerceCartPage;
   window.ALM.navigateToProfilePage = navigateToProfilePage;
   window.ALM.navigateToSignOutPage = navigateToSignOutPage;
-  window.ALM.navigateToCatalogPageFromCategory = navigateToCatalogPageFromCategory;
+  window.ALM.navigateToCatalogPageFromCategory =
+    navigateToCatalogPageFromCategory;
   window.ALM.navigateToCatalogPageForStates = navigateToCatalogPageForStates;
   window.ALM.updateCart = updateCart;
   window.ALM.isProxyEnabled = isProxyEnabled;
@@ -237,5 +241,6 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   window.ALM.isBoardDetailsPage = isBoardDetailsPage;
   window.ALM.isBoardsPage = isBoardsPage;
   window.ALM.isProfilePage = isProfilePage;
+  window.ALM.isExtensionAllowed = isExtensionAllowed;
   
 })(window, document, Granite, jQuery);

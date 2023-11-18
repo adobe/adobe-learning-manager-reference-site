@@ -1,0 +1,82 @@
+@import "../../../styles/variables.css";
+
+.new {
+  border-bottom: 1px solid var(--prime-color-nc6);
+  margin-bottom: 20px;
+}
+
+.badgelist {
+  padding-top: 40px;
+  font-weight: var(--prime-font-weight-400);
+  font-style: normal;
+  color: var(--prime-color-nc3);
+  box-sizing: inherit;
+}
+
+.list {
+  font-weight: var(--prime-font-weight-400);
+  font-style: normal;
+  color: var(--prime-color-nc3);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  box-sizing: inherit;
+}
+
+.rightpadding {
+  padding-right: 10px;
+}
+
+.flex {
+  display: flex;
+}
+
+.rightaligned {
+  box-sizing: inherit;
+  float: right;
+}
+
+.pdf {
+  padding-left: 10px;
+  color: var(--prime-color-primary);
+  cursor: pointer;
+}
+
+.alignRight {
+  color: var(--prime-color-primary);
+  float: right;
+  margin-left: 5px;
+  margin-right: 3px;
+  cursor: pointer;
+}
+
+.downloadicons {
+  padding-left: 20px;
+  float: right;
+  margin-top: 7px;
+}
+
+.downloadoptions {
+  float: right;
+}
+
+.downloadlink {
+  float: left;
+  margin-right: 3px;
+}
+
+@media (max-width: 768px) {
+  .rightaligned {
+    font-size: 14px;
+    display: grid;
+    justify-items: flex-start;
+    float: left;
+  }
+  .downloadicons {
+    padding-left: 0%;
+    float: left;
+  }
+  .badgelist {
+    padding-top: 80px;
+  }
+}

@@ -9,7 +9,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { MaxPrice, PrimeLearningObject, PrimeUser } from "..";
+import { MaxPrice, PrimeLearningObject, PrimeUser, PrimeUserBadge } from "..";
 import store from "../../store/APIStore";
 import { CatalogFilterState } from "../store/reducers/catalog";
 import {
@@ -28,7 +28,6 @@ import {
 import { JsonApiParse } from "../utils/jsonAPIAdapter";
 import { isCommerceEnabled } from "../utils/price";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
-import { getBrowserLocale } from "../utils/translationService";
 import APIServiceInstance from "./APIService";
 import ICustomHooks from "./ICustomHooks";
 
@@ -62,7 +61,7 @@ class ALMCustomHooks implements ICustomHooks {
     params["page[limit]"] = DEFAULT_PAGE_LIMIT;
     params["include"] = DEFUALT_LO_INCLUDE;
     params["filter.ignoreEnhancedLP"] = false;
-
+    params["enforcedFields[learningObject]"] = "extensionOverrides";
     let url = `${this.primeApiURL}/learningObjects`;
     if (searchText && catalogAttributes?.showSearch === "true") {
       updateURLParams({ snippetType: snippetType });
@@ -124,6 +123,8 @@ class ALMCustomHooks implements ICustomHooks {
   ): Promise<PrimeLearningObject> {
     let response;
     try {
+      params["enforcedFields[learningObject]"] = "extensionOverrides";
+      params["enforcedFields[sessionRecordingInfo]"] = "transcriptUrl";
       response = await RestAdapter.get({
         url: `${this.primeApiURL}learningObjects/${id}`,
         params: params,
@@ -146,11 +147,15 @@ class ALMCustomHooks implements ICustomHooks {
     });
     return JsonApiParse(response);
   }
-  async enrollToTraining(params: QueryParams = {}) {
+  async enrollToTraining(
+    params: QueryParams = {},
+    headers: Record<string, string> = {}
+  ) {
     const response = await RestAdapter.post({
       url: `${this.primeApiURL}enrollments`,
       method: "POST",
       params,
+      headers,
     });
     return JsonApiParse(response);
   }
@@ -251,6 +256,36 @@ class ALMCustomHooks implements ICustomHooks {
   async addProductToCart(sku: string) {
     const defaultCartValues = { items: [], totalQuantity: 0, error: null };
     return { ...defaultCartValues, error: true };
+  }
+  async getUsersBadges(
+    userId: string,
+    params: QueryParams
+  ): Promise<
+  {
+      badgeList : PrimeUserBadge[];
+      links: {next: any}
+  }
+> {
+    let response;
+    try {
+      response = await RestAdapter.get({
+        url: `${this.primeApiURL}users/${userId}/userBadges`,
+        params: params,
+      });
+    } catch (e: any) {}
+    const parsedResponse = JsonApiParse(response)
+    return {
+      badgeList: parsedResponse.userBadgeList || [],
+      links: {
+        next: parsedResponse.links?.next || "",
+      },
+    };
+  }
+  async loadMoreBadges(url: string) {
+    const response = await RestAdapter.get({
+      url,
+    });
+    return JsonApiParse(response);
   }
 }
 

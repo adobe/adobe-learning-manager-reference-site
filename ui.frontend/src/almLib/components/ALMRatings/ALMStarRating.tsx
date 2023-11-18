@@ -59,7 +59,8 @@ const ALMRatingsComponent = (props: ratingProps) => {
         setNumEmptyStars(numEmptyStars - Math.floor(avgRating) - halfStar);
       }
     }
-  }, [avgRating, ratingGiven]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps 
+  }, [avgRating, ratingGiven ]);
 
   useEffect(() => {
     const template = [];

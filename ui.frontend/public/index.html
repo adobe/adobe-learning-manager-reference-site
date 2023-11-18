@@ -94,13 +94,15 @@
         cdnBaseUrl: "https://cpcontentsdev.adobe.com",
         usageType: "aem-commerce",
         accountData: "{}",
-        esBaseUrl: "xxxxx",
+        esBaseUrl:
+          "https://primeapps-stage.adobe.com/almsearch/api/v1/stage1/7319/237fa1c8-591f-4904-aa6f-07578c3be5a2",
         instancePath: "/instance.html",
         catalogPath: "/explore.html",
         trainingOverviewPath: "/trainingOverview.html",
         communityPath: "/community.html",
         communityBoardsPath: "/community.html",
         communityBoardDetailsPath: "/community.html",
+        badgesPath: "/badges.html",
         almCdnBaseUrl: "xxxxx",
         primeTileColors: {
           0: "#00000",
@@ -117,7 +119,8 @@
       };
 
       const getAccessToken = () => {
-        return "xxxxxxxxx";
+        return "7b819890302726b09967d246ff0f51ce";
+        // return "b9e1945a881994633176fbce2c67db30";
       };
       const COMMERCE_TOKEN_COOKIE_NAME = "alm_commerce_token";
 
@@ -163,6 +166,12 @@
         });
       };
 
+      const navigateToBadgesPage = () => {
+        let { badgesPath } = getALMConfig();
+        let url = getUrl(badgesPath);
+        window.location = url;
+      }
+
       const getUrlWithQueryParams = (urlStr, params) => {
         const url = new URL(urlStr);
         for (const param in params) {
@@ -190,7 +199,7 @@
         }
         console.log("Fetch user");
         const primeApiURL = window.ALM.ALMConfig.primeApiURL;
-        const userUrl = `${primeApiURL}/user?include=account`;
+        const userUrl = `${primeApiURL}/user?include=account&enforcedFields[account]=extensions`;
         const headers = {
           Accept: "application/vnd.api+json",
           Authorization: `oauth ${getAccessToken()}`,
@@ -329,6 +338,11 @@
         window.ALM.storage.removeItem("COMMERCE_FILTERS");
       }
 
+      function isExtensionAllowed(extension){
+       return Boolean(extension)
+      //  return extension && extension.launchType === "IN_APP"
+      }
+
       window.ALM = window.ALM || {};
       window.ALM.ALMConfig = ALMConfig; //window.ALM.ALMConfig || primeConfig;
       window.ALM.getALMConfig = getALMConfig;
@@ -338,6 +352,7 @@
       window.ALM.navigateToInstancePage = navigateToInstancePage;
       window.ALM.navigateToBoardDetailsPage = navigateToBoardDetailsPage;
       window.ALM.navigateToCommerceSignInPage = navigateToCommerceSignInPage;
+      window.ALM.navigateToBadgesPage = navigateToBadgesPage;
       window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
       window.ALM.getAccessToken = getAccessToken;
       window.ALM.getCommerceToken = getCommerceToken;
@@ -350,17 +365,18 @@
       window.ALM.updateCart = function (value) {
         console.log(value);
       };
-      if (isPrimeUserLoggedIn()) {
-        getALMUser();
-      }
+      window.ALM.isExtensionAllowed = isExtensionAllowed;
+      // if (isPrimeUserLoggedIn()) {
+      //   getALMUser();
+      // }
     </script>
     <title>React App</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <!-- /* <div class="instance__container"></div> */ -->
-
-    <!--/* <div
+    <!-- <div class="instance__container"></div> -->
+    <div class="training__page__container" data-show-description="true" data-show-author-info="true" data-show-enroll-deadline="true"></div>  
+     <!-- <div
       class="catalog__container"
       data-show-filters="true"
       data-show-search="true"
@@ -375,9 +391,14 @@
       data-tag-name="true"
       data-skill-level="true"
       data-cities="true"
-    ></div> */-->
+    ></div> -->
 
-    <!--/* <div class="profile__container"></div>
+  
+    <!-- <div class="badges__container"></div>
+    <div class="author__container"></div> -->
+
+    <!-- <div class="profile__container"></div> -->
+    <!-- /* 
     <div class="skills__container"></div>
     <div
       class="activeFields__container"
@@ -389,24 +410,22 @@
       data-section2-active-fields="hobby, new location"
     ></div> */-->
 
-    <!--/* <div
-      class="training__page__container"
-      data-show-description="true"
-      data-show-author-info="true"
-      data-show-enroll-deadline="true"
-    ></div> -->
+     
+    <!-- <div class="notification__container"></div> -->
 
     <div class="notification__container"></div>
     <!--/* <div class="boards__container"></div> */-->
 
+    <!-- <div class="notification__container"></div> -->
+    <!--/* <div class="boards__container"></div> */-->
     <!--/* <div id="root1"></div> */-->
     <!--
-      This HTML file is a template.
+     This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
       You can add webfonts, meta tags, or analytics to this file.
       The build step will place the bundled scripts into the <body> tag.
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    --> 
   </body>
 </html>

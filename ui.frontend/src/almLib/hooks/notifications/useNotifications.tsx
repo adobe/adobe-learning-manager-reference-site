@@ -16,6 +16,7 @@ import { PrimeUserNotification } from "../../models";
 import {
   loadNotifications,
   paginateNotifications,
+  loadAnnouncements,
 } from "../../store/actions/notification/action";
 import { State } from "../../store/state";
 import { getALMConfig, getALMObject, getALMUser } from "../../utils/global";
@@ -65,9 +66,10 @@ const channels = [
   "admin::added",
   "author::added",
   "integrationAdmin::added",
+  "announcement::received",
 ];
 export const useNotifications = () => {
-  const { notifications, next } = useSelector(
+  const { notifications, next , announcements } = useSelector(
     (state: State) => state.notification
   );
   const [isLoading, setIsLoading] = useState(false);
@@ -84,7 +86,7 @@ export const useNotifications = () => {
 
   const pageLimit = 6;
 
-  //console.log(user.id);
+
   const fetchNotifications = useCallback(async () => {
     try {
       const userId = await getUserId();
@@ -203,9 +205,24 @@ export const useNotifications = () => {
     alm.navigateToTrainingOverviewPage(trainingId, trainingInstanceId);
     return;
   }, []);
+  const fetchAnnouncements= async (id : string)=>{
+    const userId = await getUserId();
+      if (!userId) {
+        return;
+      }
+      setIsLoading(true);
 
+      const response = await RestAdapter.get({
+        url: `${config.primeApiURL}//announcements/${id}`,
+      });
+      const parsedResponse = JsonApiParse(response)?.adminAnnouncement;
+      
+      dispatch(loadAnnouncements(parsedResponse));
+      setIsLoading(false);
+  }
   return {
     notifications,
+    announcements,
     isLoading,
     unreadCount,
     fetchNotifications,
@@ -213,5 +230,6 @@ export const useNotifications = () => {
     markReadNotification,
     redirectOverviewPage,
     pollUnreadNotificationCount,
+    fetchAnnouncements,
   };
 };

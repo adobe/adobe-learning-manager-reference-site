@@ -10,9 +10,10 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { AnyAction, Reducer , combineReducers} from "redux";
-import { PrimeUserNotification } from "../../models";
+import { PrimeAdminAnnouncement, PrimeUserNotification } from "../../models";
 
 import {
+  LOAD_ANNOUNCEMENT,
     LOAD_NOTIFICATIONS,
     PAGINATE_NOTIFICATIONS
   } from "../actions/notification/actionTypes";
@@ -20,6 +21,7 @@ import {
   export interface NotificationState {
     notifications: PrimeUserNotification[] | null;
     next: string;
+    announcements: PrimeAdminAnnouncement;
   }
 
 const notifications: Reducer<PrimeUserNotification[] | null, AnyAction> = (
@@ -35,6 +37,18 @@ const notifications: Reducer<PrimeUserNotification[] | null, AnyAction> = (
     }
     default:
       return state || [];
+  }
+};
+const announcements: Reducer<PrimeAdminAnnouncement  , AnyAction> = (
+  state: PrimeAdminAnnouncement  | undefined,
+  action: AnyAction
+) => {
+  switch (action.type) {
+    case LOAD_ANNOUNCEMENT: {
+      return action?.payload || {};
+    }
+    default:
+      return state || {};
   }
 };
 
@@ -55,6 +69,7 @@ const next: Reducer<string, AnyAction> = (
 const notification: Reducer<NotificationState, AnyAction> = combineReducers({
     notifications,
     next,
+    announcements,
   });
   
 export  {notification};

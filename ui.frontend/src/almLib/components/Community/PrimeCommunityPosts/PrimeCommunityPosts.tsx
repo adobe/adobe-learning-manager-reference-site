@@ -37,6 +37,7 @@ const PrimeCommunityPosts = (props: any) => {
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [searchResult, setSearchResult] = useState(0);
   const [searchString, setSearchString] = useState("");
+  const [clearSortFilter, setClearSortFilter] = useState(false);
   const [user, setUser] = useState({} as PrimeUser);
   const [boardModerators, setBoardModerators] = useState([] as string[]);
   const showLoaderHandler = (value: any) => {
@@ -62,9 +63,11 @@ const PrimeCommunityPosts = (props: any) => {
   const resetSearchHandler = async () => {
     setIsSearchMode(false);
     setSearchResult(0);
+    setClearSortFilter(true);
     getPosts();
   };
   const sortFilterChangeHandler = async (sortValue: any) => {
+    setClearSortFilter(false);
     const ids = posts.map((post) => post.id).join(',');
     getPosts(sortValue,ids);
   };
@@ -113,6 +116,7 @@ const PrimeCommunityPosts = (props: any) => {
             {posts?.length > 0 && (
               <PrimeCommunityPostFilters
                 sortFilterChangeHandler={sortFilterChangeHandler}
+                clearSortFilter={clearSortFilter}
               ></PrimeCommunityPostFilters>
             )}
             <PrimeCommunitySearch

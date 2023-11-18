@@ -51,6 +51,7 @@ governing permissions and limitations under the License.
 .resourceType {
   text-transform: uppercase;
   display: flex;
+  align-items: inherit;
 }
 .headerIcon {
   display: flex;
@@ -120,6 +121,7 @@ a.details {
   justify-content: space-between;
   color: var(--prime-color-nc3);
   font-size: var(--prime-font-size-12);
+  align-items: center;
 }
 
 .moduleLocked,
@@ -176,6 +178,10 @@ a.details {
   height: 10px;
 }
 
+.mandatoryModuleContainer {
+  box-shadow: -2px 0 0 0 #e61414;
+}
+
 .titleContainer {
   display: flex;
   justify-content: space-between;
@@ -219,6 +225,38 @@ a.details {
   }
   .title {
     width: 50%;
+  }
+
+  .resourceType{
+    display: block;
+  }
+
+  .attemptsDuration{
+    margin-left: 1px !important;
+  }
+
+  .reattemptButton{
+    margin-left: 0;
+    padding-left: 0;
+    border: 0;
+  }
+
+  .reattemptButtonDisabled{
+    margin-left: 0;
+    padding-left: 0;
+    border: 0;
+  }
+
+  .refresh svg{
+    margin-left: 0px !important;
+  }
+
+  .completedRefresh svg {
+    margin-left: 0px !important;
+  }
+
+  .attemptDescriptionContainer{
+    display: block;
   }
 }
 
@@ -295,7 +333,80 @@ a.details {
   display: grid;
 }
 
-.lastVisitedMssg{
+.lastVisitedMssg {
   color: rgb(251, 112, 75);
   font-size: 12px;
+}
+
+.reattempt {
+  color: var(--prime-color-primary);
+  text-transform: none;
+  margin-left: 5px;
+  position: relative;
+  font-size: 12px;
+}
+
+.noAttemptLeft {
+  text-transform: none;
+  margin-left: 5px;
+  position: relative;
+  font-size: 12px;
+}
+
+.attemptsLeft {
+  text-transform: none;
+  margin-left: 2px;
+  position: relative;
+  right: 5px;
+}
+
+.initialAttempts {
+  text-transform: none;
+  margin-left: 5px;
+  position: relative;
+  font-size: 12px;
+}
+
+.attemptsDuration {
+  text-transform: none;
+  margin-left: 10px;
+}
+
+.refresh svg {
+  stroke: var(--prime-color-primary);
+  width: 10px;
+  height: 10px;
+  fill: var(--prime-color-primary);
+  stroke-width: 2;
+  text-transform: none;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+.completedRefresh svg {
+  stroke: var(--prime-color-nc3);
+  width: 10px;
+  height: 10px;
+  fill: var(--prime-color-nc3);
+  stroke-width: 2;
+  text-transform: none;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+.reattemptButton {
+  background-color: transparent;
+  border-color: transparent;
+  position: relative;
+}
+
+.reattemptButtonDisabled {
+  background-color: transparent;
+  border-color: transparent;
+  position: relative;
+  opacity: 50%;
+}
+
+.attemptDescriptionContainer{
+  position: relative;
 }
