@@ -74,7 +74,7 @@ const PrimeTrainingsContainer: React.FC<{
       )}
     </ul>
   ) : (
-    <p className={styles.noResults}>
+    <p className={styles.noResults} aria-live='polite'>
       {formatMessage({ id: "alm.catalog.no.result" })}
     </p>
   );
@@ -108,7 +108,7 @@ const PrimeTrainingsContainer: React.FC<{
         {listHtml}
         <div id="load-more-trainings" className={styles.loadMoreContainer}>
           {hasMoreItems ? (
-            <button onClick={loadMoreTraining} className="almButton secondary">
+            <button onClick={loadMoreTraining} className={`almButton secondary`}>
               {formatMessage({ id: "alm.community.loadMore" })}
             </button>
           ) : (

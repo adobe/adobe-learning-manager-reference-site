@@ -13,6 +13,7 @@ import { AnyAction } from "redux";
 import { PrimeUserNotification } from "../../../models/PrimeModels";
 import {
   LOAD_NOTIFICATIONS,
+  LOAD_ANNOUNCEMENT,
   PAGINATE_NOTIFICATIONS
 } from "./actionTypes";
 
@@ -20,6 +21,11 @@ export const loadNotifications = (payload: any): AnyAction => ({
   type: LOAD_NOTIFICATIONS,
   payload,
 });
+export const loadAnnouncements = (payload: any): AnyAction => ({
+  type: LOAD_ANNOUNCEMENT,
+  payload,
+});
+
 
 export const paginateNotifications = (payload: {
     notifications: PrimeUserNotification[];

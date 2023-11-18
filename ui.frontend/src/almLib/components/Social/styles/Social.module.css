@@ -1,0 +1,97 @@
+/**
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+@import "../../../styles/variables.css";
+.sideContainer{
+  display: flex;
+  position: absolute;
+  top: 20%; 
+  bottom: 0px;
+  padding: 10px;
+}
+.upperArea{
+  padding: 10px;
+}
+.infoButton{
+  background-color: #ffffff6e;
+  padding: 10px 15px 10px 15px;
+  border-radius: 20px;
+  border: 0px;
+  color: #fff;
+  text-shadow: 0.1rem 0.1rem 0.1rem #56565652;
+  font-weight: var( --prime-font-weight-400);
+  box-shadow: 0.1rem 0.1rem 0.1rem #56565652;
+  cursor: pointer;
+}
+
+
+.socialLearningMoto {
+  color: #fff;
+  padding-top: 1px;
+  font-weight: var(--prime-font-weight-400);
+  text-shadow: 0.2rem 0.2rem 0.2rem #565656;
+}
+.bannerItems {
+  position: relative;
+  padding: 2rem 0px 0px 18rem;
+  height: 100%;
+}
+.socialLearningHeading{
+  color: #fff;
+  font-weight: var(--prime-font-weight-600);
+  text-shadow: 0.2rem 0.2rem 0.2rem #565656;
+}
+.bannerbg {
+    background-image : url("https://cpcontentsdev.adobe.com/public/social-app/assets/images/banner_large-2d55849b1962b60220fa1c8d96787a4b.png") ;
+    height: 240px;
+    width: 104.9%;
+    background-size: cover;
+}
+.mainPanel {
+  padding: 3rem 14rem 3rem 14rem;
+  margin: 0;
+  width: 100%;
+  display: flex;
+}
+
+.gridContainer {
+
+  display: flex;
+  flex-direction: row;
+  padding: 8px 0px 0px 250px;
+  
+
+  }
+
+.left{
+  width: 80%;
+}
+
+.mainContainer{
+
+  width:min-content !important;
+}
+.leftLoader{
+  position: absolute;
+  left: -550px;
+  bottom: 450px;
+}
+.rightLoader{
+  position: absolute;
+  right: -500px;
+  bottom: 450px;
+}
+
+body{
+  text-align: left;
+  
+}
+ 

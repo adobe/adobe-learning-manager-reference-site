@@ -15,11 +15,17 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import loadLocaleData from "./i18n/i18n";
+import { getALMObject, getALMUser, init } from "./almLib/utils/global";
 
 window.onload = async () => {
   const { locale, messages } = await loadLocaleData();
+  // if (getALMObject().isPrimeUserLoggedIn()) {
+  //   await getALMUser();
+  // }
+  await init();
   const root = document.createElement("div");
   root.id = "root";
   document.body.appendChild(root);
+
   ReactDOM.render(<App locale={locale} messages={messages} />, root);
 };

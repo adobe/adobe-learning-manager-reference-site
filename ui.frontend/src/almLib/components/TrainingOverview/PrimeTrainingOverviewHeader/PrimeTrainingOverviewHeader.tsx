@@ -32,15 +32,12 @@ import Email from "@spectrum-icons/workflow/Email";
 import Close from "@spectrum-icons/workflow/Close";
 import BookmarkSingleOutline from "@spectrum-icons/workflow/BookmarkSingleOutline";
 import BookmarkSingle from "@spectrum-icons/workflow/BookmarkSingle";
-import { transform } from "@babel/core";
-import { PrimeLearningObject } from "../../../models/PrimeModels";
-import { 
-  getALMConfig,
-  getALMObject 
-} from "../../../utils/global";
 import {
-  COURSE, LEARNING_PROGRAM, TRAINING_INSTANCE_ID_STR,
-} from "../../../utils/constants";
+  PrimeLearningObject,
+  PrimeLoInstanceSummary,
+} from "../../../models/PrimeModels";
+import { getALMConfig, getALMObject } from "../../../utils/global";
+import { COURSE, LEARNING_PROGRAM } from "../../../utils/constants";
 import {
   getLoId,
   getLoName,
@@ -58,6 +55,8 @@ interface trainingOverviewProps {
   showProgressBar?: boolean;
   enrollment?: PrimeLearningObjectInstanceEnrollment;
   training: PrimeLearningObject;
+  instanceSummary: PrimeLoInstanceSummary;
+  isFlexible: boolean;
   updateBookMark: (
     isBookmarked: boolean,
     loId: any
@@ -74,6 +73,8 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
     enrollment,
     training,
     updateBookMark,
+    instanceSummary,
+    isFlexible,
   } = props;
   const { formatMessage } = useIntl();
   const [showShareMenu, setShowShareMenu] = useState(false);
@@ -82,13 +83,13 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
   const [almAlert] = useAlert();
   let menuRef = useRef<HTMLInputElement>(null);
   const showRating = useCanShowRating(training);
+  const enrollmentCount = instanceSummary?.enrollmentCount;
 
   const formatLabel = useMemo(() => {
     if (training.loType === COURSE) {
       return format ? GetTranslation(`${formatMap[format]}`, true) : "";
-    }
-    else if (training.loType === LEARNING_PROGRAM){
-      return GetTranslation(`alm.training.learningProgram`, true)
+    } else if (training.loType === LEARNING_PROGRAM) {
+      return GetTranslation(`alm.training.learningProgram`, true);
     }
   }, [format]);
 
@@ -114,7 +115,7 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
         AlertType.success
       );
     }
-  }, [showCopiedUrlMsg]);
+  }, [showCopiedUrlMsg, almAlert, formatMessage]);
 
   const handleClickOutside = (e: any) => {
     if (menuRef && menuRef.current && !menuRef.current.contains(e.target)) {
@@ -130,6 +131,7 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
 
   function copyURL() {
     let url = getTrainingUrl(window.location.href);
+
     navigator.clipboard.writeText(url);
     setShowCopiedUrlMsg(true);
     setShowShareMenu(false);
@@ -141,8 +143,7 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
   function sendEmail() {
     // const learnerAppOrigin = getALMConfig().almBaseURL;
     let shareUrlLink = getTrainingUrl(window.location.href);
-    const trainingOverview = getALMConfig().trainingOverviewPath;
-    const trainingId = training.id;
+
     //const shareUrlLink = `${learnerAppOrigin}${trainingOverview}/trainingId/${trainingId}`;
     const subject = title;
     window.location.href = `mailto:?subject= ${formatMessage(
@@ -150,15 +151,19 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
         id: "alm.text.training",
         defaultMessage: "Training",
       },
-      { training: GetTranslation(`alm.training.${training.loType}`, true),
-       subject: subject }
+      {
+        training: GetTranslation(`alm.training.${training.loType}`, true),
+        subject: subject,
+      }
     )}&body=${formatMessage(
       {
         id: "alm.text.trainingLink",
         defaultMessage: "Training Link - ",
       },
-      { training: GetTranslation(`alm.training.${training.loType}`, true),
-      shareUrlLink: shareUrlLink }
+      {
+        training: GetTranslation(`alm.training.${training.loType}`, true),
+        shareUrlLink: shareUrlLink,
+      }
     )}`;
     setShowShareMenu(false);
   }
@@ -199,10 +204,37 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
       );
     }
   };
+
+  const enrollmentCountButtonDisplay = () => {
+    return (
+      <button tabIndex={-1} className={`${styles.enrollmentCountButton}`}>
+        <span className={styles.enrollmentLabel}>
+          <label className={styles.label}>
+            {formatMessage(
+              {
+                id: "alm.overview.enrollment.count",
+              },
+              {
+                0: enrollmentCount,
+              }
+            )}
+          </label>
+        </span>
+      </button>
+    );
+  };
+
   const shareButtonDisplay = () => {
     return (
       <div>
-        <button className={`${styles.shareButton}`} onClick={shareHandler}>
+        <button
+          className={`${styles.shareButton}`}
+          onClick={shareHandler}
+          aria-label={formatMessage({
+            id: "alm.header.text.sharePop",
+            defaultMessage: "share, menu pop-up",
+          })}
+        >
           <span aria-hidden="true" className={styles.shareIcon}>
             <Reply />
           </span>
@@ -224,7 +256,7 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
         )}
         {showShareMenu && (
           <div>
-            <button className={styles.boxButton} onClick={copyURL}>
+            <button className={styles.boxButton} onClick={copyURL} role="link">
               <span aria-hidden="true" className={styles.urlIcon}>
                 <Link />
               </span>
@@ -261,9 +293,8 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
   const hasMultipleInstances = !hasSingleActiveInstance(training);
 
   const showParentBreadCrumbs = () => {
-
     const loDetailsArray = getParentPathStack();
-    if(loDetailsArray.length===0){
+    if (loDetailsArray.length === 0) {
       return;
     }
     return (
@@ -273,24 +304,33 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
           const loId = getLoId(loDetails);
           return (
             <React.Fragment key={`breadcrumb-${index}`}>
-            <a className={styles.breadcrumbLink}
-              onClick={() => getALMObject().navigateToTrainingOverviewPage(loId)}
-              title={loName}>
+              <a
+                className={styles.breadcrumbLink}
+                onClick={() =>
+                  getALMObject().navigateToTrainingOverviewPage(loId)
+                }
+                title={loName}
+              >
                 {loName}
               </a>
               {index <= loDetailsArray.length - 1 && (
                 <b className={styles.breadcrumbArrow}>&nbsp; &gt; &nbsp;</b>
               )}
             </React.Fragment>
-
           );
         })}
-        {primaryEnrollment || !hasMultipleInstances ? ""
-          :(<a 
-            className={styles.breadcrumbLink} 
-            onClick={() =>  {
-            getALMObject().navigateToInstancePage(training.id)
-          }}>{GetTranslation("alm.breadcrumb.all.instances", true)}</a>)}
+        {primaryEnrollment || !hasMultipleInstances ? (
+          ""
+        ) : (
+          <a
+            className={styles.breadcrumbLink}
+            onClick={() => {
+              getALMObject().navigateToInstancePage(training.id);
+            }}
+          >
+            {GetTranslation("alm.breadcrumb.all.instances", true)}
+          </a>
+        )}
       </div>
     );
   };
@@ -306,7 +346,8 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
                 background: `linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0)),url(${bannerUrl}) no-repeat `,
               }
             : { backgroundColor: color }
-        }>
+        }
+      >
         <div className={styles.headingContainer}>
           <div className={styles.left}>
             <div className={styles.formatMobile}>{formatLabel}</div>
@@ -322,7 +363,8 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
                 id={title}
                 aria-label={title}
                 title={title}
-                data-automationid={title}>
+                data-automationid={title}
+              >
                 {title}
               </h1>
               <div className={styles.format}>

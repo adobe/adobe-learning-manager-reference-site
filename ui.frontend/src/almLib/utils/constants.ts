@@ -8,6 +8,8 @@ export const PENDING_ACCEPTANCE = "PENDING_ACCEPTANCE";
 export const WAITING = "WAITING";
 export const STARTED = "STARTED";
 
+export const SELF_ENROLL = "Self Enroll"
+
 export const COURSE = "course";
 export const CERTIFICATION = "certification";
 export const PREWORK = "Pre Work";
@@ -25,6 +27,7 @@ export const TRAINING_INSTANCE_ID_STR = "trainingInstanceId";
 export const ENROLLED = "ENROLLED";
 export const REJECTED = "REJECTED";
 export const COMPLETED = "COMPLETED";
+export const COMPLETED_IC = "Completed";
 export const PENDING_SUBMISSION = "PENDING_SUBMISSION";
 export const CHANGE = "CHANGE";
 export const APPROVED = "APPROVED";
@@ -35,7 +38,9 @@ export const HIGH = "HIGH";
 export const NORMAL = "NORMAL";
 export const DATE_UPDATED = "Date Updated";
 export const DATE_CREATED = "Date Created";
+export const SKILL_LEVEL = "skillLevel";
 export const SKILL = "SKILL";
+export const SKILL_LC = "skill";
 export const UPVOTE = "UPVOTE";
 export const DOWNVOTE = "DOWNVOTE";
 export const COMMENT = "comment";
@@ -71,3 +76,18 @@ export const PDF = "PDF";
 export const DOC = "DOC";
 export const PPT = "PPT";
 export const XLS = "XLS";
+
+export const SKILLS = "skills";
+export const FOLLOW = "follow";
+export const LEADERBOARD = "leaderboard";
+export const FAVOURITES = "favs";
+export const ANNOUNCEMENT="announcement";
+export const MYBOARDS = "MyBoards"
+
+export const FLEX_LP_COURSE_INFO = "flexLPCourseInfo";
+export const DEFAULT_THEME = "Default";
+export const CARNIVAL_THEME = "Carnival";
+export const WINTER_SKY_THEME = "Winter Sky";
+export const VIVID_THEME = "Vivid";
+export const PEBBLES_THEME = "Pebbles";
+export const AUTUMN_THEME = "Autumn";

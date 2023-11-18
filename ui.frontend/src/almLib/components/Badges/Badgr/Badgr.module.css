@@ -1,0 +1,105 @@
+@import "../../../styles/variables.css";
+
+.badgr {
+  color: var(--prime-color-primary) !important;
+  cursor: pointer !important;
+  font-weight: var(--prime-font-weight-700);
+  font-size: var(--prime-font-size-14);
+  background: none !important;
+  border: none;
+  padding: 0 !important;
+  font-family: var(--prime-font-family);
+}
+
+.badgrIcon {
+  width: 25px;
+  padding-right: 4px;
+}
+
+.dialog {
+  position: absolute;
+  width: 62rem;
+  box-sizing: inherit;
+  font-family: var(--prime-font-family);
+}
+
+.dialogBox {
+  background: var(--prime-color-nc1);
+  border: 4px solid var(--prime-color-nc3);
+  font-size: var(--prime-font-size-14);
+  position: relative;
+  bottom: 45vh;
+  right: 175px;
+}
+
+.heading {
+  font-weight: var(--prime-font-weight-400);
+  font-size: 20px;
+  margin: 0;
+  line-height: 30px;
+  color: var(--prime-color-nc2);
+}
+
+.badgrBody {
+  color: var(--prime-color-nc2);
+  padding: 20px 0;
+  line-height: 20px;
+}
+
+.row,
+.rowSelect {
+  box-sizing: border-box;
+  display: flex;
+}
+
+.left {
+  width: 150px;
+  padding: 10px 0;
+  float: left;
+}
+
+.statusText {
+  padding: 10px 0;
+  font-weight: var(--prime-font-weight-700);
+  float: left;
+  width: 250px;
+}
+
+.note {
+  padding-top: 10px;
+}
+
+.btn {
+  margin-top: 5px;
+  width: 150px;
+  font-family: var(--prime-font-family);
+}
+
+.picker {
+  margin-top: 5px;
+  margin-right: 20px;
+  font-family: var(--prime-font-family) !important;
+}
+
+@media (max-width: 768px) {
+  .dialog {
+    all: unset;
+    font-size: var(--prime-font-size-14);
+    font-family: var(--prime-font-family);
+  }
+  .dialogBox {
+    all: unset;
+    background: var(--prime-color-nc1);
+    border: 4px solid var(--prime-color-nc3);
+  }
+  .rowSelect {
+    display: grid;
+  }
+  .picker {
+    width: 150px;
+  }
+  .btn {
+    margin-top: 15px;
+    margin-bottom: 10px;
+  }
+}

@@ -9,10 +9,15 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { PrimeAccount, PrimeAccountTerminology } from "../models/PrimeModels";
+
+import { PrimeAccount, PrimeExtension, PrimeLearningObject, PrimeLearningObjectResource } from "../models/PrimeModels";
 import { JsonApiParse } from "./jsonAPIAdapter";
+import { convertUrlToEmber } from "./urlConv";
+import { RestAdapter } from "./restAdapter";
 import { setThemeVariables } from "./themes";
 import { SetupAccountTerminologies } from "./translationService";
+import { darkTheme, lightTheme } from "@adobe/react-spectrum";
+import { AUTUMN_THEME, CARNIVAL_THEME, DEFAULT_THEME, PEBBLES_THEME, VIVID_THEME, WINTER_SKY_THEME } from "./constants";
 const _fontLoading = require("./fontLoading");
 
 export interface PrimeThemeData {
@@ -57,6 +62,7 @@ export interface PrimeConfig {
   hideBackButton: boolean;
   hideSearchInput: boolean;
   handleShareExternally: boolean;
+  handleLinkedInContentExternally: boolean;
   useConfigLocale: boolean;
 }
 
@@ -66,6 +72,7 @@ export interface ALM {
   navigateToInstancePage: Function;
   navigateToBoardDetailsPage: Function;
   navigateToBoardsPage: Function;
+  navigateToBadgesPage: Function;
   isPrimeUserLoggedIn: Function;
   getALMUser: Function;
   getAccessToken: Function;
@@ -82,6 +89,7 @@ export interface ALM {
   handleLogOut: Function;
   storage: any;
   themeData: PrimeThemeData;
+  isExtensionAllowed: Function;
 }
 
 export function getWindowObject() {
@@ -116,6 +124,7 @@ export const getPathParams = (pagePath: string, pathParams: string[] = []) => {
   let paramsMap: {
     [key: string]: string;
   } = {};
+  
   const currentUrl = getWindowObject().location;
   const pathname = currentUrl.pathname.indexOf(pagePath) > -1
       ? currentUrl.pathname
@@ -205,6 +214,8 @@ export function updateURLParams(params: any) {
       ? "?" + encodeURI(existingQueryParams.toString()) + window.location.hash
       : "");
   window.history.replaceState({ path: newurl }, "", newurl);
+  window.parent.postMessage({"data":convertUrlToEmber(), "origin" : window.origin , 'href' : newurl} , "*");
+
 }
 
 export const getALMAccount = async () => {
@@ -237,7 +248,6 @@ export const init = async () => {
     setThemeVariables(primeThemeData);
   }
 };
-
 init();
 
 export const getItemFromStorage = (key: string) => {
@@ -261,7 +271,7 @@ export const getRegistrationsURLs = (accountConfig: any, almDomain: string) => {
   const ipId = queryParams["ipId"];
   const accesskey = queryParams["accesskey"];
   let domain = window.location.origin;
-  if (domain.indexOf("localhost") != -1) {
+  if (domain.indexOf("localhost") !== -1) {
     domain = almDomain;
   }
   let signUpURL = "";
@@ -307,4 +317,61 @@ export function getPageAttributes(
     setALMAttribute(pageAttributeName, attributes);
     return attributes;
   }
+}
+
+export function isScreenBelowDesktop() {
+  return window.innerWidth <= 992;
+}
+
+//isExtensionAllowed client Apps loading AEM app, needs to provide the extension allowed in method in config
+export function isExtensionAllowed(extension: PrimeExtension) {
+  return extension &&
+    typeof getALMObject().isExtensionAllowed === "function" &&
+    getALMObject().isExtensionAllowed(extension);
+
+}
+
+export function getModalBackgroundColor(theme: string) {
+  switch (theme) {
+    case CARNIVAL_THEME:
+    case WINTER_SKY_THEME:
+      return "#F5F5F5";
+    case VIVID_THEME:
+      return "#232323";
+  }
+  return "#292929"
+}
+
+export function getModalTheme(theme: string) {
+  const darkThemes = [DEFAULT_THEME, PEBBLES_THEME, AUTUMN_THEME, VIVID_THEME]
+  return darkThemes.indexOf(theme) > -1 ? darkTheme : lightTheme;
+}
+
+export function addHttpsToHref(htmlString: string): string {
+  const anchorRegex = /<a\s+(?:[^>]*?\s+)?href=["']([^"']*)["']/gi;
+
+  const modifiedHTML = htmlString.replace(anchorRegex, (match, url) => {
+    if (!/^https?:\/\//i.test(url)) {
+      return match.replace(url, `https://${url}`);
+    } else {
+      return match;
+    }
+  });
+
+  return modifiedHTML;
+}
+
+export const launchContentUrlInNewWindow = async (training: PrimeLearningObject, module: PrimeLearningObjectResource) => {
+  let res: any = await RestAdapter.ajax({
+    url: getALMConfig().almBaseURL + `/primeapi/v2/externalSessionUrl?loId=${training.id}&loResourceId=${module.id}&resourceId=${module.resources[0].id}`,
+    method: "GET",
+  });
+  const linkedInUrl = res && JSON.parse(res).location;
+  if (linkedInUrl) {
+    window.open(linkedInUrl, '_blank')
+  }
+};
+
+export const checkIfLinkedInLearningCourse = (training: PrimeLearningObject) => {
+  return training?.authorNames?.some((author: string) => author.toLowerCase() === 'linkedin learning');
 }

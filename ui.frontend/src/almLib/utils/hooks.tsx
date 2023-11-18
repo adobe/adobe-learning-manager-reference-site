@@ -23,6 +23,7 @@ import {
   COURSE,
   ENGLISH_LOCALE,
   LEARNING_PROGRAM,
+  RETIRED,
   TRAINING_INSTANCE_ID_STR,
 } from "./constants";
 import { getALMConfig, getALMObject } from "./global";
@@ -185,12 +186,14 @@ const filterTrainingInstance = (
   }
 
   const trainingInstances = instances.filter((instance) => {
-    if (instanceId) {
-      return instance.id === instanceId;
-    } else if (primaryEnrollment) {
-      return instance.id === primaryEnrollment.loInstance.id;
-    } else {
-      return instance.isDefault; //&& instance.state == "Active";
+    if(instance){
+      if (instanceId) {
+        return instance.id === instanceId;
+      } else if (primaryEnrollment && primaryEnrollment.loInstance) {
+        return instance.id === primaryEnrollment.loInstance.id;
+      } else {
+        return instance.isDefault; //&& instance.state == "Active";
+      }
     }
   });
   return trainingInstances.length
@@ -358,6 +361,72 @@ export function setHttp(link: string): string {
   return link;
 }
 
+const getDuration = (
+  learningObjectResources: PrimeLearningObjectResource[], 
+  locale: string
+) => {
+  let duration = 0;
+  learningObjectResources?.forEach((learningObjectResource) => {
+    const resource = filteredResource(learningObjectResource, locale);
+    const resDuration =
+      resource.authorDesiredDuration || resource.desiredDuration || 0;
+    duration += resDuration;
+  });
+  return duration;
+};
+
+const findCoursesInsideFlexLP = (training: PrimeLearningObject, isFlexible=true): PrimeLearningObject[] => {
+  const result: PrimeLearningObject[] = [];
+
+  const findCourses = (lp: PrimeLearningObject) => {
+    if (lp && lp.subLOs && isFlexible) { // Check if subLO has .subLOs
+      for (const sub of lp.subLOs) {
+        if (sub.loType === COURSE) {
+          result.push(sub);
+        } else if (sub.loType === LEARNING_PROGRAM && sub.instances[0].isFlexible) {
+          findCourses(sub);
+        }
+      }
+    }
+  };
+
+  findCourses(training);
+
+  return result;
+};
+
+const findRetiredCoursesInsideFlexLP = (training: PrimeLearningObject, isFlexible: boolean): PrimeLearningObject[] => {
+
+  const allCourses = findCoursesInsideFlexLP(training, isFlexible);
+
+  const retiredCourses = allCourses.filter((lo) =>
+    lo.instances.every((instance) => instance.state === RETIRED)
+  );
+
+  return retiredCourses;
+}
+
+const findFlexlpInsideLP = (training: PrimeLearningObject): boolean => {
+
+  const findFlexLP = (lp: PrimeLearningObject): boolean => {
+    if (lp.subLOs) {
+      for (const sub of lp.subLOs) {
+        // assuming one instance only
+        if (sub.loType === LEARNING_PROGRAM && sub.instances[0].isFlexible) {
+          return true;
+        }
+        // Recursively search in sub-LO
+        if (findFlexLP(sub)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
+  return findFlexLP(training);
+};
+
 export {
   useCardIcon,
   useTrainingSkills,
@@ -381,4 +450,8 @@ export {
   clearParentLoDetails,
   getTrainingUrl,
   getLocalizedData,
+  getDuration,
+  findCoursesInsideFlexLP,
+  findRetiredCoursesInsideFlexLP,
+  findFlexlpInsideLP
 };

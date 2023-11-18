@@ -23,7 +23,11 @@ import { formatTime, GetFormattedDate } from "../../../utils/dateTime";
 import { getALMConfig } from "../../../utils/global";
 import { checkIsEnrolled } from "../../../utils/overview";
 import { getFormattedPrice } from "../../../utils/price";
-import { GetTranslation, formatMap } from "../../../utils/translationService";
+import {
+  GetTranslation,
+  formatMap,
+  getPreferredLocalizedMetadata,
+} from "../../../utils/translationService";
 import styles from "./PrimeInstanceItem.module.css";
 import CheckmarkCircle from "@spectrum-icons/workflow/CheckmarkCircle";
 
@@ -45,6 +49,9 @@ const PrimeInstanceItem = (props: any) => {
     showProgressBar,
     seatLimit,
     seatsAvailable,
+    extension,
+    extensionClickHandler,
+    instanceId,
   } = props;
   const { formatMessage } = useIntl();
 
@@ -68,6 +75,13 @@ const PrimeInstanceItem = (props: any) => {
       </a>
     );
   };
+
+  const extensionLocalizedMetadata = useMemo(() => {
+    if (!extension) {
+      return {} as any;
+    }
+    return getPreferredLocalizedMetadata(extension.localizedMetadata, locale);
+  }, [extension, locale]);
 
   const seatsAvailableText = seatLimit ? (
     <>
@@ -273,6 +287,14 @@ const PrimeInstanceItem = (props: any) => {
             defaultMessage: "View",
           })}
         </button>
+        {extension && (
+          <a
+            className={styles.extensionLabel}
+            onClick={(event) => extensionClickHandler(instanceId, event)}
+          >
+            {extensionLocalizedMetadata?.label}
+          </a>
+        )}
       </div>
     </li>
   );

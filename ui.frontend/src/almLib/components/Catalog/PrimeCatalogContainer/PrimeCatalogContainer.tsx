@@ -27,6 +27,8 @@ import { PrimeCatalogFilters } from "../PrimeCatalogFilters";
 import PrimeCatalogSearch from "../PrimeCatalogSearch/PrimeCatalogSearch";
 import { PrimeTrainingsContainer } from "../PrimeTrainingsContainer";
 import styles from "./PrimeCatalogContainer.module.css";
+import { closeSuggestionsList } from "../../../store/actions/search/actions";
+import { useDispatch } from "react-redux";
 
 const PrimeCatalogContainer = (props: any) => {
   const {
@@ -46,6 +48,7 @@ const PrimeCatalogContainer = (props: any) => {
   } = useCatalog();
   const { formatMessage } = useIntl();
   const [showFiltersOnMobile, setShowFiltersOnMobile] = useState(false);
+  const dispatch = useDispatch();
   const hideSearchInput = getALMConfig().hideSearchInput;
   const defaultCatalogHeading = isTranslated(
     GetTranslation("alm.catalog.header", true)
@@ -59,7 +62,13 @@ const PrimeCatalogContainer = (props: any) => {
         {GetTranslation("alm.text.searchResults")}
         <div className={styles.searchTextContainer}>
           <span className={styles.searchText}>{query}</span>
-          <span className={styles.searchReset} onClick={resetSearch}>
+          
+          <span className={styles.searchReset} onClick={resetSearch} tabIndex={0} role="button" aria-label={formatMessage(
+    { id: "alm.search.results" },
+    {
+      searchText:query
+    }
+  )}>
             {CLOSE_SVG()}
           </span>
         </div>
@@ -117,13 +126,14 @@ const PrimeCatalogContainer = (props: any) => {
     ) : (
       ""
     );
-  const searchHtml =
+  const searchHtml = 
     catalogAttributes?.showSearch === "true" ? (
       <PrimeCatalogSearch
         query={query}
         handleSearch={handleSearch}
         getSearchSuggestions={getSearchSuggestions}
         updateSnippet={updateSnippet}
+        
       />
     ) : (
       ""
@@ -138,24 +148,30 @@ const PrimeCatalogContainer = (props: any) => {
         <div className={styles.pageContainer}>
           <div className={styles.headerContainer}>
             <div className={styles.header}>
-              <h1 className={styles.label}>
+               <h1 className={styles.label} tabIndex={0}>
                 {props.heading ? props.heading : defaultCatalogHeading}
               </h1>
               {filtersButtonForMobileHTML}
+
               {!hideSearchInput && searchContainerHTML}
             </div>
+
             {props.description && (
-              <div className={styles.catalogDescription}>
+              <div className={styles.catalogDescription} tabIndex={0}>
                 {props.description}
               </div>
             )}
             {catalogAttributes?.showSearch === "true" && showingSearchHtml}
           </div>
-          <div className={styles.filtersAndListConatiner}>
+          <div className={styles.filtersAndListConatiner}
+          onFocus={
+            () => dispatch(closeSuggestionsList())
+          }>
             {filtersHtml}
             <div
               className={listContainerCss}
               aria-hidden={showFiltersOnMobile ? "true" : "false"}
+              
             >
               {isLoading ? (
                 <ALMLoader classes={styles.loader} />

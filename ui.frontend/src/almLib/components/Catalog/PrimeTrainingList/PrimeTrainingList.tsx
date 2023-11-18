@@ -48,7 +48,7 @@ const PrimeTrainingList: React.FC<{
 
   const skillsAsString = skillNames;
   const descriptionHtml = description ? (
-    <p className={styles.description}>{description}</p>
+    <p className={styles.description} aria-label={description} tabIndex={0}>{description}</p>
   ) : (
     ""
   );
@@ -127,6 +127,7 @@ const PrimeTrainingList: React.FC<{
               }
             : cardClickHandler
         }
+        
       >
         {enrollment
           ? formatMessage({
@@ -147,9 +148,9 @@ const PrimeTrainingList: React.FC<{
             style={{ ...listThumbnailBgStyle }}
             className={styles.loThumbnail}
           ></div>
-          <div className={styles.loDetails}>
+          <div className={styles.loDetails} aria-label={name} tabIndex={0} >
             <div
-              className={styles.loName}
+              className={styles.loName} 
               onClick={
                 guest
                   ? () => {

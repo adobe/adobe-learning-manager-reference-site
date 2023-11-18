@@ -3,6 +3,7 @@ import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
   PrimeLearningObjectResource,
+  PrimeLearningObjectResourceGrade,
   PrimeNote,
 } from "../../../models/PrimeModels";
 import styles from "./PrimeNoteItem.module.css";
@@ -13,6 +14,8 @@ import {
 } from "../../../utils/translationService";
 import { getEnrolledInstancesCount } from "../../../utils/hooks";
 import { AUDIO, CP, DOC, ELEARNING, PDF, PPT, PR, VIDEO, XLS } from "../../../utils/constants";
+import { AlertType } from "../../../common/Alert/AlertDialog";
+import { useAlert } from "../../../common/Alert/useAlert";
 
 const PrimeNoteItem: React.FC<{
   training: PrimeLearningObject;
@@ -31,6 +34,7 @@ const PrimeNoteItem: React.FC<{
   ) => Promise<void | undefined>;
   launchPlayerHandler: Function;
 }> = (props) => {
+  const [almAlert] = useAlert();
   const { training, trainingInstance, note, updateNote, deleteNote, launchPlayerHandler } = props;
   const isMarkerIndexPresent = note.marker ? true : false;
   let noteContainer = styles.noteContentWithoutMarker;
@@ -78,6 +82,58 @@ const PrimeNoteItem: React.FC<{
       </div>
     );
   };
+
+  const multipleAttempt = note.loResource?.multipleAttempt;
+  const timeBetweenAttempts = multipleAttempt?.timeBetweenAttempts || 0;
+  const stopAttemptOnSuccessfulComplete = multipleAttempt?.stopAttemptOnSuccessfulComplete;
+  const filteredResourceGrades = trainingInstance.enrollment?.loResourceGrades.filter(
+    (loResourceGrade) => loResourceGrade.id.search(note.loResource.id) !== -1
+  );
+
+  const loResourceGrade = filteredResourceGrades?.length
+    ? filteredResourceGrades[0]
+    : ({} as PrimeLearningObjectResourceGrade);
+
+  const moduleLockedBetweenAttempt = ()=>{
+    const lastAttemptEndTime = new Date(
+      note.loResource.learnerAttemptInfo?.currentAttemptEndTime || note.loResource.learnerAttemptInfo?.lastAttemptEndTime || 0
+    ).getTime() || 0;
+    
+    const attemptStartTime = lastAttemptEndTime + timeBetweenAttempts * 60 * 1000;
+    const now = new Date().getTime();
+    return now < attemptStartTime;
+  };
+
+  const noteClickHandler = (event: any) => {
+    if(!(
+      note.loResource.multipleAttemptEnabled &&
+      note.loResource.learnerAttemptInfo &&
+      moduleLockedBetweenAttempt()
+    )){
+
+    // Case when module is completed
+    if(stopAttemptOnSuccessfulComplete && loResourceGrade?.hasPassed){
+      return ;
+    }
+      launchPlayerHandler({
+        id: training.id,
+        moduleId: note.loResource.id,
+        trainingInstanceId: trainingInstance.id, 
+        isMultienrolled: isMultienrolled,
+        note_id: note.id,
+        note_position: note.marker,
+      })
+    }
+    else{
+      almAlert(
+        true,
+        GetTranslation("alm.mqa.module.locked.message"),
+        AlertType.error
+      );
+
+    }
+  }
+
   const defaultView = () => {
     return (
       <div
@@ -160,16 +216,7 @@ const PrimeNoteItem: React.FC<{
           <>
             <span
               className={styles.markerText}
-              onClick={() =>
-                launchPlayerHandler({
-                  id: training.id,
-                  moduleId: note.loResource.id,
-                  trainingInstanceId: trainingInstance.id, 
-                  isMultienrolled: isMultienrolled,
-                  note_id: note.id,
-                  note_position: note.marker,
-                })
-              }
+              onClick={noteClickHandler}
             >
               {formattedNoteMarker(note)}
             </span>

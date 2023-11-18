@@ -20,7 +20,7 @@ import {
 } from "../../store/actions/social/action";
 import { State } from "../../store/state";
 import { COMMENT } from "../../utils/constants";
-import { getALMConfig } from "../../utils/global";
+import { addHttpsToHref, getALMConfig } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
 
@@ -60,13 +60,14 @@ export const useComments = () => {
   const patchComment = useCallback(
     async (commentId: any, input: any) => {
       const baseApiUrl = getALMConfig().primeApiURL;
+      const updatedInput = addHttpsToHref(input);
       const body = {
         data: {
           type: COMMENT,
           id: commentId,
           attributes: {
             state: "ACTIVE",
-            text: input,
+            text: updatedInput,
           },
         },
       };

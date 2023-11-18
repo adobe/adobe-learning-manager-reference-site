@@ -40,3 +40,32 @@ governing permissions and limitations under the License.
   height: 20px;
   font-size: var(--prime-font-size-12);
 }
+.icon{
+  width: 15px;
+  height: 15px;
+  margin-right: 10px;
+  margin-top: 3.5px;
+}
+
+.pointer{
+  cursor: pointer;
+}
+.cursorDefault{
+  cursor :default;
+}
+
+.hoverit:hover {
+  .icon{
+    width: 18px;
+    height: 18px;
+    transition: all 0.2s ease-in;
+  }
+  .hover{
+  transition: all 0.2s ease-in-out;
+  }
+}
+
+.thumbnail{
+  width: 100px;
+  padding-top: 4px;
+}

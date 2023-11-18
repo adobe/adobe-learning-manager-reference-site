@@ -9,7 +9,12 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { PrimeLearningObject } from "../../../models/PrimeModels";
+import {
+  PrimeLearningObject,
+  PrimeLearningObjectResource,
+  PrimeNote,
+} from "../../../models/PrimeModels";
+import { findCoursesInsideFlexLP } from "../../../utils/hooks";
 import { PrimeCourseItemContainer } from "../PrimeCourseItemContainer";
 import { PrimeLPItemContainer } from "../PrimeLPItemContainer";
 
@@ -24,6 +29,34 @@ const PrimeTrainingOverview: React.FC<{
   isPreviewEnabled: boolean;
   updateFileSubmissionUrl: Function;
   parentLoName: string;
+  setTimeBetweenAttemptEnabled: Function;
+  timeBetweenAttemptEnabled: boolean;
+  sendInstanceId: Function;
+  selectedCourses: Object;
+  isFlexible: boolean;
+  selectedInstanceInfo?: Object;
+  notes: PrimeNote[];
+  updateNote: (
+    note: PrimeNote,
+    updatedText: string,
+    loId: string,
+    loResourceId: PrimeLearningObjectResource
+  ) => Promise<void | undefined>;
+  deleteNote: (
+    noteId: string,
+    loId: string,
+    loResourceId: string
+  ) => Promise<void | undefined>;
+  downloadNotes: (
+    loId: string,
+    loInstanceId: string
+  ) => Promise<void | undefined>;
+  sendNotesOnMail: (
+    loId: string,
+    loInstanceId: string
+  ) => Promise<void | undefined>;
+  lastPlayingLoResourceId: string;
+  showUnselectedLOs: boolean;
 }> = (props) => {
   const {
     trainings,
@@ -34,25 +67,70 @@ const PrimeTrainingOverview: React.FC<{
     updateFileSubmissionUrl,
     isParentLOEnrolled = false,
     parentLoName,
+    setTimeBetweenAttemptEnabled,
+    timeBetweenAttemptEnabled,
+    sendInstanceId,
+    selectedCourses,
+    isFlexible,
+    selectedInstanceInfo,
+    notes,
+    updateNote,
+    deleteNote,
+    downloadNotes,
+    sendNotesOnMail,
+    lastPlayingLoResourceId,
+    showUnselectedLOs
   } = props;
+
+  const allCoursesAreSelected=(training: PrimeLearningObject)=>{
+    if(!selectedInstanceInfo){
+      return false;
+    }
+      const allCourses=findCoursesInsideFlexLP(training, isFlexible);
+      const courseIdList = Object.keys(selectedInstanceInfo);
+      let allSelected = allCourses.every((subLO) => courseIdList.includes(subLO.id));
+    return allSelected;
+  }
+
   return (
     <>
       {trainings?.map((training) => {
         const loType = training.loType;
         if (loType === COURSE) {
           return (
-            <PrimeCourseItemContainer
-              key={training.id}
-              training={training}
-              launchPlayerHandler={launchPlayerHandler}
-              isPartOfLP={isPartOfLP}
-              showMandatoryLabel={showMandatoryLabel}
-              isPreviewEnabled={isPreviewEnabled}
-              updateFileSubmissionUrl={updateFileSubmissionUrl}
-              isParentLOEnrolled={isParentLOEnrolled}
-              parentLoName={parentLoName}></PrimeCourseItemContainer>
+            <>
+              <PrimeCourseItemContainer
+                key={training.id}
+                training={training}
+                launchPlayerHandler={launchPlayerHandler}
+                isPartOfLP={isPartOfLP}
+                showMandatoryLabel={showMandatoryLabel}
+                isPreviewEnabled={isPreviewEnabled}
+                updateFileSubmissionUrl={updateFileSubmissionUrl}
+                isParentLOEnrolled={isParentLOEnrolled}
+                parentLoName={parentLoName}
+                setTimeBetweenAttemptEnabled={setTimeBetweenAttemptEnabled}
+                timeBetweenAttemptEnabled={timeBetweenAttemptEnabled}
+                sendInstanceId={sendInstanceId}
+                selectedCourses={selectedCourses}
+                isFlexible={isFlexible}
+                selectedInstanceInfo={selectedInstanceInfo}
+                notes={notes}
+                updateNote={updateNote}
+                deleteNote={deleteNote}
+                downloadNotes={downloadNotes}
+                sendNotesOnMail={sendNotesOnMail}
+                lastPlayingLoResourceId={lastPlayingLoResourceId}
+              ></PrimeCourseItemContainer>
+            </>
           );
         } else if (loType === LEARNING_PROGRAM) {
+          
+          if((showUnselectedLOs && isFlexible && allCoursesAreSelected(training)) || 
+              (showUnselectedLOs && !training.instances[0].isFlexible)){
+                // assuming one instance of LP
+            return;
+          }
           return (
             <PrimeLPItemContainer
               key={training.id}
@@ -63,7 +141,21 @@ const PrimeTrainingOverview: React.FC<{
               isPreviewEnabled={isPreviewEnabled}
               updateFileSubmissionUrl={updateFileSubmissionUrl}
               isParentLOEnrolled={isParentLOEnrolled}
-              parentLoName={parentLoName}></PrimeLPItemContainer>
+              parentLoName={parentLoName}
+              setTimeBetweenAttemptEnabled={setTimeBetweenAttemptEnabled}
+              timeBetweenAttemptEnabled={timeBetweenAttemptEnabled}
+              sendInstanceId={sendInstanceId}
+              selectedCourses={selectedCourses}
+              isFlexible={isFlexible}
+              selectedInstanceInfo={selectedInstanceInfo}
+              notes={notes}
+              updateNote={updateNote}
+              deleteNote={deleteNote}
+              downloadNotes={downloadNotes}
+              sendNotesOnMail={sendNotesOnMail}
+              lastPlayingLoResourceId={lastPlayingLoResourceId}
+              showUnselectedLOs={showUnselectedLOs}
+            ></PrimeLPItemContainer>
           );
         }
         return <></>;

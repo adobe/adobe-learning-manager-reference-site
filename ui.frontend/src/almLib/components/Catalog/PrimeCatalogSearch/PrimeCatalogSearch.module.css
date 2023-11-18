@@ -37,7 +37,7 @@ governing permissions and limitations under the License.
 
 .customInput input {
   padding-right: 30px;
-  height: 100%;
+  height: 38px;
   font-size: var(--prime-font-size-14);
   border-color: var(--prime-color-nc3) !important;
   border-radius: 0px 3px 3px 0px;

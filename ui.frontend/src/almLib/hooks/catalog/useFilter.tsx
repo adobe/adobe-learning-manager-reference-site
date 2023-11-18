@@ -22,14 +22,29 @@ import {
   FilterType,
   UpdateFiltersEvent,
 } from "../../utils/filters";
-import { getQueryParamsFromUrl, updateURLParams } from "../../utils/global";
+import { getALMObject, getQueryParamsFromUrl, updateURLParams } from "../../utils/global";
+import { convertJsonToUri, convertUrltoReact } from "../../utils/urlConv";
 
 export const useFilter = () => {
+
+
   const emptyFilterState = {} as FilterState;
   const [filterState, setFilterState] = useState(() => emptyFilterState);
   const filtersFromState = useSelector(
     (state: State) => state.catalog.filterState
   );
+  ///------------ Handling Ember URI conversion ------------
+  var queryParams = getQueryParamsFromUrl();
+  if(queryParams.instancePage){
+    window.history.replaceState(null,'','/catalog/index?')
+    getALMObject().navigateToInstancePage(queryParams.instancePage)
+  }
+  if( queryParams.isEmber === 'true'){
+    queryParams  = convertUrltoReact(queryParams);
+      window.history.replaceState(null , 'null' , convertJsonToUri(queryParams));
+      updateURLParams(queryParams)
+    }
+  //----------------------------------------------
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
 
@@ -72,6 +87,8 @@ export const useFilter = () => {
 
   useEffect(() => {
     const queryParams = getQueryParamsFromUrl();
+
+
     const getFilters = async () => {
       try {
         const filters = await APIServiceInstance.getFilters();
@@ -81,10 +98,11 @@ export const useFilter = () => {
         console.log(error);
       }
     };
-    getFilters();
-    //update state merged with filters in url
-    const updatedFilters = { ...filtersFromState, ...queryParams };
+    
+    getFilters();   
+    const updatedFilters = { ...filtersFromState, ...queryParams  };
     dispatch(updateFiltersOnLoad(updatedFilters));
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

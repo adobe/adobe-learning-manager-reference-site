@@ -22,8 +22,8 @@ import {
 import { CONTENT, PREWORK, TESTOUT } from "../../../utils/constants";
 import { convertSecondsToTimeText } from "../../../utils/dateTime";
 import {
-  filteredResource,
   filterLoReourcesBasedOnResourceType,
+  getDuration,
 } from "../../../utils/hooks";
 import {
   getPreferredLocalizedMetadata,
@@ -41,12 +41,15 @@ const PrimeCourseOverview: React.FC<{
   launchPlayerHandler: Function;
   isParentLOEnrolled?: boolean;
   isPartOfLP?: boolean;
+  isParentFlexLP?: boolean;
   showDuration?: boolean;
   showNotes: boolean;
   isPreviewEnabled: boolean;
   updateFileSubmissionUrl: Function;
   notes: PrimeNote[];
   lastPlayingLoResourceId: String;
+  setTimeBetweenAttemptEnabled: Function;
+  timeBetweenAttemptEnabled: boolean;
   updateNote: (
     note: PrimeNote,
     updatedText: string,
@@ -76,13 +79,16 @@ const PrimeCourseOverview: React.FC<{
     isPartOfLP = false,
     isParentLOEnrolled = false,
     isPreviewEnabled = false,
+    isParentFlexLP = false,
     updateFileSubmissionUrl,
     notes,
     updateNote,
     deleteNote,
     downloadNotes,
     sendNotesOnMail,
-    lastPlayingLoResourceId
+    lastPlayingLoResourceId,
+    setTimeBetweenAttemptEnabled,
+    timeBetweenAttemptEnabled,
   } = props;
 
   const { locale } = useIntl();
@@ -93,18 +99,6 @@ const PrimeCourseOverview: React.FC<{
   interface INotesByNamesAndId {
     [key: string]: INotesbyModuleName;
   }
-  const getDuration = (
-    learningObjectResources: PrimeLearningObjectResource[]
-  ) => {
-    let duration = 0;
-    learningObjectResources?.forEach((learningObjectResource) => {
-      const resource = filteredResource(learningObjectResource, locale);
-      const resDuration =
-        resource.authorDesiredDuration || resource.desiredDuration || 0;
-      duration += resDuration;
-    });
-    return duration;
-  };
 
   let moduleReources = filterLoReourcesBasedOnResourceType(
     trainingInstance,
@@ -120,7 +114,7 @@ const PrimeCourseOverview: React.FC<{
     PREWORK
   );
 
-  const contentModuleDuration = getDuration(moduleReources);
+  const contentModuleDuration = getDuration(moduleReources,locale);
 
   if (isPartOfLP) {
     moduleReources = [...preWorkResources, ...moduleReources];
@@ -130,7 +124,7 @@ const PrimeCourseOverview: React.FC<{
   let [preWorkDuration, setPreWorkDuration] = useState(0);
   useEffect(() => {
     if (preWorkResources?.length) {
-      setPreWorkDuration(getDuration(preWorkResources));
+      setPreWorkDuration(getDuration(preWorkResources, locale));
     }
   }, [locale, preWorkResources]);
 
@@ -212,7 +206,10 @@ const PrimeCourseOverview: React.FC<{
                 isPreviewEnabled={isPreviewEnabled}
                 updateFileSubmissionUrl={updateFileSubmissionUrl}
                 isParentLOEnrolled={isParentLOEnrolled}
+                isParentFlexLP={isParentFlexLP}
                 lastPlayingLoResourceId={lastPlayingLoResourceId}
+                setTimeBetweenAttemptEnabled={setTimeBetweenAttemptEnabled}
+                timeBetweenAttemptEnabled={timeBetweenAttemptEnabled}
               ></PrimeModuleList>
             </>
           )}
@@ -239,7 +236,10 @@ const PrimeCourseOverview: React.FC<{
             isPreviewEnabled={isPreviewEnabled}
             updateFileSubmissionUrl={updateFileSubmissionUrl}
             isParentLOEnrolled={isParentLOEnrolled}
+            isParentFlexLP={isParentFlexLP}
             lastPlayingLoResourceId={lastPlayingLoResourceId}
+            setTimeBetweenAttemptEnabled={setTimeBetweenAttemptEnabled}
+            timeBetweenAttemptEnabled={timeBetweenAttemptEnabled}
           ></PrimeModuleList>
         </Item>
         {showTestout && (
@@ -252,7 +252,10 @@ const PrimeCourseOverview: React.FC<{
               isPreviewEnabled={isPreviewEnabled}
               updateFileSubmissionUrl={updateFileSubmissionUrl}
               isParentLOEnrolled={isParentLOEnrolled}
+              isParentFlexLP={isParentFlexLP}
               lastPlayingLoResourceId={lastPlayingLoResourceId}
+              setTimeBetweenAttemptEnabled={setTimeBetweenAttemptEnabled}
+              timeBetweenAttemptEnabled={timeBetweenAttemptEnabled}
             ></PrimeModuleList>
           </Item>
         )}
@@ -265,13 +268,13 @@ const PrimeCourseOverview: React.FC<{
                     <span aria-hidden="true" className={styles.downloadIcon}>
                       <Download />
                     </span>
-                    {GetTranslation("alm.text.download", true)}
+                    <span>{GetTranslation("alm.text.download", true)}</span>
                   </p>
                   <p onClick={handleNotesMailing}>
                     <span aria-hidden="true" className={styles.mailIcon}>
                       <Email />
                     </span>
-                    {GetTranslation("alm.text.email", true)}
+                    <span>{GetTranslation("alm.text.email", true)}</span>
                   </p>
                 </div>
                 {notesByModuleName.map((item: INotesbyModuleName) => (

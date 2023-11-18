@@ -34,6 +34,24 @@ export const convertSecondsToTimeText = (time: number) => {
   return `${hoursText} ${minsText}`;
 };
 
+// Time in hours mins seconds
+export const calculateSecondsToTime = (time: number) => {
+  if (!time || time === 0) {
+    return GetTranslationReplaced("alm.text.mins", "0");
+  }
+  
+  const hours = Math.floor(time / 3600);
+  const mins = Math.floor((time % 3600) / 60);
+  const secs = time % 60;
+
+  const hoursText = hours > 0 ? (hours === 1 ? GetTranslation("alm.text.1hr") : GetTranslationReplaced("alm.text.hrs", `${hours}`)) : "";
+  const minsText = mins > 0 ? (mins === 1 ? GetTranslation("alm.text.1min") : GetTranslationReplaced("alm.text.mins", `${mins}`)) : "";
+  const secsText = secs > 0 ? (secs === 1 ? GetTranslation("alm.text.1sec") : GetTranslationReplaced("alm.text.secs", `${secs}`)) : "";
+
+  const timeParts = [hoursText, minsText, secsText].filter(part => part !== ""); // Remove empty parts
+  return timeParts.join(" ");
+};
+
 export const timeSince = (date: any) => {
   var seconds = Math.floor(
     (new Date().valueOf() - new Date(date).valueOf()) / 1000

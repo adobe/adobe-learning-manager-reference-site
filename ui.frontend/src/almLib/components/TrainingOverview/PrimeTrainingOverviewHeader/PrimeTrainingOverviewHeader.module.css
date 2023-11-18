@@ -84,6 +84,22 @@ governing permissions and limitations under the License.
   padding: 0 10px;
   font-family: "source-sans-pro";
 }
+
+.enrollmentCountButton {
+  border: 0.1rem solid var(--prime-color-nc4);
+  background-color: var(--prime-color-white);
+  align-items: center;
+  min-width: 280px !important;
+  border-radius: 24px;
+  font-size: var(--prime-font-size-14);
+  font-weight: 400;
+  min-height: 30px;
+  color: var(--prime-color-white);
+  cursor: pointer;
+  padding: 0 10px;
+  font-family: "source-sans-pro";
+}
+
 .boxButton {
   border: 0.1rem solid var(--prime-color-nc2);
   background-color: var(--prime-color-white);
@@ -221,6 +237,14 @@ governing permissions and limitations under the License.
 .progressLabel {
   margin: -10px 10px 0px 0px;
   color: var(--prime-color-white);
+}
+
+.enrollmentLabel{
+  color: var(--prime-color-black);
+}
+
+.enrollmentCountButtonGroup{
+  margin-bottom: 0.5rem;
 }
 
 @media screen and (max-width: 1024px) {
@@ -404,5 +428,9 @@ governing permissions and limitations under the License.
   }
   .breadcrumbLink {
     color: var(--prime-color-black);
+  }
+
+  .enrollmentCountButtonGroup{
+    display: none;
   }
 }

@@ -29,9 +29,13 @@ governing permissions and limitations under the License.
 .notesActions p{
   margin-left: 20px;
   color: var(--prime-color-nc3);
+  display: flex;
+  align-items: center;
 }
 .notesNotPresent{
   color: var(--prime-color-nc3);
+  padding-left: 10px;
+  padding-bottom: 10px;
 }
 .header {
   display: flex;
@@ -84,6 +88,6 @@ governing permissions and limitations under the License.
   fill: var(--prime-color-nc3);
   width: 14px;
   float: left;
-  padding-bottom: 3px;
+  height: inherit;
 }
 

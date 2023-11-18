@@ -15,7 +15,9 @@ import { useIntl } from "react-intl";
 import { useNotifications } from "../../../hooks";
 import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 import { PrimeNotificationList } from "../PrimeNotificationList";
+import { PrimeAnnouncementContainer } from "../PrimeAnnoucementContainer";
 import styles from "./PrimeNotificationContainer.module.css";
+import { PrimeUserNotification } from "../../../models";
 
 const POLLING_INTERVAL = 60000; //1 MIN
 const PrimeNotificationContainer = () => {
@@ -33,7 +35,8 @@ const PrimeNotificationContainer = () => {
   } = useNotifications();
 
   const [showNotifications, setShowNotifications] = useState(false);
-
+  const [openAnnouncement , setAnnouncementOpen] = useState(false);
+  const [announcementData , setAnnouncementData] = useState({} as PrimeUserNotification);
   const toggleShowNotifications = () => {
     setShowNotifications((prevState) => !prevState);
   };
@@ -96,9 +99,13 @@ const PrimeNotificationContainer = () => {
             isLoading={isLoading}
             loadMoreNotifications={loadMoreNotifications}
             redirectOverviewPage={redirectToLoPage}
+            setAnnouncementOpen={setAnnouncementOpen}
+            setShowNotifications={setShowNotifications}
+            setAnnouncementData={setAnnouncementData}
           />
         )}
       </div>
+      { openAnnouncement && <PrimeAnnouncementContainer setAnnouncementOpen={setAnnouncementOpen}  notifications={announcementData}/>}
     </ALMErrorBoundary>
   );
 };

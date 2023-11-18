@@ -28,6 +28,7 @@ import {
 } from "./ALMCustomHooks";
 import APIServiceInstance from "./APIService";
 import ICustomHooks from "./ICustomHooks";
+import { PrimeUserBadge } from "../models";
 
 interface ISortMap {
   date: string;
@@ -138,12 +139,15 @@ class ESCustomHooks implements ICustomHooks {
     }
     return null;
   }
-  async enrollToTraining(params: QueryParams = {}) {
+  async enrollToTraining(
+    params: QueryParams = {},
+    headers: Record<string, string> = {}
+  ) {
     if (redirectToLoginAndAbort()) {
       return;
     }
     if (isUserLoggedIn()) {
-      return ALMCustomHooksInstance.enrollToTraining(params);
+      return ALMCustomHooksInstance.enrollToTraining(params, headers);
     }
   }
   async unenrollFromTraining(enrollmentId: string) {
@@ -225,6 +229,28 @@ class ESCustomHooks implements ICustomHooks {
   async addProductToCart(sku: string) {
     const defaultCartValues = { items: [], totalQuantity: 0, error: null };
     return { ...defaultCartValues, error: true };
+  }
+  async getUsersBadges(
+    userId: string,
+    params: QueryParams
+  ): Promise<{
+      badgeList : PrimeUserBadge[];
+      links: {next: any}
+  }
+  | undefined
+> {
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.getUsersBadges(userId, params);
+    }
+    return;
+  }
+  async loadMoreBadges(url: string) {
+    if (redirectToLoginAndAbort()) {
+      return;
+    }
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.loadMoreBadges(url);
+    }
   }
 }
 

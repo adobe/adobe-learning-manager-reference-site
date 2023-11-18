@@ -9,7 +9,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { DATE_CREATED } from "../../../utils/constants";
 import { PrimeDropdown } from "../PrimeDropdown";
@@ -30,6 +30,12 @@ const PrimeCommunityPostFilters = (props: any) => {
       props.sortFilterChangeHandler(sortFilters[option]);
     }
   };
+
+  useEffect(() => {
+    if (props.clearSortFilter) {
+      setSelectedSortFilter(defaultSortFilter);
+    }
+  }, [props.clearSortFilter]);
 
   return (
     <>

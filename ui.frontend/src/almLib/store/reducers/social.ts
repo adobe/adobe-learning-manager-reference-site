@@ -74,6 +74,7 @@ import {
   UPDATE_POST_PREVIEW_DATA,
   UPDATE_REPLY,
   UPDATE_REPLY_PREVIEW_DATA,
+  LOAD_FAV_BOARDS,
 } from "../actions/social/actionTypes";
 
 // import post from "./post";
@@ -87,6 +88,7 @@ export interface SelectedBoardState {
 export interface SelectedPostState {
   item: PrimePost;
 }
+
 
 export interface BoardState {
   items: PrimeBoard[];
@@ -147,6 +149,8 @@ export interface SocialState {
   selectedComment: PrimeComment;
   comments: { items: PrimeComment[]; paginating: boolean; next: string };
   replies: { items: PrimeReply[]; paginating: boolean; next: string };
+  userFavBoards : PrimeBoard[];
+
   // createComment: PrimeCommentCreationAttributes;
   // createReply: PrimeReplyCreationAttributes;
   // createPost: CreatePostDetails;
@@ -245,7 +249,7 @@ const next: Reducer<string, AnyAction> = (
   switch (action.type) {
     case LOAD_SOCIAL_BOARDS:
     case PAGINATE_SOCIAL_BOARDS:
-      return action.payload.next;
+      return action.payload.next || null;
     case CHANGE_SOCIAL_TAB:
       return null;
     default:
@@ -911,6 +915,20 @@ const replies: Reducer<
 });
 //Reducers for replies ends
 
+
+const userFavBoards: Reducer<PrimeBoard[], AnyAction> = (
+  state: PrimeBoard[] | undefined,
+  action: AnyAction
+) => {
+  switch (action.type) {
+    case LOAD_FAV_BOARDS: {
+      return action?.payload || [];
+    }
+    
+    default:
+      return state || [];
+  }
+};
 const social: Reducer<SocialState, AnyAction> = combineReducers({
   selectedTab,
   board,
@@ -925,6 +943,7 @@ const social: Reducer<SocialState, AnyAction> = combineReducers({
   selectedComment,
   comments,
   replies,
+  userFavBoards,
   // comment,
   // reply,
   // post,

@@ -1,0 +1,141 @@
+@import "../../../styles/variables.css";
+
+.App {
+  box-sizing: border-box;
+}
+
+.itemview {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 1px solid var(--prime-color-nc6);
+  position: relative;
+}
+
+.image {
+  width: 80px;
+  height: 80px;
+  border-radius: 0%;
+}
+
+.containertext {
+  display: inline-block;
+  max-width: 70%;
+  margin-top: 10px;
+  padding-left: 10px;
+  padding-right: 20px;
+  position: absolute;
+}
+
+.badgename {
+  box-sizing: inherit;
+  overflow: hidden;
+  font-style: normal;
+  font-weight: var(--prime-font-weight-400);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.para {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badgebox {
+  width: 100%;
+  height: 100px;
+  padding-left: 5px;
+}
+
+.achieved {
+  color: var(--prime-success-color);
+}
+
+.inprogress {
+  color: var(--prime-progress-color);
+}
+
+.inline {
+  display: inline;
+  color: var(--prime-color-primary);
+  cursor: pointer;
+}
+
+.badgestatus {
+  text-align: left;
+  padding-bottom: 4px;
+}
+
+.imagecontainer {
+  width: 80px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.blue {
+  color: var(--prime-color-primary);
+  cursor: pointer;
+}
+
+.right {
+  color: var(--prime-color-primary);
+  float: right;
+  margin-left: 5px;
+}
+
+.margin {
+  color: var(--prime-color-primary);
+  float: right;
+  margin-left: 5px;
+  margin-right: 3px;
+  cursor: pointer;
+}
+
+.downloadicons {
+  float: right;
+  margin-right: 0;
+  margin-top: 5px;
+}
+
+.downloadiconsdisabled {
+  opacity: 0.5;
+  float: right;
+  margin-right: 0;
+  margin-top: 10px;
+}
+
+.downloadoptions {
+  float: right;
+}
+
+.downloadlink {
+  float: left;
+  margin-right: 3px;
+}
+
+@media (max-width: 768px) {
+  .itemview {
+    font-size: 14px;
+  }
+  .containertext {
+    padding-top: 25px;
+  }
+  .imagecontainer {
+    padding-top: 25px;
+  }
+  .checkbox {
+    padding-top: 25px;
+    padding-right: 5px !important;
+  }
+  .badgebox {
+    height: 120px;
+  }
+  .image {
+    width: 70px;
+    height: 70px;
+  }
+  .imagecontainer {
+    width: 70px;
+  }
+}

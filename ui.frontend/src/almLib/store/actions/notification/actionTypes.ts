@@ -11,3 +11,4 @@ governing permissions and limitations under the License.
 */
 export const LOAD_NOTIFICATIONS = "LOAD_NOTIFICATIONS";
 export const PAGINATE_NOTIFICATIONS = "PAGINATE_NOTIFICATIONS";
+export const LOAD_ANNOUNCEMENT = "LOAD_ANN";

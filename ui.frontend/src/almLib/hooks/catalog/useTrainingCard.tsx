@@ -35,6 +35,7 @@ import {
   GetTranslation,
 } from "../../utils/translationService";
 
+
 export const useTrainingCard = (training: PrimeLearningObject) => {
   const [almAlert] = useAlert();
   const { locale } = useIntl();
@@ -136,8 +137,10 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
       alm.navigateToTrainingOverviewPage(training.id, defaultInstance[0]?.id);
       return;
     }
+    window.parent.postMessage({ "origin" : window.origin , 'instancePageUrl' : `instancePage=${training.id}`,'instancePage': true}  , "*");
+
     alm.navigateToInstancePage(training.id);
-  }, [training]);
+  }, [training , almAlert]);
 
   return {
     id,

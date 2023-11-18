@@ -23,7 +23,7 @@ import store from "../store/APIStore";
 export const AppContextProvider = (props: React.PropsWithChildren<{}>) => {
   return (
     <ReduxProvider store={store}>
-      {props.children}
+      <>{props.children}</>
     </ReduxProvider>
   );
 };

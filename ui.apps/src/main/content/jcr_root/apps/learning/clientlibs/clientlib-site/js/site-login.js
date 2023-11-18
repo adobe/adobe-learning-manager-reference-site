@@ -45,7 +45,7 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
       return user;
     }
     const primeApiURL = window.ALM.ALMConfig.primeApiURL;
-    const userUrl = `${primeApiURL}/user?include=account`;
+    const userUrl = `${primeApiURL}/user?include=account&enforcedFields[account]=extensions`;
     const headers = {
       Accept: "application/vnd.api+json",
       Authorization: `oauth ${getAccessToken()}`,

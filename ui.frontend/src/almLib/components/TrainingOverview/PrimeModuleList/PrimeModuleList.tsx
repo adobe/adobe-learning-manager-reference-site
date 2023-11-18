@@ -28,10 +28,13 @@ const PrimeModuleList: React.FC<{
   loResources: PrimeLearningObjectResource[];
   isPartOfLP?: boolean;
   isParentLOEnrolled?: boolean;
+  isParentFlexLP?: boolean;
   isContent?: boolean;
   isPreviewEnabled: boolean;
   updateFileSubmissionUrl: Function;
   lastPlayingLoResourceId: String;
+  setTimeBetweenAttemptEnabled: Function;
+  timeBetweenAttemptEnabled: boolean;
 }> = (props) => {
   const {
     loResources,
@@ -40,10 +43,13 @@ const PrimeModuleList: React.FC<{
     trainingInstance,
     isPartOfLP = false,
     isParentLOEnrolled = false,
+    isParentFlexLP = false,
     isContent,
     isPreviewEnabled,
     updateFileSubmissionUrl,
-    lastPlayingLoResourceId
+    lastPlayingLoResourceId,
+    setTimeBetweenAttemptEnabled,
+    timeBetweenAttemptEnabled,
   } = props;
 
   const isModuleLocked = (
@@ -59,6 +65,9 @@ const PrimeModuleList: React.FC<{
     const enrollment = getEnrollment(training, trainingInstance);
     
     if (!enrollment) {
+      if(index==0){
+        return false;
+      }
       return true;
     }
     const loResourceGrades = enrollment.loResourceGrades;
@@ -103,7 +112,10 @@ const PrimeModuleList: React.FC<{
           updateFileSubmissionUrl={updateFileSubmissionUrl}
           isPartOfLP={isPartOfLP}
           isParentLOEnrolled={isParentLOEnrolled}
+          isParentFlexLP={isParentFlexLP}
           lastPlayingLoResourceId = {lastPlayingLoResourceId}
+          setTimeBetweenAttemptEnabled={setTimeBetweenAttemptEnabled}
+          timeBetweenAttemptEnabled={timeBetweenAttemptEnabled}
         ></PrimeModuleItem>
       ))}
     </ul>

@@ -15,7 +15,6 @@ governing permissions and limitations under the License.
   padding: 10px;
   /* height: 140px; */
   /* border: 1px solid #c7c7c7; */
-  cursor: pointer;
 }
 .headerContainer:hover {
   background-color: var(--prime-color-white);
@@ -76,6 +75,7 @@ governing permissions and limitations under the License.
   border-radius: 10px !important;
   flex: 0 0 auto;
   background-size: 50px !important;
+  cursor: pointer;
 }
 
 .title {

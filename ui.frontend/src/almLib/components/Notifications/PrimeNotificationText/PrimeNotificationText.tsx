@@ -13,6 +13,9 @@ import { useIntl } from "react-intl";
 import { modifyTimeDDMMYY } from "../../../utils/dateTime";
 import { ReplaceLoTypeWithAccountTerminology } from "../../../utils/translationService";
 import styles from "./PrimeNotificationText.module.css";
+import { PrimeUserNotification } from "../../../models";
+
+
 
 const feedbackChannels: Array<string> = [
   "course::l1FeedbackPrompt",
@@ -35,11 +38,21 @@ const name0Var2Brace: String = "{{name0}}";
 const dateTimeStr: any = ["date", "time"];
 const learningObjType: any = "learningObject";
 
-const PrimeNotificationText = (props: any) => {
+const PrimeNotificationText : React.FC<{
+  notification: PrimeUserNotification
+  redirectOverviewPage : Function;
+  setAnnouncementOpen: Function;
+  setShowNotifications: Function;
+  setAnnouncementData: Function;
+
+}> = (props: any) => {
   const { locale } = useIntl();
   const notif = props.notification;
-  const redirectOverviewPage = props.redirectOverviewPage;
-
+  const setAnnouncementOpen=props?.setAnnouncementOpen
+  const setShowNotifications = props?.setShowNotifications
+  const setAnnouncementData= props?.setAnnouncementData;
+  let clickHandler = props.redirectOverviewPage;
+  
   let message = notif.message
     .replace("course", ReplaceLoTypeWithAccountTerminology("course"))
     .replace("program", ReplaceLoTypeWithAccountTerminology("learningProgram"))
@@ -47,7 +60,6 @@ const PrimeNotificationText = (props: any) => {
       "certification",
       ReplaceLoTypeWithAccountTerminology("certification")
     );
-
   let name1 = -1,
     name0 = -1,
     endname0 = -1,
@@ -120,6 +132,15 @@ const PrimeNotificationText = (props: any) => {
     let className = styles.loLink;
     return value === learningObjType ? className : "";
   };
+  if(notif.announcement){
+    
+      clickHandler = () =>{
+        setAnnouncementData(notif);
+        setAnnouncementOpen(true);
+        setShowNotifications(false);
+      }
+
+  }
 
   const formattedNotificationText = (strType: string, loStr: string) => {
     return (dateTimeStr.includes(strType) && !loReminderChannels.includes(notif.channel)) ? (
@@ -129,7 +150,7 @@ const PrimeNotificationText = (props: any) => {
         role="link"
         className={getLearningObjClass(strType)}
         onClick={() => {
-          redirectOverviewPage(notif);
+          clickHandler(notif);
         }}
       >
         {loStr}
@@ -139,13 +160,20 @@ const PrimeNotificationText = (props: any) => {
 
   return (
     <div>
+      
+     
       {subStrPart1}
       {formattedNotificationText(str1Type, loStr1)}
       {subStrPart2}
       {name1 > 0 ? formattedNotificationText(str2Type, loStr2) : null}
       {subStrPart3}
+  
+  
+      
     </div>
   );
 };
 
 export default PrimeNotificationText;
+
+

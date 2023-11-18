@@ -40,6 +40,7 @@ import {
 } from "./ALMCustomHooks";
 import APIServiceInstance from "./APIService";
 import ICustomHooks from "./ICustomHooks";
+import { PrimeUserBadge } from "../models";
 
 const CART_ID = "CART_ID";
 const COMMERCE_FILTERS = "COMMERCE_FILTERS";
@@ -178,7 +179,7 @@ const getTransformedFilter = async (filterState: CatalogFilterState) => {
     const pricesArray = filterState.price.split("-");
     filter[ALM_PRICE] = {
       from: pricesArray[0],
-      to: pricesArray[1] == "0" ? "0.0000000001": pricesArray[1] ,
+      to: pricesArray[1] === "0" ? "0.0000000001": pricesArray[1] ,
     };
   }
   return filter;
@@ -342,12 +343,15 @@ class CommerceCustomHooks implements ICustomHooks {
     return null;
   }
 
-  async enrollToTraining(params: QueryParams = {}) {
+  async enrollToTraining(
+    params: QueryParams = {},
+    headers: Record<string, string> = {}
+  ) {
     if (redirectToLoginAndAbort()) {
       return;
     }
     if (isUserLoggedIn()) {
-      return ALMCustomHooksInstance.enrollToTraining(params);
+      return ALMCustomHooksInstance.enrollToTraining(params, headers);
     }
   }
   async unenrollFromTraining(enrollmentId: string) {
@@ -495,6 +499,28 @@ class CommerceCustomHooks implements ICustomHooks {
         totalQuantity: 0,
         error: [error?.message],
       };
+    }
+  }
+  async getUsersBadges(
+    userId: string,
+    params: QueryParams
+  ): Promise< {
+      badgeList : PrimeUserBadge[];
+      links: {next: any}
+  }
+  | undefined
+> {
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.getUsersBadges(userId, params);
+    }
+    return;
+  }
+  async loadMoreBadges(url: string) {
+    if (redirectToLoginAndAbort()) {
+      return;
+    }
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.loadMoreBadges(url);
     }
   }
 }

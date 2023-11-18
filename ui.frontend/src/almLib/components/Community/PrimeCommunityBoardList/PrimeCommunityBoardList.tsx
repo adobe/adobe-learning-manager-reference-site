@@ -28,6 +28,7 @@ const PrimeCommunityBoardList = () => {
   const queryParams = getQueryParamsFromUrl();
   const DEFAULT_SORT_VALUE = "-dateUpdated";
   const DEFAULT_SKILL = queryParams ? queryParams.skill : "";
+
   const {
     items,
     fetchBoards,

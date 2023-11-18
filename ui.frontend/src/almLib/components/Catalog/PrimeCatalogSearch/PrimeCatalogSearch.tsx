@@ -52,7 +52,7 @@ const PrimeCatalogSearch: React.FC<{
   const [state, setState] = useState(query);
 
   const [showSearchInDropdown, setShowSearchInDropdown] = useState(false);
-
+  
   const searchFilterDropdownRef = useRef<HTMLInputElement>(null);
   const searchAutocompleteDropdownRef = useRef<HTMLInputElement>(null);
 
@@ -84,9 +84,10 @@ const PrimeCatalogSearch: React.FC<{
           ].join(" ")}
         >
           <h4>{GetTranslation("alm.catalog.searchIn")}</h4>
+          <ul>
           {defaultSearchInDropdownList.map((item) => {
             return (
-              <ul>
+              
                 <li key={item.label}>
                   <Checkbox
                     onChange={(checked) => updateSnippet(checked, item)}
@@ -96,9 +97,10 @@ const PrimeCatalogSearch: React.FC<{
                     {GetTranslation(item.label, true)}
                   </Checkbox>
                 </li>
-              </ul>
+              
             );
           })}
+          </ul>
         </div>
       );
     }
@@ -254,6 +256,10 @@ const PrimeCatalogSearch: React.FC<{
         <Properties size="S" />
       </button>
       <div className={styles.container}>
+      {searchInDropdownTemplate()}
+      <div
+          onFocus={() => setShowSearchInDropdown(false)}
+        >
         <TextField
           placeholder={formatMessage({
             id: "alm.catalog.search.placeholder",
@@ -275,8 +281,9 @@ const PrimeCatalogSearch: React.FC<{
         <span className={styles.searchIcon} onClick={beginSearchHandler}>
           {SEARCH_ICON_SVG()}
         </span>
+        
         {searchSuggestionsTemplate()}
-        {searchInDropdownTemplate()}
+        </div>
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 import { useCallback } from "react";
 import { COMMENT, POLL, POST } from "../../utils/constants";
-import { getALMConfig } from "../../utils/global";
+import { addHttpsToHref, getALMConfig } from "../../utils/global";
 import { RestAdapter } from "../../utils/restAdapter";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { useDispatch } from "react-redux";
@@ -63,20 +63,6 @@ export const usePost = () => {
     },
     []
   );
-  
-  function addHttpsToHref(htmlString: string): string {
-    const anchorRegex = /<a\s+(?:[^>]*?\s+)?href=["']([^"']*)["']/gi;
-
-    const modifiedHTML = htmlString.replace(anchorRegex, (match, url) => {
-      if (!/^https?:\/\//i.test(url)) {
-        return match.replace(url, `https://${url}`);
-      } else {
-        return match;
-      }
-    });
-  
-    return modifiedHTML;
-  }
 
   const getPollPostObject = (pollOptions: any[]) => {
     let otherData = [] as any;
@@ -104,6 +90,7 @@ export const usePost = () => {
       pollOptions
     ) => {
       const baseApiUrl = getALMConfig().primeApiURL;
+      const updatedInput = addHttpsToHref(input);
       const postBody: any = {
         data: {
           type: POST,
@@ -111,7 +98,7 @@ export const usePost = () => {
           attributes: {
             postingType: postingType,
             state: "ACTIVE",
-            text: input,
+            text: updatedInput,
           },
         },
       };
@@ -144,12 +131,13 @@ export const usePost = () => {
 
   const addComment = useCallback(async (postId: any, input: any) => {
     const baseApiUrl = getALMConfig().primeApiURL;
+    const updatedInput = addHttpsToHref(input);
     const postBody = {
       data: {
         type: COMMENT,
         attributes: {
           state: "ACTIVE",
-          text: input,
+          text: updatedInput,
         },
       },
     };

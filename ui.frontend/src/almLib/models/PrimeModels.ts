@@ -56,6 +56,7 @@ export interface PrimeAccount {
   timeZones: PrimeTimeZone[];
   uiLocales: PrimeLocalizationMetadata[];
   enableECommerce: boolean;
+  extensions: PrimeExtension[];
 }
 
 export interface PrimeAccountTerminology {
@@ -319,8 +320,17 @@ export interface PrimeJob {
   jobType: string;
   nextPayload: object;
   payload: object;
-  status: object;
+  status: PrimeStatus;
   type: string;
+}
+
+export interface PrimeStatus {
+  code: string
+  data: PrimeUrl
+}
+
+export interface PrimeUrl {
+  s3Url: string
 }
 
 export interface PrimeLearnerAttemptInfo {
@@ -329,6 +339,8 @@ export interface PrimeLearnerAttemptInfo {
   attemptsFinishedCount: number;
   currentAttemptNumber: number;
   lastAttemptEndTime: string;
+  currentAttemptStartTime: string;
+  currentAttemptEndTime: string;
 }
 
 export interface PrimeLearningObject {
@@ -380,6 +392,7 @@ export interface PrimeLearningObject {
   price: number;
   loResourceCompletionCount: number;
   isBookmarked: boolean;
+  extensionOverrides?: PrimeExtensionOverride[];
   // price?: {
   //   currency: string;
   //   value: number;
@@ -432,6 +445,23 @@ export interface PrimeLearningObjectInstanceEnrollment {
   loResourceGrades: PrimeLearningObjectResourceGrade[];
 }
 
+export interface MultipleAttempt {
+  attemptDuration: number;
+  attemptEndCriteria: string;
+  infiniteAttempts: boolean;
+  maxAttemptCount: number;
+  stopAttemptOnSuccessfulComplete: boolean;
+  timeBetweenAttempts: number;
+}
+
+export interface LearnerAttemptInfo{
+  currentAttemptStartTime: string;
+  currentAttemptEndTime: string;
+  attemptsFinishedCount: number;
+  currentAttemptNumber: number;
+  lastAttemptEndTime: string;
+}
+
 export interface PrimeLearningObjectResource {
   id: string;
   _transient: any;
@@ -447,9 +477,9 @@ export interface PrimeLearningObjectResource {
   submissionUrl: string;
   type: string;
   version: number;
-  learnerAttemptInfo: object;
+  learnerAttemptInfo: LearnerAttemptInfo;
   localizedMetadata: PrimeLocalizationMetadata[];
-  multipleAttempt: object;
+  multipleAttempt: MultipleAttempt;
   learningObject: PrimeLearningObject;
   loInstance: PrimeLearningObjectInstance;
   resources: PrimeResource[];
@@ -464,6 +494,7 @@ export interface PrimeSessionRecordingInfo {
   passcode: string;
   startTime: string;
   url: string;
+  transcriptUrl: string;
 }
 
 export interface PrimeLearningObjectResourceGrade {
@@ -1172,4 +1203,27 @@ export interface MaxPrice {
   course: number;
   learningProgram: number;
   certification: number;
+}
+
+export interface PrimeExtension {
+  defaultScope: string,
+  id: string,
+  invocationType: string,
+  launchType: string,
+  url: string;
+  localizedMetadata: PrimeExtensionLocalizationMetadata[];
+  width?: string;
+  height?: string;
+}
+
+export interface PrimeExtensionOverride {
+  id: string;
+  enabled: string;
+}
+
+export interface PrimeExtensionLocalizationMetadata {
+  description: string;
+  locale: string;
+  name: string;
+  label: string;
 }

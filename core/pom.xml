@@ -16,7 +16,7 @@
     <parent>
         <groupId>com.adobe.learning</groupId>
         <artifactId>aem-learning</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>aem-learning-core</artifactId>

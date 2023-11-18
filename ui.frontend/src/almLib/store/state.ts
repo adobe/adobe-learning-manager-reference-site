@@ -17,6 +17,7 @@ import { FileUpload } from "./reducers/fileUpload";
 import { UserSkillInterestState } from "./reducers/userSkillInterest";
 import { SkillState } from "./reducers/skill";
 import { SearchState } from "./reducers/search";
+import { BadgeState } from "./reducers/badge";
 export interface Authentication {
   accessToken: string;
 }
@@ -27,6 +28,7 @@ export interface State {
   account: PrimeAccount;
   catalog: CatalogState;
   notification: NotificationState;
+  badge: BadgeState;
   social: SocialState;
   fileUpload: FileUpload;
   userSkillInterest: UserSkillInterestState;

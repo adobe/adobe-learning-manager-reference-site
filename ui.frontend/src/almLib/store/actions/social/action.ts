@@ -36,6 +36,8 @@ import {
   UPDATE_COMMENT,
   UPDATE_REPLY,
   UPDATE_POST,
+  LOAD_USER_SKILLS,
+  LOAD_FAV_BOARDS
 } from "./actionTypes";
 
 export const loadBoard = (payload: any): AnyAction => ({
@@ -48,6 +50,14 @@ export const loadBoards = (payload: any): AnyAction => ({
   payload,
 });
 
+export const loadUserSkills = (payload:any) : AnyAction =>({
+  type: LOAD_USER_SKILLS,
+  payload,
+});
+export const loadFavouriteBoards = (payload:any) : AnyAction =>({
+  type: LOAD_FAV_BOARDS,
+  payload,
+})
 export const addBoardToFavourites = (payload: any): AnyAction => ({
   type: SOCIAL_ADD_BOARD_FAVORITE_SUCCESS,
   payload,

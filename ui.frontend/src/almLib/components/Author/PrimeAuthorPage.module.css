@@ -1,0 +1,199 @@
+@import "../../styles/variables.css";
+
+.dashboard {
+  font-size: 14px;
+  font-weight: 400 !important;
+  font-style: normal;
+  margin: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 80px;
+  width: 100%;
+  min-height: 1000px;
+  min-width: 1400px;
+  overflow-x: auto;
+  box-sizing: inherit;
+  background: var(--prime-color-nc7) !important;
+  padding-top: 57px;
+  font-family: var(--prime-font-family);
+}
+
+.authorBox {
+  padding: 20px 200px;
+  width: 100%;
+  height: 200px;
+  box-sizing: inherit;
+  border-radius: 0;
+  background-color: var(--prime-author-color) !important;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  width: 1000px;
+  margin: auto;
+}
+
+.avatar {
+  vertical-align: middle;
+  box-sizing: inherit;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 1px solid var(--prime-color-white);
+}
+
+.about {
+  display: flex;
+  flex-direction: column;
+  padding-top: 4px;
+  padding-left: 30px;
+  color: var(--prime-color-white);
+  flex-grow: 1;
+  word-break: break-word;
+}
+
+.authorName {
+  font-weight: 600;
+  font-size: 20px;
+  text-transform: capitalize;
+}
+
+.designation {
+  font-weight: var(--prime-font-weight-600);
+}
+
+.catalogContainer {
+  color: var(--prime-color-nc3);
+  max-width: 1000px;
+  padding: 0;
+  margin: auto;
+  box-sizing: inherit;
+  display: block;
+}
+
+.btn {
+  font: inherit;
+  margin: 0;
+  overflow: visible;
+  text-transform: none;
+  cursor: pointer;
+  color: var(--prime-color-black);
+  background: 0 0;
+  border: none;
+  padding: 0;
+}
+
+.left {
+  width: 62%;
+  display: block;
+  box-sizing: border-box;
+  font-size: 100%;
+  float: left;
+  padding-left: 10px;
+  margin-top: 10px;
+}
+
+.back {
+  width: 62%;
+  float: left;
+  margin-top: 10px;
+  padding-left: 5px;
+}
+
+.right {
+  box-sizing: inherit;
+  font-size: 100%;
+  float: right;
+  margin-right: 10px;
+}
+
+.viewButton {
+  margin-left: auto;
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
+  overflow: hidden;
+  box-sizing: inherit;
+}
+
+.sort {
+  position: relative;
+  float: left;
+  min-height: 1px;
+  padding-top: 10px;
+}
+
+.toggle {
+  display: inline-block;
+  vertical-align: middle;
+  box-sizing: inherit;
+  width: 27px;
+  height: 27px;
+  cursor: pointer;
+  margin: 0;
+  transform: scale(0.8);
+  background: none;
+  padding-top: 8px;
+}
+
+.primeTrainingsCards {
+  display: flex;
+  flex-wrap: wrap;
+  align-self: self-start;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  gap: 20px;
+}
+
+.primeTrainingsList {
+  align-self: self-start;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  width: 100%;
+  padding: 0;
+  gap: 20px;
+}
+
+.loadMoreContainer {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+  align-items: center;
+}
+
+.primeVerticalSeperator {
+  border-left: 1px solid var(--prime-color-nc2);
+  height: 20px;
+  margin-right: 10px;
+}
+
+.primeTrainingsContainer {
+  padding-top: 40px;
+  padding-left: 10px;
+}
+
+.top {
+  padding-top: 40px;
+}
+
+.picker {
+  position: relative;
+  float: left;
+  min-height: 1px;
+  padding: 3px 10px 0 10px;
+}
+
+.pick {
+  width: 160px;
+}
+
+.backIcon {
+  width: 20px;
+  height: 20px;
+  border: none;
+  float: left;
+}

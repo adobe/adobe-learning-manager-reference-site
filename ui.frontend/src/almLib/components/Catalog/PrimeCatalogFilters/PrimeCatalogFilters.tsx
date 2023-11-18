@@ -91,6 +91,7 @@ const PrimeCatalogFilters = (props: any) => {
     ) : (
       ""
     );
+    
   };
 
   const inputEnterKeyHandler = (event: any, type: string) => {

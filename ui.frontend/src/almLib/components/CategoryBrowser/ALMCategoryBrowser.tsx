@@ -66,7 +66,7 @@ const ALMCategoryBrowser = (props: any) => {
   const setCategoryBrowsers = () => {
     let categoriesArray = categoryBrowsers.categories;
     const categories: categoryBrowserData[] = [];
-    categoriesArray.forEach((category: PrimeCategoryData) => {
+    categoriesArray?.forEach((category: PrimeCategoryData) => {
       let currentCategory = {} as categoryBrowserData;
       let currentCategoryDetails = {} as PrimeHeadingConfig;
       currentCategory.contentUrl = category?.contentUrl;
