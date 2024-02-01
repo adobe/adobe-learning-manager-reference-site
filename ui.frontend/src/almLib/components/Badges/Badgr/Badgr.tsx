@@ -19,6 +19,7 @@ import {
 } from "@adobe/react-spectrum";
 import { useIntl } from "react-intl";
 import icon from "../../../assets/images/badgr.svg";
+import { GetTranslation } from "../../../utils/translationService";
 
 const Badgr = (props: any) => {
   const [instance, setInstance] = useState("");
@@ -57,13 +58,13 @@ const Badgr = (props: any) => {
                   </div>
                   <div className={styles.rowSelect}>
                     <div className={styles.left}>
-                      {formatMessage({ id: "alm.badgr.selectInstance" })}
+                      {GetTranslation("alm.badgr.selectInstance", true)}
                     </div>
                     <Picker
                       UNSAFE_className={styles.picker}
-                      placeholder={formatMessage({
-                        id: "alm.badgr.selectInstance",
-                      })}
+                      placeholder={
+                        GetTranslation("alm.badgr.selectInstance", true)
+                      }
                       onSelectionChange={(key) => {
                         setInstance(JSON.stringify(key));
                       }}
