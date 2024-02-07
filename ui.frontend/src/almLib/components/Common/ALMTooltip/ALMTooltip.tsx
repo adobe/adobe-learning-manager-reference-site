@@ -25,6 +25,7 @@ const ALMTooltip: React.FC<{
           showIcon={true}
           placement={"bottom"}
           UNSAFE_className={styles.almTooltip}
+          isOpen = {true}
         >
           {message}
         </Tooltip>

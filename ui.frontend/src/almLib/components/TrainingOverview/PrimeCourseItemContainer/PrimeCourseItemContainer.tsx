@@ -308,7 +308,9 @@ const PrimeCourseItemContainer: React.FC<{
               <div className={styles.line}></div>
               <div className={styles.line}></div>
               <div className={styles.dropdownGroup}>
-                <div className={styles.instanceLabel}>Instance</div>
+                <div className={styles.instanceLabel}>
+                  {GetTranslation("alm.overview.flexlp.dialog.instance", true)}
+                </div>
                 <div>
                   {/* can check via flexLp */}
                   {state !== COMPLETED ? (
@@ -432,7 +434,7 @@ const PrimeCourseItemContainer: React.FC<{
               timeBetweenAttemptEnabled={timeBetweenAttemptEnabled}
             />
           ) : null}
-          {(!isFlexible || showModule!=="" || getSelectedKey()!=="") && (
+          {(!isFlexible || showModule !== "" || getSelectedKey() !== "") && (
             <div className={styles.collapsibleContainer}>
               <Button variant="overBackground" isQuiet onPress={clickHandler}>
                 {isCollapsed ? <ChevronDown /> : <ChevronUp />}

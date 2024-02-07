@@ -360,7 +360,7 @@ const PrimeInstancePage = () => {
                   tabIndex={0}
                   aria-label={GetTranslation("alm.instance.listView", true)}
                 >
-                    <ViewList />
+                  <ViewList />
                 </button>
                 <button
                   className={
@@ -379,10 +379,7 @@ const PrimeInstancePage = () => {
               {/* Shown only in Mobile */}
               <div className={styles.selectInstanceContainer}>
                 <h3 className={styles.selectInstance}>
-                  {formatMessage({
-                    id: "alm.instance.select.instance",
-                    defaultMessage: "Select An Instance",
-                  })}
+                  {GetTranslation("alm.instance.select.instance", true)}
                 </h3>
               </div>
 
@@ -396,10 +393,7 @@ const PrimeInstancePage = () => {
                           <div
                             className={`${styles.instanceNameWrapper} ${styles.commonHeader}`}
                           >
-                            {formatMessage({
-                              id: "alm.instance.name",
-                              defaultMessage: "Instance Name",
-                            })}
+                            {GetTranslation("alm.instance.name", true)}
                             <span
                               onClick={() => applySort("name")}
                               className={styles.sortIcon}

@@ -85,6 +85,21 @@ governing permissions and limitations under the License.
   margin-top: 8px;
 }
 
+.selectCiMsg,
+.scrollToSelectMsg {
+  font-size: var(--prime-font-size-12);
+  text-align: center;
+}
+
+.selectCiMsg {
+  font-weight: 600;
+  margin: 10px 0px 0px 0px;
+  color: red;
+}
+.scrollToSelectMsg{
+  margin-bottom: 10px;
+}
+
 
 .icon,
 .instanceIcon {

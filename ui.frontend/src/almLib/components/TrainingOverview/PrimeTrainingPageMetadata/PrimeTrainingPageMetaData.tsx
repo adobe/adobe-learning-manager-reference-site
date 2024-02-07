@@ -218,6 +218,17 @@ const PrimeTrainingPageMetaData: React.FC<{
     </span>
   );
 
+  const isInstanceNotSelected = (
+    <div>
+      <div className={styles.selectCiMsg}>
+        {GetTranslation(`alm.training.flexlp.select.instance`, true)}
+      </div>
+      <div className={styles.scrollToSelectMsg}>
+        {GetTranslation(`alm.training.flexlp.no.instance`, true)}
+      </div>
+    </div>
+  );
+
   const isInstanceSwitchEnabled =
     training.instanceSwitchEnabled && primaryEnrollment?.state !== COMPLETED;
   const isMultiEnrollmentEnabled = training.multienrollmentEnabled;
@@ -249,7 +260,7 @@ const PrimeTrainingPageMetaData: React.FC<{
     let flexLpObject = {} as any;
     for (let i = 0; i < courseIdList.length; i++) {
       flexLpObject[courseIdList[i] as keyof typeof flexLpObject] =
-        courseInfoList[i]["instanceId" as keyof typeof courseInfoList[0]];
+        courseInfoList[i]["instanceId" as keyof (typeof courseInfoList)[0]];
     }
     return flexLpObject;
   };
@@ -278,7 +289,12 @@ const PrimeTrainingPageMetaData: React.FC<{
 
   // Enrolled courses inside flex lp, for which instance not selected
   const courseInstanceNotSelected =
-    primaryEnrollment && !primaryEnrollment.loInstance;
+    loType == COURSE && primaryEnrollment && !primaryEnrollment.loInstance;
+
+  const courseInstanceInsideFlexLPSelected =
+    training.subLOs?.some((lo) => {
+      return lo.enrollment?.loInstance !== undefined;
+    });
 
   const action: string = useMemo(() => {
     if (courseInstanceNotSelected) {
@@ -631,9 +647,10 @@ const PrimeTrainingPageMetaData: React.FC<{
                         }
                       </b>
                       <p>
-                        {formatMessage({
-                          id: "alm.overview.flexlp.dialog.instance",
-                        })}
+                        {GetTranslation(
+                          "alm.overview.flexlp.dialog.instance",
+                          true
+                        )}
                         :{" "}
                         {
                           selectedInstanceInfo[
@@ -644,14 +661,18 @@ const PrimeTrainingPageMetaData: React.FC<{
                     </li>
                   ) : (
                     <li className={styles.courseListInFlexLp}>
-                      {((item.enrollment && training.enrollment && item.enrollment.loInstance ) ||
-                      item.enrollment?.state === COMPLETED && item.enrollment.loInstance) ? (
+                      {(item.enrollment &&
+                        training.enrollment &&
+                        item.enrollment.loInstance) ||
+                      (item.enrollment?.state === COMPLETED &&
+                        item.enrollment.loInstance) ? (
                         <p>
                           <b>{item.localizedMetadata[0].name}</b>
                           <p>
-                            {formatMessage({
-                              id: "alm.overview.flexlp.dialog.instance",
-                            })}
+                            {GetTranslation(
+                              "alm.overview.flexlp.dialog.instance",
+                              true
+                            )}
                             :{" "}
                             {
                               item.enrollment.loInstance.localizedMetadata[0]
@@ -663,10 +684,10 @@ const PrimeTrainingPageMetaData: React.FC<{
                         <p>
                           <b>{item.localizedMetadata[0].name}</b>
                           <p>
-                            {formatMessage({
-                              id: "alm.overview.flexlp.dialog.instance",
-                            })}
-                            :{" "}
+                            {GetTranslation(
+                              "alm.overview.flexlp.dialog.instance",
+                              true
+                            )}:{" "}
                             <span className={styles.notSelected}>
                               {formatMessage({
                                 id: "alm.overview.flexlp.dialog.noInstanceSelected",
@@ -733,9 +754,7 @@ const PrimeTrainingPageMetaData: React.FC<{
         id: "alm.community.board.confirmationRequired",
         defaultMessage: "Confirmation Required",
       }),
-      formatMessage({
-        id: "alm.multi.enrollment.confirmation",
-      }),
+      GetTranslation("alm.multi.enrollment.confirmation", true),
       formatMessage({
         id: "alm.overview.confirm",
       }),
@@ -751,9 +770,7 @@ const PrimeTrainingPageMetaData: React.FC<{
       formatMessage({
         id: "alm.update.enrollment.confirmationRequired",
       }),
-      formatMessage({
-        id: "alm.update.enrollment.confirmationInfo",
-      }),
+      GetTranslation("alm.update.enrollment.confirmationInfo", true),
       formatMessage({
         id: "alm.overview.confirm",
       }),
@@ -997,9 +1014,7 @@ const PrimeTrainingPageMetaData: React.FC<{
       return (
         <div
           dangerouslySetInnerHTML={{
-            __html: formatMessage({
-              id: "alm.overview.instance.multi.unenroll.confirmation",
-            }),
+            __html: GetTranslation("alm.overview.instance.multi.unenroll.confirmation", true),
           }}
         />
       );
@@ -1161,15 +1176,11 @@ const PrimeTrainingPageMetaData: React.FC<{
     </p>
   ) : isTrainingFlexLP && courseIdList.length === 0 ? (
     <p className={`${styles.label} ${styles.centerAlign}`}>
-      {formatMessage(
-        {
-          id: "alm.flexlp.addToCart",
-        },
-      )}
+      {GetTranslation("alm.flexlp.addToCart", true)}
     </p>
-    ):(
-      ""
-    );
+  ) : (
+    ""
+  );
 
   const enrollmentDeadlinePassedText = hasEnrollmentDeadlinePassed ? (
     <p className={`${styles.errorText} ${styles.centerAlign}`}>
@@ -1393,12 +1404,9 @@ const PrimeTrainingPageMetaData: React.FC<{
 
   const enrollmentDisabledInfoText = (
     <p className={`${styles.label} ${styles.centerAlign}`}>
-      {formatMessage({
-        id:
-          primaryEnrollment?.state === COMPLETED
-            ? "alm.instance.completed"
-            : "alm.instance.enrolled",
-      })}
+      {primaryEnrollment?.state === COMPLETED
+        ? GetTranslation(`alm.instance.completed`, true)
+        : GetTranslation(`alm.instance.enrolled`, true)}
     </p>
   );
 
@@ -1434,9 +1442,7 @@ const PrimeTrainingPageMetaData: React.FC<{
 
   const pendingApprovalText = (
     <p className={`${styles.label} ${styles.centerAlign}`}>
-      {formatMessage({
-        id: "alm.overview.pending.approval",
-      })}
+      {GetTranslation("alm.overview.pending.approval", true)}
     </p>
   );
 
@@ -1492,14 +1498,23 @@ const PrimeTrainingPageMetaData: React.FC<{
       if (!checkIfEnrollmentDeadlineNotPassed(trainingInstance)) {
         return "alm.overview.manager.approval.pending.enrollment.deadline.passed";
       } else if (trainingInstance.state === RETIRED) {
-        return "alm.overview.manager.approval.pending.singleInstance";
+        return GetTranslation(
+          "alm.overview.manager.approval.pending.singleInstance",
+          true
+        );
       } else {
         return "alm.overview.manager.approval.pending";
       }
     } else if (!checkIfEnrollmentDeadlineNotPassed(trainingInstance)) {
-      return "alm.overview.manager.approval.pending.enrollment.deadline.passed.change.instance";
+      return GetTranslation(
+        "alm.overview.manager.approval.pending.enrollment.deadline.passed.change.instance",
+        true
+      );
     } else if (trainingInstance.state === RETIRED) {
-      return "alm.overview.manager.approval.pending.instance.retired";
+      return GetTranslation(
+        "alm.overview.manager.approval.pending.instance.retired",
+        true
+      );
     } else {
       return "alm.overview.manager.approval.pending";
     }
@@ -1544,6 +1559,7 @@ const PrimeTrainingPageMetaData: React.FC<{
         (isFirstModuleCrOrVc() ||
           !arePrerequisiteEnforcedAndCompleted(training))) ||
       courseInstanceNotSelected ||
+      (primaryEnrollment && isTrainingFlexLP && !courseInstanceInsideFlexLPSelected) ||
       timeBetweenAttemptEnabled
     );
   };
@@ -1699,6 +1715,13 @@ const PrimeTrainingPageMetaData: React.FC<{
           </div>
         </div>
       )}
+
+      {primaryEnrollment && isTrainingFlexLP && !courseInstanceInsideFlexLPSelected &&
+      !updationChecker() &&
+      !courseInstanceNotSelected
+        ? isInstanceNotSelected
+        : ""}
+
       {!showPreviewButton && (
         <div className={styles.actionContainer}>
           <button className={styles.bookMark} onClick={toggle}>
@@ -1787,7 +1810,7 @@ const PrimeTrainingPageMetaData: React.FC<{
                 </label>
                 <label className={styles.instanceName}>
                   {isAutoInstanceEnrolled ? (
-                    GetTranslation("alm.text.autoInstance")
+                    GetTranslation(`alm.text.autoInstance`,true)
                   ) : (
                     <>
                       {trainingInstance.localizedMetadata[0].name}
