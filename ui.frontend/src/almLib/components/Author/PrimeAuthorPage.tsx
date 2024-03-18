@@ -14,6 +14,7 @@ import { useIntl } from "react-intl";
 import { useProfile } from "../../hooks";
 import icon from "../../assets/images/back.svg";
 import { useAuthor } from "../../hooks/author";
+import { getALMObject } from "../../utils/global";
 
 const PrimeAuthorPage = (props: any) => {
   const { trainings, loadMoreTraining, hasMoreItems } = useAuthor();
@@ -21,7 +22,7 @@ const PrimeAuthorPage = (props: any) => {
   const { profileAttributes } = useProfile();
   const { user } = profileAttributes;
   const setInitialView = () => {
-    return window.localStorage.getItem("view") || TILE_VIEW;
+    return getALMObject().storage.getItem("CARD_VIEW") || TILE_VIEW;
   };
 
   const isListView = () => {
@@ -32,7 +33,7 @@ const PrimeAuthorPage = (props: any) => {
 
   const setCatalogView = (view: string) => {
     setView(view);
-    window.localStorage.setItem("view", view);
+    getALMObject().storage.setItem("CARD_VIEW", view);
   };
 
   const ToggleView = () => {

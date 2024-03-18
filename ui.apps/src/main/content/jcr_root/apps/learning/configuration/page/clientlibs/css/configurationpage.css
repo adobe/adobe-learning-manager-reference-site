@@ -58,14 +58,20 @@ governing permissions and limitations under the License.
     width: 80%;
 }
 
+.coral-Form--vertical .coral-Form-field.coral3-Checkbox.useAdminRefreshToken-checkbox {
+    display: inline-block;
+}
+
 .coral-Form-fieldwrapper.config-help-btn,
-.coral-Form-fieldwrapper.config-rda-token-btn {
+.coral-Form-fieldwrapper.config-rda-token-btn,
+.coral-Form-fieldwrapper.useAdminRefreshToken-help-btn{
     display: inline-block;
     float: right;
 }
 
 .config-help-btn .coral-Form-fieldlabel,
-.config-rda-token-btn .coral-Form-fieldlabel {
+.config-rda-token-btn .coral-Form-fieldlabel,
+.useAdminRefreshToken-help-btn .coral-Form-fieldlabel{
     color: #3471DE;
     cursor: pointer;
 }

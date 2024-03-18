@@ -87,7 +87,6 @@ import { RadioGroup, Radio } from "@adobe/react-spectrum";
 
 const PrimeTrainingPage = (props: any) => {
   const config = getALMConfig();
-  const { account } = useAccount();
   let trainingOverviewPath = config.trainingOverviewPath;
 
   let pathParams = getPathParams(trainingOverviewPath, [
@@ -204,14 +203,7 @@ const PrimeTrainingPage = (props: any) => {
               return;
             }
             getALMObject().storage.removeItem(FLEX_LP_COURSE_INFO);
-
-            almAlert(
-              true,
-              `${GetTranslation("alm.enrollment.failed.for.extension")} ${
-                token?.extError || ""
-              }`,
-              AlertType.error
-            );
+            showExtensionErrorPopup(token?.extError || "");
           }
         }
       }, 0);
@@ -453,18 +445,30 @@ const PrimeTrainingPage = (props: any) => {
       </a>
     );
   };
-
+  const showExtensionErrorPopup = (message: string) => {
+    let messageToDisplay = GetTranslation(
+      "native.extension.enrollment.failed.header"
+    );
+    if (message) {
+      messageToDisplay += GetTranslationsReplaced(
+        "native.extension.enrollment.failed.custom.message",
+        {
+          x: message,
+        },
+        true
+      );
+    }
+    messageToDisplay += GetTranslation(
+      "native.extension.enrollment.failed.message"
+    );
+    messageToDisplay = `<div>${messageToDisplay}</div>`;
+    almAlert(true, messageToDisplay, AlertType.error);
+  };
   const iframeCloseHandler = (event: any) => {
     setExtensionAppIframeUrl("");
     setActiveExtension(undefined);
     if (typeof event === "string" && event.length) {
-      almAlert(
-        true,
-        `${formatMessage({
-          id: "alm.enrollment.failed.for.extension",
-        })} ${event || ""}`,
-        AlertType.error
-      );
+      showExtensionErrorPopup(event);
     }
   };
 

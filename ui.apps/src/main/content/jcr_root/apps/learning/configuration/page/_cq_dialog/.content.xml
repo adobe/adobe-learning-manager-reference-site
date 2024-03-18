@@ -116,7 +116,7 @@
                         required="{Boolean}true"/>
                     <authorRefreshToken
                         cq:showOnCreate="{Boolean}true"
-                        granite:rel="aem-sites"
+                        granite:rel="aem-sites authorTkn"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                         fieldDescription="Enter admin's learner scoped refresh token generated from Learning Manager account. Refer help section to learn more."                        
@@ -131,6 +131,15 @@
                         fieldDescription="Enter cdn base url generated in integration admin from Learning Manager account. Refer help section to learn more."
                         fieldLabel="Adobe Learning Manager cdn base URL"
                         name="./almCdnBaseUrl"
+                        required="{Boolean}true"/>
+                    <adminRefreshToken
+                        cq:showOnCreate="{Boolean}true"
+                        granite:rel="aem-sites adminTknLearnerTkn"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldDescription="Enter admin's admin scoped refresh token generated from Learning Manager account. Refer help section to learn more."
+                        fieldLabel="Admin refresh token"
+                        name="./adminRefreshToken"
                         required="{Boolean}true"/>
                     <commerceURL
                         cq:showOnCreate="{Boolean}true"
@@ -233,14 +242,30 @@
                         text="Sync"
                         variant="primary"/>
                     <storeTokenInCookie
+                            cq:showOnCreate="{Boolean}true"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                            name="./storeTokenInCookie"
+                            text="Do not store token in the cookie"
+                            checked="false"
+                            uncheckedValue="false"
+                            value="true"/>
+                    <useAdminRefreshToken
                         cq:showOnCreate="{Boolean}true"
                         jcr:primaryType="nt:unstructured"
+                        granite:rel="aem-sites useAdminRefreshToken-checkbox"
                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                        name="./storeTokenInCookie"
-                        text="Do not store token in the cookie"
+                        name="./useAdminRefreshToken"
+                        text="Use custom authentication"
                         checked="false"
                         uncheckedValue="false"
                         value="true"/>
+                    <adminRefreshTokenHelpBtn
+                            cq:showOnCreate="{Boolean}true"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/field"
+                            fieldLabel="Help"
+                            wrapperClass="useAdminRefreshToken-help-btn"/>
                     <embWidgetSection
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/field"
@@ -302,6 +327,12 @@
                         sling:resourceType="granite/ui/components/foundation/form/hidden"
                         name="./configHelpURL"
                         value="https://helpx.adobe.com/captivate-prime/integrate-aem-captivate-prime.html"/>
+                    <adminRTToLearnerATHelpURL
+                            cq:showOnCreate="{Boolean}true"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/foundation/form/hidden"
+                            name="./adminRTtoLearnerATHelpURL"
+                            value="https://helpx.adobe.com/captivate-prime/integrate-aem-captivate-prime.html"/>
                     <configRdaTokenURL
                         cq:showOnCreate="{Boolean}true"
                         jcr:primaryType="nt:unstructured"

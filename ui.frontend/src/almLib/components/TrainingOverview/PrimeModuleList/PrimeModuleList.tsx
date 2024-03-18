@@ -15,7 +15,7 @@ import {
   PrimeLearningObjectInstance,
   PrimeLearningObjectResource,
 } from "../../../models/PrimeModels";
-import { PREWORK, TESTOUT } from "../../../utils/constants";
+import { CHECKLIST, PENDING, PREWORK, TESTOUT } from "../../../utils/constants";
 import { getEnrollment } from "../../../utils/hooks";
 import { arePrerequisiteEnforcedAndCompleted } from "../../../utils/overview";
 import { PrimeModuleItem } from "../PrimeModuleItem";
@@ -52,6 +52,10 @@ const PrimeModuleList: React.FC<{
     timeBetweenAttemptEnabled,
   } = props;
 
+  const isNonBlockingChecklistModule = (loResource: PrimeLearningObjectResource) => {
+    return loResource.resourceSubType === CHECKLIST && !loResource.isChecklistMandatory;
+  }
+
   const isModuleLocked = (
     loResource: PrimeLearningObjectResource,
     index: number
@@ -87,6 +91,9 @@ const PrimeModuleList: React.FC<{
       filteredPreviousResourceGrade.length &&
       !filteredPreviousResourceGrade[0].hasPassed
     ) {
+      if (isNonBlockingChecklistModule(loResources[index - 1])) {
+        return loResources[index - 1].checklistEvaluationStatus === PENDING;
+      }
       return true;
     }
 

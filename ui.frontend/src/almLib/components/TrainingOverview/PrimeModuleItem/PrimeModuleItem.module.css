@@ -259,6 +259,10 @@ a.details {
     display: block;
   }
 }
+.fileNotAccessible{
+  color: var(--prime-color-nc5);
+}
+
 
 .fileSubmissionContainer {
   text-transform: none;
@@ -277,7 +281,6 @@ a.details {
 .uploadButton {
   background: none;
   border: none;
-  padding-bottom: 12px;
   font-size: 11px;
   color: #4283d0;
 }
@@ -409,4 +412,32 @@ a.details {
 
 .attemptDescriptionContainer{
   position: relative;
+}
+
+.checklistStatus {
+  margin-left: 5px;
+  text-transform: capitalize;
+}
+
+.passStatus {
+  color: var(--prime-success-color);
+}
+
+.failStatus {
+  color: var(--prime-error-color);
+}
+
+.passStatus, 
+.failStatus {
+  display: flex;
+  margin-left: 5px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.checklistFailInfo {
+  font-size: 12px;
+}
+.fileNotAccessibleIcon{
+  margin-right: 25px;
 }

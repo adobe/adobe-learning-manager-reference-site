@@ -17,14 +17,12 @@ governing permissions and limitations under the License.
   --prime-error-color: #ec0909;
 
   --prime-color-nc1: #292929;
-  --prime-color-nc2: #cccccc;
-  --prime-color-nc3: #717171;
-  --prime-color-nc4: #5d5d5d;
-  --prime-color-nc5: #f7f7f7;
-  --prime-color-nc6: #e8e8e8;
-  --prime-color-nc7: #e6e6e6;
-  --prime-color-nc8: #909090;
-  --prime-color-nc9: #d9e6f5;
+  --prime-color-nc2: #c9c9c9;
+  --prime-color-nc3: #5d5d5d;
+  --prime-color-nc4: #f7f7f7;
+  --prime-color-nc5: #8f8f8f;
+  --prime-color-nc6: #ddd;
+  --prime-color-nc7: #efefef;
 
   --prime-text-shadow: 0.2rem 0.2rem 0.2rem #565656;
 

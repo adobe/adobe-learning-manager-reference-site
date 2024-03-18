@@ -31,6 +31,7 @@ public class Constants {
     public static final String SITES_AUTHOR_REFRESH_TOKEN_NAME = "authorRefreshToken";
     public static final String ALM_BASE_URL = "almBaseURL";
     public static final String CLIENT_ID = "clientId";
+    public static final String ACCOUNT_ID = "accountId";
     public static final String CLIENT_SECRET = "clientSecret";
     public static final String PAGE_LOCALE = "pageLocale";
     public static final String COMMERCE_ADMIN_REFRESH_TOKEN = "refreshToken";
@@ -39,6 +40,7 @@ public class Constants {
     public static final String SITE_MAP = "siteMap";
     public static final String SITE_MAP_TRAINING_PATH = "sitemapTrainingPath";
     public static final String NOT_STORE_TOKEN_IN_COOKIE = "storeTokenInCookie";
+    public static final String USE_ADMIN_RT_TO_LEARNER_AT = "useAdminRefreshToken";
     public static final String ES_BASE_URL_NAME = "esBaseUrl";
     public static final String COMMERCE_URL_NAME = "commerceURL";
     public static final String LEARNER_TOKEN_URL =
@@ -55,6 +57,10 @@ public class Constants {
 
     public static final String ACCESS_TOKEN_COOKIE_NAME = "alm_cp_token";
     public static final String CUSTOMER_TOKEN_COOKIE_NAME = "alm_commerce_token";
+
+    public static final String ADMIN_REFRESH_TOKEN = "adminRefreshToken";
+
+    public static final String PRIME_LOGIN_IMPLEMENTATION = "isALMLoginImplementation";
 
     static {
       MUTABLE_NAVIGATION_PATHS.put("trainingOverviewPath", "overview.html");

@@ -24,8 +24,10 @@ governing permissions and limitations under the License.
   const CONFIG_FORM_CREATE_SEL = ".foundation-wizard-control";
   const DX_SKU_VALIDATION_ERROR_ID = "alm-dx-sku-validator";
   const SITE_MAP_SEL = "coral-checkbox[name='./siteMap']";
+  const USE_ADMIN_RT_LEARNER_AT_SEL = "coral-checkbox[name='./useAdminRefreshToken']";
   const SITE_MAP_TRAINING_PATH_SEL = "foundation-autocomplete[name='./sitemapTrainingPath']";
   const CONFIG_HELP_BTN_SEL = ".config-help-btn";
+  const ADMIN_RT_LEARNER_AT_CONFIG_HELP_BTN_SEL = ".useAdminRefreshToken-help-btn";
   const CONFIG_RDA_TOKEN_HEADING_SEL = ".config-rda-token-heading";
   const CONFIG_RDA_TOKEN_BTN_SEL = ".config-rda-token-btn";
 
@@ -60,9 +62,15 @@ governing permissions and limitations under the License.
         $("button." + usageOption).removeAttr("hidden");
         $("foundation-autocomplete." + usageOption).removeAttr("hidden");
       }
+      if(usageOption === "aem-sites")
+      {
+        $(".adminTknLearnerTkn").attr("disabled",'');
+      }
     });
 
+
     renderSitemapTrainingPath();
+    showAdminRefreshTokenForAEMSites();
   }
 
   function handleSubmit(e)
@@ -222,6 +230,21 @@ governing permissions and limitations under the License.
         $(SITE_MAP_TRAINING_PATH_SEL).attr("disabled","");
       }
   }
+
+  function showAdminRefreshTokenForAEMSites() {
+      const selectedUsageOption = $(USAGE_TYPE_INPUT_VALUE_SEL).attr("value");
+      if (selectedUsageOption === "aem-sites") {
+          if ($(USE_ADMIN_RT_LEARNER_AT_SEL).attr("checked") === 'checked') {
+              $(".adminTknLearnerTkn").removeAttr("disabled");
+              $(".authorTkn").attr("disabled", '');
+              $("input[name='./authorRefreshToken']").val('');
+          } else {
+              $(".adminTknLearnerTkn").attr("disabled", '');
+              $("input[name='./adminRefreshToken']").val('');
+              $(".authorTkn").removeAttr("disabled");
+          }
+      }
+  }
   
   function openHelpxPage() {
     const helpxURL = $("input[name='./configHelpURL']").val();
@@ -230,6 +253,14 @@ governing permissions and limitations under the License.
       window.focus();
     }
   }
+
+  function openAdminRtToLearnerAtHelpxPage() {
+      const helpxURL = $("input[name='./adminRTtoLearnerATHelpURL']").val();
+      if (helpxURL) {
+        const newWindow = window.open(helpxURL, "_blank");
+        window.focus();
+      }
+    }
 
   function openRdaTokenPage() {
     const rdaFetchTokenURLConfig = $("input[name='./configRdaTokenURL']").val();
@@ -281,6 +312,14 @@ governing permissions and limitations under the License.
       });
     }
 
+    let useAdminRTCheckBoxElem = $(USE_ADMIN_RT_LEARNER_AT_SEL).get(0);
+    if (useAdminRTCheckBoxElem) {
+        Coral.commons.ready(useAdminRTCheckBoxElem, function() {
+            showAdminRefreshTokenForAEMSites();
+            useAdminRTCheckBoxElem.on('change', showAdminRefreshTokenForAEMSites);
+        });
+    }
+
     renderRdaConfigUI();
 
     $(CONFIG_FORM_DONE_ACT_SEL).off("click", handleSubmit).on("click", handleSubmit);
@@ -288,6 +327,7 @@ governing permissions and limitations under the License.
     $(CONFIG_FORM_CREATE_SEL).filter("button[type='submit']").off("click", handleSubmit).on("click", handleSubmit);
     $(NOMENCLATURE_BUTTON_SEL).off("click").on("click", () => fetchNomenclatureData());
     $(CONFIG_HELP_BTN_SEL).off("click").on("click", () => openHelpxPage());
+    $(ADMIN_RT_LEARNER_AT_CONFIG_HELP_BTN_SEL).off("click").on("click", () => openAdminRtToLearnerAtHelpxPage());
     $(CONFIG_RDA_TOKEN_BTN_SEL).off("click").on("click", () => openRdaTokenPage());
   });
 

@@ -74,7 +74,7 @@ export const useCheckoutPage = (props) => {
     const getPaymentModes = async () => {
       try {
         await fetchPaymentModes();
-        await fetchToken();
+
         console.log(tokenData);
       } catch (error) {
         if (process.env.NODE_ENV !== "production") {
@@ -87,6 +87,31 @@ export const useCheckoutPage = (props) => {
     }
   }, [cartId, fetchPaymentModes, isLoggedIn]);
 
+  useEffect(() => {
+    if (!paymentModes) {
+      return;
+    }
+    const getBrainTreeToken = async () => {
+      try {
+        await fetchToken();
+      } catch (error) {
+        if (process.env.NODE_ENV !== "production") {
+          console.error(error);
+        }
+      }
+    };
+
+    if (paymentModes?.cart?.available_payment_methods?.length > 0) {
+      const braintreePaymentMethod =
+        paymentModes?.cart?.available_payment_methods.find(
+          (paymentMethod) => paymentMethod.code === "braintree"
+        );
+      //call only when braintree payment method is available
+      if (braintreePaymentMethod) {
+        getBrainTreeToken();
+      }
+    }
+  }, [paymentModes, fetchPaymentModes]);
   const navigateToOrdersSuccessPage = useCallback(
     (orderId) => {
       if (orderId) {

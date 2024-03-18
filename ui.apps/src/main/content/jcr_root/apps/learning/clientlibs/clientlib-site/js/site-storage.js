@@ -34,21 +34,29 @@ governing permissions and limitations under the License.
   class BrowserPersistence {
     constructor() {
       this.key = "ALM_BROWSER_PERSISTENCE";
-      this.storage = new NamespacedSessionStorage(sessionStorage, this.key);
+      if ("sessionStorage" in window) {
+        this.storage = new NamespacedSessionStorage(sessionStorage, this.key);
+      }
     }
-    getRawItem(name) {
-      return this.storage.getItem(name);
+    _getKey(key) {
+      return `${this.key}__${key}`;
     }
     getItem(name) {
       const now = Date.now();
-      const item = this.storage.getItem(name);
+      let item = null;
+      try {
+        item = this.storage.getItem(name);
+      } catch (error) {
+        item = window[this._getKey(name)] || null;
+      }
+
       if (!item) {
         return undefined;
       }
       const { value, ttl, timeStored } = JSON.parse(item);
 
       if (ttl && now - timeStored > ttl * 1000) {
-        this.storage.removeItem(name);
+        this.removeItem(name);
         return undefined;
       }
 
@@ -56,17 +64,23 @@ governing permissions and limitations under the License.
     }
     setItem(name, value, ttl) {
       const timeStored = Date.now();
-      this.storage.setItem(
-        name,
-        JSON.stringify({
-          value: JSON.stringify(value),
-          timeStored,
-          ttl,
-        })
-      );
+      const valueToStore = JSON.stringify({
+        value: JSON.stringify(value),
+        timeStored,
+        ttl,
+      });
+      try {
+        this.storage.setItem(name, valueToStore);
+      } catch (error) {
+        window[this._getKey(name)] = valueToStore;
+      }
     }
     removeItem(name) {
-      this.storage.removeItem(name);
+      try {
+        this.storage.removeItem(name);
+      } catch (error) {
+        window[this._getKey(name)] = null;
+      }
     }
   }
 

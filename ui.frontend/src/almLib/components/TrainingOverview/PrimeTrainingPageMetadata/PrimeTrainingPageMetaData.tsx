@@ -291,10 +291,9 @@ const PrimeTrainingPageMetaData: React.FC<{
   const courseInstanceNotSelected =
     loType == COURSE && primaryEnrollment && !primaryEnrollment.loInstance;
 
-  const courseInstanceInsideFlexLPSelected =
-    training.subLOs?.some((lo) => {
-      return lo.enrollment?.loInstance !== undefined;
-    });
+  const courseInstanceInsideFlexLPSelected = training.subLOs?.some((lo) => {
+    return lo.enrollment?.loInstance !== undefined;
+  });
 
   const action: string = useMemo(() => {
     if (courseInstanceNotSelected) {
@@ -687,7 +686,8 @@ const PrimeTrainingPageMetaData: React.FC<{
                             {GetTranslation(
                               "alm.overview.flexlp.dialog.instance",
                               true
-                            )}:{" "}
+                            )}
+                            :{" "}
                             <span className={styles.notSelected}>
                               {formatMessage({
                                 id: "alm.overview.flexlp.dialog.noInstanceSelected",
@@ -905,23 +905,24 @@ const PrimeTrainingPageMetaData: React.FC<{
 
         return subLOsInsideLP;
       });
-      
+
       let launchSubLO;
       for (const subLO of sectionSubLOs[0]) {
-        if (
-          subLO.enrollment &&
-          subLO.enrollment.loInstance
-        ) {
+        if (subLO.enrollment && subLO.enrollment.loInstance) {
           launchSubLO = subLO;
           break;
         }
       }
 
       const trainingId = (launchSubLO && launchSubLO.id) || subLOs[0].id;
-      
-      const trainingInstanceId = (Object.keys(selectedInstanceInfo).length > 0 && selectedInstanceInfo[
-        trainingId as keyof typeof selectedInstanceInfo
-      ]["instanceId" as keyof typeof selectedInstanceInfo]) || (launchSubLO && launchSubLO.enrollment.loInstance.id) || subLOs[0].enrollment.loInstance.id;
+
+      const trainingInstanceId =
+        (Object.keys(selectedInstanceInfo).length > 0 &&
+          selectedInstanceInfo[trainingId as keyof typeof selectedInstanceInfo][
+            "instanceId" as keyof typeof selectedInstanceInfo
+          ]) ||
+        (launchSubLO && launchSubLO.enrollment.loInstance.id) ||
+        subLOs[0].enrollment.loInstance.id;
 
       launchPlayerHandler({
         id: trainingId,
@@ -1014,7 +1015,10 @@ const PrimeTrainingPageMetaData: React.FC<{
       return (
         <div
           dangerouslySetInnerHTML={{
-            __html: GetTranslation("alm.overview.instance.multi.unenroll.confirmation", true),
+            __html: GetTranslation(
+              "alm.overview.instance.multi.unenroll.confirmation",
+              true
+            ),
           }}
         />
       );
@@ -1559,7 +1563,9 @@ const PrimeTrainingPageMetaData: React.FC<{
         (isFirstModuleCrOrVc() ||
           !arePrerequisiteEnforcedAndCompleted(training))) ||
       courseInstanceNotSelected ||
-      (primaryEnrollment && isTrainingFlexLP && !courseInstanceInsideFlexLPSelected) ||
+      (primaryEnrollment &&
+        isTrainingFlexLP &&
+        !courseInstanceInsideFlexLPSelected) ||
       timeBetweenAttemptEnabled
     );
   };
@@ -1716,7 +1722,9 @@ const PrimeTrainingPageMetaData: React.FC<{
         </div>
       )}
 
-      {primaryEnrollment && isTrainingFlexLP && !courseInstanceInsideFlexLPSelected &&
+      {primaryEnrollment &&
+      isTrainingFlexLP &&
+      !courseInstanceInsideFlexLPSelected &&
       !updationChecker() &&
       !courseInstanceNotSelected
         ? isInstanceNotSelected
@@ -1810,7 +1818,7 @@ const PrimeTrainingPageMetaData: React.FC<{
                 </label>
                 <label className={styles.instanceName}>
                   {isAutoInstanceEnrolled ? (
-                    GetTranslation(`alm.text.autoInstance`,true)
+                    GetTranslation(`alm.text.autoInstance`, true)
                   ) : (
                     <>
                       {trainingInstance.localizedMetadata[0].name}

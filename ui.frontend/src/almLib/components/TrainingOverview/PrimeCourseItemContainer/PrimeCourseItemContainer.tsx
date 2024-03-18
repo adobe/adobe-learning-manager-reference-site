@@ -249,7 +249,7 @@ const PrimeCourseItemContainer: React.FC<{
       );
     }
 
-    if(isParentLOEnrolled && training.enrollment && training.enrollment.loInstance){
+    if(isFlexible && isParentLOEnrolled && training.enrollment && training.enrollment.loInstance){
       setIsCollapsed(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

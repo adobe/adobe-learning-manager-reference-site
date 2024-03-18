@@ -50,21 +50,30 @@
       class BrowserPersistence {
         constructor() {
           this.key = "ALM_BROWSER_PERSISTENCE";
-          this.storage = new NamespacedSessionStorage(sessionStorage, this.key);
+          if('sessionStorage' in window){
+            this.storage = new NamespacedSessionStorage(sessionStorage, this.key);
+          }
+          
         }
-        getRawItem(name) {
-          return this.storage.getItem(name);
+        _getKey(key) {
+          return `${this.key}__${key}`;
         }
         getItem(name) {
           const now = Date.now();
-          const item = this.storage.getItem(name);
+          let item = null;
+          try {
+            item = this.storage.getItem(name);
+          } catch (error) {
+            item = window[this._getKey(name)] || null;
+          }
+          
           if (!item) {
             return undefined;
           }
           const { value, ttl, timeStored } = JSON.parse(item);
 
           if (ttl && now - timeStored > ttl * 1000) {
-            this.storage.removeItem(name);
+            this.removeItem(name);
             return undefined;
           }
 
@@ -72,17 +81,25 @@
         }
         setItem(name, value, ttl) {
           const timeStored = Date.now();
-          this.storage.setItem(
-            name,
-            JSON.stringify({
+          const valueToStore =  JSON.stringify({
               value: JSON.stringify(value),
               timeStored,
               ttl,
             })
-          );
+            try {
+              this.storage.setItem(name, valueToStore);
+            } catch (error) {
+              window[this._getKey(name)] = valueToStore;
+            }
+          
         }
         removeItem(name) {
-          this.storage.removeItem(name);
+          try {
+            this.storage.removeItem(name);
+          } catch (error) {
+            window[this._getKey(name)] = null;
+          }
+          
         }
       }
     </script>
@@ -119,7 +136,7 @@
       };
 
       const getAccessToken = () => {
-        return "7b819890302726b09967d246ff0f51ce";
+        return "XXXXXX";
         // return "b9e1945a881994633176fbce2c67db30";
       };
       const COMMERCE_TOKEN_COOKIE_NAME = "alm_commerce_token";
@@ -375,23 +392,23 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <!-- <div class="instance__container"></div> -->
-    <div class="training__page__container" data-show-description="true" data-show-author-info="true" data-show-enroll-deadline="true"></div>  
-     <!-- <div
-      class="catalog__container"
-      data-show-filters="true"
-      data-show-search="true"
-      data-catalogs="true"
-      data-lo-types="true"
-      data-skill-name="true"
-      data-lo-format="true"
-      data-duration="true"
-      data-price="true"
-      data-skills-level="true"
-      data-learner-state="true"
-      data-tag-name="true"
-      data-skill-level="true"
-      data-cities="true"
-    ></div> -->
+    <!-- <div class="training__page__container" data-show-description="true" data-show-author-info="true" data-show-enroll-deadline="true"></div>   -->
+    <div
+    class="catalog__container"
+    data-show-filters="true"
+    data-show-search="true"
+    data-catalogs="true"
+    data-lo-types="true"
+    data-skill-name="true"
+    data-lo-format="true"
+    data-duration="true"
+    data-price="true"
+    data-skills-level="true"
+    data-learner-state="true"
+    data-tag-name="true"
+    data-skill-level="true"
+    data-cities="true"
+  ></div>
 
   
     <!-- <div class="badges__container"></div>
@@ -413,7 +430,7 @@
      
     <!-- <div class="notification__container"></div> -->
 
-    <div class="notification__container"></div>
+    <!-- <div class="notification__container"></div> -->
     <!--/* <div class="boards__container"></div> */-->
 
     <!-- <div class="notification__container"></div> -->

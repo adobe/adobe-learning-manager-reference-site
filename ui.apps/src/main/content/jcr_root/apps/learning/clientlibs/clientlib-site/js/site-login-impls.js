@@ -10,6 +10,7 @@
     const PROXY_ALM_LOGOUT_URL = "/cpoauth.almLogout.html";
     const WCM_AUTHOR_MODE = "author";
     const WCM_NON_AUTHOR_MODE = "non-author";
+    const CP_ADMIN_RT_LEARNER_RT_TOKEN_URL = "/cpoauth.adminRefreshToken.html";
 
     const ALM_AUTHENTICATION_ERROR_ID = "alm-authentication-validator";
 
@@ -117,6 +118,31 @@
                 }
         }
 
+        async checkALMLoginImpl() {
+
+            const REDIRECT_URL = Granite.HTTP.externalize(CP_ADMIN_RT_LEARNER_RT_TOKEN_URL);
+            const requestData = {
+                  _charset_: "UTF-8",
+            };
+            const currentUrl = new URL(window.location.href);
+            const pathName = currentUrl.pathname;
+            requestData["pagePath"] = pathName;
+            requestData["currentUrl"] = currentUrl.href;
+            try {
+                 const response = await this.makeAjaxRequest(REDIRECT_URL, "POST", requestData);
+                 let jsonRes = JSON.parse(response.response) ;
+                 if (response && response.status==200 && jsonRes.isALMLoginImplementation === true) {
+                      document.location.href = this.getCpOauthUrl()  ;
+                 }
+                 await this.setAccessToken();
+                 window.ALM.isALMLoggedIn = true;
+                 window.ALM.getALMUser();
+            } catch (error) {
+                 console.error("Failed to authenticate.");
+                 console.error(error);
+            }
+        }
+
         getAccessToken() {
             if (window.ALM.isProxyEnabled()) {
                 return window.ALM.almAccessToken;
@@ -137,6 +163,17 @@
             }
         }
 
+        async setAccessToken () {
+        try {
+              const resp = await this.makeAjaxRequest(PROXY_ALM_LOGIN_URL, "POST", {});
+              if (resp && resp.response && resp.status === 200)  {
+                  window.ALM.almAccessToken = resp.response.access_token;
+              } } catch (error) {
+                  console.error("Error in checking logged in");
+                  window.ALM.almAccessToken = "";
+              }
+        }
+
         async handlePrimeLogIn() {
             const isLoggedIn = this.isLoggedIn();
             const data = {
@@ -148,19 +185,21 @@
               const currentUrl = new URL(window.location.href);
               const pathName = currentUrl.pathname;
               data["pagePath"] = pathName;
+
+              const oauthState = currentUrl.searchParams.get("state");
+              const code = currentUrl.searchParams.get("code");
+
               if (window.ALM.isAuthor()) {
                 await this.fetchAccessToken(data);
-              } else {
-                const oauthState = currentUrl.searchParams.get("state");
-                const code = currentUrl.searchParams.get("code");
-                if (CP_OAUTH_STATE == oauthState && code) {
+              } else if (window.ALM.ALMConfig["useAdminRefreshToken"] === "true" && code === null) {
+                  await this.checkALMLoginImpl();
+              } else if (CP_OAUTH_STATE == oauthState && code) {
     
                   data["mode"] = WCM_NON_AUTHOR_MODE;
                   data["code"] = code;
                   await this.fetchAccessToken(data);
-                } else {
+              } else {
                   document.location.href = this.getCpOauthUrl();
-                }
               }
             }
           };

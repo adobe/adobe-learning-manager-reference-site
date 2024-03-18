@@ -237,6 +237,7 @@ governing permissions and limitations under the License.
 .progressLabel {
   margin: -10px 10px 0px 0px;
   color: var(--prime-color-white);
+  word-break: keep-all;
 }
 
 .enrollmentLabel{
