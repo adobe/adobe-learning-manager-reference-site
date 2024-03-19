@@ -26,3 +26,6 @@ $include "./default_filters.any"
 
 # Allow Commerce Login Token servlet
 /0108 { /type "allow" /method "POST" /extension "html" /selectors "almCommerceLogin" /path "/cpoauth"}
+
+# Allow Admin RT to Learner Login Token servlet
+/0109 { /type "allow" /method "POST" /extension "html" /selectors "adminRefreshToken" /path "/cpoauth"}

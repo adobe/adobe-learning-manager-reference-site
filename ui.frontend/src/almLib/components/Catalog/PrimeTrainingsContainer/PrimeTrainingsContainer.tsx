@@ -19,6 +19,7 @@ import ViewList from "@spectrum-icons/workflow/ViewList";
 import ClassicGridView from "@spectrum-icons/workflow/ClassicGridView";
 
 import styles from "./PrimeTrainingsContainer.module.css";
+import { getALMObject } from "../../../utils/global";
 
 const PrimeTrainingsContainer: React.FC<{
   trainings: PrimeLearningObject[] | null;
@@ -38,7 +39,7 @@ const PrimeTrainingsContainer: React.FC<{
   const { formatMessage } = useIntl();
 
   const setInitialView = () => {
-    return window.localStorage.getItem("view") || TILE_VIEW;
+    return getALMObject().storage.getItem("CARD_VIEW") || TILE_VIEW;
   };
 
   const isListView = () => {
@@ -74,14 +75,14 @@ const PrimeTrainingsContainer: React.FC<{
       )}
     </ul>
   ) : (
-    <p className={styles.noResults} aria-live='polite'>
+    <p className={styles.noResults} aria-live="polite">
       {formatMessage({ id: "alm.catalog.no.result" })}
     </p>
   );
 
   const setCatalogView = (view: string) => {
     setView(view);
-    window.localStorage.setItem("view", view);
+    getALMObject().storage.setItem("CARD_VIEW", view);
   };
 
   return (
@@ -108,7 +109,10 @@ const PrimeTrainingsContainer: React.FC<{
         {listHtml}
         <div id="load-more-trainings" className={styles.loadMoreContainer}>
           {hasMoreItems ? (
-            <button onClick={loadMoreTraining} className={`almButton secondary`}>
+            <button
+              onClick={loadMoreTraining}
+              className={`almButton secondary`}
+            >
               {formatMessage({ id: "alm.community.loadMore" })}
             </button>
           ) : (

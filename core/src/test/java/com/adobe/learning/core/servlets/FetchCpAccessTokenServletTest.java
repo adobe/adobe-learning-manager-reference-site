@@ -122,6 +122,8 @@ public class FetchCpAccessTokenServletTest {
     adminConfigs.addProperty("commerceURL", "https://learningmanagerstage1.adobe.com");
     adminConfigs.addProperty("customerTokenLifetime", "3600");
     adminConfigs.addProperty("authorRefreshToken", "xxxxxx");
+    adminConfigs.addProperty("adminRefreshToken", "xxxxxx");
+    adminConfigs.addProperty("useAdminRefreshToken", "false");
     return adminConfigs;
   }
 

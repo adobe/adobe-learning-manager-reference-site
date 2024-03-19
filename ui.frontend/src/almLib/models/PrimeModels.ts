@@ -57,6 +57,7 @@ export interface PrimeAccount {
   uiLocales: PrimeLocalizationMetadata[];
   enableECommerce: boolean;
   extensions: PrimeExtension[];
+  expireSubmissionDuration?: number;
 }
 
 export interface PrimeAccountTerminology {
@@ -485,6 +486,8 @@ export interface PrimeLearningObjectResource {
   resources: PrimeResource[];
   previewEnabled: boolean;
   sessionRecordingInfo: PrimeSessionRecordingInfo[];
+  isChecklistMandatory: boolean;
+  isExpiredSubmission?: boolean;
 }
 
 export interface PrimeSessionRecordingInfo {

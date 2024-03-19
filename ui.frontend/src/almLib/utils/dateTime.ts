@@ -121,6 +121,29 @@ export function modifyTimeDDMMYY(dateToModify: string, locale: string) {
   return local;
 }
 
+export function modifyTimeForSessionReminderNotif(dateToModify: string, locale: string) {
+  if (isNaN(Date.parse(dateToModify))) {
+    return "";
+  }
+
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  };
+
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: "numeric",
+    minute: "2-digit",
+  };
+
+  const formattedDate = new Date(dateToModify).toLocaleDateString(locale, dateOptions);
+  const formattedTime = new Date(dateToModify).toLocaleTimeString(locale, timeOptions);
+
+  // format: [Jan 22, 2024 1:00 PM]
+  return `${formattedDate} ${formattedTime}`;
+}
+
 export function formatTime(dateString: string, locale: string){
     const date = new Date(dateString);
 

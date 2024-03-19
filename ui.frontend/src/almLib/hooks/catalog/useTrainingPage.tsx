@@ -573,7 +573,7 @@ export const useTrainingPage = (
           headers: headers,
           params: params,
         });
-
+        setRefreshTraining((prevState) => !prevState);
         const parsedResponse = JsonApiParse(response);
         const loInstance = parsedResponse.learningObject.instances?.filter(
           (instance) => {

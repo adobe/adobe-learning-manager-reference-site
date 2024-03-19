@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 import { Item, TabList, TabPanels, Tabs } from "@react-spectrum/tabs";
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useIntl } from "react-intl";
 import {
   PrimeLearningObject,
@@ -94,13 +94,14 @@ const PrimeCourseOverview: React.FC<{
   const { locale } = useIntl();
   interface INotesbyModuleName {
     moduleName: string;
+    moduleId: string;
     notes: PrimeNote[];
   }
   interface INotesByNamesAndId {
     [key: string]: INotesbyModuleName;
   }
 
-  let moduleReources = filterLoReourcesBasedOnResourceType(
+  let moduleResources = filterLoReourcesBasedOnResourceType(
     trainingInstance,
     CONTENT
   );
@@ -114,10 +115,10 @@ const PrimeCourseOverview: React.FC<{
     PREWORK
   );
 
-  const contentModuleDuration = getDuration(moduleReources,locale);
+  const contentModuleDuration = getDuration(moduleResources, locale);
 
   if (isPartOfLP) {
-    moduleReources = [...preWorkResources, ...moduleReources];
+    moduleResources = [...preWorkResources, ...moduleResources];
     preWorkResources = [] as PrimeLearningObjectResource[];
   }
 
@@ -129,34 +130,69 @@ const PrimeCourseOverview: React.FC<{
   }, [locale, preWorkResources]);
 
   const showTestout = testOutResources?.length !== 0;
-  const showTabs = showTestout || showNotes;
+  const showTabs = isPartOfLP ? false : showTestout || showNotes;
   const classNames = `${styles.tablist} ${showTabs ? "" : styles.hide}`;
-  const filterNotesByModuleName = (notesList: PrimeNote[]) => {
-    const notesbyModuleId = notesList.reduce(function (
-      accumulator: INotesByNamesAndId,
-      note: PrimeNote
-    ) {
-      const metaData = getPreferredLocalizedMetadata(
-        note?.loResource?.localizedMetadata,
-        locale
+  const getModuleId = useMemo(() => {
+    const getIds = () => {
+      let moduleIds: string[] = [];
+      moduleResources.forEach((element) => {
+        moduleIds.push(element.id);
+      });
+      return moduleIds;
+    };
+    return getIds();
+  }, [moduleResources]);
+  const notesByModuleName = useMemo(() => {
+    const filterNotesByModuleName = (notesList: PrimeNote[]) => {
+      const notesbyModuleId = notesList.reduce(function (
+        accumulator: INotesByNamesAndId,
+        note: PrimeNote
+      ) {
+        const metaData = getPreferredLocalizedMetadata(
+          note?.loResource?.localizedMetadata,
+          locale
+        );
+        const moduleId = note?.loResource?.id;
+        if (!accumulator[moduleId]) {
+          accumulator[moduleId] = {
+            notes: [],
+            moduleName: metaData.name,
+            moduleId: moduleId,
+          };
+        }
+        accumulator[moduleId].notes.push(note);
+        return accumulator;
+      },
+      {});
+      return Object.keys(notesbyModuleId).map(
+        (id: string) => notesbyModuleId[id]
       );
-      const moduleId = note?.loResource?.id;
-      if (!accumulator[moduleId]) {
-        accumulator[moduleId] = {
-          notes: [],
-          moduleName: metaData.name,
-        };
-      }
-      accumulator[moduleId].notes.push(note);
-      return accumulator;
-    },
-    {});
-    return Object.keys(notesbyModuleId).map(
-      (id: string) => notesbyModuleId[id]
+    };
+    return filterNotesByModuleName(notes);
+  }, [notes]);
+  const sortNotesByModuleResourceIds = useMemo(() => {
+    const moduleIds = getModuleId;
+    return notesByModuleName.sort(
+      (a, b) => moduleIds.indexOf(a.moduleId) - moduleIds.indexOf(b.moduleId)
     );
-  };
-  const notesByModuleName = filterNotesByModuleName(notes);
-
+  }, [notesByModuleName]);
+  const memoizedNotesByModuleId = useMemo(() => {
+    return notesByModuleName.map((item, index) => {
+      if (item.notes) {
+        const areMarkersSame = item.notes.every(
+          (note) => note.marker === item.notes[0].marker
+        );
+        if (areMarkersSame) {
+          item.notes.reverse();
+        } else {
+          item.notes.sort(
+            (a, b) => parseFloat(a.marker) - parseFloat(b.marker)
+          );
+        }
+      }
+      return item;
+    });
+  }, [notesByModuleName]);
   const handleNotesDownload = () => {
     downloadNotes(training.id, trainingInstance.id);
   };
@@ -228,7 +264,7 @@ const PrimeCourseOverview: React.FC<{
           )}
           <PrimeModuleList
             launchPlayerHandler={launchPlayerHandler}
-            loResources={moduleReources}
+            loResources={moduleResources}
             training={training}
             isPartOfLP={isPartOfLP}
             trainingInstance={trainingInstance}

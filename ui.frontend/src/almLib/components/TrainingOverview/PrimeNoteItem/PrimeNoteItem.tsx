@@ -72,7 +72,7 @@ const PrimeNoteItem: React.FC<{
           onChange={(e) => setValueOfNotes(e.target.value)}
         ></input>
         <div className={controlActions}>
-          <button className={styles.actionButton} onClick={updateNoteHandler}>
+          <button className={styles.actionButton} onClick={valueOfNotes.trim() !== '' ? updateNoteHandler : deleteNoteHandler}>
             {GetTranslation("alm.text.done")}
           </button>
           <button className={styles.actionButton} onClick={deleteNoteHandler}>

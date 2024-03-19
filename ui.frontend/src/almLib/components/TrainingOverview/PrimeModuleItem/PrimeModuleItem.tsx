@@ -35,10 +35,15 @@ import {
   PrimeResource,
 } from "../../../models/PrimeModels";
 import {
+  ACTIVITY,
   APPROVED,
   CHANGE,
+  CHECKLIST,
   CLASSROOM,
   ELEARNING,
+  FAILED,
+  PASSED,
+  PENDING,
   PENDING_APPROVAL,
   PENDING_SUBMISSION,
   PREVIEW,
@@ -56,7 +61,11 @@ import {
   getEnrollment,
   useResource,
 } from "../../../utils/hooks";
-import { checkIfLinkedInLearningCourse, getALMConfig, launchContentUrlInNewWindow } from "../../../utils/global";
+import {
+  checkIfLinkedInLearningCourse,
+  getALMConfig,
+  launchContentUrlInNewWindow,
+} from "../../../utils/global";
 import {
   ACTIVITY_SVG,
   AUDIO_SVG,
@@ -91,6 +100,8 @@ import {
 } from "../../../utils/uploadUtils";
 import styles from "./PrimeModuleItem.module.css";
 import Refresh from "@spectrum-icons/workflow/Refresh";
+import { ALMTooltip } from "../../Common/ALMTooltip";
+import { useAccount } from "../../../hooks";
 interface ActionMap {
   Classroom: string;
 }
@@ -144,7 +155,7 @@ const PrimeModuleItem: React.FC<{
   const { formatMessage, locale } = useIntl();
 
   const [almAlert] = useAlert();
-
+  const { account } = useAccount();
   const [showCannotSkipDialog, setShowCannotSkipDialog] = useState(false);
 
   const showPreWorkLabel = loResource.loResourceType === PREWORK && isPartOfLP;
@@ -283,8 +294,7 @@ const PrimeModuleItem: React.FC<{
         timeBetweenAttempts
       ) {
         timeComparison();
-      }
-      else{
+      } else {
         setTimeBetweenAttemptEnabled(false);
       }
     }
@@ -369,12 +379,14 @@ const PrimeModuleItem: React.FC<{
       (isEnrolled && !isClassroomOrVC) ||
       (isModulePreviewAble && isPrimeUserLoggedIn)
     ) {
-      if (checkIfLinkedInLearningCourse(training) && getALMConfig().handleLinkedInContentExternally) {
+      if (
+        checkIfLinkedInLearningCourse(training) &&
+        getALMConfig().handleLinkedInContentExternally
+      ) {
         return launchContentUrlInNewWindow(training, loResource);
       }
       const isMultienrolled = getEnrolledInstancesCount(training) > 1;
-      const isResetReattemptRequired =
-      reattemptButtonClicked
+      const isResetReattemptRequired = reattemptButtonClicked
         ? isResetRequired
         : !loResource.learnerAttemptInfo && !infiniteAttempts;
 
@@ -393,9 +405,13 @@ const PrimeModuleItem: React.FC<{
     }
   };
 
+  const capitalizeFirstChar = (value: string) => {
+    return value.toLowerCase().charAt(0).toUpperCase() + value.toLowerCase().slice(1);
+  }
+
   const formatLabel =
     loResource.resourceType && formatMap[loResource.resourceType]
-      ? GetTranslation(`${formatMap[loResource.resourceType]}`, true)
+      ? GetTranslation(`${loResource.resourceSubType !== CHECKLIST ? formatMap[loResource.resourceType] : formatMap[capitalizeFirstChar(loResource.resourceSubType)]}`, true)
       : "";
 
   const gradeHasPassed = (): boolean => {
@@ -474,65 +490,160 @@ const PrimeModuleItem: React.FC<{
   };
 
   const getSubmissionFileName = (url: any) => {
-    const urlWithoutParams = url?.split("?")[0];
-    let urlParts = urlWithoutParams?.split("/");
-    return urlParts?.length > 0 ? urlParts[urlParts?.length - 1] : "";
+    let fileUrl = url;
+    let fileNameToReturn = "";
+    if (fileUrl) {
+      let dummyUrl = new URL(fileUrl);
+      fileUrl = `${dummyUrl.origin}${dummyUrl.pathname}`;
+      // Extract filename from the URL
+      let fileNameWithExtension = decodeURI(fileUrl).substring(
+        fileUrl.lastIndexOf("/") + 1
+      );
+      if (fileNameWithExtension.length <= 15) {
+        return fileNameWithExtension;
+      }
+      let lastDotIndex = fileNameWithExtension.lastIndexOf(".");
+      let fileName = fileNameWithExtension.substring(0, lastDotIndex);
+      let extension = fileNameWithExtension.substring(lastDotIndex - 1);
+      // Trim filename to 15 characters
+      let trimmedFilename = fileName.substring(0, 15);
+      // Concatenate trimmed filename and extension
+      fileNameToReturn = trimmedFilename + "..." + extension;
+    }
+    return fileNameToReturn;
   };
 
   const showFileSubmission = () => {
-    return isEnrolled && loResource.submissionEnabled;
+    return isEnrolled && loResource.submissionEnabled && canPlay;
+  };
+
+  const isChecklistPassed = () => {
+    return loResource.checklistEvaluationStatus && loResource.checklistEvaluationStatus.toLowerCase() === PASSED;
+  }
+
+  const isChecklistFailed = () => {
+    return loResource.checklistEvaluationStatus && loResource.checklistEvaluationStatus.toLowerCase() === FAILED;
+  }
+
+  const showChecklistFailInfo = () => {
+    return loResource.isChecklistMandatory && isChecklistFailed();
+  }
+
+  const showChecklistStatus = () => {
+    if (loResource.checklistEvaluationStatus) {
+      if (loResource.checklistEvaluationStatus === PENDING) {
+        return formatMessage({
+          id: "alm.overview.checklistReviewPending",
+          defaultMessage: "Reviewer evaluation is pending",
+        });
+      } else {
+        return (
+          <span className={isChecklistPassed() ? styles.passStatus : styles.failStatus}>
+              {capitalizeFirstChar(loResource.checklistEvaluationStatus.toLowerCase())}
+          </span>
+        )
+      }
+    }
   };
 
   const getFileUploadSection = (hasSession: Boolean, state: String) => {
     const allowFileUpdate = true;
+    let fileNotAccessibleHtml = <></>;
+    if (loResource.isExpiredSubmission) {
+      fileNotAccessibleHtml = (
+        <>
+          <span className={styles.fileNotAccessible}>
+            {formatMessage({
+              id: "alm.overview.document.not.accessible.note",
+              defaultMessage: "Last submission not accessible",
+            })}
+          </span>
+          {account.expireSubmissionDuration &&
+          account.expireSubmissionDuration > 0 ? (
+            <span className={styles.fileNotAccessibleIcon}>
+              <ALMTooltip
+                message={formatMessage(
+                  {
+                    id: "alm.overview.document.not.accessible.disclaimer",
+                    defaultMessage: `Document is not accessible after ${account.expireSubmissionDuration} days from last submission date`,
+                  },
+                  {
+                    days: account.expireSubmissionDuration,
+                  }
+                )}
+              ></ALMTooltip>
+            </span>
+          ) : (
+            ""
+          )}
+        </>
+      );
+    }
     switch (state) {
       case REJECTED:
         return (
-          <span className={styles.fileSubmissionContainer}>
-            <span className={styles.fileRejected}>
-              {formatMessage({
-                id: "alm.overview.rejected.label",
-                defaultMessage: "Submission Rejected",
-              })}
+          <>
+            <span className={styles.fileSubmissionContainer}>
+              <span className={styles.fileRejected}>
+                {formatMessage({
+                  id: "alm.overview.rejected.label",
+                  defaultMessage: "Submission Rejected",
+                })}
+                :{" "}
+              </span>
+
+              {fileNotAccessibleHtml}
             </span>
-            : {getUploadedFileSection(hasSession, allowFileUpdate)}
-          </span>
+            {getUploadedFileSection(hasSession, allowFileUpdate)}
+          </>
         );
 
       case PENDING_APPROVAL:
         return (
-          <span className={styles.fileSubmissionContainer}>
-            <span className={styles.fileAwaitingApproval}>
-              {formatMessage({
-                id: "alm.overview.submissionAwaitingApproval.label",
-                defaultMessage: "Submission Awaiting Approval",
-              })}
+          <>
+            <span className={styles.fileSubmissionContainer}>
+              <span className={styles.fileAwaitingApproval}>
+                {formatMessage({
+                  id: "alm.overview.submissionAwaitingApproval.label",
+                  defaultMessage: "Submission Awaiting Approval",
+                })}
+                :{" "}
+              </span>
+
+              {fileNotAccessibleHtml}
             </span>
-            : {getUploadedFileSection(hasSession, allowFileUpdate)}
-          </span>
+            {getUploadedFileSection(hasSession, allowFileUpdate)}
+          </>
         );
       case APPROVED:
         return (
-          <span className={styles.fileSubmissionContainer}>
-            <span className={styles.fileApproved}>
-              {formatMessage({
-                id: "alm.overview.approved.label",
-                defaultMessage: "Submission Approved",
-              })}
+          <>
+            <span className={styles.fileSubmissionContainer}>
+              <span className={styles.fileApproved}>
+                {formatMessage({
+                  id: "alm.overview.approved.label",
+                  defaultMessage: "Submission Approved",
+                })}
+                :{" "}
+              </span>
+
+              {fileNotAccessibleHtml}
             </span>
-            : {getUploadedFileSection(hasSession, !allowFileUpdate)}
-          </span>
+            {getUploadedFileSection(hasSession, !allowFileUpdate)}
+          </>
         );
       case PENDING_SUBMISSION:
       default:
         return (
-          <span className={styles.fileSubmissionContainer}>
-            {formatMessage({
-              id: "alm.overview.submissionPending.label",
-              defaultMessage: "Submission Pending",
-            })}
-            : {getUploadFileSection(hasSession)}
-          </span>
+          <>
+            <span className={styles.fileSubmissionContainer}>
+              {formatMessage({
+                id: "alm.overview.submissionPending.label",
+                defaultMessage: "Submission Pending",
+              })}
+            </span>
+            {getUploadFileSection(hasSession)}
+          </>
         );
     }
   };
@@ -737,8 +848,7 @@ const PrimeModuleItem: React.FC<{
         GetTranslation("alm.mqa.module.locked.message"),
         AlertType.error
       );
-    }
-    else {
+    } else {
       itemClickHandler(event, true);
     }
   };
@@ -988,9 +1098,19 @@ const PrimeModuleItem: React.FC<{
                   getFileUploadSection(isClassroomOrVC, submissionState)}
                 {((isPartOfLP && isParentLOEnrolled) || !isPartOfLP) &&
                   attemptDescription()}
+                {canPlay &&
+                  <span className={styles.checklistStatus}>
+                    {showChecklistStatus()}
+                  </span>
+                }
               </span>
               <span>{durationText}</span>
             </div>
+            {showChecklistFailInfo() &&
+              <div className={styles.checklistFailInfo}>
+                {GetTranslation("alm.overview.checklistFailInfo", true)}
+              </div>
+            }
           </div>
         </div>
         <div className={styles.wrapperContainer}>

@@ -167,7 +167,7 @@ const PrimeCatalogSearch: React.FC<{
             {GetTranslation("alm.search.userSearchHistory.label")}
           </h4>
         )}
-        <ul>
+        <ul className={styles.searchItemNoPadding}>
           {suggestions.map((item: string) => getSuggesstionItemHtml(item))}
         </ul>
       </div>
@@ -176,7 +176,7 @@ const PrimeCatalogSearch: React.FC<{
 
   const getSuggesstionItemHtml = (item: string) => {
     return (
-      <li key={item}>
+      <li className = {styles.searchItemSelected} key={item}>
         <a
           href="javascript:void(0)"
           title={item}

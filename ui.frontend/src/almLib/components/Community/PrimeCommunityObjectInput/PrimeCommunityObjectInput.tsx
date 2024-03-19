@@ -97,6 +97,21 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
     }
   }, [props.defaultValue]);
 
+  const tooltipPlaceholder = "Please enter a link"; 
+  useEffect(() => {
+    const handleTooltipClick = function() {
+      const tooltipInputElement = document.querySelector('.ql-tooltip input[placeholder="https://quilljs.com"]');
+      if (tooltipInputElement) {
+        tooltipInputElement.setAttribute("placeholder", tooltipPlaceholder);
+      }
+    };
+  
+    document.addEventListener("click", handleTooltipClick);
+    return () => {
+      document.removeEventListener("click", handleTooltipClick);
+    };
+  }, []);
+
   const handleEditorTextChange = (value: string) => {
     const charCount = stripHtmlTags(value).length;
     if (charCount <= objectTextLimit) {
@@ -173,8 +188,7 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
         .ql-tooltip {
           display:flex;
           z-index:2000;
-          position:fixed !important;
-          top: 300px !important;
+          position:${props.concisedToolbarOptions ? 'absolute':'fixed'} !important;
         }
         .ql-container.ql-snow {
           max-height: fit-content !important;

@@ -89,6 +89,9 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
               ? "false"
                   .equals(jsonConfigs.get(Constants.Config.NOT_STORE_TOKEN_IN_COOKIE).getAsString())
               : true;
+      boolean useAdminRefreshToken =
+          jsonConfigs.get(Constants.Config.USE_ADMIN_RT_TO_LEARNER_AT) != null
+              && jsonConfigs.get(Constants.Config.USE_ADMIN_RT_TO_LEARNER_AT).getAsBoolean();
       String mode = request.getParameter("mode");
 
       if (AUTHOR_MODE.equals(mode)) {
@@ -96,7 +99,9 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
         String usageType = jsonConfigs.get(Constants.Config.USAGE_TYPE_NAME).getAsString();
         if (Constants.Config.SITES_USAGE.equals(usageType)) {
           refreshToken =
-              jsonConfigs.get(Constants.Config.SITES_AUTHOR_REFRESH_TOKEN_NAME).getAsString();
+              useAdminRefreshToken
+                  ? jsonConfigs.get(Constants.Config.ADMIN_REFRESH_TOKEN).getAsString()
+                  : jsonConfigs.get(Constants.Config.SITES_AUTHOR_REFRESH_TOKEN_NAME).getAsString();
         } else {
           refreshToken =
               jsonConfigs.get(Constants.Config.COMMERCE_ADMIN_REFRESH_TOKEN).getAsString();
@@ -105,7 +110,7 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
         Pair<String, Integer> accessTokenResp =
             tokenService.getAccessToken(almURL, clientId, clientSecret, refreshToken);
 
-        if (Constants.Config.COMMERCE_USAGE.equals(usageType)) {
+        if (Constants.Config.COMMERCE_USAGE.equals(usageType) || useAdminRefreshToken) {
           String email = getALMUserEmail(almURL, accessTokenResp.getLeft());
           if (StringUtils.isBlank(email)) {
             LOGGER.error("CPPrime:: Exception in fetching ALM User");

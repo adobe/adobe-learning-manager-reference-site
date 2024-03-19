@@ -76,7 +76,7 @@ governing permissions and limitations under the License.
   width: 100%;
   padding: 10px 0 0 0;
   white-space: normal !important;
-  height: auto;
+  height: auto !important;
   font-family: var(--prime-font-family);
 }
 

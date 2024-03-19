@@ -91,3 +91,8 @@ export const WINTER_SKY_THEME = "Winter Sky";
 export const VIVID_THEME = "Vivid";
 export const PEBBLES_THEME = "Pebbles";
 export const AUTUMN_THEME = "Autumn";
+
+export const CHECKLIST = "CHECKLIST";
+export const PENDING = "PENDING";
+export const PASSED = "passed";
+export const FAILED = "failed"

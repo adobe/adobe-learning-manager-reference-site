@@ -392,4 +392,5 @@ export const formatMap: any = {
   "Virtual Classroom": "alm.catalog.card.virtual.classroom",
   Classroom: "alm.catalog.card.classroom",
   "Self Paced": "alm.catalog.card.self.paced",
+  Checklist: "alm.catalog.card.checklistActivity"
 };

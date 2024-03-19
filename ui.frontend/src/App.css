@@ -38,3 +38,8 @@ html {
 .extensionDialog hr{
   height: 0!important;
 }
+.extensionErrorPopupMessage{
+  margin: 0;
+  text-align: left;
+  margin-bottom: 10px;
+}

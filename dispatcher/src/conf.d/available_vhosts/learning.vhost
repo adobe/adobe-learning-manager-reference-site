@@ -10,6 +10,7 @@ Include conf.d/variables/custom.vars
             ProxyPass        ${ALM_COMMERCE_ENDPOINT}
             ProxyPassReverse ${ALM_COMMERCE_ENDPOINT}
             RewriteEngine Off
+
     </LocationMatch>
 </IfDefine>
 

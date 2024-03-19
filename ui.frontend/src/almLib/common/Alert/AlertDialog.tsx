@@ -37,9 +37,8 @@ const AlertDialog: React.FC<{
               role="alert"
               aria-atomic="true"
               aria-live="assertive"
-            >
-              {message}
-            </div>
+              dangerouslySetInnerHTML={{ __html: message }}
+            ></div>
           </div>
         </div>
       )}

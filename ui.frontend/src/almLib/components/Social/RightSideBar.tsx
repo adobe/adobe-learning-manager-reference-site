@@ -5,6 +5,7 @@
 import styles from "./styles/SideBar.module.css";
 import SectionLine from "./SectionLine";
 import { useIntl } from "react-intl";
+import { GetTranslation } from "../../utils/translationService";
 const SKILLS = "skills";
 const FOLLOW = "follow";
 const LEADERBOARD = "leaderboard";
@@ -46,10 +47,7 @@ const RightSideBar = (props: any) => {
           {props.skillsData ? (
             <Section
               type={SKILLS}
-              title={formatMessage({
-                id: "alm.text.myModSkills",
-                defaultMessage: "My Mod Skills",
-              })}
+              title={GetTranslation("alm.text.mySkills", true)}
               src={src}
               data={props.skillsData}
             />
@@ -71,10 +69,8 @@ const RightSideBar = (props: any) => {
           {props.leaderBoard ? (
             <Section
               type={LEADERBOARD}
-              title={formatMessage({
-                id: "alm.text.leaderboard",
-                defaultMessage: "Social Mod Leaderboard",
-              })}
+              title=
+              {GetTranslation("alm.text.leaderboard", true)}
               src={src}
             />
           ) : (

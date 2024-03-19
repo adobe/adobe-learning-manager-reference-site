@@ -96,10 +96,9 @@ governing permissions and limitations under the License.
   margin: 10px 0px 0px 0px;
   color: red;
 }
-.scrollToSelectMsg{
+.scrollToSelectMsg {
   margin-bottom: 10px;
 }
-
 
 .icon,
 .instanceIcon {
@@ -167,12 +166,16 @@ governing permissions and limitations under the License.
   font-weight: var(--prime-font-weight-600);
   padding-top: 5px;
 }
-.subtleText {
+.subtleText,
+.skillText {
   font-size: var(--prime-font-size-14);
   color: var(--prime-color-nc5);
   overflow: hidden;
   padding-bottom: 5px;
   font-family: "source-sans-pro";
+}
+.skillText {
+  word-break: break-word;
 }
 .authorContainer {
   display: flex;
@@ -358,11 +361,11 @@ governing permissions and limitations under the License.
   vertical-align: bottom;
 }
 
-.courseListInFlexLp{
+.courseListInFlexLp {
   margin-bottom: 15px;
 }
 
-.flexLpDialogList{
+.flexLpDialogList {
   padding-left: 15px;
 }
 
@@ -387,10 +390,10 @@ governing permissions and limitations under the License.
   .bookMarkIcon {
     display: none;
   }
-  .preBmSeperator{
+  .preBmSeperator {
     display: none;
   }
-  .bookmarkContainer{
+  .bookmarkContainer {
     display: none;
   }
   .previewButton {

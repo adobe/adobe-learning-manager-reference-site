@@ -15,17 +15,17 @@ governing permissions and limitations under the License.
   display: none;
 }
 .showOnHover {
-  position: relative;
+  position: absolute;
 }
 .showOnHover:hover .tooltip {
   display: block;
+
 }
 .showOnHover svg {
   width: 20px;
   height: 20px;
   transform: scale(0.7) rotate(180deg);
   position: relative;
-  top: 5px;
   left: 2px;
   cursor: pointer;
 }
@@ -37,8 +37,8 @@ div[class^="spectrum-Tooltip"].almTooltip {
   right: 0!important;
   width: 180px!important;
 }
-.almTooltip span[class^="spectrum-Tooltip-tip"] {
-  left: 96%;
+.almTooltip span[class*="spectrum-Tooltip-tip"] {
+  left: 10%!important;
 }
 .almTooltip span[class^="spectrum-Tooltip-label"] {
   font-size: var(--prime-font-size-12);

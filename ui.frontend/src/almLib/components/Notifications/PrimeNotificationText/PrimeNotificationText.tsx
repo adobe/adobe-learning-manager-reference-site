@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { useIntl } from "react-intl";
-import { modifyTimeDDMMYY } from "../../../utils/dateTime";
+import { modifyTimeDDMMYY, modifyTimeForSessionReminderNotif } from "../../../utils/dateTime";
 import { ReplaceLoTypeWithAccountTerminology } from "../../../utils/translationService";
 import styles from "./PrimeNotificationText.module.css";
 import { PrimeUserNotification } from "../../../models";
@@ -143,6 +143,11 @@ const PrimeNotificationText : React.FC<{
   }
 
   const formattedNotificationText = (strType: string, loStr: string) => {
+
+    // Date Time formatting for session reminder channels
+    if((dateTimeStr.includes(strType) && loReminderChannels.includes(notif.channel))){
+      return modifyTimeForSessionReminderNotif(notif.modelIds[1], locale);
+    }
     return (dateTimeStr.includes(strType) && !loReminderChannels.includes(notif.channel)) ? (
       modifyTimeDDMMYY(loStr, locale)
     ) : (

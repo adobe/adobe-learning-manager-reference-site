@@ -30,7 +30,7 @@
 .primary:disabled {
   background: var(--prime-color-nc7);
   border-color: var(--prime-color-nc7);
-  color: var(--prime-color-nc8);
+  color: var(--prime-color-nc5);
   cursor: not-allowed;
 }
 
@@ -42,7 +42,7 @@
 
 .secondary:enabled:hover,
 .secondary:enabled:focus {
-  background-color: var(--prime-color-nc9);
+  background-color: var(--prime-color-nc7);
   border-color: var(--prime-color-primary-hover);
   color: var(--prime-color-primary-hover);
 }
@@ -50,6 +50,6 @@
 .secondary:disabled {
   background: var(--prime-color-white);
   border-color: var(--prime-color-nc7);
-  color: var(--prime-color-nc8);
+  color: var(--prime-color-nc5);
   cursor: not-allowed;
 }
