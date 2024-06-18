@@ -18,3 +18,6 @@ export const ORDER_PATH = "/orders";
 export const RESET_PASSWORD_PATH = "/resetPassword";
 export const PURCHASE_COMPLETED_PATH = "/ecommerce/purchaseCompleted";
 export const PURCHASE_INITIATED_PATH = "/ecommerce/purchaseInitiated";
+export const PREVIEW = "PREVIEW";
+export const ENROLL = "ENROLL";
+export const ADD_TO_CART = "ADD_TO_CART";

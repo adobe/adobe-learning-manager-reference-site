@@ -12,13 +12,19 @@ governing permissions and limitations under the License.
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getALMObject, getCommerceToken, setCartId, handlePageLoad } from "../../utils/global";
+import {
+  getALMObject,
+  getCommerceToken,
+  setCartId,
+  handlePageLoad,
+} from "../../utils/global";
 import {
   CREATE_ACCOUNT,
   CREATE_CART,
   REQUEST_PASSWORD_RESET_EMAIL,
   SIGN_IN,
 } from "./signIn.gql";
+import { ADD_TO_CART, ENROLL, PREVIEW } from "../../utils/constants";
 
 export const useAlmSignIn = (props) => {
   let navigate = useNavigate();
@@ -57,14 +63,25 @@ export const useAlmSignIn = (props) => {
 
       let urlSearchParams = new URLSearchParams(window.location.search);
       const redirectPath = urlSearchParams.get("redirectPath");
+
       if (redirectPath) {
-        urlSearchParams.delete("redirectPath");
-        window.history.replaceState(
-          null,
-          "",
-          "?" + urlSearchParams + window.location.hash
-        );
-        window.location.href = decodeURIComponent(redirectPath);
+        const redirectPathURL = new URL(redirectPath);
+        const actionInURL = redirectPathURL.searchParams.get("action");
+        const validActions = [PREVIEW, ENROLL, ADD_TO_CART];
+        if (
+          redirectPathURL?.origin === window.location.origin &&
+          (!actionInURL || validActions.includes(actionInURL))
+        ) {
+          urlSearchParams.delete("redirectPath");
+          window.history.replaceState(
+            null,
+            "",
+            "?" + urlSearchParams + window.location.hash
+          );
+          window.location.href = decodeURIComponent(redirectPath);
+          return;
+        }
+        console.info("Stopping Redirection");
       } else if (process.env.NODE_ENV === "production") {
         getALMObject().navigateToExplorePage();
       } else {
