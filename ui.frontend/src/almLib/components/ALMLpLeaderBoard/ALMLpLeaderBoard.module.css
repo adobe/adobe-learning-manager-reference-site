@@ -1,0 +1,81 @@
+.borderContainer {
+  border: 1px solid var(--prime-color-neutral-3);
+  border-radius: 12px;
+  padding: 12px;
+  background: var(--prime-color-neutral-5);
+  min-width: 280px;
+}
+.paddingSeperatorForBorderContainer {
+  margin-top: 48px;
+}
+.leaderBoardText {
+  font-size: var(--prime-font-size-16);
+  font-weight: var(--prime-font-weight-700);
+}
+.leaderBoardTextContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.chevron {
+  border: transparent;
+  background-color: transparent;
+  cursor: pointer;
+}
+.seperator {
+  border-bottom: 1px solid var(--prime-color-neutral-3);
+  margin: 12px 0;
+}
+.leaderBoardUser {
+  height: 42px;
+  display: flex;
+}
+.avatarIcon {
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+}
+.leaderBoardUserRank {
+  font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-400);
+}
+.leaderBoardItem {
+  margin-left: 12px;
+  display: flex;
+}
+.leaderBoardUserDetails {
+  font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-400);
+  margin-left: 6px;
+}
+.smallSeparator {
+  border-bottom: 1px solid var(--prime-color-neutral-3);
+  margin: 12px 0px 12px 20px;
+}
+.leaderBoardExistingItem {
+  margin-left: 20px;
+  display: flex;
+}
+.ruleItem {
+  margin-left: 1rem;
+  margin-top: 1rem;
+}
+.ruleHeader {
+  font-size: var(--prime-font-size-16);
+}
+.ruleDetails {
+  font-size: var(--prime-font-size-14);
+}
+.ruleAndSeeAllText {
+  color: var(--prime-color-link);
+  cursor: pointer;
+}
+.dotsImage {
+  width: 5rem;
+  height: 5rem;
+  margin-left: 2rem;
+  transform: scale(0.55);
+}
+.highlightForCurrentUser {
+  border: 1px solid;
+}

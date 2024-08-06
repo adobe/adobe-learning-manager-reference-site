@@ -22,6 +22,7 @@ import { QueryParams, RestAdapter } from "../../utils/restAdapter";
 export const useSkills = () => {
   const { items, next } = useSelector((state: State) => state.skill);
   const dispatch = useDispatch();
+
   const fetchSkills = useCallback(async () => {
     try {
       const baseApiUrl = getALMConfig().primeApiURL;
@@ -47,7 +48,38 @@ export const useSkills = () => {
     }
   }, [dispatch]);
 
-  // for pagination
+  const searchSkill = useCallback(
+    async (q: string) => {
+      try {
+        const baseApiUrl = getALMConfig().primeApiURL;
+        const params: QueryParams = {};
+        params["filter.loTypes"] = "skill";
+        params["state"] = "active";
+        params["sort"] = "name";
+        params["type"] = "skill";
+        params["filter.skill.type"] = "internal";
+        params["query"] = q;
+        params["page[offset]"] = "0";
+        params["page[limit]"] = "10";
+
+        const response = await RestAdapter.get({
+          url: `${baseApiUrl}/search?`,
+          params: params,
+        });
+        const parsedResponse = JsonApiParse(response);
+        const data = {
+          items: parsedResponse.skillList || [],
+          next: parsedResponse.links?.next || "",
+        };
+        dispatch(loadSkills(data));
+      } catch (e) {
+        dispatch(loadSkills([] as PrimeSkill[]));
+        console.log("Error while loading skills " + e);
+      }
+    },
+    [dispatch]
+  );
+
   const loadMoreSkills = useCallback(async () => {
     if (!next) return;
     const parsedResponse = await APIServiceInstance.loadMore(next);
@@ -62,6 +94,7 @@ export const useSkills = () => {
   return {
     skills: items,
     fetchSkills,
+    searchSkill,
     loadMoreSkills,
     hasMoreSkills: Boolean(next),
   };

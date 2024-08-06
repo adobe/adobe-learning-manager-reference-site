@@ -1,0 +1,29 @@
+@import "../../styles/variables.css";
+
+.goToTopButton {
+  position: fixed;
+  right: 36px;
+  bottom: 48px;
+  width: 48px;
+  height: 48px;
+  z-index: 10;
+  background: var(--prime-color-white);
+  box-shadow: 0px 1px 6px 0px #0000001f;
+  border: 1px solid var(--prime-color-neutral-2);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.goToTopButton svg {
+  transform: rotate(270deg) scale(1.1);
+  width: 24px;
+  height: 24px;
+}
+
+.goToTopButton.show {
+  opacity: 1;
+  visibility: visible;
+}

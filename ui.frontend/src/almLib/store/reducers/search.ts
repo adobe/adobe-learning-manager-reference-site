@@ -15,10 +15,7 @@ export interface SearchState {
   searchTerm: string;
 }
 
-const searching: Reducer<boolean, AnyAction> = (
-  state: boolean | undefined,
-  action: AnyAction
-) => {
+const searching: Reducer<boolean, AnyAction> = (state: boolean | undefined, action: AnyAction) => {
   switch (action.type) {
     case OPEN_SEARCH:
       return true;
@@ -81,10 +78,7 @@ const popularSearches: Reducer<string[] | null, AnyAction> = (
   }
 };
 
-const searchTerm: Reducer<string, AnyAction> = (
-  state: string | undefined,
-  action: AnyAction
-) => {
+const searchTerm: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
   switch (action.type) {
     case SET_SEARCH_TERM:
       return action.payload;

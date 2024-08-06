@@ -9,29 +9,42 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
+import { ALM_PLAYER_CLOSE, ALM_PLAYER_CLOSE_FROM_PARENT, ALM_PLAYER_LAUNCH } from "./constants";
 import {
-  getAccessToken,
   getALMConfig,
+  getALMObject,
+  getAuthKey,
+  GetPrimeEmitEventLinks,
   getWindowObject,
   redirectToLoginAndAbort,
+  sendEvent,
 } from "./global";
 import { getLocale } from "./translationService";
+import { PrimeDispatchEvent, SendMessageToParent } from "./widgets/base/EventHandlingBase";
+import { PrimeEvent } from "./widgets/common";
 // let currenttrainingId = "";
 
+const dispatchEvent = (eventDetail: any, event: PrimeEvent) => {
+  PrimeDispatchEvent(document, event, false, eventDetail);
+};
+
 export function LaunchPlayer(props: any) {
+  sendEvent(ALM_PLAYER_LAUNCH);
   if (redirectToLoginAndAbort()) {
     return;
   }
   const ClosePlayer = (event: MessageEvent) => {
-    if (event.data === "status:close") {
+    if (event.data === "status:close" || event.data.type === ALM_PLAYER_CLOSE_FROM_PARENT) {
       getWindowObject().removeEventListener("message", ClosePlayer);
       handlePlayerClose(props.trainingId);
-      props.callBackFn &&
-        typeof props.callBackFn == "function" &&
-        props.callBackFn();
+      props.callBackFn && typeof props.callBackFn === "function" && props.callBackFn();
+      sendEvent(ALM_PLAYER_CLOSE);
+      dispatchEvent({ loId: props.trainingId }, PrimeEvent.PLAYER_CLOSE);
     }
   };
+
   getWindowObject().addEventListener("message", ClosePlayer, false);
+
   const playeURL: string = GetPlayerURl(
     props.trainingId,
     props.moduleId,
@@ -42,6 +55,7 @@ export function LaunchPlayer(props: any) {
     props.isResetRequired
   );
   cleanUp();
+  const iframeDimension = props?.playerDimension || "100%";
   const overlay = document.createElement("div");
   overlay.id = "primePlayerOverlay";
   overlay.style.display = "grid";
@@ -52,7 +66,7 @@ export function LaunchPlayer(props: any) {
   overlay.style.left = "0";
   overlay.style.right = "0";
   overlay.style.bottom = "0";
-  // overlay.style.backgroundColor = "rgba(0,0,0,0.95)";
+  overlay.style.backgroundColor = "rgba(0,0,0,0.95)";
   overlay.style.zIndex = "100";
   document.body.appendChild(overlay);
   document.body.style.overflow = "hidden";
@@ -66,11 +80,17 @@ export function LaunchPlayer(props: any) {
   iframe.setAttribute("mozallowfullscreen", "true");
   iframe.setAttribute("msallowfullscreen", "true");
   iframe.setAttribute("allowfullscreen", "true");
-  iframe.width = "100%";
-  iframe.height = "100%";
+  iframe.width = iframeDimension;
+  iframe.height = iframeDimension;
   iframe.style.margin = "auto";
   iframe.style.border = "none";
   overlay.appendChild(iframe);
+
+  SendMessageToParent(
+    { type: PrimeEvent.PLAYER_LAUNCH, loId: props.trainingId },
+    GetPrimeEmitEventLinks()
+  );
+  getALMObject().playerLaunchTimeStamp = Date.now();
 }
 
 function cleanUp() {
@@ -101,14 +121,13 @@ export function GetPlayerURl(
   isMultienrolled: boolean,
   note_id: "",
   note_position: "",
-  isResetRequired= false
+  isResetRequired = false
 ): string {
   const primeConfig = getALMConfig();
   const hostName = primeConfig.almBaseURL;
   const playerEndPoint = "/app/player?";
   const key = `lo_id=${trainingId}`;
-  const accessToken = getAccessToken();
-  const authKey = `access_token=${accessToken}`;
+  const authKey = getAuthKey();
   //to-do handle preview/guest
   let url = `${hostName}${playerEndPoint}${key}&${authKey}&hostname=${hostName}&trapfocus=true&is_native=true&reset_attempt=${isResetRequired}`;
   if (moduleId) {

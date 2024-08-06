@@ -1,7 +1,12 @@
 .moduleNotesContainer {
-  border: 1px solid var(--prime-color-nc5);
-  margin-bottom: 15px;
+  margin-bottom: 48px;
+  font-family: var(--prime-font-family);
+  padding-right: 10px;
 }
 .noteItemList {
   box-sizing: border-box;
+}
+.notesItemSeparator {
+  border: 0.5px solid var(--prime-color-neutral-3);
+  margin: 0;
 }

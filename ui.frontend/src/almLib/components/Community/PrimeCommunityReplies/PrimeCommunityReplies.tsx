@@ -17,8 +17,7 @@ import { useIntl } from "react-intl";
 const PrimeCommunityReplies = (props: any) => {
   const { formatMessage } = useIntl();
   const commentId = props.object.id;
-  const { items, patchReply, loadMoreReplies, hasMoreItems } =
-    useReplies(commentId);
+  const { items, patchReply, loadMoreReplies, hasMoreItems } = useReplies(commentId);
 
   const deleteReplyHandler = async () => {
     if (typeof props.deleteReplyHandler === "function") {
@@ -39,8 +38,8 @@ const PrimeCommunityReplies = (props: any) => {
       <div className={styles.primeReplySectionWrapper}>
         <div className={styles.primeReplySection}>
           {items
-            ?.filter((reply) => reply.parent.id === commentId)
-            .map((reply) => (
+            ?.filter(reply => reply.parent.id === commentId)
+            .map(reply => (
               <PrimeCommunityReply
                 reply={reply}
                 key={reply.id}
@@ -49,10 +48,7 @@ const PrimeCommunityReplies = (props: any) => {
               ></PrimeCommunityReply>
             ))}
           {hasMoreItems && (
-            <button
-              className={styles.showMoreRepliesButton}
-              onClick={loadMoreReplies}
-            >
+            <button className={styles.showMoreRepliesButton} onClick={loadMoreReplies}>
               {formatMessage({
                 id: "alm.community.showMoreReplies",
                 defaultMessage: "Show more replies",

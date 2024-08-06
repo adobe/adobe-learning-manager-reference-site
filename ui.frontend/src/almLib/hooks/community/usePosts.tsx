@@ -26,7 +26,7 @@ export const usePosts = (boardId?: any) => {
 
   //Fort any page load or filterchanges
   const fetchPosts = useCallback(
-    async (boardId: any, sortFilter?: any, ids="") => {
+    async (boardId: any, sortFilter?: any, ids = "") => {
       const baseApiUrl = getALMConfig().primeApiURL;
       const params: QueryParams = {};
       params["sort"] = sortFilter ? sortFilter : DEFAULT_SORT_VALUE;
@@ -34,7 +34,7 @@ export const usePosts = (boardId?: any) => {
       params["page[offset]"] = "0";
       params["page[limit]"] = "10";
       params["include"] = "parent,createdBy";
-      if(ids!== ""){
+      if (ids !== "") {
         params["ids"] = ids;
       }
       const response = await RestAdapter.get({

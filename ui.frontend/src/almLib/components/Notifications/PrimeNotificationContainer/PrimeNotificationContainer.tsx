@@ -35,10 +35,10 @@ const PrimeNotificationContainer = () => {
   } = useNotifications();
 
   const [showNotifications, setShowNotifications] = useState(false);
-  const [openAnnouncement , setAnnouncementOpen] = useState(false);
-  const [announcementData , setAnnouncementData] = useState({} as PrimeUserNotification);
+  const [openAnnouncement, setAnnouncementOpen] = useState(false);
+  const [announcementData, setAnnouncementData] = useState({} as PrimeUserNotification);
   const toggleShowNotifications = () => {
-    setShowNotifications((prevState) => !prevState);
+    setShowNotifications(prevState => !prevState);
   };
 
   const handleClickOutside = (event: any) => {
@@ -51,7 +51,7 @@ const PrimeNotificationContainer = () => {
   const redirectToLoPage = async (notif: any) => {
     await markReadNotification();
     redirectOverviewPage(notif);
-  }
+  };
 
   useEffect(() => {
     let timer: any;
@@ -67,12 +67,8 @@ const PrimeNotificationContainer = () => {
       timer && clearInterval(timer);
       document.removeEventListener("click", handleClickOutside, false);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    fetchNotifications,
-    pollUnreadNotificationCount,
-    showNotifications,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchNotifications, pollUnreadNotificationCount, showNotifications]);
 
   return (
     <ALMErrorBoundary>
@@ -88,9 +84,7 @@ const PrimeNotificationContainer = () => {
           onClick={toggleShowNotifications}
         >
           {<Bell />}
-          {unreadCount > 0 && (
-            <div className={styles.notificationCountStyle}>{unreadCount}</div>
-          )}
+          {unreadCount > 0 && <div className={styles.notificationCountStyle}>{unreadCount}</div>}
         </button>
         {showNotifications && (
           <PrimeNotificationList
@@ -105,7 +99,12 @@ const PrimeNotificationContainer = () => {
           />
         )}
       </div>
-      { openAnnouncement && <PrimeAnnouncementContainer setAnnouncementOpen={setAnnouncementOpen}  notifications={announcementData}/>}
+      {openAnnouncement && (
+        <PrimeAnnouncementContainer
+          setAnnouncementOpen={setAnnouncementOpen}
+          notifications={announcementData}
+        />
+      )}
     </ALMErrorBoundary>
   );
 };

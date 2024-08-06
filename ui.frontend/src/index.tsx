@@ -19,9 +19,6 @@ import { getALMObject, getALMUser, init } from "./almLib/utils/global";
 
 window.onload = async () => {
   const { locale, messages } = await loadLocaleData();
-  // if (getALMObject().isPrimeUserLoggedIn()) {
-  //   await getALMUser();
-  // }
   await init();
   const root = document.createElement("div");
   root.id = "root";

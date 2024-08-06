@@ -15,31 +15,19 @@ import {
   PrimeResource,
 } from "../models/PrimeModels";
 
-export const checkIfEnrollmentDeadlineNotPassed = (
-  instance: PrimeLearningObjectInstance
-) => {
+export const checkIfEnrollmentDeadlineNotPassed = (instance: PrimeLearningObjectInstance) => {
   const enrollmentDeadlineStr = instance.enrollmentDeadline;
-  return enrollmentDeadlineStr && new Date(enrollmentDeadlineStr) < new Date()
-    ? false
-    : true;
+  return enrollmentDeadlineStr && new Date(enrollmentDeadlineStr) < new Date() ? false : true;
 };
 
-export const checkIfCompletionDeadlineNotPassed = (
-  instance: PrimeLearningObjectInstance
-) => {
+export const checkIfCompletionDeadlineNotPassed = (instance: PrimeLearningObjectInstance) => {
   const completionDeadlineStr = instance.completionDeadline;
-  return completionDeadlineStr && new Date(completionDeadlineStr) < new Date()
-    ? false
-    : true;
+  return completionDeadlineStr && new Date(completionDeadlineStr) < new Date() ? false : true;
 };
 
-export const checkIfUnenrollmentDeadlinePassed = (
-  instance: PrimeLearningObjectInstance
-) => {
+export const checkIfUnenrollmentDeadlinePassed = (instance: PrimeLearningObjectInstance) => {
   const unenrollmentDeadlineStr = instance.unenrollmentDeadline;
-  return unenrollmentDeadlineStr && new Date(unenrollmentDeadlineStr) >= new Date()
-    ? false
-    : true;
+  return unenrollmentDeadlineStr && new Date(unenrollmentDeadlineStr) >= new Date() ? false : true;
 };
 
 export const getResourceBasedOnLocale = (
@@ -50,8 +38,8 @@ export const getResourceBasedOnLocale = (
     return {} as PrimeResource;
   }
   return (
-    loResource.resources.filter((item) => item.locale === locale)[0] ||
-    loResource.resources.filter((item) => item.locale === "en-US")[0] ||
+    loResource.resources.filter(item => item.locale === locale)[0] ||
+    loResource.resources.filter(item => item.locale === "en-US")[0] ||
     loResource.resources[0]
   );
 };

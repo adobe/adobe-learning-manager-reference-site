@@ -1,136 +1,113 @@
-
 @import "../../../styles/variables.css";
-.leftSideBar{
+.leftSideBar {
+  padding-left: 100px;
+  top: 200px;
+  padding-top: 50px;
+  color: var(--prime-color-nc3);
+}
+.divider {
+  background: black;
+}
+.rightSideBar {
+  height: 400px;
+  top: 200px;
 
-    
-    padding-left: 100px;
-    top: 200px;
-    padding-top: 50px;
-    color: var(--prime-color-nc3);
-  }
-  .divider{
-    background: black;
-  }
-  .rightSideBar{
-
-    height: 400px;
-    top: 200px;
-    
-    padding-left: 50px;
-    padding-right: 10px;
-    color: var(--prime-color-nc3);
-  }
-  .primeBoardIcon {
-    width: 28px;
-    margin-right: 10px;
-   
-  }
-  .boardList{
-    padding: 20px;
-  }
-  .gridContainer {
-    display: grid;
-    grid-template-columns: 80px  auto;
-    align-items:center ;
-    justify-items: center
-    }
-  .sectionGridContainer {
-      display: grid;
-      grid-template-columns: 40px 180px;
-      align-items:center ;
-      justify-items: left;
-      margin-top: 15px;
-    }
-.subTitle{
-    font-size: var(--prime-font-size-14);
-    padding: 2px; 
-    justify-self: left;
-  }
-.metaData{
+  padding-left: 50px;
+  padding-right: 10px;
+  color: var(--prime-color-nc3);
+}
+.primeBoardIcon {
+  width: 28px;
+  margin-right: 10px;
+}
+.boardList {
+  padding: 20px;
+}
+.gridContainer {
+  display: grid;
+  grid-template-columns: 80px auto;
+  align-items: center;
+  justify-items: center;
+}
+.sectionGridContainer {
+  display: grid;
+  grid-template-columns: 40px 180px;
+  align-items: center;
+  justify-items: left;
+  margin-top: 15px;
+}
+.subTitle {
+  font-size: var(--prime-font-size-14);
+  padding: 2px;
+  justify-self: left;
+}
+.metaData {
   display: flex;
   justify-content: left;
   font-size: var(--prime-font-size-12);
   padding-left: 10px;
-
-  
 }
-.board{
-    padding-top: 10px;
-    margin-bottom: 10px;
-    border-bottom: 2px solid var(--prime-color-nc2);
-    font-size: var(--prime-font-size-14);
-    margin-right: 20px;
-    justify-self: center;
-    
+.board {
+  padding-top: 10px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid var(--prime-color-nc2);
+  font-size: var(--prime-font-size-14);
+  margin-right: 20px;
+  justify-self: center;
 }
-.data{
+.data {
   text-align: left !important;
 }
-.sectionImage{
+.sectionImage {
   border-radius: 50%;
   height: 22px;
   width: 22px;
   justify-self: center;
-  margin-right:10px;
-  
+  margin-right: 10px;
 }
-.sectionImageContainer{
+.sectionImageContainer {
   border-radius: 50%;
   height: 35px;
   width: 35px;
-
-  
 }
-.section{
+.section {
   padding-top: 20px;
   padding-right: 100px;
 }
-.title{
-    justify-self: right;
-    padding-right: 10px;
-    padding-bottom: 0px;
-    padding-left: 0px;
+.title {
+  justify-self: right;
+  padding-right: 10px;
+  padding-bottom: 0px;
+  padding-left: 0px;
 
-    font-weight: var( --prime-font-weight-600); 
-    font-size: var(--prime-font-size-16);
-
-    
+  font-weight: var(--prime-font-weight-600);
+  font-size: var(--prime-font-size-16);
 }
-.title2{
+.title2 {
   justify-self: right;
   padding-right: 10px;
   padding-bottom: 15px;
   padding-left: 0px;
 
-  font-weight: var( --prime-font-weight-600); 
+  font-weight: var(--prime-font-weight-600);
   font-size: var(--prime-font-size-16);
-
-  
 }
-.pointer       { 
-  cursor: pointer; 
+.pointer {
+  cursor: pointer;
   margin: 3px;
-  
-  
 }
-.hoverit:hover{
-
+.hoverit:hover {
   opacity: 50%;
   translate: 2px 2px;
   transition: all 0.1s ease-in-out;
 }
-.hoverit2:hover{
-
+.hoverit2:hover {
   translate: 1px 1px;
   transition: all 0.1s ease-in-out;
 }
-.hovered{
+.hovered {
   color: #eb5e00;
-  
 }
-.favArea{
+.favArea {
   opacity: 60%;
 }
-
-
-

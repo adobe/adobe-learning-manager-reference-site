@@ -9,15 +9,26 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
+import { useIntl } from "react-intl";
 import loadingImage from "../../../assets/images/LoadingButton.gif";
+import { getALMConfig } from "../../../utils/global";
 
 import styles from "./ALMLoader.module.css";
 
 const ALMLoader: React.FC<{ classes?: string }> = ({ classes = "" }) => {
+  const { formatMessage } = useIntl();
   const loadingContainerClass = `${styles.loadingContainer} ${classes}`;
+  const customLoaderImage = getALMConfig().customLoaderImage;
   return (
     <section className={loadingContainerClass}>
-      <img src={loadingImage} alt="loading"></img>
+      <img
+        src={customLoaderImage || loadingImage}
+        className={styles.loaderImage}
+        alt={formatMessage({
+          id: "alm.loading.label",
+          defaultMessage: "Loading",
+        })}
+      ></img>
     </section>
   );
 };

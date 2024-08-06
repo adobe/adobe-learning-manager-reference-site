@@ -20,9 +20,11 @@ import {
   PrimeLearningObjectInstance,
   PrimeLocalizationMetadata,
   PrimeRating,
+  PrimeSearchResult,
 } from "../models";
 import { ENGLISH_LOCALE } from "./constants";
 import { getALMConfig } from "./global";
+import { JsonApiDataRef } from "./widgets/common";
 
 let store: Store | undefined;
 export function GetStore(): Store {
@@ -50,13 +52,25 @@ export class Store {
 }
 
 function filterResponse(data: any, type: string) {
+  if (type === "learningObject") {
+    const searchMap: any = {};
+    data.data.forEach((searchResult: PrimeSearchResult) => {
+      searchMap[searchResult.id] = searchResult;
+    });
+    let retVal;
+    const filteredRes = data.included?.filter((item: { type: any }) => item.type === type);
+    retVal = filteredRes.map((item: PrimeLearningObject) => {
+      item.snippets = searchMap[item.id].attributes.snippets || [];
+      return item;
+    });
+    return retVal;
+  }
   return data.included?.filter((item: { type: any }) => item.type === type);
 }
 
 export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
   const storeToUse: Store = GetStore();
-  if (typeof jsonApiResponse === "string")
-    jsonApiResponse = JSON.parse(jsonApiResponse);
+  if (typeof jsonApiResponse === "string") jsonApiResponse = JSON.parse(jsonApiResponse);
 
   if (Array.isArray(jsonApiResponse.included)) {
     for (let j = 0; j < jsonApiResponse.included.length; ++j) {
@@ -70,7 +84,11 @@ export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
   let data = jsonApiResponse["data"];
   if (Array.isArray(data)) {
     if (data.length && data[0]["type"] === "searchResult") {
-      data = filterResponse(jsonApiResponse, "learningObject");
+      if (data[0]?.attributes?.modelType === "learningObject") {
+        data =
+          jsonApiResponse.included &&
+          filterResponse(jsonApiResponse, data[0]?.attributes?.modelType);
+      }
       if (data?.length === 0) {
         data = filterResponse(jsonApiResponse, "post");
       }
@@ -80,14 +98,7 @@ export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
     for (let j = 0; j < data.length; ++j) {
       oneObj = data[j];
       storeToUse.put(oneObj);
-      result.push(
-        ObjectWrapper.GetWrapper(
-          oneObj["type"],
-          oneObj["id"],
-          storeToUse,
-          oneObj
-        )
-      );
+      result.push(ObjectWrapper.GetWrapper(oneObj["type"], oneObj["id"], storeToUse, oneObj));
       if (!dataType) {
         dataType = oneObj["type"];
         isList = true;
@@ -95,21 +106,38 @@ export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
     }
   } else if (data) {
     if (data["type"] === "searchResult") {
-      data = jsonApiResponse.included.filter(
-        (item: { type: any }) => item.type === "learningObject"
-      );
+      data =
+        jsonApiResponse.included &&
+        jsonApiResponse.included.filter((item: { type: any }) => item.type === "learningObject");
     }
+
+    if (data["type"] === "learningObject" && data.relationships?.enrollment) {
+      const instanceId = data.relationships.enrollment.data.id;
+      const instance = jsonApiResponse.included?.find((item: any) => item.id === instanceId)
+        ?.relationships?.loInstance;
+
+      const instancesData = data.relationships?.instances?.data;
+
+      if (instance && instancesData) {
+        const instanceExistsInData = instancesData.some(
+          (item: any) => item.id === instance.data.id
+        );
+
+        !instanceExistsInData && instancesData.push(instance.data);
+      }
+    }
+
     dataType = data["type"];
     storeToUse.put(data);
     result = ObjectWrapper.GetWrapper(data["type"], data["id"], storeToUse);
   }
   const retval: any = {};
   if (dataType) {
-    retval[
-      `${dataType === "searchResult" ? "learningObject" : dataType}${
-        isList ? "List" : ""
-      }`
-    ] = result;
+    let listType = dataType;
+    if (dataType === "searchResult") {
+      listType = data[0]?.attributes?.modelType;
+    }
+    retval[`${listType}${isList ? "List" : ""}`] = result;
   }
   retval.links = jsonApiResponse["links"];
   retval.meta = jsonApiResponse["meta"];
@@ -144,13 +172,23 @@ export class ObjectWrapper {
     }
   }
   public get(attr: string) {
-    if (attr === "id") return this.id_lxpv;
-    if (attr === "type") return this.type_lxpv;
-    if (attr === "__storedataobj") return this.dataObject;
-    if (attr === "_transient") return this.dataObject._transient;
+    if (attr === "id") {
+      return this.id_lxpv;
+    }
+    if (attr === "type") {
+      return this.type_lxpv;
+    }
+    if (attr === "__storedataobj") {
+      return this.dataObject;
+    }
+    if (attr === "_transient") {
+      return this.dataObject._transient;
+    }
 
     if (this.dataObject === undefined) return;
-
+    if (attr === "snippets") {
+      return this.dataObject.snippets;
+    }
     let retval;
     if (this.dataObject.hasOwnProperty("attributes")) {
       //check in attributes
@@ -158,10 +196,7 @@ export class ObjectWrapper {
         ? this.dataObject["attributes"][attr]
         : undefined;
     }
-    if (
-      retval === undefined &&
-      this.dataObject.hasOwnProperty("relationships")
-    ) {
+    if (retval === undefined && this.dataObject.hasOwnProperty("relationships")) {
       //check in relationships
       retval = this.dataObject["relationships"][attr];
       if (retval !== undefined) {
@@ -171,21 +206,11 @@ export class ObjectWrapper {
           let oneObj;
           for (let ii = 0; ii < relData.length; ++ii) {
             oneObj = relData[ii];
-            retval.push(
-              ObjectWrapper.GetWrapper(
-                oneObj["type"],
-                oneObj["id"],
-                this.ALMStore
-              )
-            );
+            retval.push(ObjectWrapper.GetWrapper(oneObj["type"], oneObj["id"], this.ALMStore));
           }
         } else
           retval = relData
-            ? ObjectWrapper.GetWrapper(
-                relData["type"],
-                relData["id"],
-                this.ALMStore
-              )
+            ? ObjectWrapper.GetWrapper(relData["type"], relData["id"], this.ALMStore)
             : undefined;
       }
     }
@@ -228,6 +253,18 @@ export class ObjectWrapper {
     });
     return objWrapper;
   }
+}
+export function JsonApiRelationshipUpdate(
+  baseObj: JsonApiDataRef,
+  relationRefToUpdate: JsonApiDataRef,
+  relName: string
+) {
+  const storeToUse = GetStore();
+  const obj = storeToUse.get(baseObj.type, baseObj.id);
+  //Add relationship - For now going with simple update
+  //This might require a refactor if we need lot more functionality
+  //like array, or deletes or no rel exists etc
+  obj["relationships"][relName] = { data: relationRefToUpdate };
 }
 
 // export interface IJsonApiPaginatee {
@@ -320,11 +357,9 @@ export class ObjectWrapper {
 //     }
 // }
 
-export function parseESResponse(
-  response: ESPrimeLearningObject[]
-): PrimeLearningObject[] {
+export function parseESResponse(response: ESPrimeLearningObject[]): PrimeLearningObject[] {
   let loResponse: PrimeLearningObject[] = [];
-  response.forEach((item) => {
+  response.forEach(item => {
     const locale = getALMConfig().locale || ENGLISH_LOCALE;
     let lo: Partial<PrimeLearningObject> = {};
     let rating: PrimeRating;
@@ -410,7 +445,7 @@ export function parseCommerceResponse(
     }
   );
 
-  response.forEach((item) => {
+  response.forEach(item => {
     let lo: Partial<PrimeLearningObject> = {};
     let rating: PrimeRating;
     let localizedData: PrimeLocalizationMetadata;
@@ -451,15 +486,14 @@ export function parseCommerceResponse(
           optionsMap[element.value] = element.label;
         }
       });
-      skillValues.forEach((skill) => {
+      skillValues.forEach(skill => {
         if (optionsMap[skill]) {
           lo.skillNames?.push(optionsMap[skill]);
         }
       });
     }
     if (item.almdeliverytype) {
-      const loFormatOptions =
-        filterMap.get(ALMToCommerceTypes["loFormat"]) || [];
+      const loFormatOptions = filterMap.get(ALMToCommerceTypes["loFormat"]) || [];
       loFormatOptions?.forEach((element: { label: any; value: any }) => {
         if (element.value == item.almdeliverytype) {
           lo.loFormat = element.label;

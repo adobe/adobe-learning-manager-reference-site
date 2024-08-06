@@ -10,12 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import { AnyAction } from "redux";
-import {
-  PrimeBoard,
-  PrimePost,
-  PrimeComment,
-  PrimeReply,
-} from "../../../models/PrimeModels";
+import { PrimeBoard, PrimePost, PrimeComment, PrimeReply } from "../../../models/PrimeModels";
 import {
   LOAD_BOARD_DETAILS,
   LOAD_COMMENTS,
@@ -37,7 +32,7 @@ import {
   UPDATE_REPLY,
   UPDATE_POST,
   LOAD_USER_SKILLS,
-  LOAD_FAV_BOARDS
+  LOAD_FAV_BOARDS,
 } from "./actionTypes";
 
 export const loadBoard = (payload: any): AnyAction => ({
@@ -50,14 +45,14 @@ export const loadBoards = (payload: any): AnyAction => ({
   payload,
 });
 
-export const loadUserSkills = (payload:any) : AnyAction =>({
+export const loadUserSkills = (payload: any): AnyAction => ({
   type: LOAD_USER_SKILLS,
   payload,
 });
-export const loadFavouriteBoards = (payload:any) : AnyAction =>({
+export const loadFavouriteBoards = (payload: any): AnyAction => ({
   type: LOAD_FAV_BOARDS,
   payload,
-})
+});
 export const addBoardToFavourites = (payload: any): AnyAction => ({
   type: SOCIAL_ADD_BOARD_FAVORITE_SUCCESS,
   payload,
@@ -73,10 +68,7 @@ export const deleteBoard = (payload: any): AnyAction => ({
   payload,
 });
 
-export const paginateBoards = (payload: {
-  items: PrimeBoard[];
-  next: string;
-}): AnyAction => ({
+export const paginateBoards = (payload: { items: PrimeBoard[]; next: string }): AnyAction => ({
   type: PAGINATE_SOCIAL_BOARDS,
   payload,
 });
@@ -86,10 +78,7 @@ export const loadPosts = (payload: any): AnyAction => ({
   payload,
 });
 
-export const paginatePosts = (payload: {
-  items: PrimePost[];
-  next: string;
-}): AnyAction => ({
+export const paginatePosts = (payload: { items: PrimePost[]; next: string }): AnyAction => ({
   type: PAGINATE_SOCIAL_BOARD_POSTS,
   payload,
 });
@@ -104,10 +93,7 @@ export const loadComments = (payload: any): AnyAction => ({
   payload,
 });
 
-export const paginateComments = (payload: {
-  items: PrimeComment[];
-  next: string;
-}): AnyAction => ({
+export const paginateComments = (payload: { items: PrimeComment[]; next: string }): AnyAction => ({
   type: PAGINATE_COMMENTS,
   payload,
 });
@@ -117,10 +103,7 @@ export const loadReplies = (payload: any): AnyAction => ({
   payload,
 });
 
-export const paginateReplies = (payload: {
-  items: PrimeReply[];
-  next: string;
-}): AnyAction => ({
+export const paginateReplies = (payload: { items: PrimeReply[]; next: string }): AnyAction => ({
   type: PAGINATE_REPLIES,
   payload,
 });

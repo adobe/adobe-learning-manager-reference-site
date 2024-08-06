@@ -14,60 +14,67 @@ governing permissions and limitations under the License.
 .skillsArea {
   margin: 0 auto;
   padding: 40px 0;
+  width: 880px;
 }
 
-@media screen and (min-width: 1024px) {
-  .skillsArea,
-  .skillsContainer {
-    width: 930px;
-  }
-}
-@media screen and (min-width: 1366px) {
-  .skillsArea,
-  .skillsContainer {
-    width: 1084px;
-  }
-}
-@media (max-width: 450px) {
-  .skillsArea,
-  .skillsContainer {
-    padding-left: 20px;
-  }
+.interestsArea {
+  width: 880px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px 1px rgba(0, 0, 0, 0.16);
+  margin-bottom: 30px;
+  padding: 30px;
 }
 
-@media screen and (max-width: 1024px) {
-  .skillsArea,
-  .skillsContainer {
-    padding-left: 20px;
-  }
+.skillHeading {
+  display: flex;
+  font-size: var(--prime-font-size-20);
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.1;
+  letter-spacing: normal;
+  color: var(--prime-color-neutral-1);
+}
+
+.skillIcons {
+  margin-left: auto;
+  display: flex;
+}
+.skillIcons span {
+  width: 25px;
+  height: 25px;
+}
+
+.skillsContainer {
+  margin-top: 20px;
 }
 
 .skillsHeading {
   font-size: var(--prime-font-size-18);
-  font: normal normal bold 21px/27px Source Sans Pro;
+  font: normal normal bold 21px/27px var(--prime-font-family);
   letter-spacing: 0px;
-  color: var(--prime-color-nc1);
+  color: var(--prime-color-neutral-1);
 }
 
 .skillsDescription {
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 }
 
 .skillBox,
 .skillBoxSelectable {
-  width: 256px;
+  width: 250px;
   height: 90px;
   line-height: 90px;
   border-radius: 4px;
-  border: solid 1px var(--prime-color-nc2);
-  background-color: var(--prime-color-nc4);
+  border: solid 1px var(--prime-color-neutral-2);
+  background-color: var(--prime-color-neutral-3);
   margin-right: 20px;
   display: inline-block;
   margin-bottom: 20px;
   text-align: center;
   position: relative;
   box-shadow: 0 2px 10px 1px rgba(0, 0, 0, 0.11);
-  font-size: 13px;
+  font-size: var(--prime-font-size-14);
 }
 
 .skillBoxSelectable {
@@ -89,7 +96,7 @@ governing permissions and limitations under the License.
 }
 
 .removeInterestButton {
-  background-color: #858585;
+  background-color: var(--prime-color-neutral-1);
   color: var(--prime-color-white);
   z-index: 10;
   cursor: auto;
@@ -118,17 +125,17 @@ governing permissions and limitations under the License.
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
   border-bottom: 10px solid;
-  border-bottom-color: #858585;
+  border-bottom-color: var(--prime-color-neutral-1);
   margin-top: -15px;
 }
 
 .skillDataTooltip {
   display: none;
-  background-color: #858585;
+  background-color: var(--prime-color-neutral-1);
   color: var(--prime-color-white);
   z-index: 1;
   padding: 10px;
-  font-size: 13px;
+  font-size: var(--prime-font-size-14);
   position: absolute;
   width: 256px;
   text-align: left;
@@ -173,4 +180,59 @@ governing permissions and limitations under the License.
 
 .showMoreButton:hover {
   cursor: pointer;
+}
+
+.skillTab,
+.activeSkillTab {
+  font-size: var(--prime-font-size-16);
+  font-weight: 500;
+  margin-right: 25px;
+  display: inline;
+}
+
+.skillTab:hover,
+.activeSkillTab:hover {
+  cursor: pointer;
+}
+
+.skillsTabRow {
+  margin-bottom: 30px;
+  padding: 0px;
+}
+
+.activeSkillTab {
+  padding: 7px 0;
+  border-bottom-style: solid;
+  border-bottom-color: var(--prime-color-primary);
+}
+
+.primeLoaderWrapper {
+  width: 98% !important;
+  height: 20px;
+  margin-bottom: 10px;
+}
+
+.skillInput {
+  width: 96%;
+  height: 40px;
+  padding: 10px 40px 10px 12px;
+  margin-bottom: 25px;
+  border-radius: 4px;
+  border: 1px solid var(--prime-color-neutral-2);
+  background: var(--prime-color-white);
+  box-shadow: rgba(0, 0, 0, 0.08) 0 4px 12px 0 inset;
+  font-size: var(--prime-font-size-14);
+}
+
+.searchIcon {
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  margin-left: -25px;
+  position: relative;
+  top: 3px;
+}
+
+.selectedSkillBox {
+  box-shadow: 0 0 3pt 3pt var(--prime-color-primary);
 }

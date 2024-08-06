@@ -9,20 +9,20 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { AnyAction, Reducer , combineReducers} from "redux";
+import { AnyAction, Reducer, combineReducers } from "redux";
 import { PrimeAdminAnnouncement, PrimeUserNotification } from "../../models";
 
 import {
   LOAD_ANNOUNCEMENT,
-    LOAD_NOTIFICATIONS,
-    PAGINATE_NOTIFICATIONS
-  } from "../actions/notification/actionTypes";
+  LOAD_NOTIFICATIONS,
+  PAGINATE_NOTIFICATIONS,
+} from "../actions/notification/actionTypes";
 
-  export interface NotificationState {
-    notifications: PrimeUserNotification[] | null;
-    next: string;
-    announcements: PrimeAdminAnnouncement;
-  }
+export interface NotificationState {
+  notifications: PrimeUserNotification[] | null;
+  next: string;
+  announcements: PrimeAdminAnnouncement;
+}
 
 const notifications: Reducer<PrimeUserNotification[] | null, AnyAction> = (
   state: PrimeUserNotification[] | null | undefined,
@@ -39,8 +39,8 @@ const notifications: Reducer<PrimeUserNotification[] | null, AnyAction> = (
       return state || [];
   }
 };
-const announcements: Reducer<PrimeAdminAnnouncement  , AnyAction> = (
-  state: PrimeAdminAnnouncement  | undefined,
+const announcements: Reducer<PrimeAdminAnnouncement, AnyAction> = (
+  state: PrimeAdminAnnouncement | undefined,
   action: AnyAction
 ) => {
   switch (action.type) {
@@ -52,24 +52,20 @@ const announcements: Reducer<PrimeAdminAnnouncement  , AnyAction> = (
   }
 };
 
-const next: Reducer<string, AnyAction> = (
-    state: string | undefined,
-    action: AnyAction
-  ) => {
-    switch (action.type) {
-      case LOAD_NOTIFICATIONS:
-      case PAGINATE_NOTIFICATIONS:
-        return action.payload?.next;
-      default:
-        return state || "";
-    }
-  };
-
+const next: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
+  switch (action.type) {
+    case LOAD_NOTIFICATIONS:
+    case PAGINATE_NOTIFICATIONS:
+      return action.payload?.next;
+    default:
+      return state || "";
+  }
+};
 
 const notification: Reducer<NotificationState, AnyAction> = combineReducers({
-    notifications,
-    next,
-    announcements,
-  });
-  
-export  {notification};
+  notifications,
+  next,
+  announcements,
+});
+
+export { notification };

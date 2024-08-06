@@ -15,19 +15,14 @@ import { ReplaceLoTypeWithAccountTerminology } from "../../../utils/translationS
 import styles from "./PrimeNotificationText.module.css";
 import { PrimeUserNotification } from "../../../models";
 
-
-
-const feedbackChannels: Array<string> = [
-  "course::l1FeedbackPrompt",
-  "learningProgram::l1Feedback",
-];
+const feedbackChannels: Array<string> = ["course::l1FeedbackPrompt", "learningProgram::l1Feedback"];
 
 const loReminderChannels: Array<string> = [
   "course::sessionReminder",
   "course::completionReminder",
   "certification::completionReminder",
-  "learningProgram::completionReminder"
-]
+  "learningProgram::completionReminder",
+];
 
 const name1Var3Brace: String = "{{{name1}}}";
 const name1Var2Brace: String = "{{name1}}";
@@ -38,28 +33,24 @@ const name0Var2Brace: String = "{{name0}}";
 const dateTimeStr: any = ["date", "time"];
 const learningObjType: any = "learningObject";
 
-const PrimeNotificationText : React.FC<{
-  notification: PrimeUserNotification
-  redirectOverviewPage : Function;
+const PrimeNotificationText: React.FC<{
+  notification: PrimeUserNotification;
+  redirectOverviewPage: Function;
   setAnnouncementOpen: Function;
   setShowNotifications: Function;
   setAnnouncementData: Function;
-
 }> = (props: any) => {
   const { locale } = useIntl();
   const notif = props.notification;
-  const setAnnouncementOpen=props?.setAnnouncementOpen
-  const setShowNotifications = props?.setShowNotifications
-  const setAnnouncementData= props?.setAnnouncementData;
+  const setAnnouncementOpen = props?.setAnnouncementOpen;
+  const setShowNotifications = props?.setShowNotifications;
+  const setAnnouncementData = props?.setAnnouncementData;
   let clickHandler = props.redirectOverviewPage;
-  
+
   let message = notif.message
     .replace("course", ReplaceLoTypeWithAccountTerminology("course"))
     .replace("program", ReplaceLoTypeWithAccountTerminology("learningProgram"))
-    .replace(
-      "certification",
-      ReplaceLoTypeWithAccountTerminology("certification")
-    );
+    .replace("certification", ReplaceLoTypeWithAccountTerminology("certification"));
   let name1 = -1,
     name0 = -1,
     endname0 = -1,
@@ -106,49 +97,38 @@ const PrimeNotificationText : React.FC<{
     subStrPart1 = name0 > 0 ? message.substring(0, name0) : null;
     loStr1 = notif.modelNames[0] + " ";
     str1Type = notif.modelTypes[0];
-    subStrPart2 = message.substring(
-      endname0,
-      name1 > 0 ? name1 : message.length
-    );
+    subStrPart2 = message.substring(endname0, name1 > 0 ? name1 : message.length);
     loStr2 = notif.modelNames[1] + " ";
     str2Type = notif.modelTypes[1];
-    subStrPart3 =
-      name1 !== -1 ? message.substring(endname1, message.length) : "";
+    subStrPart3 = name1 !== -1 ? message.substring(endname1, message.length) : "";
   } else {
     subStrPart1 = name1 > 0 ? message.substring(0, name1) : "";
     loStr1 = notif.modelNames[1] + " ";
     str1Type = notif.modelTypes[1];
-    subStrPart2 = message.substring(
-      endname1,
-      name0 > 0 ? name0 : message.length
-    );
+    subStrPart2 = message.substring(endname1, name0 > 0 ? name0 : message.length);
     loStr2 = notif.modelNames[0] + " ";
     str2Type = notif.modelTypes[0];
-    subStrPart3 =
-      name0 !== -1 ? message.substring(endname0, message.length) : "";
+    subStrPart3 = name0 !== -1 ? message.substring(endname0, message.length) : "";
   }
 
   const getLearningObjClass = (value: string) => {
     let className = styles.loLink;
     return value === learningObjType ? className : "";
   };
-  if(notif.announcement){
-    
-      clickHandler = () =>{
-        setAnnouncementData(notif);
-        setAnnouncementOpen(true);
-        setShowNotifications(false);
-      }
-
+  if (notif.announcement) {
+    clickHandler = () => {
+      setAnnouncementData(notif);
+      setAnnouncementOpen(true);
+      setShowNotifications(false);
+    };
   }
 
   const formattedNotificationText = (strType: string, loStr: string) => {
-
     // Date Time formatting for session reminder channels
-    if((dateTimeStr.includes(strType) && loReminderChannels.includes(notif.channel))){
+    if (dateTimeStr.includes(strType) && loReminderChannels.includes(notif.channel)) {
       return modifyTimeForSessionReminderNotif(notif.modelIds[1], locale);
     }
-    return (dateTimeStr.includes(strType) && !loReminderChannels.includes(notif.channel)) ? (
+    return dateTimeStr.includes(strType) && !loReminderChannels.includes(notif.channel) ? (
       modifyTimeDDMMYY(loStr, locale)
     ) : (
       <span
@@ -165,20 +145,13 @@ const PrimeNotificationText : React.FC<{
 
   return (
     <div>
-      
-     
       {subStrPart1}
       {formattedNotificationText(str1Type, loStr1)}
       {subStrPart2}
       {name1 > 0 ? formattedNotificationText(str2Type, loStr2) : null}
       {subStrPart3}
-  
-  
-      
     </div>
   );
 };
 
 export default PrimeNotificationText;
-
-

@@ -17,6 +17,8 @@ export * from "./notification";
 export { default as social } from "./social";
 export { default as fileUpload } from "./fileUpload";
 export { default as userSkillInterest } from "./userSkillInterest";
+export { default as userRecommendationPreference } from "./userRecommendationPreference";
 export { default as skill } from "./skill";
 export { default as search } from "./search";
-export * from "./badge"
+export * from "./badge";
+export { default as authorTrainings } from "./author";

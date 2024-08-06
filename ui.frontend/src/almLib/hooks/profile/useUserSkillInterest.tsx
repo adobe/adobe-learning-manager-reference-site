@@ -22,39 +22,43 @@ import { State } from "../../store/state";
 import { getALMConfig, getALMUser } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
+import { INTERNAL } from "../../utils/constants";
 
 export const useUserSkillInterest = () => {
-  const { items, next } = useSelector(
-    (state: State) => state.userSkillInterest
-  );
+  const { items, next } = useSelector((state: State) => state.userSkillInterest);
   const dispatch = useDispatch();
-  const fetchUserSkillInterest = useCallback(async () => {
-    try {
-      const baseApiUrl = getALMConfig().primeApiURL;
-      const params: QueryParams = {};
-      params["filter.skillInterestTypes"] = "ADMIN_DEFINED"; //internal skills only
-      params["page[offset]"] = "0";
-      params["page[limit]"] = "10";
-      params["include"] = "skill,userSkills.skillLevel";
+  const fetchUserSkillInterest = useCallback(
+    async (type: string) => {
+      try {
+        const baseApiUrl = getALMConfig().primeApiURL;
+        const params: QueryParams = {};
+        // params["filter.skillInterestTypes"] = type;
+        params["type"] = type;
+        params["page[offset]"] = "0";
+        params["page[limit]"] = "10";
+        params["include"] = "skill,userSkills.skillLevel";
+        // params["filter.skillInterestTypes"]=INDUSTRY_ALIGNED
+        const userResponse = await getALMUser();
+        const response = await RestAdapter.get({
+          url: `${baseApiUrl}/users/${userResponse?.user?.id}/userSkillInterest?`,
+          // url: `${baseApiUrl}/users/${userResponse?.user?.id}/skillInterests?`,
+          params: params,
+        });
+        const parsedResponse = JsonApiParse(response);
+        const data = {
+          items: parsedResponse.userSkillInterestList || [],
+          next: parsedResponse.links?.next || "",
+        };
+        dispatch(loadUserSkillInterest(data));
+      } catch (e) {
+        dispatch(loadUserSkillInterest([] as PrimeUserSkillInterest[]));
+        console.log("Error while loading user skill interests " + e);
+      }
+    },
+    [dispatch]
+  );
 
-      const userResponse = await getALMUser();
-      const response = await RestAdapter.get({
-        url: `${baseApiUrl}/users/${userResponse?.user?.id}/skillInterests?`,
-        params: params,
-      });
-      const parsedResponse = JsonApiParse(response);
-      const data = {
-        items: parsedResponse.userSkillInterestList,
-        next: parsedResponse.links?.next || "",
-      };
-      dispatch(loadUserSkillInterest(data));
-    } catch (e) {
-      dispatch(loadUserSkillInterest([] as PrimeUserSkillInterest[]));
-      console.log("Error while loading boards " + e);
-    }
-  }, [dispatch]);
-
-  const saveUserSkillInterest = useCallback(async (skills) => {
+  const saveUserSkillInterest = useCallback(async skills => {
     const baseApiUrl = getALMConfig().primeApiURL;
     const headers = { "content-type": "application/json" };
     const userResponse = await getALMUser();
@@ -67,7 +71,7 @@ export const useUserSkillInterest = () => {
   }, []);
 
   const removeUserSkillInterest = useCallback(
-    async (skillId) => {
+    async skillId => {
       const baseApiUrl = getALMConfig().primeApiURL;
       const headers = { "content-type": "application/json" };
       const userResponse = await getALMUser();
@@ -81,7 +85,6 @@ export const useUserSkillInterest = () => {
     [dispatch]
   );
 
-  // for pagination
   const loadMoreUserSkillInterest = useCallback(async () => {
     if (!next) return;
     const parsedResponse = await APIServiceInstance.loadMore(next);
@@ -94,7 +97,7 @@ export const useUserSkillInterest = () => {
   }, [dispatch, next]);
 
   useEffect(() => {
-    fetchUserSkillInterest();
+    fetchUserSkillInterest(INTERNAL);
   }, [dispatch]);
 
   return {

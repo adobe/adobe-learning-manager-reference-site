@@ -20,6 +20,9 @@ governing permissions and limitations under the License.
   min-height: 32px;
   border: 2px solid var(--prime-color-white);
 }
+.dialogButton button::after {
+  display: none;
+}
 .dialogButton button[class*="spectrum-Button--secondary"] {
   color: var(--prime-color-primary);
   background-color: var(--prime-color-white);

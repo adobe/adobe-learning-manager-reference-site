@@ -2,12 +2,21 @@ import { useEffect, useState } from "react";
 import { render } from "react-dom";
 import { PrimeAlertDialog } from "../../components/Community/PrimeAlertDialog";
 
+export enum VariantType {
+  CONFIRMATION = "confirmation",
+  INFORMATION = "information",
+  DESTRUCTIVE = "destructive",
+  ERROR = "error",
+  WARNING = "warning",
+}
+
 let alertTitle: String;
 let alertBody: String;
 let alertPrimaryActionLabel: String;
 let alertSecondaryActionLabel: String;
 let primaryActionHandler: Function;
 let secondaryActionHandler: Function;
+let variant: string;
 
 const useConfirmationAlert = (): [
   (
@@ -16,8 +25,9 @@ const useConfirmationAlert = (): [
     primaryActionLabel: String,
     secondaryActionLabel?: String,
     onPrimaryAction?: Function,
-    onSecondaryAction?: Function
-  ) => void
+    onSecondaryAction?: Function,
+    variantType?: string
+  ) => void,
 ] => {
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
 
@@ -27,7 +37,8 @@ const useConfirmationAlert = (): [
     primaryActionLabel: String,
     secondaryActionLabel?: String,
     onPrimaryAction?: Function,
-    onSecondaryAction?: Function
+    onSecondaryAction?: Function,
+    variantType?: string
   ) => {
     alertTitle = title;
     alertBody = body;
@@ -36,13 +47,14 @@ const useConfirmationAlert = (): [
     primaryActionHandler = onPrimaryAction || function () {};
     secondaryActionHandler = onSecondaryAction || function () {};
     handleShowConfirmation(true);
+    variant = variantType || VariantType.CONFIRMATION;
   };
 
   const handleShowConfirmation = (value: boolean) => {
     setShowConfirmation(value);
     let backgroundEvent = new Event(value ? "almDisableBackground" : "almEnableBackground");
     document.dispatchEvent(backgroundEvent);
-  }
+  };
 
   const onPrimaryActionHandler = () => {
     handleShowConfirmation(false);
@@ -61,7 +73,7 @@ const useConfirmationAlert = (): [
   const alertTemplate = () => {
     return (
       <PrimeAlertDialog
-        variant="confirmation"
+        variant={variant}
         title={alertTitle}
         body={alertBody}
         primaryActionLabel={alertPrimaryActionLabel}
@@ -69,6 +81,7 @@ const useConfirmationAlert = (): [
         onPrimaryAction={onPrimaryActionHandler}
         onSecondaryAction={onSecondaryActionHandler}
         show={showConfirmation}
+        classes="confirmationAlert"
       ></PrimeAlertDialog>
     );
   };

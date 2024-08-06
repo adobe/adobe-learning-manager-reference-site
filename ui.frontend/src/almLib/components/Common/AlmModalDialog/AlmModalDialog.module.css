@@ -1,0 +1,169 @@
+.modalDialogOverlay {
+  box-shadow: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: block;
+  height: 100%;
+  left: 0;
+  opacity: 1;
+  overflow: auto;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1500;
+}
+.modalFadeIn {
+  -webkit-animation: fadeIn ease-in 1;
+  -moz-animation: fadeIn ease-in 1;
+  -ms-animation: fadeIn ease-in 1;
+  -o-animation: fadeIn ease-in 1;
+  animation: fadeIn ease-in 1;
+  -webkit-animation-fill-mode: forwards;
+  -moz-animation-fill-mode: forwards;
+  -ms-animation-fill-mode: forwards;
+  -o-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-duration: 0.2s;
+  -moz-animation-duration: 0.2s;
+  -ms-animation-duration: 0.2s;
+  -o-animation-duration: 0.2s;
+  animation-duration: 0.2s;
+  -webkit-transition: opacity 0.15s linear;
+  -o-transition: opacity 0.15s linear;
+  transition: opacity 0.15s linear;
+}
+@keyframes modalFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.modalDialogHeader {
+  background-color: var(--prime-color-popup-background);
+  border-radius: 3px 3px 0 0;
+  font-size: var(--prime-font-size-20);
+  padding: 15px 20px 0px 20px;
+  font-weight: var(--prime-font-weight-400);
+  color: var(--prime-color-popup-color);
+  height: 50px;
+}
+.modalDialog {
+  -webkit-box-shadow: 0 10px 20px rgb(0 0 0 / 30%);
+  -moz-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  -ms-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  -o-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 20px rgb(0 0 0 / 30%);
+  border-radius: 3px;
+  font-size: 14px;
+  padding: 0;
+  top: 56px;
+  width: 620px;
+  z-index: 1050;
+  margin: 56px auto;
+  width: 620px;
+  position: relative;
+  color: var(--prime-color-popup-color);
+  border-color: var(--prime-color-popup-color);
+  background: var(--prime-color-popup-background);
+}
+.modalDialogContent {
+  -webkit-box-shadow: none;
+  -ms-box-shadow: none;
+  -moz-box-shadow: none;
+  -o-box-shadow: none;
+  box-shadow: none;
+  color: var(--prime-color-popup-color);
+  border-color: var(--prime-color-popup-color);
+}
+.modalBody {
+  border: 0;
+  padding: 20px;
+}
+
+.modalBootstrapDialogBody {
+  font-size: 14px;
+  word-wrap: break-word;
+}
+
+.modalFooter {
+  padding: 20px;
+  text-align: right;
+}
+
+.modalDialogCloseButton {
+  -webkit-opacity: 0.9;
+  -ms-opacity: 0.9;
+  -moz-opacity: 0.9;
+  -o-opacity: 0.9;
+  opacity: 0.9;
+  float: right;
+  filter: alpha(opacity=90);
+  font-size: 20px;
+}
+.modalCloseButton {
+  cursor: pointer;
+  float: right;
+  background-size: 120%;
+  background: none;
+  border: 0;
+  color: inherit;
+  font-size: 28px;
+  font-weight: bold;
+  height: 30px;
+  line-height: 30px;
+  margin: 0;
+  margin-right: -10px;
+  padding: 0;
+  text-align: center;
+  text-shadow: none;
+  width: 30px;
+}
+.modalTitle {
+  font-size: var(--prime-font-size-20);
+}
+
+.modalCloseButton:after {
+  display: block;
+}
+.modalPrimaryButton {
+  color: var(--prime-color-white);
+  background: var(--prime-color-primary);
+  font-size: 14px;
+  border: 1px solid transparent;
+  border-radius: 30px;
+  cursor: pointer;
+  height: 30px;
+  margin: 0;
+  min-width: 90px;
+  padding: 0 15px;
+  white-space: nowrap;
+  display: inline-block;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  overflow: visible;
+}
+@media screen and (max-width: 760px) {
+  .modalDialog {
+    width: 95%;
+    margin: 30px auto;
+  }
+}
+@media (min-width: 768px) {
+  .modalDialog {
+    width: 600px;
+    margin: 30px auto;
+  }
+}
+@media (min-width: 768px) {
+  .modalDialogContent {
+    -webkit-box-shadow: 0 5px 15px rgb(0 0 0 / 50%);
+    box-shadow: 0 5px 15px rgb(0 0 0 / 50%);
+  }
+}

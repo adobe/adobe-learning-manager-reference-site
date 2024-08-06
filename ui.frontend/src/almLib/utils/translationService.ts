@@ -70,36 +70,40 @@ export function getLocale(locale: string): string | undefined {
     if (locale.length == 2) {
       return langMap[locale];
     }
-    if (
-      locale.length > 2 &&
-      availableLanguages.includes(locale.slice(0, 2).toLowerCase())
-    ) {
+    if (locale.length > 2 && availableLanguages.includes(locale.slice(0, 2).toLowerCase())) {
       return langMap[locale.slice(0, 2)];
     }
   }
   return undefined;
 }
 
-export function getPreferredLocalizedMetadata<T>(
-  localizedMetadata: T[],
-  locale: string
-): T {
+export function getPreferredLocalizedMetadata<T>(localizedMetadata: T[], locale: string): T {
   if (!localizedMetadata) {
     return {} as T;
   }
-  if (locale) {
-    locale = locale.replace("-", "_");
-  }
+
+  const formattedLocale = locale?.replace("-", "_");
+  const alternativeLocale = formattedLocale?.replace("_", "-");
+
   let data = localizedMetadata.find(
-    (item: any) =>
-      item.locale === locale || item.locale === locale.replace("_", "-")
+    (item: any) => item.locale === formattedLocale || item.locale === alternativeLocale
   );
 
-  return (
+  const localizedData =
     data ||
     localizedMetadata.find((item: any) => item.locale === ENGLISH_LOCALE)! ||
-    localizedMetadata[0]
-  );
+    localizedMetadata[0];
+
+  // In HTML, consecutive whitespace characters (including newlines) are collapsed into a single space
+  // Replacing it to <br> tag to maintain the newlines
+  if ((localizedData as any).richTextOverview) {
+    (localizedData as any).richTextOverview = (localizedData as any).richTextOverview.replace(
+      /\n/g,
+      `<br style="display: block; content: ''; margin-top: 0;"/>`
+    );
+  }
+
+  return localizedData;
 }
 
 export function SetupTranslations(translations: string): void {
@@ -110,10 +114,7 @@ export function isTranslated(val: string): boolean {
   return !pluralPrefix.test(val) && !singularPrefix.test(val);
 }
 
-export function GetTranslation(
-  key: string,
-  replaceAccountTerminology = false
-): string {
+export function GetTranslation(key: string, replaceAccountTerminology = false): string {
   let val = _translations[key];
   if (replaceAccountTerminology) {
     val = ReplaceAccountTerminology(val);
@@ -200,7 +201,7 @@ export function SetupAccountTerminologies(
   accountTerminologies: PrimeAccountTerminology[] = defaultAccountTerminologies
 ): void {
   accountTerminologyMap = {};
-  accountTerminologies.forEach((item) => {
+  accountTerminologies.forEach(item => {
     accountTerminologyMap[item.entityType] = {
       name_lxpv: item.name,
       pluralName_lxpv: item.pluralName,
@@ -213,14 +214,14 @@ export function ReplaceLoTypeWithAccountTerminology(term: string): string {
     term === "learningProgram"
       ? "LEARNING_PATH"
       : term === "jobAid"
-      ? "JOB_AID"
-      : term === "certification"
-      ? "CERTIFICATION"
-      : term === "MODULES"
-      ? "MODULES"
-      : term === "MODULE"
-      ? "MODULE"
-      : "COURSE";
+        ? "JOB_AID"
+        : term === "certification"
+          ? "CERTIFICATION"
+          : term === "MODULES"
+            ? "MODULES"
+            : term === "MODULE"
+              ? "MODULE"
+              : "COURSE";
   return accountTerminologyMap[terminologiesLoType]
     ? accountTerminologyMap[terminologiesLoType]["name_lxpv"]
     : term;
@@ -392,5 +393,5 @@ export const formatMap: any = {
   "Virtual Classroom": "alm.catalog.card.virtual.classroom",
   Classroom: "alm.catalog.card.classroom",
   "Self Paced": "alm.catalog.card.self.paced",
-  Checklist: "alm.catalog.card.checklistActivity"
+  Checklist: "alm.catalog.card.checklistActivity",
 };

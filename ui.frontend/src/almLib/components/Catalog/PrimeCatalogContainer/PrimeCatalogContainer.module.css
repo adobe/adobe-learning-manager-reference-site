@@ -24,20 +24,20 @@ governing permissions and limitations under the License.
   letter-spacing: 0px;
   color: var(--prime-color-black);
   margin: 0;
-  font-family: "source-sans-pro" !important;
 }
 .searchContainer {
   width: 265px;
 }
 .filtersAndListConatiner {
   display: flex;
+  justify-content: space-between;
 }
 .filtersContainer {
-  width: 256px;
+  width: 240px;
 }
 .listContainer {
   width: calc(100% - 256px);
-  padding-left: 20px;
+  padding-left: 52px;
 }
 .listContainer.full {
   width: 100%;
@@ -94,7 +94,7 @@ governing permissions and limitations under the License.
 }
 
 .pageContainer {
-  max-width: var(--prime-container-max-width-desktop);
+  max-width: var(--prime-catalog-container-max-width-desktop);
   margin: 0 auto;
 }
 @media screen and (max-width: 1024px) {
@@ -165,11 +165,21 @@ governing permissions and limitations under the License.
     visibility: hidden;
     pointer-events: none;
     transform: translate(-100%, 0);
-    -webkit-transition: transform 250ms ease-in-out, visibility 0ms linear 130ms;
-    -moz-transition: transform 250ms ease-in-out, visibility 0ms linear 130ms;
-    -ms-transition: transform 250ms ease-in-out, visibility 0ms linear 130ms;
-    -o-transition: transform 250ms ease-in-out, visibility 0ms linear 130ms;
-    transition: transform 250ms ease-in-out, visibility 0ms linear 130ms;
+    -webkit-transition:
+      transform 250ms ease-in-out,
+      visibility 0ms linear 130ms;
+    -moz-transition:
+      transform 250ms ease-in-out,
+      visibility 0ms linear 130ms;
+    -ms-transition:
+      transform 250ms ease-in-out,
+      visibility 0ms linear 130ms;
+    -o-transition:
+      transform 250ms ease-in-out,
+      visibility 0ms linear 130ms;
+    transition:
+      transform 250ms ease-in-out,
+      visibility 0ms linear 130ms;
   }
   .listContainer {
     width: 100%;
@@ -212,9 +222,76 @@ governing permissions and limitations under the License.
 }
 
 .catalogDescription {
-  color: var(--prime-color-nc1);
-  font-size: var(--prime-font-size-18);
+  font-size: var(--prime-font-size-14);
   letter-spacing: 0;
-  margin-bottom: 10px;
-  font-family: "source-sans-pro" !important;
+  width: 58%;
+}
+.picker {
+  min-height: 1px;
+  padding: 0px 10px;
+  height: 32px;
+}
+
+.sortAndChangeLayoutContainer {
+  display: flex;
+  justify-content: flex-end;
+  width: 40%;
+  height: 32px;
+  align-items: flex-start;
+}
+
+.viewButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 6px 6px;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  background: none;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.selectedView {
+  border: 1.5px solid var(--prime-color-primary);
+  color: var(--prime-color-primary);
+  border-radius: 4px;
+}
+
+.descriptionContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.changeLayoutContainer {
+  display: flex;
+}
+
+.sortText {
+  padding-top: 4px;
+}
+
+.searchQuery {
+  font-weight: var(--prime-font-weight-700);
+}
+
+.clearSearch {
+  cursor: pointer;
+  border: 0px;
+  background-color: transparent;
+  padding: 0px;
+  margin-left: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .descriptionContainer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

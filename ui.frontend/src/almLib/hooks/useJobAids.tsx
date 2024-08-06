@@ -13,16 +13,22 @@ governing permissions and limitations under the License.
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import { PrimeLearningObject } from "../models/PrimeModels";
-import { useState } from "react";
-import { isJobaidContentTypeUrl } from "../utils/catalog";
+import { useCallback, useState } from "react";
+import { getJobaidUrl, isJobaidContentTypeUrl } from "../utils/catalog";
 import { useIntl } from "react-intl";
 import { useAlert } from "../common/Alert/useAlert";
+import APIServiceInstance from "../common/APIService";
+import { GetTranslation } from "../utils/translationService";
+import { AlertType } from "../common/Alert/AlertDialog";
+import { LaunchPlayer } from "../utils/playback-utils";
+import { getWidgetConfig } from "../utils/global";
+import { CalculateIfTablet } from "../utils/widgets/utils";
 
 export const useJobAids = (
   training: PrimeLearningObject,
-  enrollmentHandler: Function,
-  unEnrollmentHandler: Function,
-  jobAidClickHandler: Function
+  handleLoEnrollment?: Function,
+  updateLearningObject?: Function,
+  unEnrollmentHandler?: Function
 ) => {
   const { formatMessage } = useIntl();
   //on click, if not enrolled show popup alert
@@ -31,32 +37,71 @@ export const useJobAids = (
   });
   const [showAlert, setShowAlert] = useState(false);
   const [almAlert] = useAlert();
-
+  const handleUnenrollment = async (enrollmentId: string) => {
+    if (!enrollmentId) {
+      setIsEnrolled(true);
+    }
+    try {
+      await APIServiceInstance.unenrollFromTraining(enrollmentId);
+      setIsEnrolled(false);
+      if (updateLearningObject) {
+        await updateLearningObject(training.id);
+      }
+    } catch (error) {
+      almAlert(true, GetTranslation("alm.unenrollment.error"), AlertType.error);
+      setIsEnrolled(true);
+    }
+  };
+  const handleJobAidClick = useCallback((training: PrimeLearningObject) => {
+    if (isJobaidContentTypeUrl(training)) {
+      window.open(getJobaidUrl(training), "_blank");
+    } else {
+      const playerDimension = getWidgetConfig().isMobile || CalculateIfTablet() ? "100%" : "70%";
+      LaunchPlayer({ trainingId: training.id, playerDimension });
+    }
+  }, []);
   const unenroll = () => {
-    unEnrollmentHandler({
-      enrollmentId: training.enrollment.id,
-      isSupplementaryLO: true,
-    });
-    setIsEnrolled(false);
+    handleUnenrollment(training?.enrollment?.id);
   };
 
-  const enroll = () => {
-    enrollmentHandler({
-      id: training.id,
-      instanceId: training.instances[0].id,
-      isSupplementaryLO: false,
-    });
-    setIsEnrolled(true);
+  const handleJobAidEnrollment = (isEnrolling: boolean) => {
+    if (isEnrolling) {
+      handleLoEnrollment?.({
+        id: training.id,
+        instanceId: training.instances[0].id,
+        isSupplementaryLO: false,
+      });
+    } else if (training?.enrollment?.id) {
+      unEnrollmentHandler?.({
+        enrollmentId: training.enrollment.id,
+        isSupplementaryLO: true,
+      });
+    }
+    setIsEnrolled(isEnrolling);
+  };
+
+  const enrollJobAid = () => handleJobAidEnrollment(true);
+  const unenrollJobAid = () => handleJobAidEnrollment(false);
+  const enroll = async () => {
+    if (!handleLoEnrollment) {
+      return;
+    }
+    try {
+      await handleLoEnrollment(training.id, training.instances[0].id);
+      setIsEnrolled(true);
+    } catch (error) {
+      throw new Error();
+    }
   };
 
   const nameClickHandler = () => {
     if (isJobaidContentTypeUrl(training)) {
-      jobAidClickHandler(training);
+      handleJobAidClick(training);
       return;
     }
 
     if (isEnrolled) {
-      jobAidClickHandler(training);
+      handleJobAidClick(training);
       return;
     } else {
       // alert("not in your list"); - only for overview page
@@ -82,7 +127,10 @@ export const useJobAids = (
     jobAidAddToListMsg,
     jobAidRemoveToListMsg,
     nameClickHandler,
+    enrollJobAid,
+    unenrollJobAid,
     isEnrolled,
     showAlert,
+    handleJobAidClick,
   };
 };

@@ -35,7 +35,7 @@ const PrimeDropdown = (props: any) => {
   });
 
   const toggleDropdownExpand = () => {
-    setisExpandDropdown((isExpandDropdown) => !isExpandDropdown);
+    setisExpandDropdown(isExpandDropdown => !isExpandDropdown);
   };
   const dropdownClickHandler = () => {
     toggleDropdownExpand();
@@ -52,12 +52,8 @@ const PrimeDropdown = (props: any) => {
     <>
       <div ref={ref} className={styles.primeDropdown}>
         {props.label}
-        <span
-          className={styles.primeDropdownValue}
-          onClick={dropdownClickHandler}
-        >
-          : {selectedOption}{" "}
-          <span className={styles.primeDropdownIcon}>{ARROW_DOWN_SVG()}</span>
+        <span className={styles.primeDropdownValue} onClick={dropdownClickHandler}>
+          : {selectedOption} <span className={styles.primeDropdownIcon}>{ARROW_DOWN_SVG()}</span>
         </span>
         <div>
           {isExpandDropdown && (
@@ -65,7 +61,7 @@ const PrimeDropdown = (props: any) => {
               {optionList?.map((option: any) => (
                 <li
                   className={styles.primeDropdownOption}
-                  onClick={(option) => optionClickHandler(option)}
+                  onClick={option => optionClickHandler(option)}
                   key={option}
                 >
                   {option}

@@ -15,8 +15,8 @@ import { ProgressBar } from "@adobe/react-spectrum";
 import Calendar from "@spectrum-icons/workflow/Calendar";
 import { useMemo, useState } from "react";
 import { useIntl } from "react-intl";
-import { COMPLETED, WAITING } from "../../../utils/constants";
-import {  GetFormattedDate } from "../../../utils/dateTime";
+import { COMPLETED, ENGLISH_LOCALE, WAITING } from "../../../utils/constants";
+import { GetFormattedDate } from "../../../utils/dateTime";
 import { checkIsEnrolled } from "../../../utils/overview";
 import {
   GetTranslation,
@@ -25,6 +25,8 @@ import {
 } from "../../../utils/translationService";
 import styles from "./PrimeInstanceCard.module.css";
 import { THREE_DOTS_MENU_SVG } from "../../../utils/inline_svg";
+import { getFormattedPrice } from "../../../utils/price";
+import { useUserContext } from "../../../contextProviders/userContextProvider";
 
 const PrimeInstanceCard = (props: any) => {
   const {
@@ -43,9 +45,14 @@ const PrimeInstanceCard = (props: any) => {
     extension,
     extensionClickHandler,
     instanceId,
+    price,
+    hasCrVcModule,
+    waitlistPosition,
   } = props;
 
   const { formatMessage } = useIntl();
+  const user = useUserContext() || {};
+  const contentLocale = user?.contentLocale || ENGLISH_LOCALE;
 
   const selectHandler = () => {
     selectInstanceHandler(id);
@@ -62,9 +69,7 @@ const PrimeInstanceCard = (props: any) => {
     setIsHovered(false);
   };
 
-  const extraIconHtml = (
-    <div className={styles.extraIcon}>{THREE_DOTS_MENU_SVG()}</div>
-  );
+  const extraIconHtml = <div className={styles.extraIcon}>{THREE_DOTS_MENU_SVG()}</div>;
 
   const skillsAsString = props.skill;
 
@@ -92,17 +97,24 @@ const PrimeInstanceCard = (props: any) => {
       ) : enrollment && enrollment.state === WAITING ? (
         <span>
           {formatMessage({
-            id: `alm.overview.waitlist`,
+            id: `alm.overview.waitlist.position`,
           })}
+          {waitlistPosition}
         </span>
       ) : (
-        <span className={styles.seatNotAvailable}>
+        <span className={styles.seatAvailable}>
           {formatMessage({
             id: `alm.overview.no.seats.available`,
           })}
         </span>
       )}
     </>
+  ) : hasCrVcModule ? (
+    <span className={styles.seatAvailable}>
+      {formatMessage({
+        id: `alm.overviewseatsAvailableMsg`,
+      })}
+    </span>
   ) : (
     ""
   );
@@ -121,9 +133,9 @@ const PrimeInstanceCard = (props: any) => {
 
   const extensionLocalizedMetadata = useMemo(() => {
     return extension
-      ? getPreferredLocalizedMetadata(extension.localizedMetadata, locale)
+      ? getPreferredLocalizedMetadata(extension.localizedMetadata, contentLocale)
       : ({} as any);
-  }, [extension, locale]);
+  }, [extension, contentLocale]);
 
   return (
     <div className={cardClass} tabIndex={-1} aria-label={name}>
@@ -136,6 +148,7 @@ const PrimeInstanceCard = (props: any) => {
         <div className={styles.thumbnail} style={{ ...cardBgStyle }}>
           <div className={styles.bottomBar} tabIndex={-1}>
             <div className={!isHovered ? styles.loInfo : ""}>
+              {price && <div className={styles.loPrice}> {getFormattedPrice(price)}</div>}
               <div className={styles.title}>{name}</div>
               <div className={!isHovered ? styles.format : styles.formatHover}>
                 <span>{trainingTypeLabel} </span>
@@ -154,16 +167,12 @@ const PrimeInstanceCard = (props: any) => {
 
               <div className={extraBlock}>
                 {!enrollment || enrollment?.state === WAITING ? (
-                  <div className={styles.instanceLoFormat}>
-                    {seatsAvailableText}
-                  </div>
+                  <div className={styles.instanceLoFormat}>{seatsAvailableText}</div>
                 ) : (
                   <></>
                 )}
 
-                {showProgressBar &&
-                enrollment &&
-                checkIsEnrolled(enrollment) ? (
+                {showProgressBar && enrollment && checkIsEnrolled(enrollment) ? (
                   <div className={styles.progressContainer}>
                     {enrollment.state === COMPLETED ? (
                       <>
@@ -175,11 +184,23 @@ const PrimeInstanceCard = (props: any) => {
                         </p>
                       </>
                     ) : (
-                      <ProgressBar
-                        showValueLabel={false}
-                        value={enrollment.progressPercent}
-                        UNSAFE_className={styles.progressBar}
-                      />
+                      <>
+                        <ProgressBar
+                          showValueLabel={false}
+                          value={enrollment.progressPercent}
+                          UNSAFE_className={styles.progressBar}
+                        />
+                        <span className={`${styles.completed} ${styles.progressPercentLabel}`}>
+                          {formatMessage(
+                            {
+                              id: "alm.catalog.card.progress.percent",
+                              defaultMessage: `${enrollment?.progressPercent}% complete`,
+                            },
+                            { "0": enrollment?.progressPercent }
+                          )}
+                        </span>
+                        {extraIconHtml}
+                      </>
                     )}
                   </div>
                 ) : (
@@ -195,9 +216,7 @@ const PrimeInstanceCard = (props: any) => {
                       <span className={styles.skiillsLabel}>
                         {GetTranslation("alm.catalog.card.skills.label", true)}
                       </span>
-                      <span className={styles.skillsValue}>
-                        {skillsAsString}
-                      </span>
+                      <span className={styles.skillsValue}>{skillsAsString}</span>
                     </div>
                   </>
                 ) : (
@@ -251,9 +270,7 @@ const PrimeInstanceCard = (props: any) => {
                 {extension && (
                   <a
                     className={styles.enrolledSelectButton}
-                    onClick={(event) =>
-                      extensionClickHandler(instanceId, event)
-                    }
+                    onClick={event => extensionClickHandler(instanceId, event)}
                     href="javascript:void(0)"
                   >
                     {extensionLocalizedMetadata?.label}
@@ -267,17 +284,12 @@ const PrimeInstanceCard = (props: any) => {
           <div className={styles.topBar}>
             <div
               className={
-                !isHovered
-                  ? styles.completionDateWrapper
-                  : styles.completionDateWrapperHovered
+                !isHovered ? styles.completionDateWrapper : styles.completionDateWrapperHovered
               }
             >
               {completionDateValue ? (
                 <p>
-                  <span
-                    className={`${styles.mobileOnly} ${styles.icon}`}
-                    aria-hidden="true"
-                  >
+                  <span className={`${styles.mobileOnly} ${styles.icon}`} aria-hidden="true">
                     <Calendar />
                   </span>
                   {completionDateValue}

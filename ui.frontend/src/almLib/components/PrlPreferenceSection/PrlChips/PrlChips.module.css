@@ -1,0 +1,66 @@
+@import "../../../styles/variables.css";
+
+.prlChipsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  padding-right: 34px;
+  align-content: flex-start;
+}
+.prlChipsContainer input {
+  display: none;
+}
+.prlChip {
+  border: 1px solid var(--prime-color-neutral-1);
+  margin-bottom: 10px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  line-height: 35px;
+  border-radius: 25px;
+  cursor: pointer;
+  padding: 0px 15px;
+  background: var(--prime-color-white);
+  height: 35px;
+}
+.prlChip label {
+  cursor: pointer;
+  line-height: 35px;
+  display: inline-block;
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.prlChipSelected label {
+  max-width: 100%;
+}
+.prlChip svg {
+  position: absolute;
+  right: 10px;
+  transform: scale(1.2);
+  width: 15px;
+  height: 15px;
+}
+.prlChip:hover {
+  border-color: var(--prime-color-primary);
+  outline: 0;
+  border-width: 1px;
+}
+.prlChip:focus {
+  border-color: var(--prime-color-primary);
+  outline: 0;
+  border-width: 2px;
+}
+.prlChipSelected,
+.prlChipSelected:hover {
+  border: 2px solid var(--prime-color-primary);
+  color: var(--prime-color-primary);
+  padding-right: 35px;
+  position: relative;
+}
+@media screen and (max-width: 767px) {
+  .prlChipsContainer {
+    padding-right: 0;
+  }
+}

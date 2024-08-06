@@ -25,6 +25,8 @@ import {
 import { RestAdapter } from "../../utils/restAdapter";
 import { GetTranslation } from "../../utils/translationService";
 import { getUploadInfo, uploadFile } from "../../utils/uploadUtils";
+import { PrimeDispatchEvent } from "../../utils/widgets/base/EventHandlingBase";
+import { PrimeEvent } from "../../utils/widgets/common";
 
 interface ProfileAttributes {
   user: PrimeUser;
@@ -32,9 +34,10 @@ interface ProfileAttributes {
 }
 
 export const useProfile = () => {
-  const [profileAttributes, setProfileAttributes] = useState<ProfileAttributes>(
-    { user: {}, accountActiveFields: {} } as ProfileAttributes
-  );
+  const [profileAttributes, setProfileAttributes] = useState<ProfileAttributes>({
+    user: {},
+    accountActiveFields: {},
+  } as ProfileAttributes);
 
   const [userFieldData, setUserFieldData] = useState<any>({ fields: {} });
   // const [errorMessage, setErrorMessage] = useState("");
@@ -81,7 +84,7 @@ export const useProfile = () => {
         },
       });
       const response = await updateALMUser();
-      setProfileAttributes((prevState) => ({
+      setProfileAttributes(prevState => ({
         accountActiveFields: prevState.accountActiveFields,
         user: response.user,
       }));
@@ -103,7 +106,7 @@ export const useProfile = () => {
         },
       });
       const response = await updateALMUser();
-      setProfileAttributes((prevState) => ({
+      setProfileAttributes(prevState => ({
         accountActiveFields: prevState.accountActiveFields,
         user: response.user,
       }));
@@ -114,25 +117,43 @@ export const useProfile = () => {
     }
   }, []);
 
-  const updateAccountActiveFields = useCallback(
-    async (accountActiveFields: any, userId: any) => {
-      try {
-        await updateAccountActiveFieldsDetails(accountActiveFields, userId);
-        almAlert(
-          true,
-          GetTranslation("alm.text.activeFieldsSuccess"),
-          AlertType.success
-        );
-      } catch (error: any) {
-        almAlert(
-          true,
-          GetTranslation("alm.text.activeFieldsFailure"),
-          AlertType.error
-        );
-      }
+  const updateAccountActiveFields = useCallback(async (accountActiveFields: any, userId: any) => {
+    try {
+      await updateAccountActiveFieldsDetails(accountActiveFields, userId);
+      almAlert(true, GetTranslation("alm.text.activeFieldsSuccess"), AlertType.success);
+    } catch (error: any) {
+      almAlert(true, GetTranslation("alm.text.activeFieldsFailure"), AlertType.error);
+    }
+  }, []);
+
+  const updateProfileSettings = useCallback(
+    async ({ shouldEnrollOnClick }: { shouldEnrollOnClick: boolean }) => {
+      const user = profileAttributes.user;
+      const patchData = {
+        data: {
+          id: user.id,
+          type: "user",
+          attributes: {
+            enrollOnClick: shouldEnrollOnClick || user.enrollOnClick,
+          },
+        },
+      };
+      await updateUserProfile(user.id, patchData);
+      PrimeDispatchEvent(document, PrimeEvent.ALM_USER_PROFILE_UPDATED);
     },
-    []
+    [profileAttributes]
   );
+
+  const updateUserProfile = async (userId: string, requestBody: any) => {
+    const headers = { "content-type": "application/json" };
+
+    await RestAdapter.ajax({
+      url: `${getALMConfig().primeApiURL}/users/${userId}`,
+      method: "PATCH",
+      body: JSON.stringify(requestBody),
+      headers: headers,
+    });
+  };
 
   return {
     profileAttributes,
@@ -142,5 +163,6 @@ export const useProfile = () => {
     updateAccountActiveFields,
     userFieldData,
     setUserFieldData,
+    updateProfileSettings,
   };
 };

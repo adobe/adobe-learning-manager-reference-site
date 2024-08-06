@@ -12,12 +12,16 @@ governing permissions and limitations under the License.
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import APIServiceInstance from "../../common/APIService";
-import { PrimeLearningObject } from "../../models/PrimeModels";
+import {
+  PrimeLearningObject,
+  PrimeLearningObjectInstanceEnrollment,
+} from "../../models/PrimeModels";
 import {
   loadTrainings,
   paginateTrainings,
   updateSnippetOnLoad,
   updateSnippetType,
+  updateTrainings,
 } from "../../store/actions/catalog/action";
 import { defaultSearchInDropdownList } from "../../store/reducers/catalog";
 import { State } from "../../store/state";
@@ -25,42 +29,50 @@ import { getPageAttributes, getQueryParamsFromUrl } from "../../utils/global";
 
 import { useFilter } from "./useFilter";
 import { useSearch } from "./useSearch";
+import { QueryParams } from "../../utils/restAdapter";
+import { getTraining } from "../../utils/lo-utils";
+import { GetTranslation } from "../../utils/translationService";
+import { debounce } from "../../utils/catalog";
 
 export const useCatalog = () => {
   //To Do: need to check a better way of doing this
   const [catalogAttributes, setCatalogAttributes] = useState(() =>
     getPageAttributes("catalogContainer", "catalogAttributes")
   );
-  const updatedCatalogAttributed = getPageAttributes(
-    "catalogContainer",
-    "catalogAttributes"
-  );
+  const updatedCatalogAttributed = getPageAttributes("catalogContainer", "catalogAttributes");
   const [state, setState] = useState<{
     isLoading: boolean;
     errorCode: string;
-  }>({ isLoading: false, errorCode: "" });
+  }>({ isLoading: true, errorCode: "" });
   const { isLoading, errorCode } = state;
-  const { trainings, sort, next } = useSelector(
-    (state: State) => state.catalog
-  );
-  const { query, handleSearch, resetSearch, getSearchSuggestions } =
-    useSearch();
-  const { filters, filterState, updateFilters, updatePriceFilter } =
-    useFilter();
+  const { sort, next } = useSelector((state: State) => state.catalog);
+  let { trainings } = useSelector((state: State) => state.catalog);
+  const [metaData, setMetaData] = useState({} as any);
+  const { query, handleSearch, resetSearch, getSearchSuggestions } = useSearch();
+  const {
+    filters,
+    filterState,
+    updateFilters,
+    updatePriceRangeFilter,
+    resetFilterList,
+    areFiltersLoading,
+    searchFilters,
+    clearFilterSearch,
+  } = useFilter();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const queryParams = getQueryParamsFromUrl();
-    if (queryParams.snippetType) {
-      const updatedSnippetType = queryParams.snippetType;
-      dispatch(updateSnippetOnLoad(updatedSnippetType));
-    }
-  }, [dispatch]);
+  //Not there in ember app anymore
+  // useEffect(() => {
+  //   const queryParams = getQueryParamsFromUrl();
+  //   if (queryParams.snippetType) {
+  //     const updatedSnippetType = queryParams.snippetType;
+  //     dispatch(updateSnippetOnLoad(updatedSnippetType));
+  //   }
+  // }, [dispatch]);
 
   const updateSnippet = (checked: boolean, data: any) => {
     let payload = "";
 
-    defaultSearchInDropdownList.forEach((item) => {
+    defaultSearchInDropdownList.forEach(item => {
       if (item.label === data.label) {
         item.checked = checked;
       }
@@ -71,47 +83,62 @@ export const useCatalog = () => {
     dispatch(updateSnippetType(payload));
   };
 
-  const fetchTrainings = useCallback(async () => {
-    try {
-      setState({ isLoading: true, errorCode: "" });
-      const response = await APIServiceInstance.getTrainings(
-        filters,
-        sort,
-        query
-      );
-      dispatch(loadTrainings(response));
-      setState({ isLoading: false, errorCode: "" });
-    } catch (error: any) {
-      dispatch(loadTrainings([] as PrimeLearningObject[]));
-      setState({ isLoading: false, errorCode: error.status });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    dispatch,
-    filters.duration,
-    filters.learnerState,
-    filters.loFormat,
-    filters.loTypes,
-    filters.skillName,
-    filters.tagName,
-    filters.cities,
-    filters.skillLevel,
-    filters.duration,
-    filters.catalogs,
-    filters.price,
-    query,
-    sort,
-  ]);
+  const fetchTrainings = useCallback(
+    debounce(async () => {
+      try {
+        setState({ isLoading: true, errorCode: "" });
+        dispatch(loadTrainings([]));
+        const response = await APIServiceInstance.getTrainings(filters, sort, query);
+        dispatch(loadTrainings(response));
+        const meta = response?.meta || {};
+        setMetaData(meta);
+        setState({ isLoading: false, errorCode: "" });
+      } catch (error: any) {
+        dispatch(loadTrainings([] as PrimeLearningObject[]));
+        setState({ isLoading: false, errorCode: error.status });
+        setMetaData({});
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }),
+    [
+      dispatch,
+      filters.duration,
+      filters.learnerState,
+      filters.loFormat,
+      filters.loTypes,
+      filters.skillName,
+      filters.tagName,
+      filters.cities,
+      filters.skillLevel,
+      filters.duration,
+      filters.catalogs,
+      filters.price,
+      filters.priceRange,
+      filters.products,
+      filters.roles,
+      filters.levels,
+      filters.announcedGroups,
+      //on checking with learner app this should be userGroupsByRecommendation
+      query,
+      sort,
+    ]
+  );
 
   useEffect(() => {
-    fetchTrainings();
-    setCatalogAttributes(updatedCatalogAttributed);
+    const loadData = setTimeout(() => {
+      fetchTrainings();
+      setCatalogAttributes(updatedCatalogAttributed);
+    }, 100);
+    return () => clearTimeout(loadData);
   }, [fetchTrainings, catalogAttributes]);
 
   //for pagination
   const loadMoreTraining = useCallback(
     async () => {
-      if (!next) return;
+      if (!next || isLoading) {
+        return;
+      }
+      setState({ isLoading: true, errorCode: "" });
       try {
         const parsedResponse = await APIServiceInstance.loadMoreTrainings(
           filters,
@@ -125,6 +152,7 @@ export const useCatalog = () => {
             next: parsedResponse!.links?.next || "",
           })
         );
+        setState({ isLoading: false, errorCode: "" });
       } catch (error: any) {
         setState({ isLoading: false, errorCode: error.status });
       }
@@ -142,13 +170,71 @@ export const useCatalog = () => {
       filters.duration,
       filters.catalogs,
       filters.cities,
+      filters.products,
+      filters.roles,
+      filters.levels,
+      filters.announcedGroups,
       query,
       sort,
+      isLoading,
     ]
+  );
+  const updateLearningObject = useCallback(
+    async (loId: string): Promise<PrimeLearningObject | Error> => {
+      try {
+        const response = await getTraining(loId);
+
+        const list = [...trainings!];
+        const index = list.findIndex(item => item.id === loId);
+        list[index] = response!;
+
+        const updatedTrainingList = [...list];
+        dispatch(updateTrainings({ trainings: updatedTrainingList }));
+
+        return response!;
+      } catch (error) {
+        throw new Error();
+      }
+    },
+    [trainings, dispatch]
+  );
+
+  //check for multi-enrollment
+  const enrollmentHandler = useCallback(
+    async (
+      loId,
+      instanceId
+      // allowMultiEnrollment = false,
+      // headers = {},
+    ): Promise<PrimeLearningObjectInstanceEnrollment> => {
+      const queryParam: QueryParams = {
+        loId: loId,
+        loInstanceId: instanceId,
+        // allowMultiEnrollment: allowMultiEnrollment,
+      };
+      const emptyResponse = {} as PrimeLearningObjectInstanceEnrollment;
+      try {
+        const response = await APIServiceInstance.enrollToTraining(
+          queryParam
+          // headers
+        );
+        await updateLearningObject(loId);
+        if (response) {
+          return response.learningObjectInstanceEnrollment;
+        }
+        return emptyResponse;
+      } catch (error) {
+        throw new Error(GetTranslation("alm.enrollment.error"));
+      }
+    },
+
+    [updateLearningObject]
   );
 
   return {
     trainings,
+    updateLearningObject,
+    enrollmentHandler,
     loadMoreTraining,
     query,
     handleSearch,
@@ -162,7 +248,12 @@ export const useCatalog = () => {
     isLoading,
     errorCode,
     hasMoreItems: Boolean(next),
-    updatePriceFilter,
+    updatePriceRangeFilter,
     updateSnippet,
+    resetFilterList,
+    metaData,
+    areFiltersLoading,
+    searchFilters,
+    clearFilterSearch,
   };
 };

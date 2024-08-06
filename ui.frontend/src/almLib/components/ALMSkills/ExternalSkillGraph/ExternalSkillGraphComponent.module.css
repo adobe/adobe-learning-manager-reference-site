@@ -1,0 +1,247 @@
+@import "../../../styles/variables.css";
+
+canvas {
+  display: flex;
+  margin-left: 5px;
+}
+
+.selectedSkills {
+  margin-top: 30px;
+  display: block;
+  padding-left: 20px;
+  padding-top: 20px;
+  border: solid 2px var(--prime-color-black);
+  width: 780px;
+  font-size: var(--prime-font-size-16);
+  margin-left: 5px;
+}
+
+.selectedSkillsHeading {
+  width: 350px;
+  height: 22px;
+  font-size: var(--prime-font-size-18);
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.38;
+  letter-spacing: normal;
+  color: var(--prime-color-black);
+  margin-right: 18px;
+  margin-bottom: 20px;
+}
+
+.selectedSkillsArea {
+  display: inline-block;
+  width: 800px;
+  height: 160px;
+  margin-bottom: 20px;
+}
+
+.selectedSkillsArea:hover {
+  cursor: pointer;
+}
+
+.showScrollbar {
+  overflow-y: scroll;
+  scrollbar-color: var(--prime-color-neutral-3) var(--prime-color-neutral-1);
+  scrollbar-width: thin;
+}
+
+.accountSpecificCheckbox[type="checkbox"] {
+  background-color: transparent;
+  border: solid var(--prime-color-black) 1px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  vertical-align: middle;
+  width: 16px;
+  height: 16px;
+}
+
+.accountSpecificCheckbox[type="checkbox"]:checked {
+  background-color: var(--prime-color-primary);
+  background: var(--prime-color-primary)
+    url("data:image/gif;base64,R0lGODlhCwAKAIABAP////3cnSH5BAEKAAEALAAAAAALAAoAAAIUjH+AC73WHIsw0UCjglraO20PNhYAOw==")
+    2px 2px no-repeat;
+}
+
+.selectedSkill {
+  width: 200px;
+  height: 60px;
+  border-radius: 4px;
+  border: solid 1px var(--prime-color-neutral-2);
+  background-color: var(--prime-color-neutral-4);
+  margin-right: 24px;
+  display: inline-block;
+  margin-bottom: 18px;
+  padding: 20px 10px 10px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 2px 10px 1px rgba(0, 0, 0, 0.11);
+  font-size: var(--prime-font-size-16);
+}
+
+.selectedSkilll:focus-within .closeButton,
+.selectedSkill:hover .closeButton {
+  visibility: visible;
+}
+
+.closeButton {
+  float: right;
+  background-color: var(--prime-color-neutral-1);
+  color: var(--prime-color-white);
+  z-index: 10;
+  cursor: auto;
+  visibility: hidden;
+  margin: -20px 0 0 0;
+  height: 18px;
+  padding: 0;
+  width: 17px;
+}
+
+.closeButton:after {
+  content: "\00d7";
+}
+
+.closeButton:hover {
+  cursor: pointer;
+}
+
+.selectedSkillsActions {
+  margin-top: 5px;
+}
+
+.remove {
+  padding-left: 5px;
+}
+
+.topOptions {
+  margin-top: 3px;
+  margin-bottom: 20px;
+  margin-left: 5px;
+  font-size: var(--prime-font-size-14);
+  text-align: center;
+}
+
+.checkboxRow {
+  display: flex;
+  width: 80%;
+}
+
+.search {
+  font-size: var(--prime-font-size-16);
+  position: relative;
+  float: left;
+}
+
+.searchLoader {
+  margin-top: 20px;
+  left: 48%;
+  position: absolute;
+  background-size: contain;
+  height: 16px;
+  width: 16px;
+  background-color: transparent;
+  visibility: visible;
+}
+
+.graphHeading {
+  margin-right: 140px;
+  font-weight: 600;
+  font-size: var(--prime-font-size-16);
+}
+
+.skillInput {
+  padding: 4px;
+  font-size: var(--prime-font-size-14);
+  border-radius: 4px;
+  border: 1px solid rgb(86, 86, 86);
+}
+
+.typeahead {
+  position: absolute;
+  z-index: 1000;
+  background: var(--prime-color-white);
+  border: solid 2px var(--prime-color-primary);
+  min-height: 50px;
+  width: 100%;
+  text-align: left;
+}
+
+.suggestion,
+.noSuggestion {
+  padding: 10px;
+}
+
+.suggestion:hover {
+  background-color: var(--prime-color-primary);
+  color: var(--prime-color-white);
+  cursor: pointer;
+}
+
+.active {
+  background-color: var(--prime-color-primary);
+  color: var(--prime-color-white);
+  cursor: pointer;
+}
+
+.setting {
+  font-size: var(--prime-font-size-14);
+  margin-left: 5px;
+}
+
+.loader {
+  border: 7px solid var(--prime-color-neutral-4);
+  border-radius: 50%;
+  border-top: 7px solid var(--prime-color-primary);
+  width: 25px;
+  height: 25px;
+  -webkit-animation: spin 1s linear infinite; /* Safari */
+  animation: spin 1s linear infinite;
+  margin-top: 190px;
+  justify-content: center;
+  z-index: 5;
+  position: absolute;
+  left: 50%;
+  visibility: hidden;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.resetGraph {
+  position: absolute;
+  z-index: 10;
+  margin-top: -34px;
+  margin-left: 761px;
+  background-color: var(--prime-color-neutral-1);
+  fill: var(--prime-color-white);
+}
+
+.resetGraph:hover {
+  cursor: pointer;
+}
+
+.graphArea {
+  margin-bottom: 10px;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

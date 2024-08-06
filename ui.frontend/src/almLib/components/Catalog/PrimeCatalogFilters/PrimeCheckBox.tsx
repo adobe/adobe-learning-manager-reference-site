@@ -18,7 +18,10 @@ const PrimeCheckbox: React.FC<{
   filterType: string;
   checked: boolean;
   changeHandler: Function;
-  isListDynamic?: boolean; }> = (props) => { const { checked, filterType, label, changeHandler, isListDynamic = false } = props;
+  isListDynamic?: boolean;
+  automationId?: string;
+}> = props => {
+  const { checked, filterType, label, changeHandler, isListDynamic = false, automationId } = props;
 
   const onChangeHandler = (checked: boolean) => {
     changeHandler({
@@ -27,14 +30,15 @@ const PrimeCheckbox: React.FC<{
       label,
     });
   };
- 
+  const labelToShow = isListDynamic ? label : GetTranslation(label, true);
   return (
     <Checkbox
       onChange={onChangeHandler}
       isSelected={checked}
       UNSAFE_className={styles.primeCheckbox}
+      {...(automationId ? { "data-automationId": automationId } : {})}
     >
-      {isListDynamic ? label : GetTranslation(label, true)}
+      <span title={labelToShow}>{labelToShow}</span>
     </Checkbox>
   );
 };

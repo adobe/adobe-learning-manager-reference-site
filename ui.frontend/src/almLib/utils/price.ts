@@ -1,3 +1,4 @@
+import { PrimeAccount } from "../models";
 import { ADOBE_COMMERCE } from "./constants";
 import { getALMConfig } from "./global";
 
@@ -23,4 +24,7 @@ export const getFormattedPrice = (price: number) => {
 
 export const isCommerceEnabled = () => {
   return getALMConfig().usageType === ADOBE_COMMERCE;
+};
+export const canShowPriceFilter = (account: PrimeAccount) => {
+  return isCommerceEnabled() || account.enableECommerce;
 };

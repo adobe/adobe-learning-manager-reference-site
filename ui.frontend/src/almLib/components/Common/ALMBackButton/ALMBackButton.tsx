@@ -23,7 +23,8 @@ const ALMBackButton = () => {
         variant="primary"
         isQuiet
         UNSAFE_className={styles.backButton}
-        onPress={() => window.history.back()}>
+        onPress={() => window.history.back()}
+      >
         <ChevronLeft></ChevronLeft>
         <span className={styles.buttonLabel}>
           {formatMessage({

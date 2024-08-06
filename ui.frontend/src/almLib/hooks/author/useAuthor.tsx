@@ -12,96 +12,145 @@ governing permissions and limitations under the License.
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import APIServiceInstance from "../../common/APIService";
-import { PrimeLearningObject } from "../../models/PrimeModels";
+import { PrimeLearningObject, PrimeUser } from "../../models/PrimeModels";
 import {
   loadTrainings,
   paginateTrainings,
-  updateSnippetOnLoad,
-  updateSnippetType,
-} from "../../store/actions/catalog/action";
-import { defaultSearchInDropdownList } from "../../store/reducers/catalog";
+  updateTrainingsAuthor,
+} from "../../store/actions/author/action";
 import { State } from "../../store/state";
-import { getPageAttributes, getQueryParamsFromUrl } from "../../utils/global";
+import { getALMConfig } from "../../utils/global";
+import { enrollTraining, getTraining } from "../../utils/lo-utils";
 
-import { useFilter } from "../catalog/useFilter";
-import { useSearch } from "../catalog/useSearch";
+import { RestAdapter } from "../../utils/restAdapter";
+import { JsonApiParse } from "../../utils/jsonAPIAdapter";
+import { GetTranslation } from "../../utils/translationService";
+import { INTERNAL_STR, SORT_RECENTLY_PUBLISHED_PARAM } from "../../utils/constants";
+import { Light } from "three";
 
-export const useAuthor = () => {
-  //To Do: need to check a better way of doing this
+export const useAuthor = (authorId: string, authorType: string) => {
   const [state, setState] = useState<{
     isLoading: boolean;
     errorCode: string;
   }>({ isLoading: false, errorCode: "" });
   const { isLoading, errorCode } = state;
-
-  const { trainings, sort, next } = useSelector(
-    (state: State) => state.catalog
-  );
-  const { query, handleSearch, resetSearch, getSearchSuggestions } =
-    useSearch();
-  const { filters, filterState, updateFilters, updatePriceFilter } =
-    useFilter();
+  let { trainings, next } = useSelector((state: State) => state.authorTrainings);
+  const [totalTrainings, setTotalTrainings] = useState(0);
+  const [authorDetails, setAuthorDetails] = useState({} as PrimeUser);
+  const baseApiUrl = getALMConfig().primeApiURL;
   const dispatch = useDispatch();
-
-  const fetchTrainings = useCallback(async () => {
+  const fetchTrainings = useCallback(
+    async selectedKey => {
+      try {
+        setState({ isLoading: true, errorCode: "" });
+        const response = await APIServiceInstance.getTrainingsForAuthor(
+          authorId,
+          authorType,
+          selectedKey
+        );
+        dispatch(
+          loadTrainings({
+            trainings: response?.trainings || [],
+            next: response?.next || "",
+          })
+        );
+        const meta = response?.meta || {};
+        setTotalTrainings((meta as any).count);
+        setState({ isLoading: false, errorCode: "" });
+      } catch (error: any) {
+        dispatch(
+          loadTrainings({
+            trainings: [] as PrimeLearningObject[],
+            next: "",
+          })
+        );
+        setState({ isLoading: false, errorCode: error.status });
+      }
+    },
+    [dispatch, authorId]
+  );
+  const getUserDetails = async (userId: string) => {
     try {
-      setState({ isLoading: true, errorCode: "" });
-      const response = await APIServiceInstance.getTrainings(
-        filters,
-        sort,
-        query
-      );
-      dispatch(loadTrainings(response));
-      setState({ isLoading: false, errorCode: "" });
-    } catch (error: any) {
-      dispatch(loadTrainings([] as PrimeLearningObject[]));
-      setState({ isLoading: false, errorCode: error.status });
+      const url = `${baseApiUrl}users/${userId}`;
+      const response = await RestAdapter.ajax({
+        url: url,
+        method: "GET",
+      });
+      const parsedResponse = JsonApiParse(response);
+      setAuthorDetails(parsedResponse.user);
+    } catch (error) {
+      throw new Error("Failed to get user details");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, query, sort]);
-
+  };
   useEffect(() => {
-    fetchTrainings();
+    if (authorType === INTERNAL_STR) {
+      getUserDetails(authorId);
+    }
+    fetchTrainings(SORT_RECENTLY_PUBLISHED_PARAM);
   }, [fetchTrainings]);
+  const updateLearningObject = useCallback(
+    async (loId: string): Promise<PrimeLearningObject | Error> => {
+      try {
+        const response = await getTraining(loId);
 
-  //for pagination
+        const list = [...trainings!];
+        const index = list.findIndex(item => item.id === loId);
+        list[index] = response!;
+
+        const updatedTrainingList = [...list];
+        dispatch(updateTrainingsAuthor({ trainings: updatedTrainingList }));
+
+        return response!;
+      } catch (error) {
+        throw new Error();
+      }
+    },
+    [trainings, dispatch]
+  );
+  const enrollmentHandler = useCallback(
+    async (loId, loInstanceId, headers = {}): Promise<PrimeLearningObject | Error> => {
+      try {
+        await enrollTraining(loId, loInstanceId, headers);
+        return updateLearningObject(loId);
+      } catch (error: any) {
+        throw new Error(GetTranslation("alm.enrollment.error"));
+      }
+    },
+    [updateLearningObject]
+  );
   const loadMoreTraining = useCallback(
-    async () => {
+    async (selectedKey = SORT_RECENTLY_PUBLISHED_PARAM) => {
       if (!next) return;
       try {
-        const parsedResponse = await APIServiceInstance.loadMoreTrainings(
-          filters,
-          sort,
-          query,
+        const parsedResponse = await APIServiceInstance.getTrainingsForAuthor(
+          authorId,
+          authorType,
+          selectedKey,
           next
         );
         dispatch(
           paginateTrainings({
-            trainings: parsedResponse!.learningObjectList || [],
-            next: parsedResponse!.links?.next || "",
+            trainings: parsedResponse!.trainings || [],
+            next: parsedResponse!.next || "",
           })
         );
       } catch (error: any) {
         setState({ isLoading: false, errorCode: error.status });
       }
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch, next, query, sort]
+    [dispatch, next]
   );
 
   return {
     trainings,
+    totalTrainings,
     loadMoreTraining,
-    query,
-    handleSearch,
-    resetSearch,
-    getSearchSuggestions,
-    filters,
-    filterState,
-    updateFilters,
-    sort,
+    enrollmentHandler,
+    updateLearningObject,
     isLoading,
     errorCode,
     hasMoreItems: Boolean(next),
-    updatePriceFilter,
+    fetchTrainings,
+    authorDetails,
   };
 };

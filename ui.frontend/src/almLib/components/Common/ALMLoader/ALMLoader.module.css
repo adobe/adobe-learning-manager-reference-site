@@ -15,3 +15,7 @@ governing permissions and limitations under the License.
   align-items: center;
   justify-content: center;
 }
+
+.loaderImage {
+  height: 32px;
+}

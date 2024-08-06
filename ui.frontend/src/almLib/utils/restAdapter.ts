@@ -9,17 +9,16 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { getALMObject, redirectToLoginAndAbort } from "./global";
-export type QueryParams = Record<
-  string,
-  string | number | boolean | Array<any>
->;
+import { getALMConfig, getALMObject, redirectToLoginAndAbort } from "./global";
+export type QueryParams = Record<string, string | number | boolean | Array<any>>;
 
 export interface IRestAdapterGetOptions {
   url: string;
   headers?: Record<string, string>;
   params?: QueryParams;
   withCredentials?: boolean;
+  responseType?: XMLHttpRequestResponseType;
+  cancelToken?: string;
 }
 
 export interface IRestAdapterAjaxOptions extends IRestAdapterGetOptions {
@@ -36,6 +35,7 @@ function getUrl(urlStr: string, params?: QueryParams) {
 }
 
 export class RestAdapter {
+  static currentRequest: { [key: string]: XMLHttpRequest | undefined } = {};
   public static get(options: IRestAdapterGetOptions): Promise<unknown> {
     (options as IRestAdapterAjaxOptions).method = "GET";
     return this.ajax(options as IRestAdapterAjaxOptions);
@@ -61,28 +61,48 @@ export class RestAdapter {
     return this.ajax(options as IRestAdapterAjaxOptions);
   }
 
+  public static resetPreviousRequest(options: IRestAdapterAjaxOptions): void {
+    const { cancelToken } = options;
+    if (cancelToken) {
+      this.currentRequest[cancelToken] = undefined;
+    }
+  }
+
   public static ajax(options: IRestAdapterAjaxOptions): Promise<unknown> {
+    let xhr = new XMLHttpRequest();
+    const context = this;
+    if (options.cancelToken) {
+      //cancel the previous call, if any
+      context.currentRequest[options.cancelToken]?.abort();
+      context.currentRequest[options.cancelToken] = xhr;
+    }
     return new Promise(function (resolve, reject) {
-      const xhr = new XMLHttpRequest();
-      xhr.open(options.method, getUrl(options.url, options.params));
       if (getALMObject().isPrimeUserLoggedIn()) {
-        xhr.withCredentials =
-          options.withCredentials === undefined
-            ? true
-            : options.withCredentials;
-        xhr.setRequestHeader(
-          "Authorization",
-          `oauth ${getALMObject().getAccessToken()}`
-        );
+        if (getALMConfig().csrfToken) {
+          const location = new URL(options.url);
+          const urlSearchParams = new URLSearchParams(location.search);
+          urlSearchParams.set("csrf_token", getALMObject().getCsrfToken());
+          options.url = options.url.split("?")[0] + `?${urlSearchParams.toString()}`;
+          xhr.open(options.method, getUrl(options.url, options.params));
+        } else if (getALMObject().getAccessToken()) {
+          xhr.open(options.method, getUrl(options.url, options.params));
+          xhr.setRequestHeader("Authorization", `oauth ${getALMObject().getAccessToken()}`);
+        }
       }
+      xhr.withCredentials = options.withCredentials === undefined ? true : options.withCredentials;
 
       for (const header in options.headers) {
         xhr.setRequestHeader(header, options.headers[header]);
       }
+      if (options.responseType) {
+        xhr.responseType = options.responseType;
+      }
       xhr.onload = function () {
         if ((this.status >= 200 && this.status < 300) || this.status === 304) {
+          context.resetPreviousRequest(options);
           resolve(xhr.response);
         } else {
+          context.resetPreviousRequest(options);
           reject({
             status: this.status,
             statusText: xhr.statusText,
@@ -91,6 +111,7 @@ export class RestAdapter {
         }
       };
       xhr.onerror = function () {
+        context.resetPreviousRequest(options);
         reject({
           status: this.status,
           statusText: xhr.statusText,
@@ -98,8 +119,9 @@ export class RestAdapter {
         });
       };
 
-      xhr.onreadystatechange = function() {
+      xhr.onreadystatechange = function () {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 401) {
+          context.resetPreviousRequest(options);
           redirectToLoginAndAbort(true);
           return;
         }

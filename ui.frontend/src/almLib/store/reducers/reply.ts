@@ -12,10 +12,10 @@ governing permissions and limitations under the License.
 import { PrimeReplyCreationAttributes } from "../../models/PrimeModels";
 import { AnyAction, combineReducers, Reducer } from "redux";
 import {
-    UPDATE_REPLY_TEXT,
-    LOAD_REPLIES,
-    // SET_CONTENT_TYPE,
-    // REMOVE_CONTENT,
+  UPDATE_REPLY_TEXT,
+  LOAD_REPLIES,
+  // SET_CONTENT_TYPE,
+  // REMOVE_CONTENT,
 } from "../actions/social/actionTypes";
 
 //TODO: use when comments support media
@@ -54,33 +54,27 @@ import {
 // > = combineReducers({ contentType, data });
 
 const state: Reducer<"ACTIVE", AnyAction> = (
-    state: "ACTIVE" | null | undefined,
-    action: AnyAction
+  state: "ACTIVE" | null | undefined,
+  action: AnyAction
 ) => {
-    switch (action.type) {
-        default:
-            return "ACTIVE";
-    }
+  switch (action.type) {
+    default:
+      return "ACTIVE";
+  }
 };
-const text: Reducer<string, AnyAction> = (
-    state: string | null | undefined,
-    action: AnyAction
-) => {
-    switch (action.type) {
-        case UPDATE_REPLY_TEXT:
-            return action.text || "";
-        case LOAD_REPLIES:
-            return "";
-        default:
-            return state ? state : "";
-    }
+const text: Reducer<string, AnyAction> = (state: string | null | undefined, action: AnyAction) => {
+  switch (action.type) {
+    case UPDATE_REPLY_TEXT:
+      return action.text || "";
+    case LOAD_REPLIES:
+      return "";
+    default:
+      return state ? state : "";
+  }
 };
-const reply: Reducer<
-    PrimeReplyCreationAttributes,
-    AnyAction
-> = combineReducers({
-    state,
-    text,
+const reply: Reducer<PrimeReplyCreationAttributes, AnyAction> = combineReducers({
+  state,
+  text,
 });
 
 export default reply;

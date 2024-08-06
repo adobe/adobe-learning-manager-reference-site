@@ -24,7 +24,7 @@ export const useBoardOptions = () => {
   const { item } = useSelector((state: State) => state.social.board);
   const dispatch = useDispatch();
   const addBoardToFavourite = useCallback(
-    async (boardId) => {
+    async boardId => {
       const baseApiUrl = getALMConfig().primeApiURL;
       await RestAdapter.ajax({
         url: `${baseApiUrl}/boards/${boardId}/favorite`,
@@ -36,7 +36,7 @@ export const useBoardOptions = () => {
   );
 
   const removeBoardFromFavourite = useCallback(
-    async (boardId) => {
+    async boardId => {
       const baseApiUrl = getALMConfig().primeApiURL;
       await RestAdapter.ajax({
         url: `${baseApiUrl}/boards/${boardId}/favorite`,
@@ -59,7 +59,7 @@ export const useBoardOptions = () => {
     [dispatch]
   );
 
-  const reportBoard = useCallback(async (boardId) => {
+  const reportBoard = useCallback(async boardId => {
     const baseApiUrl = getALMConfig().primeApiURL;
     await RestAdapter.ajax({
       url: `${baseApiUrl}/boards/${boardId}/reportAbuse`,

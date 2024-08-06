@@ -22,15 +22,16 @@ import { useCardIcon } from "../../utils/hooks";
 import { checkIfCompletionDeadlineNotPassed } from "../../utils/instance";
 import { QueryParams } from "../../utils/restAdapter";
 import { getPreferredLocalizedMetadata } from "../../utils/translationService";
+import { ENGLISH_LOCALE, INSTANCE_CARD_BACKGROUND_SIZE } from "../../utils/constants";
+import { useUserContext } from "../../contextProviders/userContextProvider";
 
 const DEFAULT_INCLUDE_LO_OVERVIEW =
   "enrollment,instances.enrollment, instances.loResources.resources,subLOs.instances.loResources,skills.skillLevel.skill, instances.badge,supplementaryResources, skills.skillLevel.badge, instances.loResources.resources.room, enrollment.loInstance";
 
-export const useInstancePage = (
-  trainingId: string,
-  params: QueryParams = {}
-) => {
+export const useInstancePage = (trainingId: string, params: QueryParams = {}) => {
   const { locale } = useIntl();
+  const user = useUserContext() || {};
+  const contentLocale = user?.contentLocale || ENGLISH_LOCALE;
   const [currentState, setCurrentState] = useState({
     training: {} as PrimeLearningObject,
     isLoading: true,
@@ -44,10 +45,7 @@ export const useInstancePage = (
         queryParam["include"] = params.include || DEFAULT_INCLUDE_LO_OVERVIEW;
         queryParam["useCache"] = true;
         queryParam["filter.ignoreEnhancedLP"] = false;
-        const response = await APIServiceInstance.getTraining(
-          trainingId,
-          queryParam
-        );
+        const response = await APIServiceInstance.getTraining(trainingId, queryParam);
         if (response) {
           setCurrentState({
             training: response,
@@ -75,21 +73,24 @@ export const useInstancePage = (
     if (!training) {
       return {} as PrimeLocalizationMetadata;
     }
-    return getPreferredLocalizedMetadata(training.localizedMetadata, locale);
-  }, [training, locale]);
+    return getPreferredLocalizedMetadata(training.localizedMetadata, contentLocale);
+  }, [training, contentLocale]);
 
   const activeInstances: PrimeLearningObjectInstance[] = useMemo(() => {
     const instances = training.instances;
     return instances?.length
       ? instances?.filter(
-          (instance) =>
-            ((instance.state === "Active" &&
-            checkIfCompletionDeadlineNotPassed(instance)) || (instance.enrollment ))
+          instance =>
+            (instance.state === "Active" && checkIfCompletionDeadlineNotPassed(instance)) ||
+            instance.enrollment
         )
       : [];
   }, [training.instances]);
 
-  const { cardIconUrl, color, bannerUrl, cardBgStyle } = useCardIcon(training);
+  const { cardIconUrl, color, bannerUrl, cardBgStyle, listThumbnailBgStyle } = useCardIcon(
+    training,
+    INSTANCE_CARD_BACKGROUND_SIZE
+  );
 
   const selectInstanceHandler = useCallback(
     (instanceId: string) => {
@@ -99,12 +100,12 @@ export const useInstancePage = (
   );
 
   const getSummary = async (trainingInstance: PrimeLearningObjectInstance) => {
-    
     return await APIServiceInstance.getTrainingInstanceSummary(
       trainingInstance.learningObject.id,
       trainingInstance.id
-    ).then(response => response?.loInstanceSummary)
-    .catch(error => console.log(error));
+    )
+      .then(response => response?.loInstanceSummary)
+      .catch(error => console.log(error));
   };
 
   return {
@@ -118,9 +119,10 @@ export const useInstancePage = (
     overview,
     richTextOverview,
     cardBgStyle,
+    listThumbnailBgStyle,
     activeInstances,
     selectInstanceHandler,
     errorCode,
-    getSummary
+    getSummary,
   };
 };

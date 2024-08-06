@@ -23,14 +23,11 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
   const { formatMessage } = useIntl();
   const objectTextLimit = props.characterLimit ? props.characterLimit : 1000;
   const emptyString = "";
-  const [charactersRemaining, setCharactersRemaining] =
-    useState(objectTextLimit);
+  const [charactersRemaining, setCharactersRemaining] = useState(objectTextLimit);
   const [showLinkPreview, setShowLinkPreview] = useState(false);
   // const [ showLoLinkPreview, setShowLoLinkPreview ] = useState(false);
   const firstRun = useRef(true);
-  const [userInputText, setUserInputText] = useState(
-    props.defaultValue ? props.defaultValue : ""
-  );
+  const [userInputText, setUserInputText] = useState(props.defaultValue ? props.defaultValue : "");
   const [characterCount, setCharacterCount] = useState(0);
 
   const exitActions = () => {
@@ -72,7 +69,7 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
   };
 
   const checkTextCount = () => {
-    if (ref.current && typeof ref.current.value !== 'undefined') {
+    if (ref.current && typeof ref.current.value !== "undefined") {
       const currentInputLength = stripHtmlTags(ref.current.value).length;
       if (currentInputLength > 0) {
         if (typeof props.enablePrimaryAction === "function") {
@@ -97,15 +94,17 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
     }
   }, [props.defaultValue]);
 
-  const tooltipPlaceholder = "Please enter a link"; 
+  const tooltipPlaceholder = "Please enter a link";
   useEffect(() => {
-    const handleTooltipClick = function() {
-      const tooltipInputElement = document.querySelector('.ql-tooltip input[placeholder="https://quilljs.com"]');
+    const handleTooltipClick = function () {
+      const tooltipInputElement = document.querySelector(
+        '.ql-tooltip input[placeholder="https://quilljs.com"]'
+      );
       if (tooltipInputElement) {
         tooltipInputElement.setAttribute("placeholder", tooltipPlaceholder);
       }
     };
-  
+
     document.addEventListener("click", handleTooltipClick);
     return () => {
       document.removeEventListener("click", handleTooltipClick);
@@ -117,12 +116,9 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
     if (charCount <= objectTextLimit) {
       setUserInputText(value);
       setCharacterCount(charCount);
-      const charRemainingCount =
-        objectTextLimit < charCount ? 0 : objectTextLimit - charCount;
+      const charRemainingCount = objectTextLimit < charCount ? 0 : objectTextLimit - charCount;
       setCharactersRemaining(charRemainingCount);
-      
-    }
-    else {
+    } else {
       const quillEditor = ref.current.getEditor();
       quillEditor.history.undo();
       setUserInputText(userInputText);
@@ -132,8 +128,6 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
     processInput();
   };
 
-
-  
   const stripHtmlTags = (html: string) => {
     const div = document.createElement("div");
     div.innerHTML = html;
@@ -188,13 +182,13 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
         .ql-tooltip {
           display:flex;
           z-index:2000;
-          position:${props.concisedToolbarOptions ? 'absolute':'fixed'} !important;
+          position:${props.concisedToolbarOptions ? "absolute" : "fixed"} !important;
         }
         .ql-container.ql-snow {
           max-height: fit-content !important;
          }
       `}</style>
-       <div className={styles.primeTextAreaCountRemaining}>
+        <div className={styles.primeTextAreaCountRemaining}>
           {charactersRemaining}{" "}
           {formatMessage({
             id: "alm.community.post.charactersLeft",
@@ -202,22 +196,15 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
           })}
         </div>
         {props.primaryActionHandler && (
-          <button
-            className={styles.primeSaveObjectButton}
-            onClick={primaryActionHandler}
-          >
+          <button className={styles.primeSaveObjectButton} onClick={primaryActionHandler}>
             <Send UNSAFE_className={styles.postActionSvg} />
           </button>
         )}
         {props.secondaryActionHandler && (
-          <button
-            className={styles.primeSaveObjectButton}
-            onClick={secondaryActionHandler}
-          >
+          <button className={styles.primeSaveObjectButton} onClick={secondaryActionHandler}>
             <Cancel UNSAFE_className={styles.postActionSvg} />
           </button>
         )}
-       
       </div>
       <div className={styles.primePreviewImage}>
         <PrimeCommunityLinkPreview

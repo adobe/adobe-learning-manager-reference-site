@@ -9,12 +9,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import {
-  ActionButton,
-  DialogTrigger,
-  Provider,
-  lightTheme,
-} from "@adobe/react-spectrum";
+import { ActionButton, DialogTrigger, Provider, lightTheme } from "@adobe/react-spectrum";
 import { getUploadInfo } from "../../../utils/uploadUtils";
 import { PrimeCommunityAddPostDialog } from "../PrimeCommunityAddPostDialog";
 import styles from "./PrimeCommunityAddPostDialogTrigger.module.css";
@@ -26,9 +21,7 @@ const PrimeCommunityAddPostDialogTrigger = (props: any) => {
 
   useEffect(() => {
     if (props.openDialog && !showDialog.current) {
-      const launchDialog = document.getElementById(
-        "hiddenActionButton"
-      ) as HTMLElement;
+      const launchDialog = document.getElementById("hiddenActionButton") as HTMLElement;
       launchDialog.click();
       showDialog.current = true;
     }
@@ -51,21 +44,15 @@ const PrimeCommunityAddPostDialogTrigger = (props: any) => {
     close: any
   ) => {
     if (typeof props.savePostHandler === "function") {
-      props.savePostHandler(
-        input,
-        postingType,
-        resource,
-        isResourceModified,
-        pollOptions
-      );
+      props.savePostHandler(input, postingType, resource, isResourceModified, pollOptions);
     }
     close();
   };
 
   const onClickHandler = async () => {
     await getUploadInfo();
-    if(props.inMobileView){
-      setMobileDialogOpen((prevState) => !prevState)
+    if (props.inMobileView) {
+      setMobileDialogOpen(prevState => !prevState);
     }
   };
 
@@ -83,7 +70,7 @@ const PrimeCommunityAddPostDialogTrigger = (props: any) => {
             id="showAddPostDialog"
             UNSAFE_className={`almButton primary ${styles.primeDialogLaunchButton}`}
             onPress={onClickHandler}
-            isDisabled = {isMobileDialogOpen}
+            isDisabled={isMobileDialogOpen}
           >
             {props.buttonLabel}
           </ActionButton>
@@ -110,14 +97,14 @@ const PrimeCommunityAddPostDialogTrigger = (props: any) => {
                 pollOptions,
                 close
               );
-              if(props.inMobileView){
-                setMobileDialogOpen((prevState) => !prevState)
+              if (props.inMobileView) {
+                setMobileDialogOpen(prevState => !prevState);
               }
             }}
             closeHandler={() => {
               closeDialogHandler(close);
-              if(props.inMobileView){
-                setMobileDialogOpen((prevState) => !prevState)
+              if (props.inMobileView) {
+                setMobileDialogOpen(prevState => !prevState);
               }
             }}
           ></PrimeCommunityAddPostDialog>

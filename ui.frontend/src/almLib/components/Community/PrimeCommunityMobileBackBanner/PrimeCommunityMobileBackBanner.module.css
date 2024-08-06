@@ -10,34 +10,36 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 @import "../../../styles/variables.css";
-.primeCommunityTopRow, .primeCommunityTopBack, .primeCommunityBackButton, .primeCommunityChevronLeftSvg {
-    display: none;
+.primeCommunityTopRow,
+.primeCommunityTopBack,
+.primeCommunityBackButton,
+.primeCommunityChevronLeftSvg {
+  display: none;
 }
 
-@media (max-width:450px) {
-    .primeCommunityTopRow{
-        display: flex;
-        background-color: #306EB5;
-        height: 47px;
-    }
-    .primeCommunityTopBack {
-        display: flex;
-    }
-    .primeCommunityBackButton {
-        color: #FFFFFF;
-        display: block;
-        border: none;
-        background: transparent;
-        font-weight: 500;
-        font-size: var(--prime-font-size-16);
-        padding-top: 3px;
-        padding-left: 0px;
-    }
-    .primeCommunityChevronLeftSvg {
-        display: block;
-        width: 50px;
-        padding: 10px 10px;
-        color: #FFFFFF;
-    }
+@media (max-width: 450px) {
+  .primeCommunityTopRow {
+    display: flex;
+    background-color: #306eb5;
+    height: 47px;
+  }
+  .primeCommunityTopBack {
+    display: flex;
+  }
+  .primeCommunityBackButton {
+    color: #ffffff;
+    display: block;
+    border: none;
+    background: transparent;
+    font-weight: 500;
+    font-size: var(--prime-font-size-16);
+    padding-top: 3px;
+    padding-left: 0px;
+  }
+  .primeCommunityChevronLeftSvg {
+    display: block;
+    width: 50px;
+    padding: 10px 10px;
+    color: #ffffff;
+  }
 }
-

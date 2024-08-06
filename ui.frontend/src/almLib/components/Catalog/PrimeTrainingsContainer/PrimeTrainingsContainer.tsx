@@ -9,17 +9,35 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { useState } from "react";
+import { useMemo, useRef } from "react";
 import { useIntl } from "react-intl";
-import { PrimeLearningObject } from "../../../models/PrimeModels";
-import { LIST_VIEW, TILE_VIEW } from "../../../utils/constants";
-import { PrimeTrainingCard } from "../PrimeTrainingCard";
+import {
+  PrimeAccount,
+  PrimeLearningObject,
+  PrimeLearningObjectInstanceEnrollment,
+  PrimeUser,
+} from "../../../models/PrimeModels";
+import { JOBAID, LIST_VIEW } from "../../../utils/constants";
+
 import { PrimeTrainingList } from "../PrimeTrainingList";
-import ViewList from "@spectrum-icons/workflow/ViewList";
-import ClassicGridView from "@spectrum-icons/workflow/ClassicGridView";
 
 import styles from "./PrimeTrainingsContainer.module.css";
-import { getALMObject } from "../../../utils/global";
+import { navigateToLo } from "../../../utils/global";
+import {
+  showAuthorInfo,
+  showEffectivenessIndex,
+  showRating,
+} from "../../Widgets/ALMPrimeStrip/ALMPrimeStrip.helper";
+import { PrimeTrainingCardV2 } from "../PrimeTrainingCardV2";
+import { useLoadMore } from "../../../hooks";
+import {
+  canShowPrice,
+  launchPlayerHandler,
+  openJobAid,
+} from "../PrimeTrainingCardV2/PrimeTrainingCardV2.helper";
+import { CARD_WIDTH_EXCLUDING_PADDING } from "../../../utils/widgets/common";
+import { PrimeFeedbackWrapper } from "../../ALMFeedback";
+import { useFeedback } from "../../../hooks/feedback";
 
 const PrimeTrainingsContainer: React.FC<{
   trainings: PrimeLearningObject[] | null;
@@ -28,6 +46,15 @@ const PrimeTrainingsContainer: React.FC<{
   guest?: boolean;
   signUpURL?: string;
   almDomain?: string;
+  user: PrimeUser;
+  account: PrimeAccount;
+  view: string;
+  enrollmentHandler: (
+    loId: string,
+    instanceId: string
+  ) => Promise<PrimeLearningObjectInstanceEnrollment>;
+  updateLearningObject: (loId: string) => Promise<PrimeLearningObject | Error>;
+  isloading: boolean;
 }> = ({
   trainings,
   loadMoreTraining,
@@ -35,89 +62,135 @@ const PrimeTrainingsContainer: React.FC<{
   guest,
   signUpURL,
   almDomain,
+  user,
+  account,
+  view,
+  enrollmentHandler,
+  updateLearningObject,
+  isloading,
 }) => {
   const { formatMessage } = useIntl();
-
-  const setInitialView = () => {
-    return getALMObject().storage.getItem("CARD_VIEW") || TILE_VIEW;
+  const elementRef = useRef(null);
+  useLoadMore({
+    items: trainings,
+    callback: loadMoreTraining,
+    elementRef,
+  });
+  const {
+    feedbackTrainingId,
+    trainingInstanceId,
+    playerLaunchTimeStamp,
+    shouldLaunchFeedback,
+    handleL1FeedbackLaunch,
+    fetchCurrentLo,
+    getFilteredNotificationForFeedback,
+    submitL1Feedback,
+    closeFeedbackWrapper,
+  } = useFeedback();
+  const handleLoEnrollment = async (loId: string, loInstanceId: string) => {
+    return enrollmentHandler && (await enrollmentHandler(loId, loInstanceId));
   };
 
-  const isListView = () => {
-    return view === LIST_VIEW;
+  const isListView = view === LIST_VIEW;
+  const handleLoNameClick = (training: PrimeLearningObject, resourceLocation?: string) => {
+    if (training.loType === JOBAID) {
+      openJobAid(training, resourceLocation);
+      return;
+    }
+    navigateToLo(training);
   };
 
-  const [view, setView] = useState(setInitialView());
-
-  const listHtml = trainings?.length ? (
-    <ul
-      className={
-        isListView() ? styles.primeTrainingsList : styles.primeTrainingsCards
-      }
-    >
-      {trainings?.map((training) =>
-        isListView() ? (
-          <PrimeTrainingList
-            training={training}
-            key={training.id}
-            guest={guest}
-            signUpURL={signUpURL}
-            almDomain={almDomain}
-          ></PrimeTrainingList>
-        ) : (
-          <PrimeTrainingCard
-            training={training}
-            key={training.id}
-            guest={guest}
-            signUpURL={signUpURL}
-            almDomain={almDomain}
-          ></PrimeTrainingCard>
-        )
-      )}
-    </ul>
-  ) : (
-    <p className={styles.noResults} aria-live="polite">
-      {formatMessage({ id: "alm.catalog.no.result" })}
-    </p>
-  );
-
-  const setCatalogView = (view: string) => {
-    setView(view);
-    getALMObject().storage.setItem("CARD_VIEW", view);
+  const getListViewHtml = () => {
+    return (
+      <ul className={styles.primeTrainingsList} data-automationid={"trainingsList"}>
+        {trainings?.map(training => {
+          return (
+            <PrimeTrainingList
+              training={training}
+              key={`${training.id}-${view}`}
+              guest={guest}
+              signUpURL={signUpURL}
+              almDomain={almDomain}
+              account={account}
+              showRating={showRating(training, account)}
+              showEffectivenessIndex={showEffectivenessIndex(training, account)}
+              handleLoEnrollment={handleLoEnrollment}
+              updateLearningObject={updateLearningObject}
+            ></PrimeTrainingList>
+          );
+        })}
+      </ul>
+    );
+  };
+  const getCardViewHtml = () => {
+    return (
+      <ul className={styles.primeTrainingsCards} data-automationid="trainingsCard">
+        {trainings?.map(training => {
+          return (
+            <div style={{ width: CARD_WIDTH_EXCLUDING_PADDING }}>
+              <PrimeTrainingCardV2
+                training={training}
+                key={`${training.id}-${view}`}
+                account={account!}
+                user={user!}
+                signUpURL={signUpURL}
+                almDomain={almDomain}
+                showRating={showRating(training, account!)}
+                showProgressBar={!!training?.enrollment}
+                showSkills={true}
+                showEffectivenessIndex={showEffectivenessIndex(training, account)}
+                showAuthorInfo={showAuthorInfo(training)}
+                handleLoEnrollment={handleLoEnrollment}
+                handleActionClick={() => navigateToLo(training)}
+                updateLearningObject={updateLearningObject}
+                handlePlayerLaunch={launchPlayerHandler}
+                handleLoNameClick={handleLoNameClick}
+                showPrice={canShowPrice(training, account)}
+                handleL1FeedbackLaunch={handleL1FeedbackLaunch}
+              ></PrimeTrainingCardV2>
+            </div>
+          );
+        })}
+      </ul>
+    );
   };
 
+  const getTrainingsHtml = useMemo(() => {
+    if (trainings?.length === 0 && !isloading) {
+      return (
+        <p className={styles.noResults} aria-live="polite" data-automationid="noSearchResults">
+          {formatMessage({ id: "alm.catalog.no.result" })}
+        </p>
+      );
+    }
+    return isListView ? getListViewHtml() : getCardViewHtml();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    trainings,
+    trainings?.length,
+    isloading,
+    isListView,
+    getListViewHtml,
+    getCardViewHtml,
+    formatMessage,
+  ]);
   return (
     <>
-      {isListView() && (
-        <div
-          className={styles.viewButton}
-          onClick={() => setCatalogView(TILE_VIEW)}
-        >
-          <ClassicGridView />
-        </div>
+      {shouldLaunchFeedback && (
+        <PrimeFeedbackWrapper
+          trainingId={feedbackTrainingId}
+          trainingInstanceId={trainingInstanceId}
+          playerLaunchTimeStamp={playerLaunchTimeStamp}
+          fetchCurrentLo={fetchCurrentLo}
+          getFilteredNotificationForFeedback={getFilteredNotificationForFeedback}
+          submitL1Feedback={submitL1Feedback}
+          closeFeedbackWrapper={closeFeedbackWrapper}
+        />
       )}
-      {!isListView() && (
-        <div
-          className={styles.viewButton}
-          onClick={() => setCatalogView(LIST_VIEW)}
-        >
-          <ViewList />
-        </div>
-      )}
-
-      <div className={styles.primeTrainingsContainer}>
-        {isListView() && <hr className={styles.primeVerticalSeparator}></hr>}
-        {listHtml}
-        <div id="load-more-trainings" className={styles.loadMoreContainer}>
-          {hasMoreItems ? (
-            <button
-              onClick={loadMoreTraining}
-              className={`almButton secondary`}
-            >
-              {formatMessage({ id: "alm.community.loadMore" })}
-            </button>
-          ) : (
-            ""
-          )}
+      <div className={styles.primeTrainingsContainer} data-automationid="trainingsContainer">
+        {getTrainingsHtml}
+        <div ref={elementRef} id="load-more-trainings" data-automationid="loadMoreTrainingsLoader">
+          {/* {hasMoreItems ? <ALMLoader classes={styles.loader} /> : ""} */}
         </div>
       </div>
     </>

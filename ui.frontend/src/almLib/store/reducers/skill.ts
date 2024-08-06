@@ -26,18 +26,13 @@ const items: Reducer<PrimeSkill[], AnyAction> = (
     case GET_SKILLS:
       return action?.payload.items;
     case PAGINATE_SKILLS:
-      return action.payload.items
-        ? [...state!, ...action.payload.items]
-        : state;
+      return action.payload.items ? [...state!, ...action.payload.items] : state;
     default:
       return state || {};
   }
 };
 
-const next: Reducer<string, AnyAction> = (
-  state: string | undefined,
-  action: AnyAction
-) => {
+const next: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
   switch (action.type) {
     case GET_SKILLS:
     case PAGINATE_SKILLS:

@@ -25,15 +25,12 @@ const PrimeCommunityPost = (props: any) => {
   const { formatMessage } = useIntl();
   const ref = useRef<any>();
   const post = props.post;
-  const { addComment, votePost, deletePostVote, patchPost, submitPollVote } =
-    usePost();
+  const { addComment, votePost, deletePostVote, patchPost, submitPollVote } = usePost();
   const { fetchComments } = useComments();
   const myVoteStatus = post.myVoteStatus ? post.myVoteStatus : "";
   const [myUpVoteStatus, setMyUpVoteStatus] = useState(myVoteStatus === UPVOTE);
   const [upVoteCount, setUpVoteCount] = useState(post.upVote);
-  const [myDownVoteStatus, setMyDownVoteStatus] = useState(
-    myVoteStatus === DOWNVOTE
-  );
+  const [myDownVoteStatus, setMyDownVoteStatus] = useState(myVoteStatus === DOWNVOTE);
   const [downVoteCount, setDownVoteCount] = useState(post.downVote);
   const firstRunForUpvote = useRef(true);
   const firstRunForDownvote = useRef(true);
@@ -78,9 +75,7 @@ const PrimeCommunityPost = (props: any) => {
       firstRunForUpvote.current = false;
       return;
     }
-    myUpVoteStatus === true
-      ? setUpVoteCount(upVoteCount + 1)
-      : setUpVoteCount(upVoteCount - 1);
+    myUpVoteStatus === true ? setUpVoteCount(upVoteCount + 1) : setUpVoteCount(upVoteCount - 1);
   }, [myUpVoteStatus]);
 
   useEffect(() => {
@@ -104,18 +99,18 @@ const PrimeCommunityPost = (props: any) => {
     //if already upVoted, delete vote
     myUpVoteStatus ? deletePostVote(post.id, UP) : votePost(post.id, UP);
     if (!myUpVoteStatus && myDownVoteStatus) {
-      setMyDownVoteStatus((myDownVoteStatus) => !myDownVoteStatus);
+      setMyDownVoteStatus(myDownVoteStatus => !myDownVoteStatus);
     }
-    setMyUpVoteStatus((myUpVoteStatus) => !myUpVoteStatus);
+    setMyUpVoteStatus(myUpVoteStatus => !myUpVoteStatus);
   };
 
   const downVoteButtonClickHandler = () => {
     //if already downVoted, delete vote
     myDownVoteStatus ? deletePostVote(post.id, DOWN) : votePost(post.id, DOWN);
     if (!myDownVoteStatus && myUpVoteStatus) {
-      setMyUpVoteStatus((myUpVoteStatus) => !myUpVoteStatus);
+      setMyUpVoteStatus(myUpVoteStatus => !myUpVoteStatus);
     }
-    setMyDownVoteStatus((myDownVoteStatus) => !myDownVoteStatus);
+    setMyDownVoteStatus(myDownVoteStatus => !myDownVoteStatus);
   };
 
   const saveCommentHandler = async (value: any) => {
@@ -141,14 +136,7 @@ const PrimeCommunityPost = (props: any) => {
     pollOptions: any
   ) => {
     try {
-      await patchPost(
-        post.id,
-        input,
-        postingType,
-        resource,
-        isResourceModified,
-        pollOptions
-      );
+      await patchPost(post.id, input, postingType, resource, isResourceModified, pollOptions);
       showConfirmationDialog(input);
     } catch (exception) {
       console.log("Error in creating Post");
@@ -186,11 +174,7 @@ const PrimeCommunityPost = (props: any) => {
   return (
     <>
       <div
-        className={
-          props.showBorder
-            ? styles.primePostWrapperWithBorder
-            : styles.primePostWrapper
-        }
+        className={props.showBorder ? styles.primePostWrapperWithBorder : styles.primePostWrapper}
       >
         <PrimeCommunityObjectHeader
           object={post}
@@ -203,13 +187,7 @@ const PrimeCommunityPost = (props: any) => {
             isResourceModified: any,
             pollOptions: any
           ) => {
-            updatePostHandler(
-              input,
-              postingType,
-              resource,
-              isResourceModified,
-              pollOptions
-            );
+            updatePostHandler(input, postingType, resource, isResourceModified, pollOptions);
           }}
         ></PrimeCommunityObjectHeader>
         <PrimeCommunityObjectBody

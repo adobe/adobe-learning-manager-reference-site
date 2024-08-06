@@ -1,0 +1,472 @@
+/**
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+@import "../../../styles/variables.css";
+
+.widget * {
+  box-sizing: border-box;
+}
+.parentContainer {
+  gap: 16px;
+  display: grid;
+  font-family: var(--prime-font-family);
+}
+.containerHeader {
+  margin: 0;
+  font-size: var(--prime-font-size-22);
+  line-height: 29px;
+  color: var(--prime-color-body);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.emptyDonut {
+  fill: var(--prime-color-neutral-3);
+  stroke: #909090;
+  stroke-width: 0.25;
+}
+.emptyBody {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-bottom: 0;
+  height: 100%;
+  gap: 10px;
+  width: inherit;
+}
+
+.emptyBodyText {
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-neutral-1);
+  text-align: center;
+}
+
+.moreEnrollments {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-bottom: 0;
+  height: 100%;
+  font-size: var(--prime-font-size-14);
+}
+
+.moreEnrollmentsIcon svg {
+  width: 230px;
+  height: 164px;
+}
+.moreEnrollmentsText {
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-neutral-1);
+  display: flex;
+  align-items: center;
+  max-width: 250px;
+}
+
+.moreEnrollmentsText p {
+  margin: 0;
+}
+
+.myLearning {
+  color: var(--prime-color-link);
+  cursor: pointer;
+  background: 0;
+  border: 0;
+  font-weight: var(--prime-font-weight-700);
+}
+
+.sessionListViewButton {
+  padding: 0px;
+  border: 0px;
+  background: none;
+  cursor: pointer;
+  width: 15px;
+}
+
+.arrow {
+  border-right: 2px solid;
+  border-right-color: var(--prime-color-body);
+  border-top: 2px solid;
+  border-top-color: var(--prime-color-body);
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+  display: inline-block;
+  height: 7px;
+  width: 7px;
+  margin-left: 3px;
+}
+
+.widget {
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  border: 1px solid var(--prime-color-neutral-3);
+  background-color: var(--prime-color-white);
+}
+
+.donutCardContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: var(--prime-font-size-12);
+}
+
+.detailContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: var(--prime-font-size-12);
+  position: relative;
+  padding: 16px 6px 16px 16px;
+  gap: 8px;
+}
+
+.cardsDivider {
+  height: calc(100% - 30px);
+  background-color: var(--prime-color-neutral-3);
+  width: 1px !important;
+  align-self: center;
+}
+
+.categoriesDivider {
+  background-color: var(--prime-color-neutral-3);
+  height: 1px !important;
+}
+
+.detailHeader {
+  display: flex;
+  align-items: center;
+  height: 17px;
+}
+
+.detailHeaderTitle {
+  width: auto;
+  font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-700);
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: var(--prime-color-body);
+}
+
+.categoryButtons {
+  height: 139px;
+  padding: 0px 16px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.categoryButtons button {
+  border: 0;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  padding: 4px 0px;
+  align-items: center;
+  border-radius: 5px;
+}
+
+.categoryButtonText {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  font-size: var(--prime-font-size-12);
+  font-weight: 400;
+  line-height: 15px;
+  letter-spacing: 0.01em;
+  text-align: left;
+  color: var(--prime-color-body);
+}
+
+.selectedCategoryStyle {
+  font-weight: bold;
+}
+
+.categoryIcon {
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 0.25px solid #909090;
+}
+
+.donut {
+  height: 165px;
+  align-items: center;
+  display: flex;
+  width: 100%;
+}
+
+.donutSlice {
+  cursor: pointer;
+  stroke: #909090;
+  stroke-width: 0.25;
+}
+
+.donutText {
+  font-size: var(--prime-font-size-12);
+}
+
+.donutText tspan:nth-child(2) {
+  font-weight: bold;
+}
+
+.donutLegends {
+  stroke: var(--prime-color-neutral-2);
+  stroke-width: 0.5;
+}
+
+.detailBody {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  gap: 14px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+/* For Firefox */
+@-moz-document url-prefix() {
+  .detailBody {
+    scrollbar-width: thin;
+    scrollbar-color: var(--prime-color-neutral-3) transparent;
+  }
+}
+
+.detailBody::-webkit-scrollbar,
+.detailBody:hover::-webkit-scrollbar {
+  width: 5px;
+}
+
+.detailBody::-webkit-scrollbar-track,
+.detailBody::-webkit-scrollbar-thumb:hover {
+  background: none;
+}
+
+.detailBody:hover::-webkit-scrollbar-thumb {
+  display: flex;
+  background: var(--prime-color-neutral-3);
+  border-radius: 5px;
+  border: 1px solid var(--prime-color-neutral-3);
+}
+.loDetail {
+  display: flex;
+  flex-wrap: nowrap;
+  height: 58px;
+}
+
+.loImageContainer {
+  width: 54px;
+  height: 54px;
+  margin-top: 4px;
+  border-radius: 4px;
+}
+
+.loDefaultImgContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.overflowEllipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.courseDetails {
+  display: block;
+  padding-right: 11px;
+}
+
+.dueDateContainer {
+  display: flex !important;
+}
+
+.enrollmentDueDate {
+  padding-right: 5px;
+}
+
+.statusIcon {
+  font-size: var(--prime-font-size-12) !important;
+  padding: 0px !important;
+  min-block-size: fit-content !important;
+  color: var(--prime-color-neutral-1) !important;
+  align-items: center !important;
+  line-height: 16px !important;
+}
+
+.statusIcon::before {
+  margin: 0px 4px 0px 3px !important;
+  border: 0.25px solid #909090 !important;
+  box-sizing: border-box !important;
+}
+
+.overdueStatusIcon::before {
+  background-color: #f75c46 !important;
+}
+
+.upcomingStatusIcon::before {
+  background-color: #ffa037 !important;
+}
+
+.ontrackStatusIcon::before {
+  background-color: #f8d904 !important;
+}
+
+.loContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.loImageImg {
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+  object-fit: cover;
+}
+
+.loDefaultImg {
+  width: 80%;
+}
+
+.progressBar {
+  height: 4px;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  background-color: var(--prime-color-neutral-3);
+  display: block;
+  border-radius: 8px;
+}
+
+.progressBarContainer {
+  padding-top: 4px;
+}
+
+.progressPercent {
+  height: 100%;
+  background-color: var(--prime-color-link);
+  border-radius: 8px;
+}
+
+.loDescriptionContainer {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding-left: 10px;
+  line-height: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--prime-color-neutral-1);
+}
+
+.loName {
+  color: var(--prime-color-link);
+  cursor: pointer;
+  font-size: var(--prime-font-size-12);
+  background: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font-family: var(--prime-font-family);
+  font-weight: var(--prime-font-weight-700);
+}
+
+.leftArrow {
+  border-left: 1.5px solid;
+  border-left-color: var(--prime-color-body);
+  border-top: 1.5px solid;
+  border-top-color: var(--prime-color-body);
+  width: 6px;
+  height: 6px;
+  transform: rotate(-45deg);
+}
+
+.rightArrow {
+  border-right: 2px solid;
+  border-right-color: var(--prime-color-link);
+  border-top: 2px solid;
+  border-top-color: var(--prime-color-link);
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+  display: inline-block;
+  height: 6px;
+  width: 6px;
+  margin-left: 3px;
+}
+
+.loLink {
+  padding-right: 3px;
+  padding-left: 0px;
+  border: 0;
+  background: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
+}
+.smoothTransition {
+  transition: transform 0.5s ease;
+}
+
+.complianceDropdown {
+  padding-top: 16px;
+  align-self: center;
+  width: fit-content;
+  height: fit-content;
+}
+
+.complianceDropdown button[class*="spectrum-Dropdown-trigger"] {
+  width: 256px;
+  height: 24px;
+  background-color: var(--prime-color-neutral-3);
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.complianceDropdown button[class*="spectrum-Dropdown-trigger"]:hover {
+  background-color: var(--prime-color-neutral-3);
+}
+
+.complianceDropdown span[class*="spectrum-Dropdown-label"] {
+  font-size: var(--prime-font-size-12);
+}
+
+@media screen and (max-width: 450px) {
+  .detailBody {
+    overflow-y: scroll;
+  }
+
+  .detailBody::-webkit-scrollbar-thumb {
+    background: var(--prime-color-neutral-3);
+    border-radius: 5px;
+    border: 1px solid var(--prime-color-neutral-3);
+  }
+}

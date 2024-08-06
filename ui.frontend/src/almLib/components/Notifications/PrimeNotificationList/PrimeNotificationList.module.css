@@ -26,9 +26,8 @@ governing permissions and limitations under the License.
   box-shadow: 0 0 5px rgb(0 0 0 / 20%);
   scrollbar-color: var(--prime-color-nc5) var(--prime-color-nc4);
   scrollbar-width: thin;
-
 }
-.icon{
+.icon {
   width: 13px;
   height: 13px;
   margin: 2px;
@@ -67,17 +66,16 @@ governing permissions and limitations under the License.
   margin-top: 8px;
 }
 
-.notificationEmpty{
+.notificationEmpty {
   padding: 10px;
   font-size: var(--prime-font-size-16);
   font-weight: var(--prime-font-weight-600);
   display: flex;
   justify-content: center;
-
 }
 
 .notificationLoaderWrapper {
-  margin-top:20px;
+  margin-top: 20px;
   margin-bottom: 20px;
   height: 200px;
   display: flex;
@@ -90,5 +88,4 @@ governing permissions and limitations under the License.
     width: 100vw;
     right: -93px;
   }
-
 }

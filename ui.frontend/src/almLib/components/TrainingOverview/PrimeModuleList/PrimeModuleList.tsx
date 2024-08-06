@@ -15,9 +15,13 @@ import {
   PrimeLearningObjectInstance,
   PrimeLearningObjectResource,
 } from "../../../models/PrimeModels";
-import { CHECKLIST, PENDING, PREWORK, TESTOUT } from "../../../utils/constants";
-import { getEnrollment } from "../../../utils/hooks";
-import { arePrerequisiteEnforcedAndCompleted } from "../../../utils/overview";
+import { CHECKLIST, CONTENT, PENDING } from "../../../utils/constants";
+import { filterLoReourcesBasedOnResourceType, getEnrollment } from "../../../utils/hooks";
+import {
+  arePrerequisitesEnforcedAndCompleted,
+  checkLoResourceForModuleLocking,
+  isNonBlockingChecklistModule,
+} from "../../../utils/overview";
 import { PrimeModuleItem } from "../PrimeModuleItem";
 import styles from "./PrimeModuleList.module.css";
 
@@ -27,74 +31,147 @@ const PrimeModuleList: React.FC<{
   launchPlayerHandler: Function;
   loResources: PrimeLearningObjectResource[];
   isPartOfLP?: boolean;
+  isPartOfCertification?: boolean;
   isParentLOEnrolled?: boolean;
+  isRootLOEnrolled?: boolean;
+  isRootLoPreviewEnabled: boolean;
   isParentFlexLP?: boolean;
+  parentHasEnforcedPrerequisites: boolean;
+  parentHasSubLoOrderEnforced: boolean;
   isContent?: boolean;
   isPreviewEnabled: boolean;
   updateFileSubmissionUrl: Function;
   lastPlayingLoResourceId: String;
   setTimeBetweenAttemptEnabled: Function;
   timeBetweenAttemptEnabled: boolean;
-}> = (props) => {
+  isLocked: boolean;
+  updatePlayerLoState: Function;
+  childLpId: string;
+  isRootLoCompleted: boolean;
+  setEnrollViaModuleClick: Function;
+  isPartOfFirstChildTraining: boolean;
+}> = props => {
   const {
     loResources,
     launchPlayerHandler,
     training,
     trainingInstance,
     isPartOfLP = false,
+    isPartOfCertification = false,
     isParentLOEnrolled = false,
+    isRootLOEnrolled = false,
+    isRootLoPreviewEnabled = false,
     isParentFlexLP = false,
+    parentHasEnforcedPrerequisites = false,
+    parentHasSubLoOrderEnforced = false,
     isContent,
     isPreviewEnabled,
     updateFileSubmissionUrl,
     lastPlayingLoResourceId,
     setTimeBetweenAttemptEnabled,
     timeBetweenAttemptEnabled,
+    isLocked,
+    updatePlayerLoState,
+    childLpId,
+    isRootLoCompleted,
+    setEnrollViaModuleClick,
+    isPartOfFirstChildTraining,
   } = props;
 
-  const isNonBlockingChecklistModule = (loResource: PrimeLearningObjectResource) => {
-    return loResource.resourceSubType === CHECKLIST && !loResource.isChecklistMandatory;
-  }
+  const isPartOfParentLO = isPartOfLP || isPartOfCertification;
+  const hasSubLoOrderEnforced = training.isSubLoOrderEnforced || parentHasSubLoOrderEnforced;
 
   const isModuleLocked = (
     loResource: PrimeLearningObjectResource,
-    index: number
+    loResourceIndex: number
   ): boolean => {
-    if (!arePrerequisiteEnforcedAndCompleted(training)) {
+    if (isLocked) {
       return true;
     }
-    if (!training.isSubLoOrderEnforced) {
+    if (!hasSubLoOrderEnforced) {
       return false;
     }
-    const enrollment = getEnrollment(training, trainingInstance);
-    
-    if (!enrollment) {
-      if(index==0){
+
+    const coreContentResources = filterLoReourcesBasedOnResourceType(trainingInstance, CONTENT);
+    const isFirstModuleOfCoreContent = coreContentResources[0]?.id === loResource.id;
+    const loResourceType = loResource.loResourceType;
+
+    if (isPartOfParentLO && !isRootLOEnrolled && parentHasSubLoOrderEnforced) {
+      // if parent has subLOs enforced and not enrolled, lock all modules except first course's modules
+
+      if (!isPartOfFirstChildTraining) {
+        return true;
+      }
+
+      // First course of training
+      if (training.isSubLoOrderEnforced) {
+        // If subLO order is enforced, lock all modules except first one
+        // Not locking PREWORK and TESTOUT modules of first course
+        return loResourceType === CONTENT && !isFirstModuleOfCoreContent;
+      }
+      return false;
+    }
+
+    // If the module is a prework or testout, it should be unlocked
+    if (loResourceType !== CONTENT) {
+      return false;
+    }
+
+    if (isFirstModuleOfCoreContent) {
+      return false;
+    }
+
+    // Flex lp check to handle the case if course is enrolled but not instance is selected
+    const enrollment = isParentFlexLP ? training.enrollment : trainingInstance.enrollment;
+    if (!enrollment || !isParentLOEnrolled) {
+      if (loResourceIndex === 0) {
         return false;
       }
       return true;
     }
+
+    // A. if previousResourceGrade (i.e enrollment is there)
+    // ----> 1. if previous resource checklistEvaluationStatus is pending -> Lock the (current) module
+    // ----> 2. if previous resource is non-blocking checklist module -> Unlock the (current) module
+    // ----> 3. if previous resource hasPassed -> Unlock the (current) module
+    // ----> 4. if previous resource has blocking checklist module (mandatory) and not passed -> Lock the (current) module
+    // B. if previousResourceGrade is not there (no enrollment) -> Lock the (current) module
+
+    const checklistResources = filterLoReourcesBasedOnResourceType(trainingInstance, CHECKLIST);
     const loResourceGrades = enrollment.loResourceGrades;
-    
-    if(loResource.loResourceType === TESTOUT || loResource.loResourceType === PREWORK){
-      return false;
+    if (checklistResources.length > 0 && loResourceIndex >= 0) {
+      const previousResource = coreContentResources[loResourceIndex - 1];
+      const previousResourceId = previousResource?.id;
+      const filteredPreviousResourceGrade = loResourceGrades?.filter(
+        loResourceGrade => loResourceGrade.id.search(previousResourceId) > -1
+      );
+      if (!filteredPreviousResourceGrade.length) {
+        return true;
+      }
+
+      if (previousResource.checklistEvaluationStatus === PENDING) {
+        return true;
+      }
+
+      if (
+        isNonBlockingChecklistModule(previousResource) ||
+        filteredPreviousResourceGrade[0].hasPassed
+      ) {
+        return false;
+      }
+
+      return true;
     }
 
-    if (index === 0) {
-      return false;
-    }
-    const previousResourceId = loResources[index - 1]?.id;
-    const filteredPreviousResourceGrade = loResourceGrades.filter(
-      (loResourceGrade) => loResourceGrade.id.search(previousResourceId) > -1
-    );
-    if (
-      filteredPreviousResourceGrade.length &&
-      !filteredPreviousResourceGrade[0].hasPassed
-    ) {
-      if (isNonBlockingChecklistModule(loResources[index - 1])) {
-        return loResources[index - 1].checklistEvaluationStatus === PENDING;
-      }
+    //////////////////////////////////////////////////////////////////////////////////////////
+
+    if (!arePrerequisitesEnforcedAndCompleted(training)) {
+      // prerequisite enforced and not completed
       return true;
+    }
+
+    if (training.isSubLoOrderEnforced) {
+      return checkLoResourceForModuleLocking(loResource, training, trainingInstance);
     }
 
     return false;
@@ -102,28 +179,39 @@ const PrimeModuleList: React.FC<{
 
   return (
     <ul
-      className={`${styles.moduleListContainer} ${
-        isPartOfLP ? styles.isPartOfLP : ""
-      }`}
+      className={`${styles.moduleListContainer} ${isPartOfParentLO ? styles.isPartOfParentLO : ""}`}
+      data-automationid={`${training.localizedMetadata[0].name}-modules-list`}
     >
       {loResources?.map((loResource, index) => (
-        <PrimeModuleItem
-          loResource={loResource}
-          key={loResource.id}
-          launchPlayerHandler={launchPlayerHandler}
-          training={training}
-          trainingInstance={trainingInstance}
-          isContent={isContent}
-          isPreviewEnabled={isPreviewEnabled}
-          canPlay={!isModuleLocked(loResource, index)}
-          updateFileSubmissionUrl={updateFileSubmissionUrl}
-          isPartOfLP={isPartOfLP}
-          isParentLOEnrolled={isParentLOEnrolled}
-          isParentFlexLP={isParentFlexLP}
-          lastPlayingLoResourceId = {lastPlayingLoResourceId}
-          setTimeBetweenAttemptEnabled={setTimeBetweenAttemptEnabled}
-          timeBetweenAttemptEnabled={timeBetweenAttemptEnabled}
-        ></PrimeModuleItem>
+        <div key={index}>
+          <PrimeModuleItem
+            loResource={loResource}
+            key={loResource.id}
+            launchPlayerHandler={launchPlayerHandler}
+            training={training}
+            trainingInstance={trainingInstance}
+            isContent={isContent}
+            isPreviewEnabled={isPreviewEnabled}
+            canPlay={!isModuleLocked(loResource, index)}
+            updateFileSubmissionUrl={updateFileSubmissionUrl}
+            isPartOfLP={isPartOfLP}
+            isPartOfCertification={isPartOfCertification}
+            isParentLOEnrolled={isParentLOEnrolled}
+            isRootLOEnrolled={isRootLOEnrolled}
+            isRootLoPreviewEnabled={isRootLoPreviewEnabled}
+            isParentFlexLP={isParentFlexLP}
+            parentHasEnforcedPrerequisites={parentHasEnforcedPrerequisites}
+            parentHasSubLoOrderEnforced={parentHasSubLoOrderEnforced}
+            lastPlayingLoResourceId={lastPlayingLoResourceId}
+            setTimeBetweenAttemptEnabled={setTimeBetweenAttemptEnabled}
+            timeBetweenAttemptEnabled={timeBetweenAttemptEnabled}
+            updatePlayerLoState={updatePlayerLoState}
+            childLpId={childLpId}
+            isRootLoCompleted={isRootLoCompleted}
+            setEnrollViaModuleClick={setEnrollViaModuleClick}
+          ></PrimeModuleItem>
+          <hr className={styles.loResourceSeparator} />
+        </div>
       ))}
     </ul>
   );

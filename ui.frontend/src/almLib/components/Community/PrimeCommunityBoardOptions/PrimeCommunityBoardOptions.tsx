@@ -51,9 +51,14 @@ const PrimeCommunityBoardOptions = (props: any) => {
   };
 
   const copyBoardUrlHandler = () => {
-    let { communityBoardDetailsPath } = getALMConfig()
-    let domain = (new URL(window.location.href));
-    let hostUrl = domain.protocol + "//" + domain.hostname + (domain.port ? ":" + domain.port : "") + communityBoardDetailsPath;
+    let { communityBoardDetailsPath } = getALMConfig();
+    let domain = new URL(window.location.href);
+    let hostUrl =
+      domain.protocol +
+      "//" +
+      domain.hostname +
+      (domain.port ? ":" + domain.port : "") +
+      communityBoardDetailsPath;
     const boardUrl = hostUrl + "/boardId/" + boardId;
     copyUrl(boardUrl);
     if (typeof props.copyBoardUrlHandler === "function") {
@@ -106,10 +111,7 @@ const PrimeCommunityBoardOptions = (props: any) => {
                     })
                 }
             </div> */}
-        <div
-          className={styles.primeBoardCriticalOption}
-          onClick={reportBoardHandler}
-        >
+        <div className={styles.primeBoardCriticalOption} onClick={reportBoardHandler}>
           {formatMessage({
             id: "alm.community.board.report",
             defaultMessage: "Report",

@@ -29,18 +29,13 @@ const PrimeCommunityBoardList = () => {
   const DEFAULT_SORT_VALUE = "-dateUpdated";
   const DEFAULT_SKILL = queryParams ? queryParams.skill : "";
 
-  const {
-    items,
-    fetchBoards,
-    loadMoreBoards,
-    hasMoreItems,
-    skills,
-    currentSkill,
-  } = useBoards(DEFAULT_SORT_VALUE, DEFAULT_SKILL);
+  const { items, fetchBoards, loadMoreBoards, hasMoreItems, skills, currentSkill } = useBoards(
+    DEFAULT_SORT_VALUE,
+    DEFAULT_SKILL
+  );
   const { posts } = usePosts();
   const { formatMessage } = useIntl();
-  const [selectedSortFilter, setSelectedSortFilter] =
-    useState(DEFAULT_SORT_VALUE);
+  const [selectedSortFilter, setSelectedSortFilter] = useState(DEFAULT_SORT_VALUE);
   const [selectedSkill, setSelectedSkill] = useState(currentSkill);
   const [showLoader, setShowLoader] = useState(true);
   const [isSearchMode, setIsSearchMode] = useState(false);
@@ -144,10 +139,7 @@ const PrimeCommunityBoardList = () => {
                 })}{" "}
                 '{searchString}'
               </div>
-              <button
-                className={styles.primeCommunitySearchClear}
-                onClick={resetSearchHandler}
-              >
+              <button className={styles.primeCommunitySearchClear} onClick={resetSearchHandler}>
                 (
                 {formatMessage({
                   id: "alm.community.search.clear.label",
@@ -160,13 +152,9 @@ const PrimeCommunityBoardList = () => {
         )}
         {isSearchMode &&
           posts?.length > 0 &&
-          posts.map((post) => (
+          posts.map(post => (
             <div className={styles.primeCommunitySearchResultContainer}>
-              <PrimeCommunityPost
-                post={post}
-                key={post.id}
-                showBorder={true}
-              ></PrimeCommunityPost>
+              <PrimeCommunityPost post={post} key={post.id} showBorder={true}></PrimeCommunityPost>
             </div>
           ))}
         {!isSearchMode && items?.length > 0 && (

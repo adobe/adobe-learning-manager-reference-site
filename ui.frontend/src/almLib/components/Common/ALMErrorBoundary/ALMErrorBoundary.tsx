@@ -12,6 +12,10 @@ governing permissions and limitations under the License.
 import React from "react";
 import { GetTranslation } from "../../../utils/translationService";
 import styles from "./ALMErrorBoundary.module.css";
+import { Button, Provider, lightTheme } from "@adobe/react-spectrum";
+import { SendMessageToParent } from "../../../utils/widgets/base/EventHandlingBase";
+import { PrimeEvent } from "../../../utils/widgets/common";
+import { GetPrimeEmitEventLinks } from "../../../utils/global";
 
 interface ALMErrorBoundaryProps {}
 
@@ -30,22 +34,34 @@ export default class ALMErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: any, errorInfo: any) {
-    this.setState({
+    const errorObj = {
       error: error,
       errorInfo: errorInfo,
-    });
+    };
+    this.setState(errorObj);
+    console.error("Error loading the Page : ", errorObj);
   }
 
   render() {
     if (this.state.error) {
       // Error path
       return (
-        <div>
-          <h2 className={styles.errorMessage}>
-            {GetTranslation("alm.error.message")}
-            {this.state.error && this.state.error?.toString()}
-          </h2>
-        </div>
+        <Provider theme={lightTheme} colorScheme={"light"}>
+          <div className={styles.errorMessageContainer}>
+            <h2 className={styles.errorMessage}>{GetTranslation("alm.error.message")}</h2>
+            <Button
+              variant="primary"
+              onPress={() => {
+                SendMessageToParent(
+                  { type: PrimeEvent.ALM_RETRY_PAGE_RELOAD },
+                  GetPrimeEmitEventLinks()
+                );
+              }}
+            >
+              {GetTranslation("alm.retry")}
+            </Button>
+          </div>
+        </Provider>
       );
     }
     // Normally, just render children

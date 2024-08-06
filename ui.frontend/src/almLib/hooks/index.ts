@@ -16,4 +16,5 @@ export * from "./instance";
 export * from "./loadMore";
 export * from "./notifications";
 export * from "./profile";
-export * from "./social"
+export * from "./social";
+export * from "./widgets";

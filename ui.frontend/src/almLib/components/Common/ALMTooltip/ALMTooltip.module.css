@@ -19,7 +19,6 @@ governing permissions and limitations under the License.
 }
 .showOnHover:hover .tooltip {
   display: block;
-
 }
 .showOnHover svg {
   width: 20px;
@@ -33,12 +32,12 @@ governing permissions and limitations under the License.
 div[class^="spectrum-Tooltip"].almTooltip {
   visibility: initial;
   opacity: 1;
-  position: absolute!important;
-  right: 0!important;
-  width: 180px!important;
+  position: absolute !important;
+  right: 0 !important;
+  width: 180px !important;
 }
 .almTooltip span[class*="spectrum-Tooltip-tip"] {
-  left: 10%!important;
+  left: 10% !important;
 }
 .almTooltip span[class^="spectrum-Tooltip-label"] {
   font-size: var(--prime-font-size-12);

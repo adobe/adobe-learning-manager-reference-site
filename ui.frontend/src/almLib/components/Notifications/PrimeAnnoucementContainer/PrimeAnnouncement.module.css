@@ -11,44 +11,38 @@ governing permissions and limitations under the License.
 */
 @import "../../../styles/variables.css";
 
-
 .primePostVideoIframe {
   min-height: 20rem;
   width: 100%;
   border: none;
-  
 }
 
-.contentBody{
+.contentBody {
   background-color: var(--prime-color-nc2);
 
-  padding: 0 ;
-  margin-top: 5px ;
-
+  padding: 0;
+  margin-top: 5px;
 }
-.dialog{
-  padding :0px ;
-  background-color: var(--prime-color-nc5) ;
+.dialog {
+  padding: 0px;
+  background-color: var(--prime-color-nc5);
   font-family: var(--prime-font-family);
   font-weight: var(--prime-font-weight-600);
-
 }
-.heading{
-  padding-left: 12px ;
-  padding-right: 12px ;
+.heading {
+  padding-left: 12px;
+  padding-right: 12px;
   color: var(--prime-color-nc3);
-
 }
-.apos{
+.apos {
   width: 75px;
   height: 75px;
-  fill: var(--prime-color-nc3) ;
-  opacity: .15;
+  fill: var(--prime-color-nc3);
+  opacity: 0.15;
   animation-name: aposAni;
   animation-duration: 0.2s;
   animation-iteration-count: 10;
   animation-timing-function: ease-in-out;
-  
 }
 /* @keyframes aposAni {
       0% {
@@ -83,36 +77,34 @@ governing permissions and limitations under the License.
   transform: rotate(180deg);
 } 
 }*/
-.aposInv{
+.aposInv {
   width: 75px;
   height: 75px;
-  -webkit-transform:rotate(180deg); /* Chrome, Safari, Opera */
+  -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
   -moz-transform: rotate(180deg);
   -ms-transform: rotate(180deg);
   -o-transform: rotate(180deg);
   transform: rotate(180deg);
-  align-self: baseline ;
-  opacity: .15;
+  align-self: baseline;
+  opacity: 0.15;
   animation-name: aposAniInv;
   animation-duration: 0.2s;
   animation-iteration-count: 10;
   animation-timing-function: ease-in-out;
-
 }
-.upperArea{
+.upperArea {
   background: var(--prime-color-nc2);
   padding: auto;
 }
-.subTitle{
+.subTitle {
   font-size: var(--prime-font-size-14);
-  font-weight: var( --prime-font-weight-400);
+  font-weight: var(--prime-font-weight-400);
   color: var(--prime-color-nc2);
 }
-.title{
+.title {
   font-size: var(--prime-font-size-16);
-  font-weight: var( --prime-font-weight-600);
-  
+  font-weight: var(--prime-font-weight-600);
 }
-.header{
+.header {
   padding-top: 25px;
 }

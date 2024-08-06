@@ -26,18 +26,35 @@ import {
   UPDATE_SKILLLEVEL_FILTERS,
   UPDATE_DURATION_FILTERS,
   UPDATE_CATALOGS_FILTERS,
+  UPDATE_PRICE_RANGE_FILTERS,
   UPDATE_PRICE_FILTERS,
   UPDATE_SNIPPET_TYPE,
   UPDATE_SNIPPET_ON_LOAD,
   OPEN_SNIPPET_TYPE_DIALOG,
   CLOSE_SNIPPET_TYPE_DIALOG,
+  UPDATE_PRODUCTS_FILTERS,
+  UPDATE_ROLES_FILTERS,
+  UPDATE_LEVELS_FILTERS,
+  UPDATE_ANNOUNCED_GROUPS_FILTERS,
+  CLEAR_LEVELS,
+  UPDATE_SORT,
+  CLEAR_ALL,
+  UPDATE_TRAININGS,
+  LOAD_USER_SKILLS,
 } from "./actionTypes";
 
 export const loadTrainings = (payload: any): AnyAction => ({
   type: LOAD_TRAININGS,
   payload,
 });
-
+export const updateTrainings = (payload: any): AnyAction => ({
+  type: UPDATE_TRAININGS,
+  payload,
+});
+export const loadUserSkills = (payload: any): AnyAction => ({
+  type: LOAD_USER_SKILLS,
+  payload,
+});
 export const updateLoTypesFilter = (payload: string): AnyAction => ({
   type: UPDATE_LOTYPES_FILTERS,
   payload,
@@ -48,7 +65,7 @@ export const updateLearnerStateFilter = (payload: string): AnyAction => ({
   payload,
 });
 
-export const updateSkillNameFilter = (payload: string): AnyAction => ({
+export const updateSkillNameFilter = (payload: { [key: string]: string }): AnyAction => ({
   type: UPDATE_SKILLNAME_FILTERS,
   payload,
 });
@@ -71,6 +88,30 @@ export const updateTagsFilter = (payload: string): AnyAction => ({
 export const updateCitiesFilter = (payload: string): AnyAction => ({
   type: UPDATE_CITIES_FILTERS,
   payload,
+});
+
+export const updateProductsFilter = (payload: string): AnyAction => ({
+  type: UPDATE_PRODUCTS_FILTERS,
+  payload,
+});
+
+export const updateRolesFilter = (payload: string): AnyAction => ({
+  type: UPDATE_ROLES_FILTERS,
+  payload,
+});
+
+export const updateLevelsFilter = (payload: string): AnyAction => ({
+  type: UPDATE_LEVELS_FILTERS,
+  payload,
+});
+
+export const updateAnnouncedGroupsFilter = (payload: string): AnyAction => ({
+  type: UPDATE_ANNOUNCED_GROUPS_FILTERS,
+  payload,
+});
+
+export const clearLevelsFilter = (): AnyAction => ({
+  type: CLEAR_LEVELS,
 });
 
 export const updateDurationFilter = (payload: any): AnyAction => ({
@@ -98,6 +139,10 @@ export const updateFiltersOnLoad = (payload: any): AnyAction => ({
   payload,
 });
 
+export const clearAllFilters = (): AnyAction => ({
+  type: CLEAR_ALL,
+});
+
 export const paginateTrainings = (payload: {
   trainings: PrimeLearningObject[];
   next: string;
@@ -106,7 +151,12 @@ export const paginateTrainings = (payload: {
   payload,
 });
 
-export const updatePriceFilter = (payload: any): AnyAction => ({
+export const updatePriceRangeFilter = (payload: any): AnyAction => ({
+  type: UPDATE_PRICE_RANGE_FILTERS,
+  payload,
+});
+
+export const updatePriceFilter = (payload: string): AnyAction => ({
   type: UPDATE_PRICE_FILTERS,
   payload,
 });
@@ -128,4 +178,9 @@ export const onOpenSearchInList = (payload: any): AnyAction => ({
 
 export const onCloseSearchInList = (): AnyAction => ({
   type: CLOSE_SNIPPET_TYPE_DIALOG,
+});
+
+export const updateSortOrder = (payload: any): AnyAction => ({
+  type: UPDATE_SORT,
+  payload,
 });

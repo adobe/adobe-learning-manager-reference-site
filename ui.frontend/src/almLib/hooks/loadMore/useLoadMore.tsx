@@ -27,11 +27,9 @@ const useLoadMore = (props: any) => {
     const localRef = elementRef?.current!;
     let observer: IntersectionObserver;
     if (localRef) {
-      options = containerId
-        ? { ...options, root: document.getElementById(containerId) }
-        : options;
+      options = containerId ? { ...options, root: document.getElementById(containerId) } : options;
 
-      observer = new IntersectionObserver((entities) => {
+      observer = new IntersectionObserver(entities => {
         const isIntersecting = entities[0].isIntersecting;
         if (isIntersecting) {
           callback instanceof Function && callback();

@@ -1,14 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
+    <meta name="description" content="Web site created using create-react-app" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -50,10 +47,9 @@
       class BrowserPersistence {
         constructor() {
           this.key = "ALM_BROWSER_PERSISTENCE";
-          if('sessionStorage' in window){
+          if ("sessionStorage" in window) {
             this.storage = new NamespacedSessionStorage(sessionStorage, this.key);
           }
-          
         }
         _getKey(key) {
           return `${this.key}__${key}`;
@@ -66,7 +62,7 @@
           } catch (error) {
             item = window[this._getKey(name)] || null;
           }
-          
+
           if (!item) {
             return undefined;
           }
@@ -81,17 +77,16 @@
         }
         setItem(name, value, ttl) {
           const timeStored = Date.now();
-          const valueToStore =  JSON.stringify({
-              value: JSON.stringify(value),
-              timeStored,
-              ttl,
-            })
-            try {
-              this.storage.setItem(name, valueToStore);
-            } catch (error) {
-              window[this._getKey(name)] = valueToStore;
-            }
-          
+          const valueToStore = JSON.stringify({
+            value: JSON.stringify(value),
+            timeStored,
+            ttl,
+          });
+          try {
+            this.storage.setItem(name, valueToStore);
+          } catch (error) {
+            window[this._getKey(name)] = valueToStore;
+          }
         }
         removeItem(name) {
           try {
@@ -99,20 +94,93 @@
           } catch (error) {
             window[this._getKey(name)] = null;
           }
-          
         }
       }
     </script>
     <script>
+      // console.log("HELLO")
+      const pageSetting = {
+        widgetRef: "com.adobe.captivateprime.layout",
+        attributes: {
+          widgetOverrides: {
+            ["com.adobe.captivateprime.masthead"]: {
+              size: "small",
+            },
+            ["com.adobe.captivateprime.compliance"]: {
+              size: "medium",
+            },
+          },
+          layoutConfig: JSON.stringify({
+            layoutMode: "row",
+            widgets: [
+              [
+                {
+                  widgetRef: "com.adobe.captivateprime.masthead",
+                  attributes: {
+                    size: "large",
+                  },
+                },
+              ],
+              [
+                {
+                  widgetRef: "com.adobe.captivateprime.lostrip.mylearning",
+                },
+              ],
+              [
+                {
+                  widgetRef: "com.adobe.captivateprime.calendar",
+                  attributes: {
+                    numCards: 1,
+                  },
+                },
+                {
+                  widgetRef: "com.adobe.captivateprime.compliance",
+                  attributes: {
+                    numCards: 1,
+                  },
+                },
+                {
+                  widgetRef: "com.adobe.captivateprime.social",
+                },
+                {
+                  widgetRef: "com.adobe.captivateprime.leaderboard",
+                },
+              ],
+              [
+                {
+                  widgetRef: "com.adobe.captivateprime.recommendations",
+                  attributes: {
+                    view: "individual",
+                  },
+                },
+              ],
+              [
+                {
+                  widgetRef: "com.adobe.captivateprime.lostrip.adminreco",
+                },
+              ],
+              [
+                {
+                  widgetRef: "com.adobe.captivateprime.lostrip.browsecatalog",
+                },
+              ],
+              [
+                {
+                  widgetRef: "com.adobe.captivateprime.footer",
+                },
+              ],
+            ],
+          }),
+        },
+      };
       const ALMConfig = {
         almBaseURL: "https://captivateprimestage1.adobe.com",
         primeApiURL: "https://captivateprimestage1.adobe.com/primeapi/v2/",
         locale: "en-US",
         cdnBaseUrl: "https://cpcontentsdev.adobe.com",
-        usageType: "aem-commerce",
+        usageType: "aem-sites",
         accountData: "{}",
-        esBaseUrl:
-          "https://primeapps-stage.adobe.com/almsearch/api/v1/stage1/7319/237fa1c8-591f-4904-aa6f-07578c3be5a2",
+        esBaseUrl:"xxxxx",
         instancePath: "/instance.html",
         catalogPath: "/explore.html",
         trainingOverviewPath: "/trainingOverview.html",
@@ -120,6 +188,7 @@
         communityBoardsPath: "/community.html",
         communityBoardDetailsPath: "/community.html",
         badgesPath: "/badges.html",
+        authorPath: "/author.html",
         almCdnBaseUrl: "xxxxx",
         primeTileColors: {
           0: "#00000",
@@ -129,6 +198,36 @@
         commerceSignInPath: "signIn",
         commerceURL: "xxxx",
         commerceStoreName: "xxx",
+        accessToken: "XXXXXX",
+        widgetConfig: {
+          pageSetting: pageSetting,
+          customizationUrl: "",
+          emitPageLinkEvents: true,
+          emitPlayerLaunchEvent: true,
+          disableLinks: false,
+        },
+        theme: {
+          primaryColor: "#2676ff",
+          secondaryColor: "#0091ff",
+          background: "#efefef",
+          darkMode: false,
+          customization: `{
+            "cardLayout": {
+                "cardLayoutName": "Custom1",
+                "cardPrimaryColor": "#376BA4",
+                "cardSecondaryColor": "#F98EB0",
+                "startedStateTextColor": "#ffffff",
+                "continueStateTextColor": "#ffffff",
+                "revisitStateTextColor": "#ffffff",
+                "startedStateColor": "#a0a0a0",
+                "continueStateColor": "#f9a122",
+                "revisitedStateColor": "#7fbc64",
+                "textPrimaryColor": "#ffffff",
+                "textSecondaryColor": "#d93f3f",
+                "navIconColor": "#a0a0a0"
+          }}`,
+          //customization: `{"globalCssText":"@import url('https://fonts.googleapis.com/css2?family=Grandstander:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');","fontNames": "Grandstander","cardLayout": {"cardLayoutName": "Custom1","cardPrimaryColor": "#376BA4","cardSecondaryColor": "#F98EB0","startedStateTextColor": "#ffffff","continueStateTextColor": "#ffffff","revisitStateTextColor": "#ffffff","startedStateColor": "#a0a0a0","continueStateColor": "#f9a122","revisitedStateColor": "#7fbc64","textPrimaryColor": "#ffffff","textSecondaryColor": "#d93f3f","navIconColor": "#a0a0a0"}}`,
+        },
       };
 
       const isPrimeUserLoggedIn = () => {
@@ -137,12 +236,11 @@
 
       const getAccessToken = () => {
         return "XXXXXX";
-        // return "b9e1945a881994633176fbce2c67db30";
       };
       const COMMERCE_TOKEN_COOKIE_NAME = "alm_commerce_token";
 
       const getCommerceToken = () => {
-        let cookieValues = document.cookie.match(
+        const cookieValues = document.cookie.match(
           `(^|[^;]+)\\s*${COMMERCE_TOKEN_COOKIE_NAME}\\s*=\\s*([^;]+)`
         );
         return cookieValues ? cookieValues.pop() : "";
@@ -152,10 +250,7 @@
         return window.ALM.ALMConfig;
       };
 
-      const navigateToTrainingOverviewPage = (
-        trainingId,
-        trainingInstanceId = "",
-      ) => {
+      const navigateToTrainingOverviewPage = (trainingId, trainingInstanceId = "") => {
         let { trainingOverviewPath } = getALMConfig();
         trainingOverviewPath = getUrl(trainingOverviewPath, {
           trainingId: trainingId,
@@ -168,26 +263,38 @@
         window.location = trainingOverviewPath;
       };
 
-      const navigateToInstancePage = (
-        trainingId,
-      ) => {
-        let { instancePath } = getALMConfig();
-        let url = getUrl(instancePath, { trainingId: trainingId });
+      const navigateToInstancePage = trainingId => {
+        const { instancePath } = getALMConfig();
+        const url = getUrl(instancePath, { trainingId: trainingId });
         window.location = url;
       };
 
-      const navigateToBoardDetailsPage = (boardId) => {
-        let { communityBoardDetailsPath } = getALMConfig();
+      const navigateToBoardDetailsPage = boardId => {
+        const { communityBoardDetailsPath } = getALMConfig();
         window.location = getUrl(communityBoardDetailsPath, {
           boardId: boardId,
         });
       };
 
       const navigateToBadgesPage = () => {
-        let { badgesPath } = getALMConfig();
-        let url = getUrl(badgesPath);
+        const { badgesPath } = getALMConfig();
+        const url = getUrl(badgesPath);
         window.location = url;
-      }
+      };
+
+      const navigateToAuthorPage = (authorId, isLegacyAuthor, authorName) => {
+        const { authorPath } = getALMConfig();
+        const queryParams = { author: authorId };
+        let url = getUrl(authorPath, queryParams);
+        if (isLegacyAuthor !== undefined && authorName !== undefined) {
+          url += "?authorName=" + authorName + "&isLegacyAuthor=" + isLegacyAuthor;
+        }
+        window.location = url;
+      };
+      const navigateToCatalogPage = () => {
+        const { catalogPath } = getALMConfig();
+        window.location = catalogPath;
+      };
 
       const getUrlWithQueryParams = (urlStr, params) => {
         const url = new URL(urlStr);
@@ -204,7 +311,7 @@
         return urlStr;
       };
 
-      async function getALMUser() {
+      async function getALMUser(displayType) {
         if (!window.ALM.isPrimeUserLoggedIn()) {
           window.ALM.storage.removeItem("user");
           return;
@@ -216,7 +323,10 @@
         }
         console.log("Fetch user");
         const primeApiURL = window.ALM.ALMConfig.primeApiURL;
-        const userUrl = `${primeApiURL}/user?include=account&enforcedFields[account]=extensions`;
+        let userUrl = `${primeApiURL}/user?include=account&enforcedFields[account]=extensions`;
+        if (displayType) {
+          userUrl = `${userUrl}&filter.displayType=${displayType}`;
+        }
         const headers = {
           Accept: "application/vnd.api+json",
           Authorization: `oauth ${getAccessToken()}`,
@@ -232,6 +342,7 @@
             const userStr = JSON.stringify(user);
             console.log("set user");
             window.ALM.storage.setItem("user", userStr, 1800);
+
             return userStr;
           } else {
             console.error("User call failed!!");
@@ -284,8 +395,7 @@
           },
         };
 
-        const updateAccountActiveFieldsUrl =
-          baseApiUrl + "users/" + `${userId}`;
+        const updateAccountActiveFieldsUrl = baseApiUrl + "users/" + `${userId}`;
         const headers = { "content-type": "application/json" };
         try {
           const response = await fetch(updateAccountActiveFieldsUrl, {
@@ -310,19 +420,22 @@
       };
 
       const navigateToCommerceSignInPage = () => {
-        let { commerceSignInPath } = getALMConfig();
+        const { commerceSignInPath } = getALMConfig();
         window.location =
-          commerceSignInPath +
-          "?redirectPath=" +
-          encodeURIComponent(window.location.pathname);
+          commerceSignInPath + "?redirectPath=" + encodeURIComponent(window.location.pathname);
       };
 
       function handlePrimeLogIn() {
         console.log("login to prime");
       }
 
+      // const PRIME_USAGE_TYPE = "aem-sites";
+      // const ES_USAGE_TYPE = "aem-es";
+      // const COMMERCE_USAGE_TYPE = "aem-commerce";
+      // const DEFAULT_USAGE = "aem-default";
+      // const CURRENT_USAGE_TYPE = DEFAULT_USAGE;
       function handleLogIn() {
-        let { commerceSignInPath } = getALMConfig();
+        const { commerceSignInPath } = getALMConfig();
         window.location.pathname = commerceSignInPath;
         switch (CURRENT_USAGE_TYPE) {
           case PRIME_USAGE_TYPE:
@@ -343,40 +456,38 @@
         const COMMERCE_TOKEN_COOKIE_NAME = "alm_commerce_token";
         const ACCESS_TOKEN_COOKIE_NAME = "alm_cp_token";
         document.cookie =
-          ACCESS_TOKEN_COOKIE_NAME +
-          "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+          ACCESS_TOKEN_COOKIE_NAME + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
 
         document.cookie =
-          COMMERCE_TOKEN_COOKIE_NAME +
-          "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+          COMMERCE_TOKEN_COOKIE_NAME + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
         window.ALM.storage.removeItem("user");
         window.ALM.storage.removeItem("CART_ID");
         window.ALM.storage.removeItem("PRIME_CATALOG_FILTER");
         window.ALM.storage.removeItem("COMMERCE_FILTERS");
       }
 
-      function isExtensionAllowed(extension){
-       return Boolean(extension)
-      //  return extension && extension.launchType === "IN_APP"
+      function isExtensionAllowed(extension) {
+        return Boolean(extension);
+        //  return extension && extension.launchType === "IN_APP"
       }
-
+      // console.log("HELLOP")
       window.ALM = window.ALM || {};
       window.ALM.ALMConfig = ALMConfig; //window.ALM.ALMConfig || primeConfig;
       window.ALM.getALMConfig = getALMConfig;
       window.ALM.handleLogIn = handleLogIn;
-      window.ALM.navigateToTrainingOverviewPage =
-        navigateToTrainingOverviewPage;
+      window.ALM.navigateToTrainingOverviewPage = navigateToTrainingOverviewPage;
       window.ALM.navigateToInstancePage = navigateToInstancePage;
       window.ALM.navigateToBoardDetailsPage = navigateToBoardDetailsPage;
       window.ALM.navigateToCommerceSignInPage = navigateToCommerceSignInPage;
       window.ALM.navigateToBadgesPage = navigateToBadgesPage;
+      window.ALM.navigateToAuthorPage = navigateToAuthorPage;
+      window.ALM.navigateToCatalogPage = navigateToCatalogPage;
       window.ALM.isPrimeUserLoggedIn = isPrimeUserLoggedIn;
       window.ALM.getAccessToken = getAccessToken;
       window.ALM.getCommerceToken = getCommerceToken;
       window.ALM.getALMUser = getALMUser;
       window.ALM.getAccountActiveFields = getAccountActiveFields;
-      window.ALM.updateAccountActiveFieldsDetails =
-        updateAccountActiveFieldsDetails;
+      window.ALM.updateAccountActiveFieldsDetails = updateAccountActiveFieldsDetails;
       window.ALM.updateALMUser = updateALMUser;
       window.ALM.storage = window.ALM.storage || new BrowserPersistence();
       window.ALM.updateCart = function (value) {
@@ -386,6 +497,7 @@
       // if (isPrimeUserLoggedIn()) {
       //   getALMUser();
       // }
+      window.isLocal = true;
     </script>
     <title>React App</title>
   </head>
@@ -394,29 +506,35 @@
     <!-- <div class="instance__container"></div> -->
     <!-- <div class="training__page__container" data-show-description="true" data-show-author-info="true" data-show-enroll-deadline="true"></div>   -->
     <div
-    class="catalog__container"
-    data-show-filters="true"
-    data-show-search="true"
-    data-catalogs="true"
-    data-lo-types="true"
-    data-skill-name="true"
-    data-lo-format="true"
-    data-duration="true"
-    data-price="true"
-    data-skills-level="true"
-    data-learner-state="true"
-    data-tag-name="true"
-    data-skill-level="true"
-    data-cities="true"
-  ></div>
+      class="catalog__container"
+      data-show-filters="true"
+      data-test="1"
+      data-show-search="true"
+      data-catalogs="true"
+      data-lo-types="true"
+      data-skill-name="true"
+      data-lo-format="true"
+      data-duration="true"
+      data-price="true"
+      data-skills-level="true"
+      data-learner-state="true"
+      data-tag-name="true"
+      data-skill-level="true"
+      data-cities="true"
+      data-products="true"
+      data-roles="true"
+      data-levels="true"
+      data-price-range="true"
+      data-announced-groups="true"
+    ></div>
 
-  
     <!-- <div class="badges__container"></div>
     <div class="author__container"></div> -->
 
     <!-- <div class="profile__container"></div> -->
     <!-- /* 
     <div class="skills__container"></div>
+    <div class="recommendations__container"></div>
     <div
       class="activeFields__container"
       data-section1-title="Organization"
@@ -427,7 +545,7 @@
       data-section2-active-fields="hobby, new location"
     ></div> */-->
 
-     
+    <!-- <div class="prime-widgets__container"></div> -->
     <!-- <div class="notification__container"></div> -->
 
     <!-- <div class="notification__container"></div> -->
@@ -436,6 +554,10 @@
     <!-- <div class="notification__container"></div> -->
     <!--/* <div class="boards__container"></div> */-->
     <!--/* <div id="root1"></div> */-->
+
+    <!-- <div class="calendar_widget_container"></div> -->
+    <!-- <div class="compliance__widget__container"></div> -->
+
     <!--
      This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -443,6 +565,6 @@
       The build step will place the bundled scripts into the <body> tag.
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
-    --> 
+    -->
   </body>
 </html>

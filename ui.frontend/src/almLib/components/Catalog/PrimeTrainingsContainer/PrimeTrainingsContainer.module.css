@@ -23,7 +23,8 @@ governing permissions and limitations under the License.
   margin: 0;
   padding: 0;
   width: 100%;
-  gap: 20px;
+  row-gap: 40px;
+  column-gap: 20px;
 }
 
 .primeTrainingsList {
@@ -33,6 +34,11 @@ governing permissions and limitations under the License.
   padding: 0;
   width: 100%;
   gap: 20px;
+}
+
+.primeTrainingsList li {
+  border-top: 1px solid var(--prime-color-neutral-3);
+  padding-top: 24px;
 }
 
 .noResults {

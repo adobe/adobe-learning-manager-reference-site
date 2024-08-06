@@ -32,7 +32,7 @@ const Badgr = (props: any) => {
           <img className={styles.badgrIcon} src={icon} alt="" />
           {formatMessage({ id: "alm.badgr.configureBadgr" })}
         </ActionButton>
-        {(close) => (
+        {close => (
           <div className={styles.dialog}>
             <Dialog
               UNSAFE_className={styles.dialogBox}
@@ -49,9 +49,7 @@ const Badgr = (props: any) => {
               <Content>
                 <div className={styles.badgrBody}>
                   <div className={styles.row}>
-                    <div className={styles.left}>
-                      {formatMessage({ id: "alm.badgr.status" })}
-                    </div>
+                    <div className={styles.left}>{formatMessage({ id: "alm.badgr.status" })}</div>
                     <div className={styles.statusText}>
                       {formatMessage({ id: "alm.badgr.notConnected" })}
                     </div>
@@ -62,38 +60,22 @@ const Badgr = (props: any) => {
                     </div>
                     <Picker
                       UNSAFE_className={styles.picker}
-                      placeholder={
-                        GetTranslation("alm.badgr.selectInstance", true)
-                      }
-                      onSelectionChange={(key) => {
+                      placeholder={GetTranslation("alm.badgr.selectInstance", true)}
+                      onSelectionChange={key => {
                         setInstance(JSON.stringify(key));
                       }}
                     >
-                      <Item key="US">
-                        {formatMessage({ id: "alm.badgr.region.us" })}
-                      </Item>
-                      <Item key="EU">
-                        {formatMessage({ id: "alm.badgr.region.eu" })}
-                      </Item>
-                      <Item key="CA">
-                        {formatMessage({ id: "alm.badgr.region.ca" })}
-                      </Item>
-                      <Item key="AU">
-                        {formatMessage({ id: "alm.badgr.region.au" })}
-                      </Item>
+                      <Item key="US">{formatMessage({ id: "alm.badgr.region.us" })}</Item>
+                      <Item key="EU">{formatMessage({ id: "alm.badgr.region.eu" })}</Item>
+                      <Item key="CA">{formatMessage({ id: "alm.badgr.region.ca" })}</Item>
+                      <Item key="AU">{formatMessage({ id: "alm.badgr.region.au" })}</Item>
                     </Picker>
-                    <Button
-                      variant="primary"
-                      UNSAFE_className={styles.btn}
-                      isDisabled={!instance}
-                    >
+                    <Button variant="primary" UNSAFE_className={styles.btn} isDisabled={!instance}>
                       {formatMessage({ id: "alm.badgr.connect" })}
                     </Button>
                   </div>
                   <div className={styles.row}>
-                    <div className={styles.note}>
-                      {formatMessage({ id: "alm.badgr.note" })}
-                    </div>
+                    <div className={styles.note}>{formatMessage({ id: "alm.badgr.note" })}</div>
                   </div>
                 </div>
               </Content>

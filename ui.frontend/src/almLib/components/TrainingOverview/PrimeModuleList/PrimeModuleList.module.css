@@ -12,13 +12,20 @@ governing permissions and limitations under the License.
 @import "../../../styles/variables.css";
 
 .moduleListContainer {
-  padding: 0;
-  margin: 0;
-  border: 1.5px solid var(--prime-color-nc2);
-  border-top: 0;
+  padding-bottom: 24px;
+  padding-left: 0px;
+}
+
+.loResourceSeparator {
+  border: 0.5px solid var(--prime-color-neutral-3);
+  margin: 16px 0px;
 }
 
 /* CSS override for inside LP */
-.isPartOfLP {
+.isPartOfParentLO {
   border: none;
+}
+
+.locked {
+  opacity: 0.5;
 }

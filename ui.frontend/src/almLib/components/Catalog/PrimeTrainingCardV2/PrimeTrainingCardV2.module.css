@@ -1,0 +1,553 @@
+/**
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+@import "../../../styles/variables.css";
+
+.card {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: var(--prime-card-height);
+  border-radius: 10px 10px 20px 20px;
+  background: var(--prime-color-white);
+}
+.upper {
+  /* display: flex; */
+  width: 100%;
+  height: 155px;
+  position: relative;
+}
+.imageContainer {
+  height: 100%;
+  border: 1px solid var(--prime-color-white);
+  border-radius: 10px;
+  position: relative;
+  transition: all 0.1s ease-in-out;
+}
+.loFormat {
+  max-width: 70%;
+  position: absolute;
+  transition: all 0.5s ease-in-out;
+  top: 8px;
+  left: 8px;
+  padding: 4px 10px 5px 10px;
+  gap: 4px;
+  border-radius: 40px;
+  font-size: var(--prime-font-size-12);
+  font-weight: var(--prime-font-weight-700);
+  line-height: 15.02px;
+  text-align: left;
+  color: var(--prime-color-white);
+  background: var(--prime-color-black);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.price {
+  top: 40px;
+}
+.actionIcon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  height: 22px;
+  width: 22px;
+  z-index: 2;
+  visibility: visible;
+  background-color: transparent;
+  padding: 0;
+  border-color: transparent;
+  border-radius: 50%;
+  border: 2px solid var(--prime-color-white);
+  background-color: var(--prime-color-white);
+  cursor: pointer;
+}
+.actionIcon.enrolled {
+  background: transparent;
+  border-color: transparent;
+}
+.actionIcon svg {
+  width: 18px;
+  height: 18px;
+}
+.duration {
+  height: 24px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 4px 8px 4px 8px;
+  border-radius: 9px 0px;
+  background: var(--prime-color-white);
+  opacity: 0.9;
+  position: absolute;
+  font-size: var(--prime-font-size-12);
+  font-weight: 500;
+  line-height: 15px;
+  letter-spacing: 0.01em;
+  transition: all 0.5s ease-in-out;
+}
+.duration.enrolled {
+  border-radius: 9px 0px 0px 0;
+  bottom: 8px;
+}
+.progressBar {
+  width: 100%;
+  height: 8px;
+  border-radius: 0px 0px 8px 8px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: var(--prime-color-neutral-3);
+  transition: all 0.5s ease-in-out;
+  padding: 1px 2px;
+}
+.progressBar div[class$="spectrum-BarLoader-track"] {
+  height: 100%;
+  border-radius: 0px 0px 10px 10px;
+  background: var(--prime-color-neutral-3);
+}
+.progressBar div[class$="spectrum-BarLoader-fill"] {
+  background: var(--prime-color-primary);
+  height: 100%;
+}
+
+.imageFlipContainer {
+  opacity: 0;
+  visibility: hidden;
+  height: 155px;
+  width: 100%;
+  border: 1px solid var(--prime-color-white);
+  border-radius: 10px;
+  position: relative;
+  transition: all 0.5s ease-in-out;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    rgba(102, 102, 102, 0.5) 0%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+  padding: 12px 30px 12px 12px;
+  white-space: break-spaces;
+  position: absolute;
+  top: 0;
+  backdrop-filter: blur(20px);
+}
+
+.description {
+  font-family: var(--prime-font-family);
+  font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-400);
+  line-height: 18.2px;
+  text-align: left;
+  white-space: break-spaces;
+  color: var(--prime-color-white);
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.descriptionWithParams {
+  margin-right: -20px;
+  font-size: var(--prime-font-size-12);
+  font-weight: var(--prime-font-weight-400);
+  line-height: 15.6px;
+  text-align: left;
+  -webkit-line-clamp: 2;
+  margin-top: 20px;
+}
+.dateText {
+  font-size: var(--prime-font-size-12);
+  line-height: 15.6px;
+  text-align: left;
+  color: var(--prime-color-white);
+  position: absolute;
+  bottom: 12px;
+}
+.dateText span {
+  font-weight: var(--prime-font-weight-700);
+}
+.matchingParamsHeader {
+  font-size: var(--prime-font-size-12);
+  font-weight: var(--prime-font-weight-400);
+  line-height: 15.6px;
+  text-align: left;
+  color: var(--prime-color-white);
+  margin: 0;
+}
+.matchingParams {
+  font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-700);
+  line-height: 18.2px;
+  text-align: left;
+  color: var(--prime-color-white);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 37px;
+}
+.lower {
+  width: 100%;
+  height: 150px;
+  padding: 6px;
+}
+.skillsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 18px;
+  width: 100%;
+}
+.skills {
+  width: 50%;
+  height: 22px;
+  display: flex;
+  align-items: center;
+}
+.skills svg {
+  width: 16px;
+  height: 16px;
+  fill: var(--prime-color-neutral-1);
+}
+.skillName {
+  font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-400);
+  line-height: 18px;
+  text-align: left;
+  color: var(--prime-color-neutral-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  display: inline-block;
+  padding-left: 5px;
+}
+.ratingsContainer {
+  width: 50%;
+  font-size: var(--prime-font-size-12);
+  font-weight: var(--prime-font-weight-400);
+  line-height: 15.02px;
+  text-align: right;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  color: var(--prime-color-neutral-1);
+  cursor: pointer;
+}
+.ratingsContainer svg {
+  fill: var(--prime-progress-color);
+  width: 12px;
+}
+.rating {
+  font-weight: var(--prime-font-weight-700);
+  line-height: 15.02px;
+  text-align: right;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+.effectiveness {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--prime-color-link);
+  padding-left: 0;
+  padding-right: 0;
+  font-size: var(--prime-font-size-12);
+  font-weight: var(--prime-font-weight-400);
+}
+
+.titleContainer {
+  display: flex;
+  justify-content: space-between;
+  max-height: 42px;
+}
+.title {
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: var(--prime-font-size-16);
+  font-weight: var(--prime-font-weight-700);
+  line-height: 20.8px;
+  width: 256px;
+  white-space: break-spaces;
+  color: var(--prime-color-black);
+  cursor: pointer;
+  text-decoration: none;
+}
+.title[tabindex]:not([tabindex="0"]) {
+  cursor: default;
+}
+.saveUnsaveContainer {
+  top: 4px;
+  align-self: flex-start;
+  position: relative;
+}
+.saveUnsaveButton {
+  padding: 2px 0 0 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.saveUnsaveContainer svg {
+  width: 16px;
+  cursor: pointer;
+}
+.authorContainer {
+  height: 18px;
+  display: flex;
+  align-items: center;
+}
+.authorName {
+  font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-400);
+  line-height: 18.2px;
+  color: var(--prime-color-neutral-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+.recoContainer {
+  height: 18px;
+  display: flex;
+  align-items: center;
+}
+.recoReason {
+  font-size: var(--prime-font-size-12);
+  font-weight: var(--prime-font-weight-400);
+  line-height: 15.6px;
+  text-align: left;
+  color: var(--prime-color-black);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+.recoReasonGroupLink {
+  text-decoration: none;
+  color: var(--prime-color-primary);
+}
+.actionContainer {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: 6px;
+  width: calc(100% - 12px);
+}
+
+.actionButton {
+  border-radius: 16px;
+  width: 100%;
+  border: 2px solid var(--prime-color-primary);
+  color: var(--prime-color-primary);
+  background: var(--prime-color-white);
+  height: 32px;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-700);
+  line-height: 17.53px;
+  font-family: var(--prime-font-family);
+}
+.actionDontRecommend {
+  min-width: 32px;
+  height: 32px;
+  gap: 0px;
+  border-radius: 16px;
+  border: 1px solid var(--prime-color-neutral-3);
+  margin-left: 5px;
+  background: var(--prime-color-white);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.downloadJobAid {
+  cursor: pointer;
+  min-width: 32px;
+  height: 32px;
+  margin-left: 5px;
+}
+.undoContainer {
+  display: flex;
+  flex-direction: column;
+  height: var(--prime-card-height);
+  width: 100%;
+  background: var(--prime-color-white);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  opacity: 0;
+  border: 1px solid var(--prime-color-neutral-3);
+  visibility: hidden;
+  border-radius: 10px;
+}
+.undoContainer.show {
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.2s ease-in-out;
+  z-index: 2;
+}
+
+.upperUndoContainer {
+  height: 154px;
+  display: flex;
+  justify-content: center;
+  white-space: break-spaces;
+  flex-direction: column;
+  padding: 16px;
+}
+.upperUndoContainer a {
+  font-size: var(--prime-font-size-16);
+  font-weight: var(--prime-font-weight-400);
+  line-height: 22px;
+  text-align: left;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  cursor: pointer;
+}
+.upperUndoContainer h2 {
+  font-size: var(--prime-font-size-16);
+  font-weight: var(--prime-font-weight-400);
+  line-height: 22px;
+  text-align: left;
+  margin: 0;
+  color: var(--prime-color-body);
+}
+.upperUndoContainer span {
+  font-size: var(--prime-font-size-16);
+  font-weight: var(--prime-font-weight-700);
+  line-height: 22px;
+}
+.lowerUndoContainer {
+  height: 145px;
+  display: flex;
+  white-space: break-spaces;
+  flex-direction: column;
+  padding: 16px;
+}
+.lowerUndoContainer p {
+  font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-400);
+  line-height: 22px;
+  margin: 0;
+}
+.undo {
+  margin-left: 5px;
+  color: var(--prime-color-primary);
+  cursor: pointer;
+  display: inline-block;
+}
+
+.actionDontRecommend svg {
+  fill: var(--prime-error-color);
+  cursor: pointer;
+}
+.card:hover .actionButton {
+  background-color: var(--prime-color-primary);
+  color: var(--prime-color-white);
+}
+.card:hover .imageContainer {
+  filter: blur(2px);
+}
+.card:hover .loFormat {
+  opacity: 0;
+  visibility: hidden;
+}
+.card:hover .imageFlipContainer {
+  opacity: 1;
+  visibility: visible;
+  cursor: pointer;
+}
+
+.card:hover .duration {
+  visibility: hidden;
+  opacity: 0;
+}
+.card:hover .progressBar {
+  visibility: hidden;
+  opacity: 0;
+}
+.hidden {
+  visibility: hidden;
+}
+.justifyContentEnd {
+  justify-content: flex-end;
+}
+
+.loader {
+  border: 3px solid var(--prime-color-white);
+  border-radius: 50%;
+  border-top: 3px solid var(--prime-color-primary);
+  width: 22px;
+  height: 22px;
+  float: right;
+  -webkit-animation: lo-card-spin 1s linear infinite;
+  animation: lo-card-spin 1s linear infinite;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+}
+.smallLoader {
+  width: 18px;
+  height: 18px;
+  top: 0;
+}
+
+.buttonTransparent {
+  height: 20px;
+  width: 100%;
+  color: var(--prime-color-primary);
+  line-height: 17.53px;
+  background: var(--prime-color-white);
+  border: none;
+  padding: 0;
+}
+.saveUnsaveContainer .loader {
+  right: 0;
+}
+.errorIcon {
+  background: var(--prime-color-white);
+  border: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: transparent;
+}
+.errorIcon svg {
+  fill: var(--prime-error-color);
+  transform: scale(1.2);
+}
+@-webkit-keyframes lo-card-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes lo-card-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media screen and (max-width: 450px) {
+}

@@ -41,9 +41,7 @@ const PrimeCommunityBoard = (props: any) => {
   const { formatMessage, locale } = useIntl();
   let board = props.board;
   let showBoardOptions = false;
-  const [isBoardOptionsOpen, setIsBoardOptionsOpen] = useState(
-    showBoardOptions
-  );
+  const [isBoardOptionsOpen, setIsBoardOptionsOpen] = useState(showBoardOptions);
   const { reportBoard } = useBoardOptions();
   const [almAlert] = useAlert();
   const [almConfirmationAlert] = useConfirmationAlert();
@@ -66,7 +64,7 @@ const PrimeCommunityBoard = (props: any) => {
   });
 
   const toggleBoardOptionsHandler = () => {
-    setIsBoardOptionsOpen((prevState) => !prevState);
+    setIsBoardOptionsOpen(prevState => !prevState);
   };
 
   const boardNameClickHandler = () => {
@@ -128,13 +126,7 @@ const PrimeCommunityBoard = (props: any) => {
   return (
     <>
       <div className={styles.primeBoardWrapper}>
-        <div
-          className={
-            props.showBorder
-              ? styles.primeBoardItemWithBorder
-              : styles.primeBoardItem
-          }
-        >
+        <div className={props.showBorder ? styles.primeBoardItemWithBorder : styles.primeBoardItem}>
           <div className="prime-title-skills-container">
             <button
               className={styles.primeBoardOptions}
@@ -165,8 +157,7 @@ const PrimeCommunityBoard = (props: any) => {
             <div className={styles.primeBoardSkill}>
               {boardSkills && (
                 <span className={styles.primeBoardSkillNames}>
-                  {GetTranslation("alm.community.board.skills", true)}:{" "}
-                  {boardSkills}
+                  {GetTranslation("alm.community.board.skills", true)}: {boardSkills}
                 </span>
               )}
               <div
@@ -178,14 +169,14 @@ const PrimeCommunityBoard = (props: any) => {
                         defaultMessage: "Public Board",
                       })
                     : board.visibility === PRIVATE
-                    ? formatMessage({
-                        id: "alm.community.board.private",
-                        defaultMessage: "Private Board",
-                      })
-                    : formatMessage({
-                        id: "alm.community.board.restricted",
-                        defaultMessage: "Restricted Board",
-                      })
+                      ? formatMessage({
+                          id: "alm.community.board.private",
+                          defaultMessage: "Private Board",
+                        })
+                      : formatMessage({
+                          id: "alm.community.board.restricted",
+                          defaultMessage: "Restricted Board",
+                        })
                 }
               >
                 {board.visibility === PUBLIC ? (
@@ -198,18 +189,15 @@ const PrimeCommunityBoard = (props: any) => {
               </div>
             </div>
           </div>
-          <PrimeCommunityObjectBody
-            object={board}
-            type={BOARD}
-          ></PrimeCommunityObjectBody>
+          <PrimeCommunityObjectBody object={board} type={BOARD}></PrimeCommunityObjectBody>
           <div className={styles.primeBoardActivityPanel}>
             <div className={styles.primeBoardActivityStats}>
               <div className={styles.primeActivityStatsIcon}>
                 {board.activityLevel === HIGH
                   ? SOCIAL_ACTIVITY_INDEX_HIGH_SVG()
                   : board.activityLevel === NORMAL
-                  ? SOCIAL_ACTIVITY_INDEX_MEDIUM_SVG()
-                  : SOCIAL_ACTIVITY_INDEX_LOW_SVG()}
+                    ? SOCIAL_ACTIVITY_INDEX_MEDIUM_SVG()
+                    : SOCIAL_ACTIVITY_INDEX_LOW_SVG()}
               </div>
               <span className={styles.primeActivityStatsText}>
                 {board.activityLevel === HIGH
@@ -218,14 +206,14 @@ const PrimeCommunityBoard = (props: any) => {
                       defaultMessage: "High Activity",
                     })
                   : board.activityLevel === NORMAL
-                  ? formatMessage({
-                      id: "alm.community.board.normalActivity",
-                      defaultMessage: "Normal Activity",
-                    })
-                  : formatMessage({
-                      id: "alm.community.board.lowActivity",
-                      defaultMessage: "Low Activity",
-                    })}
+                    ? formatMessage({
+                        id: "alm.community.board.normalActivity",
+                        defaultMessage: "Normal Activity",
+                      })
+                    : formatMessage({
+                        id: "alm.community.board.lowActivity",
+                        defaultMessage: "Low Activity",
+                      })}
               </span>
               <div
                 className={styles.primeActivityInfoIcon}
@@ -241,10 +229,7 @@ const PrimeCommunityBoard = (props: any) => {
                 ref={ref}
               >
                 <Info />
-                <span
-                  id={board.id + "-tooltipText"}
-                  className={styles.tooltipText}
-                >
+                <span id={board.id + "-tooltipText"} className={styles.tooltipText}>
                   {formatMessage({
                     id: "alm.community.board.activityCalc",
                     defaultMessage:
@@ -265,9 +250,7 @@ const PrimeCommunityBoard = (props: any) => {
               </span>
             </div>
             <div className={styles.primeBoardActivityStats}>
-              <div className={styles.primeActivityStatsIcon}>
-                {<Visibility />}
-              </div>
+              <div className={styles.primeActivityStatsIcon}>{<Visibility />}</div>
               <span className={styles.primeActivityStatsText}>
                 {board.viewsCount}{" "}
                 {formatMessage({
@@ -277,9 +260,7 @@ const PrimeCommunityBoard = (props: any) => {
               </span>
             </div>
             <div className={styles.primeBoardActivityStats}>
-              <div className={styles.primeActivityStatsIcon}>
-                {<UserGroup />}
-              </div>
+              <div className={styles.primeActivityStatsIcon}>{<UserGroup />}</div>
               <span className={styles.primeActivityStatsText}>
                 {board.userCount}{" "}
                 {formatMessage({

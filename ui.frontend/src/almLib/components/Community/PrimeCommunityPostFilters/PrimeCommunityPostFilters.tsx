@@ -17,8 +17,7 @@ import { PrimeDropdown } from "../PrimeDropdown";
 const PrimeCommunityPostFilters = (props: any) => {
   let defaultSortFilter = DATE_CREATED;
   const { formatMessage } = useIntl();
-  const [selectedSortFilter, setSelectedSortFilter] =
-    useState(defaultSortFilter);
+  const [selectedSortFilter, setSelectedSortFilter] = useState(defaultSortFilter);
   const sortFilters: { [key: string]: string } = {
     "Date Created": "-dateCreated",
     "Date Updated": "-dateUpdated",

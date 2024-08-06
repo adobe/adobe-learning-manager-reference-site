@@ -18,19 +18,14 @@ import { useIntl } from "react-intl";
 const PrimeCommunityComments = (props: any) => {
   const { formatMessage } = useIntl();
   const postId = props.object.id;
-  const {
-    items,
-    loadMoreComments,
-    hasMoreItems,
-    patchComment,
-    markCommentAsRightAnswer,
-  } = useComments();
+  const { items, loadMoreComments, hasMoreItems, patchComment, markCommentAsRightAnswer } =
+    useComments();
   const [answerCommentId, setAnswerCommentId] = useState("");
 
   useEffect(() => {
     items
-      ?.filter((comment) => comment.parent.id === postId)
-      .map((comment) => {
+      ?.filter(comment => comment.parent.id === postId)
+      .map(comment => {
         if (comment.isCorrectAnswer) {
           setAnswerCommentId(comment.id);
           return comment.id;
@@ -67,8 +62,8 @@ const PrimeCommunityComments = (props: any) => {
       <div className={styles.primeCommentSectionWrapper}>
         <div className={styles.primeCommentSection}>
           {items
-            ?.filter((comment) => comment.parent.id === postId)
-            .map((comment) => (
+            ?.filter(comment => comment.parent.id === postId)
+            .map(comment => (
               <PrimeCommunityComment
                 comment={comment}
                 parentPost={props.object}
@@ -80,10 +75,7 @@ const PrimeCommunityComments = (props: any) => {
               ></PrimeCommunityComment>
             ))}
           {hasMoreItems && (
-            <button
-              className={styles.showMoreCommentsButton}
-              onClick={loadMoreComments}
-            >
+            <button className={styles.showMoreCommentsButton} onClick={loadMoreComments}>
               {formatMessage({
                 id: "alm.community.showMoreComments",
                 defaultMessage: "Show more comments",

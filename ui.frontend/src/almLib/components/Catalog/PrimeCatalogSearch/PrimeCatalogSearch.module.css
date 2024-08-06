@@ -34,13 +34,13 @@ governing permissions and limitations under the License.
   width: 16px;
   height: 16px;
 }
-.searchItemSelected:hover{
+.searchItemSelected:hover {
   background-color: var(--prime-color-nc2);
 }
-.searchItemSelected{
+.searchItemSelected {
   padding-left: 40px;
 }
-.searchItemNoPadding{
+.searchItemNoPadding {
   padding: 0px;
 }
 
@@ -119,7 +119,7 @@ governing permissions and limitations under the License.
   cursor: pointer;
 }
 
-.searchDropdownContainer input[type="checkbox"]{
+.searchDropdownContainer input[type="checkbox"] {
   cursor: pointer;
 }
 

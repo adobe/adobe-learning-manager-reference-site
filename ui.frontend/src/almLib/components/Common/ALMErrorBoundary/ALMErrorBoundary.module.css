@@ -10,7 +10,20 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 @import "../../../styles/variables.css";
+.errorMessageContainer {
+  flex-direction: column;
+  height: 100vh;
+  padding: 32px;
+}
 
+.errorMessageContainer h2 {
+  padding: 0;
+  margin-bottom: 20px;
+  font-size: var(--prime-font-size-24);
+}
+.errorMessageContainer button {
+  cursor: pointer;
+}
 .errorMessage {
   margin: 0;
   padding: 10px;

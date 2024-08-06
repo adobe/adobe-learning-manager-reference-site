@@ -9,6 +9,9 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
+
+import { PrimeLearningObjectInstanceEnrollment, PrimeLocalizationMetadata } from "./PrimeModels";
+
 export interface Skill {
   name: string;
   levelName: string;
@@ -33,6 +36,7 @@ export interface CardBgStyle {
   backgroundRepeat?: string;
   backgroundPosition?: string;
   background?: string;
+  backgroundColor?: string;
 }
 
 export interface AccountActiveFields {
@@ -160,6 +164,71 @@ export interface PrimeMastHeadContentData {
   contentUrl: string;
   sourceUrl: string;
   locale: string;
+}
+
+export interface PrimeComplianceData {
+  name: string;
+  index: number;
+  count: number;
+  enrollmentIds: string[];
+  enrollmentList: {
+    learningObjectInstanceEnrollmentList: PrimeLearningObjectInstanceEnrollment[];
+  };
+}
+
+export interface PrimeComplianceDonutStyles {
+  color: string;
+  pathData: string;
+  lineStart: { x: number; y: number };
+  lineEnd: { x: number; y: number };
+  slantingLineStart: { x: number; y: number };
+  slantingLineEnd: { x: number; y: number };
+  annotationPosition: { x: number; y: number };
+  tranformDirection: { x: number | null; y: number | null };
+  isLeftSlice: boolean;
+}
+
+export interface PrimeComplianceEnrollmentData extends PrimeComplianceData {
+  donutStyles: PrimeComplianceDonutStyles;
+}
+
+export interface CatalogLabelValueId {
+  id: string;
+  name: string;
+}
+
+export interface CatalogLabel {
+  name: string;
+  type: string;
+  catalogLabelValueIds: CatalogLabelValueId[];
+  values: string[];
+}
+
+export interface LearningObjectItem {
+  id: string;
+  type: string;
+  attributes: {
+    localizedMetadata: PrimeLocalizationMetadata[];
+    catalogLabels: CatalogLabel[];
+  };
+}
+
+export interface ComplianceLabelResponse {
+  data: LearningObjectItem[];
+  links: string;
+}
+
+export interface ComplianceLabelDetails {
+  name: string;
+  type: string;
+  values: LabelValueDetails[];
+}
+
+export interface LabelValueDetails {
+  _transient: any;
+  id: string;
+  name: string;
+  loIds: string[];
 }
 
 // export interface CatalogLearningObject {

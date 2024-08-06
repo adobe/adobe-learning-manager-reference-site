@@ -13,8 +13,7 @@ const LEADERBOARD = "leaderboard";
 const RightSideBar = (props: any) => {
   const { formatMessage } = useIntl();
 
-  const src =
-    "https://wallpapers.com/images/hd/tiger-predator-eyes-portrait-29kla8c3maawuxb8.webp"; // default img
+  const src = "https://wallpapers.com/images/hd/tiger-predator-eyes-portrait-29kla8c3maawuxb8.webp"; // default img
 
   function Section(props: any) {
     return (
@@ -27,11 +26,7 @@ const RightSideBar = (props: any) => {
         {props.data?.map((entry: any, i: number) => {
           return (
             <div key={i}>
-              <SectionLine
-                title={entry.name}
-                type={props.type}
-                src={props.src}
-              />
+              <SectionLine title={entry.name} type={props.type} src={props.src} />
             </div>
           );
         })}
@@ -69,8 +64,7 @@ const RightSideBar = (props: any) => {
           {props.leaderBoard ? (
             <Section
               type={LEADERBOARD}
-              title=
-              {GetTranslation("alm.text.leaderboard", true)}
+              title={GetTranslation("alm.text.leaderboard", true)}
               src={src}
             />
           ) : (

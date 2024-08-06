@@ -8,6 +8,7 @@
   text-align: center;
   z-index: 1;
   position: relative;
+  border-radius: 8px;
 }
 .primeSlides {
   overflow: hidden;
@@ -44,11 +45,7 @@
   white-space: nowrap;
   overflow-x: visible;
   font-size: 0;
-  background-image: linear-gradient(
-    to bottom,
-    #0000,
-    var(--prime-color-black)
-  );
+  background-image: linear-gradient(to bottom, #0000, var(--prime-color-black));
 }
 .primeMastheadDots li {
   color: var(--prime-color-white);
@@ -57,14 +54,21 @@
   display: inline-block;
   outline: 0;
 }
+
+.primeMastheadSelectedDot {
+  border: 1px solid var(--prime-color-white);
+  background-color: var(--prime-color-link) !important;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
 .primeMastheadDots li b {
   display: block;
   text-indent: -9999px;
   margin-right: 7px;
-  background-color: var(--prime-color-white);
-  background-color: hsla(0, 0%, 100%, 0.3);
-  width: 13px;
-  height: 13px;
+  background-color: var(--prime-color-neutral-3);
+  width: 9px;
+  height: 9px;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
   overflow: hidden;
   transition: height 0.3s ease;
@@ -72,43 +76,61 @@
 }
 .primeMastheadActions {
   z-index: 6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 24px 20px 24px;
 }
 .primeMastheadContinue {
-  min-width: 94px;
+  min-width: 100px;
   height: 32px;
   border: none;
   border-radius: 16px;
-  background-color: var(--prime-color-white);
+  background-color: var(--prime-color-link);
   font-weight: bold;
   letter-spacing: normal;
   text-align: center;
   cursor: pointer;
-  color: var(--prime-color-nc3);
+  color: var(--prime-color-white);
+  width: 25%;
 }
 .primeMastheadContinue:hover {
   opacity: 0.8;
 }
 
 .primeMastheadMedia > div,
-.primeMastheadMedia img {
+.primeMastheadMedia > img {
+  padding: 0;
+  width: 100%;
+  height: var(--prime-mh-height);
+  margin: auto;
+  vertical-align: bottom;
+  margin-top: -6px;
+}
+
+.primeMastheadVideo {
   padding: 0;
   width: 100%;
   height: 300px;
   vertical-align: bottom;
 }
+
 @media screen and (min-width: 768px) and (max-width: 979px) {
   .primeMastheadMedia > div,
+  .primeSlides,
   .primeMastheadMedia img {
-    height: 216px;
+    height: 216px !important;
   }
 }
 @media screen and (max-width: 767px) {
   .primeMastheadMedia > div,
+  .primeSlides,
   .primeMastheadMedia img {
-    height: 216px;
+    height: 216px !important;
   }
   .primeMastheadNavIcons {
     display: none !important;
+    width: 25%;
   }
 }
 @media screen and (max-width: 480px) {
@@ -123,46 +145,38 @@
 .primeMastheadIconsContainer {
   float: right;
   display: inline-flex;
+  margin-right: -24px;
 }
 .primeMastheadNavIcons {
-  width: 100%;
-  position: absolute;
+  width: 25%;
   bottom: 0;
-  padding: 0 0 2.5rem 0;
   pointer-events: none;
   z-index: 6;
 }
 .primeMastheadIcon {
   margin: 0 2rem 0 0;
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   background: none;
   border: none;
+  display: inline-block;
 }
 .primeMastheadIcon svg {
   display: block;
-  margin: 8px;
-  fill: var(--prime-color-white);
+  fill: var(--prime-color-neutral-3);
   cursor: pointer;
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   pointer-events: all;
 }
 .primeMasthead ul {
   font-size: 0;
 }
 
-/* .vjs-modal-dialog-content,
-.vjs-big-play-button,
-.vjs-close-button,
-.vjs-control-bar {
-  display: none;
-} */
-
 .primeMastheadNavIconDisabled {
   margin: 0 2rem 0 0;
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   background: none;
   border: none;
   opacity: 0.2;
@@ -198,5 +212,20 @@
 
 .primeDots {
   z-index: 60000;
-  padding: 1% 0 !important;
+  width: auto;
+  margin-left: -36px;
+}
+
+.primeLearnMore {
+  width: 25%;
+  margin-left: 14%;
+}
+
+/* safari only */
+@supports (-webkit-appearance: none) {
+  .primeMastheadSelectedDot {
+    padding: 0px; /* Adjust this value as needed */
+    width: 10px !important;
+    height: 10px !important;
+  }
 }

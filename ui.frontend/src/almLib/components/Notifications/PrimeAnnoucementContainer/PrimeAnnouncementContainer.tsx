@@ -15,7 +15,7 @@ import { useIntl } from "react-intl";
 import { Image, View, Grid } from "@adobe/react-spectrum";
 import { PrimeAnnouncement, PrimeUserNotification } from "../../../models";
 import { ALMLoader } from "../../Common/ALMLoader";
-import { getALMConfig, getAccessToken } from "../../../utils/global";
+import { getALMConfig, getAuthKey } from "../../../utils/global";
 import Apos from "../../../assets/images/aposInv.svg";
 import { VIDEO } from "../../../utils/constants";
 
@@ -44,9 +44,9 @@ const PrimeAnnouncementContainer: React.FC<{
   const assetType = notif?.modelTypes[0];
 
   const config = getALMConfig();
-  const token = getAccessToken();
+  const authKey = getAuthKey();
 
-  const iframeSrc = `${config.almBaseURL}/app/videoplayer?videoId=${contentId}&context=formal&asset_id=${assetId}&asset_type=${assetType}&csrf_token=${token}&player_type=inline`;
+  const iframeSrc = `${config.almBaseURL}/app/videoplayer?videoId=${contentId}&context=formal&asset_id=${assetId}&asset_type=${assetType}&${authKey}&player_type=inline`;
 
   const [isOpen, setOpen] = useState(true);
   const clickHandler = () => {
@@ -75,12 +75,7 @@ const PrimeAnnouncementContainer: React.FC<{
 
   return (
     <Provider theme={defaultTheme}>
-      <DialogContainer
-        isDismissable
-        full
-        onDismiss={() => clickHandler()}
-        {...props}
-      >
+      <DialogContainer isDismissable full onDismiss={() => clickHandler()} {...props}>
         {isOpen && (
           <Dialog UNSAFE_className={styles.dialog}>
             <Content UNSAFE_className={styles.contentBody}>

@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 import Evaporate from "evaporate";
 
-import { sha256 as SHA256 } from 'js-sha256';
+import { sha256 as SHA256 } from "js-sha256";
 import store from "../../store/APIStore";
 import { PrimeUploadInfo } from "../models/PrimeModels";
 
@@ -20,10 +20,10 @@ import {
   SET_UPLOAD_NAME,
   SET_UPLOAD_PROGRESS,
 } from "../store/actions/fileUpload/actionTypes";
-import { getALMConfig, getALMObject } from "./global";
+import { getALMConfig, getAccessToken, getCsrfToken } from "./global";
 import { RestAdapter } from "./restAdapter";
 
-const sparkMD5 =require('spark-md5');
+const sparkMD5 = require("spark-md5");
 
 let evaporateInstance: any;
 let awsCredJsonObj: PrimeUploadInfo = {
@@ -40,9 +40,7 @@ async function uploadInfo() {
     url: `${baseApiUrl}/uploadInfo`,
     method: "GET",
   });
-  const parsedResponse = JSON.parse(
-    typeof response === "string" ? response : ""
-  );
+  const parsedResponse = JSON.parse(typeof response === "string" ? response : "");
   const data = {
     awsKey: parsedResponse.awsKey,
     bucket: parsedResponse.bucket,
@@ -67,8 +65,14 @@ export async function getUploadInfo() {
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getEvaporateConfig(): any {
-  const baseApiUrl = getALMConfig().primeApiURL;
-  const accessTokenString = "oauth " + getALMObject().getAccessToken();
+  const almConfig = getALMConfig();
+  const baseApiUrl = almConfig.primeApiURL;
+  const headers: any = { "Content-Type": "application/json" };
+  if (almConfig.csrfToken) {
+    headers["X-CSRF-TOKEN"] = getCsrfToken();
+  } else {
+    headers["authorization"] = `oauth ${getAccessToken()}`;
+  }
 
   return {
     aws_key: awsCredJsonObj.awsKey, // REQUIRED
@@ -79,10 +83,7 @@ function getEvaporateConfig(): any {
     signerUrl: `${baseApiUrl}uploadSigner`,
     awsSignatureVersion: "4",
     computeContentMd5: true,
-    signHeaders: {
-      "Content-Type": "application/json",
-      authorization: accessTokenString,
-    },
+    signHeaders: headers,
     aws_url: awsCredJsonObj.awsUrl,
     cryptoMd5Method: (data: any) => btoa(sparkMD5.ArrayBuffer.hash(data, true)),
     cryptoHexEncodedHash256: SHA256,
@@ -101,10 +102,11 @@ async function initEvaporate(config: any): Promise<any> {
 
 export async function uploadFile(name: string, file: File) {
   const state = store.getState();
+  const fileName = name.replace(/[^a-zA-Z0-9.]/g, '');
   try {
-    store.dispatch({ value: name, type: SET_UPLOAD_NAME });
+    store.dispatch({ value: fileName, type: SET_UPLOAD_NAME });
     const result = await evaporateInstance.add({
-      name,
+      name: fileName,
       file,
       progress: (progressValue: never) => {
         if (state.fileUpload.uploadProgress !== progressValue) {
@@ -125,11 +127,9 @@ export async function uploadFile(name: string, file: File) {
 }
 export async function cancelUploadFile(name: string) {
   try {
-    await evaporateInstance
-      .cancel(awsCredJsonObj.bucket + "/" + name)
-      .then(function () {
-        console.log("Canceled file upload");
-      });
+    await evaporateInstance.cancel(awsCredJsonObj.bucket + "/" + name).then(function () {
+      console.log("Canceled file upload");
+    });
     return {
       type: RESET_UPLOAD,
     };

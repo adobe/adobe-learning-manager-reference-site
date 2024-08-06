@@ -11,8 +11,7 @@ governing permissions and limitations under the License.
 */
 import ReactDOM from "react-dom";
 import { Suspense } from "react";
-import 'react-quill/dist/quill.snow.css';
-
+import "react-quill/dist/quill.snow.css";
 
 const withSuspense = (Component: any) => {
   let WithSuspense: any = (props: any) => {
@@ -22,9 +21,7 @@ const withSuspense = (Component: any) => {
       </Suspense>
     );
   };
-  WithSuspense.displayName = `withSuspense(${
-    Component.displayName || Component.name
-  })`;
+  WithSuspense.displayName = `withSuspense(${Component.displayName || Component.name})`;
   return WithSuspense;
 };
 

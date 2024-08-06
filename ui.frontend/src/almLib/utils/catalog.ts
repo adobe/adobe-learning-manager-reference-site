@@ -10,20 +10,24 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import {
+  PrimeAccount,
   PrimeCatalog,
   PrimeLearningObject,
   PrimeLearningObjectInstance,
+  PrimeUser,
 } from "../models/PrimeModels";
 import { CatalogFilterState } from "../store/reducers/catalog";
-import { ENGLISH_LOCALE } from "./constants";
+import { ACTIVE, ENGLISH_LOCALE } from "./constants";
 import {
   getALMAttribute,
   getALMConfig,
   getItemFromStorage,
+  getQueryParamsFromUrl,
   setItemToStorage,
 } from "./global";
+import { checkIfCompletionDeadlineNotPassed } from "./instance";
 import { JsonApiParse } from "./jsonAPIAdapter";
-import { QueryParams, RestAdapter } from "./restAdapter";
+import { RestAdapter } from "./restAdapter";
 
 const PRIME_CATALOG_FILTER = "PRIME_CATALOG_FILTER";
 
@@ -33,25 +37,25 @@ export function isJobaid(training: PrimeLearningObject): boolean {
 
 export function isJobaidContentTypeUrl(training: PrimeLearningObject): boolean {
   const trainingInstance = training.instances[0];
-  const contentType =
-    trainingInstance.loResources[0]?.resources[0]?.contentType;
+  const contentType = trainingInstance.loResources?.[0]?.resources?.[0]?.contentType;
   return contentType === "OTHER" ? true : false;
 }
 
 export function getJobaidUrl(training: PrimeLearningObject): string {
-  return training.instances[0]?.loResources[0]?.resources[0]?.location;
+  return training.instances[0]?.loResources?.[0]?.resources?.[0]?.location;
 }
 
-export function getActiveInstances(
-  training: PrimeLearningObject
-): PrimeLearningObjectInstance[] {
-  return training.instances?.filter((i) => i && i.state === "Active");
+export function getActiveInstances(training: PrimeLearningObject): PrimeLearningObjectInstance[] {
+  // Instances which are active and have not passed the completion deadline
+  return training.instances?.filter(
+    instance =>
+      (instance.state === ACTIVE && checkIfCompletionDeadlineNotPassed(instance)) ||
+      instance.enrollment
+  );
 }
 
-export function getDefaultIntsance(
-  training: PrimeLearningObject
-): PrimeLearningObjectInstance[] {
-  return training.instances?.filter((i) => i && i.isDefault);
+export function getDefaultIntsance(training: PrimeLearningObject): PrimeLearningObjectInstance[] {
+  return training.instances?.filter(i => i && i.isDefault);
 }
 
 export function debounce(fn: Function, time = 250) {
@@ -62,9 +66,7 @@ export function debounce(fn: Function, time = 250) {
   };
 }
 
-export const getOrUpdateCatalogFilters = async (): Promise<
-  PrimeCatalog[] | undefined
-> => {
+export const getOrUpdateCatalogFilters = async (): Promise<PrimeCatalog[] | undefined> => {
   try {
     const filterItems = getItemFromStorage(PRIME_CATALOG_FILTER);
     if (filterItems) {
@@ -79,63 +81,118 @@ export const getOrUpdateCatalogFilters = async (): Promise<
   } catch (e) {}
 };
 
-const getCatalogParamsForAPi = async (
-  catalogState: string
-): Promise<string> => {
+const getCatalogParamsForAPI = async (catalogState: string): Promise<Array<string>> => {
   const catalogFilterFromStorage = await getOrUpdateCatalogFilters();
-  const catalogFilterFromState = catalogState.split(",");
+  const catalogFilterFromState = splitStringIntoArray(catalogState);
   let returnValue = "";
-  catalogFilterFromStorage?.forEach((item) => {
+  catalogFilterFromStorage?.forEach(item => {
     if (catalogFilterFromState.indexOf(item.name) > -1) {
       returnValue += returnValue ? "," + item.id : item.id;
     }
   });
 
-  return returnValue;
+  return splitStringIntoArray(returnValue);
 };
 
-export async function getParamsForCatalogApi(filterState: CatalogFilterState) {
-  const params: QueryParams = {};
+export const isAttributeEnabled = (attribute: string) => {
+  return attribute === "true";
+};
+
+export async function getParamsForCatalogApi(
+  filterState: CatalogFilterState,
+  account: PrimeAccount
+) {
+  const params: any = {};
   const catalogAttributes = getALMAttribute("catalogAttributes");
+  const { prlCriteria } = account;
+  const queryParams = getQueryParamsFromUrl();
+  const {
+    products,
+    roles,
+    levels,
+    loTypes,
+    skillName,
+    tagName,
+    learnerState,
+    loFormat,
+    duration,
+    skillLevel,
+    catalogs,
+    price,
+    priceRange,
+    cities,
+    announcedGroups,
+  } = filterState;
+  if (isAttributeEnabled(queryParams.myLearning)) {
+    params["filter.learnerState"] = ["enrolled", "completed", "started"];
+  }
 
-  if (catalogAttributes?.showFilters === "true") {
-    if (catalogAttributes?.loTypes === "true") {
-      params["filter.loTypes"] = filterState.loTypes;
+  if (isAttributeEnabled(catalogAttributes?.showFilters)) {
+    if (isAttributeEnabled(catalogAttributes?.loTypes)) {
+      params["filter.loTypes"] = splitStringIntoArray(loTypes);
     }
 
-    if (filterState.skillName && catalogAttributes?.skillName === "true") {
-      params["filter.skillName"] = filterState.skillName;
+    if (skillName && hasKeys(skillName) && isAttributeEnabled(catalogAttributes?.skillName)) {
+      params["filter.skillName"] = splitStringIntoArray(getTruePropertiesAsString(skillName) || "");
     }
-    if (filterState.tagName && catalogAttributes?.tagName === "true") {
-      params["filter.tagName"] = filterState.tagName;
+    if (tagName && hasKeys(tagName) && isAttributeEnabled(catalogAttributes?.tagName)) {
+      params["filter.tagName"] = splitStringIntoArray(getTruePropertiesAsString(tagName) || "");
     }
-    if (
-      filterState.learnerState &&
-      catalogAttributes?.learnerState === "true"
-    ) {
-      params["filter.learnerState"] = filterState.learnerState;
+    if (learnerState && isAttributeEnabled(catalogAttributes?.learnerState)) {
+      params["filter.learnerState"] = splitStringIntoArray(learnerState);
     }
-    if (filterState.loFormat && catalogAttributes?.loFormat === "true") {
-      params["filter.loFormat"] = filterState.loFormat;
+    if (loFormat && isAttributeEnabled(catalogAttributes?.loFormat)) {
+      params["filter.loFormat"] = splitStringIntoArray(loFormat);
     }
-    if (filterState.duration && catalogAttributes?.duration === "true") {
-      params["filter.duration.range"] = filterState.duration;
+    if (duration && isAttributeEnabled(catalogAttributes?.duration)) {
+      params["filter.duration.range"] = splitStringIntoArray(duration);
     }
-    if (filterState.skillLevel && catalogAttributes?.skillLevel === "true") {
-      params["filter.skill.level"] = filterState.skillLevel;
+    if (skillLevel && isAttributeEnabled(catalogAttributes?.skillLevel)) {
+      params["filter.skill.level"] = splitStringIntoArray(skillLevel);
     }
-    if (filterState.catalogs && catalogAttributes?.catalogs === "true") {
-      params["filter.catalogIds"] = await getCatalogParamsForAPi(
-        filterState.catalogs
-      );
+    if (catalogs && isAttributeEnabled(catalogAttributes?.catalogs)) {
+      params["filter.catalogIds"] = splitStringIntoArray(catalogs);
     }
-    if (filterState.price && catalogAttributes?.price === "true") {
-      params["filter.priceRange"] = filterState.price;
+    if (price && isAttributeEnabled(catalogAttributes?.price)) {
+      // Don't send anything if free and paid both are applied.
+      if (splitStringIntoArray(price).length === 1) {
+        params["filter.price"] = price;
+      }
     }
-    if (filterState.cities && catalogAttributes?.cities === "true") {
-      params["filter.cityName"] = filterState.cities;
+    if (priceRange && isAttributeEnabled(catalogAttributes?.priceRange)) {
+      params["filter.priceRange"] = splitStringIntoArray(priceRange);
+    }
+    if (cities && isAttributeEnabled(catalogAttributes?.cities)) {
+      params["filter.cityName"] = splitStringIntoArray(cities);
+    }
+
+    if (prlCriteria?.enabled) {
+      const { products: prlCriteriaProducts, roles: prlCriteriaRoles } = prlCriteria;
+      if (
+        prlCriteriaProducts?.enabled &&
+        products &&
+        isAttributeEnabled(catalogAttributes?.products)
+      ) {
+        params["filter.recommendationProducts"] = getPRLFilters(
+          products,
+          prlCriteriaProducts.levelsEnabled,
+          levels
+        );
+      }
+      if (prlCriteriaRoles?.enabled && roles && isAttributeEnabled(catalogAttributes?.roles)) {
+        params["filter.recommendationRoles"] = getPRLFilters(
+          roles,
+          prlCriteriaRoles.levelsEnabled,
+          levels
+        );
+      }
+    }
+
+    if (announcedGroups && isAttributeEnabled(catalogAttributes?.announcedGroups)) {
+      params["filter.announcedGroups"] = splitStringIntoArray(announcedGroups);
     }
   }
+  params["filter.ignoreEnhancedLP"] = false;
   return params;
 }
 
@@ -145,34 +202,26 @@ interface DurationFilter {
 }
 
 export function getFiltersObjectForESApi(filterState: CatalogFilterState) {
-  const {
-    duration,
-    loFormat,
-    loTypes,
-    skillLevel,
-    skillName,
-    tagName,
-    cities,
-    catalogs,
-  } = filterState;
-  let filters: any = {
+  const { duration, loFormat, loTypes, skillLevel, skillName, tagName, cities, catalogs } =
+    filterState;
+  const filters: any = {
     terms: {
-      loSkillLevels: skillLevel ? filterState.skillLevel.split(",") : null,
-      loType: loTypes ? filterState.loTypes.split(",") : null,
-      deliveryType: loFormat ? filterState.loFormat.split(",") : null,
-      loSkillNames: skillName ? filterState.skillName.split(",") : null,
-      tags: tagName ? filterState.tagName.split(",") : null,
-      catalogNames: catalogs ? catalogs.split(",") : null,
-      cities: cities ? cities.split(",") : null,
+      loSkillLevels: skillLevel ? splitStringIntoArray(filterState.skillLevel) : null,
+      loType: loTypes ? splitStringIntoArray(filterState.loTypes) : null,
+      deliveryType: loFormat ? splitStringIntoArray(filterState.loFormat) : null,
+      loSkillNames: skillName ? splitStringIntoArray(getTruePropertiesAsString(skillName)) : null,
+      tags: tagName ? splitStringIntoArray(getTruePropertiesAsString(tagName)) : null,
+      catalogNames: catalogs ? splitStringIntoArray(catalogs) : null,
+      cities: cities ? splitStringIntoArray(cities) : null,
     },
     range: {},
   };
   //range object
   if (duration) {
-    const durations = duration.split(",");
-    let durationFilter: DurationFilter[] = [];
-    durations.forEach((item) => {
-      const [minValue, maxValue] = item.split("-");
+    const durations = splitStringIntoArray(duration);
+    const durationFilter: DurationFilter[] = [];
+    durations.forEach(item => {
+      const [minValue, maxValue] = splitStringIntoArray(item, "-");
       durationFilter.push({
         lte: parseInt(maxValue),
         gte: parseInt(minValue),
@@ -211,10 +260,10 @@ export function getIndividualFiltersForCommerce(
       optionsMap[element.label] = element.value;
     }
   });
-
-  const loTypes = filterState[type as keyof CatalogFilterState].split(",");
+  //  add if condition for skill and tags
+  const loTypes = splitStringIntoArray(filterState[type as keyof CatalogFilterState] as string);
   let value: any[] = [];
-  loTypes.forEach((element) => {
+  loTypes.forEach(element => {
     if (optionsMap[element]) {
       value.push(optionsMap[element]);
     }
@@ -224,7 +273,62 @@ export function getIndividualFiltersForCommerce(
 }
 
 export function sortList(list: Array<any>, paramName: string) {
-  return [...list].sort((a, b) =>
-    a[paramName]?.trim().localeCompare(b[paramName]?.trim())
-  );
+  return [...list].sort((a, b) => a[paramName]?.trim().localeCompare(b[paramName]?.trim()));
+}
+
+export function splitStringIntoArray(input: string, delimiter = ","): Array<string> {
+  return input.split(delimiter);
+}
+
+export async function fetchRecommendationData(recommendationCriteria: string, url: string) {
+  return await RestAdapter.get({
+    url: `${url}?filter.recommendationCriteria=${recommendationCriteria}&filter.showAllRecommendationCriteria=true`,
+  });
+}
+
+export function getFilterNames(promise: any) {
+  return promise ? JsonApiParse(promise)?.data?.names : null;
+}
+
+export function getPRLFilters(filterValues: string, isLevelsEnabled: boolean, levels: string) {
+  const levelsArray = isLevelsEnabled && levels ? splitStringIntoArray(levels) : [];
+
+  return splitStringIntoArray(filterValues).map(item => ({ name: item, levels: levelsArray }));
+}
+
+export const getTruePropertiesAsString = (obj: { [key: string]: boolean }) => {
+  return Object.entries(obj)
+    .filter(([key, value]) => value)
+    .map(([key]) => key)
+    .join(",");
+};
+
+export const filterObjectByTruthyValues = (obj: { [key: string]: boolean }) => {
+  return Object.entries(obj)
+    .filter(([key, value]) => value)
+    .reduce((acc: any, [key]) => {
+      acc[key] = true;
+      return acc;
+    }, {});
+};
+
+export const convertStringToObject = (str: string, value = true) => {
+  return str.split(",").reduce((obj: any, key) => {
+    obj[key] = true;
+    return obj;
+  }, {});
+};
+
+export const hasKeys = (obj: {}) => {
+  return Object.keys(obj).length > 0;
+};
+export function getLocalesForSearch(user: PrimeUser): Array<string> {
+  const localesForSearch: Set<string> = new Set([ENGLISH_LOCALE]);
+  const locales = [user.contentLocale, user.uiLocale, user.account?.locale];
+
+  locales.forEach(locale => {
+    locale && localesForSearch.add(locale);
+  });
+
+  return Array.from(localesForSearch);
 }

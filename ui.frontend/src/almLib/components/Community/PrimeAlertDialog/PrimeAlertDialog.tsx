@@ -9,32 +9,31 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import {
-  ActionButton,
-  DialogTrigger,
-  Provider,
-  lightTheme,
-  AlertDialog,
-} from "@adobe/react-spectrum";
+import { ActionButton, DialogTrigger, Provider, AlertDialog } from "@adobe/react-spectrum";
 import { useEffect, useRef } from "react";
 import styles from "./PrimeAlertDialog.module.css";
+import { getALMConfig, getModalColorScheme, getModalTheme, sendEvent } from "../../../utils/global";
+import { PrimeEvent } from "../../../utils/widgets/common";
 
 const PrimeAlertDialog = (props: any) => {
   const showDialog = useRef(false);
-  let classes = ""
-  if(props.classes){
-    classes = `${props.classes} ${styles.dialogButton} `
+  const themeName = getALMConfig().themeData?.name;
+  let classes = "";
+  if (props.classes) {
+    classes = `${props.classes} ${styles.dialogButton} `;
   }
-  
+
   useEffect(() => {
     if (!showDialog.current && props.show) {
       const launchDialog = document.getElementById("showAlert") as HTMLElement;
       launchDialog.click();
       showDialog.current = true;
+      sendEvent(PrimeEvent.ALM_DISABLE_NAV_CONTROLS);
     }
   }, [showDialog, props]);
 
   const hideDialog = () => {
+    sendEvent(PrimeEvent.ALM_ENABLE_NAV_CONTROLS);
     showDialog.current = false;
   };
   const onPrimaryActionHandler = () => {
@@ -53,7 +52,7 @@ const PrimeAlertDialog = (props: any) => {
 
   return (
     props.show && (
-      <Provider theme={lightTheme} colorScheme={"light"}>
+      <Provider theme={getModalTheme(themeName)} colorScheme={getModalColorScheme(themeName)}>
         <DialogTrigger>
           <ActionButton
             id="showAlert"

@@ -2,182 +2,299 @@
  *
  * Please Do not use this Component.
  */
-import { Item, Picker, Provider, lightTheme } from "@adobe/react-spectrum";
+import { Provider, lightTheme } from "@adobe/react-spectrum";
 import styles from "./PrimeAuthorPage.module.css";
-import { useState } from "react";
-import { TILE_VIEW, LIST_VIEW } from "../../utils/constants";
-import ViewList from "@spectrum-icons/workflow/ViewList";
-import ClassicGridView from "@spectrum-icons/workflow/ClassicGridView";
-import { PrimeTrainingCard } from "../Catalog/PrimeTrainingCard";
+import { useCallback, useMemo, useRef, useState } from "react";
+import {
+  TILE_VIEW,
+  LIST_VIEW,
+  AUTHOR_ID_STR,
+  IS_LEGACY_AUTHOR,
+  AUTHOR_NAME,
+  INTERNAL_STR,
+  EXTERNAL_STR,
+} from "../../utils/constants";
+import { DEFAULT_USER_SVG } from "../../utils/inline_svg";
 import { PrimeTrainingList } from "../Catalog/PrimeTrainingList";
 import { useIntl } from "react-intl";
-import { useProfile } from "../../hooks";
-import icon from "../../assets/images/back.svg";
+import { useAccount, useLoadMore } from "../../hooks";
+import { BACK_BUTTON_ICON } from "../../utils/inline_svg";
 import { useAuthor } from "../../hooks/author";
-import { getALMObject } from "../../utils/global";
+import {
+  containsSubstr,
+  getALMConfig,
+  getALMObject,
+  getPathParams,
+  getQueryParamsFromUrl,
+  navigateToLo,
+  setTrainingsLayout,
+} from "../../utils/global";
+import { PrimeTrainingCardV2 } from "../Catalog/PrimeTrainingCardV2";
+import { GetTranslation } from "../../utils/translationService";
+import { PrimeLearningObject } from "../../models";
+import { ALMCustomPicker } from "../Common/ALMCustomPicker";
+import { ALMLoader } from "../Common/ALMLoader";
+import {
+  canShowPrice,
+  launchPlayerHandler,
+} from "../Catalog/PrimeTrainingCardV2/PrimeTrainingCardV2.helper";
+import { showEffectivenessIndex, showRating } from "../Widgets/ALMPrimeStrip/ALMPrimeStrip.helper";
+import ViewList from "@spectrum-icons/workflow/ViewList";
+import ClassicGridView from "@spectrum-icons/workflow/ClassicGridView";
+import { PrimeFeedbackWrapper } from "../ALMFeedback";
+import { useFeedback } from "../../hooks/feedback";
+import { ALMGoToTop } from "../ALMGoToTop";
 
 const PrimeAuthorPage = (props: any) => {
-  const { trainings, loadMoreTraining, hasMoreItems } = useAuthor();
-  const { formatMessage } = useIntl();
-  const { profileAttributes } = useProfile();
-  const { user } = profileAttributes;
-  const setInitialView = () => {
-    return getALMObject().storage.getItem("CARD_VIEW") || TILE_VIEW;
-  };
+  const config = getALMConfig();
+  const authorPath = config.authorPath;
 
+  const pathParams = getPathParams(authorPath, [AUTHOR_ID_STR]);
+  const queryParam = getQueryParamsFromUrl();
+  const authorId = containsSubstr(pathParams[AUTHOR_ID_STR], "?")
+    ? pathParams[AUTHOR_ID_STR].split("?")[0]
+    : pathParams[AUTHOR_ID_STR];
+  const authorType = queryParam[IS_LEGACY_AUTHOR] ? EXTERNAL_STR : INTERNAL_STR;
+  const authorName = queryParam[AUTHOR_NAME];
+  const {
+    trainings,
+    totalTrainings,
+    hasMoreItems,
+    loadMoreTraining,
+    enrollmentHandler,
+    updateLearningObject,
+    fetchTrainings,
+    authorDetails,
+    isLoading,
+  } = useAuthor(authorId, authorType);
+  const {
+    feedbackTrainingId,
+    trainingInstanceId,
+    playerLaunchTimeStamp,
+    shouldLaunchFeedback,
+    handleL1FeedbackLaunch,
+    fetchCurrentLo,
+    getFilteredNotificationForFeedback,
+    submitL1Feedback,
+    closeFeedbackWrapper,
+  } = useFeedback();
+  const elementRef = useRef(null);
+  useLoadMore({
+    items: trainings,
+    callback: loadMoreTraining,
+    elementRef,
+  });
+  const { account } = useAccount();
+  const { formatMessage } = useIntl();
+  const alm = getALMObject();
+  const setInitialView = () => {
+    return getALMObject().storage.getItem(TILE_VIEW) || TILE_VIEW;
+  };
+  const isAuthorExternal = authorType === EXTERNAL_STR;
   const isListView = () => {
     return view === LIST_VIEW;
   };
-
+  const handleLoEnrollment = async (loId: string, loInstanceId: string) => {
+    return enrollmentHandler && (await enrollmentHandler(loId, loInstanceId));
+  };
   const [view, setView] = useState(setInitialView());
 
-  const setCatalogView = (view: string) => {
-    setView(view);
-    getALMObject().storage.setItem("CARD_VIEW", view);
+  const navigateToLOPage = (training: PrimeLearningObject) => {
+    navigateToLo(training);
   };
+  const sortByDropdown = [
+    { id: "-date", name: GetTranslation("alm.picker.sort.recentlyPublished") },
+    { id: "name", name: GetTranslation("alm.picker.sort.nameAZ") },
+    { id: "-name", name: GetTranslation("alm.picker.sort.nameZA") },
+  ];
+  const [selectedOptionId, setSelectedOptionId] = useState(sortByDropdown[0].id);
 
-  const ToggleView = () => {
-    return (
-      <>
-        {isListView() && (
-          <div
-            className={styles.viewButton}
-            onClick={() => setCatalogView(TILE_VIEW)}
-          >
-            <ClassicGridView />
-          </div>
-        )}
-        {!isListView() && (
-          <div
-            className={styles.viewButton}
-            onClick={() => setCatalogView(LIST_VIEW)}
-          >
-            <ViewList />
-          </div>
-        )}
-      </>
-    );
+  const handleOptionSelected = (selectedOption: string) => {
+    setSelectedOptionId(selectedOption);
+    fetchTrainings(selectedOption);
   };
+  const gridButtonTitle = useMemo(() => GetTranslation("alm.grid.view.aria", true), []);
+  const listButtonTitle = useMemo(() => GetTranslation("alm.list.view.aria", true), []);
 
   const listHtml = trainings?.length ? (
-    <ul
-      className={
-        isListView() ? styles.primeTrainingsList : styles.primeTrainingsCards
-      }
-    >
-      {isListView() && <hr className={styles.primeVerticalSeparator}></hr>}
-      {trainings?.map((training) =>
+    <ul className={isListView() ? styles.primeTrainingsList : styles.primeTrainingsCards}>
+      {trainings?.map((training: PrimeLearningObject, index: number) =>
         isListView() ? (
           <PrimeTrainingList
             training={training}
-            key={training.id}
+            key={`${training.id}-${view}`}
+            account={account}
           ></PrimeTrainingList>
         ) : (
-          <PrimeTrainingCard
-            training={training}
-            key={training.id}
-          ></PrimeTrainingCard>
+          <li key={training.id}>
+            <div className={styles.loCard}>
+              <PrimeTrainingCardV2
+                training={training}
+                key={`${training.id}-${view}`}
+                account={account}
+                user={authorDetails}
+                showProgressBar={!!training?.enrollment}
+                showSkills={true}
+                showPrice={canShowPrice(training, account)}
+                showRating={showRating(training, account!)}
+                showEffectivenessIndex={showEffectivenessIndex(training, account)}
+                showActionButton={true}
+                showRecommendedReason={true}
+                handleLoEnrollment={handleLoEnrollment}
+                updateLearningObject={updateLearningObject}
+                handlePlayerLaunch={launchPlayerHandler}
+                handleLoNameClick={() => navigateToLOPage(training)}
+                handleL1FeedbackLaunch={handleL1FeedbackLaunch}
+              ></PrimeTrainingCardV2>
+            </div>
+          </li>
         )
       )}
     </ul>
   ) : (
-    <p className={styles.noResults}>
-      {formatMessage({ id: "alm.catalog.no.result" })}
-    </p>
+    !isLoading && (
+      <p className={styles.noResults}>{formatMessage({ id: "alm.catalog.no.result" })}</p>
+    )
   );
-
+  const getAuthorImage = () => {
+    if (isAuthorExternal) {
+      return (
+        <span className={styles.avatar} data-automationid="default-avatar">
+          {DEFAULT_USER_SVG()}
+        </span>
+      );
+    }
+    return (
+      <img
+        className={styles.avatar}
+        src={authorDetails.avatarUrl}
+        alt={GetTranslation("author.avatar.text")}
+      />
+    );
+  };
+  const getAuthorName = useCallback(() => {
+    if (isAuthorExternal) {
+      return authorName;
+    }
+    return authorDetails.name;
+  }, [authorDetails, authorType]);
   return (
     <Provider theme={lightTheme} colorScheme="light">
-      <div className={styles.dashboard}>
+      {shouldLaunchFeedback && (
+        <PrimeFeedbackWrapper
+          trainingId={feedbackTrainingId}
+          trainingInstanceId={trainingInstanceId}
+          playerLaunchTimeStamp={playerLaunchTimeStamp}
+          fetchCurrentLo={fetchCurrentLo}
+          getFilteredNotificationForFeedback={getFilteredNotificationForFeedback}
+          submitL1Feedback={submitL1Feedback}
+          closeFeedbackWrapper={closeFeedbackWrapper}
+        />
+      )}
+      <div className={styles.pageContainer}>
         <div className={styles.authorBox}>
-          <div className={styles.profile}>
-            <img className={styles.avatar} src={user.avatarUrl} alt="" />
-            <div className={styles.about}>
-              <span className={styles.authorName}>{user.name}</span>
-              <span className={styles.designation}>
-                {formatMessage({ id: "alm.text.author" })}
-              </span>
-              <span>
-                {formatMessage({ id: "alm.author.trainings" }, { x: 173 })}
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className={styles.catalogContainer}>
-          <div className={styles.back}>
+          <div className={styles.back} data-automationid="back-button">
             <button
               className={styles.btn}
               onClick={() => window.history.back()}
+              data-automationid="Back-Button"
             >
-              <img src={icon} className={styles.backIcon} alt="" />
+              <div
+                className={styles.backIcon}
+                aria-label={GetTranslation("cpw.back.button.aria.label")}
+              >
+                {BACK_BUTTON_ICON()}
+              </div>
               {formatMessage({ id: "alm.author.back.label" })}
             </button>
           </div>
-          <div className={styles.left}>
-            {formatMessage(
-              { id: "alm.author.trainings.note" },
-              { AuthorName: <b>{user.name}</b> }
-            )}
+          <div className={styles.authorDetails} data-automationid="author-details">
+            {getAuthorImage()}
           </div>
-          <div className={styles.right}>
-            <div className={styles.sort}>
-              {formatMessage({ id: "alm.author.sortBy" })}
+          <div className={styles.about} data-automationid="trainings-note">
+            <span className={styles.allLearningsHeader}>
+              {GetTranslation("alm.author.trainings.note", true)}
+            </span>
+            <span
+              className={styles.authorName}
+              data-automationid={getAuthorName()}
+              aria-label={`${formatMessage({
+                id: "alm.label.authorName",
+                defaultMessage: "Author name",
+              })} ${getAuthorName()}`}
+              tabIndex={0}
+              data-skip="skip-target"
+            >
+              {getAuthorName()}
+            </span>
+          </div>
+          <div className={styles.authorDescription} data-automationId="author-description">
+            {authorDetails.bio}
+          </div>
+        </div>
+        <div className={styles.authorLoContainer}>
+          <div className={styles.actionsContainer}>
+            <div
+              className={styles.totalTrainingsDetails}
+              data-automationid="total-trainings-by-author"
+            >
+              {isLoading
+                ? ""
+                : formatMessage({ id: "alm.author.trainings" }, { x: totalTrainings })}
             </div>
-            <div className={styles.picker}>
-              <Picker
-                defaultSelectedKey={formatMessage({
-                  id: "alm.author.sort.recentlyPublished",
-                })}
-                UNSAFE_className={styles.pick}
-              >
-                <Item
-                  key={formatMessage({
-                    id: "alm.author.sort.recentlyPublished",
-                  })}
+            <div className={styles.right}>
+              <div>{formatMessage({ id: "alm.picker.sortBy" })}</div>
+              <div className={styles.picker}>
+                <ALMCustomPicker
+                  options={sortByDropdown}
+                  onOptionSelected={handleOptionSelected}
+                  defaultSelectedOptionId={selectedOptionId}
+                />
+              </div>
+              <div className={styles.toggle}>
+                <button
+                  className={`${styles.viewButton} ${
+                    view === TILE_VIEW ? styles.selectedView : ""
+                  }`}
+                  onClick={() => setTrainingsLayout(TILE_VIEW, setView)}
+                  title={gridButtonTitle}
+                  aria-label={gridButtonTitle}
+                  data-automationid="trainingsTileView"
+                  aria-pressed={view === TILE_VIEW}
                 >
-                  {formatMessage({ id: "alm.author.sort.recentlyPublished" })}
-                </Item>
-                <Item
-                  key={formatMessage({
-                    id: "alm.author.sort.nameAZ",
-                  })}
+                  <ClassicGridView />
+                </button>
+
+                <button
+                  className={`${styles.viewButton} ${
+                    view === LIST_VIEW ? styles.selectedView : ""
+                  }`}
+                  onClick={() => setTrainingsLayout(LIST_VIEW, setView)}
+                  title={listButtonTitle}
+                  aria-label={listButtonTitle}
+                  data-automationid="trainingsListView"
+                  aria-pressed={view === LIST_VIEW}
                 >
-                  {formatMessage({ id: "alm.author.sort.nameAZ" })}
-                </Item>
-                <Item
-                  key={formatMessage({
-                    id: "alm.author.sort.nameZA",
-                  })}
-                >
-                  {formatMessage({ id: "alm.author.sort.nameZA" })}
-                </Item>
-              </Picker>
-            </div>
-            <div className={styles.toggle}>
-              <ToggleView />
+                  <ViewList />
+                </button>
+              </div>
             </div>
           </div>
+
           <div className={styles.top}>
-            <div className={styles.primeTrainingsContainer}>
+            <div>
               {listHtml}
               <div
+                ref={elementRef}
                 id="load-more-trainings"
-                className={styles.loadMoreContainer}
+                data-automationid="loadMoreTrainingsLoader"
               >
-                {hasMoreItems ? (
-                  <button
-                    onClick={loadMoreTraining}
-                    className="almButton secondary"
-                  >
-                    {formatMessage({ id: "alm.community.loadMore" })}
-                  </button>
-                ) : (
-                  ""
-                )}
+                {isLoading || hasMoreItems ? <ALMLoader classes={styles.loader} /> : ""}
               </div>
             </div>
           </div>
         </div>
+        <ALMGoToTop />
       </div>
     </Provider>
   );

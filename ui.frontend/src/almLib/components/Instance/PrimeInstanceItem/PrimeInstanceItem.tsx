@@ -18,9 +18,8 @@ import Money from "@spectrum-icons/workflow/Money";
 import User from "@spectrum-icons/workflow/User";
 import { useMemo } from "react";
 import { useIntl } from "react-intl";
-import { COMPLETED, WAITING } from "../../../utils/constants";
+import { COMPLETED, ENGLISH_LOCALE, WAITING } from "../../../utils/constants";
 import { formatTime, GetFormattedDate } from "../../../utils/dateTime";
-import { getALMConfig } from "../../../utils/global";
 import { checkIsEnrolled } from "../../../utils/overview";
 import { getFormattedPrice } from "../../../utils/price";
 import {
@@ -30,13 +29,16 @@ import {
 } from "../../../utils/translationService";
 import styles from "./PrimeInstanceItem.module.css";
 import CheckmarkCircle from "@spectrum-icons/workflow/CheckmarkCircle";
+import { useUserContext } from "../../../contextProviders/userContextProvider";
 
 const PrimeInstanceItem = (props: any) => {
   const {
     id,
     name,
     format,
-    showLocationAndInstructor,
+    showStartDateAndInstructor,
+    showLocation,
+    showCompletionDateColumn,
     startDate,
     completionDate,
     enrollByDate,
@@ -52,8 +54,13 @@ const PrimeInstanceItem = (props: any) => {
     extension,
     extensionClickHandler,
     instanceId,
+    hasCrVcModule,
+    waitlistPosition,
   } = props;
   const { formatMessage } = useIntl();
+
+  const user = useUserContext() || {};
+  const contentLocale = user?.contentLocale || ENGLISH_LOCALE;
 
   const selectHandler = () => {
     selectInstanceHandler(id);
@@ -70,7 +77,7 @@ const PrimeInstanceItem = (props: any) => {
 
   const getInstanceName = () => {
     return (
-      <a className={styles.instanceName} onClick={selectHandler}>
+      <a tabIndex={0} className={styles.instanceName} onClick={selectHandler}>
         {name}
       </a>
     );
@@ -80,26 +87,25 @@ const PrimeInstanceItem = (props: any) => {
     if (!extension) {
       return {} as any;
     }
-    return getPreferredLocalizedMetadata(extension.localizedMetadata, locale);
-  }, [extension, locale]);
+    return getPreferredLocalizedMetadata(extension.localizedMetadata, contentLocale);
+  }, [extension, contentLocale]);
 
   const seatsAvailableText = seatLimit ? (
     <>
-      &nbsp; &#124; &nbsp;
       {seatsAvailable > 0 ? (
-        <span className={styles.seatAvailable}>
-          {formatMessage(
-            {
-              id: `alm.overview.seatsAvailable`,
-            },
-            { x: seatsAvailable }
-          )}
+        <span className={styles.label}>
+          {formatMessage({
+            id: `alm.overviewseatsAvailableMsg`,
+          })}
+          {": "}
+          <span className={styles.value}>{seatsAvailable}</span>
         </span>
       ) : enrollment && enrollment.state === WAITING ? (
         <span>
           {formatMessage({
-            id: `alm.overview.waitlist`,
+            id: `alm.overview.waitlist.position`,
           })}
+          {waitlistPosition}
         </span>
       ) : (
         <span className={styles.seatNotAvailable}>
@@ -109,12 +115,20 @@ const PrimeInstanceItem = (props: any) => {
         </span>
       )}
     </>
+  ) : hasCrVcModule ? (
+    <>
+      <span className={styles.label}>
+        {formatMessage({
+          id: `alm.overviewseatsAvailableMsg`,
+        })}
+      </span>
+    </>
   ) : (
     ""
   );
 
   const otherInstructorNames = () => {
-    const names = instructorsName.join(", ");
+    const names = instructorsName.slice(1).join(", ");
     return names;
   };
 
@@ -124,37 +138,32 @@ const PrimeInstanceItem = (props: any) => {
   };
 
   return (
-    <li className={styles.instanceListItem}>
-      <div className={styles.instanceNameWrapper}>
+    <div className={styles.instanceListItem} role="row">
+      <div role="cell" className={styles.instanceNameWrapper}>
         {getInstanceName()}
-        <p className={styles.instanceLoFormat}>
-          {fomatLabel}
-          {seatsAvailableText}
+        <p className={styles.instanceLoFormat}>{fomatLabel}</p>
+        <p className={styles.seatsInfo}>
+          {(!enrollment || enrollment?.state === WAITING) && seatsAvailableText}
         </p>
 
         {/* Instructors List */}
-        {showLocationAndInstructor && instructorsName.length > 0 && (
+        {showStartDateAndInstructor && instructorsName.length > 0 && (
           <p className={styles.instructorsName} title={otherInstructorNames()}>
             <span className={styles.aboveMobile}>
               {formatMessage({
                 id: "alm.instance.instructors",
                 defaultMessage: "Instructors",
               })}
-              {" : "}
+              {": "}
             </span>
-            <span
-              className={`${styles.mobileOnly} ${styles.icon}`}
-              aria-hidden="true"
-            >
+            <span className={`${styles.mobileOnly} ${styles.icon}`} aria-hidden="true">
               <User />
             </span>
             {instructorsName[0]}
             {instructorsName.length > 1 && (
               <>
                 <span>, </span>
-                <span style={{ textDecoration: "underline" }}>
-                  +{instructorsName.length - 1}
-                </span>
+                <span style={{ textDecoration: "underline" }}>+{instructorsName.length - 1}</span>
               </>
             )}
           </p>
@@ -183,120 +192,106 @@ const PrimeInstanceItem = (props: any) => {
                 </p>
               </>
             ) : (
-              <span className={styles.percent}>
-                {enrollment.progressPercent}%
-              </span>
+              <span className={styles.percent}>{enrollment.progressPercent}%</span>
             )}
           </div>
         )}
 
         {/* Enrollment Deadline */}
         {!enrollment && enrollByDateValue && (
-          <div className={styles.instanceLoFormat}>
+          <p className={styles.label}>
             {formatMessage({
               id: "alm.instance.enrolBy.label",
-              defaultMessage: "Enrol by: ",
+              defaultMessage: "Enroll by",
             })}
-            {enrollByDateValue}
+            {": "}
+            <span className={styles.value}>{enrollByDateValue}</span>
+          </p>
+        )}
+      </div>
+
+      <div className={styles.middleSection}>
+        {/* Starting Date for CR/VCR course */}
+        {showStartDateAndInstructor && (
+          <div role="cell" className={styles.dateWrapper}>
+            {startDateValue && (
+              <p className={styles.startDate}>
+                <span className={`${styles.mobileOnly} ${styles.icon}`} aria-hidden="true">
+                  <Calendar />
+                </span>
+                {startDateValue} <br />
+                {`(${startTimeValue})`}
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Completion Deadline */}
+        {showCompletionDateColumn && (
+          <div role="cell" className={styles.completionDateWrapper}>
+            {completionDateValue && (
+              <p className={styles.completionDate}>
+                <span className={`${styles.mobileOnly} ${styles.icon}`} aria-hidden="true">
+                  <Calendar />
+                </span>
+                {completionDateValue} <br /> {`(${completionTimeValue})`}
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* List of CR/VCR locations */}
+        {showLocation && (
+          <div role="cell" className={styles.locationWrapper} title={otherLocations()}>
+            {location.length > 0 && (
+              <p className={styles.startDate}>
+                <span className={`${styles.mobileOnly} ${styles.icon}`} aria-hidden="true">
+                  <Location />
+                </span>
+                {location[0]}
+                {location.length > 1 && (
+                  <>
+                    <span> </span>
+                    <span style={{ textDecoration: "underline" }}>+{location.length - 1} more</span>
+                  </>
+                )}
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Training price */}
+        {price && (
+          <div role="cell" className={styles.priceWrapper}>
+            <p className={styles.startDate}>
+              <span className={`${styles.mobileOnly} ${styles.icon}`} aria-hidden="true">
+                <Money />
+              </span>
+              {getFormattedPrice(price)}
+            </p>
           </div>
         )}
       </div>
 
-      {/* Starting Date for CR/VCR course */}
-      {showLocationAndInstructor && (
-        <div className={styles.dateWrapper}>
-          {startDateValue && (
-            <p className={styles.startDate}>
-              <span
-                className={`${styles.mobileOnly} ${styles.icon}`}
-                aria-hidden="true"
-              >
-                <Calendar />
-              </span>
-              {startDateValue} {`(${startTimeValue})`}
-            </p>
-          )}
-        </div>
-      )}
-
-      {/* Completion Deadline */}
-      {!showLocationAndInstructor && (
-        <div className={styles.completionDateWrapper}>
-          {completionDateValue && (
-            <p className={styles.completioDate}>
-              <span
-                className={`${styles.mobileOnly} ${styles.icon}`}
-                aria-hidden="true"
-              >
-                <Calendar />
-              </span>
-              {completionDateValue} {`(${completionTimeValue})`}
-            </p>
-          )}
-        </div>
-      )}
-
-      {/* List of CR/VCR locations */}
-      {showLocationAndInstructor && (
-        <div className={styles.locationWrapper} title={otherLocations()}>
-          {location.length > 0 && (
-            <p className={styles.startDate}>
-              <span
-                className={`${styles.mobileOnly} ${styles.icon}`}
-                aria-hidden="true"
-              >
-                <Location />
-              </span>
-              {location[0]}
-              {location.length > 1 && (
-                <>
-                  <span>, </span>
-                  <span style={{ textDecoration: "underline" }}>
-                    +{location.length - 1} more
-                  </span>
-                </>
-              )}
-            </p>
-          )}
-        </div>
-      )}
-
-      {/* Training price */}
-      {price && (
-        <div className={styles.priceWrapper}>
-          <p className={styles.startDate}>
-            <span
-              className={`${styles.mobileOnly} ${styles.icon}`}
-              aria-hidden="true"
-            >
-              <Money />
-            </span>
-            {getFormattedPrice(price)}
-          </p>
-        </div>
-      )}
-
-      {/* View instance button */}
-      <div className={styles.actionWrapper}>
-        <button
-          onClick={selectHandler}
-          className={`almButton secondary ${styles.button}`}
-        >
+      {/* Select instance button */}
+      <div role="cell" className={styles.actionWrapper}>
+        <button onClick={selectHandler} className={`almButton secondary ${styles.buttonLabel}`}>
           {formatMessage({
-            id: "alm.instance.view",
-            defaultMessage: "View",
+            id: "alm.instance.select",
+            defaultMessage: "Select",
           })}
         </button>
         {extension && (
           <a
             className={styles.extensionLabel}
-            onClick={(event) => extensionClickHandler(instanceId, event)}
+            onClick={event => extensionClickHandler(instanceId, event)}
+            tabIndex={0}
           >
             {extensionLocalizedMetadata?.label}
           </a>
         )}
       </div>
-    </li>
+    </div>
   );
 };
 

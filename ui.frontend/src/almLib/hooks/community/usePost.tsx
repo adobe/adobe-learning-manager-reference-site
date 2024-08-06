@@ -48,9 +48,7 @@ export const usePost = () => {
       }
 
       if (postingType === POLL) {
-        postBody.data.attributes.otherData = JSON.stringify(
-          getPollPostObject(pollOptions)
-        );
+        postBody.data.attributes.otherData = JSON.stringify(getPollPostObject(pollOptions));
       }
 
       const headers = { "content-type": "application/json" };
@@ -108,9 +106,7 @@ export const usePost = () => {
       }
 
       if (postingType === POLL) {
-        postBody.data.attributes.otherData = JSON.stringify(
-          getPollPostObject(pollOptions)
-        );
+        postBody.data.attributes.otherData = JSON.stringify(getPollPostObject(pollOptions));
       }
 
       const headers = { "content-type": "application/json" };

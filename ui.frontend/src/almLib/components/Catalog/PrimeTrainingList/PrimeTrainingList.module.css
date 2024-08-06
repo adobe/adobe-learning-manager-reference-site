@@ -12,42 +12,286 @@ governing permissions and limitations under the License.
 @import "../../../styles/variables.css";
 
 .listItem {
-  display: block;
+  display: flex;
   font-size: var(--prime-font-size-16);
-  margin-top: 15px;
+  padding: 24px 0;
+  border-top: none !important;
+  border-bottom: 1px solid var(--prime-color-neutral-3);
+  gap: 20px;
 }
-
-.listRow {
+.detailsContainer {
+  width: 85%;
   display: flex;
 }
 
-.loName {
-  color: var(--prime-color-primary);
+.actionsContainer {
+  width: 15%;
+  padding-left: 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  justify-content: space-between;
+}
+
+.imageContainer {
+  width: 198px;
+  height: 103px;
+  border-radius: 8px;
+  position: relative;
+}
+.price {
+  position: absolute;
+  transition: all 0.5s ease-in-out;
+  top: 8px;
+  left: 8px;
+  padding: 4px 10px 5px 10px;
+  gap: 4px;
+  border-radius: 40px;
+  font-size: var(--prime-font-size-12);
+  font-weight: var(--prime-font-weight-700);
+  line-height: 15.02px;
+  text-align: left;
+  color: var(--prime-color-white);
+  background: var(--prime-color-black);
+  text-transform: uppercase;
+}
+.loDetailsContainer {
+  width: calc(100% - 198px);
+  padding-left: 16px;
+}
+
+.title {
+  font-family: var(--prime-font-family);
+  font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-700);
+  color: var(--prime-color-link);
+  line-height: 18.2px;
+  text-align: left;
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   cursor: pointer;
   text-decoration: none;
+}
+.extraDetails {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.details {
+  position: relative;
+  font-family: var(--prime-font-family);
+  font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-400);
+  line-height: 18.2px;
+  text-align: left;
+  color: var(--prime-color-neutral-1);
+  display: inline-block;
+  max-width: 33%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dot {
+  content: " ";
+  height: 4px;
+  width: 4px;
+  border-radius: 50%;
+  background: var(--prime-color-black);
+}
+
+.description {
+  font-family: var(--prime-font-family);
+  font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-400);
+  line-height: 18.2px;
+  text-align: left;
+  white-space: break-spaces;
+  color: var(--prime-color-neutral-1);
+  margin: 5px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-height: 18px;
+}
+
+.skillsContainer {
+  display: flex;
+  align-items: center;
+}
+
+.loSkillsData {
+  width: 33%;
+  font-family: var(--prime-font-family);
+  font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-700);
+  line-height: 17.53px;
+  text-align: left;
+  color: var(--prime-color-black);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 5px 0;
+  padding-right: 5px;
+}
+.skillsLabel {
+  font-weight: var(--prime-font-weight-700);
+  margin-right: 5px;
+}
+.skills {
+  font-weight: var(--prime-font-weight-400);
+  color: var(--prime-color-neutral-1);
+}
+
+.dueDateContainer {
+  width: 33%;
+  padding: 5px 0;
+  padding-right: 5px;
+  position: relative;
+  font-family: var(--prime-font-family);
+  font-size: var(--prime-font-size-14);
+  line-height: 18.2px;
+  text-align: left;
+  color: var(--prime-color-neutral-1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-left: 5px;
+}
+.dueDateLabel {
+  display: inline-block;
+  font-weight: var(--prime-font-weight-700);
+  color: var(--prime-color-black);
+}
+.separator {
+  position: relative;
+  right: 3px;
+}
+.progressContainer {
+  width: 33%;
+  display: flex;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 5px 0;
+  padding-left: 5px;
+}
+.iconActionButton {
+  display: flex;
+  gap: 4px;
+  padding: 5px;
+  background: none;
+  border: none;
+  width: auto;
+  cursor: pointer;
+  max-width: 100%;
+}
+.iconActionButtonLabel {
+  width: 90%;
+  overflow: hidden;
+  white-space: nowrap;
+  display: block;
+  text-overflow: ellipsis;
+  display: block;
+  text-align: left;
+  color: var(--prime-color-link);
+  position: relative;
+  top: 2px;
+}
+.progressBar {
+  width: 55px !important;
+}
+.progressValueText {
+  font-family: var(--prime-font-family);
+  font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-500);
+  line-height: 15.6px;
+  margin-left: 8px;
+  color: var(--prime-color-neutral-1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  position: relative;
+  bottom: 2px;
+}
+
+.progressBar div[class$="spectrum-BarLoader-fill"] {
+  background: var(--prime-color-primary);
+  height: 100%;
+}
+.scoreContainer {
+  display: flex;
+  align-items: end;
+  justify-content: end;
+  width: 100%;
+}
+
+.notRatedContainer {
+  width: 44px;
+  height: 18px;
+  gap: 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+  padding: 0 7px;
+  background: var(--prime-color-neutral-3);
+  font-size: var(--prime-font-size-12);
+  font-weight: 500;
+  line-height: 15.02px;
+  color: var(--prime-color-black);
   cursor: pointer;
 }
-
-.loDetails {
-  margin-bottom: 25px;
+.notRatedContainer svg {
+  width: 12px;
+  height: 12px;
+}
+.ratingsContainer {
+  font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-400);
+  line-height: 15.02px;
+  color: var(--prime-color-neutral-1);
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.ratingsContainer svg {
+  fill: var(--prime-progress-color);
+  width: 12px;
+  height: 15px;
+}
+.rating {
+  font-weight: var(--prime-font-weight-700);
+  line-height: 15.02px;
+  text-align: right;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+.bold {
+  font-weight: var(--prime-font-weight-700);
 }
 
-.separatorDot {
-  width: 5px;
-  height: 5px;
-  margin: 1px 5px;
-  border-radius: 50%;
-  background-color: var(--prime-color-nc3);
-  display: inline-block;
+.effectiveness {
+  color: var(--prime-color-link);
+  font-size: var(--prime-font-size-14);
+  line-height: 20px;
+  font-weight: var(--prime-font-weight-400);
 }
 
-.loAdditionalData {
-  margin-bottom: 20px;
+.starContainer {
   display: flex;
-}
-
-.dueDateLabel {
-  margin-left: auto;
+  align-items: center;
+  gap: 2px;
+  padding-bottom: 5px;
+  color: var(--prime-color-black);
+  cursor: default;
 }
 
 .primeVerticalSeperator {
@@ -59,17 +303,43 @@ governing permissions and limitations under the License.
 .exploreButton {
   color: var(--prime-color-primary);
   background: var(--prime-color-white);
-  border: 0.1rem solid var(--prime-color-primary);
+  border: 2px solid var(--prime-color-primary);
   cursor: pointer;
   border-radius: 20px;
   padding: 5px 0px;
   width: 90px;
+  padding: 6px 16px 6px 16px;
+  font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-700);
+  line-height: 17.53px;
+  font-family: var(--prime-font-family);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .exploreButton:hover {
-  opacity: 0.7;
+  color: var(--prime-color-white);
+  background: var(--prime-color-primary);
 }
 
+.addRemoveLink {
+  color: var(--prime-color-link);
+  font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-500);
+  line-height: 15.6px;
+  text-align: left;
+  text-decoration: none;
+  position: relative;
+  bottom: 2px;
+  padding-left: 2px;
+}
+.icon {
+  padding-right: 4px;
+}
+.block {
+  display: block;
+}
 .loEnrollmentData {
   display: flex;
   width: 65%;
@@ -81,29 +351,8 @@ governing permissions and limitations under the License.
   justify-content: flex-start;
 }
 
-.dueDateLabel {
-  display: flex;
-  margin-left: 50px;
-}
-
 .actionButton {
   margin-left: auto;
-}
-
-.loSkillsData {
-  width: 35%;
-}
-
-.progressValueText {
-  margin-left: 10px;
-}
-
-.progressBar {
-  width: 80px;
-}
-
-.description {
-  margin-bottom: 15px;
 }
 
 .loThumbnail {
@@ -123,43 +372,20 @@ governing permissions and limitations under the License.
   margin-right: 20px;
 }
 
-@media screen and (max-width: 450px) {
-  .progressBar {
-    display: none;
-  }
-
-  .loSkillsData {
-    width: 25%;
-  }
-
-  .loEnrollmentData {
-    width: 75%;
-  }
-
-  .dueDateLabel {
-    display: flex;
-    margin-left: 15px;
+.snippet {
+  color: var(--prime-color-neutral-1);
+  > span {
+    background-color: yellow;
   }
 }
 
-@media screen and (max-width: 780px) {
-  .loAdditionalData,
-  .loEnrollmentData,
-  .loEnrollData {
-    display: inline;
-  }
-  .loSkillsData,
-  .loEnrollData {
-    width: 100%;
-    margin: 5px 0px;
-  }
-  .actionButton {
-    margin: 10px 0px;
-  }
-  .dueDateLabel {
-    margin: 5px 0px;
-  }
-  .progressBar {
-    margin: 11px 0px;
-  }
+.snippetContainer {
+  display: flex;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  font-size: var(--prime-font-size-14);
+}
+.snippetType {
+  font-weight: var(--prime-font-weight-700);
+  margin-right: 5px;
 }

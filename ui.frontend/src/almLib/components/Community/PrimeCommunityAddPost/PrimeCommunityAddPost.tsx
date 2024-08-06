@@ -29,14 +29,7 @@ const PrimeCommunityAddPost = (props: any) => {
     pollOptions: any
   ) => {
     try {
-      await addPost(
-        boardId,
-        input,
-        postingType,
-        resource,
-        isResourceModified,
-        pollOptions
-      );
+      await addPost(boardId, input, postingType, resource, isResourceModified, pollOptions);
       // below setTimeout is needed to fix spetrum dialog breaking scroll issue
       setTimeout(() => {
         showConfirmationDialog();
@@ -78,15 +71,7 @@ const PrimeCommunityAddPost = (props: any) => {
                 resource: any,
                 isResourceModified: any,
                 pollOptions: any
-              ) =>
-                savePostHandler(
-                  input,
-                  postingType,
-                  resource,
-                  isResourceModified,
-                  pollOptions
-                )
-              }
+              ) => savePostHandler(input, postingType, resource, isResourceModified, pollOptions)}
             ></PrimeCommunityAddPostButton>
           </div>
         </div>
@@ -100,15 +85,7 @@ const PrimeCommunityAddPost = (props: any) => {
             resource: any,
             isResourceModified: any,
             pollOptions: any
-          ) =>
-            savePostHandler(
-              input,
-              postingType,
-              resource,
-              isResourceModified,
-              pollOptions
-            )
-          }
+          ) => savePostHandler(input, postingType, resource, isResourceModified, pollOptions)}
           inMobileView={true}
         ></PrimeCommunityAddPostButton>
       </div>

@@ -1,0 +1,61 @@
+@import "../../../styles/variables.css";
+
+.prlPContainer,
+.prlPContainer * {
+  box-sizing: border-box;
+}
+.prlPContainer {
+  width: 100%;
+  border-top: 1px solid var(--prime-color-neutral-2);
+  margin: 12px 0;
+  padding: 12px 0;
+}
+.prlPHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.prlPHeading {
+  font-size: var(--prime-font-size-16);
+  color: var(--prime-color-neutral-1);
+}
+.prlPPrimaryButton {
+  width: 90px;
+  height: 40px;
+  background: var(--prime-color-primary);
+  border: none;
+  border-radius: 20px;
+  color: var(--prime-color-neutral-3);
+  cursor: pointer;
+}
+.prlPSecondaryButton {
+  font-size: var(--prime-font-size-14);
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  cursor: pointer;
+  background: none;
+  color: var(--prime-color-primary);
+  border: 0;
+  margin-right: 12px;
+}
+.prlPPrimaryButton[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.prlPCriteria {
+  font-size: var(--prime-font-size-16);
+  color: var(--prime-color-neutral-1);
+}
+.prlPCriteriaSection {
+  display: flex;
+}
+.prlPPrlChips {
+  flex-grow: 1;
+}
+.prlPLevelSelector {
+  flex-shrink: 0;
+  width: 430px;
+}

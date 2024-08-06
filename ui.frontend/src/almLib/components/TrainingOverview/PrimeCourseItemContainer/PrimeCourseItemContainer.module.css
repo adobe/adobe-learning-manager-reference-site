@@ -12,17 +12,13 @@ governing permissions and limitations under the License.
 @import "../../../styles/variables.css";
 
 .container {
-  max-width: 100%;
-  /* margin: 0 auto; */
-  border: 1px solid var(--prime-color-nc2);
+  width: 100%;
   clear: both;
   text-align: left !important;
   list-style: none;
   padding: 0;
   display: flex;
   flex-direction: column;
-  margin-bottom: 10px;
-  background-color: var(--prime-color-white);
 }
 
 .moduleDescription {
@@ -69,15 +65,14 @@ governing permissions and limitations under the License.
 }
 
 .wrapperContainer {
-  background-color: var(--prime-color-nc4);
-  border-color: var(--prime-color-nc4);
-  /* border: 1px solid #c9c9c9; */
+  background-color: var(--prime-color-neutral-4);
+  border-color: var(--prime-color-neutral-4);
 }
 
 .metaDataContainer {
   display: flex;
   flex-wrap: wrap;
-  background-color: var(--prime-color-nc4);
+  background-color: var(--prime-color-neutral-4);
 }
 
 .metadata {
@@ -89,6 +84,23 @@ governing permissions and limitations under the License.
 .resourceAndDuration {
   display: flex;
   justify-content: space-between;
+}
+
+.picker {
+  width: 40%;
+}
+
+.picker > div > button {
+  border-color: var(--prime-color-neutral-3);
+}
+
+.picker > div > button > span {
+  color: var(--prime-color-neutral-1) !important;
+  font-style: normal !important;
+}
+
+.trainingDisabled {
+  opacity: 0.5;
 }
 
 @media screen and (max-width: 450px) {
@@ -110,184 +122,60 @@ governing permissions and limitations under the License.
     width: 100%;
   }
 
-  .picker{
+  .picker {
     width: 150px;
   }
 }
 
 .collapsibleContainer {
-  background: no-repeat padding-box var(--prime-color-nc4);
+  background: no-repeat padding-box;
+  background-color: var(--prime-color-neutral-4);
   border: none;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
+  width: 100%;
+  height: 14px;
+  border-radius: 15px;
+  margin-bottom: 10px;
 }
 
 .collapsibleContainer > button {
   cursor: pointer;
   width: 100%;
-  padding: 0;
+  padding: 0 !important;
   min-height: 19px;
   border: transparent;
 }
 
 .collapsibleContainer .count {
   position: absolute;
-  right: 5px;
-  color: var(--prime-color-nc1);
-  font-size: var(--prime-font-size-12);
+  right: 10px;
+  color: var(--prime-color-body);
+  font-size: var(--prime-font-size-10);
 }
 
 .collapsibleContainer > button > svg {
-  fill: var(--prime-color-nc3);
+  fill: var(--prime-color-body);
   width: 18px;
   height: 18px;
 }
 
-.dropdown {
-  align-items: center;
-  box-sizing: border-box;
+.collapsibleContainer [class$="focus-ring"] {
+  outline: 2px solid var(--prime-color-link);
+}
+
+.dropdownError > div > button {
+  border-color: var(--prime-error-color);
+}
+
+.instanceSelectContainer {
+  padding-left: 85px;
+  gap: 8px;
+  padding-bottom: 16px;
   display: flex;
-  height: 32 px;
-  margin-bottom: 0px;
-  margin-left: 0px;
-  margin-right: 0px;
-  margin-top: 10px;
-  overflow-x: visible;
-  overflow-y: visible;
-  padding-bottom: 0px;
-  padding-left: 0px;
-  padding-right: 0px;
-  padding-top: 0px;
-  width: 200px;
-  color: rgb(86, 86, 86);
-  background-color: rgb(255, 255, 255);
-  border-bottom-color: rgb(205, 205, 205);
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  border-image-outset: 0;
-  border-image-repeat: stretch;
-  border-image-slice: 100%;
-  border-image-source: none;
-  border-image-width: 1;
-  border-left-color: rgb(205, 205, 205);
-  border-left-style: solid;
-  border-left-width: 1px;
-  border-right-color: rgb(205, 205, 205);
-  border-right-style: solid;
-  border-right-width: 1px;
-  border-top-color: rgb(205, 205, 205);
-  border-top-style: solid;
-  border-top-width: 1px;
-  cursor: pointer;
-  position: relative;
-  left: 70px;
-  bottom: 25px;
-  /* display: block; */
-}
-
-.dropdown:disabled {
-  cursor: not-allowed;
-  border-color: #eaeaea;
-  color: #ababab;
-}
-
-.dropdownArrow {
-  position: relative;
-  left: 10px;
-  box-sizing: border-box;
-  height: 32px;
-  overflow-x: visible;
-  overflow-y: visible;
-  width: 24px;
-  color: rgb(86, 86, 86);
-  cursor: pointer;
-  display: block;
-  background-color: rgb(255, 255, 255);
-  border-bottom-color: rgb(255, 255, 255);
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  border-image-outset: 0;
-  border-image-repeat: stretch;
-  border-image-slice: 100%;
-  border-image-source: none;
-  border-image-width: 1;
-  border-left-color: rgb(205, 205, 205);
-  border-left-style: solid;
-  border-left-width: 1px;
-  border-right-color: rgb(205, 205, 205);
-  border-right-style: solid;
-  border-right-width: 1px;
-  border-top-color: rgb(255, 255, 255);
-  border-top-style: solid;
-  border-top-width: 1px;
-}
-
-.arrow svg {
-  align-items: right;
-  position: relative;
-  left: 0px;
-  top: 3px;
-  transform: scale(0.8);
-}
-
-.textInBox {
-  text-align: left;
-  width: 166px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-height: 32px;
-  white-space: nowrap;
-}
-
-.line {
-  border-top-width: 0.4px;
-  border-top-style: solid;
-  border-top-color: rgba(0, 0, 0, 0.4);
-  color: rgb(86, 86, 86);
-  -webkit-font-smoothing: antialiased;
-  list-style-image: none;
-  list-style-position: outside;
-  list-style-type: none;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  display: block;
-}
-
-.dropdownContent {
-  text-align: left;
-  box-sizing: border-box;
-  height: 32px;
-  overflow-x: visible;
-  overflow-y: visible;
-  width: 200px;
-  color: rgb(86, 86, 86);
-  background-color: rgb(255, 255, 255);
-  border-bottom-color: rgb(205, 205, 205);
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  border-image-outset: 0;
-  border-image-repeat: stretch;
-  border-image-slice: 100%;
-  border-image-source: none;
-  border-image-width: 1;
-  border-left-color: rgb(205, 205, 205);
-  border-left-style: solid;
-  border-left-width: 1px;
-  border-right-color: rgb(205, 205, 205);
-  border-right-style: solid;
-  border-right-width: 1px;
-  border-top-color: rgb(255, 255, 255);
-  border-top-style: solid;
-  border-top-width: 1px;
-  cursor: pointer;
-  position: relative;
-  left: 30px;
-  bottom: 25px;
-  z-index: 1;
-  overflow: visible;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  flex-direction: column;
 }
 
 .instanceList {
@@ -295,9 +183,10 @@ governing permissions and limitations under the License.
 }
 
 .instanceLabel {
-  margin-left: 8px;
   vertical-align: sub;
-  margin-right: 5px;
+  padding-right: 8px;
+  font-weight: var(--prime-font-weight-600);
+  color: var(--prime-color-neutral-1);
 }
 
 .extraWrapper {
@@ -313,18 +202,50 @@ governing permissions and limitations under the License.
   width: 80%;
 }
 
-.dropdownGroup {
-  margin-top: 11px;
-  margin-bottom: 25px;
+.instanceSelectDropdown {
   display: inline-flex;
   align-items: center;
 }
 
-.flexLPUpdate {
-  font-weight: 600;
-  font-size: smaller;
-  color: #e6a000;
-  padding: 5px 0 0 60px;
-  margin-top: -25px;
-  margin-bottom: 25px;
+.isEnrolled {
+  align-items: center;
+  display: flex;
+  gap: 5px;
+  padding-left: 12px;
+}
+
+.isEnrolled svg {
+  width: 18px;
+  height: 18px;
+  fill: var(--prime-success-color);
+}
+
+.contentSeparator {
+  border: 0.5px solid var(--prime-color-neutral-3);
+  margin: 0;
+}
+
+.instanceSwitch {
+  color: var(--prime-progress-color);
+}
+.instanceMetaData,
+.unenrollmentDeadline,
+.instanceSwitch {
+  padding-left: 60px;
+}
+
+.instanceMetaData {
+  color: var(--prime-color-neutral-1);
+}
+
+.flexLPSeatLimitError {
+  font-size: var(--prime-font-size-12);
+  display: flex;
+  padding-left: 50px;
+}
+
+.flexLPSeatLimitError svg {
+  width: 32px;
+  height: 30px;
+  fill: var(--prime-error-color);
 }

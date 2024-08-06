@@ -1,4 +1,3 @@
-
 .almButton {
   box-sizing: border-box;
   border-radius: 3rem;
@@ -10,7 +9,6 @@
   /* min-width: 280px !important; */
   padding: 5px 15px;
   border: 0.1rem solid transparent;
-  
 }
 .almButton:focus-within,
 .almButton:focus-visible {
@@ -27,9 +25,12 @@
 }
 
 .primary:disabled {
-  cursor: default;
-  opacity: 0.5;
-  pointer-events: none;
+  cursor: not-allowed;
+  font-family: var(--prime-font-family);
+  border-radius: 26px;
+  border: 2px solid var(--prime-color-neutral-3);
+  color: var(--prime-color-neutral-2);
+  background-color: var(--prime-color-neutral-3);
 }
 
 .secondary {
@@ -44,9 +45,9 @@
 }
 
 .secondary:disabled {
-  background: var(--prime-color-nc2);
-  border-color: var(--prime-color-nc4);
-  color: var(--prime-color-white);
   cursor: not-allowed;
-  font-family:'source-sans-pro'
+  font-family: var(--prime-font-family);
+  border-radius: 26px;
+  border: 2px solid var(--prime-color-neutral-3);
+  color: var(--prime-color-neutral-2);
 }

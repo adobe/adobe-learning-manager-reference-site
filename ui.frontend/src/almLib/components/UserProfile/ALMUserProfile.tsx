@@ -9,12 +9,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import {
-  Button,
-  lightTheme,
-  ProgressBar,
-  Provider,
-} from "@adobe/react-spectrum";
+import { Button, lightTheme, ProgressBar, Provider } from "@adobe/react-spectrum";
 import Edit from "@spectrum-icons/workflow/Edit";
 import { useRef, useState } from "react";
 import { useIntl } from "react-intl";
@@ -28,15 +23,12 @@ import styles from "./ALMUserProfile.module.css";
 
 const ALMUserProfile = () => {
   const { formatMessage } = useIntl();
-  const { profileAttributes, updateProfileImage, deleteProfileImage } =
-    useProfile();
+  const { profileAttributes, updateProfileImage, deleteProfileImage } = useProfile();
   const { user } = profileAttributes;
   const [isUploading, setIsUploading] = useState(false);
   const [changeImage, setChangeImage] = useState(false);
   const state = store.getState();
-  const [fileUploadProgress, setFileUploadProgress] = useState(
-    state.fileUpload.uploadProgress
-  );
+  const [fileUploadProgress, setFileUploadProgress] = useState(state.fileUpload.uploadProgress);
 
   const inputRef = useRef<null | HTMLInputElement>(null);
 
@@ -112,21 +104,19 @@ const ALMUserProfile = () => {
                   isEditImageState()
                     ? styles.detailsContainerWithBottomPadding
                     : styles.detailsContainer
-                }>
+                }
+              >
                 <div className={styles.image}>
                   <div className={styles.imageWrapper}>
-                    <img
-                      className={styles.profileImage}
-                      src={user.avatarUrl}
-                      alt="profile"
-                    />
+                    <img className={styles.profileImage} src={user.avatarUrl} alt="profile" />
                   </div>
                   {!isUploading && !changeImage && (
                     <Button
                       variant="primary"
                       isQuiet
                       UNSAFE_className={styles.profileActionButton}
-                      onPress={changeImageClickHandler}>
+                      onPress={changeImageClickHandler}
+                    >
                       {formatMessage({
                         id: "alm.profile.change.image",
                         defaultMessage: "Change image",
@@ -139,7 +129,8 @@ const ALMUserProfile = () => {
                         variant="primary"
                         isQuiet
                         UNSAFE_className={styles.profileActionButton}
-                        onPress={startFileUpload}>
+                        onPress={startFileUpload}
+                      >
                         {formatMessage({
                           id: "alm.profile.edit.image",
                           defaultMessage: "Edit image",
@@ -150,7 +141,8 @@ const ALMUserProfile = () => {
                           variant="primary"
                           isQuiet
                           UNSAFE_className={styles.profileActionButton}
-                          onPress={deleteImage}>
+                          onPress={deleteImage}
+                        >
                           {formatMessage({
                             id: "alm.profile.delete.image",
                             defaultMessage: "Delete image",
@@ -163,7 +155,8 @@ const ALMUserProfile = () => {
                     variant="cta"
                     isQuiet
                     UNSAFE_className={styles.editIcon}
-                    onPress={startFileUpload}>
+                    onPress={startFileUpload}
+                  >
                     <Edit />
                   </Button>
                   {isUploading && (
@@ -181,7 +174,8 @@ const ALMUserProfile = () => {
                           id: "alm.removeUpload.label",
                           defaultMessage: "Remove upload",
                         })}
-                        onClick={cancelClickHandler}>
+                        onClick={cancelClickHandler}
+                      >
                         {SOCIAL_CANCEL_SVG()}
                       </button>
                     </div>
@@ -195,7 +189,8 @@ const ALMUserProfile = () => {
                           id: "alm.removeUpload.label",
                           defaultMessage: "Remove upload",
                         })}
-                        onClick={cancelClickHandler}>
+                        onClick={cancelClickHandler}
+                      >
                         {SOCIAL_CANCEL_SVG()}
                       </button>
                     </div>

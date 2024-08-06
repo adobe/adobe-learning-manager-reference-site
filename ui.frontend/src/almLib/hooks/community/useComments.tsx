@@ -13,11 +13,7 @@ import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import APIServiceInstance from "../../common/APIService";
 import { PrimeComment } from "../../models/PrimeModels";
-import {
-  loadComments,
-  paginateComments,
-  updateComment,
-} from "../../store/actions/social/action";
+import { loadComments, paginateComments, updateComment } from "../../store/actions/social/action";
 import { State } from "../../store/state";
 import { COMMENT } from "../../utils/constants";
 import { addHttpsToHref, getALMConfig } from "../../utils/global";

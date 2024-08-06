@@ -6,15 +6,10 @@ let alertMesssage: string = "Unknown Error";
 let alertType: "success" | "error";
 
 const useAlert = (): [
-  (show: boolean, messsage: string, type: AlertType, timeOut?: number) => void
+  (show: boolean, messsage: string, type: AlertType, timeOut?: number) => void,
 ] => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
-  const almAlert = (
-    show: boolean,
-    messsage: string,
-    type: AlertType,
-    timeOut: number = 3000
-  ) => {
+  const almAlert = (show: boolean, messsage: string, type: AlertType, timeOut: number = 3000) => {
     alertType = type;
     alertMesssage = messsage;
     setShowAlert(show);
@@ -23,13 +18,7 @@ const useAlert = (): [
     }, timeOut);
   };
   const alertTemplate = () => {
-    return (
-      <AlertDialog
-        type={alertType}
-        show={showAlert}
-        message={alertMesssage}
-      ></AlertDialog>
-    );
+    return <AlertDialog type={alertType} show={showAlert} message={alertMesssage}></AlertDialog>;
   };
 
   useEffect(() => {

@@ -17,6 +17,7 @@ import { useEffect, useMemo, useState } from "react";
 import { getRegistrationsURLs } from "../../utils/global";
 import ShowMenu from "@spectrum-icons/workflow/ShowMenu";
 import Close from "@spectrum-icons/workflow/Close";
+import { GetTranslation } from "../../utils/translationService";
 
 const ALMNavigationBar = (props: any) => {
   const location = useLocation();
@@ -72,12 +73,7 @@ const ALMNavigationBar = (props: any) => {
 
   const getHomeButton = () => {
     return (
-      <Link
-        to={props.homeLink}
-        id={HOME}
-        className={styles.homeButton}
-        onClick={goToHomePage}
-      >
+      <Link to={props.homeLink} id={HOME} className={styles.homeButton} onClick={goToHomePage}>
         {formatMessage({ id: "alm.text.home" })}
       </Link>
     );
@@ -91,7 +87,7 @@ const ALMNavigationBar = (props: any) => {
         className={styles.catalogButton}
         onClick={goToCatalogPage}
       >
-        {formatMessage({ id: "alm.text.catalog" })}
+        {GetTranslation("alm.text.catalog", true)}
       </Link>
     );
   };
@@ -138,16 +134,8 @@ const ALMNavigationBar = (props: any) => {
           <div className={styles.mobileMenuIcon} onClick={toggleMobileMenu}>
             <ShowMenu />
           </div>
-          {showLogo() && (
-            <img
-              className={styles.companyLogo}
-              src={companyLogo}
-              alt={companyLogo}
-            />
-          )}
-          {showOrgName() && (
-            <div className={styles.companyName}>{companyName}</div>
-          )}
+          {showLogo() && <img className={styles.companyLogo} src={companyLogo} alt={companyLogo} />}
+          {showOrgName() && <div className={styles.companyName}>{companyName}</div>}
           <ul className={styles.headerMenu}>
             <li>{getHomeButton()}</li>
             <li>{getCatalogButton()}</li>
@@ -159,42 +147,27 @@ const ALMNavigationBar = (props: any) => {
           {showMobileMenu && (
             <div className={styles.mobileMenu}>
               <div className={styles.mobileMenuOptions}>
-                <div
-                  className={styles.closeMenuButton}
-                  onClick={toggleMobileMenu}
-                >
+                <div className={styles.closeMenuButton} onClick={toggleMobileMenu}>
                   <Close />
                 </div>
                 <hr className={styles.primeVerticalSeparator}></hr>
 
-                <div
-                  className={styles.mobileMenuOption}
-                  onClick={toggleMobileMenu}
-                >
+                <div className={styles.mobileMenuOption} onClick={toggleMobileMenu}>
                   {getHomeButton()}
                 </div>
                 <hr className={styles.primeVerticalSeparator}></hr>
 
-                <div
-                  className={styles.mobileMenuOption}
-                  onClick={toggleMobileMenu}
-                >
+                <div className={styles.mobileMenuOption} onClick={toggleMobileMenu}>
                   {getCatalogButton()}
                 </div>
                 <hr className={styles.primeVerticalSeparator}></hr>
 
-                <div
-                  className={styles.mobileMenuOption}
-                  onClick={toggleMobileMenu}
-                >
+                <div className={styles.mobileMenuOption} onClick={toggleMobileMenu}>
                   {getSignUpButton()}
                 </div>
                 <hr className={styles.primeVerticalSeparator}></hr>
 
-                <div
-                  className={styles.mobileMenuOption}
-                  onClick={toggleMobileMenu}
-                >
+                <div className={styles.mobileMenuOption} onClick={toggleMobileMenu}>
                   {getSignInButton()}
                 </div>
                 <hr className={styles.primeVerticalSeparator}></hr>

@@ -1,0 +1,47 @@
+.removeFilterButton {
+  cursor: pointer;
+  border: 0px;
+  background: inherit;
+  padding: 0px;
+}
+
+.selectedFilter {
+  display: flex;
+  max-width: 160px;
+  height: 24px;
+  padding: 4px 10px;
+  font-size: var(--prime-font-size-12);
+  border: 1.5px solid var(--prime-color-body);
+  border-radius: 4px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  align-items: center;
+  background-color: var(--prime-color-white);
+}
+
+.selectedFiltersContainer {
+  display: flex;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  max-width: 904px;
+}
+
+.selectedFilterText {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 100px;
+  padding-right: 5px;
+}
+
+.showFiltersButton {
+  color: var(--prime-color-primary);
+  height: 24px;
+  padding: 4px 10px;
+  font-size: var(--prime-font-size-12);
+  border: 1.5px solid var(--prime-color-primary);
+  border-radius: 4px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  background-color: inherit;
+}

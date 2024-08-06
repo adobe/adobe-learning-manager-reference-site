@@ -22,13 +22,7 @@ const PrimeCommunityAddPostButton = (props: any) => {
     pollOptions: any
   ) => {
     if (typeof props.savePostHandler === "function") {
-      props.savePostHandler(
-        input,
-        postingType,
-        resource,
-        isResourceModified,
-        pollOptions
-      );
+      props.savePostHandler(input, postingType, resource, isResourceModified, pollOptions);
     }
   };
 
@@ -46,13 +40,7 @@ const PrimeCommunityAddPostButton = (props: any) => {
           isResourceModified: any,
           pollOptions: any
         ) => {
-          saveHandler(
-            input,
-            postingType,
-            resource,
-            isResourceModified,
-            pollOptions
-          );
+          saveHandler(input, postingType, resource, isResourceModified, pollOptions);
         }}
         inMobileView={props.inMobileView}
       ></PrimeCommunityAddPostDialogTrigger>
