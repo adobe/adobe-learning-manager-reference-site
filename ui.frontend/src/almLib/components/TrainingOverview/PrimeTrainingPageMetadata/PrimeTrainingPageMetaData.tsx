@@ -428,7 +428,8 @@ const PrimeTrainingPageMetaData: React.FC<{
 
   const courseIdList = Object.keys(courseInstanceMapping);
 
-  let showPreviewButton = isPreviewEnabled && training.hasPreview && !training.enrollment;
+  let showPreviewButton =
+    isPreviewEnabled && training.hasPreview && !checkIsEnrolled(training.enrollment);
 
   const flexLpUpdationChecker = () => {
     const entries = Object.entries(courseInstanceMapping);
@@ -2042,15 +2043,18 @@ const PrimeTrainingPageMetaData: React.FC<{
 
   function disableStartForCourse(course: PrimeLearningObject): boolean {
     const isModuleCrOrVc = isFirstModuleCrOrVc();
-    const coreContentOfTheCourse = filterLoReourcesBasedOnResourceType(course?.enrollment?.loInstance, CONTENT);
-   // If the course has more than one core content modules
+    const coreContentOfTheCourse = filterLoReourcesBasedOnResourceType(
+      course?.enrollment?.loInstance,
+      CONTENT
+    );
+    // If the course has more than one core content modules
     if (coreContentOfTheCourse?.length > 1 || !isModuleCrOrVc) {
       return false;
     }
-     //If the course has only one module and its cr/vc then disable it
+    //If the course has only one module and its cr/vc then disable it
     return shouldDisableStart(coreContentOfTheCourse, isModuleCrOrVc);
   }
-  
+
   function disableStartForLPOrCert(training: PrimeLearningObject): boolean {
     // If LP/Cert has more than one subLo then don't disable start button
     if (training?.subLOs?.length > 1) {
@@ -2063,14 +2067,14 @@ const PrimeTrainingPageMetaData: React.FC<{
     }
     return disableStartForLPOrCert(childLo);
   }
-  
+
   function disableStartForCrOrVc(): boolean {
     if (isCourse) {
       return disableStartForCourse(training);
     }
     return disableStartForLPOrCert(training);
   }
-  
+
   const isButtonDisabled = () => {
     return (
       (action === START &&

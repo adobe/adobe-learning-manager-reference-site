@@ -17,10 +17,14 @@ import ReactQuill from "react-quill";
 import { PrimeCommunityLinkPreview } from "../PrimeCommunityLinkPreview";
 import styles from "./PrimeCommunityObjectInput.module.css";
 import "react-quill/dist/quill.snow.css";
+import { getAlmConfirmationBadwordParams } from "../../../utils/social-utils";
+import { useConfirmationAlert } from "../../../common/Alert/useConfirmationAlert";
+import { BAD_WORD_FOUND } from "../../../utils/constants";
 // import { PrimeCommunityLoLinkPreview } from "../PrimeCommunityLoLinkPreview";
 
 const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
   const { formatMessage } = useIntl();
+  const { primaryActionHandler: primaryAction } = props;
   const objectTextLimit = props.characterLimit ? props.characterLimit : 1000;
   const emptyString = "";
   const [charactersRemaining, setCharactersRemaining] = useState(objectTextLimit);
@@ -29,6 +33,7 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
   const firstRun = useRef(true);
   const [userInputText, setUserInputText] = useState(props.defaultValue ? props.defaultValue : "");
   const [characterCount, setCharacterCount] = useState(0);
+  const [almConfirmationAlert] = useConfirmationAlert();
 
   const exitActions = () => {
     setUserInputText(emptyString);
@@ -37,13 +42,24 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
     // setShowLoLinkPreview(false);
   };
 
-  const primaryActionHandler = () => {
+  const primaryActionHandler = async () => {
     if (characterCount <= 0) {
       return;
     }
-    if (typeof props.primaryActionHandler === "function") {
-      props.primaryActionHandler(userInputText);
-      exitActions();
+    if (typeof primaryAction === "function") {
+      try {
+        await primaryAction(userInputText);
+        exitActions();
+      } catch (error: any) {
+        if (error.message === BAD_WORD_FOUND) {
+          const {
+            title,
+            body: message,
+            actionlabel,
+          } = getAlmConfirmationBadwordParams("BAD_WORD_FOUND");
+          almConfirmationAlert(title, message, actionlabel, "");
+        }
+      }
     }
   };
 
@@ -195,7 +211,7 @@ const PrimeCommunityObjectInput = React.forwardRef((props: any, ref: any) => {
             defaultMessage: "characters left",
           })}
         </div>
-        {props.primaryActionHandler && (
+        {primaryAction && (
           <button className={styles.primeSaveObjectButton} onClick={primaryActionHandler}>
             <Send UNSAFE_className={styles.postActionSvg} />
           </button>

@@ -169,7 +169,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
     }
   };
 
-  const updateObjectHandler = (
+  const updateObjectHandler = async (
     input: any,
     postingType: any,
     resource: any,
@@ -177,7 +177,13 @@ const PrimeCommunityObjectHeader = (props: any) => {
     pollOptions: any
   ) => {
     if (typeof props.updateObjectHandler === "function") {
-      props.updateObjectHandler(input, postingType, resource, isResourceModified, pollOptions);
+      await props.updateObjectHandler(
+        input,
+        postingType,
+        resource,
+        isResourceModified,
+        pollOptions
+      );
     }
     setShowUpdatePostModal(false);
   };
@@ -229,15 +235,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
             post={object}
             description={props.description}
             mode={UPDATE}
-            savePostHandler={(
-              input: any,
-              postingType: any,
-              resource: any,
-              isResourceModified: any,
-              pollOptions: any
-            ) => {
-              updateObjectHandler(input, postingType, resource, isResourceModified, pollOptions);
-            }}
+            savePostHandler={updateObjectHandler}
             closeDialogHandler={closeDialogHandler}
           ></PrimeCommunityAddPostDialogTrigger>
         )}

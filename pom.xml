@@ -18,7 +18,7 @@
     <groupId>com.adobe.learning</groupId>
     <artifactId>aem-learning</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
     <description>Learning Site</description>
 
     <modules>

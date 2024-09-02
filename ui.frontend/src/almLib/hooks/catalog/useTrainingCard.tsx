@@ -72,7 +72,19 @@ export const useTrainingCard = (training: PrimeLearningObject) => {
       return skillNames?.join(", ");
     }
     let tempSkillNames = new Set();
-    skills?.forEach(item => {
+    let loSkills = skills;
+    if (training.loType === LEARNING_PROGRAM) {
+      const lpSkills = skills?.filter(skill => {
+        return skill.learningObjectId === training.id;
+      });
+      const courseSkills = skills?.filter(skill => {
+        return skill.learningObjectId !== training.id;
+      });
+      if (lpSkills?.length > 0) {
+        loSkills = lpSkills.concat(courseSkills);
+      }
+    }
+    loSkills?.forEach(item => {
       tempSkillNames.add(item.skillLevel?.skill?.name);
     });
     return Array.from(tempSkillNames).join(", ");

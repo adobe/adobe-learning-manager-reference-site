@@ -15,7 +15,8 @@ import styles from "./ALMErrorBoundary.module.css";
 import { Button, Provider, lightTheme } from "@adobe/react-spectrum";
 import { SendMessageToParent } from "../../../utils/widgets/base/EventHandlingBase";
 import { PrimeEvent } from "../../../utils/widgets/common";
-import { GetPrimeEmitEventLinks } from "../../../utils/global";
+import { getALMConfig, getALMUser, GetPrimeEmitEventLinks } from "../../../utils/global";
+import { RestAdapter } from "../../../utils/restAdapter";
 
 interface ALMErrorBoundaryProps {}
 
@@ -24,10 +25,7 @@ interface ALMErrorBoundaryState {
   errorInfo: any;
 }
 
-export default class ALMErrorBoundary extends React.Component<
-  ALMErrorBoundaryProps,
-  ALMErrorBoundaryState
-> {
+export default class ALMErrorBoundary extends React.Component<ALMErrorBoundaryProps, ALMErrorBoundaryState> {
   constructor(props: any) {
     super(props);
     this.state = { error: null, errorInfo: null };
@@ -42,6 +40,24 @@ export default class ALMErrorBoundary extends React.Component<
     console.error("Error loading the Page : ", errorObj);
   }
 
+  retryHandler = async () => {
+    try {
+      const userResponse = await getALMUser();
+      const { primeApiURL } = getALMConfig();
+      const { id: accountId } = userResponse?.user?.account || {};
+      const { id: userId } = userResponse?.user || {};
+
+      await RestAdapter.ajax({
+        url: `${primeApiURL}/loguierror?accountId=${accountId}&userId=${userId}&url=${window.location.href}`,
+        method: "GET",
+      });
+    } catch (error) {
+      console.error("Error logging UI error:", error);
+    } finally {
+      SendMessageToParent({ type: PrimeEvent.ALM_RETRY_PAGE_RELOAD }, GetPrimeEmitEventLinks());
+    }
+  };
+
   render() {
     if (this.state.error) {
       // Error path
@@ -51,12 +67,8 @@ export default class ALMErrorBoundary extends React.Component<
             <h2 className={styles.errorMessage}>{GetTranslation("alm.error.message")}</h2>
             <Button
               variant="primary"
-              onPress={() => {
-                SendMessageToParent(
-                  { type: PrimeEvent.ALM_RETRY_PAGE_RELOAD },
-                  GetPrimeEmitEventLinks()
-                );
-              }}
+              onPress={this.retryHandler}
+              data-automationid="error-reload-button"
             >
               {GetTranslation("alm.retry")}
             </Button>

@@ -14,6 +14,8 @@ import { usePost } from "../../../hooks/community";
 import { PrimeCommunityAddPostButton } from "../PrimeCommunityAddPostButton";
 import { useConfirmationAlert } from "../../../common/Alert/useConfirmationAlert";
 import styles from "./PrimeCommunityAddPost.module.css";
+import { useEffect } from "react";
+import { PrimeEvent } from "../../../utils/widgets/common";
 
 const PrimeCommunityAddPost = (props: any) => {
   const boardId = props.boardId;
@@ -21,6 +23,13 @@ const PrimeCommunityAddPost = (props: any) => {
   const { addPost } = usePost();
   const [almConfirmationAlert] = useConfirmationAlert();
   const EMPTY = "";
+  useEffect(() => {
+    document.addEventListener(PrimeEvent.ALM_SHOW_POST_CONFIRMATION, showConfirmationDialog);
+    return () => {
+      document.removeEventListener(PrimeEvent.ALM_SHOW_POST_CONFIRMATION, showConfirmationDialog);
+    };
+  }, []);
+
   const savePostHandler = async (
     input: any,
     postingType: any,
@@ -28,15 +37,7 @@ const PrimeCommunityAddPost = (props: any) => {
     isResourceModified: any,
     pollOptions: any
   ) => {
-    try {
-      await addPost(boardId, input, postingType, resource, isResourceModified, pollOptions);
-      // below setTimeout is needed to fix spetrum dialog breaking scroll issue
-      setTimeout(() => {
-        showConfirmationDialog();
-      }, 1000);
-    } catch (exception) {
-      console.log("Error in creating Post");
-    }
+    return await addPost(boardId, input, postingType, resource, isResourceModified, pollOptions);
   };
 
   const showConfirmationDialog = () => {
@@ -65,13 +66,7 @@ const PrimeCommunityAddPost = (props: any) => {
         <div className={styles.primeAddPostSection}>
           <div className={styles.primeAddPostButtonDiv}>
             <PrimeCommunityAddPostButton
-              savePostHandler={(
-                input: any,
-                postingType: any,
-                resource: any,
-                isResourceModified: any,
-                pollOptions: any
-              ) => savePostHandler(input, postingType, resource, isResourceModified, pollOptions)}
+              savePostHandler={savePostHandler}
             ></PrimeCommunityAddPostButton>
           </div>
         </div>

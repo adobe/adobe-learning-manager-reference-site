@@ -254,6 +254,7 @@ export const ALM_CART_DATA = "ALM_CART_DATA";
 export const ALM_FETCH_CART = "ALM_FETCH_CART";
 export const CART_DATA = "cartData";
 export const ERROR_ALREADY_ADDED = "exceeds the maximum qty allowed";
+export const BAD_WORD_FOUND = "BAD_WORD_FOUND";
 
 export const LOCATION = "location";
 export const COMPLETION_DATE = "completionDate";

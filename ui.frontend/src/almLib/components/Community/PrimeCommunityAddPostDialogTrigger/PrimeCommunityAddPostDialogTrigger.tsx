@@ -18,6 +18,7 @@ import { useRef, useEffect, useState } from "react";
 const PrimeCommunityAddPostDialogTrigger = (props: any) => {
   const showDialog = useRef(false);
   const [isMobileDialogOpen, setMobileDialogOpen] = useState(false);
+  const { savePostHandler: saveHandler } = props;
 
   useEffect(() => {
     if (props.openDialog && !showDialog.current) {
@@ -34,7 +35,7 @@ const PrimeCommunityAddPostDialogTrigger = (props: any) => {
     close();
   };
 
-  const savePostHandler = (
+  const savePostHandler = async (
     event: any,
     input: any,
     postingType: any,
@@ -43,10 +44,12 @@ const PrimeCommunityAddPostDialogTrigger = (props: any) => {
     pollOptions: any,
     close: any
   ) => {
-    if (typeof props.savePostHandler === "function") {
-      props.savePostHandler(input, postingType, resource, isResourceModified, pollOptions);
+    if (props.inMobileView) {
+      setMobileDialogOpen(prevState => !prevState);
     }
-    close();
+    if (typeof saveHandler === "function") {
+      return await saveHandler(input, postingType, resource, isResourceModified, pollOptions);
+    }
   };
 
   const onClickHandler = async () => {
@@ -80,27 +83,8 @@ const PrimeCommunityAddPostDialogTrigger = (props: any) => {
             post={props.post}
             description={props.description}
             mode={props.mode}
-            saveHandler={(
-              event: any,
-              input: any,
-              postingType: any,
-              resource: any,
-              isResourceModified: any,
-              pollOptions: any
-            ) => {
-              savePostHandler(
-                event,
-                input,
-                postingType,
-                resource,
-                isResourceModified,
-                pollOptions,
-                close
-              );
-              if (props.inMobileView) {
-                setMobileDialogOpen(prevState => !prevState);
-              }
-            }}
+            saveHandler={savePostHandler}
+            close={close}
             closeHandler={() => {
               closeDialogHandler(close);
               if (props.inMobileView) {

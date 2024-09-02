@@ -76,9 +76,9 @@ const PrimeCommunityReply = (props: any) => {
     }
   };
 
-  const updateReply = (value: any) => {
+  const updateReply = async (value: any) => {
     if (typeof props.updateReply === "function") {
-      props.updateReply(reply.id, value);
+      await props.updateReply(reply.id, value);
       setReplyText(value);
       setShowEditReplyView(false);
     }

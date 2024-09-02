@@ -228,6 +228,7 @@ class ALMCustomHooks implements ICustomHooks {
       requestBody["filter.snippetTypes"] = (snippetsFromUrl || snippetType)?.split(",");
       requestBody["query"] = searchText;
       requestBody["stemmed"] = true;
+      requestBody["mode"] = "advanceSearch";
     }
     response = await RestAdapter.post({
       url,

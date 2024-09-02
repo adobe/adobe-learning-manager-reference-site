@@ -246,7 +246,7 @@ const PrimeModuleItem: React.FC<{
   let isResetRequired = true;
 
   const isRootLoUnenrolled =
-    (isPartOfParentLO && !isRootLOEnrolled) || (!isPartOfParentLO && !training.enrollment);
+    (isPartOfParentLO && !isRootLOEnrolled) || (!isPartOfParentLO && !isEnrolled);
 
   const isModulePreviewAble = isPreviewEnabled && isRootLoUnenrolled && loResource.previewEnabled;
 

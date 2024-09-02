@@ -22,7 +22,7 @@ import Close from "@spectrum-icons/workflow/Close";
 import { useEffect, useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import store from "../../../../store/APIStore";
-import { POLL, QUESTION, UPDATE } from "../../../utils/constants";
+import { BAD_WORD_FOUND, POLL, QUESTION, UPDATE } from "../../../utils/constants";
 import {
   SOCIAL_CANCEL_SVG,
   SOCIAL_QUESTION_SVG,
@@ -32,14 +32,20 @@ import {
 import { cancelUploadFile, uploadFile } from "../../../utils/uploadUtils";
 import { PrimeCommunityObjectInput } from "../PrimeCommunityObjectInput";
 import styles from "./PrimeCommunityAddPostDialog.module.css";
+import { PrimeDispatchEvent } from "../../../utils/widgets/base/EventHandlingBase";
+import { PrimeEvent } from "../../../utils/widgets/common";
+import { getAlmConfirmationBadwordParams } from "../../../utils/social-utils";
+import { useConfirmationAlert } from "../../../common/Alert/useConfirmationAlert";
 
 const PrimeCommunityAddPostDialog = (props: any) => {
   const ref = useRef<any>();
   const { formatMessage } = useIntl();
+  const { saveHandler } = props;
   const state = store.getState(); //TO-DO check why not updating
   const defaultPostingType = "DEFAULT";
   const supportedFileTypes = "image/*,video/*,audio/*,.pdf,.ppt,.pptx,.doc,.docx,.xls,.xlsx";
   const inputField = "uploadFile";
+  const [almConfirmationAlert] = useConfirmationAlert();
   const [postingType, setPostingType] = useState(defaultPostingType);
   const [questionTypeSelected, setQuestionTypeSelected] = useState(false);
   const [pollTypeSelected, setPollTypeSelected] = useState(false);
@@ -112,20 +118,33 @@ const PrimeCommunityAddPostDialog = (props: any) => {
     }
   };
 
-  const savePostHandler = (close: any) => {
+  const savePostHandler = async (close: any) => {
     if (ref.current.value === "") {
       return;
     }
-    if (typeof props.saveHandler === "function") {
-      props.saveHandler(
-        close,
-        ref.current.value,
-        postingType,
-        resource,
-        isResourceModified,
-        pollOptions
-      );
-      onExitActions();
+    if (typeof saveHandler === "function") {
+      try {
+        await saveHandler(
+          close,
+          ref.current.value,
+          postingType,
+          resource,
+          isResourceModified,
+          pollOptions
+        );
+        onExitActions();
+        props.close && props.close();
+        PrimeDispatchEvent(document, PrimeEvent.ALM_SHOW_POST_CONFIRMATION, false);
+      } catch (error: any) {
+        if (error.message === BAD_WORD_FOUND) {
+          const {
+            title,
+            body: message,
+            actionlabel,
+          } = getAlmConfirmationBadwordParams(BAD_WORD_FOUND);
+          almConfirmationAlert(title, message, actionlabel, "");
+        }
+      }
     }
   };
 

@@ -14,15 +14,17 @@ import { PrimeCommunityAddPostDialogTrigger } from "../PrimeCommunityAddPostDial
 
 const PrimeCommunityAddPostButton = (props: any) => {
   const { formatMessage } = useIntl();
-  const saveHandler = (
+  const { savePostHandler } = props;
+
+  const saveHandler = async (
     input: any,
     postingType: any,
     resource: any,
     isResourceModified: any,
     pollOptions: any
   ) => {
-    if (typeof props.savePostHandler === "function") {
-      props.savePostHandler(input, postingType, resource, isResourceModified, pollOptions);
+    if (typeof savePostHandler === "function") {
+      return await savePostHandler(input, postingType, resource, isResourceModified, pollOptions);
     }
   };
 
@@ -33,15 +35,7 @@ const PrimeCommunityAddPostButton = (props: any) => {
           id: "alm.community.newPost.label",
           defaultMessage: "New Post",
         })}
-        savePostHandler={(
-          input: any,
-          postingType: any,
-          resource: any,
-          isResourceModified: any,
-          pollOptions: any
-        ) => {
-          saveHandler(input, postingType, resource, isResourceModified, pollOptions);
-        }}
+        savePostHandler={saveHandler}
         inMobileView={props.inMobileView}
       ></PrimeCommunityAddPostDialogTrigger>
     </>

@@ -12,11 +12,11 @@ governing permissions and limitations under the License.
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/aria-role */
 import { ProgressBar } from "@adobe/react-spectrum";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import { useTrainingCard } from "../../../hooks/catalog/useTrainingCard";
 
-import Cancel from "@spectrum-icons/workflow/Cancel";
+import MoreVertical from "@spectrum-icons/workflow/MoreVertical";
 import { AlertType } from "../../../common/Alert/AlertDialog";
 import {
   PrimeAccount,
@@ -34,8 +34,9 @@ import {
   ERROR_ICON_SVG,
   HEART_IN_CIRCLE,
   SKILL_SVG,
-  JOBAID_CARD_DOWNLOAD,
   JOBAID_CARD_REMOVE,
+  JOBAID_ICON_REMOVE,
+  DOWNLOAD_ICON_ROUNDED,
 } from "../../../utils/inline_svg";
 import {
   formatMap,
@@ -191,7 +192,8 @@ const PrimeTrainingCardV2: React.FC<{
   const [jobAidDownloadUrl, setJobAidDownloadUrl] = useState("");
 
   const [showEffectivenessDialog, setShowEffectivenessDialog] = useState<boolean>(false);
-
+  const [showExtraActions, setExtraActions] = useState<boolean>(false);
+  const extraActionsContainerRef = useRef<HTMLDivElement>(null);
   const { formatMessage, locale } = useIntl();
   const downloadLabel = GetTranslation("alm.text.download");
   const ratingTemplate = useRatingsTemplate(styles, formatMessage, training);
@@ -336,7 +338,27 @@ const PrimeTrainingCardV2: React.FC<{
       document.removeEventListener(PrimeEvent.PLAYER_CLOSE, handlePlayerClose);
     };
   }, []);
+  useEffect(() => {
+    if (!showExtraActions) {
+      return;
+    }
+    const handleKeyDownOutside = (event: MouseEvent) => {
+      if (
+        extraActionsContainerRef.current &&
+        !extraActionsContainerRef.current.contains(event.target as Node)
+      ) {
+        console.log("Key pressed outside the container");
+        setExtraActions(false);
+      }
+    };
 
+    document.addEventListener("mousedown", handleKeyDownOutside);
+
+    return () => {
+      console.log("removing event");
+      document.removeEventListener("mousedown", handleKeyDownOutside);
+    };
+  }, [extraActionsContainerRef?.current, showExtraActions]);
   const getEffectivenessIndexTemplate = () => {
     const effectivenessIndex = training.effectivenessIndex;
     if (!effectivenessIndex || effectivenessIndex === 0) {
@@ -598,6 +620,7 @@ const PrimeTrainingCardV2: React.FC<{
         title={GetTranslation("locard.enroll", true)}
         className={`${styles.actionIcon} ${classForAddOrRemoveFromList}`}
         onClick={checkConflictingSessions}
+        disabled={showExtraActions}
       >
         {ADD_BUTTON_SVG()}
       </button>
@@ -800,6 +823,10 @@ const PrimeTrainingCardV2: React.FC<{
     setShowEffectivenessDialog(value => !value);
   };
 
+  const toggleExtraActions = () => {
+    setExtraActions(value => !value);
+  };
+
   const saveLabel = useMemo(() => GetTranslation("text.save"), []);
   const unSaveLabel = useMemo(() => GetTranslation("text.unsave"), []);
   const trainingTypeLabel = useMemo(() => {
@@ -808,7 +835,7 @@ const PrimeTrainingCardV2: React.FC<{
   const progressBarClass = showProgressBar && !isJobAid ? styles.enrolled : "";
   return (
     <>
-      <div className={styles.card}>
+      <div className={`${styles.card} ${showExtraActions ? styles.extraActionsOpened : ""}`}>
         <div
           className={`${styles.upper} ${undoContainerType ? styles.hidden : ""}`}
           aria-hidden={undoContainerType ? true : false}
@@ -881,7 +908,7 @@ const PrimeTrainingCardV2: React.FC<{
           {/* Title Row Starts */}
           <div className={styles.titleContainer}>
             <a
-              tabIndex={widget?.attributes?.disableLinks ? -1 : 0}
+              tabIndex={widget?.attributes?.disableLinks || showExtraActions ? -1 : 0}
               id="title"
               href="javascript:void(0)"
               className={styles.title}
@@ -906,6 +933,7 @@ const PrimeTrainingCardV2: React.FC<{
                     data-automationid={`${name}-unsave`}
                     aria-label={unSaveLabel}
                     title={unSaveLabel}
+                    disabled={showExtraActions}
                   >
                     {BOOKMARKED_ICON()}
                   </button>
@@ -918,6 +946,7 @@ const PrimeTrainingCardV2: React.FC<{
                     data-automationid={`${name}-save`}
                     aria-label={saveLabel}
                     title={saveLabel}
+                    disabled={showExtraActions}
                   >
                     {BOOKMARK_ICON()}
                   </button>
@@ -959,6 +988,7 @@ const PrimeTrainingCardV2: React.FC<{
                 }
                 id={actionButtonId}
                 aria-label={`${actionText} ${trainingTypeLabel} ${name}`}
+                disabled={showExtraActions}
               >
                 {actionText}
               </button>
@@ -969,32 +999,65 @@ const PrimeTrainingCardV2: React.FC<{
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => jobAidActionHandler(event)}
                 data-automationid={`jobAid- ${name}`}
                 id={actionButtonId}
+                disabled={showExtraActions}
               >
                 {GetTranslation("alm.jobAid.view.button")}
               </button>
             )}
-            {showDownloadButtonForJobAid && (
-              <a
-                className={styles.downloadJobAid}
-                href="javascript:void(0)"
-                title={downloadLabel}
-                onClick={handleClickForJobAidDownload}
-              >
-                {JOBAID_CARD_DOWNLOAD()}
-              </a>
-            )}
-            {showDontRecommend && (
+            {(showDownloadButtonForJobAid || showDontRecommend) && (
               <button
-                className={styles.actionDontRecommend}
-                onClick={blockLORecommendationHandler}
-                data-automationid={`${name}-dontRecommend`}
-                title={GetTranslation("text.dontRecommendThis")}
+                className={styles.showExtraOptions}
+                onClick={toggleExtraActions}
+                data-automationid={`${name}-extraOptions`}
+                disabled={showExtraActions}
               >
-                <Cancel />
+                {<MoreVertical />}
               </button>
             )}
           </div>
+
           {/* Action Button ends */}
+          {/* Extra Action starts */}
+
+          {showExtraActions && (
+            <div className={styles.extraActionsDummyContainer}>
+              <div className={styles.blurContainer}></div>
+              <div className={styles.extraActionsContainer} ref={extraActionsContainerRef}>
+                {showDontRecommend && (
+                  <button
+                    onClick={blockLORecommendationHandler}
+                    data-automationid={`${name}-dontRecommend`}
+                    className={styles.extraActions}
+                  >
+                    {JOBAID_ICON_REMOVE("--prime-color-link")}
+                    <span className={styles.extraActionsText}>
+                      {GetTranslation("text.dontRecommendThis")}
+                    </span>
+                  </button>
+                )}
+                {showDownloadButtonForJobAid && (
+                  <button
+                    title={downloadLabel}
+                    onClick={handleClickForJobAidDownload}
+                    className={styles.extraActions}
+                  >
+                    {DOWNLOAD_ICON_ROUNDED()}
+                    <span className={styles.extraActionsText}>
+                      {GetTranslation("alm.text.download")}
+                    </span>
+                  </button>
+                )}
+              </div>
+              <button
+                className={styles.showExtraOptions}
+                onClick={toggleExtraActions}
+                data-automationid={`${name}-extraOptions`}
+              >
+                {<MoreVertical />}
+              </button>
+            </div>
+          )}
+          {/* Extra Action ends */}
         </div>
         {/* Undo section starts */}
         <div className={`${styles.undoContainer} ${undoContainerType ? styles.show : ""}`}>

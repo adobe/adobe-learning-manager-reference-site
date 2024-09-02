@@ -19,12 +19,15 @@ import { useComment, useReplies } from "../../../hooks/community";
 import { useRef, useEffect, useState } from "react";
 import styles from "./PrimeCommunityComment.module.css";
 import { COMMENT, DOWN, DOWNVOTE, REPLY, UP, UPVOTE } from "../../../utils/constants";
+import { useConfirmationAlert } from "../../../common/Alert/useConfirmationAlert";
+import { getAlmConfirmationBadwordParams } from "../../../utils/social-utils";
 
 const PrimeCommunityComment = (props: any) => {
   const { formatMessage } = useIntl();
   const ref = useRef<any>();
   const comment = props.comment;
   const parentPost = props.parentPost;
+  const { updateComment: setComment } = props;
   const { voteComment, deleteCommentVote } = useComment();
   const { addReply, fetchReplies } = useReplies(comment.id);
   const myVoteStatus = comment.myVoteStatus ? comment.myVoteStatus : "";
@@ -48,6 +51,8 @@ const PrimeCommunityComment = (props: any) => {
   const [replyCount, setReplyCount] = useState(comment.replyCount);
   const [showEditCommentView, setShowEditCommentView] = useState(false);
   const [commentText, setCommentText] = useState(comment.richText);
+  const [almConfirmationAlert] = useConfirmationAlert();
+  const EMPTY = "";
 
   const viewButtonClickHandler = () => {
     if (!showReplies) {
@@ -117,19 +122,15 @@ const PrimeCommunityComment = (props: any) => {
   };
 
   const saveReplyHandler = async (value: any) => {
-    try {
-      await addReply(comment.id, value);
-      setReplyCount(replyCount + 1);
-      fetchReplies(comment.id);
-      showReplySection();
-    } catch (exception) {
-      console.log("not updating reply count");
-    }
+    await addReply(comment.id, value);
+    setReplyCount(replyCount + 1);
+    fetchReplies(comment.id);
+    showReplySection();
   };
 
-  const updateComment = (value: any) => {
-    if (typeof props.updateComment === "function") {
-      props.updateComment(comment.id, value);
+  const updateComment = async (value: any) => {
+    if (typeof setComment === "function") {
+      await setComment(comment.id, value);
       setCommentText(value);
       setShowEditCommentView(false);
     }

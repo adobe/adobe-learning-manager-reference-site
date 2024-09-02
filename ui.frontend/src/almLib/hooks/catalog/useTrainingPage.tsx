@@ -179,8 +179,9 @@ export const useTrainingPage = (
         const response = await APIServiceInstance.getTraining(trainingId, queryParam);
 
         if (response) {
-          if (response.enrollmentType === ADMIN_ENROLL) {
-            navigateToHomePageHandler(GetTranslation("alm.no.permission.error.text", true));
+          if (response.enrollmentType === ADMIN_ENROLL && !response.enrollment) {
+            const errorMessage = loType && getErrorMessage(loType);
+            errorMessage && navigateToHomePageHandler(errorMessage);
             return;
           }
           const trainingInstance = filterTrainingInstance(response, instanceId);

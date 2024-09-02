@@ -13,11 +13,15 @@ import { useReplies } from "../../../hooks/community";
 import { PrimeCommunityReply } from "../PrimeCommunityReply";
 import styles from "./PrimeCommunityReplies.module.css";
 import { useIntl } from "react-intl";
+import { useConfirmationAlert } from "../../../common/Alert/useConfirmationAlert";
+import { getAlmConfirmationBadwordParams } from "../../../utils/social-utils";
 
 const PrimeCommunityReplies = (props: any) => {
   const { formatMessage } = useIntl();
   const commentId = props.object.id;
   const { items, patchReply, loadMoreReplies, hasMoreItems } = useReplies(commentId);
+  const [almConfirmationAlert] = useConfirmationAlert();
+  const EMPTY = "";
 
   const deleteReplyHandler = async () => {
     if (typeof props.deleteReplyHandler === "function") {
@@ -26,11 +30,7 @@ const PrimeCommunityReplies = (props: any) => {
   };
 
   const updateReply = async (replyId: any, value: any) => {
-    try {
-      await patchReply(replyId, value);
-    } catch (exception) {
-      console.log("error while updating reply");
-    }
+    await patchReply(replyId, value);
   };
 
   return (

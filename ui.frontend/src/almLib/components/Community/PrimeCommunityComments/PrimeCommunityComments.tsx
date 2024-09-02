@@ -12,6 +12,8 @@ governing permissions and limitations under the License.
 import { useComments } from "../../../hooks/community";
 import { PrimeCommunityComment } from "../PrimeCommunityComment";
 import styles from "./PrimeCommunityComments.module.css";
+import { useConfirmationAlert } from "../../../common/Alert/useConfirmationAlert";
+import { getAlmConfirmationBadwordParams } from "../../../utils/social-utils";
 import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 
@@ -21,6 +23,8 @@ const PrimeCommunityComments = (props: any) => {
   const { items, loadMoreComments, hasMoreItems, patchComment, markCommentAsRightAnswer } =
     useComments();
   const [answerCommentId, setAnswerCommentId] = useState("");
+  const [almConfirmationAlert] = useConfirmationAlert();
+  const EMPTY = "";
 
   useEffect(() => {
     items
@@ -41,11 +45,7 @@ const PrimeCommunityComments = (props: any) => {
   };
 
   const updateComment = async (commentId: any, value: any) => {
-    try {
-      await patchComment(commentId, value);
-    } catch (exception) {
-      console.log("error while updating comment");
-    }
+    await patchComment(commentId, value);
   };
 
   const updateRightAnswerHandler = async (commentId: any, value: any) => {

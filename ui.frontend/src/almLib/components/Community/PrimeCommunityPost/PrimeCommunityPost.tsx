@@ -18,6 +18,7 @@ import { useIntl } from "react-intl";
 import { useComments, usePost } from "../../../hooks/community";
 import { useRef, useEffect, useState } from "react";
 import { useConfirmationAlert } from "../../../common/Alert/useConfirmationAlert";
+import { getAlmConfirmationBadwordParams } from "../../../utils/social-utils";
 import { DOWN, DOWNVOTE, POST, UP, UPVOTE } from "../../../utils/constants";
 import styles from "./PrimeCommunityPost.module.css";
 
@@ -114,14 +115,10 @@ const PrimeCommunityPost = (props: any) => {
   };
 
   const saveCommentHandler = async (value: any) => {
-    try {
-      await addComment(post.id, value);
-      setCommentCount(commentCount + 1);
-      fetchComments(post.id);
-      showCommentsSection();
-    } catch (exception) {
-      console.log("not updating comment count");
-    }
+    await addComment(post.id, value);
+    setCommentCount(commentCount + 1);
+    fetchComments(post.id);
+    showCommentsSection();
   };
 
   const deleteCommentHandler = () => {
@@ -135,12 +132,8 @@ const PrimeCommunityPost = (props: any) => {
     isResourceModified: any,
     pollOptions: any
   ) => {
-    try {
-      await patchPost(post.id, input, postingType, resource, isResourceModified, pollOptions);
-      showConfirmationDialog(input);
-    } catch (exception) {
-      console.log("Error in creating Post");
-    }
+    await patchPost(post.id, input, postingType, resource, isResourceModified, pollOptions);
+    showConfirmationDialog(input);
   };
 
   const showConfirmationDialog = (input: any) => {
@@ -180,15 +173,7 @@ const PrimeCommunityPost = (props: any) => {
           object={post}
           type={POST}
           description={postDescription}
-          updateObjectHandler={(
-            input: any,
-            postingType: any,
-            resource: any,
-            isResourceModified: any,
-            pollOptions: any
-          ) => {
-            updatePostHandler(input, postingType, resource, isResourceModified, pollOptions);
-          }}
+          updateObjectHandler={updatePostHandler}
         ></PrimeCommunityObjectHeader>
         <PrimeCommunityObjectBody
           object={post}

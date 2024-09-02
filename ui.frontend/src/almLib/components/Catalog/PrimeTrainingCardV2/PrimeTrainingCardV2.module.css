@@ -198,6 +198,7 @@ governing permissions and limitations under the License.
   width: 100%;
   height: 150px;
   padding: 6px;
+  /* position: relative; */
 }
 .skillsContainer {
   display: flex;
@@ -360,8 +361,9 @@ governing permissions and limitations under the License.
   line-height: 17.53px;
   font-family: var(--prime-font-family);
 }
-.actionDontRecommend {
+.showExtraOptions {
   min-width: 32px;
+  width: 32px;
   height: 32px;
   gap: 0px;
   border-radius: 16px;
@@ -452,32 +454,32 @@ governing permissions and limitations under the License.
   display: inline-block;
 }
 
-.actionDontRecommend svg {
-  fill: var(--prime-error-color);
+.showExtraOptions svg {
+  fill: var(--prime-color-black);
   cursor: pointer;
 }
-.card:hover .actionButton {
+.card:not(.extraActionsOpened):hover .actionButton {
   background-color: var(--prime-color-primary);
   color: var(--prime-color-white);
 }
-.card:hover .imageContainer {
+.card:not(.extraActionsOpened):hover .imageContainer {
   filter: blur(2px);
 }
-.card:hover .loFormat {
+.card:not(.extraActionsOpened):hover .loFormat {
   opacity: 0;
   visibility: hidden;
 }
-.card:hover .imageFlipContainer {
+.card:not(.extraActionsOpened):hover .imageFlipContainer {
   opacity: 1;
   visibility: visible;
   cursor: pointer;
 }
 
-.card:hover .duration {
+.card:not(.extraActionsOpened):hover .duration {
   visibility: hidden;
   opacity: 0;
 }
-.card:hover .progressBar {
+.card:not(.extraActionsOpened):hover .progressBar {
   visibility: hidden;
   opacity: 0;
 }
@@ -532,6 +534,73 @@ governing permissions and limitations under the License.
   fill: var(--prime-error-color);
   transform: scale(1.2);
 }
+.extraActionsDummyContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  height: 150px;
+}
+.blurContainer {
+  opacity: 0.7;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--prime-color-white);
+}
+.extraActionsDummyContainer .showExtraOptions {
+  opacity: 1;
+  position: absolute;
+  z-index: 2;
+  right: 6px;
+  bottom: 6px;
+  box-shadow: 0px 0px 12px 0px var(--prime-color-box-shadow);
+}
+.extraActionsContainer {
+  display: flex;
+  flex-direction: column;
+  min-width: 145px;
+  max-width: 90%;
+  position: absolute;
+  right: 6px;
+  bottom: 45px;
+  background: var(--prime-color-white);
+  border-radius: 6px;
+  box-shadow: 0px 4px 16px 0px var(--prime-color-box-shadow);
+  border: 1px solid transparent;
+}
+.extraActionsContainer .extraActions {
+  background: var(--prime-color-white);
+  border: none;
+  padding: 6px 12px 7px 12px;
+  display: flex;
+  align-items: center;
+  font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-400);
+  line-height: 18.2px;
+  text-align: left;
+  color: var(--prime-color-link);
+  cursor: pointer;
+  margin-bottom: 1px;
+  gap: 8px;
+  border-radius: 6px;
+}
+.extraActions svg {
+  fill: var(--prime-color-link);
+}
+.extraActionsText {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.extraActions:hover {
+  background: var(--prime-color-neutral-4);
+}
+
 @-webkit-keyframes lo-card-spin {
   0% {
     -webkit-transform: rotate(0deg);

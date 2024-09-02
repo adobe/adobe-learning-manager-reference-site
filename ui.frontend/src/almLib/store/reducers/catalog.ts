@@ -364,7 +364,6 @@ const query: Reducer<string, AnyAction> = (state: string | undefined, action: An
       return state || "";
   }
 };
-
 const snippetType: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
   switch (action.type) {
     case UPDATE_SNIPPET_TYPE:

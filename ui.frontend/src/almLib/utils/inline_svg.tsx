@@ -1937,16 +1937,16 @@ export function LO_JOBAID_ICON() {
     </svg>
   );
 }
-export function JOBAID_ICON_REMOVE() {
+export function JOBAID_ICON_REMOVE(cssVariable = "--prime-color-primary") {
   return (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M9 16.9014C4.65732 16.9014 1.125 13.369 1.125 9.02637C1.125 4.68369 4.65732 1.15137 9 1.15137C13.3427 1.15137 16.875 4.68369 16.875 9.02637C16.875 13.369 13.3427 16.9014 9 16.9014ZM9 2.50137C5.40175 2.50137 2.475 5.42812 2.475 9.02637C2.475 12.6246 5.40175 15.5514 9 15.5514C12.5982 15.5514 15.525 12.6246 15.525 9.02637C15.525 5.42812 12.5982 2.50137 9 2.50137Z"
-        fill="var(--prime-color-primary)"
+        fill={`var(${cssVariable})`}
       />
       <path
         d="M11.4746 9.67501H6.52461C6.15196 9.67501 5.84961 9.37267 5.84961 9.00001C5.84961 8.62736 6.15196 8.32501 6.52461 8.32501H11.4746C11.8473 8.32501 12.1496 8.62736 12.1496 9.00001C12.1496 9.37267 11.8473 9.67501 11.4746 9.67501Z"
-        fill="var(--prime-color-primary)"
+        fill={`var(${cssVariable})`}
       />
     </svg>
   );
