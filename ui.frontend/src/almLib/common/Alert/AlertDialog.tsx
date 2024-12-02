@@ -2,7 +2,8 @@ import React from "react";
 import styles from "./AlertDialog.module.css";
 import Alert from "@spectrum-icons/workflow/Alert";
 import CheckmarkCircleOutline from "@spectrum-icons/workflow/CheckmarkCircleOutline";
-import { lightTheme, Provider } from "@adobe/react-spectrum";
+import { Provider } from "@adobe/react-spectrum";
+import { getALMConfig, getModalColorScheme, getModalTheme } from "../../utils/global";
 
 export enum AlertType {
   success = "success",
@@ -12,11 +13,7 @@ export enum AlertType {
 export const renderAlert = (type: "success" | "error") => {
   switch (AlertType[type]) {
     case AlertType.success:
-      return (
-        <CheckmarkCircleOutline
-          UNSAFE_className={`${styles.alertIcon} ${styles.success}`}
-        />
-      );
+      return <CheckmarkCircleOutline UNSAFE_className={`${styles.alertIcon} ${styles.success}`} />;
     case AlertType.error:
       return <Alert UNSAFE_className={`${styles.alertIcon} ${styles.error}`} />;
   }
@@ -26,8 +23,9 @@ const AlertDialog: React.FC<{
   show: boolean;
   message: string;
 }> = ({ type, show, message }) => {
+  const themeName = getALMConfig().themeData?.name;
   return (
-    <Provider theme={lightTheme} colorScheme={"light"}>
+    <Provider theme={getModalTheme(themeName)} colorScheme={getModalColorScheme(themeName)}>
       {show && (
         <div className={styles.alertbackdrop}>
           <div className={`${styles.alert} ${styles.dialog}`}>

@@ -19,9 +19,11 @@ import {
   fileUpload,
   notification,
   userSkillInterest,
+  userRecommendationPreference,
   skill,
   search,
   badge,
+  authorTrainings,
 } from "./reducers";
 
 const reducer = combineReducers({
@@ -33,8 +35,10 @@ const reducer = combineReducers({
   social,
   fileUpload,
   userSkillInterest,
+  userRecommendationPreference,
   skill,
   search,
   badge,
+  authorTrainings,
 });
 export default reducer;

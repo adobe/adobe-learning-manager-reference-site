@@ -13,13 +13,9 @@ import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import APIServiceInstance from "../../common/APIService";
 import { PrimeReply } from "../../models/PrimeModels";
-import {
-  loadReplies,
-  paginateReplies,
-  updateReply,
-} from "../../store/actions/social/action";
+import { loadReplies, paginateReplies, updateReply } from "../../store/actions/social/action";
 import { State } from "../../store/state";
-import { REPLY } from "../../utils/constants";
+import { BAD_WORD_FOUND, REPLY } from "../../utils/constants";
 import { addHttpsToHref, getALMConfig } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
@@ -61,12 +57,49 @@ export const useReplies = (commentId: any) => {
 
   const patchReply = useCallback(
     async (replyId: any, input: any) => {
+      try {
+        const baseApiUrl = getALMConfig().primeApiURL;
+        const updatedInput = addHttpsToHref(input);
+        const body = {
+          data: {
+            type: REPLY,
+            id: replyId,
+            attributes: {
+              state: "ACTIVE",
+              text: updatedInput,
+            },
+          },
+        };
+        const headers = { "content-type": "application/json" };
+        const result = await RestAdapter.ajax({
+          url: `${baseApiUrl}/replies/${replyId}`,
+          method: "PATCH",
+          body: JSON.stringify(body),
+          headers: headers,
+        });
+
+        const parsedResponse = JsonApiParse(result);
+        const data = {
+          item: parsedResponse.reply,
+        };
+        dispatch(updateReply(data));
+      } catch (error: any) {
+        const res = JSON.parse(error.responseText).title;
+        if (res === BAD_WORD_FOUND) {
+          throw new Error(BAD_WORD_FOUND);
+        }
+      }
+    },
+    [dispatch]
+  );
+
+  const addReply = useCallback(async (commentId: any, input: any) => {
+    try {
       const baseApiUrl = getALMConfig().primeApiURL;
       const updatedInput = addHttpsToHref(input);
-      const body = {
+      const postBody = {
         data: {
           type: REPLY,
-          id: replyId,
           attributes: {
             state: "ACTIVE",
             text: updatedInput,
@@ -74,41 +107,18 @@ export const useReplies = (commentId: any) => {
         },
       };
       const headers = { "content-type": "application/json" };
-      const result = await RestAdapter.ajax({
-        url: `${baseApiUrl}/replies/${replyId}`,
-        method: "PATCH",
-        body: JSON.stringify(body),
+      await RestAdapter.ajax({
+        url: `${baseApiUrl}/comments/${commentId}/replies`,
+        method: "POST",
+        body: JSON.stringify(postBody),
         headers: headers,
       });
-
-      const parsedResponse = JsonApiParse(result);
-      const data = {
-        item: parsedResponse.reply,
-      };
-      dispatch(updateReply(data));
-    },
-    [dispatch]
-  );
-
-  const addReply = useCallback(async (commentId: any, input: any) => {
-    const baseApiUrl = getALMConfig().primeApiURL;
-    const updatedInput = addHttpsToHref(input);
-    const postBody = {
-      data: {
-        type: REPLY,
-        attributes: {
-          state: "ACTIVE",
-          text: updatedInput,
-        },
-      },
-    };
-    const headers = { "content-type": "application/json" };
-    await RestAdapter.ajax({
-      url: `${baseApiUrl}/comments/${commentId}/replies`,
-      method: "POST",
-      body: JSON.stringify(postBody),
-      headers: headers,
-    });
+    } catch (error: any) {
+      const res = JSON.parse(error.responseText).title;
+      if (res === BAD_WORD_FOUND) {
+        throw new Error(BAD_WORD_FOUND);
+      }
+    }
   }, []);
 
   // for pagination

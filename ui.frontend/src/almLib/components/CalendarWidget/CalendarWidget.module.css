@@ -1,0 +1,536 @@
+@import "../../styles/variables.css";
+
+.small {
+  height: 50px;
+}
+
+.calendarEmptyBody {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-bottom: 84px;
+  height: 100%;
+}
+.calendarEmptyBody {
+  padding-bottom: 0;
+}
+.calendarEmptyBodyIcon {
+  width: 151px;
+  height: 118px;
+}
+
+.calendarEmptyBodyString {
+  font-size: var(--prime-font-size-14);
+  text-align: center;
+}
+.calendarWidget {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px 1px rgba(0, 0, 0, 0.16);
+}
+.filterLocationList {
+  font-size: var(--prime-font-size-12);
+  font-weight: var(--prime-font-weight-700);
+  margin-bottom: 12px;
+}
+.calendarWeeks {
+  width: calc(100% / 7);
+  font-size: var(--prime-font-size-12);
+  font-weight: var(--prime-font-weight-700);
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: var(--prime-color-neutral-1);
+}
+
+.containerPadding {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.subText {
+  color: var(--prime-color-neutral-1);
+}
+
+/* :host,
+.primelxp-calendar-ce {
+  padding: 10px;
+  display: flex;
+} */
+
+.widgetContainer *:focus {
+  outline-color: var(--prime-color-secondary);
+}
+.widgetContainer * {
+  box-sizing: border-box;
+}
+
+.widgetContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid var(--prime-color-neutral-3);
+  background-color: var(--prime-color-white);
+}
+
+.calendarContainer,
+.calendarfilterContainer,
+.calendarDetailContainer {
+  height: 100%;
+  padding-top: 20px;
+  padding-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.separator {
+  width: 1px;
+  height: calc(100% - 40px);
+  border: solid 0.5px;
+  border-color: var(--prime-color-neutral-3);
+}
+.horizontalSeparator {
+  width: 100%;
+  height: 0px;
+  border: solid 0.5px;
+  border-color: var(--prime-color-neutral-3);
+  margin: 10px 0;
+}
+.calendarHeader {
+  justify-content: center;
+}
+.calendarHeader,
+.calendarDetailHeader {
+  display: flex;
+  margin: 0;
+  margin-bottom: 10px;
+  align-items: baseline;
+}
+
+.calendarHeaderTitle,
+.calendarDetailHeaderTitle {
+  width: 205px;
+  font-size: var(--prime-font-size-12);
+  font-weight: var(--prime-font-weight-700);
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: var(--prime-color-body);
+  padding-bottom: 10px;
+  align-items: center;
+}
+.calendarDetailHeaderTitle {
+  width: auto;
+}
+
+#previousMonth,
+#nextMonth {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#previousMonth:disabled,
+#nextMonth:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.leftArrow {
+  border-left: 2px solid;
+  border-left-color: var(--prime-color-body);
+  border-top: 2px solid;
+  border-top-color: var(--prime-color-body);
+  width: 8px;
+  height: 8px;
+  transform: rotate(-45deg);
+}
+
+.calendarBody {
+  height: 225px;
+  padding: 0px 16px;
+}
+
+.weeksContainer {
+  display: flex;
+  align-items: center;
+}
+
+.daysContainer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.days {
+  width: calc(100% / 7);
+  text-align: center;
+  color: var(--prime-color-body);
+  padding: 3px 0;
+  display: block;
+}
+
+.dayButton {
+  border: 0;
+  padding: 0;
+  background: none;
+  width: 32px;
+  height: 25px;
+  cursor: pointer;
+}
+
+.day {
+  font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-400);
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 12px;
+  letter-spacing: normal;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin: 1px;
+  /* not there in variables */
+  color: var(--prime-color-body);
+}
+
+.day.hasSession {
+  background-color: var(--prime-color-neutral-3);
+}
+
+.day.today {
+  background-color: var(--prime-color-primary);
+  color: var(--prime-color-neutral-5);
+}
+
+.day.selected {
+  background-color: var(--prime-color-neutral-2);
+  color: var(--prime-color-white);
+}
+
+.detailBody {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.detailBody:hover::-webkit-scrollbar-thumb {
+  display: flex;
+  background: var(--prime-color-neutral-3);
+  border-radius: 5px;
+  border: 1px solid var(--prime-color-neutral-3);
+}
+
+.detailBody::-webkit-scrollbar,
+.detailBody:hover::-webkit-scrollbar {
+  width: 5px;
+}
+
+.detailBody::-webkit-scrollbar-track,
+.detailBody::-webkit-scrollbar-thumb:hover {
+  background: none;
+}
+
+.loDetail {
+  display: flex;
+  flex-wrap: nowrap;
+  font-size: 12px;
+  align-items: center;
+  height: 54px;
+  margin-bottom: 14px;
+}
+
+.loImageContainer {
+  width: 54px;
+  height: 54px;
+  border-radius: 4px;
+}
+
+.overflowEllipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+.loDefaultImgContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.loImage {
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+  object-fit: cover;
+}
+
+.loDefaultImg {
+  width: 80%;
+}
+
+.loDescriptionContainer {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  width: calc(100% - 64px);
+  padding-left: 8px;
+}
+
+.loDescriptionCourseType {
+  width: 100%;
+  align-items: baseline;
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+.enrolledIndicator {
+  height: 6px;
+  width: 6px;
+  border-radius: 50%;
+  background-color: var(--prime-success-color);
+  align-self: center;
+  margin-right: 3px;
+}
+
+.separatorDot {
+  height: 3px;
+  width: 3px;
+  border-radius: 50%;
+  background-color: var(--prime-color-neutral-2);
+  margin: 4px 3px 0px 3px;
+}
+
+.pendingIndicator {
+  height: 6px;
+  width: 6px;
+  border-radius: 50%;
+  background-color: var(--prime-error-color);
+  align-self: center;
+  margin-right: 3px;
+}
+
+.loSessionName {
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  word-break: break-word;
+  text-align: left;
+  color: var(--prime-color-black);
+  opacity: 1;
+  font-size: var(--prime-font-size-12);
+  font-weight: var(--prime-font-weight-700);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.loCourseName {
+  padding: 0;
+  overflow: hidden;
+  text-align: left;
+  letter-spacing: -0.08px;
+  color: var(--prime-color-link);
+  opacity: 1;
+  font-size: var(--prime-font-size-12);
+  background: none;
+  border: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.loSessiontime {
+  color: var(--prime-color-neutral-1);
+  padding-top: 3px;
+  line-height: 15px;
+}
+
+.loLink {
+  cursor: pointer;
+  color: var(--prime-color-link);
+}
+
+.loSessionType {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  word-break: break-word;
+  float: left;
+}
+
+.loCoursesType {
+  width: fit-content;
+  /* padding: 1px 6px; */
+  display: flex;
+  background: var(--prime-color-white) 0% 0% no-repeat padding-box;
+  text-align: left;
+  font-size: 8px;
+  letter-spacing: -0.05px;
+  color: var(--prime-color-neutral-1);
+  opacity: 1;
+}
+
+.pending {
+  color: var(--prime-error-color);
+}
+
+.calendarBodySingle {
+  position: relative;
+}
+
+span.calendarDayDouble:hover {
+  font-weight: var(--prime-font-weight-700);
+}
+
+.sessionFilter {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+.sessionFilter button {
+  border: none;
+  background: none;
+  color: var(--prime-color-primary);
+  cursor: pointer;
+  padding-top: 0px;
+  font-size: var(--prime-font-size-14);
+  padding-left: 0;
+}
+.applyFilter {
+  display: flex;
+  align-items: center;
+}
+.checkboxItem {
+  display: flex;
+  font-size: var(--prime-font-size-14);
+  padding: 6px 8px 0px 0px;
+}
+.checkboxItem label {
+  margin-left: 4px;
+}
+.filterBtn {
+  display: flex;
+  align-items: center;
+}
+.filterIcon {
+  display: inline-block;
+  height: 18px;
+  width: 18px;
+  margin-right: 8px;
+  margin-top: 4px;
+  svg path {
+    fill: var(--prime-color-primary);
+  }
+}
+.dot {
+  position: relative;
+}
+.dot::after {
+  position: absolute;
+  content: " ";
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background: var(--prime-color-primary);
+  right: -4px;
+  top: -2px;
+}
+.filterLocationList {
+  font-size: var(--prime-font-size-12);
+  font-weight: var(--prime-font-weight-700);
+  margin-bottom: 12px;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.header {
+  color: var(--prime-color-body);
+  font-size: var(--prime-font-size-22);
+  line-height: 29px;
+  margin: 0px 0px 16px 0px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.rightArrow {
+  border-right: 2px solid;
+  border-right-color: var(--prime-color-body);
+  border-top: 2px solid;
+  border-top-color: var(--prime-color-body);
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+}
+
+.loState {
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  word-break: break-word;
+  font-size: var(--prime-font-size-8);
+  letter-spacing: -0.08px;
+  float: left;
+  display: flex;
+}
+
+.filterCheckbox {
+  margin-left: 0px;
+}
+.previousMonth {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.calendarDetailContainer {
+  padding: 16px 6px 16px 16px;
+}
+.calendarHeaderTitle {
+  font-size: var(--prime-font-size-14);
+}

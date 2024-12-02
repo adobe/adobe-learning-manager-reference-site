@@ -12,65 +12,66 @@ governing permissions and limitations under the License.
 @import "../../../styles/variables.css";
 
 .left {
-  width: calc(100% - 256px);
-  padding-right: 80px;
+  width: 100%;
   padding-bottom: 30px;
-  float: left;
-  background-color: var(--prime-color-nc4);
+  background-color: var(--prime-color-neutral-5);
+  gap: 24px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0px;
 }
 
 .right {
-  width: 256px;
+  width: 280px;
   padding: 20px 0;
-  float: left;
-  background-color: var(--prime-color-nc4);
 }
-.trainingOverviewContainer,
-.trainingOverviewPrequisite {
-  border: 1px solid var(--prime-color-nc2);
-  border-radius: 6px;
-  margin-bottom: 20px;
-}
-
 .trainingOverviewContainer {
-  padding: 10px;
+  gap: 14px;
+  display: flex;
+  flex-direction: column;
 }
 
 .coursesViewMenu {
-  border: 1px solid var(--prime-color-nc2);
-  margin-bottom: 20px;
-  padding-top: 5px;
   position: relative;
-  background-color: var(--prime-color-white);
+  margin: 24px 0px;
 }
 
 .trainingPrequisiteLabel {
-  margin-bottom: 10px;
-  margin-top: 10px;
-  color: var(--prime-color-nc3);
+  margin-top: 24px;
+  margin-bottom: 0px;
+  color: var(--prime-color-black);
+  font-size: var(--prime-font-size-18);
+  font-weight: var(--prime-font-weight-700);
+}
+
+.prequisiteCourseSeparator {
+  border: 0.5px solid var(--prime-color-neutral-3);
+  margin: 0;
+}
+
+.sectionHeader {
+  display: flex;
+  padding: 24px 0 12px 0;
+  border-bottom: 1px solid var(--prime-color-neutral-1);
 }
 
 .sectionName {
-  margin: 0 0 10px 0;
-  color: var(--prime-color-nc1);
-  font-size: var(--prime-font-size-16);
+  font-size: var(--prime-font-size-14);
+  margin: 0;
 }
 .sectionOptional {
-  display: inline-block;
-  margin-bottom: 20px;
   background: var(--prime-success-color);
-  border-radius: 8px;
+  border-radius: 42px;
   color: var(--prime-color-white);
   font-weight: var(--prime-font-weight-600);
-  font-size: var(--prime-font-size-10);
+  font-size: var(--prime-font-size-12);
   padding: 1px 8px;
   letter-spacing: 0.4px;
-  text-transform: uppercase;
+  margin-left: auto;
 }
 
 .overview {
   font-size: var(--prime-font-size-14);
-  color: var(--prime-color-nc3);
   overflow: hidden;
   display: inline-block;
   width: 100%;
@@ -86,17 +87,52 @@ img {
 }
 .duration {
   font-size: var(--prime-font-size-14);
-  color: var(--prime-color-nc3);
-  margin-bottom: 10px;
-  display: block;
+  display: flex;
+  align-items: center;
 }
+
+.durationIcon {
+  display: flex;
+  padding-right: 5px;
+}
+
+.durationIcon svg {
+  fill: var(--prime-icon-color);
+  width: 20px;
+  height: 20px;
+}
+
+.durationText {
+  color: var(--prime-color-neutral-1);
+}
+
+.mandatoryModule {
+  background-size: contain;
+  border-radius: 30px;
+  margin-top: 5px;
+  margin-left: 3px;
+  line-height: 40%;
+  background-color: var(--prime-color-white);
+}
+
+.mandatoryModule svg {
+  fill: var(--prime-error-color);
+  width: 10px;
+  height: 10px;
+}
+
 .pageContainer {
   display: flex;
   max-width: var(--prime-container-max-width-desktop);
   width: var(--prime-container-width);
   margin: 0 auto;
   margin-top: 15px;
-  background-color: #efefef;
+  background-color: var(--prime-color-neutral-5);
+  gap: 50px;
+}
+
+.completionDateInfoIcon {
+  display: flex;
 }
 @media screen and (max-width: 1024px) {
   .headingContainer {
@@ -121,7 +157,7 @@ img {
     flex-direction: column;
     width: 100%;
     max-width: var(--prime-container-max-width-mobile);
-    background-color: #efefef;
+    background-color: var(--prime-color-neutral-3);
   }
   .trainingOverviewContainer {
     border: none;
@@ -138,77 +174,210 @@ img {
 
 .externalCertUploadInfo {
   max-width: 100%;
-  border: 1px solid var(--prime-color-nc4);
   clear: both;
-  text-align: left !important;
   list-style: none;
   padding: 0;
   display: flex;
   flex-direction: column;
   margin-top: 20px;
-  margin-bottom: 30px;
-  border-left: 5px solid orange;
-  background-color: #fff;
+  border-left: 5px solid var(--prime-progress-color);
+  background-color: var(--prime-color-white);
 }
 
 .externalCertUploadMessage {
   padding: 10px;
+  background-color: var(--prime-color-neutral-4);
+}
+
+.uploadFileSubmission {
+  height: 38px;
+  width: inherit;
+  padding: 6px 0px 6px 15px;
+}
+
+.uploadFileSubmission button {
+  display: none;
+}
+
+.fileSubmissionLabel {
+  position: absolute;
+  padding: 6px 0px 6px 15px;
+  right: 0;
+  left: 0;
+  z-index: 1;
+  height: 38px;
+  font-weight: 400;
+  color: var(--prime-color-neutral-1);
+  background-color: var(--prime-color-neutral-4);
+  border: 1px solid var(--prime-color-neutral-2);
+  border-radius: 100px;
+  font-size: var(--prime-font-size-14);
+}
+
+.fileSubmissionLabel span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 75%;
+  display: inline-block;
+}
+
+.fileSubmissionLabel::after {
+  position: absolute;
+  width: 20%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  color: var(--prime-color-body);
+  content: "Browse";
+  background-color: var(--prime-color-neutral-4);
+  border-left: inherit;
+  border-radius: 0 100px 100px 0;
+}
+
+.proofUploadButton {
+  flex: 1;
+}
+
+.uploadButton {
+  flex: 1;
+  height: 38px;
+  width: 100%;
+}
+
+.fileUpload {
+  position: relative;
+  width: 100%;
+  display: flex;
 }
 
 .fileSubmissionContainer {
   text-transform: none;
-  font-weight: 700;
-  margin-left: 15px;
-  margin-bottom: 10px;
+  gap: 10px;
+  display: flex;
+  padding-top: 24px;
+  font-weight: var(--prime-font-weight-700);
 }
 
-.awaitingApproval {
-  color: #e6a000;
+.uploadFileBox {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+}
+
+.enterCompletionDate {
+  display: flex;
+  flex-direction: column;
+  width: 22%;
+}
+
+.enterCompletionDate [class$="spectrum-Field-field"] {
+  width: 85%;
+  margin-left: 5px;
+}
+
+.enterCompletionDate [class$="spectrum-InputGroup-input"] {
+  border-bottom-left-radius: 100px;
+  border-top-left-radius: 100px;
+  height: 38px;
+  border: 1px solid var(--prime-color-neutral-2);
+  border-right: 0;
+  padding: 5px;
+}
+
+.enterCompletionDate [class$="spectrum-FieldButton"] {
+  height: 38px;
+  width: 25%;
+}
+
+.enterCompletionDate [class$="focus-ring"] {
+  height: 38px;
+}
+
+.enterCompletionDate [class$="spectrum-FieldButton"]:before {
+  border-bottom-right-radius: 100px !important;
+  border-top-right-radius: 100px !important;
+  border: 1px solid var(--prime-color-neutral-2);
+}
+
+.enterCompletionDate [class$="spectrum-Datepicker-segments"] {
+  font-weight: var(--prime-font-weight-500);
+}
+
+.enterCompletionDate [class$="spectrum-Datepicker-inputContents"] {
+  justify-content: center;
+}
+
+.enterCompletionDate [class$="spectrum-Icon"] {
+  fill: var(--prime-color-neutral-1);
 }
 
 .submissionLink {
-  color: var(--prime-color-primary);
+  color: var(--prime-color-link);
   text-decoration: none;
   margin-left: 5px;
 }
 
+.uploadedCertContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.uploadedFileDetails {
+  display: flex;
+  gap: 5px;
+  font-weight: normal;
+}
+
+.uploadContainerHeading {
+  height: 30px;
+}
+
+.completionDateInfo {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.completionDateInfo svg {
+  fill: var(--prime-color-neutral-1);
+  height: 13px;
+  width: 13px;
+}
+
+.awaitingApprovalLabel {
+  color: var(--prime-progress-color);
+}
+
+.approvedFileDetails {
+  color: var(--prime-success-color);
+  display: flex;
+  gap: 5px;
+  font-weight: normal;
+}
+
+.approvedFileDetails svg {
+  width: 20px;
+  height: 20px;
+}
+
+.proofApprovedLabel {
+  fill: var(--prime-success-color);
+}
+
 .fileUploadNote {
-  margin-top: 20px;
-  margin-bottom: 30px;
-  margin-left: 15px;
+  font-size: var(--prime-font-size-12);
+  color: var(--prime-color-neutral-1);
+  padding: 12px 0 24px 0;
 }
 
-.fileApproved {
-  color: #0f870f;
-}
-
-.uploadUpperSeperator,
-.uploadLowerSeperator {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  border: 2px solid var(--prime-color-nc2);
-}
-
-.uploadLowerSeperator {
-  border: 1px solid var(--prime-color-nc2);
-}
-
-.uploadFileSubmission {
-  display: none;
-}
-
-.uploadButton {
-  background: none;
-  border: none;
-  padding-bottom: 12px;
-  font-size: 13px;
-  color: var(--prime-color-primary);
-  font-weight: 750;
-}
-
-.uploadButton:hover {
-  border: none;
-  cursor: pointer;
+.certUploadNoteText {
+  padding-left: 30px;
 }
 
 .primeStatusSvg {
@@ -220,13 +389,17 @@ img {
 }
 .backgroundPage {
   width: 100%;
-  background-color: var(--prime-color-nc4);
-  min-height: 850px;
+}
+
+.flexLpInfoBox {
+  display: flex;
 }
 
 .info {
   display: flex;
   width: fit-content;
+  margin-left: -5px;
+  padding-right: 2px;
 }
 
 .info svg {
@@ -238,9 +411,16 @@ img {
 }
 
 .script {
-  position: relative;
-  bottom: 28px;
-  padding-left: 35px;
+  padding-top: 5px;
+}
+
+.script span {
+  color: var(--prime-color-neutral-1);
+}
+
+.courseViewLabel {
+  width: 90%;
+  display: flex;
 }
 
 .radioButton {
@@ -257,33 +437,34 @@ img {
 }
 
 .refreshDiv {
-  box-sizing: border-box;
-  display: inline;
   position: absolute;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  border-top: none;
-  border-left: none;
-  border-bottom: none;
-  border-right: none;
+  border: none;
   background-color: transparent;
-  right: 5px;
-  bottom: 5px;
+  right: 0px;
+  bottom: 0px;
   cursor: pointer;
 }
 
 .refresh svg {
-  stroke: var(--prime-color-nc5);
-  width: 18px;
-  height: 18px;
-  fill: var(--prime-color-nc5);
-  stroke-width: 2;
-  transform: scale(0.85);
+  stroke: var(--prime-color-neutral-1);
+  width: 15px;
+  height: 15px;
+  fill: var(--prime-color-neutral-1);
 }
 
 .radioGroup {
   position: relative;
-  margin-left: 35px;
-  margin-bottom: 15px;
-  padding-right: 3px;
+  margin-top: 8px;
+}
+
+.radioGroup > div > div > label {
+  font-weight: var(--prime-font-weight-400);
+}
+
+.subLOsHeader {
+  font-size: var(--prime-font-size-18);
+  font-weight: var(--prime-font-weight-600);
+  color: var(--prime-color-black);
+  margin-bottom: -48px;
+  margin-top: 48px;
 }

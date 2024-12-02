@@ -28,14 +28,16 @@ import {
   ALMCategoryBrowser,
   ALMNavigationBar,
   ALMFooter,
+  PrlPreferenceSection,
 } from "./almLib";
 
 import "./almLib/utils/global";
 import "./App.css";
-
+import ALMPrimeWidgets from "./almLib/components/Widgets/ALMPrimeWidgets/ALMPrimeWidgets";
+import { CalendarWidget } from "./almLib/components/CalendarWidget";
+import { GetPrimeObj, WinInit } from "./almLib/utils/widgets/windowWrapper";
+import { PrimeAuthorPage } from "./almLib/components/Author";
 const App = (props: any) => {
-  // const { mountingPoints } = config;
-  //store.subscribe(() => console.log(store.getState()));
   return (
     <IntlProvider locale={props.locale} messages={props.messages}>
       <div id="alertDialog"></div>
@@ -80,6 +82,18 @@ const App = (props: any) => {
           </Portal>
           <Portal selector={mountingPoints.footerContainer}>
             <ALMFooter />
+          </Portal>
+          <Portal selector={mountingPoints.authorContainer}>
+            <PrimeAuthorPage />
+          </Portal>
+          <Portal selector={mountingPoints.calendarWidgetContainer}>
+            <CalendarWidget numCards={2} />
+          </Portal>
+          <Portal selector={mountingPoints.userRecommendationsContainer}>
+            <PrlPreferenceSection />
+          </Portal>
+          <Portal selector={mountingPoints.layoutContainer}>
+            <ALMPrimeWidgets />
           </Portal>
         </AppContextProvider>
       </CommerceContextProvider>

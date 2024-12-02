@@ -16,7 +16,11 @@ import {
   PAGINATE_USER_SKILL_INTEREST,
   GET_SKILLS,
   PAGINATE_SKILLS,
-  DELETE_USER_SKILL_INTEREST
+  DELETE_USER_SKILL_INTEREST,
+  GET_USER_RECOMMENDATION_PREFERENCE,
+  GET_RECOMMENDATION_PRODUCTS,
+  GET_RECOMMENDATION_ROLES,
+  GET_RECOMMENDATION_LEVELS,
 } from "./actionTypes";
 
 export const loadUser = (payload: string) => {
@@ -64,6 +68,34 @@ export const paginateSkills = (payload: any) => {
 export const deleteUserSkillInterest = (payload: any) => {
   return {
     type: DELETE_USER_SKILL_INTEREST,
+    payload,
+  };
+};
+
+export const loadUserRecommendationPreference = (payload: any) => {
+  return {
+    type: GET_USER_RECOMMENDATION_PREFERENCE,
+    payload,
+  };
+};
+
+export const loadRecommendationProducts = (payload: any) => {
+  return {
+    type: GET_RECOMMENDATION_PRODUCTS,
+    payload,
+  };
+};
+
+export const loadRecommendationRoles = (payload: any) => {
+  return {
+    type: GET_RECOMMENDATION_ROLES,
+    payload,
+  };
+};
+
+export const loadRecommendationLevels = (payload: any) => {
+  return {
+    type: GET_RECOMMENDATION_LEVELS,
     payload,
   };
 };

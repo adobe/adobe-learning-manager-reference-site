@@ -8,6 +8,7 @@ import { useIntl } from "react-intl";
 import { SKILL_LEVEL } from "../../../utils/constants";
 import { Badgr } from "../Badgr";
 import { useState } from "react";
+import { GetTranslation } from "../../../utils/translationService";
 
 const BadgeList = (props: any) => {
   const { badges, handleDownloadPdfClick, handleDownloadImgClick } = props;
@@ -30,18 +31,12 @@ const BadgeList = (props: any) => {
                 tabIndex={0}
                 aria-label={
                   downloadNum
-                    ? formatMessage(
-                        { id: "alm.badge.downloadNumPdf" },
-                        { downloadNum }
-                      )
+                    ? formatMessage({ id: "alm.badge.downloadNumPdf" }, { downloadNum })
                     : formatMessage({ id: "alm.badge.downloadAllPdf" })
                 }
               >
                 {downloadNum
-                  ? formatMessage(
-                      { id: "alm.text.pdfNum" },
-                      { num: downloadNum }
-                    )
+                  ? formatMessage({ id: "alm.text.pdfNum" }, { num: downloadNum })
                   : formatMessage({ id: "alm.text.pdf" })}
               </a>
             </div>
@@ -52,18 +47,12 @@ const BadgeList = (props: any) => {
                 tabIndex={0}
                 aria-label={
                   downloadNum
-                    ? formatMessage(
-                        { id: "alm.badge.downloadNumImg" },
-                        { downloadNum }
-                      )
+                    ? formatMessage({ id: "alm.badge.downloadNumImg" }, { downloadNum })
                     : formatMessage({ id: "alm.badge.downloadAllImg" })
                 }
               >
                 {downloadNum
-                  ? formatMessage(
-                      { id: "alm.text.badgeNum" },
-                      { num: downloadNum }
-                    )
+                  ? formatMessage({ id: "alm.text.badgeNum" }, { num: downloadNum })
                   : formatMessage({ id: "alm.text.badge" })}
               </a>
             </div>
@@ -90,7 +79,7 @@ const BadgeList = (props: any) => {
               dateAchieved={el.dateAchieved}
               badgeAquiredForType={
                 el.model.loType
-                  ? formatMessage({ id: `alm.text.${el.model.loType}` })
+                  ? GetTranslation(`alm.text.${el.model.loType}`, true)
                   : formatMessage({ id: "alm.text.skill" })
               }
               badgeTypeName={

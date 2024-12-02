@@ -17,10 +17,7 @@ import { Checkbox, TextField } from "@adobe/react-spectrum";
 import TrendInspect from "@spectrum-icons/workflow/TrendInspect";
 import History from "@spectrum-icons/workflow/History";
 import Properties from "@spectrum-icons/workflow/Properties";
-import {
-  POPULAR_SUGGESTIONS,
-  USERS_SUGGESTIONS,
-} from "../../../utils/constants";
+import { POPULAR_SUGGESTIONS, USERS_SUGGESTIONS } from "../../../utils/constants";
 import { GetTranslation } from "../../../utils/translationService";
 import { getALMObject } from "../../../utils/global";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,23 +33,22 @@ import { defaultSearchInDropdownList } from "../../../store/reducers/catalog";
 
 const PrimeCatalogSearch: React.FC<{
   query: string;
-  handleSearch: (text: string) => void;
+  handleSearch: (text: string, autoCorrectMode?: boolean) => void;
   getSearchSuggestions: (searhTerm: string) => any;
   updateSnippet: (checked: boolean, data: any) => void;
-}> = ({ query, handleSearch, getSearchSuggestions, updateSnippet }) => {
+  autoCorrectMode: boolean;
+}> = ({ query, handleSearch, getSearchSuggestions, updateSnippet, autoCorrectMode }) => {
   const dispatch = useDispatch();
   const { formatMessage } = useIntl();
 
   const storeState = store.getState();
   const searchState = storeState.search;
-  const canAutoComplete = useSelector(
-    (state: State) => state.search.autocomplete
-  );
+  const canAutoComplete = useSelector((state: State) => state.search.autocomplete);
 
   const [state, setState] = useState(query);
 
   const [showSearchInDropdown, setShowSearchInDropdown] = useState(false);
-  
+
   const searchFilterDropdownRef = useRef<HTMLInputElement>(null);
   const searchAutocompleteDropdownRef = useRef<HTMLInputElement>(null);
 
@@ -61,14 +57,14 @@ const PrimeCatalogSearch: React.FC<{
 
   const searchChangedHandler = (event: any) => {
     if (event.key === "Enter") {
-      handleSearch(state);
+      handleSearch(state, autoCorrectMode);
       handleClickOutside(event);
     }
   };
 
   const beginSearchHandler = () => {
     if (state) {
-      handleSearch(state);
+      handleSearch(state, autoCorrectMode);
     }
   };
 
@@ -85,21 +81,19 @@ const PrimeCatalogSearch: React.FC<{
         >
           <h4>{GetTranslation("alm.catalog.searchIn")}</h4>
           <ul>
-          {defaultSearchInDropdownList.map((item) => {
-            return (
-              
+            {defaultSearchInDropdownList.map(item => {
+              return (
                 <li key={item.label}>
                   <Checkbox
-                    onChange={(checked) => updateSnippet(checked, item)}
+                    onChange={checked => updateSnippet(checked, item)}
                     isSelected={item.checked}
                     UNSAFE_className={styles.primeChechbox}
                   >
                     {GetTranslation(item.label, true)}
                   </Checkbox>
                 </li>
-              
-            );
-          })}
+              );
+            })}
           </ul>
         </div>
       );
@@ -110,31 +104,19 @@ const PrimeCatalogSearch: React.FC<{
     if (canAutoComplete && isPrimeUserLoggedIn) {
       return (
         <div ref={searchAutocompleteDropdownRef}>
-          {autoComplete(
-            searchState.userSearchHistory || [],
-            searchState.popularSearches || []
-          )}
+          {autoComplete(searchState.userSearchHistory || [], searchState.popularSearches || [])}
         </div>
       );
     }
   };
 
-  const autoComplete = (
-    userSearchHistory: string[],
-    popularSearches: string[]
-  ) => {
+  const autoComplete = (userSearchHistory: string[], popularSearches: string[]) => {
     if (userSearchHistory?.length === 0 && popularSearches?.length === 0) {
       return "";
     }
 
-    const userSuggestionTemplate = getSuggestionHtml(
-      userSearchHistory,
-      USERS_SUGGESTIONS
-    );
-    const popularSuggestionTemplate = getSuggestionHtml(
-      popularSearches,
-      POPULAR_SUGGESTIONS
-    );
+    const userSuggestionTemplate = getSuggestionHtml(userSearchHistory, USERS_SUGGESTIONS);
+    const popularSuggestionTemplate = getSuggestionHtml(popularSearches, POPULAR_SUGGESTIONS);
 
     const dividerHtml =
       userSearchHistory?.length === 0 || popularSearches?.length === 0 ? (
@@ -176,7 +158,7 @@ const PrimeCatalogSearch: React.FC<{
 
   const getSuggesstionItemHtml = (item: string) => {
     return (
-      <li className = {styles.searchItemSelected} key={item}>
+      <li className={styles.searchItemSelected} key={item}>
         <a
           href="javascript:void(0)"
           title={item}
@@ -246,43 +228,39 @@ const PrimeCatalogSearch: React.FC<{
   return (
     <div className={styles.searchContainer}>
       <button
-        className={
-          isPrimeUserLoggedIn ? styles.searchDropdownFilterIcon : styles.hide
-        }
-        onClick={(e) => {
+        className={isPrimeUserLoggedIn ? styles.searchDropdownFilterIcon : styles.hide}
+        onClick={e => {
           setShowSearchInDropdown(true);
         }}
       >
         <Properties size="S" />
       </button>
       <div className={styles.container}>
-      {searchInDropdownTemplate()}
-      <div
-          onFocus={() => setShowSearchInDropdown(false)}
-        >
-        <TextField
-          placeholder={formatMessage({
-            id: "alm.catalog.search.placeholder",
-            defaultMessage: "Enter text and press enter",
-          })}
-          onKeyDown={searchChangedHandler}
-          onChange={(value) => setState(value)}
-          value={state}
-          width={"100%"}
-          height={"38px"}
-          UNSAFE_className={styles.customInput}
-          {...(isPrimeUserLoggedIn
-            ? {
-                onInput: (e) => handleInput(e),
-                onFocus: (e) => openSuggestionList(e),
-              }
-            : {})}
-        />
-        <span className={styles.searchIcon} onClick={beginSearchHandler}>
-          {SEARCH_ICON_SVG()}
-        </span>
-        
-        {searchSuggestionsTemplate()}
+        {searchInDropdownTemplate()}
+        <div onFocus={() => setShowSearchInDropdown(false)}>
+          <TextField
+            placeholder={formatMessage({
+              id: "alm.catalog.search.placeholder",
+              defaultMessage: "Enter text and press enter",
+            })}
+            onKeyDown={searchChangedHandler}
+            onChange={value => setState(value)}
+            value={state}
+            width={"100%"}
+            height={"38px"}
+            UNSAFE_className={styles.customInput}
+            {...(isPrimeUserLoggedIn
+              ? {
+                  onInput: e => handleInput(e),
+                  onFocus: e => openSuggestionList(e),
+                }
+              : {})}
+          />
+          <span className={styles.searchIcon} onClick={beginSearchHandler}>
+            {SEARCH_ICON_SVG()}
+          </span>
+
+          {searchSuggestionsTemplate()}
         </div>
       </div>
     </div>

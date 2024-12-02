@@ -46,8 +46,12 @@ const PrimeTrainingCard: React.FC<{
     cardClickHandler,
   } = useTrainingCard(training);
 
-  const { enrollmentHandler, unEnrollmentHandler, jobAidClickHandler } =
-    useTrainingPage(training.id, "", {}, true);
+  const { enrollmentHandler, unEnrollmentHandler, jobAidClickHandler } = useTrainingPage(
+    training.id,
+    "",
+    {},
+    true
+  );
   const {
     enroll,
     unenroll,
@@ -55,12 +59,7 @@ const PrimeTrainingCard: React.FC<{
     jobAidRemoveToListMsg,
     nameClickHandler,
     isEnrolled,
-  } = useJobAids(
-    training,
-    enrollmentHandler,
-    unEnrollmentHandler,
-    jobAidClickHandler
-  );
+  } = useJobAids(training, enrollmentHandler, jobAidClickHandler, unEnrollmentHandler);
 
   const [isHovered, setIsHovered] = useState(false);
   const { formatMessage, locale } = useIntl();
@@ -87,7 +86,13 @@ const PrimeTrainingCard: React.FC<{
 
   const skillsAsString = skillNames;
   const descriptionHtml = description ? (
-    <p className={styles.description} aria-label={formatMessage({id:'alm.text.description'},{description:description})} tabIndex={0}>{description}</p>
+    <p
+      className={styles.description}
+      aria-label={formatMessage({ id: "alm.text.description" }, { description: description })}
+      tabIndex={0}
+    >
+      {description}
+    </p>
   ) : (
     ""
   );
@@ -96,13 +101,13 @@ const PrimeTrainingCard: React.FC<{
     training.loType === JOBAID ? (
       <div>
         <div onClick={nameClickHandler} className={styles.jobAidAction}>
-          {GetTranslation("alm.jobaid.view")}
+          {GetTranslation("alm.jobaid.view", true)}
         </div>
         {!isEnrolled ? (
           <a
             href="javascript:void(0)"
             role="button"
-            onClick={(e) => {
+            onClick={e => {
               addJobAid(e);
             }}
           >
@@ -112,7 +117,7 @@ const PrimeTrainingCard: React.FC<{
           <a
             href="javascript:void(0)"
             role="button"
-            onClick={(e) => {
+            onClick={e => {
               removeJobAid(e);
             }}
           >
@@ -123,23 +128,18 @@ const PrimeTrainingCard: React.FC<{
           training.instances![0] !== undefined &&
           training.instances![0].loResources !== undefined &&
           training.instances![0].loResources![0].resources !== undefined &&
-          training.instances![0].loResources![0].resources![0].contentType !==
-            "OTHER" &&
+          training.instances![0].loResources![0].resources![0].contentType !== "OTHER" &&
           training.instances![0].loResources![0].resources![0].downloadUrl && (
             <a
-              href={
-                training.instances![0].loResources![0].resources![0].downloadUrl
-              }
+              href={training.instances![0].loResources![0].resources![0].downloadUrl}
               role="button"
               download
               target="_blank"
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
               }}
             >
-              <div className={styles.jobAidAction}>
-                {GetTranslation("alm.text.download")}
-              </div>
+              <div className={styles.jobAidAction}>{GetTranslation("alm.text.download")}</div>
             </a>
           )}
       </div>
@@ -194,9 +194,7 @@ const PrimeTrainingCard: React.FC<{
   if (price && isCommerceEnabled()) {
     priceLabel = getFormattedPrice(price);
   }
-  const extraIconHtml = (
-    <div className={styles.extraIcon}>{THREE_DOTS_MENU_SVG()}</div>
-  );
+  const extraIconHtml = <div className={styles.extraIcon}>{THREE_DOTS_MENU_SVG()}</div>;
 
   return (
     <>
@@ -205,15 +203,15 @@ const PrimeTrainingCard: React.FC<{
           className={cardClass}
           onMouseLeave={onMouseLeaveHandler}
           onClick={
-            guest 
+            guest
               ? () => {
                   navigateToLogin(signUpURL, training.id, almDomain);
                 }
               : cardClickHandler
           }
           tabIndex={0}
-          aria-label={formatMessage({id:"alm.label.view"},{name:name})}
-          role='link'
+          aria-label={formatMessage({ id: "alm.label.view" }, { name: name })}
+          role="link"
         >
           <div style={{ ...cardBgStyle }} className={styles.thumbnail}></div>
 
@@ -224,22 +222,14 @@ const PrimeTrainingCard: React.FC<{
               <div className={styles.title}>{name}</div>
               <div className={styles.trainingType}>{trainingTypeLabel}</div>
               {priceLabel && <span className={styles.price}>{priceLabel}</span>}
-              <div
-                className={styles.descriptionContainer}
-                onMouseEnter={onMouseEnterHandler}
-              >
+              <div className={styles.descriptionContainer} onMouseEnter={onMouseEnterHandler}>
                 <div className={styles.extra}>
                   {hasCompletedTrainingHtml ||
                     (skillsAsString ? (
                       <div className={styles.extraWrapper}>
                         <div className={styles.sendIcon}>{SEND_SVG()}</div>
                         <div className={styles.extraLabel}>
-                          <span>
-                            {GetTranslation(
-                              "alm.catalog.card.skills.label",
-                              true
-                            )}
-                          </span>
+                          <span>{GetTranslation("alm.catalog.card.skills.label", true)}</span>
                           <span>{skillsAsString}</span>
                         </div>
                         {extraIconHtml}
@@ -272,14 +262,9 @@ const PrimeTrainingCard: React.FC<{
                     <>
                       <div className={styles.skillsContainer}>
                         <span className={styles.skiillsLabel}>
-                          {GetTranslation(
-                            "alm.catalog.card.skills.label",
-                            true
-                          )}
+                          {GetTranslation("alm.catalog.card.skills.label", true)}
                         </span>
-                        <span className={styles.skillsValue}>
-                          {skillsAsString}
-                        </span>
+                        <span className={styles.skillsValue}>{skillsAsString}</span>
                       </div>
                     </>
                   ) : (
@@ -287,10 +272,7 @@ const PrimeTrainingCard: React.FC<{
                   )}
 
                   {enrollment && type !== JOBAID ? (
-                    <div
-                      className={styles.skillsContainer}
-                      style={{ marginBottom: 0 }}
-                    >
+                    <div className={styles.skillsContainer} style={{ marginBottom: 0 }}>
                       {enrollmentHtml}
                       <div className={styles.percentComplete}>
                         {formatMessage(
@@ -312,10 +294,7 @@ const PrimeTrainingCard: React.FC<{
             <div className={styles.topBar}>
               <div className={styles.format}>{fomatLabel}</div>
               {useCanShowRating(training) ? (
-                <ALMStarRating
-                  avgRating={avgRating}
-                  ratingsCount={ratingsCount}
-                />
+                <ALMStarRating avgRating={avgRating} ratingsCount={ratingsCount} />
               ) : (
                 ""
               )}

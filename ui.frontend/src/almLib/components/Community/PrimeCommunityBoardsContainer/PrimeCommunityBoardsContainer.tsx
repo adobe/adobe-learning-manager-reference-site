@@ -19,12 +19,8 @@ const PrimeCommunityBoardsContainer: React.FC<{
   loadMoreBoards: () => void;
   hasMoreItems: boolean;
 }> = ({ boards, loadMoreBoards, hasMoreItems }) => {
-  const listHtml = boards?.map((board) => (
-    <PrimeCommunityBoard
-      board={board}
-      key={board.id}
-      showBorder={true}
-    ></PrimeCommunityBoard>
+  const listHtml = boards?.map(board => (
+    <PrimeCommunityBoard board={board} key={board.id} showBorder={true}></PrimeCommunityBoard>
   ));
   const { formatMessage } = useIntl();
 

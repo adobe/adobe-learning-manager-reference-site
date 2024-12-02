@@ -1,0 +1,53 @@
+/**
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+@import "../../../styles/variables.css";
+
+.card {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: var(--prime-catalog-card-height);
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  border: 1px solid transparent;
+}
+.textContainer {
+  font-family: var(--prime-font-family);
+  display: block;
+  width: 100%;
+  height: 57px;
+  position: absolute;
+  left: 0;
+  top: 43px;
+  border-radius: 0px 0 8px 8px;
+  background: linear-gradient(360deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+  font-size: var(--prime-font-size-16);
+  font-weight: var(--prime-font-weight-700);
+  line-height: 20.8px;
+  text-align: left;
+  padding: 24px 16px 12px 16px;
+  color: var(--prime-color-white);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.hasImage {
+  background: center no-repeat;
+  background-size: cover;
+}
+.card:hover {
+  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2);
+}

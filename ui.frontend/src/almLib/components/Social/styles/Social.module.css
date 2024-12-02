@@ -10,28 +10,27 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 @import "../../../styles/variables.css";
-.sideContainer{
+.sideContainer {
   display: flex;
   position: absolute;
-  top: 20%; 
+  top: 20%;
   bottom: 0px;
   padding: 10px;
 }
-.upperArea{
+.upperArea {
   padding: 10px;
 }
-.infoButton{
+.infoButton {
   background-color: #ffffff6e;
   padding: 10px 15px 10px 15px;
   border-radius: 20px;
   border: 0px;
   color: #fff;
   text-shadow: 0.1rem 0.1rem 0.1rem #56565652;
-  font-weight: var( --prime-font-weight-400);
+  font-weight: var(--prime-font-weight-400);
   box-shadow: 0.1rem 0.1rem 0.1rem #56565652;
   cursor: pointer;
 }
-
 
 .socialLearningMoto {
   color: #fff;
@@ -44,16 +43,16 @@ governing permissions and limitations under the License.
   padding: 2rem 0px 0px 18rem;
   height: 100%;
 }
-.socialLearningHeading{
+.socialLearningHeading {
   color: #fff;
   font-weight: var(--prime-font-weight-600);
   text-shadow: 0.2rem 0.2rem 0.2rem #565656;
 }
 .bannerbg {
-    background-image : url("https://cpcontentsdev.adobe.com/public/social-app/assets/images/banner_large-2d55849b1962b60220fa1c8d96787a4b.png") ;
-    height: 240px;
-    width: 104.9%;
-    background-size: cover;
+  background-image: url("https://cpcontentsdev.adobe.com/public/social-app/assets/images/banner_large-2d55849b1962b60220fa1c8d96787a4b.png");
+  height: 240px;
+  width: 104.9%;
+  background-size: cover;
 }
 .mainPanel {
   padding: 3rem 14rem 3rem 14rem;
@@ -63,35 +62,29 @@ governing permissions and limitations under the License.
 }
 
 .gridContainer {
-
   display: flex;
   flex-direction: row;
   padding: 8px 0px 0px 250px;
-  
+}
 
-  }
-
-.left{
+.left {
   width: 80%;
 }
 
-.mainContainer{
-
-  width:min-content !important;
+.mainContainer {
+  width: min-content !important;
 }
-.leftLoader{
+.leftLoader {
   position: absolute;
   left: -550px;
   bottom: 450px;
 }
-.rightLoader{
+.rightLoader {
   position: absolute;
   right: -500px;
   bottom: 450px;
 }
 
-body{
+body {
   text-align: left;
-  
 }
- 

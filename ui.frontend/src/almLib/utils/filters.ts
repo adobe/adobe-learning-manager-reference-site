@@ -9,19 +9,32 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
+import { AnyAction } from "redux";
+import { PRLCriteria, PrimeAccount, PrimeUser } from "../models";
 import {
   updateCatalogsFilter,
   updateDurationFilter,
   updateLearnerStateFilter,
   updateLoFormatFilter,
   updateLoTypesFilter,
-  updatePriceFilter,
+  updatePriceRangeFilter,
   updateSkillLevelFilter,
   updateSkillNameFilter,
   updateTagsFilter,
   updateCitiesFilter,
+  updateProductsFilter,
+  updateRolesFilter,
+  updateLevelsFilter,
+  updatePriceFilter,
+  updateAnnouncedGroupsFilter,
 } from "../store/actions/catalog/action";
-import { getQueryParamsFromUrl } from "./global";
+import { CatalogFilterState } from "../store/reducers/catalog";
+import { getFilterNames } from "./catalog";
+import { API_REQUEST_CANCEL_TOKEN, FILTER, PRICE_RANGE } from "./constants";
+import { getALMConfig, getQueryParamsFromUrl } from "./global";
+import { JsonApiParse } from "./jsonAPIAdapter";
+import { QueryParams, RestAdapter } from "./restAdapter";
+import { GetTranslation } from "./translationService";
 export const filtersDefaultState: FilterState = {
   loTypes: {
     type: "loTypes",
@@ -104,16 +117,46 @@ export const filtersDefaultState: FilterState = {
   },
   //TO-DO : Add pagination for filters
   skillName: {
-    type: "skillName",
+    type: FILTER.SKILL_NAME,
     label: "alm.catalog.filter.skills.label",
+    list: [],
+    isListDynamic: true,
+    canSearch: true,
+    searchText: "",
+    isLoading: false,
+  },
+  products: {
+    type: "products",
+    label: "alm.catalog.filter.products.label",
+    list: [],
+    isListDynamic: true,
+  },
+  roles: {
+    type: "roles",
+    label: "alm.catalog.filter.roles.label",
+    list: [],
+    isListDynamic: true,
+  },
+  levels: {
+    type: "levels",
+    label: "alm.catalog.filter.levels.label",
+    list: [],
+    isListDynamic: true,
+  },
+  announcedGroups: {
+    type: "announcedGroups",
+    label: "alm.catalog.filter.announcedGroups.label",
     list: [],
     isListDynamic: true,
   },
   tagName: {
-    type: "tagName",
+    type: FILTER.TAG_NAME,
     label: "alm.catalog.filter.tags.label",
     list: [],
     isListDynamic: true,
+    canSearch: true,
+    searchText: "",
+    isLoading: false,
   },
   cities: {
     type: "cities",
@@ -162,9 +205,9 @@ export const filtersDefaultState: FilterState = {
       },
     ],
   },
-  price: {
-    type: "price",
-    label: "alm.catalog.filter.duration.label",
+  priceRange: {
+    type: "priceRange",
+    label: "alm.catalog.filter.priceRange.label",
     list: [
       {
         value: 0,
@@ -174,6 +217,22 @@ export const filtersDefaultState: FilterState = {
       {
         value: 0,
         label: "",
+        checked: false,
+      },
+    ],
+  },
+  price: {
+    type: "price",
+    label: "alm.catalog.filter.price.label",
+    list: [
+      {
+        value: "free",
+        label: "alm.catalog.filter.price.free",
+        checked: false,
+      },
+      {
+        value: "paid",
+        label: "alm.catalog.filter.price.paid",
         checked: false,
       },
     ],
@@ -192,6 +251,9 @@ export interface FilterType {
   list?: Array<FilterListObject>;
   isListDynamic?: boolean;
   maxPrice?: number;
+  canSearch?: boolean;
+  searchText?: string;
+  isLoading?: boolean;
 }
 
 // export interface PriceFilterType {
@@ -203,6 +265,13 @@ export interface FilterType {
 
 export interface ActionMap {
   loTypes: Function;
+  skillName: (
+    payload:
+      | string
+      | {
+          [key: string]: string;
+        }
+  ) => AnyAction;
 }
 export const ACTION_MAP = {
   loTypes: updateLoTypesFilter,
@@ -213,8 +282,13 @@ export const ACTION_MAP = {
   skillLevel: updateSkillLevelFilter,
   duration: updateDurationFilter,
   catalogs: updateCatalogsFilter,
-  price: updatePriceFilter,
+  priceRange: updatePriceRangeFilter,
   cities: updateCitiesFilter,
+  products: updateProductsFilter,
+  roles: updateRolesFilter,
+  levels: updateLevelsFilter,
+  price: updatePriceFilter,
+  announcedGroups: updateAnnouncedGroupsFilter,
 };
 
 export interface UpdateFiltersEvent {
@@ -222,6 +296,7 @@ export interface UpdateFiltersEvent {
   checked?: boolean;
   label?: string;
   data?: any;
+  resetLevels?: boolean;
 }
 
 export interface FilterState {
@@ -235,16 +310,15 @@ export interface FilterState {
   skillLevel: FilterType;
   duration: FilterType;
   price: FilterType;
+  priceRange: FilterType;
+  products: FilterType;
+  roles: FilterType;
+  levels: FilterType;
+  announcedGroups: FilterType;
 }
 
-export const updateFilterList = (
-  list: any,
-  filtersFromUrl: any,
-  type: string
-) => {
-  let filtersFromUrlTypeSplitArray = filtersFromUrl[type]
-    ? filtersFromUrl[type].split(",")
-    : [];
+export const updateFilterList = (list: any, filtersFromUrl: any, type: string) => {
+  let filtersFromUrlTypeSplitArray = filtersFromUrl[type] ? filtersFromUrl[type].split(",") : [];
 
   list?.forEach((item: any) => {
     if (filtersFromUrlTypeSplitArray?.includes(item.value)) {
@@ -254,14 +328,8 @@ export const updateFilterList = (
   return list || [];
 };
 
-export const updatePriceFilterList = (
-  list: any,
-  filtersFromUrl: any,
-  type: string
-) => {
-  let filtersFromUrlTypeSplitArray = filtersFromUrl[type]
-    ? filtersFromUrl[type].split("-")
-    : [];
+export const updatePriceRangeFilterList = (list: any, filtersFromUrl: any, type: string) => {
+  let filtersFromUrlTypeSplitArray = filtersFromUrl[type] ? filtersFromUrl[type].split("-") : [];
 
   if (list.length && filtersFromUrlTypeSplitArray.length) {
     list[0].value = filtersFromUrlTypeSplitArray[0];
@@ -301,10 +369,111 @@ export const getDefaultFiltersState = () => {
     "duration"
   );
 
-  filtersDefault.price.list = updatePriceFilterList(
-    filtersDefault.price.list,
+  filtersDefault.priceRange.list = updatePriceRangeFilterList(
+    filtersDefault.priceRange.list,
     filtersFromUrl,
-    "price"
+    "priceRange"
   );
   return filtersDefault;
+};
+
+export const getFilterLabel = (value: any, filter: FilterType) => {
+  const item = filter?.list?.filter((item: any) => item.value === value);
+  if (filter.type === PRICE_RANGE) {
+    return {
+      labelToShow: value,
+      label: value,
+    };
+  }
+  return item && item.length
+    ? {
+        labelToShow: GetTranslation(item[0]?.label, true),
+        label: item[0]?.label,
+      }
+    : { label: "", labelToShow: "" };
+};
+
+export const canShowLevelsForProducts = (
+  account: PrimeAccount,
+  filterState: CatalogFilterState
+): boolean => {
+  const { filterPanelSetting, prlCriteria = {} as PRLCriteria } = account;
+  const isPRLCriteriaEnabled = prlCriteria.enabled;
+  const isAnyProductSelected = isAnyItemSelected(filterState.products);
+  return (
+    isPRLCriteriaEnabled &&
+    filterPanelSetting.recommendationLevel &&
+    prlCriteria.products?.levelsEnabled &&
+    isAnyProductSelected
+  );
+};
+export const canShowLevelsForRoles = (
+  account: PrimeAccount,
+  filterState: CatalogFilterState
+): boolean => {
+  const { filterPanelSetting, prlCriteria = {} as PRLCriteria } = account;
+  const isPRLCriteriaEnabled = prlCriteria.enabled;
+  const isAnyRoleSelected = isAnyItemSelected(filterState.roles);
+  return (
+    isPRLCriteriaEnabled &&
+    filterPanelSetting.recommendationLevel &&
+    prlCriteria.roles?.levelsEnabled &&
+    isAnyRoleSelected
+  );
+};
+
+function isAnyItemSelected(items: any) {
+  return items?.list?.some((item: { checked: boolean }) => item.checked);
+}
+
+export const canResetLevelsFilter = (prlCriteria: PRLCriteria, filterState: any): boolean => {
+  const { products, roles } = filterState;
+
+  const isAnyProductSelected = isAnyItemSelected(products);
+  const isAnyRoleSelected = isAnyItemSelected(roles);
+
+  return (
+    (prlCriteria.products?.levelsEnabled && !isAnyProductSelected) ||
+    (prlCriteria.roles?.levelsEnabled && !isAnyRoleSelected)
+  );
+};
+
+const FILTER_SEARCH_PAGE_LIMIT = 10;
+export const searchFilterValue = async (query: string, type: string) => {
+  const baseApiUrl = getALMConfig().primeApiURL;
+  const params: QueryParams = {
+    "page[limit]": FILTER_SEARCH_PAGE_LIMIT,
+    autoCompleteMode: true,
+    sort: "relevance",
+    "filter.loTypes": type,
+    matchType: "phrase",
+    persistSearchHistory: true,
+    highlightResults: false,
+  };
+  params.query = query;
+  const cancelToken =
+    type === FILTER.SKILL_NAME
+      ? API_REQUEST_CANCEL_TOKEN.SKILL_FILTER_SEARCH
+      : API_REQUEST_CANCEL_TOKEN.TAG_FILTER_SEARCH;
+  let response: any = await RestAdapter.get({
+    url: `${baseApiUrl}/search`,
+    params: params,
+    cancelToken,
+  });
+  const parsedResponse = JsonApiParse(response);
+  return parsedResponse;
+};
+
+export const getMySkills = async () => {
+  const baseApiUrl = getALMConfig().primeApiURL;
+  const response: any = await RestAdapter.get({
+    url: `${baseApiUrl}data?filter.enrolled.skillName=true`,
+  });
+
+  return response;
+};
+export const userSkillsList = async () => {
+  const userSkillsResponse = await getMySkills();
+  const userSkills = getFilterNames(userSkillsResponse);
+  return userSkills;
 };

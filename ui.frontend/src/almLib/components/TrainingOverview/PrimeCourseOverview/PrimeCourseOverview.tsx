@@ -18,29 +18,29 @@ import {
   PrimeLearningObjectInstance,
   PrimeLearningObjectResource,
   PrimeNote,
+  PrimeLocalizationMetadata,
 } from "../../../models/PrimeModels";
-import { CONTENT, PREWORK, TESTOUT } from "../../../utils/constants";
-import { convertSecondsToTimeText } from "../../../utils/dateTime";
-import {
-  filterLoReourcesBasedOnResourceType,
-  getDuration,
-} from "../../../utils/hooks";
-import {
-  getPreferredLocalizedMetadata,
-  GetTranslation,
-} from "../../../utils/translationService";
+import { CONTENT, ENGLISH_LOCALE, PREWORK, TESTOUT } from "../../../utils/constants";
+import { calculateSecondsToTime } from "../../../utils/dateTime";
+import { filterLoReourcesBasedOnResourceType, getDuration } from "../../../utils/hooks";
+import { getPreferredLocalizedMetadata, GetTranslation } from "../../../utils/translationService";
 import { PrimeModuleList } from "../PrimeModuleList";
 import { PrimeNoteList } from "../PrimeNoteList";
 import styles from "./PrimeCourseOverview.module.css";
-import Email from "@spectrum-icons/workflow/Email";
-import Download from "@spectrum-icons/workflow/Download";
+import EmailOutline from "@spectrum-icons/workflow/EmailOutline";
+import { DOWNLOAD_ICON_ROUNDED } from "../../../utils/inline_svg";
+import { Content, InlineAlert } from "@adobe/react-spectrum";
+import { useUserContext } from "../../../contextProviders/userContextProvider";
 
 const PrimeCourseOverview: React.FC<{
   training: PrimeLearningObject;
   trainingInstance: PrimeLearningObjectInstance;
   launchPlayerHandler: Function;
   isParentLOEnrolled?: boolean;
+  isRootLOEnrolled?: boolean;
+  isRootLoPreviewEnabled: boolean;
   isPartOfLP?: boolean;
+  isPartOfCertification?: boolean;
   isParentFlexLP?: boolean;
   showDuration?: boolean;
   showNotes: boolean;
@@ -56,19 +56,22 @@ const PrimeCourseOverview: React.FC<{
     loId: string,
     loResourceId: PrimeLearningObjectResource
   ) => Promise<void | undefined>;
-  deleteNote: (
-    noteId: string,
-    loId: string,
-    loResourceId: string
-  ) => Promise<void | undefined>;
+  deleteNote: (noteId: string, loId: string, loResourceId: string) => Promise<void | undefined>;
   downloadNotes: (
     loId: string,
-    loInstanceId: string
+    loInstanceId: string,
+    loName: string,
+    loInstanceName: string
   ) => Promise<void | undefined>;
-  sendNotesOnMail: (
-    loId: string,
-    loInstanceId: string
-  ) => Promise<void | undefined>;
+  sendNotesOnMail: (loId: string, loInstanceId: string) => Promise<void | undefined>;
+  parentHasEnforcedPrerequisites: boolean;
+  parentHasSubLoOrderEnforced: boolean;
+  isTrainingLocked: boolean;
+  updatePlayerLoState: Function;
+  childLpId?: string;
+  isRootLoCompleted: boolean;
+  setEnrollViaModuleClick: Function;
+  isPartOfFirstChildTraining?: boolean;
 }> = (props: any) => {
   const {
     training,
@@ -77,9 +80,14 @@ const PrimeCourseOverview: React.FC<{
     showNotes,
     launchPlayerHandler,
     isPartOfLP = false,
+    isPartOfCertification = false,
     isParentLOEnrolled = false,
+    isRootLOEnrolled = false,
+    isRootLoPreviewEnabled = false,
     isPreviewEnabled = false,
     isParentFlexLP = false,
+    parentHasEnforcedPrerequisites = false,
+    parentHasSubLoOrderEnforced = false,
     updateFileSubmissionUrl,
     notes,
     updateNote,
@@ -89,9 +97,17 @@ const PrimeCourseOverview: React.FC<{
     lastPlayingLoResourceId,
     setTimeBetweenAttemptEnabled,
     timeBetweenAttemptEnabled,
+    isTrainingLocked,
+    updatePlayerLoState,
+    childLpId = "",
+    isRootLoCompleted,
+    setEnrollViaModuleClick,
+    isPartOfFirstChildTraining = false,
   } = props;
 
   const { locale } = useIntl();
+  const user = useUserContext() || {};
+  const contentLocale = user?.contentLocale || ENGLISH_LOCALE;
   interface INotesbyModuleName {
     moduleName: string;
     moduleId: string;
@@ -101,23 +117,16 @@ const PrimeCourseOverview: React.FC<{
     [key: string]: INotesbyModuleName;
   }
 
-  let moduleResources = filterLoReourcesBasedOnResourceType(
-    trainingInstance,
-    CONTENT
-  );
-  const testOutResources = filterLoReourcesBasedOnResourceType(
-    trainingInstance,
-    TESTOUT
-  );
+  let moduleResources = filterLoReourcesBasedOnResourceType(trainingInstance, CONTENT);
+  const testOutResources = filterLoReourcesBasedOnResourceType(trainingInstance, TESTOUT);
 
-  let preWorkResources = filterLoReourcesBasedOnResourceType(
-    trainingInstance,
-    PREWORK
-  );
+  let preWorkResources = filterLoReourcesBasedOnResourceType(trainingInstance, PREWORK);
 
   const contentModuleDuration = getDuration(moduleResources, locale);
+  const isPartOfParentLO = isPartOfLP || isPartOfCertification;
+  const isTrainingDisabled = isTrainingLocked && !isParentFlexLP;
 
-  if (isPartOfLP) {
+  if (isPartOfParentLO) {
     moduleResources = [...preWorkResources, ...moduleResources];
     preWorkResources = [] as PrimeLearningObjectResource[];
   }
@@ -129,19 +138,27 @@ const PrimeCourseOverview: React.FC<{
     }
   }, [locale, preWorkResources]);
 
+  const showNotesTab = showNotes && !isPartOfParentLO;
   const showTestout = testOutResources?.length !== 0;
-  const showTabs = isPartOfLP ? false : showTestout || showNotes;
-  const classNames = `${styles.tablist} ${showTabs ? "" : styles.hide}`;
+  const showTabs = (isPartOfParentLO && (showTestout || showNotesTab)) || !isPartOfParentLO;
+  const classNames = `${styles.tablist} ${
+    isPartOfParentLO ? "" : styles.tablistInsideParentLO
+  } ${showTabs ? "" : styles.hide}`;
   const getModuleId = useMemo(() => {
     const getIds = () => {
       let moduleIds: string[] = [];
-      moduleResources.forEach((element) => {
+      moduleResources?.forEach(element => {
         moduleIds.push(element.id);
       });
       return moduleIds;
     };
     return getIds();
   }, [moduleResources]);
+
+  const notesWithoutBookmarks = useMemo(() => {
+    return notes.filter((note: PrimeNote) => note.text !== "bookmark");
+  }, [notes]);
+
   const notesByModuleName = useMemo(() => {
     const filterNotesByModuleName = (notesList: PrimeNote[]) => {
       const notesbyModuleId = notesList.reduce(function (
@@ -150,7 +167,7 @@ const PrimeCourseOverview: React.FC<{
       ) {
         const metaData = getPreferredLocalizedMetadata(
           note?.loResource?.localizedMetadata,
-          locale
+          contentLocale
         );
         const moduleId = note?.loResource?.id;
         if (!accumulator[moduleId]) {
@@ -162,14 +179,25 @@ const PrimeCourseOverview: React.FC<{
         }
         accumulator[moduleId].notes.push(note);
         return accumulator;
-      },
-      {});
-      return Object.keys(notesbyModuleId).map(
-        (id: string) => notesbyModuleId[id]
-      );
+      }, {});
+      return Object.keys(notesbyModuleId).map((id: string) => notesbyModuleId[id]);
     };
-    return filterNotesByModuleName(notes);
-  }, [notes]);
+    return filterNotesByModuleName(notesWithoutBookmarks);
+  }, [notesWithoutBookmarks]);
+
+  const sortNotesWithModuleCheck = (notes: INotesbyModuleName[]) => {
+    // when module is deleted, notes will be shown at the end
+    return notes.sort((note1, note2) => {
+      if (!note1.moduleId) {
+        return 1;
+      }
+      if (!note2.moduleId) {
+        return -1;
+      }
+      return 0;
+    });
+  };
+
   const sortNotesByModuleResourceIds = useMemo(() => {
     const moduleIds = getModuleId;
     return notesByModuleName.sort(
@@ -179,104 +207,151 @@ const PrimeCourseOverview: React.FC<{
   const memoizedNotesByModuleId = useMemo(() => {
     return notesByModuleName.map((item, index) => {
       if (item.notes) {
-        const areMarkersSame = item.notes.every(
-          (note) => note.marker === item.notes[0].marker
-        );
+        const areMarkersSame = item.notes.every(note => note.marker === item.notes[0].marker);
         if (areMarkersSame) {
           item.notes.reverse();
         } else {
-          item.notes.sort(
-            (a, b) => parseFloat(a.marker) - parseFloat(b.marker)
-          );
+          item.notes.sort((a, b) => parseFloat(a.marker) - parseFloat(b.marker));
         }
       }
       return item;
     });
   }, [notesByModuleName]);
   const handleNotesDownload = () => {
-    downloadNotes(training.id, trainingInstance.id);
+    const trainingMetadata = getPreferredLocalizedMetadata(
+      training.localizedMetadata,
+      contentLocale
+    ) as PrimeLocalizationMetadata;
+    const trainingInstanceMetadata = getPreferredLocalizedMetadata(
+      trainingInstance.localizedMetadata,
+      contentLocale
+    ) as PrimeLocalizationMetadata;
+    downloadNotes(
+      training.id,
+      trainingInstance.id,
+      trainingMetadata.name,
+      trainingInstanceMetadata.name
+    );
   };
 
   const handleNotesMailing = () => {
     sendNotesOnMail(training.id, trainingInstance.id);
   };
 
+  const getTotalDuration = (duration: number) => {
+    if (!duration) {
+      return ``;
+    }
+    return <div className={styles.time}>{calculateSecondsToTime(duration)}</div>;
+  };
+
   return (
     <Tabs
       aria-label={GetTranslation("alm.text.moduleList", true)}
-      UNSAFE_className={isPartOfLP ? styles.isPartOfLP : ""}
+      UNSAFE_className={`
+        ${isPartOfParentLO && styles.isPartOfParentLO}
+          ${isTrainingDisabled && styles.tabsDisabled}`}
     >
       <TabList id="tabList" UNSAFE_className={classNames}>
         <Item key="Modules">
-          {GetTranslation("alm.training.modules", true)}
+          {isPartOfParentLO
+            ? GetTranslation("alm.text.curriculum")
+            : GetTranslation("alm.training.modules", true)}
         </Item>
-        {showTestout && (
-          <Item key="Testout">{GetTranslation("alm.text.testout", true)}</Item>
-        )}
-        {showNotes && (
-          <Item key="Notes">{GetTranslation("alm.text.notes")}</Item>
-        )}
+        {showTestout && <Item key="Testout">{GetTranslation("alm.text.testout", true)}</Item>}
+        {showNotesTab && <Item key="Notes">{GetTranslation("alm.text.notes")}</Item>}
       </TabList>
       <TabPanels UNSAFE_className={styles.tabPanels}>
         <Item key="Modules">
           {preWorkResources?.length > 0 && (
             <>
-              <div className={styles.overviewcontainer}>
+              <div className={styles.overviewcontainer} data-automationid="preWorkResources">
                 <header role="heading" className={styles.header} aria-level={2}>
                   <div className={styles.loResourceType}>
                     {GetTranslation("alm.text.prework", true)}
                   </div>
-                  {showDuration && (
-                    <div className={styles.time}>
-                      {convertSecondsToTimeText(preWorkDuration)}
-                    </div>
-                  )}
+                  {showDuration && getTotalDuration(preWorkDuration)}
                 </header>
               </div>
+              <hr className={styles.panelSeperator} />
               <PrimeModuleList
                 launchPlayerHandler={launchPlayerHandler}
                 loResources={preWorkResources}
                 training={training}
                 isPartOfLP={isPartOfLP}
+                isPartOfCertification={isPartOfCertification}
                 trainingInstance={trainingInstance}
                 isPreviewEnabled={isPreviewEnabled}
                 updateFileSubmissionUrl={updateFileSubmissionUrl}
                 isParentLOEnrolled={isParentLOEnrolled}
+                isRootLOEnrolled={isRootLOEnrolled}
+                isRootLoPreviewEnabled={isRootLoPreviewEnabled}
                 isParentFlexLP={isParentFlexLP}
+                parentHasEnforcedPrerequisites={parentHasEnforcedPrerequisites}
+                parentHasSubLoOrderEnforced={parentHasSubLoOrderEnforced}
                 lastPlayingLoResourceId={lastPlayingLoResourceId}
                 setTimeBetweenAttemptEnabled={setTimeBetweenAttemptEnabled}
                 timeBetweenAttemptEnabled={timeBetweenAttemptEnabled}
+                isLocked={isTrainingLocked}
+                updatePlayerLoState={updatePlayerLoState}
+                childLpId={childLpId}
+                isRootLoCompleted={isRootLoCompleted}
+                setEnrollViaModuleClick={setEnrollViaModuleClick}
+                isPartOfFirstChildTraining={isPartOfFirstChildTraining}
               ></PrimeModuleList>
             </>
           )}
 
-          {showDuration && (
-            <div className={styles.overviewcontainer}>
-              <header role="heading" className={styles.header} aria-level={2}>
-                <div className={styles.loResourceType}>
-                  {GetTranslation("alm.text.coreContent", true)}
-                </div>
-                <div className={styles.time}>
-                  {convertSecondsToTimeText(contentModuleDuration)}
-                </div>
-              </header>
-            </div>
+          {moduleResources.length > 0 ? (
+            <>
+              {showDuration && (
+                <>
+                  <div className={styles.overviewcontainer} data-automationid="coreContent">
+                    <header role="heading" className={styles.header} aria-level={2}>
+                      <div className={styles.loResourceType}>
+                        {GetTranslation("alm.text.coreContent", true)}
+                      </div>
+                      {getTotalDuration(contentModuleDuration)}
+                    </header>
+                  </div>
+                  <hr className={styles.panelSeperator} />
+                </>
+              )}
+              <PrimeModuleList
+                launchPlayerHandler={launchPlayerHandler}
+                loResources={moduleResources}
+                training={training}
+                isPartOfLP={isPartOfLP}
+                isPartOfCertification={isPartOfCertification}
+                trainingInstance={trainingInstance}
+                isContent={true}
+                isPreviewEnabled={isPreviewEnabled}
+                updateFileSubmissionUrl={updateFileSubmissionUrl}
+                isParentLOEnrolled={isParentLOEnrolled}
+                isRootLOEnrolled={isRootLOEnrolled}
+                isRootLoPreviewEnabled={isRootLoPreviewEnabled}
+                isParentFlexLP={isParentFlexLP}
+                parentHasEnforcedPrerequisites={parentHasEnforcedPrerequisites}
+                parentHasSubLoOrderEnforced={parentHasSubLoOrderEnforced}
+                lastPlayingLoResourceId={lastPlayingLoResourceId}
+                setTimeBetweenAttemptEnabled={setTimeBetweenAttemptEnabled}
+                timeBetweenAttemptEnabled={timeBetweenAttemptEnabled}
+                isLocked={isTrainingLocked}
+                updatePlayerLoState={updatePlayerLoState}
+                childLpId={childLpId}
+                isRootLoCompleted={isRootLoCompleted}
+                setEnrollViaModuleClick={setEnrollViaModuleClick}
+                isPartOfFirstChildTraining={isPartOfFirstChildTraining}
+              ></PrimeModuleList>
+            </>
+          ) : (
+            <InlineAlert variant="neutral" UNSAFE_className={styles.noModulesContainer}>
+              <Content UNSAFE_className={styles.noModulesContainerHeader}>
+                {GetTranslation("alm.overview.no.modules.header", true)}
+              </Content>
+              <Content>{GetTranslation("alm.overview.no.modules", true)}</Content>
+            </InlineAlert>
           )}
-          <PrimeModuleList
-            launchPlayerHandler={launchPlayerHandler}
-            loResources={moduleResources}
-            training={training}
-            isPartOfLP={isPartOfLP}
-            trainingInstance={trainingInstance}
-            isContent={true}
-            isPreviewEnabled={isPreviewEnabled}
-            updateFileSubmissionUrl={updateFileSubmissionUrl}
-            isParentLOEnrolled={isParentLOEnrolled}
-            isParentFlexLP={isParentFlexLP}
-            lastPlayingLoResourceId={lastPlayingLoResourceId}
-            setTimeBetweenAttemptEnabled={setTimeBetweenAttemptEnabled}
-            timeBetweenAttemptEnabled={timeBetweenAttemptEnabled}
-          ></PrimeModuleList>
         </Item>
         {showTestout && (
           <Item key="Testout">
@@ -287,37 +362,62 @@ const PrimeCourseOverview: React.FC<{
               trainingInstance={trainingInstance}
               isPreviewEnabled={isPreviewEnabled}
               updateFileSubmissionUrl={updateFileSubmissionUrl}
+              isPartOfLP={isPartOfLP}
+              isPartOfCertification={isPartOfCertification}
               isParentLOEnrolled={isParentLOEnrolled}
+              isRootLOEnrolled={isRootLOEnrolled}
+              isRootLoPreviewEnabled={isRootLoPreviewEnabled}
               isParentFlexLP={isParentFlexLP}
               lastPlayingLoResourceId={lastPlayingLoResourceId}
+              parentHasEnforcedPrerequisites={parentHasEnforcedPrerequisites}
+              parentHasSubLoOrderEnforced={parentHasSubLoOrderEnforced}
               setTimeBetweenAttemptEnabled={setTimeBetweenAttemptEnabled}
               timeBetweenAttemptEnabled={timeBetweenAttemptEnabled}
+              isLocked={isTrainingLocked}
+              updatePlayerLoState={updatePlayerLoState}
+              childLpId={childLpId}
+              isRootLoCompleted={isRootLoCompleted}
+              setEnrollViaModuleClick={setEnrollViaModuleClick}
+              isPartOfFirstChildTraining={isPartOfFirstChildTraining}
             ></PrimeModuleList>
           </Item>
         )}
-        {showNotes && (
+        {showNotesTab && (
           <Item key="Notes">
-            {Object.keys(notes[0] || {}).length ? (
+            {Object.keys(notesWithoutBookmarks[0] || {}).length ? (
               <>
                 <div className={styles.notesActions}>
                   <p onClick={handleNotesDownload}>
                     <span aria-hidden="true" className={styles.downloadIcon}>
-                      <Download />
+                      {DOWNLOAD_ICON_ROUNDED()}
                     </span>
                     <span>{GetTranslation("alm.text.download", true)}</span>
                   </p>
                   <p onClick={handleNotesMailing}>
                     <span aria-hidden="true" className={styles.mailIcon}>
-                      <Email />
+                      <EmailOutline />
                     </span>
                     <span>{GetTranslation("alm.text.email", true)}</span>
                   </p>
                 </div>
-                {notesByModuleName.map((item: INotesbyModuleName) => (
+                {sortNotesWithModuleCheck(notesByModuleName).map((item: INotesbyModuleName) => (
                   <React.Fragment key={`notes-${item.moduleName}`}>
-                    <div className={styles.moduleContainer}>
+                    <div
+                      className={styles.moduleContainer}
+                      data-automationid={`${item.moduleName}`}
+                    >
                       <p className={styles.moduleName}>
-                        {GetTranslation("alm.text.moduleName", true)}
+                        {item.moduleName ? (
+                          <>
+                            <span
+                              dangerouslySetInnerHTML={{
+                                __html: GetTranslation("alm.text.moduleName", true),
+                              }}
+                            />
+                          </>
+                        ) : (
+                          GetTranslation("alm.text.notesWithoutModule", true)
+                        )}
                         {item.moduleName}
                       </p>
                     </div>
@@ -328,14 +428,16 @@ const PrimeCourseOverview: React.FC<{
                       updateNote={updateNote}
                       deleteNote={deleteNote}
                       launchPlayerHandler={launchPlayerHandler}
+                      isPartOfLP={isPartOfLP}
+                      isPartOfCertification={isPartOfCertification}
+                      updatePlayerLoState={updatePlayerLoState}
+                      childLpId={childLpId}
                     />
                   </React.Fragment>
                 ))}
               </>
             ) : (
-              <div className={styles.notesNotPresent}>
-                {GetTranslation("alm.text.noNotes")}
-              </div>
+              <div className={styles.notesNotPresent}>{GetTranslation("alm.text.noNotes")}</div>
             )}
           </Item>
         )}

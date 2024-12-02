@@ -10,7 +10,6 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-
 // // eslint-disable-next-line @typescript-eslint/no-explicit-any
 // declare let AWS: any;
 // // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -132,4 +131,4 @@ governing permissions and limitations under the License.
 //     }
 // }
 
-export { }
+export {};

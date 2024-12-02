@@ -36,10 +36,7 @@ const BadgeElement = (props: any) => {
       aria-label={
         status
           ? badgeTypeName
-          : formatMessage(
-              { id: "alm.badge.type.notCompleted.label" },
-              { badgeTypeName }
-            )
+          : formatMessage({ id: "alm.badge.type.notCompleted.label" }, { badgeTypeName })
       }
     >
       {badgeTypeName}
@@ -62,10 +59,7 @@ const BadgeElement = (props: any) => {
           UNSAFE_className={styles.checkbox}
           isDisabled={!status}
           excludeFromTabOrder={!status}
-          aria-label={formatMessage(
-            { id: "alm.badge.checkbox" },
-            { badgeName: badge.name }
-          )}
+          aria-label={formatMessage({ id: "alm.badge.checkbox" }, { badgeName: badge.name })}
           aria-hidden={status ? false : true}
           isSelected={selected}
           onChange={handleSelect}
@@ -106,11 +100,7 @@ const BadgeElement = (props: any) => {
                 )}
           </div>
         </div>
-        <div
-          className={
-            status ? styles.downloadicons : styles.downloadiconsdisabled
-          }
-        >
+        <div className={status ? styles.downloadicons : styles.downloadiconsdisabled}>
           <div className={styles.downloadoptions}>
             <div className={styles.downloadlink}>
               <a
@@ -130,15 +120,8 @@ const BadgeElement = (props: any) => {
             <a
               className={styles.margin}
               tabIndex={status ? 0 : -1}
-              onClick={
-                status
-                  ? () => handleDownloadImgClick(badge.imageUrl)
-                  : undefined
-              }
-              aria-label={formatMessage(
-                { id: "alm.badge.downloadImg" },
-                { badgeName: badge.name }
-              )}
+              onClick={status ? () => handleDownloadImgClick(badge.imageUrl) : undefined}
+              aria-label={formatMessage({ id: "alm.badge.downloadImg" }, { badgeName: badge.name })}
               aria-hidden={status ? false : true}
             >
               {formatMessage({ id: "alm.text.badge" })}

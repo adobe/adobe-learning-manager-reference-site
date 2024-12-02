@@ -13,16 +13,11 @@ governing permissions and limitations under the License.
 
 .container {
   max-width: 100%;
-  /* margin: 0 auto; */
-  border: 1px solid var(--prime-color-nc2);
   clear: both;
-  text-align: left !important;
   list-style: none;
   padding: 0;
   display: flex;
   flex-direction: column;
-  margin-bottom: 10px;
-  background-color: var(--prime-color-white);
 }
 
 .moduleDescription {
@@ -69,15 +64,14 @@ governing permissions and limitations under the License.
 }
 
 .wrapperContainer {
-  background-color: var(--prime-color-nc4);
-  border-color: var(--prime-color-nc4);
-  /* border: 1px solid #c9c9c9; */
+  background-color: var(--prime-color-neutral-4);
+  border-color: var(--prime-color-neutral-4);
 }
 
 .metaDataContainer {
   display: flex;
   flex-wrap: wrap;
-  background-color: var(--prime-color-nc4);
+  background-color: var(--prime-color-neutral-4);
 }
 
 .metadata {
@@ -94,12 +88,11 @@ governing permissions and limitations under the License.
 
 .isPartOfLP .lpListItemContainer {
   padding: 10px 10px 0 10px;
-  border: 1px solid var(--prime-color-nc4);
   border-radius: 5px;
   margin: 10px 10px 10px 0;
 }
 .isPartOfLP .headerContainer {
-  border: 1px solid var(--prime-color-nc4);
+  border: 1px solid var(--prime-color-neutral-4);
 }
 
 @media screen and (max-width: 450px) {
@@ -131,23 +124,64 @@ ul > li {
 }
 
 .collapsibleContainer {
-  background: no-repeat padding-box var(--prime-color-nc4);
+  background: no-repeat padding-box;
+  background-color: var(--prime-color-neutral-4);
   border: none;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  width: 100%;
+  height: 14px;
+  border-radius: 15px;
+  margin-bottom: 10px;
 }
 
 .collapsibleContainer > button {
   cursor: pointer;
   width: 100%;
-  padding: 0;
+  padding: 0 !important;
   min-height: 19px;
-  border:transparent;
+  border: transparent;
 }
 
 .collapsibleContainer > button > svg {
-  fill: var(--prime-color-nc3);
+  fill: var(--prime-color-body);
   width: 18px;
   height: 18px;
+}
+
+.collapsibleContainer [class$="focus-ring"] {
+  outline: 2px solid var(--prime-color-link);
+}
+
+.trainingContainer {
+  gap: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.noSection {
+  display: none;
+}
+
+.sectionHeader {
+  display: flex;
+  padding: 24px 0 12px 0;
+  border-bottom: 1px solid var(--prime-color-neutral-1);
+}
+
+.sectionName {
+  font-size: var(--prime-font-size-14);
+  margin: 0;
+}
+.sectionOptional {
+  background: var(--prime-success-color);
+  border-radius: 42px;
+  color: var(--prime-color-white);
+  font-weight: var(--prime-font-weight-600);
+  font-size: var(--prime-font-size-12);
+  padding: 1px 8px;
+  letter-spacing: 0.4px;
+  margin-left: auto;
 }

@@ -10,10 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import React, { useEffect, useMemo, useRef } from "react";
-import {
-  GetTranslation,
-  getPreferredLocalizedMetadata,
-} from "../../../utils/translationService";
+import { GetTranslation, getPreferredLocalizedMetadata } from "../../../utils/translationService";
 import styles from "./ALMExtensionIframeDialog.module.css";
 /**
 Copyright 2021 Adobe. All rights reserved.
@@ -35,13 +32,17 @@ import {
   Content,
   DialogContainer,
 } from "@adobe/react-spectrum";
-import {
-  InvocationType,
-  getParsedJwt,
-} from "../../../utils/native-extensibility";
+import { InvocationType, getParsedJwt } from "../../../utils/native-extensibility";
 import { PrimeExtension } from "../../../models";
 import { useIntl } from "react-intl";
-import { getALMConfig, getModalBackgroundColor, getModalTheme, isScreenBelowDesktop } from "../../../utils/global";
+import {
+  getALMConfig,
+  getModalBackgroundColor,
+  getModalTheme,
+  isScreenBelowDesktop,
+  sendEvent,
+} from "../../../utils/global";
+import { PrimeEvent } from "../../../utils/widgets/common";
 
 const ALMExtensionIframeDialog: React.FC<{
   onClose: Function;
@@ -53,27 +54,20 @@ const ALMExtensionIframeDialog: React.FC<{
   extension: PrimeExtension;
   action: string;
 }> = (props: any) => {
-  const {
-    onClose,
-    href,
-    classes,
-    onProceed,
-    width,
-    height,
-    extension,
-    action,
-  } = props;
+  const { onClose, href, classes, onProceed, width, height, extension, action } = props;
   const showDialog = useRef(false);
   const { locale } = useIntl();
   const themeData = getALMConfig()?.themeData;
+  useEffect(() => {
+    sendEvent(PrimeEvent.ALM_DISABLE_NAV_CONTROLS);
+  }, []);
   useEffect(() => {
     if (!showDialog.current) {
       const launchDialog = document.getElementById("showAlert") as HTMLElement;
       launchDialog.click();
       showDialog.current = true;
       const dialog = document.getElementsByClassName("extensionDialog")[0];
-      const parentElement = (dialog as HTMLElement)
-        .parentElement as HTMLElement;
+      const parentElement = (dialog as HTMLElement).parentElement as HTMLElement;
       const isMobileOrTableView = isScreenBelowDesktop();
       if (width && height && parentElement) {
         // For below desktop set Ifram width and height to 90% of screen
@@ -83,7 +77,7 @@ const ALMExtensionIframeDialog: React.FC<{
         parentElement.style.maxHeight = `${isMobileOrTableView ? 90 : height}%`;
       }
       if (themeData) {
-        parentElement.style.backgroundColor = getModalBackgroundColor(themeData.name)
+        parentElement.style.backgroundColor = getModalBackgroundColor(themeData.name);
       }
     }
   }, [showDialog, props]);
@@ -94,8 +88,9 @@ const ALMExtensionIframeDialog: React.FC<{
         if (event.data.extToken) {
           const tokenObject = getParsedJwt(event.data.extToken);
           if (tokenObject?.invokePoint === InvocationType.LEARNER_ENROLL) {
-            if (tokenObject.extResult == 1) {
+            if (tokenObject.extResult === 1) {
               showDialog.current = false;
+              sendEvent(PrimeEvent.ALM_ENABLE_NAV_CONTROLS);
               typeof onProceed === "function" && onProceed(event.data.extToken);
               return;
             }
@@ -115,7 +110,7 @@ const ALMExtensionIframeDialog: React.FC<{
   }, []);
 
   const hideDialog = (message: string | null = "") => {
-    showDialog.current = false;
+    sendEvent(PrimeEvent.ALM_ENABLE_NAV_CONTROLS);
     setTimeout(() => {
       typeof onClose === "function" && onClose(message);
     }, 0);
@@ -136,7 +131,7 @@ const ALMExtensionIframeDialog: React.FC<{
             UNSAFE_className={styles.primeAlertDialogButton}
           ></ActionButton>
           <DialogContainer onDismiss={hideDialog} isDismissable={true}>
-            <Dialog UNSAFE_className={classes}>
+            <Dialog UNSAFE_className={`${classes} ${styles.extensionDialogContainer}`}>
               <Heading>{extensionLocalizedMetadata.label}</Heading>
               <Divider />
               <Content>

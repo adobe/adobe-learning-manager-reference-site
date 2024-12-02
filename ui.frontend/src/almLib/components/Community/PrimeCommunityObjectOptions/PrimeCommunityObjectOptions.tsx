@@ -99,10 +99,7 @@ const PrimeCommunityObjectOptions = (props: any) => {
     <>
       <div ref={ref} className={styles.primeObjectOptionsList}>
         {showEditOption() && (
-          <div
-            className={styles.primeObjectRegularOption}
-            onClick={editObjectHandler}
-          >
+          <div className={styles.primeObjectRegularOption} onClick={editObjectHandler}>
             {formatMessage({
               id: "alm.community.board.edit",
               defaultMessage: "Edit",
@@ -135,24 +132,16 @@ const PrimeCommunityObjectOptions = (props: any) => {
             </div>
           </>
         )}
-        {(showEditOption() || showPollOptions()) && (
-          <div className={styles.primeSeperator}></div>
-        )}
+        {(showEditOption() || showPollOptions()) && <div className={styles.primeSeperator}></div>}
         {isPostOwner() && (
-          <div
-            className={styles.primeObjectCriticalOption}
-            onClick={deleteObjectHandler}
-          >
+          <div className={styles.primeObjectCriticalOption} onClick={deleteObjectHandler}>
             {formatMessage({
               id: "alm.text.delete",
               defaultMessage: "Delete",
             })}
           </div>
         )}
-        <div
-          className={styles.primeObjectCriticalOption}
-          onClick={reportObjectHandler}
-        >
+        <div className={styles.primeObjectCriticalOption} onClick={reportObjectHandler}>
           {formatMessage({
             id: "alm.community.board.report",
             defaultMessage: "Report",

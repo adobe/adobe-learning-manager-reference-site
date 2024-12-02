@@ -9,7 +9,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { getALMConfig, getALMObject } from "../../../utils/global";
+import { getALMConfig, getAuthKey } from "../../../utils/global";
 import styles from "./PrimeCommunityObjectBody.module.css";
 import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -38,6 +38,7 @@ const PrimeCommunityObjectBody = (props: any) => {
   const entityType = props.type;
   const urlRegex =
     "((http|https)://)(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)";
+  const csrfToken = getALMConfig().csrfToken;
 
   const formatUrl = (url: string) => {
     if (!/^https?:\/\//i.test(url)) {
@@ -47,9 +48,7 @@ const PrimeCommunityObjectBody = (props: any) => {
   };
 
   const isValidUrl = (input: string) => {
-    return (
-      input.match(urlRegex) || (input.indexOf(".") > -1 && !input.endsWith("."))
-    );
+    return input.match(urlRegex) || (input.indexOf(".") > -1 && !input.endsWith("."));
   };
 
   const getFormattedDescription = (description: string) => {
@@ -78,18 +77,13 @@ const PrimeCommunityObjectBody = (props: any) => {
   };
   const [fullDescription, setFullDescription] = useState(getDescription());
   const primeConfig = getALMConfig();
-  const iframeSrc = `${
-    primeConfig.almBaseURL
-  }/app/player?entity_type=${entityType}&entity_id=${
-    object.id
-  }&access_token=${getALMObject().getAccessToken()}&player_type=inline`;
+  const authKey = getAuthKey();
+  const iframeSrc = `${primeConfig.almBaseURL}/app/player?entity_type=${entityType}&entity_id=${object.id}&${authKey}&player_type=inline`;
 
   const MAX_CHAR_SHOWN = 450;
   const DEFAULT_INDEX_VALUE = 2;
   const [viewIndex, setViewIndex] = useState(DEFAULT_INDEX_VALUE);
-  const [viewMore, setViewMore] = useState(
-    fullDescription?.length > MAX_CHAR_SHOWN
-  );
+  const [viewMore, setViewMore] = useState(fullDescription?.length > MAX_CHAR_SHOWN);
   const [currentDescription, setCurrentDescription] = useState(
     fullDescription?.length > MAX_CHAR_SHOWN
       ? fullDescription.substring(0, MAX_CHAR_SHOWN)
@@ -102,10 +96,7 @@ const PrimeCommunityObjectBody = (props: any) => {
       setViewMore(false);
       setCurrentDescription(fullDescription);
       setViewIndex(DEFAULT_INDEX_VALUE);
-    } else
-      setCurrentDescription(
-        fullDescription.substring(0, supportedCharacterLength)
-      );
+    } else setCurrentDescription(fullDescription.substring(0, supportedCharacterLength));
     setViewIndex(viewIndex + 1);
   };
 
@@ -118,9 +109,7 @@ const PrimeCommunityObjectBody = (props: any) => {
       const fullDesc = getDescription();
       setFullDescription(fullDesc);
       setCurrentDescription(
-        fullDesc.length > MAX_CHAR_SHOWN
-          ? fullDesc.substring(0, MAX_CHAR_SHOWN)
-          : fullDesc
+        fullDesc.length > MAX_CHAR_SHOWN ? fullDesc.substring(0, MAX_CHAR_SHOWN) : fullDesc
       );
       setViewMore(props.description?.length > MAX_CHAR_SHOWN);
     }
@@ -165,8 +154,8 @@ const PrimeCommunityObjectBody = (props: any) => {
           props.type === BOARD
             ? styles.primeBoardDescription
             : isQuestionType
-            ? styles.primeQuestionPostDescription
-            : styles.primePostDescription
+              ? styles.primeQuestionPostDescription
+              : styles.primePostDescription
         }
       >
         {isQuestionType && (
@@ -181,10 +170,7 @@ const PrimeCommunityObjectBody = (props: any) => {
       </div>
       {viewMore && (
         <div className={styles.viewMoreDiv}>
-          <button
-            className={styles.primeCommunityViewMoreButton}
-            onClick={getTruncatedDescription}
-          >
+          <button className={styles.primeCommunityViewMoreButton} onClick={getTruncatedDescription}>
             {formatMessage({
               id: "alm.community.viewMore",
               defaultMessage: "View more",
@@ -227,27 +213,17 @@ const PrimeCommunityObjectBody = (props: any) => {
 
           {object.resource && object.resource.contentType === IMAGE && (
             <div
-              className={
-                isFullScreen
-                  ? styles.fullScreenImageBox
-                  : styles.primeCommunityImageBox
-              }
+              className={isFullScreen ? styles.fullScreenImageBox : styles.primeCommunityImageBox}
             >
               <div className={styles.primeCommunityImageContainer}>
                 <img
                   src={object.resource.data!}
                   loading="lazy"
-                  className={
-                    isFullScreen
-                      ? styles.fullScreenImage
-                      : styles.primePostImage
-                  }
+                  className={isFullScreen ? styles.fullScreenImage : styles.primePostImage}
                   alt="primePostImage"
                 />
               </div>
-              <div
-                className={isFullScreen ? "" : styles.primeCommunityResourceExpand}
-              >
+              <div className={isFullScreen ? "" : styles.primeCommunityResourceExpand}>
                 <button
                   className={styles.primeCommunityResourceExpandButton}
                   onClick={handleExpandButtonClick}
@@ -274,9 +250,7 @@ const PrimeCommunityObjectBody = (props: any) => {
           )}
 
           {object.resource &&
-            ["PDF", "XLS", "PPTX", "DOC"].includes(
-              object.resource.contentType
-            ) && (
+            ["PDF", "XLS", "PPTX", "DOC"].includes(object.resource.contentType) && (
               <div className="image-box">
                 <div className="image-container">
                   <iframe

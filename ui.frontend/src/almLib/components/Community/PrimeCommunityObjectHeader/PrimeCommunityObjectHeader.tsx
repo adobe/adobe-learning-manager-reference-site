@@ -43,7 +43,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
   };
 
   const toggleOptions = () => {
-    setShowOptions((state) => !state);
+    setShowOptions(state => !state);
   };
 
   const getDeleteConfirmationString = () => {
@@ -129,10 +129,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
     await reportReplyAbuse(object.id);
   };
 
-  const showConfirmationDialog = (
-    confirmationMessage: String,
-    primaryAction?: String
-  ) => {
+  const showConfirmationDialog = (confirmationMessage: String, primaryAction?: String) => {
     almConfirmationAlert(
       formatMessage({
         id: "alm.community.board.confirmationRequired",
@@ -152,12 +149,12 @@ const PrimeCommunityObjectHeader = (props: any) => {
           ? deleteComment
           : reportComment
         : props.type === REPLY
-        ? primaryAction === DELETE
-          ? deleteReply
-          : reportReply
-        : primaryAction === DELETE
-        ? deletePost
-        : reportPost
+          ? primaryAction === DELETE
+            ? deleteReply
+            : reportReply
+          : primaryAction === DELETE
+            ? deletePost
+            : reportPost
     );
   };
 
@@ -172,7 +169,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
     }
   };
 
-  const updateObjectHandler = (
+  const updateObjectHandler = async (
     input: any,
     postingType: any,
     resource: any,
@@ -180,7 +177,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
     pollOptions: any
   ) => {
     if (typeof props.updateObjectHandler === "function") {
-      props.updateObjectHandler(
+      await props.updateObjectHandler(
         input,
         postingType,
         resource,
@@ -210,17 +207,12 @@ const PrimeCommunityObjectHeader = (props: any) => {
           alt="user-image"
           src={object.createdBy.avatarUrl}
         ></img>
-        <span className={styles.primePostOwnerName}>
-          {object.createdBy.name}
-        </span>
+        <span className={styles.primePostOwnerName}>{object.createdBy.name}</span>
         <span className={styles.primePostDateSeperator}></span>
         <span className={styles.primePostDateCreated}>
           {GetFormattedDate(object.dateCreated, locale)}
         </span>
-        <button
-          className={styles.primeCommunityOptionsIcon}
-          onClick={optionsClickHandler}
-        >
+        <button className={styles.primeCommunityOptionsIcon} onClick={optionsClickHandler}>
           {SOCIAL_MORE_OPTIONS_SVG()}
           {showOptions && (
             <PrimeCommunityObjectOptions
@@ -243,21 +235,7 @@ const PrimeCommunityObjectHeader = (props: any) => {
             post={object}
             description={props.description}
             mode={UPDATE}
-            savePostHandler={(
-              input: any,
-              postingType: any,
-              resource: any,
-              isResourceModified: any,
-              pollOptions: any
-            ) => {
-              updateObjectHandler(
-                input,
-                postingType,
-                resource,
-                isResourceModified,
-                pollOptions
-              );
-            }}
+            savePostHandler={updateObjectHandler}
             closeDialogHandler={closeDialogHandler}
           ></PrimeCommunityAddPostDialogTrigger>
         )}

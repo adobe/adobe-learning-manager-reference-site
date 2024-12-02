@@ -10,61 +10,61 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 .primeCommunityPollContainer {
-    display: flex;
-    margin-bottom: 1rem;
+  display: flex;
+  margin-bottom: 1rem;
 }
 
 .primeCommunityPollButtonContainer {
-    padding: 0px 10px;
+  padding: 0px 10px;
 }
 
 .primeCommunityPollButton {
-    height: 35px;
+  height: 35px;
 }
 
 .primeCommunityPollOptionContainer {
-    border-color: #ECECEC;
-    color: #707070;
-    background-color: #fff;
-    border: 1px solid #dedede;
-    border-radius: 3px;
-    box-shadow: 0 0 3px 0 rgb(0 0 0 / 10%);
-    width: 70%;
+  border-color: #ececec;
+  color: #707070;
+  background-color: #fff;
+  border: 1px solid #dedede;
+  border-radius: 3px;
+  box-shadow: 0 0 3px 0 rgb(0 0 0 / 10%);
+  width: 70%;
 }
 
 @media (max-width: 450px) {
-    .primeCommunityPollOptionContainer {
-        width: 60%;
-    }
+  .primeCommunityPollOptionContainer {
+    width: 60%;
+  }
 }
 .primeCommunityPollOption {
-    padding: 10px;
+  padding: 10px;
 }
 
 .primeCommunitySubmitPollButton {
-    background: none;
-    border: none;
-    color: #306EB5;
-    font-weight: 600;
-    font-size: 12px;
-    margin-left: 35px;
+  background: none;
+  border: none;
+  color: #306eb5;
+  font-weight: 600;
+  font-size: 12px;
+  margin-left: 35px;
 }
 
 .primeCommunitySubmitPollButton:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .primeCommunitySubmitted {
-    border-bottom: solid #306EB5 3px;
+  border-bottom: solid #306eb5 3px;
 }
 
 .primeCommunityAlreadySubmittedPoll {
-    color: #707070;
-    font-size: 12px;
-    margin-left: 35px;    
+  color: #707070;
+  font-size: 12px;
+  margin-left: 35px;
 }
 
 .primeCommunityPollStats {
-    padding: 12px;
-    font-size: 13px;
+  padding: 12px;
+  font-size: 13px;
 }

@@ -55,10 +55,7 @@ const BoardHtml = (props: any) => {
             UNSAFE_className={`${styles.pointer}`}
             id="gridElement1"
           >
-            <div
-              className={`${styles.primeBoardIcon}`}
-              onClick={() => loadMyBoardsPage(true)}
-            >
+            <div className={`${styles.primeBoardIcon}`} onClick={() => loadMyBoardsPage(true)}>
               {" "}
               <Article />{" "}
             </div>
@@ -78,10 +75,7 @@ const BoardHtml = (props: any) => {
             UNSAFE_className={`${styles.pointer} `}
             id="gridElement2"
           >
-            <div
-              className={`${styles.primeBoardIcon}`}
-              onClick={() => loadMyBoardsPage(false)}
-            >
+            <div className={`${styles.primeBoardIcon}`} onClick={() => loadMyBoardsPage(false)}>
               {" "}
               <Globe />{" "}
             </div>

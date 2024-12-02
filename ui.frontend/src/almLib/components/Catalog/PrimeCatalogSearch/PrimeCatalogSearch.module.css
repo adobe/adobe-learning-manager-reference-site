@@ -34,13 +34,7 @@ governing permissions and limitations under the License.
   width: 16px;
   height: 16px;
 }
-.searchItemSelected:hover{
-  background-color: var(--prime-color-nc2);
-}
-.searchItemSelected{
-  padding-left: 40px;
-}
-.searchItemNoPadding{
+.searchItemNoPadding {
   padding: 0px;
 }
 
@@ -62,7 +56,7 @@ governing permissions and limitations under the License.
   box-sizing: border-box;
   position: absolute;
   border: 1px solid var(--prime-color-nc2);
-  z-index: 1;
+  z-index: 3;
   box-shadow: 0 0 5px rgb(0 0 0 / 20%);
   top: 32px;
   width: 100%;
@@ -104,8 +98,15 @@ governing permissions and limitations under the License.
 .searchDropdownContainer a {
   color: inherit;
   text-decoration: inherit;
+  padding: 6px 6px 6px 40px;
+    display: block;
 }
-
+.searchDropdownContainer a:focus{
+  background: var(--prime-color-neutral-3);
+}
+.searchDropdownContainer a:hover{
+  background-color: var(--prime-color-neutral-3);
+}
 .searchDropdownContainer h4 {
   padding-left: 10px;
   margin-top: 10px;
@@ -119,7 +120,7 @@ governing permissions and limitations under the License.
   cursor: pointer;
 }
 
-.searchDropdownContainer input[type="checkbox"]{
+.searchDropdownContainer input[type="checkbox"] {
   cursor: pointer;
 }
 

@@ -20,10 +20,10 @@ import {
 } from "../../store/actions/notification/action";
 import { State } from "../../store/state";
 import { getALMConfig, getALMObject, getALMUser } from "../../utils/global";
-import { clearParentLoDetails } from "../../utils/hooks";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { LaunchPlayer } from "../../utils/playback-utils";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
+import { clearBreadcrumbPathDetails } from "../../utils/breadcrumbUtils";
 const channels = [
   "jobAid::adminEnrollment",
   "certification::adminEnrollment",
@@ -69,9 +69,7 @@ const channels = [
   "announcement::received",
 ];
 export const useNotifications = () => {
-  const { notifications, next , announcements } = useSelector(
-    (state: State) => state.notification
-  );
+  const { notifications, next, announcements } = useSelector((state: State) => state.notification);
   const [isLoading, setIsLoading] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const dispatch = useDispatch();
@@ -85,7 +83,6 @@ export const useNotifications = () => {
   };
 
   const pageLimit = 6;
-
 
   const fetchNotifications = useCallback(async () => {
     try {
@@ -104,8 +101,7 @@ export const useNotifications = () => {
       });
       const parsedResponse = JsonApiParse(response);
       const notificationData: any = {};
-      notificationData["notifications"] =
-        parsedResponse.userNotificationList || [];
+      notificationData["notifications"] = parsedResponse.userNotificationList || [];
       notificationData["next"] = parsedResponse.links?.next || "";
       setUnreadCount(0);
       dispatch(loadNotifications(notificationData));
@@ -186,10 +182,10 @@ export const useNotifications = () => {
     [config.primeApiURL, notifications]
   );
 
-  const redirectOverviewPage = useCallback((notif) => {
+  const redirectOverviewPage = useCallback(notif => {
     let alm = getALMObject();
     let trainingId = notif.modelIds[0];
-    let trainingInstanceId = (notif.metadata ? notif.metadata[0].id : "");
+    let trainingInstanceId = notif.metadata ? notif.metadata[0].id : "";
     let isJobAid = false;
     if (notif.modelTypes[0] === "learningObject") {
       notif.modelIds!.forEach((item: string) => {
@@ -201,25 +197,63 @@ export const useNotifications = () => {
     }
     if (isJobAid) return;
 
-    clearParentLoDetails();
+    clearBreadcrumbPathDetails(trainingId);
     alm.navigateToTrainingOverviewPage(trainingId, trainingInstanceId);
     return;
   }, []);
-  const fetchAnnouncements= async (id : string)=>{
+
+  const fetchAnnouncements = async (id: string) => {
     const userId = await getUserId();
+    if (!userId) {
+      return;
+    }
+    setIsLoading(true);
+
+    const response = await RestAdapter.get({
+      url: `${config.primeApiURL}/announcements/${id}`,
+    });
+    const parsedResponse = JsonApiParse(response)?.adminAnnouncement;
+
+    dispatch(loadAnnouncements(parsedResponse));
+    setIsLoading(false);
+  };
+
+  const updateNotification = async (
+    userId: string,
+    userNotificationId: string,
+    requestBody: PrimeUserNotification,
+    retryCount = 0
+  ) => {
+    try {
+      await RestAdapter.patch({
+        url: `${config.primeApiURL}/users/${userId}/userNotifications/${userNotificationId}`,
+        method: "PATCH",
+        body: JSON.stringify(requestBody),
+        headers: { "content-type": "application/vnd.api+json;charset=UTF-8" },
+      });
+    } catch (e) {
+      if (retryCount < 2) {
+        updateNotification(userId, userNotificationId, requestBody, retryCount + 1);
+      }
+    }
+  };
+
+  const getUserNotification = async (userNotificationId: string) => {
+    try {
+      const userId = await getUserId();
       if (!userId) {
         return;
       }
-      setIsLoading(true);
-
-      const response = await RestAdapter.get({
-        url: `${config.primeApiURL}//announcements/${id}`,
+      const notificationResponse = await RestAdapter.get({
+        url: `${config.primeApiURL}/users/userNotifications/${userNotificationId}`,
       });
-      const parsedResponse = JsonApiParse(response)?.adminAnnouncement;
-      
-      dispatch(loadAnnouncements(parsedResponse));
-      setIsLoading(false);
-  }
+      const parsedNotification = JsonApiParse(notificationResponse);
+      return parsedNotification?.userNotification;
+    } catch (e) {
+      console.log("Error while fetching notification " + e);
+    }
+  };
+
   return {
     notifications,
     announcements,
@@ -231,5 +265,7 @@ export const useNotifications = () => {
     redirectOverviewPage,
     pollUnreadNotificationCount,
     fetchAnnouncements,
+    updateNotification,
+    getUserNotification,
   };
 };

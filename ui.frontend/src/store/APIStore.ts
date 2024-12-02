@@ -14,9 +14,5 @@ import { reducer } from "../almLib";
 import { composeWithDevTools } from "redux-devtools-extension";
 
 const initialState = {};
-const store = createStore(
-  reducer,
-  initialState as never,
-  composeWithDevTools(),
-);
+const store = createStore(reducer, initialState as never, composeWithDevTools());
 export default store;

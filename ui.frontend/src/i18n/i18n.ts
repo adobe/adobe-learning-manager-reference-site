@@ -14,11 +14,9 @@ import outputFileMap from "../.transient/outputFileMap.json";
 import { ENGLISH_LOCALE } from "../almLib/utils/constants";
 import { getALMConfig } from "../almLib/utils/global";
 import { RestAdapter } from "../almLib/utils/restAdapter";
-import {
-  SetupTranslations,
-  getBrowserLocale,
-} from "../almLib/utils/translationService";
+import { SetupTranslations, getBrowserLocale } from "../almLib/utils/translationService";
 
+import * as trans from "../almLib/i18n/en_US.json";
 let MANIFEST: Record<string, string> = <any>outputFileMap;
 const GetManifestFile = (key: string) => {
   return MANIFEST[key];
@@ -73,14 +71,16 @@ export default async () => {
   const enTranslationsPromise = LoadTranslationsPromise();
 
   let translations;
-  try {
-    translations = await LoadTranslations(
-      computedLocale,
-      enTranslationsPromise
-    );
-  } catch (err) {
-    translations = await LoadTranslations(computedLocale, null);
+  if (process.env.NODE_ENV === "development") {
+    translations = JSON.stringify(trans);
+  } else {
+    try {
+      translations = await LoadTranslations(computedLocale, enTranslationsPromise);
+    } catch (err) {
+      translations = await LoadTranslations(computedLocale, null);
+    }
   }
+
   SetupTranslations(translations);
   return { locale: computedLocale, messages: JSON.parse(translations) };
 };

@@ -25,8 +25,7 @@ const ALMCategoryBrowser = (props: any) => {
 
   const CATEGORY_LIST_ID = "category-id";
   let carouselWidth = document.getElementById("carousel")?.offsetWidth || 0;
-  const ELEMENTS_IN_VIEW =
-    carouselWidth < 500 ? 1 : carouselWidth < 900 ? 2 : 3;
+  const ELEMENTS_IN_VIEW = carouselWidth < 500 ? 1 : carouselWidth < 900 ? 2 : 3;
 
   const SCROLL_ELEMENT_COUNT = 1;
   const CATEGORY_MARGIN_RIGHT = 15;
@@ -45,13 +44,9 @@ const ALMCategoryBrowser = (props: any) => {
     tagFilters?: string[];
   };
 
-  const [categoryBrowsersInitialized, setCategoryBrowsersInitialized] =
-    useState(false);
-  const [categoryBrowserHeading, setCategoryBrowserHeading] =
-    useState<PrimeHeadingConfig>();
-  const [categoryBrowsersArray, setCategoryBrowsersArray] = useState<
-    categoryBrowserData[]
-  >([]);
+  const [categoryBrowsersInitialized, setCategoryBrowsersInitialized] = useState(false);
+  const [categoryBrowserHeading, setCategoryBrowserHeading] = useState<PrimeHeadingConfig>();
+  const [categoryBrowsersArray, setCategoryBrowsersArray] = useState<categoryBrowserData[]>([]);
 
   const initCategoryIndex = (categories: any) => {
     if (categories.length > ELEMENTS_IN_VIEW) {
@@ -99,10 +94,7 @@ const ALMCategoryBrowser = (props: any) => {
 
   const setCategoryBrowsersHeading = () => {
     setCategoryBrowserHeading(
-      getPreferredLocalizedMetadata(
-        categoryBrowsers.heading,
-        locale
-      ) as PrimeHeadingConfig
+      getPreferredLocalizedMetadata(categoryBrowsers.heading, locale) as PrimeHeadingConfig
     );
   };
 
@@ -110,14 +102,10 @@ const ALMCategoryBrowser = (props: any) => {
     return (
       <div
         className={
-          element === HEADLINE
-            ? styles.primeCategoriesHeadline
-            : styles.primeCategoriesDescription
+          element === HEADLINE ? styles.primeCategoriesHeadline : styles.primeCategoriesDescription
         }
       >
-        {element === HEADLINE
-          ? categoryBrowserHeading?.title
-          : categoryBrowserHeading?.description}
+        {element === HEADLINE ? categoryBrowserHeading?.title : categoryBrowserHeading?.description}
       </div>
     );
   };
@@ -165,13 +153,8 @@ const ALMCategoryBrowser = (props: any) => {
           onClick={() => navigateToCatalog(category)}
         />
         <span className={styles.categoryHeading}>{category.title}</span>
-        <span className={styles.categoryDescription}>
-          {category.description}
-        </span>
-        <button
-          className={styles.exploreCategory}
-          onClick={() => navigateToCatalog(category)}
-        >
+        <span className={styles.categoryDescription}>{category.description}</span>
+        <button className={styles.exploreCategory} onClick={() => navigateToCatalog(category)}>
           {formatMessage({ id: "alm.text.explore" })}
         </button>
       </li>
@@ -187,17 +170,14 @@ const ALMCategoryBrowser = (props: any) => {
     var li = document.querySelectorAll<HTMLElement>(
       "#" + CATEGORY_LIST_ID + " li:nth-child(-n+" + SCROLL_ELEMENT_COUNT + ")"
     );
-    li.forEach((x) => {
+    li.forEach(x => {
       offset += x.offsetWidth + CATEGORY_MARGIN_RIGHT;
     });
     return offset;
   };
 
   const scroll = (direction: number) => {
-    if (
-      (direction === -1 && disableLeftScroll) ||
-      (direction === 1 && disableRightScroll)
-    ) {
+    if ((direction === -1 && disableLeftScroll) || (direction === 1 && disableRightScroll)) {
       return;
     }
     const categoryList = getElement(CATEGORY_LIST_ID);
@@ -235,28 +215,20 @@ const ALMCategoryBrowser = (props: any) => {
       <div id="carousel" className={styles.carousel}>
         <div className={styles.categoriesLeft}>
           <button
-            className={
-              disableLeftScroll
-                ? styles.disabledButton
-                : styles.categoriesLeftIcon
-            }
+            className={disableLeftScroll ? styles.disabledButton : styles.categoriesLeftIcon}
             onClick={() => scroll(-1)}
           >
             {<ChevronLeft />}
           </button>
         </div>
         <ul id={CATEGORY_LIST_ID} className={styles.categoriesWrapper}>
-          {categoryBrowsersArray.map((category) => {
+          {categoryBrowsersArray.map(category => {
             return getCategoryLi(category);
           })}
         </ul>
         <div className={styles.categoriesRight}>
           <button
-            className={
-              disableRightScroll
-                ? styles.disabledButton
-                : styles.categoriesRightIcon
-            }
+            className={disableRightScroll ? styles.disabledButton : styles.categoriesRightIcon}
             onClick={() => scroll(1)}
           >
             {<ChevronRight />}

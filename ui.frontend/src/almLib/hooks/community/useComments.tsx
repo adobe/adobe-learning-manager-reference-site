@@ -13,13 +13,9 @@ import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import APIServiceInstance from "../../common/APIService";
 import { PrimeComment } from "../../models/PrimeModels";
-import {
-  loadComments,
-  paginateComments,
-  updateComment,
-} from "../../store/actions/social/action";
+import { loadComments, paginateComments, updateComment } from "../../store/actions/social/action";
 import { State } from "../../store/state";
-import { COMMENT } from "../../utils/constants";
+import { BAD_WORD_FOUND, COMMENT } from "../../utils/constants";
 import { addHttpsToHref, getALMConfig } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
@@ -59,31 +55,38 @@ export const useComments = () => {
 
   const patchComment = useCallback(
     async (commentId: any, input: any) => {
-      const baseApiUrl = getALMConfig().primeApiURL;
-      const updatedInput = addHttpsToHref(input);
-      const body = {
-        data: {
-          type: COMMENT,
-          id: commentId,
-          attributes: {
-            state: "ACTIVE",
-            text: updatedInput,
+      try {
+        const baseApiUrl = getALMConfig().primeApiURL;
+        const updatedInput = addHttpsToHref(input);
+        const body = {
+          data: {
+            type: COMMENT,
+            id: commentId,
+            attributes: {
+              state: "ACTIVE",
+              text: updatedInput,
+            },
           },
-        },
-      };
-      const headers = { "content-type": "application/json" };
-      const result = await RestAdapter.ajax({
-        url: `${baseApiUrl}/comments/${commentId}`,
-        method: "PATCH",
-        body: JSON.stringify(body),
-        headers: headers,
-      });
+        };
+        const headers = { "content-type": "application/json" };
+        const result = await RestAdapter.ajax({
+          url: `${baseApiUrl}/comments/${commentId}`,
+          method: "PATCH",
+          body: JSON.stringify(body),
+          headers: headers,
+        });
 
-      const parsedResponse = JsonApiParse(result);
-      const data = {
-        item: parsedResponse.comment,
-      };
-      dispatch(updateComment(data));
+        const parsedResponse = JsonApiParse(result);
+        const data = {
+          item: parsedResponse.comment,
+        };
+        dispatch(updateComment(data));
+      } catch (error: any) {
+        const res = JSON.parse(error.responseText).title;
+        if (res === BAD_WORD_FOUND) {
+          throw new Error(BAD_WORD_FOUND);
+        }
+      }
     },
     [dispatch]
   );

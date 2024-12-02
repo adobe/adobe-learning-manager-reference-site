@@ -25,13 +25,9 @@ import { PrimeUser } from "../../../models";
 
 const PrimeCommunityPosts = (props: any) => {
   const board = props.board;
-  const {
-    posts,
-    fetchPosts,
-    loadMorePosts,
-    hasMoreItems,
-    fetchBoardModerators,
-  } = usePosts(board.id);
+  const { posts, fetchPosts, loadMorePosts, hasMoreItems, fetchBoardModerators } = usePosts(
+    board.id
+  );
   const { formatMessage } = useIntl();
   const [showLoader, setShowLoader] = useState(false);
   const [isSearchMode, setIsSearchMode] = useState(false);
@@ -68,11 +64,11 @@ const PrimeCommunityPosts = (props: any) => {
   };
   const sortFilterChangeHandler = async (sortValue: any) => {
     setClearSortFilter(false);
-    const ids = posts.map((post) => post.id).join(',');
-    getPosts(sortValue,ids);
+    const ids = posts.map(post => post.id).join(",");
+    getPosts(sortValue, ids);
   };
 
-  const getPosts = async (sortValue?: any, ids="") => {
+  const getPosts = async (sortValue?: any, ids = "") => {
     setShowLoader(true);
     await fetchPosts(board.id, sortValue, ids);
     setShowLoader(false);
@@ -84,7 +80,7 @@ const PrimeCommunityPosts = (props: any) => {
       setUser(response?.user || ({} as PrimeUser));
       const moderators = await fetchBoardModerators(board.id);
       let moderatorIds = [] as string[];
-      moderators.userList.forEach((element) => {
+      moderators.userList.forEach(element => {
         moderatorIds.push(element.id);
       });
       setBoardModerators(moderatorIds);
@@ -92,11 +88,7 @@ const PrimeCommunityPosts = (props: any) => {
   }, []);
 
   const isNewPostAllowed = () => {
-    if (
-      board.visibility === PUBLIC ||
-      boardModerators?.includes(user.id) ||
-      board.postingAllowed
-    ) {
+    if (board.visibility === PUBLIC || boardModerators?.includes(user.id) || board.postingAllowed) {
       return true;
     }
     return false;
@@ -152,10 +144,7 @@ const PrimeCommunityPosts = (props: any) => {
               })}{" "}
               '{searchString}'
             </div>
-            <button
-              className={styles.primeCommunitySearchClear}
-              onClick={resetSearchHandler}
-            >
+            <button className={styles.primeCommunitySearchClear} onClick={resetSearchHandler}>
               (
               {formatMessage({
                 id: "alm.community.search.clear.label",

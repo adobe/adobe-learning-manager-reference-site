@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 export * from "./ActiveFields";
 export * from "./ALMSkills";
-export * from "./Badges/BadgesPage" 
+export * from "./Badges/BadgesPage";
 export * from "./CategoryBrowser";
 export * from "./Catalog/PrimeCatalogContainer";
 export * from "./Community/PrimeAlertDialog";
@@ -56,6 +56,9 @@ export * from "./Masthead";
 export * from "./NavigationBar";
 export * from "./Notifications/PrimeNotificationContainer";
 export * from "./Portal";
+export * from "./PrlPreferenceSection";
 export * from "./TrainingOverview/PrimeTrainingPage";
 export * from "./UserProfile";
 
+export * from "./Widgets";
+export * from "./ALMGoToTop";

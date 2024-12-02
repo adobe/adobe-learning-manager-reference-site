@@ -12,7 +12,6 @@ governing permissions and limitations under the License.
 @import "../../../styles/variables.css";
 
 .completionDateWrapper {
-  font-family: source-sans-pro;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -53,11 +52,15 @@ governing permissions and limitations under the License.
   display: flex;
 }
 .progressBar {
-  width: 100%;
+  width: 40%;
 }
 
 .progressBar div[class^="spectrum-BarLoader-fill"] {
   background: var(--prime-success-color);
+}
+
+.progressPercentLabel {
+  margin: 2px 0 0 5px;
 }
 
 .completed {
@@ -103,7 +106,6 @@ governing permissions and limitations under the License.
 }
 
 .title {
-  font-family: source-sans-pro;
   font-size: 21px;
   font-style: normal;
   font-weight: 400;
@@ -125,7 +127,6 @@ governing permissions and limitations under the License.
 .skiillsLabel::after {
   content: ":";
   font-weight: bold;
-  font-family: source-sans-pro;
 }
 
 .skillsValue {
@@ -153,7 +154,7 @@ governing permissions and limitations under the License.
   padding-left: 40px;
   width: 180%;
   margin-left: 0px;
-  margin-bottom: 6px;
+  font-size: var(--prime-font-size-14);
 }
 
 .topBar {
@@ -169,7 +170,6 @@ governing permissions and limitations under the License.
 }
 
 .format {
-  font-family: source-sans-pro;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -179,7 +179,6 @@ governing permissions and limitations under the License.
 }
 
 .formatonHover {
-  font-family: source-sans-pro;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -268,7 +267,6 @@ governing permissions and limitations under the License.
 }
 
 .completionDateWrapperHovered {
-  font-family: source-sans-pro;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -397,7 +395,8 @@ governing permissions and limitations under the License.
 }
 
 .forLeftSpace {
-  padding-left: 4px;
+  padding: 0px 4px;
+  font-size: var(--prime-font-size-16);
 }
 
 .hideBlock {
@@ -411,4 +410,13 @@ governing permissions and limitations under the License.
   clip: rect(0, 0, 0, 0) !important;
   white-space: nowrap !important;
   border: 0 !important;
+}
+.loPrice {
+  background: var(--prime-color-white);
+  width: fit-content;
+  border-radius: 10px;
+  padding: 0px 10px;
+  margin-bottom: 10px;
+  font-weight: 750;
+  color: var(--prime-color-black);
 }

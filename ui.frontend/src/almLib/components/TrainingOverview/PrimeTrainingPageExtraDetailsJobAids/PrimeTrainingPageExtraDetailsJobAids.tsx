@@ -12,19 +12,14 @@ governing permissions and limitations under the License.
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
-import RemoveCircle from "@spectrum-icons/workflow/RemoveCircle";
-import AddCircle from "@spectrum-icons/workflow/AddCircle";
 import styles from "./PrimeTrainingPageExtraDetailsJobAids.module.css";
-import {
-  PrimeLearningObject,
-  PrimeResource,
-} from "../../../models/PrimeModels";
-import { useState } from "react";
-import { isJobaidContentTypeUrl } from "../../../utils/catalog";
-import { PrimeAlertDialog } from "../../Community/PrimeAlertDialog";
+import { PrimeLearningObject, PrimeResource } from "../../../models/PrimeModels";
+import { useEffect } from "react";
 import { GetTranslation } from "../../../utils/translationService";
-import { useIntl } from "react-intl";
 import { useJobAids } from "../../../hooks/useJobAids";
+import { JOBAID_ICON_REMOVE, JOBAID_ICON_ADD } from "../../../utils/inline_svg";
+import { useAlert } from "../../../common/Alert/useAlert";
+import { AlertType } from "../../../common/Alert/AlertDialog";
 
 const PrimeTrainingPageExtraJobAid: React.FC<{
   resource: PrimeResource;
@@ -32,70 +27,47 @@ const PrimeTrainingPageExtraJobAid: React.FC<{
   enrollmentHandler: Function;
   unEnrollmentHandler: Function;
   jobAidClickHandler: Function;
-}> = ({
-  resource,
-  training,
-  enrollmentHandler,
-  unEnrollmentHandler,
-  jobAidClickHandler,
-}) => {
+}> = ({ resource, training, enrollmentHandler, unEnrollmentHandler, jobAidClickHandler }) => {
   const {
-    enroll,
-    unenroll,
+    enrollJobAid,
+    unenrollJobAid,
     jobAidAddToListMsg,
     jobAidRemoveToListMsg,
     nameClickHandler,
     isEnrolled,
     showAlert,
-  } = useJobAids(
-    training,
-    enrollmentHandler,
-    unEnrollmentHandler,
-    jobAidClickHandler
-  );
-
+  } = useJobAids(training, enrollmentHandler, () => {}, unEnrollmentHandler);
+  const [almAlert] = useAlert();
+  useEffect(() => {
+    if (showAlert) {
+      almAlert(true, GetTranslation("alm.overview.job.aid.not.in.list", true), AlertType.error);
+    }
+  }, [showAlert]);
   return (
     <div className={styles.jobAid}>
       <a
         className={styles.name}
-        onClick={nameClickHandler}
+        onClick={(event) => {
+          event.preventDefault()
+          nameClickHandler()
+        }}
         role="button"
         tabIndex={0}
-        href="javascript:void(0)"
+        href=""
       >
         {resource.name}
       </a>
       <span className={styles.jobAidIcon}>
         {isEnrolled ? (
-          <span
-            title={jobAidRemoveToListMsg}
-            onClick={unenroll}
-            role="button"
-            tabIndex={0}
-          >
-            <RemoveCircle aria-label={jobAidRemoveToListMsg} />
+          <span title={jobAidRemoveToListMsg} onClick={unenrollJobAid} role="button" tabIndex={0}>
+            {JOBAID_ICON_REMOVE()}
           </span>
         ) : (
-          <span
-            title={jobAidAddToListMsg}
-            onClick={enroll}
-            role="button"
-            tabIndex={0}
-          >
-            <AddCircle aria-label={jobAidAddToListMsg} />
+          <span title={jobAidAddToListMsg} onClick={enrollJobAid} role="button" tabIndex={0}>
+            {JOBAID_ICON_ADD()}
           </span>
         )}
       </span>
-
-      {showAlert && (
-        <PrimeAlertDialog
-          variant="warning"
-          title={GetTranslation("alm.overview.job.aid.not.in.list", true)}
-          primaryActionLabel="Ok"
-          classes={styles.warningDialog}
-          show={true}
-        ></PrimeAlertDialog>
-      )}
     </div>
   );
 };

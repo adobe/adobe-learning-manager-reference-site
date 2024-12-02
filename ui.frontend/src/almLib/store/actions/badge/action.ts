@@ -13,19 +13,12 @@ import { AnyAction } from "redux";
 import { PrimeUserBadge } from "../../../models/PrimeModels";
 import { LOAD_BADGES, PAGINATE_BADGES } from "./actionTypes";
 
-
-export const loadBadges = (payload: {
-    badges: PrimeUserBadge[];
-    next: string;
-  }): AnyAction => ({
+export const loadBadges = (payload: { badges: PrimeUserBadge[]; next: string }): AnyAction => ({
   type: LOAD_BADGES,
   payload,
 });
 
-export const paginateBadges = (payload: {
-    badges: PrimeUserBadge[];
-    next: string;
-  }): AnyAction => ({
-    type: PAGINATE_BADGES,
-    payload,
-  });
+export const paginateBadges = (payload: { badges: PrimeUserBadge[]; next: string }): AnyAction => ({
+  type: PAGINATE_BADGES,
+  payload,
+});

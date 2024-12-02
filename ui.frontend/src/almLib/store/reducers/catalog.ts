@@ -23,6 +23,7 @@ import {
   UPDATE_LOFORMAT_FILTERS,
   UPDATE_LOTYPES_FILTERS,
   UPDATE_PRICE_FILTERS,
+  UPDATE_PRICE_RANGE_FILTERS,
   UPDATE_SEARCH_TEXT,
   UPDATE_SKILLLEVEL_FILTERS,
   UPDATE_SKILLNAME_FILTERS,
@@ -32,6 +33,15 @@ import {
   UPDATE_SNIPPET_ON_LOAD,
   OPEN_SNIPPET_TYPE_DIALOG,
   CLOSE_SNIPPET_TYPE_DIALOG,
+  UPDATE_PRODUCTS_FILTERS,
+  UPDATE_ROLES_FILTERS,
+  UPDATE_LEVELS_FILTERS,
+  UPDATE_SORT,
+  UPDATE_ANNOUNCED_GROUPS_FILTERS,
+  CLEAR_LEVELS,
+  CLEAR_ALL,
+  UPDATE_TRAININGS,
+  LOAD_USER_SKILLS,
 } from "../actions/catalog/actionTypes";
 
 export const DEFUALT_FILTERS_VALUE = {
@@ -39,13 +49,14 @@ export const DEFUALT_FILTERS_VALUE = {
 };
 
 const COURSE_METADATA_SNIPPET =
-  "courseName,courseOverview,courseDescription,moduleName,certificationName,certificationOverview,certificationDescription,jobAidName,jobAidDescription,lpName,lpDescription,lpOverview,embedLpName,embedLpDesc,embedLpOverview";
+  "courseName,courseOverview,courseDescription,moduleName,certificationName,certificationOverview,certificationDescription,jobAidName,jobAidDescription,lpName,lpDescription,lpOverview";
 const NOTES_SNIPPET = "note";
 const SKILL_SNIPPET = "skillName,skillDescription";
 const BADGES_SNIPPET = "badgeName";
-const TAGS_SNIPPET =
-  "courseTag,moduleTag,jobAidTag,lpTag,certificationTag,embedLpTag";
+const TAGS_SNIPPET = "courseTag,moduleTag,jobAidTag,lpTag,certificationTag";
 const DISCUSSION_SNIPPET = "discussion";
+
+const lo_types = "loTypes";
 
 export interface SearchDropdownFilterItem {
   value: string;
@@ -82,8 +93,8 @@ export const defaultSearchInDropdownList = [
 ];
 
 export interface CatalogFilterState {
-  skillName: string;
-  tagName: string;
+  skillName: { [key: string]: boolean };
+  tagName: { [key: string]: boolean };
   loTypes: string;
   learnerState: string;
   loFormat: string;
@@ -91,26 +102,24 @@ export interface CatalogFilterState {
   skillLevel: string;
   catalogs: string;
   price: string;
+  priceRange: string;
   cities: string;
+  products: string;
+  roles: string;
+  levels: string;
+  announcedGroups: string;
 }
 
 export interface CatalogState {
   trainings: PrimeLearningObject[] | null;
   filterState: CatalogFilterState;
-  sort:
-    | "name"
-    | "date"
-    | "-name"
-    | "-date"
-    | "effectiveness"
-    | "rating"
-    | "-rating"
-    | "dueDate";
+  sort: "name" | "date" | "-name" | "-date" | "effectiveness" | "rating" | "-rating" | "dueDate";
   next: string;
   query: string;
   snippetType: string;
   openSearchInDialog: boolean;
-  // paginating: boolean;
+  userSkills: { [key: string]: boolean };
+  autoCorrectMode: boolean;
 }
 
 const trainings: Reducer<PrimeLearningObject[] | null, AnyAction> = (
@@ -122,20 +131,15 @@ const trainings: Reducer<PrimeLearningObject[] | null, AnyAction> = (
       return action.payload?.trainings || [];
     case PAGINATE_TRAININGS:
       return [...state!, ...action.payload?.trainings];
+    case UPDATE_TRAININGS:
+      return action.payload?.trainings || [];
     default:
       return state || [];
   }
 };
 
 const sort: Reducer<
-  | "name"
-  | "date"
-  | "-name"
-  | "-date"
-  | "effectiveness"
-  | "rating"
-  | "-rating"
-  | "dueDate",
+  "name" | "date" | "-name" | "-date" | "effectiveness" | "rating" | "-rating" | "dueDate",
   AnyAction
 > = (
   state:
@@ -151,13 +155,15 @@ const sort: Reducer<
   action: AnyAction
 ) => {
   switch (action.type) {
+    case UPDATE_SORT:
+      return action.payload;
     default:
       return state || "-date";
   }
 };
 
-const skillName: Reducer<string, AnyAction> = (
-  state: string | undefined,
+const skillName: Reducer<{ [key: string]: boolean }, AnyAction> = (
+  state: { [key: string]: boolean } | undefined,
   action: AnyAction
 ) => {
   switch (action.type) {
@@ -165,13 +171,27 @@ const skillName: Reducer<string, AnyAction> = (
       return action.payload;
     case UPDATE_FILTERS_ON_LOAD:
       return action.payload.skillName;
+    case CLEAR_ALL:
+      return {};
     default:
-      return state || "";
+      return state || {};
   }
 };
 
-const tagName: Reducer<string, AnyAction> = (
-  state: string | undefined,
+const userSkills: Reducer<{ [key: string]: boolean }, AnyAction> = (
+  state: { [key: string]: boolean } | undefined,
+  action: AnyAction
+) => {
+  switch (action.type) {
+    case LOAD_USER_SKILLS:
+      return action.payload;
+    default:
+      return state || {};
+  }
+};
+
+const tagName: Reducer<{ [key: string]: boolean }, AnyAction> = (
+  state: { [key: string]: boolean } | undefined,
   action: AnyAction
 ) => {
   switch (action.type) {
@@ -179,113 +199,187 @@ const tagName: Reducer<string, AnyAction> = (
       return action.payload;
     case UPDATE_FILTERS_ON_LOAD:
       return action.payload.tagName;
+    case CLEAR_ALL:
+      return {};
     default:
-      return state || "";
+      return state || {};
   }
 };
 
-const cities: Reducer<string, AnyAction> = (
-  state: string | undefined,
-  action: AnyAction
-) => {
+const cities: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
   switch (action.type) {
     case UPDATE_CITIES_FILTERS:
       return action.payload;
     case UPDATE_FILTERS_ON_LOAD:
       return action.payload.cities;
+    case CLEAR_ALL:
+      return "";
     default:
       return state || "";
   }
 };
 
-const loTypes: Reducer<string, AnyAction> = (
+const products: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
+  switch (action.type) {
+    case UPDATE_PRODUCTS_FILTERS:
+      return action.payload;
+    case UPDATE_FILTERS_ON_LOAD:
+      return action.payload.products;
+    case CLEAR_ALL:
+      return "";
+    default:
+      return state || "";
+  }
+};
+
+const roles: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
+  switch (action.type) {
+    case UPDATE_ROLES_FILTERS:
+      return action.payload;
+    case UPDATE_FILTERS_ON_LOAD:
+      return action.payload.roles;
+    case CLEAR_ALL:
+      return "";
+    default:
+      return state || "";
+  }
+};
+
+const levels: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
+  switch (action.type) {
+    case UPDATE_LEVELS_FILTERS:
+      return action.payload;
+    case UPDATE_FILTERS_ON_LOAD:
+      return action.payload.levels;
+    case CLEAR_ALL:
+    case CLEAR_LEVELS:
+      // eslint-disable-next-line no-case-declarations
+      return "";
+    default:
+      return state || "";
+  }
+};
+
+const announcedGroups: Reducer<string, AnyAction> = (
   state: string | undefined,
   action: AnyAction
 ) => {
   switch (action.type) {
-    case UPDATE_LOTYPES_FILTERS:
-      return action.payload || DEFUALT_FILTERS_VALUE["loTypes"];
+    case UPDATE_ANNOUNCED_GROUPS_FILTERS:
+      return action.payload;
     case UPDATE_FILTERS_ON_LOAD:
-      return action.payload.loTypes;
+      return action.payload.announcedGroups;
+    case CLEAR_ALL:
+      return "";
     default:
-      return state || DEFUALT_FILTERS_VALUE["loTypes"];
+      return state || "";
   }
 };
 
-const learnerState: Reducer<string, AnyAction> = (
-  state: string | undefined,
-  action: AnyAction
-) => {
+const loTypes: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
+  switch (action.type) {
+    case UPDATE_LOTYPES_FILTERS:
+      return action.payload || DEFUALT_FILTERS_VALUE[lo_types];
+    case UPDATE_FILTERS_ON_LOAD:
+      return action.payload.loTypes;
+    case CLEAR_ALL:
+      return DEFUALT_FILTERS_VALUE[lo_types];
+    default:
+      return state || DEFUALT_FILTERS_VALUE[lo_types];
+  }
+};
+
+const learnerState: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
   switch (action.type) {
     case UPDATE_LEARNERSTATE_FILTERS:
       return action.payload;
     case UPDATE_FILTERS_ON_LOAD:
       return action.payload.learnerState;
+    case CLEAR_ALL:
+      return "";
     default:
       return state || "";
   }
 };
 
-const loFormat: Reducer<string, AnyAction> = (
-  state: string | undefined,
-  action: AnyAction
-) => {
+const loFormat: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
   switch (action.type) {
     case UPDATE_LOFORMAT_FILTERS:
       return action.payload;
     case UPDATE_FILTERS_ON_LOAD:
       return action.payload.loFormat;
+    case CLEAR_ALL:
+      return "";
     default:
       return state || "";
   }
 };
 
-const duration: Reducer<string, AnyAction> = (
-  state: string | undefined,
-  action: AnyAction
-) => {
+const duration: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
   switch (action.type) {
     case UPDATE_DURATION_FILTERS:
       return action.payload;
     case UPDATE_FILTERS_ON_LOAD:
       return action.payload.duration;
+    case CLEAR_ALL:
+      return "";
     default:
       return state || "";
   }
 };
 
-const price: Reducer<string, AnyAction> = (
-  state: string | undefined,
-  action: AnyAction
-) => {
+const priceRange: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
+  switch (action.type) {
+    case UPDATE_PRICE_RANGE_FILTERS:
+      return action.payload;
+    case UPDATE_FILTERS_ON_LOAD:
+      return action.payload.priceRange;
+    case CLEAR_ALL:
+      return "";
+    default:
+      return state || "";
+  }
+};
+
+const price: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
   switch (action.type) {
     case UPDATE_PRICE_FILTERS:
       return action.payload;
     case UPDATE_FILTERS_ON_LOAD:
       return action.payload.price;
+    case CLEAR_ALL:
+      return "";
     default:
       return state || "";
   }
 };
 
-const query: Reducer<string, AnyAction> = (
-  state: string | undefined,
-  action: AnyAction
-) => {
+const query: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
   switch (action.type) {
     case UPDATE_SEARCH_TEXT:
-      return action.payload;
+      return action.payload.query || "";
     case RESET_SEARCH_TEXT:
       return action.payload;
     default:
       return state || "";
   }
 };
-
-const snippetType: Reducer<string, AnyAction> = (
-  state: string | undefined,
+const autoCorrectMode: Reducer<boolean, AnyAction> = (
+  state: boolean | undefined,
   action: AnyAction
 ) => {
+  switch (action.type) {
+    case UPDATE_FILTERS_ON_LOAD:
+      return action.payload.autoCorrectMode === "false" ? false : true;
+    case UPDATE_SEARCH_TEXT:
+      return action.payload.autoCorrectMode ?? true;
+    case RESET_SEARCH_TEXT:
+      return true;
+    default:
+      return state ?? true;
+  }
+};
+const snippetType: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
   switch (action.type) {
     case UPDATE_SNIPPET_TYPE:
       if (action.payload) {
@@ -314,10 +408,7 @@ const openSearchInDialog: Reducer<boolean, AnyAction> = (
   }
 };
 
-const next: Reducer<string, AnyAction> = (
-  state: string | undefined,
-  action: AnyAction
-) => {
+const next: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
   switch (action.type) {
     case UPDATE_LEARNERSTATE_FILTERS:
     case UPDATE_LOFORMAT_FILTERS:
@@ -327,6 +418,7 @@ const next: Reducer<string, AnyAction> = (
     case UPDATE_DURATION_FILTERS:
     case UPDATE_TAGS_FILTERS:
     case UPDATE_CITIES_FILTERS:
+    case UPDATE_PRODUCTS_FILTERS:
     case UPDATE_SKILLLEVEL_FILTERS:
     case UPDATE_SEARCH_TEXT:
     case RESET_SEARCH_TEXT:
@@ -340,28 +432,26 @@ const next: Reducer<string, AnyAction> = (
   }
 };
 
-const skillLevel: Reducer<string, AnyAction> = (
-  state: string | undefined,
-  action: AnyAction
-) => {
+const skillLevel: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
   switch (action.type) {
     case UPDATE_SKILLLEVEL_FILTERS:
       return action.payload;
     case UPDATE_FILTERS_ON_LOAD:
       return action.payload.skillLevel;
+    case CLEAR_ALL:
+      return "";
     default:
       return state || "";
   }
 };
-const catalogs: Reducer<string, AnyAction> = (
-  state: string | undefined,
-  action: AnyAction
-) => {
+const catalogs: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
   switch (action.type) {
     case UPDATE_CATALOGS_FILTERS:
       return action.payload;
     case UPDATE_FILTERS_ON_LOAD:
       return action.payload.catalogs;
+    case CLEAR_ALL:
+      return "";
     default:
       return state || "";
   }
@@ -377,7 +467,12 @@ const filterState: Reducer<CatalogFilterState, AnyAction> = combineReducers({
   skillLevel,
   catalogs,
   price,
+  priceRange,
   cities,
+  products,
+  roles,
+  levels,
+  announcedGroups,
 });
 
 const catalog: Reducer<CatalogState, AnyAction> = combineReducers({
@@ -387,7 +482,9 @@ const catalog: Reducer<CatalogState, AnyAction> = combineReducers({
   next,
   query,
   snippetType,
+  userSkills,
   openSearchInDialog,
+  autoCorrectMode,
 });
 
 export default catalog;

@@ -21,8 +21,7 @@ const PrimeCommunityBoardFilters = (props: any) => {
   const { formatMessage } = useIntl();
 
   let defaultSkillFilter = props.selectedSkill;
-  const [selectedSkillFilter, setSelectedSkillFilter] =
-    useState(defaultSkillFilter);
+  const [selectedSkillFilter, setSelectedSkillFilter] = useState(defaultSkillFilter);
   const [showSkillFilter, setShowSkillFilter] = useState(false);
 
   const isSkillEmpty = (value: any) => {
@@ -52,8 +51,7 @@ const PrimeCommunityBoardFilters = (props: any) => {
   }, [skills]);
 
   let defaultSortFilter = DATE_UPDATED;
-  const [selectedSortFilter, setSelectedSortFilter] =
-    useState(defaultSortFilter);
+  const [selectedSortFilter, setSelectedSortFilter] = useState(defaultSortFilter);
   const sortFilters: { [key: string]: string } = {
     "Date Created": "-dateCreated",
     "Date Updated": "-dateUpdated",

@@ -25,21 +25,633 @@ html {
   scrollbar-width: thin;
 }
 
-.extensionDialog{
+.extensionDialog {
   width: 100%;
   max-width: 100%;
   height: 100%;
   max-height: 100%;
 }
-.extensionDialog > div:first-child{
-  grid-template-rows: auto 20px auto auto 1fr auto 20px!important;
-  
+
+.extensionDialog hr {
+  height: 0 !important;
 }
-.extensionDialog hr{
-  height: 0!important;
-}
-.extensionErrorPopupMessage{
+.extensionErrorPopupMessage {
   margin: 0;
   text-align: left;
   margin-bottom: 10px;
 }
+
+/* EMbeddeable widgets css starts */
+/* ALMPRIME Strip css starts */
+
+.primelxp-container {
+  margin: auto;
+  text-align: left;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  overflow: "scroll hidden";
+}
+
+.primelxp-search-clear {
+  background: transparent;
+  border: transparent;
+}
+.primelxp-nav-icon {
+  vertical-align: bottom;
+  cursor: pointer;
+  margin-top: 5px;
+  background: none;
+  border: none;
+}
+
+.primelxp-nav-icon svg {
+  display: block;
+  fill: var(--lxp-nc0);
+}
+
+.primelxp-nav-icon-custom {
+  width: 22px;
+  height: 22px;
+  padding-left: 5px;
+  background: var(--lxp-nc4);
+  border-radius: 50%;
+  margin-left: 10px;
+  z-index: 3;
+  cursor: pointer !important;
+  border: 1px solid var(--lxp-nc1);
+  opacity: 0.6;
+}
+
+.primelxp-nav-icon-custom:hover,
+.primelxp-nav-icon-custom:focus-within {
+  opacity: 1;
+}
+
+.primelxp-nav-icon-custom svg {
+  /* fill: ${unsafeCSS(GetPrimeObj()._cardProperties.navIconColor)} !important; */
+}
+
+.primelxp-prl-recommendation-heading {
+  font-weight: normal;
+}
+.primelxp-prl-recommendation-heading span {
+  font-weight: 600;
+}
+.primelxp-container-nav-icons {
+  float: right;
+  display: inline-flex;
+}
+
+.primelxp-strip-no-results {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -25px 0 0 -25px;
+}
+
+.primelxp-nav-icon-disabled {
+  opacity: 0.7;
+  pointer-events: none;
+}
+.primelxp-nav-icon-hidden {
+  /* opacity: ${isVividTheme() ? 0.6 : 0.2}; */
+  pointer-events: none;
+  outline: 0;
+}
+/* ALMPRIME Strip css ends */
+
+.primelxp-container {
+  /* border: 1px solid red; */
+  padding: 10px 0;
+  display: flex;
+  flex-wrap: wrap;
+  box-shadow: 1px 1px;
+}
+
+.child {
+  border: 1px solid black;
+}
+.primelxp-widget {
+  width: 280px;
+  height: 50px;
+}
+
+/* ===== Calendar widget css ends ===== */
+.primelxp-p-x-20 {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.primelxp-sub-text {
+  color: #777777;
+}
+:host,
+.primelxp-calendar-ce {
+  padding: 10px;
+  display: flex;
+}
+.primelxp-calendar-widget *:focus {
+  outline-color: var(--lxp-sc);
+}
+.primelxp-calendar-widget * {
+  box-sizing: border-box;
+}
+
+.primelxp-calendar-empty-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-bottom: 84px;
+  height: 100%;
+}
+.primelxp-calendar-empty-body {
+  padding-bottom: 0;
+}
+.primelxp-calendar-empty-body-icon {
+  width: 50px;
+  height: 50px;
+}
+.primelxp-calendar-empty-body-icon svg {
+  fill: var(--lxp-nc1);
+}
+.primelxp-calendar-empty-body-string {
+  font-size: 14px;
+  color: var(--lxp-nc1);
+  text-align: center;
+}
+
+.primelxp-calendar-widget {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px 1px rgba(0, 0, 0, 0.16);
+  background-color: var(--prime-color-white);
+}
+
+.primelxp-calendar-container,
+.primelxp-calendar-filter-container,
+.primelxp-calendar-detail-container {
+  height: 100%;
+  padding-top: 20px;
+  padding-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.primelxp-separator {
+  width: 1px;
+  height: calc(100% - 40px);
+  border: solid 0.5px;
+  border-color: var(--prime-color-nc3);
+}
+.primelxp-horizontal-separator {
+  width: 100%px;
+  height: 0px;
+  border: solid 0.5px;
+  border-color: var(--lxp-nc2);
+  margin: 10px 0;
+}
+.primelxp-calendar-header {
+  justify-content: center;
+}
+.primelxp-calendar-header,
+.primelxp-calendar-detail-header {
+  display: flex;
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.primelxp-calendar-header-title,
+.primelxp-calendar-detail-header-title {
+  width: 205px;
+  font-size: 16px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: var(--lxp-nc0);
+  padding-bottom: 10px;
+  align-items: center;
+}
+.primelxp-calendar-detail-header-title {
+  width: auto;
+}
+
+#calendar-previous-month,
+#calendar-next-month {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#calendar-previous-month:disabled,
+#calendar-next-month:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.primelxp-calendar-left-arrow {
+  border-left: 2px solid;
+  border-left-color: var(--lxp-pc);
+  border-top: 2px solid;
+  border-top-color: var(--lxp-pc);
+  width: 9px;
+  height: 9px;
+  transform: rotate(-45deg);
+}
+
+.primelxp-calendar-right-arrow {
+  border-right: 2px solid;
+  border-right-color: var(--lxp-pc);
+  border-top: 2px solid;
+  border-top-color: var(--lxp-pc);
+  width: 9px;
+  height: 9px;
+  transform: rotate(45deg);
+}
+
+.primelxp-calendar-body {
+  height: 225px;
+  padding: 0px 16px;
+}
+
+.primelxp-calendar-weeks-container {
+  display: flex;
+  align-items: center;
+}
+
+.primelxp-calendar-weeks {
+  width: calc(100% / 7);
+  font-size: 11px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: var(--lxp-nc1);
+}
+
+.primelxp-calendar-days-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.primelxp-calendar-days {
+  width: calc(100% / 7);
+  text-align: center;
+  color: var(--lxp-nc0);
+  padding: 3px 0;
+  display: block;
+}
+
+.primelxp-calendar-day-button {
+  border: 0;
+  padding: 0;
+  background: none;
+  width: 32px;
+  height: 28px;
+  cursor: pointer;
+}
+
+.primelxp-calendar-day {
+  font-size: 14px;
+  font-weight: 400;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 12px;
+  letter-spacing: normal;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  /* not there in variables */
+  color: #464646;
+}
+
+.primelxp-calendar-day.primelxp-calendar-has-session {
+  background-color: var(--prime-color-nc2);
+  font-weight: 900;
+  color: var(--prime-color-nc4);
+}
+
+.primelxp-calendar-day.primelxp-today {
+  background-color: var(--prime-color-primary);
+  color: var(--prime-color-nc4);
+  font-weight: 900;
+}
+
+.primelxp-calendar-day.primelxp-selected {
+  background-color: var(--prime-color-nc2);
+  color: var(--prime-color-nc4);
+  font-weight: 900;
+}
+
+.primelxp-calendar-detail-body {
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.primelxp-calendar-detail-body {
+  scrollbar-color: transparent transparent;
+  scrollbar-width: thin;
+}
+.primelxp-calendar-detail-body:hover {
+  scrollbar-color: #ececec transparent;
+}
+
+.primelxp-calendar-detail-body::-webkit-scrollbar {
+  width: 10px;
+}
+.primelxp-calendar-detail-body::-webkit-scrollbar-track {
+  background: #292929;
+  border-radius: 5px;
+}
+.primelxp-calendar-detail-body::-webkit-scrollbar-thumb {
+  background-color: #565656;
+  border-radius: 5px;
+  border: 1px solid #292929;
+}
+
+.primelxp-lo-detail {
+  display: flex;
+  flex-wrap: nowrap;
+  font-size: 12px;
+  align-items: center;
+  height: 64px;
+  margin-bottom: 14px;
+}
+
+.primelxp-lo-detail:not(:first-child) {
+  /* padding-top: 10px; */
+}
+
+.primelxp-lo-image-container {
+  width: 64px;
+  height: 64px;
+  border-radius: 3px;
+}
+
+.primelxp-overflow-ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.primelxp-lo-defaultImg-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.primelxp-lo-image-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+  object-fit: cover;
+}
+
+.primelxp-lo-defaultImg {
+  width: 80%;
+}
+
+.primelxp-lo-description-container {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  width: calc(100% - 64px);
+  padding-left: 8px;
+}
+
+.primelxp-lo-description {
+  width: 100%;
+  font-size: 13px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: var(--lxp-nc0);
+}
+
+.primelxp-lo-description-course-type {
+  width: 100%;
+  align-items: baseline;
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+.enrolled-indicator {
+  height: 6px;
+  width: 6px;
+  border-radius: 50%;
+  background-color: green;
+  align-self: center;
+  margin-right: 3px;
+}
+
+.pending-indicator {
+  height: 6px;
+  width: 6px;
+  border-radius: 50%;
+  background-color: red;
+  align-self: center;
+  margin-right: 3px;
+}
+
+.primelxp-lo-session-name {
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  word-break: break-word;
+  text-align: left;
+  color: #292929;
+  opacity: 1;
+  font-size: 12px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.primelxp-lo-course-name {
+  padding: 0;
+  padding-top: 1px;
+  overflow: hidden;
+  text-align: left;
+  letter-spacing: -0.08px;
+  color: #565656;
+  opacity: 1;
+  font-size: 12px;
+  background: none;
+  border: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.primelxp-lo-sessiontime {
+  color: #c75000;
+}
+
+.primelxp-lo-link {
+  cursor: pointer;
+  color: #5281ca;
+}
+
+.primelxp-lo-state {
+  padding-top: 2px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  word-break: break-word;
+  font-size: 12px;
+  letter-spacing: -0.08px;
+  float: left;
+}
+
+.primelxp-lo-session-type {
+  padding-top: 2px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  word-break: break-word;
+  float: left;
+}
+
+.primelxp-lo-courses-type {
+  width: fit-content;
+  /* padding: 1px 6px; */
+  display: flex;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  text-align: left;
+  font-size: 8px;
+  letter-spacing: -0.05px;
+  color: #717171;
+  opacity: 1;
+}
+
+.primelxp-enrolled {
+}
+
+.primelxp-pending {
+  color: #e00808;
+}
+
+.primelxp-calendar-body-single {
+  position: relative;
+}
+
+span.primelxp-calendar-day-double:hover {
+  font-weight: 900;
+}
+
+.primelxp-calendar-session-filter {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  /* padding-top: 12px; */
+  /* margin-bottom: 12px; */
+}
+.primelxp-calendar-session-filter button {
+  border: none;
+  background: none;
+  color: var(--prime-color-primary);
+  cursor: pointer;
+  padding-top: 0px;
+  font-size: 14px;
+  padding-left: 0;
+}
+.primelxp-filter-apply {
+  display: flex;
+  align-items: center;
+}
+.primelxp-checkbox-item {
+  display: flex;
+  font-size: 12px;
+}
+.primelxp-checkbox-item label {
+  margin-left: 4px;
+}
+.primelxp-filter-btn {
+  display: flex;
+  align-items: center;
+}
+.primelxp-filter-icon {
+  display: inline-block;
+  height: 18px;
+  width: 18px;
+  margin-right: 8px;
+  margin-top: 4px;
+}
+.primelxp-dot {
+  position: relative;
+}
+.primelxp-dot::after {
+  position: absolute;
+  content: " ";
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background: #1379f3;
+  right: -4px;
+  top: -2px;
+}
+.primelxp-filter-location-list {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+/* ===== Calendar widget css ends ===== */
+
+/* recommendations css starts */
+
+.primelxp-recommendations {
+  clear: both;
+  margin: 30px 0 0 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.primelxp-recommendations .primelxp-load-more {
+  color: var(--lxp-pc);
+  cursor: pointer;
+  background: none;
+  border: none;
+  z-index: 1;
+  font-size: 16px;
+}
+.primelxp-recommendations .primelxp-load-more svg {
+  fill: var(--lxp-pc);
+}
+.primelxp-skillLink-reco {
+  margin: 0 2px;
+  text-decoration: none;
+  position: relative;
+}
+/* recommendations css ends */
+
+/* EMbeddeable widgets css ends */

@@ -11,7 +11,8 @@ governing permissions and limitations under the License.
 */
 @import "../../styles/variables.css";
 .starRating {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
 }
 
 .givenRatingStars {
@@ -31,11 +32,11 @@ governing permissions and limitations under the License.
 }
 
 .averageRatingCount {
-  display: inline-block;
+  display: inline-flex;
   float: right;
-  padding: 0 7px;
-  color: var(--prime-color-nc3);
-  font-weight: 600;
+  padding: 4px 6px;
+  color: var(--prime-color-black);
+  font-weight: 700;
 }
 
 .tbInfoBox {
@@ -58,6 +59,21 @@ governing permissions and limitations under the License.
   position: relative;
   border: 0px;
   text-align: center;
+}
+
+input[type="radio"].starInputHidden {
+  opacity: 0.01;
+  margin: 0;
+  padding: 0;
+  display: inline !important;
+  position: absolute;
+  top: 0;
+  left: unset;
+  z-index: 1;
+}
+
+.starRadioGroup {
+  position: relative;
 }
 
 @media screen and (max-width: 450px) {

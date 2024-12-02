@@ -1,1 +1,1 @@
-export {default as SocialLearningPage} from "./Social"
+export { default as SocialLearningPage } from "./Social";

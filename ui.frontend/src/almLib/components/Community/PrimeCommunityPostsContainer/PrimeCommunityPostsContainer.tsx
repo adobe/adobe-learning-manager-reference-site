@@ -19,7 +19,7 @@ const PrimeCommunityPostsContainer: React.FC<{
   loadMorePosts: () => void;
   hasMoreItems: boolean;
 }> = ({ posts, loadMorePosts, hasMoreItems }) => {
-  const listHtml = posts?.map((post) => (
+  const listHtml = posts?.map(post => (
     <PrimeCommunityPost post={post} key={post.id}></PrimeCommunityPost>
   ));
   const { formatMessage } = useIntl();

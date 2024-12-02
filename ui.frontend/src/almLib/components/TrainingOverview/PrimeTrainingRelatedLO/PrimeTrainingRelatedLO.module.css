@@ -1,0 +1,69 @@
+.borderContainer {
+  border: 1px solid var(--prime-color-neutral-5);
+  margin-top: 12px;
+  background: var(--prime-color-neutral-5);
+  min-width: 256px;
+  height: 62px;
+}
+.loImage {
+  width: 72px;
+  height: 37.45px;
+  border-radius: 3px;
+  margin-top: 5px;
+}
+.loDetails {
+  margin: 0 0px 12px 12px;
+  min-width: 172px;
+  height: 62px;
+}
+.detailsContainer {
+  display: flex;
+  width: 256px;
+  height: 62px;
+}
+.loName {
+  font-size: 14px;
+  color: var(--prime-color-link);
+  font-weight: 400;
+  width: 172px;
+  line-height: 20px;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  cursor: pointer;
+}
+.skillsText {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 172px;
+  height: 18px;
+  color: var(--prime-color-neutral-1);
+}
+.skillName {
+  color: var(--prime-color-body);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  padding-left: 3px;
+}
+.bookMark {
+  background: var(--prime-color-neutral-5);
+  border: transparent;
+  cursor: pointer;
+}
+.bookMarkIcon svg {
+  width: 18px;
+  height: 18px;
+  margin-top: 3px;
+}
+.skillsInfo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}

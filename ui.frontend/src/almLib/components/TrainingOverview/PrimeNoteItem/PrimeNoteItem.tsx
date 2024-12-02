@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
@@ -7,15 +7,16 @@ import {
   PrimeNote,
 } from "../../../models/PrimeModels";
 import styles from "./PrimeNoteItem.module.css";
-import Note from "@spectrum-icons/workflow/Note";
-import {
-  GetTranslation,
-  GetTranslationReplaced,
-} from "../../../utils/translationService";
+import { GetTranslation, GetTranslationReplaced } from "../../../utils/translationService";
 import { getEnrolledInstancesCount } from "../../../utils/hooks";
 import { AUDIO, CP, DOC, ELEARNING, PDF, PPT, PR, VIDEO, XLS } from "../../../utils/constants";
 import { AlertType } from "../../../common/Alert/AlertDialog";
 import { useAlert } from "../../../common/Alert/useAlert";
+import { NOTE_ICON } from "../../../utils/inline_svg";
+import { extractTrainingIdNum } from "../../../utils/lo-utils";
+
+const DEFAULT_TIME = 0;
+const MINUTES_TO_MILLISECONDS = 60 * 1000;
 
 const PrimeNoteItem: React.FC<{
   training: PrimeLearningObject;
@@ -27,28 +28,40 @@ const PrimeNoteItem: React.FC<{
     loId: string,
     loResourceId: PrimeLearningObjectResource
   ) => Promise<void | undefined>;
-  deleteNote: (
-    noteId: string,
-    loId: string,
-    loResourceId: string
-  ) => Promise<void | undefined>;
+  deleteNote: (noteId: string, loId: string, loResourceId: string) => Promise<void | undefined>;
   launchPlayerHandler: Function;
-}> = (props) => {
+  isPartOfLP?: boolean;
+  isPartOfCertification?: boolean;
+  updatePlayerLoState: Function;
+  childLpId: string;
+}> = props => {
   const [almAlert] = useAlert();
-  const { training, trainingInstance, note, updateNote, deleteNote, launchPlayerHandler } = props;
+  const {
+    training,
+    trainingInstance,
+    note,
+    updateNote,
+    deleteNote,
+    launchPlayerHandler,
+    isPartOfLP,
+    isPartOfCertification,
+    updatePlayerLoState,
+    childLpId,
+  } = props;
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const isMarkerIndexPresent = note.marker ? true : false;
   let noteContainer = styles.noteContentWithoutMarker;
   let noteTextClass = styles.noteTextWithoutMarker;
   let editContent = styles.noteEditContentWithoutMarker;
   let controlActions = styles.noteControlActionsWithoutMarker;
   let noteWithoutMarker = styles.noteContainerWithoutMarker;
-    if(isMarkerIndexPresent){
-      noteContainer = styles.noteMarkerContainer;
-      noteTextClass = styles.noteContent;
-      editContent = styles.noteEditContent;
-      controlActions = styles.noteControlActions;
-      noteWithoutMarker = "";
-    }
+  if (isMarkerIndexPresent) {
+    noteContainer = styles.noteMarkerContainer;
+    noteTextClass = styles.noteContent;
+    editContent = styles.noteEditContent;
+    controlActions = styles.noteControlActions;
+    noteWithoutMarker = styles.noteContentWithMarker;
+  }
   const [isEditMode, setIsEditMode] = useState(false);
   const [valueOfNotes, setValueOfNotes] = useState(note.text);
   const editNotesHandler = () => {
@@ -56,83 +69,101 @@ const PrimeNoteItem: React.FC<{
   };
   const updateNoteHandler = () => {
     setIsEditMode(false);
-    updateNote(note, valueOfNotes, training.id, note.loResource);
+    updateNote(note, valueOfNotes, training.id, noteLoResource);
   };
   const deleteNoteHandler = () => {
     setIsEditMode(false);
-    deleteNote(note.id, training.id, note.loResource.id);
+    deleteNote(note.id, training.id, noteLoResource.id);
   };
   const editView = () => {
     return (
-      <div className={noteWithoutMarker}>
-        <input
+      <div className={noteWithoutMarker} data-automationid={`${valueOfNotes}-content`}>
+        <textarea
+          id="noteEditor"
           className={editContent}
-          type="text"
           value={valueOfNotes}
-          onChange={(e) => setValueOfNotes(e.target.value)}
-        ></input>
+          onChange={e => setValueOfNotes(e.target.value)}
+          rows={5}
+        ></textarea>
         <div className={controlActions}>
-          <button className={styles.actionButton} onClick={valueOfNotes.trim() !== '' ? updateNoteHandler : deleteNoteHandler}>
-            {GetTranslation("alm.text.done")}
-          </button>
-          <button className={styles.actionButton} onClick={deleteNoteHandler}>
+          <button
+            className={styles.actionButton}
+            onClick={deleteNoteHandler}
+            data-automationid={`${valueOfNotes}-delete-button`}
+          >
             {GetTranslation("alm.text.delete")}
+          </button>
+          <button
+            className={styles.actionButton}
+            onClick={valueOfNotes.trim() !== "" ? updateNoteHandler : deleteNoteHandler}
+            data-automationid={`${valueOfNotes}-update-button`}
+          >
+            {GetTranslation("alm.text.done")}
           </button>
         </div>
       </div>
     );
   };
 
-  const multipleAttempt = note.loResource?.multipleAttempt;
+  const noteLoResource = note.loResource;
+  const multipleAttempt = noteLoResource?.multipleAttempt;
   const timeBetweenAttempts = multipleAttempt?.timeBetweenAttempts || 0;
-  const stopAttemptOnSuccessfulComplete = multipleAttempt?.stopAttemptOnSuccessfulComplete;
-  const filteredResourceGrades = trainingInstance.enrollment?.loResourceGrades.filter(
-    (loResourceGrade) => loResourceGrade.id.search(note.loResource.id) !== -1
+  const stopAttemptOnCompletion = multipleAttempt?.stopAttemptOnSuccessfulComplete;
+  const filteredResourceGrades = trainingInstance.enrollment?.loResourceGrades?.filter(
+    loResourceGrade => loResourceGrade.id.search(noteLoResource?.id) !== -1
   );
+  const learnerAttemptInfo = noteLoResource?.learnerAttemptInfo;
+  const multipleAttemptEnabled = noteLoResource?.multipleAttemptEnabled;
 
   const loResourceGrade = filteredResourceGrades?.length
     ? filteredResourceGrades[0]
     : ({} as PrimeLearningObjectResourceGrade);
 
-  const moduleLockedBetweenAttempt = ()=>{
-    const lastAttemptEndTime = new Date(
-      note.loResource.learnerAttemptInfo?.currentAttemptEndTime || note.loResource.learnerAttemptInfo?.lastAttemptEndTime || 0
-    ).getTime() || 0;
-    
-    const attemptStartTime = lastAttemptEndTime + timeBetweenAttempts * 60 * 1000;
+  const moduleLockedBetweenAttempt = () => {
+    const lastAttemptEndTime =
+      new Date(
+        learnerAttemptInfo?.currentAttemptEndTime || learnerAttemptInfo?.lastAttemptEndTime || 0
+      ).getTime() || DEFAULT_TIME;
+
+    const attemptStartTime = lastAttemptEndTime + timeBetweenAttempts * MINUTES_TO_MILLISECONDS;
     const now = new Date().getTime();
     return now < attemptStartTime;
   };
+  const isPartOfParentLO = isPartOfLP || isPartOfCertification;
 
   const noteClickHandler = (event: any) => {
-    if(!(
-      note.loResource.multipleAttemptEnabled &&
-      note.loResource.learnerAttemptInfo &&
-      moduleLockedBetweenAttempt()
-    )){
+    const isModuleLocked =
+      multipleAttemptEnabled && learnerAttemptInfo && moduleLockedBetweenAttempt();
+    const isModuleCompleted = stopAttemptOnCompletion && loResourceGrade?.hasPassed;
 
-    // Case when module is completed
-    if(stopAttemptOnSuccessfulComplete && loResourceGrade?.hasPassed){
-      return ;
+    if (isModuleLocked) {
+      almAlert(true, GetTranslation("alm.mqa.module.locked.message"), AlertType.error);
+      return;
     }
-      launchPlayerHandler({
-        id: training.id,
-        moduleId: note.loResource.id,
-        trainingInstanceId: trainingInstance.id, 
-        isMultienrolled: isMultienrolled,
-        note_id: note.id,
-        note_position: note.marker,
-      })
-    }
-    else{
-      almAlert(
-        true,
-        GetTranslation("alm.mqa.module.locked.message"),
-        AlertType.error
-      );
 
+    if (isModuleCompleted) {
+      return;
     }
-  }
+
+    if (isPartOfParentLO) {
+      // Update root training player state -> sending last playing child lp and course
+      updatePlayerLoState({
+        body: {
+          lastPlayingChildLp: extractTrainingIdNum(childLpId),
+          lastPlayingCourse: extractTrainingIdNum(training.id),
+        },
+      });
+    }
+
+    launchPlayerHandler({
+      id: training.id,
+      moduleId: noteLoResource.id,
+      trainingInstanceId: trainingInstance.id,
+      isMultienrolled: isMultienrolled,
+      note_id: note.id,
+      note_position: note.marker,
+    });
+  };
 
   const defaultView = () => {
     return (
@@ -140,95 +171,88 @@ const PrimeNoteItem: React.FC<{
         title={GetTranslation("alm.text.clickToEdit")}
         className={noteTextClass}
         onClick={editNotesHandler}
+        data-automationid={`${valueOfNotes}-content`}
       >
         {valueOfNotes}
       </div>
     );
   };
-  const formattedNoteMarker= (note: PrimeNote)=> {
-    const moduleType = note.loResource.resourceType ;
-    const contentType = note.loResource.resources[0].contentType ;
-    let note_marker = parseInt(note.marker)
-    if (moduleType === ELEARNING) {
-      if (
-        contentType === CP ||
-        contentType === PR ||
-        contentType === VIDEO ||
-        contentType === AUDIO
-      ) {
-        let noteMarker = '';
-        let hours = Math.floor(note_marker / 3600);
-        let minutes = Math.floor(note_marker / 60) - Math.floor(60 * hours);
-        let seconds = Math.floor((note_marker% 3600) % 60);
 
-        let str_minutes = minutes.toString();
-        let str_sec = seconds.toString();
+  const formatTime = (time: number) => {
+    return time < 10 ? `0${time}` : time.toString();
+  };
 
-        if (minutes < 10) {
-          str_minutes = '0' + minutes;
-        }
-        if (seconds < 10) {
-          str_sec = '0' + seconds;
-        }
-        if (hours !== 0) {
-          let str_hours = '0' + hours.toString();
-          if (hours < 10) {
-            str_hours = '0' + hours;
-          }
-          noteMarker = noteMarker + str_hours + ':';
-        }
-        if (hours !== 0) {
-          noteMarker =
-            noteMarker + str_minutes + ':' + str_sec + ' hrs';
-        } else {
-          if (str_minutes === '00') {
-            noteMarker =
-              noteMarker + str_minutes + ':' + str_sec + ' sec';
-          } else {
-            noteMarker =
-              noteMarker + str_minutes + ':' + str_sec + ' min';
-          }
-        }
-        return noteMarker;
-      } else if (
-        contentType === PDF ||
-        contentType === DOC ||
-        contentType === PPT ||
-        contentType === XLS
-      ) {
-        return GetTranslationReplaced("alm.text.page", `${note.marker}`);
-      } else {
-        return;
-      }
-    } else if (note.loResource.resourceType === 'ACTIVITY') {
+  const formattedNoteMarker = (note: PrimeNote) => {
+    const moduleType = noteLoResource?.resourceType;
+    const contentType = noteLoResource?.resources?.[0]?.contentType;
+    const note_marker = parseInt(note.marker);
+
+    if (moduleType !== ELEARNING) {
       return;
-  }
-}
+    }
+    if (
+      contentType === CP ||
+      contentType === PR ||
+      contentType === VIDEO ||
+      contentType === AUDIO
+    ) {
+      const hours = Math.floor(note_marker / 3600);
+      const minutes = Math.floor(note_marker / 60) - Math.floor(60 * hours);
+      const seconds = Math.floor((note_marker % 3600) % 60);
 
-  const isMultienrolled = getEnrolledInstancesCount(training)>1;
+      const str_hours = hours !== 0 ? formatTime(hours) : "";
+      const str_minutes = formatTime(minutes);
+      const str_seconds = formatTime(seconds);
+
+      let noteMarker = str_hours ? `${str_hours}:` : "";
+      noteMarker += `${str_minutes}:${str_seconds}`;
+
+      noteMarker =
+        hours !== 0
+          ? GetTranslationReplaced("alm.text.hrs", noteMarker)
+          : str_minutes === "00"
+            ? GetTranslationReplaced("alm.text.secs", noteMarker)
+            : GetTranslationReplaced("alm.text.mins", noteMarker);
+
+      return noteMarker;
+    } else if (
+      contentType === PDF ||
+      contentType === DOC ||
+      contentType === PPT ||
+      contentType === XLS
+    ) {
+      return GetTranslationReplaced("alm.text.page", `${note.marker}`);
+    }
+    return;
+  };
+
+  const markerText = formattedNoteMarker(note);
+
+  const isMultienrolled = getEnrolledInstancesCount(training) > 1;
   return (
     <React.Fragment key={`note-${note.id}`}>
       <div className={noteContainer}>
-        <span aria-hidden="true" className={styles.noteIcon}>
-          <Note />
+        <span
+          aria-hidden="true"
+          className={styles.noteIcon}
+          data-automationid={`${markerText}-noteIcon`}
+        >
+          {NOTE_ICON()}
         </span>
         {isMarkerIndexPresent ? (
           <>
             <span
               className={styles.markerText}
               onClick={noteClickHandler}
+              data-automationid={`${markerText}-noteMarker`}
             >
-              {formattedNoteMarker(note)}
+              {markerText}
             </span>
           </>
         ) : (
           <></>
         )}
         {isEditMode ? editView() : defaultView()}
-      </div>
-
-      <div className={styles.noteSeperatorDiv}>
-        <div className={styles.noteSeperatorLine}></div>
       </div>
     </React.Fragment>
   );

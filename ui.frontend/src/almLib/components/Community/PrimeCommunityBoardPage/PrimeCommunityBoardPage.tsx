@@ -36,12 +36,7 @@ const PrimeCommunityBoardPage = () => {
       <PrimeCommunityMobileScrollToTop></PrimeCommunityMobileScrollToTop>
 
       <div className={styles.primeBoardParent}>
-        {item && (
-          <PrimeCommunityBoard
-            board={item}
-            showBorder={false}
-          ></PrimeCommunityBoard>
-        )}
+        {item && <PrimeCommunityBoard board={item} showBorder={false}></PrimeCommunityBoard>}
       </div>
 
       {item && <PrimeCommunityPosts board={item}></PrimeCommunityPosts>}

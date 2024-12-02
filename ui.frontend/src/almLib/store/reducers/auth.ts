@@ -12,10 +12,7 @@ governing permissions and limitations under the License.
 import { AnyAction, Reducer } from "redux";
 import { AUTHENTICATE_USER } from "../actions/auth/actionTypes";
 
-const accessToken: Reducer<String, AnyAction> = (
-  state: String | undefined,
-  action: AnyAction
-) => {
+const accessToken: Reducer<String, AnyAction> = (state: String | undefined, action: AnyAction) => {
   switch (action.type) {
     case AUTHENTICATE_USER: {
       return action?.payload;

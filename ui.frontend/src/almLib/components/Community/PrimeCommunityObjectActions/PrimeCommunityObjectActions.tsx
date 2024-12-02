@@ -49,44 +49,24 @@ const PrimeCommunityObjectActions = (props: any) => {
   return (
     <>
       <div className={styles.primeObjectOptions}>
-        <div style={{display:"flex"}}>
+        <div style={{ display: "flex" }}>
           {props.type === COMMENT && (
-            <button
-              className={styles.primeObjectCommentsCount}
-              onClick={actionClickHandler}
-            >
+            <button className={styles.primeObjectCommentsCount} onClick={actionClickHandler}>
               {props.actionLabel}
             </button>
           )}
           {props.type !== REPLY && (
-            <button
-              className={styles.primeObjectCommentsCount}
-              onClick={viewButtonClickHandler}
-            >
+            <button className={styles.primeObjectCommentsCount} onClick={viewButtonClickHandler}>
               {props.buttonLabel} ({props.buttonCount})
             </button>
           )}
-          <button
-            className={styles.primeObjectUpVoteIcon}
-            onClick={upVoteButtonClickHandler}
-          >
-            {props.myUpVoteStatus === true
-              ? SOCIAL_LIKE_FILLED_SVG()
-              : SOCIAL_LIKE_SVG()}
-            <span className={styles.primeObjectUpVoteCount}>
-              {props.upVoteCount}
-            </span>
+          <button className={styles.primeObjectUpVoteIcon} onClick={upVoteButtonClickHandler}>
+            {props.myUpVoteStatus === true ? SOCIAL_LIKE_FILLED_SVG() : SOCIAL_LIKE_SVG()}
+            <span className={styles.primeObjectUpVoteCount}>{props.upVoteCount}</span>
           </button>
-          <button
-            className={styles.primeObjectDownVoteIcon}
-            onClick={downVoteButtonClickHandler}
-          >
-            {props.myDownVoteStatus
-              ? SOCIAL_DISLIKE_FILLED_SVG()
-              : SOCIAL_DISLIKE_SVG()}{" "}
-            <span className={styles.primeObjectDownVoteCount}>
-              {props.downVoteCount}
-            </span>
+          <button className={styles.primeObjectDownVoteIcon} onClick={downVoteButtonClickHandler}>
+            {props.myDownVoteStatus ? SOCIAL_DISLIKE_FILLED_SVG() : SOCIAL_DISLIKE_SVG()}{" "}
+            <span className={styles.primeObjectDownVoteCount}>{props.downVoteCount}</span>
           </button>
           {props.object && props.object.id === props.answerCommentId && (
             <div className={styles.primeObjectRightAnswer}>
@@ -97,7 +77,7 @@ const PrimeCommunityObjectActions = (props: any) => {
             </div>
           )}
         </div>
-        
+
         {/* PAPI-19269 - Download not supported from public api */}
         {/* {props.resource && (
           <div className={styles.primeResourceDownload}>    

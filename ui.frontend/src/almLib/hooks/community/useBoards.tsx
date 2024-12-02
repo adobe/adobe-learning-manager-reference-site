@@ -43,13 +43,13 @@ const getSelectedSkill = (skillName: string, skills: string) => {
 export const useBoards = (sortFilter: string, skillName: string) => {
   skillName = skillName ? skillName : "";
   const [skills] = useState(() => setSkillValues());
-  const [isBoardsLoading,setBoardsLoading] = useState(false);
+  const [isBoardsLoading, setBoardsLoading] = useState(false);
   const [currentSkill] = useState(() => getSelectedSkill(skillName, skills));
   const { items, next } = useSelector((state: State) => state.social.boards);
   const dispatch = useDispatch();
   //Fort any page load or filterchanges
   const fetchBoards = useCallback(
-    async (sortFilter: any, skillName: any , myBoards: boolean= false) => {
+    async (sortFilter: any, skillName: any, myBoards: boolean = false) => {
       try {
         setBoardsLoading(true);
         const baseApiUrl = getALMConfig().primeApiURL;
@@ -58,11 +58,10 @@ export const useBoards = (sortFilter: string, skillName: string) => {
         params["filter.state"] = "ACTIVE";
         params["page[offset]"] = "0";
         params["page[limit]"] = "10";
-        if (skillName && skillName !== "")
-          params["filter.board.skills"] = skillName;
+        if (skillName && skillName !== "") params["filter.board.skills"] = skillName;
         params["include"] = "createdBy,skills";
-        if(myBoards){
-          params["filter.boardType"] = MYBOARDS ;
+        if (myBoards) {
+          params["filter.boardType"] = MYBOARDS;
         }
         const response = await RestAdapter.get({
           url: `${baseApiUrl}/boards?`,
@@ -74,7 +73,7 @@ export const useBoards = (sortFilter: string, skillName: string) => {
           next: parsedResponse.links?.next || "",
         };
         dispatch(loadBoards(data));
-        setBoardsLoading(false)
+        setBoardsLoading(false);
       } catch (e) {
         dispatch(loadBoards([] as PrimeBoard[]));
         console.log("Error while loading boards " + e);
@@ -84,7 +83,7 @@ export const useBoards = (sortFilter: string, skillName: string) => {
   );
 
   useEffect(() => {
-   fetchBoards(sortFilter, currentSkill);
+    fetchBoards(sortFilter, currentSkill);
   }, [fetchBoards, sortFilter, currentSkill]);
 
   // for pagination

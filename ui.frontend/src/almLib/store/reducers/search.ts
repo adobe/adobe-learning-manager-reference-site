@@ -12,13 +12,9 @@ export interface SearchState {
   autocomplete: boolean;
   userSearchHistory: string[] | null;
   popularSearches: string[] | null;
-  searchTerm: string;
 }
 
-const searching: Reducer<boolean, AnyAction> = (
-  state: boolean | undefined,
-  action: AnyAction
-) => {
+const searching: Reducer<boolean, AnyAction> = (state: boolean | undefined, action: AnyAction) => {
   switch (action.type) {
     case OPEN_SEARCH:
       return true;
@@ -81,25 +77,9 @@ const popularSearches: Reducer<string[] | null, AnyAction> = (
   }
 };
 
-const searchTerm: Reducer<string, AnyAction> = (
-  state: string | undefined,
-  action: AnyAction
-) => {
-  switch (action.type) {
-    case SET_SEARCH_TERM:
-      return action.payload;
-    case CLOSE_SEARCH:
-    case OPEN_SEARCH:
-      return "";
-    default:
-      return state ? state : "";
-  }
-};
-
 const search: Reducer<SearchState, AnyAction> = combineReducers({
   searching,
   autocomplete,
-  searchTerm,
   userSearchHistory,
   popularSearches,
 });

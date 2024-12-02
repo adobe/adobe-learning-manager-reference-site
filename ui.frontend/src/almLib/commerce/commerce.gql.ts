@@ -75,14 +75,14 @@ export const GET_COMMERCE_TRAININGS = gql`
     $filter: ProductAttributeFilterInput
     $currentPage: Int = 1
     $search: String = ""
-    $sort:ProductAttributeSortInput
+    $sort: ProductAttributeSortInput
   ) {
     products(
       pageSize: $pageSize
       filter: $filter
       currentPage: $currentPage
       search: $search
-      sort:$sort
+      sort: $sort
     ) {
       page_info {
         page_size
@@ -154,10 +154,7 @@ export const GET_COMMERCE_FILTERS = gql`
 
 export const ADD_PRODUCTS_TO_CART = gql`
   mutation addProductsToCart($cartId: String!, $sku: String!) {
-    addProductsToCart(
-      cartId: $cartId
-      cartItems: [{ quantity: 1, sku: $sku }]
-    ) {
+    addProductsToCart(cartId: $cartId, cartItems: [{ quantity: 1, sku: $sku }]) {
       cart {
         items {
           product {
@@ -175,26 +172,18 @@ export const ADD_PRODUCTS_TO_CART = gql`
   }
 `;
 export const GET_MAX_PRICE = gql`
-query getMaxPrice {
-  products(
-    pageSize: 1
-    currentPage: 1
-    search: ""
-    sort:{
-      price: DESC
-    }
-  ) {
-    items {
-    	price_range{
-        maximum_price {
-          regular_price {
-            currency
-            value
+  query getMaxPrice {
+    products(pageSize: 1, currentPage: 1, search: "", sort: { price: DESC }) {
+      items {
+        price_range {
+          maximum_price {
+            regular_price {
+              currency
+              value
+            }
           }
         }
       }
     }
   }
-}
 `;
-

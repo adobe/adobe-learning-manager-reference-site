@@ -22,13 +22,11 @@ import {
 import { parseESResponse } from "../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../utils/restAdapter";
 import AkamaiCustomHooksInstance from "./AkamaiCustomHooks";
-import {
-  default as ALMCustomHooksInstance,
-  DEFAULT_PAGE_LIMIT,
-} from "./ALMCustomHooks";
+import { default as ALMCustomHooksInstance, DEFAULT_PAGE_LIMIT } from "./ALMCustomHooks";
 import APIServiceInstance from "./APIService";
 import ICustomHooks from "./ICustomHooks";
 import { PrimeUserBadge } from "../models";
+import { defaultCartValues } from "../utils/lo-utils";
 
 interface ISortMap {
   date: string;
@@ -50,10 +48,11 @@ class ESCustomHooks implements ICustomHooks {
   async getTrainings(
     filterState: CatalogFilterState,
     sort: string,
-    searchText: string = ""
+    searchText: string = "",
+    autoCorrectMode: boolean
   ) {
     if (isUserLoggedIn()) {
-      return ALMCustomHooksInstance.getTrainings(filterState, sort, searchText);
+      return ALMCustomHooksInstance.getTrainings(filterState, sort, searchText, autoCorrectMode);
     }
     const requestObject = getRequestObjectForESApi(
       filterState,
@@ -63,8 +62,7 @@ class ESCustomHooks implements ICustomHooks {
     //below if needed for alm-non-logged-in
     if (!this.esBaseUrl) {
       this.almConfig = getALMConfig();
-      this.primeCdnTrainingBaseEndpoint =
-        this.almConfig.primeCdnTrainingBaseEndpoint;
+      this.primeCdnTrainingBaseEndpoint = this.almConfig.primeCdnTrainingBaseEndpoint;
       this.esBaseUrl = this.almConfig.esBaseUrl;
       this.almCdnBaseUrl = this.almConfig.almCdnBaseUrl;
     }
@@ -87,14 +85,16 @@ class ESCustomHooks implements ICustomHooks {
     filterState: CatalogFilterState,
     sort: string,
     searchText: string = "",
-    url: string
+    url: string,
+    autoCorrectMode: boolean
   ) {
     if (isUserLoggedIn()) {
       return ALMCustomHooksInstance.loadMoreTrainings(
         filterState,
         sort,
         searchText,
-        url
+        url,
+        autoCorrectMode
       );
     }
     const requestObject = getRequestObjectForESApi(
@@ -130,19 +130,19 @@ class ESCustomHooks implements ICustomHooks {
   async getTraining(id: string, params: QueryParams = {} as QueryParams) {
     return AkamaiCustomHooksInstance.getTraining(id, params);
   }
+
+  async getTrainingsForAuthor(authorId: string, authorType: string, sort: string, url?: string) {
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.getTrainingsForAuthor(authorId, authorType, sort, url);
+    }
+  }
   async getTrainingInstanceSummary(trainingId: string, instanceId: string) {
     if (isUserLoggedIn()) {
-      return ALMCustomHooksInstance.getTrainingInstanceSummary(
-        trainingId,
-        instanceId
-      );
+      return ALMCustomHooksInstance.getTrainingInstanceSummary(trainingId, instanceId);
     }
     return null;
   }
-  async enrollToTraining(
-    params: QueryParams = {},
-    headers: Record<string, string> = {}
-  ) {
+  async enrollToTraining(params: QueryParams = {}, headers: Record<string, string> = {}) {
     if (redirectToLoginAndAbort()) {
       return;
     }
@@ -201,9 +201,9 @@ class ESCustomHooks implements ICustomHooks {
       }));
       catalogList = updateFilterList(catalogList, queryParams, "catalogs");
       const defaultFiltersState: any = getDefaultFiltersState();
-      defaultFiltersState["loTypes"].list = defaultFiltersState[
-        "loTypes"
-      ].list?.filter((item: any) => item.value !== JOBAID);
+      defaultFiltersState["loTypes"].list = defaultFiltersState["loTypes"].list?.filter(
+        (item: any) => item.value !== JOBAID
+      );
 
       return {
         ...defaultFiltersState,
@@ -230,15 +230,26 @@ class ESCustomHooks implements ICustomHooks {
     const defaultCartValues = { items: [], totalQuantity: 0, error: null };
     return { ...defaultCartValues, error: true };
   }
+  async addProductToCartNative(
+    trainingId: string
+  ): Promise<{ redirectionUrl: string; error: Array<string> }> {
+    return { ...defaultCartValues };
+  }
+  async buyNowNative(
+    trainingId: string
+  ): Promise<{ redirectionUrl: string; error: Array<string> }> {
+    return { ...defaultCartValues };
+  }
   async getUsersBadges(
     userId: string,
     params: QueryParams
-  ): Promise<{
-      badgeList : PrimeUserBadge[];
-      links: {next: any}
-  }
-  | undefined
-> {
+  ): Promise<
+    | {
+        badgeList: PrimeUserBadge[];
+        links: { next: any };
+      }
+    | undefined
+  > {
     if (isUserLoggedIn()) {
       return ALMCustomHooksInstance.getUsersBadges(userId, params);
     }

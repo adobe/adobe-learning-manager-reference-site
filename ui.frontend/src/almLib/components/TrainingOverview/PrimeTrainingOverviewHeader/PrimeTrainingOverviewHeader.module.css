@@ -19,20 +19,16 @@ governing permissions and limitations under the License.
   transition: height 0.2s;
   height: 140px;
   width: 100%;
-  background-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 1),
-    rgba(0, 0, 0, 0)
-  );
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
   background-size: cover !important;
 }
 .left {
-  width: calc(100% - 256px);
   float: left;
+  margin-right: 50px;
 }
 .right {
-  width: 256px;
-  padding: 20px 0;
+  width: 280px;
+  padding: 29px 0;
   float: right;
 }
 .tbInfo {
@@ -46,7 +42,7 @@ governing permissions and limitations under the License.
 }
 .icon svg,
 .shareIcon svg {
-  stroke: var(--prime-color-white);
+  stroke: var(--prime-color-nc9);
   fill: transparent;
   width: 13px;
   height: 15px;
@@ -71,20 +67,25 @@ governing permissions and limitations under the License.
   margin-top: 8px;
 }
 .shareButton {
-  border: 0.1rem solid var(--prime-color-nc4);
-  background-color: transparent;
+  border: 1.8px solid var(--prime-color-primary);
+  background-color: var(--prime-color-neutral-5);
+  opacity: 0.9;
+  display: flex;
   align-items: center;
-  min-width: 280px !important;
-  border-radius: 24px;
+  justify-content: center;
+  min-width: 280px;
+  border-radius: 40px;
   font-size: var(--prime-font-size-14);
-  font-weight: 400;
+  font-weight: var(--prime-font-weight-400);
   min-height: 30px;
-  color: var(--prime-color-white);
+  color: var(--prime-color-primary);
   cursor: pointer;
   padding: 0 10px;
-  font-family: "source-sans-pro";
 }
-
+.shareText {
+  color: var(--prime-color-primary);
+  padding-left: 2px;
+}
 .enrollmentCountButton {
   border: 0.1rem solid var(--prime-color-nc4);
   background-color: var(--prime-color-white);
@@ -97,58 +98,65 @@ governing permissions and limitations under the License.
   color: var(--prime-color-white);
   cursor: pointer;
   padding: 0 10px;
-  font-family: "source-sans-pro";
 }
 
 .boxButton {
-  border: 0.1rem solid var(--prime-color-nc2);
+  border: 0.1rem solid var(--prime-color-primary);
   background-color: var(--prime-color-white);
   align-items: center;
-  min-width: 280px !important;
+  min-width: 280px;
   font-size: var(--prime-font-size-14);
-  font-weight: 200;
+  font-weight: var(--prime-font-weight-200);
   min-height: 30px;
   color: var(--prime-color-nc3);
-  border-bottom: 0.05rem solid var(--prime-color-nc2);
+  border-bottom: 0.05rem solid var(--prime-color-primary);
   float: left;
   text-align: left;
 }
 .boxButton:hover,
 .boxButton:focus,
 .boxButton:focus-visible {
-  background: var(--prime-color-nc4);
+  background: var(--prime-color-neutral-3);
 }
 
 .format {
-  letter-spacing: 1px;
   color: var(--prime-color-white);
-  line-height: 1.42857;
   font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-400);
+  margin-top: 4px;
 }
 
 .title {
-  margin-top: 35px;
+  margin-top: 29px;
   margin-bottom: 0px;
   text-align: left;
   color: var(--prime-color-white);
   line-height: 120%;
   vertical-align: bottom;
-  font-size: var(--prime-font-size-24);
+  font-size: var(--prime-font-size-22);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-weight: var(--prime-font-weight-700);
   width: 100%;
 }
 .titleBlock {
   display: flex;
   flex-direction: column;
   position: relative;
+  width: 660px;
 }
 .progressContainer {
   width: 80%;
   display: flex;
   align-items: flex-start;
-  padding-top: 40px;
+  padding-top: 12px;
+}
+.certificationStatus {
+  color: var(--prime-color-white);
+  font-size: var(--prime-font-size-14);
+  font-weight: var(--prime-font-weight-400);
+  margin-top: 4px;
 }
 .progressBar {
   width: 95%;
@@ -161,11 +169,7 @@ governing permissions and limitations under the License.
   text-shadow: var(--prime-text-shadow);
 }
 .progressBar div[class^="spectrum-BarLoader-fill"] {
-  background: var(--prime-color-nc4);
-}
-
-.progressBar div[class^="spectrum-BarLoader-track"] {
-  background: var(--prime-color-nc3);
+  background: var(--prime-color-neutral-5);
 }
 
 .ratingText {
@@ -174,9 +178,9 @@ governing permissions and limitations under the License.
   margin-top: 2px;
 }
 
-.avgRatingOverview {
+.ratingAndEnrollment {
   min-width: 280px;
-  padding: 0 10px;
+  padding: 4px 11px 6px 16px;
   display: flex;
   justify-content: center;
   background: var(--prime-color-white);
@@ -186,13 +190,19 @@ governing permissions and limitations under the License.
   margin-bottom: 1rem;
 }
 
+.ratingAndEnrollmentText {
+  display: flex;
+  align-items: center;
+}
+
 .headingContainer {
   margin: 0 auto;
   display: flex;
   max-width: var(--prime-container-max-width-desktop);
   width: var(--prime-container-width);
 }
-.share, .disableShareInTeamsMobile  {
+.share,
+.disableShareInTeamsMobile {
   display: none;
 }
 .box {
@@ -220,8 +230,11 @@ governing permissions and limitations under the License.
   overflow: hidden;
   text-overflow: ellipsis;
   text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0px;
 }
-.breadcrumbLink:hover  {
+.breadcrumbLink:hover {
   text-decoration: underline;
 }
 .breadcrumbArrow {
@@ -239,12 +252,34 @@ governing permissions and limitations under the License.
   color: var(--prime-color-white);
   word-break: keep-all;
 }
-
-.enrollmentLabel{
-  color: var(--prime-color-black);
+.enrollmentHeader {
+  padding: 4px 6px;
+  font-weight: var(--prime-font-weight-700);
 }
-
-.enrollmentCountButtonGroup{
+.ratingsText {
+  font-weight: var(--prime-font-weight-400);
+  padding: 2px;
+}
+.ratingContainer {
+  display: inline-flex;
+  color: var(--prime-color-black);
+  align-items: center;
+}
+.enrollmentLabel {
+  color: var(--prime-color-black);
+  padding: 4px;
+  font-weight: var(--prime-font-weight-400);
+  font-size: var(--prime-font-size-14);
+}
+.averageRatingCount {
+  display: inline-flex;
+  float: right;
+  padding: 4px 6px;
+  color: var(--prime-color-black);
+  font-weight: var(--prime-font-weight-700);
+  align-items: center;
+}
+.enrollmentCountButtonGroup {
   margin-bottom: 0.5rem;
 }
 
@@ -281,7 +316,8 @@ governing permissions and limitations under the License.
   .shareButton {
     display: none;
   }
-  .share, .disableShareInTeamsMobile {
+  .share,
+  .disableShareInTeamsMobile {
     display: block;
     height: 3rem;
     width: 3rem;
@@ -416,7 +452,7 @@ governing permissions and limitations under the License.
     text-overflow: ellipsis;
     text-decoration: none;
   }
-  
+
   .breadcrumbArrow {
     color: var(--prime-color-black);
     padding-right: 5px;
@@ -431,7 +467,7 @@ governing permissions and limitations under the License.
     color: var(--prime-color-black);
   }
 
-  .enrollmentCountButtonGroup{
+  .enrollmentCountButtonGroup {
     display: none;
   }
 }

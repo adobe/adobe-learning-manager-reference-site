@@ -34,11 +34,7 @@ const SectionLine = (props: any) => {
     thumbnail = (
       <div className={styles.sectionImageContainer}>
         {" "}
-        <img
-          className={styles.sectionImage}
-          src={props.src}
-          alt="Icon thummnail"
-        />
+        <img className={styles.sectionImage} src={props.src} alt="Icon thummnail" />
       </div>
     );
   }
@@ -57,9 +53,7 @@ const SectionLine = (props: any) => {
             })}
           </>
         ) : (
-          <>
-            {formatMessage({ id: "alm.text.posts", defaultMessage: " Posts" })}
-          </>
+          <>{formatMessage({ id: "alm.text.posts", defaultMessage: " Posts" })}</>
         )}
       </>
     );

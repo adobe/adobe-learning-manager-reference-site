@@ -11,11 +11,7 @@ governing permissions and limitations under the License.
 */
 import { AnyAction } from "redux";
 import { PrimeUserNotification } from "../../../models/PrimeModels";
-import {
-  LOAD_NOTIFICATIONS,
-  LOAD_ANNOUNCEMENT,
-  PAGINATE_NOTIFICATIONS
-} from "./actionTypes";
+import { LOAD_NOTIFICATIONS, LOAD_ANNOUNCEMENT, PAGINATE_NOTIFICATIONS } from "./actionTypes";
 
 export const loadNotifications = (payload: any): AnyAction => ({
   type: LOAD_NOTIFICATIONS,
@@ -26,11 +22,10 @@ export const loadAnnouncements = (payload: any): AnyAction => ({
   payload,
 });
 
-
 export const paginateNotifications = (payload: {
-    notifications: PrimeUserNotification[];
-    next: string;
-  }): AnyAction => ({
-    type: PAGINATE_NOTIFICATIONS,
-    payload,
-  });
+  notifications: PrimeUserNotification[];
+  next: string;
+}): AnyAction => ({
+  type: PAGINATE_NOTIFICATIONS,
+  payload,
+});

@@ -9,11 +9,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import {
-  JsonApiResponse,
-  PrimeLearningObject,
-  PrimeUserBadge,
-} from "../models";
+import { JsonApiResponse, PrimeLearningObject, PrimeUserBadge } from "../models";
 import { CatalogFilterState } from "../store/reducers/catalog";
 import { QueryParams } from "../utils/restAdapter";
 
@@ -21,13 +17,15 @@ export default interface ICustomHooks {
   getTrainings(
     filterState: CatalogFilterState,
     sort: string,
-    searchText: string
-  ): Promise<{ trainings: PrimeLearningObject[]; next: any } | undefined>;
+    searchText: string,
+    autoCorrectMode: boolean
+  ): Promise<{ trainings: PrimeLearningObject[]; next: any; meta?: object } | undefined>;
   loadMoreTrainings(
     filterState: CatalogFilterState,
     sort: string,
     searchText: string,
-    url: string
+    url: string,
+    autoCorrectMode: boolean
   ): Promise<
     | {
         learningObjectList: PrimeLearningObject[];
@@ -35,6 +33,12 @@ export default interface ICustomHooks {
       }
     | undefined
   >;
+  getTrainingsForAuthor(
+    authorId: string,
+    authorType: string,
+    sort: string,
+    url?: string
+  ): Promise<{ trainings: PrimeLearningObject[]; next: any; meta?: object } | undefined>;
   loadMore(url: string): Promise<JsonApiResponse | undefined>;
   getTraining(id: string, params: QueryParams): Promise<PrimeLearningObject>;
   getTrainingInstanceSummary(
@@ -47,17 +51,19 @@ export default interface ICustomHooks {
     headers: Record<string, string>
   ): Promise<JsonApiResponse | undefined>;
   unenrollFromTraining(enrollmentId: string): Promise<unknown | null>;
-  addProductToCart(
-    sku: string
-  ): Promise<{ items: any; totalQuantity: Number; error: any }>;
+  addProductToCart(sku: string): Promise<{ items: any; totalQuantity: Number; error: any }>;
+  addProductToCartNative(
+    trainingId: string
+  ): Promise<{ redirectionUrl: string; error: Array<string> }>;
+  buyNowNative(trainingId: string): Promise<{ redirectionUrl: string; error: Array<string> }>;
   getUsersBadges(
     userId: string,
     params: QueryParams
   ): Promise<
     | {
-        badgeList : PrimeUserBadge[];
-        links: {next: any}
-    }
+        badgeList: PrimeUserBadge[];
+        links: { next: any };
+      }
     | undefined
   >;
   loadMoreBadges(url: string): Promise<JsonApiResponse | undefined>;

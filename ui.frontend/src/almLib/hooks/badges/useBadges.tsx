@@ -36,10 +36,7 @@ export const useBadges = () => {
 
     try {
       setIsLoading(true);
-      const response = await APIServiceInstance.getUsersBadges(
-        userId,
-        queryParams
-      );
+      const response = await APIServiceInstance.getUsersBadges(userId, queryParams);
       dispatch(
         loadBadges({
           badges: response?.badgeList || [],

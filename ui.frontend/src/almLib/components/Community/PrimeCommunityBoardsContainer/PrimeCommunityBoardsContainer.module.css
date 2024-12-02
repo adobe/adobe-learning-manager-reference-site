@@ -10,11 +10,8 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 .loadMoreContainer {
-    display: flex;
-    justify-content: center;
-    margin: 40px 0;
-    align-items: center;
-    
-  }
-
-  
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+  align-items: center;
+}

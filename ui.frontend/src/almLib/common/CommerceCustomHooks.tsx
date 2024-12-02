@@ -9,20 +9,12 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import {
-  ADD_PRODUCTS_TO_CART,
-  GET_COMMERCE_FILTERS,
-  GET_COMMERCE_TRAININGS,
-} from "../commerce";
+import { ADD_PRODUCTS_TO_CART, GET_COMMERCE_FILTERS, GET_COMMERCE_TRAININGS } from "../commerce";
 import { GET_MAX_PRICE } from "../commerce/commerce.gql";
 import { apolloClient } from "../contextProviders";
 import { CatalogFilterState } from "../store/reducers/catalog";
 import { getIndividualFiltersForCommerce, sortList } from "../utils/catalog";
-import {
-  FilterState,
-  getDefaultFiltersState,
-  updateFilterList,
-} from "../utils/filters";
+import { FilterState, getDefaultFiltersState, updateFilterList } from "../utils/filters";
 import {
   getALMConfig,
   getItemFromStorage,
@@ -34,13 +26,11 @@ import {
 import { parseCommerceResponse } from "../utils/jsonAPIAdapter";
 import { QueryParams } from "../utils/restAdapter";
 import AkamaiCustomHooksInstance from "./AkamaiCustomHooks";
-import {
-  default as ALMCustomHooksInstance,
-  DEFAULT_PAGE_LIMIT,
-} from "./ALMCustomHooks";
+import { default as ALMCustomHooksInstance, DEFAULT_PAGE_LIMIT } from "./ALMCustomHooks";
 import APIServiceInstance from "./APIService";
 import ICustomHooks from "./ICustomHooks";
 import { PrimeUserBadge } from "../models";
+import { defaultCartValues } from "../utils/lo-utils";
 
 const CART_ID = "CART_ID";
 const COMMERCE_FILTERS = "COMMERCE_FILTERS";
@@ -78,11 +68,10 @@ const transformFilters = (
   item: FilterItem,
   filterType: string
 ) => {
-  let defaultFilters =
-    defaultFiltersState[filterType as keyof FilterState].list!;
-  item.attribute_options.forEach((attributeOption) => {
+  let defaultFilters = defaultFiltersState[filterType as keyof FilterState].list!;
+  item.attribute_options.forEach(attributeOption => {
     const { label } = attributeOption;
-    const index = defaultFilters?.findIndex((type) => type.value === label);
+    const index = defaultFilters?.findIndex(type => type.value === label);
     if (index !== -1) {
       defaultFilters[index].value = label;
     }
@@ -93,54 +82,36 @@ const transformFilters = (
 const getTransformedFilter = async (filterState: CatalogFilterState) => {
   let filters = await getOrUpdateFilters();
   const filterMap = new Map();
-  filters.forEach(
-    (filter: { attribute_code: string | number; attribute_options: any }) => {
-      if (!filterMap.has(filter.attribute_code)) {
-        filterMap.set(filter.attribute_code, filter.attribute_options);
-      }
+  filters.forEach((filter: { attribute_code: string | number; attribute_options: any }) => {
+    if (!filterMap.has(filter.attribute_code)) {
+      filterMap.set(filter.attribute_code, filter.attribute_options);
     }
-  );
+  });
   const filter: any = {};
 
   if (filterState.catalogs) {
     const catalogOptions = filterMap.get(ALMToCommerceTypes["catalogs"]) || [];
     filter[ALM_CATALOG] = {
-      in: getIndividualFiltersForCommerce(
-        catalogOptions,
-        filterState,
-        "catalogs"
-      ),
+      in: getIndividualFiltersForCommerce(catalogOptions, filterState, "catalogs"),
     };
   }
 
   if (filterState.loTypes) {
     const loTypesOptions = filterMap.get(ALMToCommerceTypes["loTypes"]) || [];
     filter[ALM_LO] = {
-      in: getIndividualFiltersForCommerce(
-        loTypesOptions,
-        filterState,
-        "loTypes"
-      ),
+      in: getIndividualFiltersForCommerce(loTypesOptions, filterState, "loTypes"),
     };
   }
   if (filterState.loFormat) {
     const loFormatOptions = filterMap.get(ALMToCommerceTypes["loFormat"]) || [];
     filter[ALM_DELIVERY] = {
-      in: getIndividualFiltersForCommerce(
-        loFormatOptions,
-        filterState,
-        "loFormat"
-      ),
+      in: getIndividualFiltersForCommerce(loFormatOptions, filterState, "loFormat"),
     };
   }
   if (filterState.duration) {
     const durationOptions = filterMap.get(ALMToCommerceTypes["duration"]) || [];
     filter[ALM_DURATION] = {
-      in: getIndividualFiltersForCommerce(
-        durationOptions,
-        filterState,
-        "duration"
-      ),
+      in: getIndividualFiltersForCommerce(durationOptions, filterState, "duration"),
     };
   }
 
@@ -151,14 +122,9 @@ const getTransformedFilter = async (filterState: CatalogFilterState) => {
     };
   }
   if (filterState.skillLevel) {
-    const skillLevelOptions =
-      filterMap.get(ALMToCommerceTypes["skillLevel"]) || [];
+    const skillLevelOptions = filterMap.get(ALMToCommerceTypes["skillLevel"]) || [];
     filter[ALM_SKILL_LEVELS] = {
-      in: getIndividualFiltersForCommerce(
-        skillLevelOptions,
-        filterState,
-        "skillLevel"
-      ),
+      in: getIndividualFiltersForCommerce(skillLevelOptions, filterState, "skillLevel"),
     };
   }
 
@@ -167,11 +133,7 @@ const getTransformedFilter = async (filterState: CatalogFilterState) => {
   if (filterState.tagName) {
     const tagNameOptions = filterMap.get(ALMToCommerceTypes["tagName"]) || [];
     filter[ALM_TAGS] = {
-      in: getIndividualFiltersForCommerce(
-        tagNameOptions,
-        filterState,
-        "tagName"
-      ),
+      in: getIndividualFiltersForCommerce(tagNameOptions, filterState, "tagName"),
     };
   }
 
@@ -179,7 +141,7 @@ const getTransformedFilter = async (filterState: CatalogFilterState) => {
     const pricesArray = filterState.price.split("-");
     filter[ALM_PRICE] = {
       from: pricesArray[0],
-      to: pricesArray[1] === "0" ? "0.0000000001": pricesArray[1] ,
+      to: pricesArray[1] === "0" ? "0.0000000001" : pricesArray[1],
     };
   }
   return filter;
@@ -196,26 +158,13 @@ const getOrUpdateFilters = async () => {
       query: GET_COMMERCE_FILTERS,
     });
 
-    const items = JSON.parse(
-      JSON.stringify(response.data.customAttributeMetadata.items)
-    );
+    const items = JSON.parse(JSON.stringify(response.data.customAttributeMetadata.items));
     //sorting skills list
-    const skillsIndex = items.findIndex(
-      (item: any) => item.attribute_code === "almskill"
-    );
-    items[skillsIndex].attribute_options = sortList(
-      items[skillsIndex].attribute_options,
-      "label"
-    );
+    const skillsIndex = items.findIndex((item: any) => item.attribute_code === "almskill");
+    items[skillsIndex].attribute_options = sortList(items[skillsIndex].attribute_options, "label");
     //sorting tags list
-    const tagsIndex = items.findIndex(
-      (item: any) => item.attribute_code === "almtags"
-    );
-    items[tagsIndex].attribute_options = sortList(
-      items[tagsIndex].attribute_options,
-      "label"
-    );
-
+    const tagsIndex = items.findIndex((item: any) => item.attribute_code === "almtags");
+    items[tagsIndex].attribute_options = sortList(items[tagsIndex].attribute_options, "label");
 
     setItemToStorage(COMMERCE_FILTERS, items);
     return items;
@@ -233,10 +182,11 @@ class CommerceCustomHooks implements ICustomHooks {
   async getTrainings(
     filterState: CatalogFilterState,
     sort: string,
-    search: string = ""
+    search: string = "",
+    autoCorrectMode: boolean
   ) {
     if (isUserLoggedIn()) {
-      return ALMCustomHooksInstance.getTrainings(filterState, sort, search);
+      return ALMCustomHooksInstance.getTrainings(filterState, sort, search, autoCorrectMode);
     }
     try {
       const filter = await getTransformedFilter(filterState);
@@ -253,17 +203,11 @@ class CommerceCustomHooks implements ICustomHooks {
       });
       const filtersFromStorage = await getOrUpdateFilters();
       const products = response?.data?.products;
-      const results = parseCommerceResponse(
-        products?.items,
-        filtersFromStorage
-      );
+      const results = parseCommerceResponse(products?.items, filtersFromStorage);
       const page_info = products?.page_info;
       return {
         trainings: results || [],
-        next:
-          page_info?.current_page < page_info?.total_pages
-            ? page_info?.current_page
-            : "",
+        next: page_info?.current_page < page_info?.total_pages ? page_info?.current_page : "",
       };
     } catch (error) {
       console.log(error);
@@ -274,14 +218,16 @@ class CommerceCustomHooks implements ICustomHooks {
     filterState: CatalogFilterState,
     sort: string,
     search: string = "",
-    currentPage: string
+    currentPage: string,
+    autoCorrectMode: boolean
   ) {
     if (isUserLoggedIn()) {
       return ALMCustomHooksInstance.loadMoreTrainings(
         filterState,
         sort,
         search,
-        currentPage
+        currentPage,
+        autoCorrectMode
       );
     }
     try {
@@ -302,22 +248,21 @@ class CommerceCustomHooks implements ICustomHooks {
       const filtersFromStorage = await getOrUpdateFilters();
 
       const products = response?.data?.products;
-      const results = parseCommerceResponse(
-        products?.items,
-        filtersFromStorage
-      );
+      const results = parseCommerceResponse(products?.items, filtersFromStorage);
       const page_info = products?.page_info;
       return {
         learningObjectList: results || [],
         links: {
-          next:
-            page_info?.current_page < page_info?.total_pages
-              ? page_info?.current_page
-              : "",
+          next: page_info?.current_page < page_info?.total_pages ? page_info?.current_page : "",
         },
       };
     } catch (error) {
       console.log(error);
+    }
+  }
+  async getTrainingsForAuthor(authorId: string, authorType: string, sort: string, url?: string) {
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.getTrainingsForAuthor(authorId, authorType, sort, url);
     }
   }
   async loadMore(url: string) {
@@ -335,18 +280,12 @@ class CommerceCustomHooks implements ICustomHooks {
 
   async getTrainingInstanceSummary(trainingId: string, instanceId: string) {
     if (isUserLoggedIn()) {
-      return ALMCustomHooksInstance.getTrainingInstanceSummary(
-        trainingId,
-        instanceId
-      );
+      return ALMCustomHooksInstance.getTrainingInstanceSummary(trainingId, instanceId);
     }
     return null;
   }
 
-  async enrollToTraining(
-    params: QueryParams = {},
-    headers: Record<string, string> = {}
-  ) {
+  async enrollToTraining(params: QueryParams = {}, headers: Record<string, string> = {}) {
     if (redirectToLoginAndAbort()) {
       return;
     }
@@ -373,89 +312,75 @@ class CommerceCustomHooks implements ICustomHooks {
       const items = await getOrUpdateFilters();
       let defaultFiltersState = getDefaultFiltersState();
       if (items) {
-        items.forEach(
-          (item: {
-            attribute_code: string;
-            attribute_options: CommerceItem[];
-          }) => {
-            const attributeCode = item.attribute_code;
+        items.forEach((item: { attribute_code: string; attribute_options: CommerceItem[] }) => {
+          const attributeCode = item.attribute_code;
 
-            switch (attributeCode) {
-              case ALM_LO: {
-                let defaultFilters = defaultFiltersState["loTypes"].list;
-                defaultFiltersState["loTypes"].list = defaultFilters?.filter(
-                  (item) => item.value !== "jobAid"
-                );
-                transformFilters(defaultFiltersState, item, "loTypes");
-                break;
-              }
+          switch (attributeCode) {
+            case ALM_LO: {
+              let defaultFilters = defaultFiltersState["loTypes"].list;
+              defaultFiltersState["loTypes"].list = defaultFilters?.filter(
+                item => item.value !== "jobAid"
+              );
+              transformFilters(defaultFiltersState, item, "loTypes");
+              break;
+            }
 
-              case ALM_DELIVERY: {
-                transformFilters(defaultFiltersState, item, "loFormat");
-                break;
-              }
+            case ALM_DELIVERY: {
+              transformFilters(defaultFiltersState, item, "loFormat");
+              break;
+            }
 
-              case ALM_DURATION: {
-                transformFilters(defaultFiltersState, item, "duration");
-                break;
-              }
+            case ALM_DURATION: {
+              transformFilters(defaultFiltersState, item, "duration");
+              break;
+            }
 
-              case ALM_SKILL_LEVELS: {
-                transformFilters(defaultFiltersState, item, "skillLevel");
-                break;
-              }
+            case ALM_SKILL_LEVELS: {
+              transformFilters(defaultFiltersState, item, "skillLevel");
+              break;
+            }
 
-              case ALM_SKILLS: {
-                let skillsList = item.attribute_options?.map((item) => ({
-                  value: item.label,
-                  label: item.label,
-                  checked: false,
-                }));
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                skillsList = updateFilterList(
-                  skillsList,
-                  queryParams,
-                  "skillName"
-                );
-                defaultFiltersState.skillName.list = skillsList;
-                break;
-              }
+            case ALM_SKILLS: {
+              let skillsList = item.attribute_options?.map(item => ({
+                value: item.label,
+                label: item.label,
+                checked: false,
+              }));
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              skillsList = updateFilterList(skillsList, queryParams, "skillName");
+              defaultFiltersState.skillName.list = skillsList;
+              break;
+            }
 
-              case ALM_TAGS: {
-                let tagsList = item.attribute_options?.map((item) => ({
-                  value: item.label,
-                  label: item.label,
-                  checked: false,
-                }));
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                tagsList = updateFilterList(tagsList, queryParams, "tagName");
-                defaultFiltersState.tagName.list = tagsList;
-                break;
-              }
-              case ALM_CATALOG: {
-                let catalogList = item.attribute_options?.map((item) => ({
-                  value: item.label,
-                  label: item.label,
-                  checked: false,
-                }));
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                catalogList = updateFilterList(
-                  catalogList,
-                  queryParams,
-                  "catalogs"
-                );
-                defaultFiltersState.catalogs.list = catalogList;
-                break;
-              }
+            case ALM_TAGS: {
+              let tagsList = item.attribute_options?.map(item => ({
+                value: item.label,
+                label: item.label,
+                checked: false,
+              }));
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              tagsList = updateFilterList(tagsList, queryParams, "tagName");
+              defaultFiltersState.tagName.list = tagsList;
+              break;
+            }
+            case ALM_CATALOG: {
+              let catalogList = item.attribute_options?.map(item => ({
+                value: item.label,
+                label: item.label,
+                checked: false,
+              }));
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              catalogList = updateFilterList(catalogList, queryParams, "catalogs");
+              defaultFiltersState.catalogs.list = catalogList;
+              break;
             }
           }
-        );
+        });
         const response = await apolloClient.query({
           query: GET_MAX_PRICE,
         });
         let maxPrice =
-          response.data?.products?.items[0]?.price_range?.maximum_price
-            ?.regular_price?.value || 0;
+          response.data?.products?.items[0]?.price_range?.maximum_price?.regular_price?.value || 0;
         if (defaultFiltersState.price.list) {
           defaultFiltersState.price.maxPrice = Math.ceil(maxPrice);
         }
@@ -501,15 +426,26 @@ class CommerceCustomHooks implements ICustomHooks {
       };
     }
   }
+  async addProductToCartNative(
+    trainingId: string
+  ): Promise<{ redirectionUrl: string; error: Array<string> }> {
+    return { ...defaultCartValues };
+  }
+  async buyNowNative(
+    trainingId: string
+  ): Promise<{ redirectionUrl: string; error: Array<string> }> {
+    return { ...defaultCartValues };
+  }
   async getUsersBadges(
     userId: string,
     params: QueryParams
-  ): Promise< {
-      badgeList : PrimeUserBadge[];
-      links: {next: any}
-  }
-  | undefined
-> {
+  ): Promise<
+    | {
+        badgeList: PrimeUserBadge[];
+        links: { next: any };
+      }
+    | undefined
+  > {
     if (isUserLoggedIn()) {
       return ALMCustomHooksInstance.getUsersBadges(userId, params);
     }
@@ -527,8 +463,5 @@ class CommerceCustomHooks implements ICustomHooks {
 
 const CommerceCustomHooksInstance = new CommerceCustomHooks();
 
-APIServiceInstance.registerServiceInstance(
-  "aem-commerce",
-  CommerceCustomHooksInstance
-);
+APIServiceInstance.registerServiceInstance("aem-commerce", CommerceCustomHooksInstance);
 export default CommerceCustomHooksInstance;

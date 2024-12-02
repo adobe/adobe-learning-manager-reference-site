@@ -11,11 +11,7 @@ governing permissions and limitations under the License.
 */
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
-import {
-  deleteComment,
-  deletePost,
-  deleteReply,
-} from "../../store/actions/social/action";
+import { deleteComment, deletePost, deleteReply } from "../../store/actions/social/action";
 import { getALMConfig } from "../../utils/global";
 import { RestAdapter } from "../../utils/restAdapter";
 
@@ -23,7 +19,7 @@ export const useCommunityObjectOptions = () => {
   const dispatch = useDispatch();
 
   const deletePostFromServer = useCallback(
-    async (postId) => {
+    async postId => {
       const baseApiUrl = getALMConfig().primeApiURL;
       await RestAdapter.ajax({
         url: `${baseApiUrl}/posts/${postId}`,
@@ -34,7 +30,7 @@ export const useCommunityObjectOptions = () => {
     [dispatch]
   );
 
-  const reportPostAbuse = useCallback(async (postId) => {
+  const reportPostAbuse = useCallback(async postId => {
     const baseApiUrl = getALMConfig().primeApiURL;
     const headers = { "content-type": "application/json" };
     const postBody = {
@@ -52,7 +48,7 @@ export const useCommunityObjectOptions = () => {
   }, []);
 
   const deleteCommentFromServer = useCallback(
-    async (commentId) => {
+    async commentId => {
       const baseApiUrl = getALMConfig().primeApiURL;
       await RestAdapter.ajax({
         url: `${baseApiUrl}/comments/${commentId}`,
@@ -63,7 +59,7 @@ export const useCommunityObjectOptions = () => {
     [dispatch]
   );
 
-  const reportCommentAbuse = useCallback(async (commentId) => {
+  const reportCommentAbuse = useCallback(async commentId => {
     const baseApiUrl = getALMConfig().primeApiURL;
     const headers = { "content-type": "application/json" };
     const postBody = {
@@ -81,7 +77,7 @@ export const useCommunityObjectOptions = () => {
   }, []);
 
   const deleteReplyFromServer = useCallback(
-    async (replyId) => {
+    async replyId => {
       const baseApiUrl = getALMConfig().primeApiURL;
       await RestAdapter.ajax({
         url: `${baseApiUrl}/replies/${replyId}`,
@@ -92,7 +88,7 @@ export const useCommunityObjectOptions = () => {
     [dispatch]
   );
 
-  const reportReplyAbuse = useCallback(async (replyId) => {
+  const reportReplyAbuse = useCallback(async replyId => {
     const baseApiUrl = getALMConfig().primeApiURL;
     const headers = { "content-type": "application/json" };
     const postBody = {

@@ -11,15 +11,26 @@ governing permissions and limitations under the License.
 */
 @import "../../../styles/variables.css";
 
-.title{
+.title {
   margin: 0;
 }
 
-.iframe{
+.iframe {
   width: 100%;
   height: calc(100% - 10px);
   border: none;
 }
 .primeAlertDialogButton {
   display: none !important;
+}
+
+.extensionDialogContainer {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+}
+
+.extensionDialogContainer hr {
+  height: 0 !important;
 }

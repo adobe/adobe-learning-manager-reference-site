@@ -57,9 +57,7 @@ const PrimeCommunityPoll = (props: any) => {
   const postSubmitActions = (id?: any) => {
     if (id) {
       let selectedOptionValue =
-        document
-          .getElementById(props.post.id + "-input-" + id)
-          ?.getAttribute("value") || "";
+        document.getElementById(props.post.id + "-input-" + id)?.getAttribute("value") || "";
       selectPollOption(selectedOptionValue, id);
     }
     setAlreadyVoted(true);
@@ -67,13 +65,10 @@ const PrimeCommunityPoll = (props: any) => {
 
   const pollSubmitCss = () => {
     for (let i = 0; i < pollStats.length; i++) {
-      let selectedElement = document.getElementById(
-        props.post.id + "-fill-" + i
-      ) as HTMLElement;
+      let selectedElement = document.getElementById(props.post.id + "-fill-" + i) as HTMLElement;
       if (selectedElement && pollStats[i]) {
         selectedElement.style.borderBottom = "solid #306EB5 4px";
-        selectedElement.style.width =
-          getVotePercent(parseInt(pollStats[i])) + "%";
+        selectedElement.style.width = getVotePercent(parseInt(pollStats[i])) + "%";
       }
     }
   };
@@ -107,24 +102,16 @@ const PrimeCommunityPoll = (props: any) => {
 
   const getVotePercent = (value: any) => {
     let percentValue = ((value * 100) / totalVotes) as any;
-    let valueUptoTwoDecimalPlaces = percentValue
-      ?.toString()
-      .match(/^-?\d+(?:\.\d{0,2})?/)[0];
+    let valueUptoTwoDecimalPlaces = percentValue?.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0];
     return valueUptoTwoDecimalPlaces.endsWith(".00")
-      ? valueUptoTwoDecimalPlaces.substring(
-          0,
-          valueUptoTwoDecimalPlaces.length - 3
-        )
+      ? valueUptoTwoDecimalPlaces.substring(0, valueUptoTwoDecimalPlaces.length - 3)
       : valueUptoTwoDecimalPlaces;
   };
 
   return (
     <>
       {pollOptions.map((item: any, index: any) => (
-        <div
-          className={styles.primeCommunityPollContainer}
-          key={props.post.id + "-" + index}
-        >
+        <div className={styles.primeCommunityPollContainer} key={props.post.id + "-" + index}>
           <div className={styles.primeCommunityPollButtonContainer}>
             <input
               id={props.post.id + "-input-" + (index + 1)}
@@ -156,10 +143,7 @@ const PrimeCommunityPoll = (props: any) => {
       ))}
       {choiceSelected !== "" && !alreadyVoted && (
         <div className={styles.primeCommunitySubmitPollContainer}>
-          <button
-            className={styles.primeCommunitySubmitPollButton}
-            onClick={submitPoll}
-          >
+          <button className={styles.primeCommunitySubmitPollButton} onClick={submitPoll}>
             {formatMessage({
               id: "alm.community.post.poll.submitChoice",
               defaultMessage: "Submit Choice",

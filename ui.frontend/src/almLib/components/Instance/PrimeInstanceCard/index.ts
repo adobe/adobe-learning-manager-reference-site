@@ -1,1 +1,1 @@
-export { default as PrimeInstanceCard } from "./PrimeInstanceCard"
+export { default as PrimeInstanceCard } from "./PrimeInstanceCard";

@@ -22,11 +22,15 @@ const mountingPoints = {
   profilePageContainer: ".profile__container",
   authorContainer: ".author__container",
   userSkillsContainer: ".skills__container",
+  userRecommendationsContainer: ".recommendations__container",
   activeFieldsContainer: ".activeFields__container",
   navigationBarContainer: ".navigationBar__container",
   mastHeadContainer: ".mastHead__container",
   categoryBrowserContainer: ".categoryBrowser__container",
   footerContainer: ".footer__container",
+  layoutContainer: ".prime-widgets__container",
+  calendarWidgetContainer: ".calendar_widget_container",
+  complianceWidgetContainer: ".compliance__widget__container",
 };
 
 (window as any).ALM = (window as any).ALM || {};

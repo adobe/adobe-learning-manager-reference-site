@@ -27,9 +27,7 @@ const PrimeCommunityReply = (props: any) => {
   const myVoteStatus = reply.myVoteStatus ? reply.myVoteStatus : "";
   const [myUpVoteStatus, setMyUpVoteStatus] = useState(myVoteStatus === UPVOTE);
   const [upVoteCount, setUpVoteCount] = useState(reply.upVote);
-  const [myDownVoteStatus, setMyDownVoteStatus] = useState(
-    myVoteStatus === DOWNVOTE
-  );
+  const [myDownVoteStatus, setMyDownVoteStatus] = useState(myVoteStatus === DOWNVOTE);
   const [downVoteCount, setDownVoteCount] = useState(reply.downVote);
   const firstRunForUpvote = useRef(true);
   const firstRunForDownvote = useRef(true);
@@ -41,9 +39,7 @@ const PrimeCommunityReply = (props: any) => {
       firstRunForUpvote.current = false;
       return;
     }
-    myUpVoteStatus === true
-      ? setUpVoteCount(upVoteCount + 1)
-      : setUpVoteCount(upVoteCount - 1);
+    myUpVoteStatus === true ? setUpVoteCount(upVoteCount + 1) : setUpVoteCount(upVoteCount - 1);
   }, [myUpVoteStatus]);
 
   useEffect(() => {
@@ -60,20 +56,18 @@ const PrimeCommunityReply = (props: any) => {
     //if already upVoted, delete vote
     myUpVoteStatus ? deleteReplyVote(reply.id, UP) : voteReply(reply.id, UP);
     if (!myUpVoteStatus && myDownVoteStatus) {
-      setMyDownVoteStatus((myDownVoteStatus) => !myDownVoteStatus);
+      setMyDownVoteStatus(myDownVoteStatus => !myDownVoteStatus);
     }
-    setMyUpVoteStatus((myUpVoteStatus) => !myUpVoteStatus);
+    setMyUpVoteStatus(myUpVoteStatus => !myUpVoteStatus);
   };
 
   const downVoteButtonClickHandler = () => {
     //if already downVoted, delete vote
-    myDownVoteStatus
-      ? deleteReplyVote(reply.id, DOWN)
-      : voteReply(reply.id, DOWN);
+    myDownVoteStatus ? deleteReplyVote(reply.id, DOWN) : voteReply(reply.id, DOWN);
     if (!myDownVoteStatus && myUpVoteStatus) {
-      setMyUpVoteStatus((myUpVoteStatus) => !myUpVoteStatus);
+      setMyUpVoteStatus(myUpVoteStatus => !myUpVoteStatus);
     }
-    setMyDownVoteStatus((myDownVoteStatus) => !myDownVoteStatus);
+    setMyDownVoteStatus(myDownVoteStatus => !myDownVoteStatus);
   };
 
   const deleteReplyHandler = async () => {
@@ -82,9 +76,9 @@ const PrimeCommunityReply = (props: any) => {
     }
   };
 
-  const updateReply = (value: any) => {
+  const updateReply = async (value: any) => {
     if (typeof props.updateReply === "function") {
-      props.updateReply(reply.id, value);
+      await props.updateReply(reply.id, value);
       setReplyText(value);
       setShowEditReplyView(false);
     }

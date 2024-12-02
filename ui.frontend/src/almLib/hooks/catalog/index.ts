@@ -11,6 +11,6 @@ governing permissions and limitations under the License.
 */
 export * from "./useCatalog";
 export * from "./useFilter";
-export * from "./useTrainingCard"
-export * from "./useTrainingPage"
+export * from "./useTrainingCard";
+export * from "./useTrainingPage";
 export * from "./useSearch";

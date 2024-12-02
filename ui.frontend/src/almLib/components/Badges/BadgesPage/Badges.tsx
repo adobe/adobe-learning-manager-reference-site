@@ -13,13 +13,8 @@ import { useIntl } from "react-intl";
 import { Provider, lightTheme } from "@adobe/react-spectrum";
 
 const Badges = (props: any) => {
-  const {
-    badges,
-    loadMoreBadge,
-    isLoading,
-    handleDownloadPdfClick,
-    handleDownloadImgClick,
-  } = useBadges();
+  const { badges, loadMoreBadge, isLoading, handleDownloadPdfClick, handleDownloadImgClick } =
+    useBadges();
   const { formatMessage } = useIntl();
   const elementRef = useRef(null);
   useLoadMore({
@@ -34,12 +29,8 @@ const Badges = (props: any) => {
       <div className={styles.dashboardcontainer} id="badges">
         <div className={styles.pagecontainer}>
           <div className={styles.headingContainer}>
-            <h1 className={styles.heading}>
-              {formatMessage({ id: "alm.text.badges.header" })}
-            </h1>
-            <div className={styles.text}>
-              {formatMessage({ id: "alm.text.badges.summary" })}
-            </div>
+            <h1 className={styles.heading}>{formatMessage({ id: "alm.text.badges.header" })}</h1>
+            <div className={styles.text}>{formatMessage({ id: "alm.text.badges.summary" })}</div>
           </div>
 
           <div className={styles.badgebody}>

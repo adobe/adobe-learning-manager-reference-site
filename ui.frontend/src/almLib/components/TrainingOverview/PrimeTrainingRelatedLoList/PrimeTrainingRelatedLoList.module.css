@@ -1,0 +1,9 @@
+.headerText {
+  font-size: var(--prime-font-size-16);
+  font-weight: var(--prime-font-weight-700);
+  color: var(--prime-color-black);
+}
+.seperator {
+  border-bottom: 1px solid var(--prime-color-neutral-3);
+  margin-top: 12px;
+}

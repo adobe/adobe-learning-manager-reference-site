@@ -25,7 +25,7 @@ governing permissions and limitations under the License.
 .courseInfoHeader span {
   font-weight: bold;
 }
-.courseInfoHeaderBlock{
+.courseInfoHeaderBlock {
   width: 90%;
 }
 .courseDetailsContainer {
@@ -81,17 +81,25 @@ governing permissions and limitations under the License.
   margin: 0;
   text-transform: capitalize;
 }
-
+.overview {
+  overflow: hidden;
+  display: inline-block;
+  width: 100%;
+  white-space: normal !important;
+  height: auto !important;
+  font-family: var(--prime-font-family);
+}
 .instancesContainer {
-  border: 2px solid #dbdbdb;
   opacity: 1;
-  margin-top: 50px;
+  margin-top: 1rem;
 }
 .instancesHeaderSection {
   display: flex;
   padding: 10px 20px;
   height: 60px;
   align-items: center;
+  width: 100%;
+  border: 2px solid var(--prime-color-neutral-3);
   /* border-bottom: 2px solid rgba(0, 0, 0, 0.1); */
 }
 .commonHeader {
@@ -103,35 +111,37 @@ governing permissions and limitations under the License.
   font-weight: bold;
 }
 .instanceNameWrapper {
-  width: 45%;
+  width: 25%;
 }
 .dateWrapper {
-  width: 25%;
+  width: 100%;
 }
 .completionDateWrapper {
-  width: 40%;
+  width: 100%;
 }
 .priceWrapper {
-  width: 15%;
+  width: 100%;
 }
 .locationWrapper {
-  width: 25%;
+  width: 100%;
 }
 .actionWrapper {
-  width: 15%;
+  width: 20%;
   align-items: flex-start;
   justify-content: flex-end;
   display: flex;
+}
+.middleSection {
+  display: flex;
+  width: 55%;
 }
 
 .instanceList {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  border-left: 2px solid #dbdbdb;
-  border-right: 2px solid #dbdbdb;
+  border: 2px solid var(--prime-color-neutral-3);
   border-top: none;
-  border-bottom: 1px solid #dbdbdb;
   background-color: var(--prime-color-white);
 }
 
@@ -156,6 +166,42 @@ governing permissions and limitations under the License.
   margin: 0 auto;
   min-height: 750px;
 }
+.loDetails {
+  max-width: 85%;
+}
+.breadcrumbMobile {
+  background: var(--prime-color-neutral-1);
+  position: absolute;
+  width: 100%;
+  left: 0;
+  justify-content: center;
+  display: flex;
+}
+
+.lightThemeLinkColor a {
+  color: var(--prime-color-link);
+}
+
+.darkThemeLinkColor a {
+  color: var(--prime-color-link-dark);
+}
+
+.languageFilterWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 1.25rem;
+  margin-bottom: 1rem;
+  font-size: var(--prime-font-size-16);
+}
+
+.languageFilter {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-neutral-2);
+}
 
 @media screen and (max-width: 1024px) {
   .pageContainer {
@@ -165,7 +211,6 @@ governing permissions and limitations under the License.
   }
 }
 @media screen and (max-width: 450px) {
-
   .pageContainerBackground {
     width: 100% !important;
   }
@@ -213,26 +258,26 @@ governing permissions and limitations under the License.
     color: var(--prime-color-black);
   }
 
-  .viewButtonShaded svg{
+  .viewButtonShaded svg {
     width: inherit;
     height: inherit;
   }
 
-  .viewButton svg{
+  .viewButton svg {
     width: inherit;
     height: inherit;
   }
 
-  .viewButtonBox{
+  .viewButtonBox {
     margin-right: 5px;
     position: inherit;
   }
 
-  .primeTrainingsCards{
+  .primeTrainingsCards {
     margin-left: 20px !important;
   }
 
-  .instancePageHeading{
+  .instancePageHeading {
     margin: 20px !important;
     display: inline !important;
   }
@@ -260,45 +305,49 @@ governing permissions and limitations under the License.
   padding: 0;
   width: 100%;
   gap: 20px;
-  margin-top: 70px;
+  margin-top: 1rem;
 }
 
 .breadcrumbParent {
   display: flex;
-  padding-top: 25px;
+  padding: 12px 0;
+  max-width: var(--prime-container-max-width-desktop);
+  width: 950px;
+  justify-content: flex-start;
+  color: var(--prime-color-neutral-3);
 }
 .breadcrumbLink {
-  color: var(--prime-color-black);
+  color: var(--prime-color-neutral-3);
   cursor: pointer;
   max-width: 165px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
 }
 .breadcrumbLink:hover {
   text-decoration: underline;
 }
 .breadcrumbArrow {
-  color: var(--prime-color-black);
+  color: var(--prime-color-neutral-3);
   cursor: pointer;
 }
 .breadcrumbDesktop {
   display: flex;
 }
 
-.viewButton svg {
+.viewButton svg,
+.viewButtonShaded svg {
   transform: scale(0.6);
-  fill: #777;
   position: relative;
   right: 8px;
 }
 
 .viewButtonShaded svg {
-  transform: scale(0.6);
-  fill: #777;
-  position: relative;
-  right: 8px;
+  fill: var(--prime-color-primary);
 }
 
 .pageContainerBackground {
@@ -317,6 +366,8 @@ governing permissions and limitations under the License.
   border-color: transparent;
   position: relative;
   align-items: center;
+  border: 1.5px solid var(--prime-color-primary) !important;
+  border-radius: 4px;
 }
 
 .viewButtonBox {
@@ -329,9 +380,8 @@ governing permissions and limitations under the License.
   display: flex;
   justify-content: center;
   align-items: center;
-  position:relative;
   bottom: 30px;
-  /* margin-top: 0px; */
+  margin-left: auto;
 }
 
 .instancesContainerBox {
@@ -354,6 +404,35 @@ governing permissions and limitations under the License.
   align-items: center;
 }
 
-.instancePageHeading{
+.instancePageHeading {
   display: none;
+}
+
+.noInstanceAvailableContainer {
+  display: flex;
+  align-items: flex-start;
+  font-size: var(--prime-font-size-16);
+  line-height: 26px;
+  letter-spacing: 0px;
+  color: var(--prime-color-nc1);
+  margin: 20px 0;
+  font-weight: normal;
+}
+
+.noInstanceAvailable {
+  width: 90%;
+}
+
+.noInstanceAvailable a {
+  color: var(--prime-color-link);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.alertIcon {
+  margin-right: 8px;
+  margin-top: 4px;
+  height: 18px;
+  width: 18px;
+  fill: var(--prime-error-color);
 }

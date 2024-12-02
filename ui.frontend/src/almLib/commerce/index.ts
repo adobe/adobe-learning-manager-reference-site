@@ -10,8 +10,4 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-export {
-  ADD_PRODUCTS_TO_CART,
-  GET_COMMERCE_FILTERS,
-  GET_COMMERCE_TRAININGS,
-} from "./commerce.gql";
+export { ADD_PRODUCTS_TO_CART, GET_COMMERCE_FILTERS, GET_COMMERCE_TRAININGS } from "./commerce.gql";

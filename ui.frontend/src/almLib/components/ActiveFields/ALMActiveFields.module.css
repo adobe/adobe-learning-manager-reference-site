@@ -45,10 +45,7 @@ governing permissions and limitations under the License.
   max-width: 100%;
   width: var(--spectrum-global-dimension-size-2400);
   min-width: var(--spectrum-global-dimension-size-600);
-  min-width: var(
-    --spectrum-dropdown-min-width,
-    var(--spectrum-global-dimension-size-600)
-  );
+  min-width: var(--spectrum-dropdown-min-width, var(--spectrum-global-dimension-size-600));
   display: inline-block;
   position: relative;
   /* width: 348px; */

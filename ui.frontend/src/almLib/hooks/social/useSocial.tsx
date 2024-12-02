@@ -9,71 +9,59 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import {useCallback,useState } from "react";
+import { useCallback, useState } from "react";
 import { getALMConfig, getALMUser } from "../../utils/global";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { useDispatch, useSelector } from "react-redux";
 
-
 import { State } from "../../store";
 import { loadFavouriteBoards } from "../../store/actions/social";
 
+export const useSocial = () => {
+  const { userFavBoards } = useSelector((state: State) => state.social);
+  const [isLoading, setIsLoading] = useState(false);
 
-export const useSocial = () =>{
-    const {userFavBoards} = useSelector(
-        (state: State) => state.social
-      );
-    const [isLoading , setIsLoading] = useState(false);
-    
-    
-    const config = getALMConfig();
-    const dispatch = useDispatch();
+  const config = getALMConfig();
+  const dispatch = useDispatch();
 
+  const fetchFollowers = useCallback(async () => {
+    try {
+      console.log("-------- followers api called-------");
+      const user = await getALMUser();
+      const params: QueryParams = {};
+      const response = await RestAdapter.get({
+        url: `${config.primeApiURL}/socialProfiles/${user?.user.id}/followers`,
+        params: params,
+      });
+      const parsedResponse = JsonApiParse(response);
 
+      return parsedResponse;
+    } catch (e) {
+      console.log(e);
+    }
+  }, [config.primeApiURL]);
 
+  const fetchFavouriteBoards = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      console.log("-------- Favourite Boards api called-------");
+      const params: QueryParams = {};
+      params["filter.boardType"] = "FavoriteBoards";
 
-    const fetchFollowers = useCallback(async() => {
-        try{
-            
-            console.log("-------- followers api called-------" ,)
-            const user = await getALMUser()
-            const params: QueryParams = {};
-            const response = await RestAdapter.get({
-                url: `${config.primeApiURL}/socialProfiles/${user?.user.id}/followers`,
-                params: params,
-              });
-            const parsedResponse = JsonApiParse(response);
- 
+      const response = await RestAdapter.get({
+        url: `${config.primeApiURL}/boards`,
+        params: params,
+      });
+      const parsedResponse = JsonApiParse(response).boardList || [];
 
-            return parsedResponse;
-        } catch(e){
-            console.log(e);
-        }
-    } ,[config.primeApiURL])
+      dispatch(loadFavouriteBoards(parsedResponse));
 
-    const fetchFavouriteBoards = useCallback(async() => {
-        try{
-            setIsLoading(true);
-            console.log("-------- Favourite Boards api called-------" ,)
-            const params: QueryParams = { } ;
-            params["filter.boardType"] = "FavoriteBoards";
+      setIsLoading(false);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [dispatch, config.primeApiURL]);
 
-            
-            const response = await RestAdapter.get({
-                url: `${config.primeApiURL}/boards`,
-                params: params,
-              });
-            const parsedResponse = JsonApiParse(response).boardList || [];
-            
-            dispatch(loadFavouriteBoards(parsedResponse));
-            
-            setIsLoading(false);
-
-        } catch(e){
-            console.log(e);
-        }
-    } ,[dispatch , config.primeApiURL])
-
-    return {  userFavBoards , isLoading  , setIsLoading , fetchFollowers , fetchFavouriteBoards};
-}
+  return { userFavBoards, isLoading, setIsLoading, fetchFollowers, fetchFavouriteBoards };
+};

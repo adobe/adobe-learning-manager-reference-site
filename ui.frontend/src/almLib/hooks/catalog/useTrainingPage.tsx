@@ -25,18 +25,30 @@ import {
   PrimeNote,
 } from "../../models/PrimeModels";
 import { getJobaidUrl, isJobaidContentTypeUrl } from "../../utils/catalog";
-import { COURSE, WAITING } from "../../utils/constants";
 import {
-  getAccessToken,
+  ADMIN_ENROLL,
+  CERTIFICATION,
+  COURSE,
+  DEFAULT_INCLUDE_LO_OVERVIEW,
+  ENGLISH_LOCALE,
+  GET_REQUEST,
+  LEARNING_PROGRAMS,
+  PREVIOUS_BREADCRUMB_PATH,
+  RECOMMENDATIONS,
+  RETIRED,
+  SKILLS_INCLUDE,
+  WAITING,
+} from "../../utils/constants";
+import {
   getALMAccount,
   getALMConfig,
+  getALMObject,
   getALMUser,
   getPageAttributes,
 } from "../../utils/global";
 import {
   filterTrainingInstance,
   getLocale,
-  popFromParentPathStack,
   useBadge,
   useCardIcon,
   useLocalizedMetaData,
@@ -44,21 +56,30 @@ import {
 } from "../../utils/hooks";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { LaunchPlayer } from "../../utils/playback-utils";
-import { QueryParams, RestAdapter } from "../../utils/restAdapter";
+import { IRestAdapterAjaxOptions, QueryParams, RestAdapter } from "../../utils/restAdapter";
 import { GetTranslation } from "../../utils/translationService";
+import { findPrimaryEnrolledInstance } from "./useTrainingPageHelper";
+import { useUserContext } from "../../contextProviders/userContextProvider";
+import { fetchCourseInstanceMapping, getTraining } from "../../utils/lo-utils";
 
-const DEFAULT_INCLUDE_LO_OVERVIEW =
-  "instances.enrollment.loResourceGrades,enrollment.loInstance.loResources.resources,prerequisiteLOs,subLOs.prerequisiteLOs,subLOs.subLOs.prerequisiteLOs,authors,subLOs.enrollment.loResourceGrades, subLOs.subLOs.enrollment.loResourceGrades, subLOs.subLOs.instances.loResources.resources, subLOs.instances.loResources.resources,instances.loResources.resources,supplementaryLOs.instances.loResources.resources,supplementaryResources,subLOs.supplementaryResources,subLOs.enrollment,instances.badge,skills.skillLevel.badge,skills.skillLevel.skill,instances.loResources.resources.room,subLOs.enrollment.loInstance.loResources.resources,prerequisiteLOs.enrollment";
-
+import { determineLoType, getErrorMessage } from "../../utils/lo-utils";
+import {
+  clearBreadcrumbPathDetails,
+  getBreadcrumbPath,
+  popFromBreadcrumbPath,
+  restorePreviousBreadcrumbPath,
+} from "../../utils/breadcrumbUtils";
+interface RatingResponse {
+  awardedPoints: number;
+}
 export const useTrainingPage = (
   trainingId: string,
   instanceId: string = "",
   params: QueryParams = {},
   shouldSkipLOCalls: boolean = false
 ) => {
-  const [trainingOverviewAttributes, setTrainingOverviewAttributes] = useState(
-    () =>
-      getPageAttributes("trainingOverviewPage", "trainingOverviewAttributes")
+  const [trainingOverviewAttributes, setTrainingOverviewAttributes] = useState(() =>
+    getPageAttributes("trainingOverviewPage", "trainingOverviewAttributes")
   );
   const baseApiUrl = getALMConfig().primeApiURL;
   const headers = { "content-type": "application/json" };
@@ -68,97 +89,85 @@ export const useTrainingPage = (
   );
   const { formatMessage, locale } = useIntl();
   const [almAlert] = useAlert();
+  const user = useUserContext() || {};
+  const contentLocale = user?.contentLocale || ENGLISH_LOCALE;
 
   const [currentState, setCurrentState] = useState({
     trainingInstance: {} as PrimeLearningObjectInstance,
     isPreviewEnabled: false,
+    isFlexLPValidationEnabled: false,
     isLoading: true,
     errorCode: "",
+    courseInstanceMap: {},
   });
-  const { trainingInstance, isPreviewEnabled, isLoading, errorCode } =
-    currentState;
-  const [instanceSummary, setInstanceSummary] = useState(
-    {} as PrimeLoInstanceSummary
-  );
+  const {
+    trainingInstance,
+    isPreviewEnabled,
+    isFlexLPValidationEnabled,
+    isLoading,
+    errorCode,
+    courseInstanceMap,
+  } = currentState;
+  const [instanceSummary, setInstanceSummary] = useState({} as PrimeLoInstanceSummary);
   const [notes, setNotes] = useState([] as PrimeNote[]);
+  const [relatedCourses, setRelatedCourses] = useState([] as PrimeLearningObject[]);
+  const [relatedLPs, setRelatedLPs] = useState([] as PrimeLearningObject[]);
   const [lastPlayingLoResourceId, setLastPlayingLoResourceId] = useState("");
+  const [lastPlayingCourseId, setLastPlayingCourseId] = useState("");
+  const [lastPlayingCourseInstanceId, setLastPlayingCourseInstanceId] = useState("");
   const [refreshNotes, setRefreshNotes] = useState(false);
   const [refreshTraining, setRefreshTraining] = useState(false);
-  const [refreshSelectedInstances, setRefreshSelectedInstances] = useState(false);
+  const [enrollViaModuleClick, setEnrollViaModuleClick] = useState([] as any); // storing training id, instance id and module id
+  const [isRegisterInterestEnabled, setIsRegisterInterestEnabled] = useState(false);
+  const [awardedPoints, setAwardedPoints] = useState<number>(0);
+  const [isCourseEnrollable, setIsCourseEnrollable] = useState(false);
+  const [isCourseEnrolled, setIsCourseEnrolled] = useState(false);
+
   const training = trainingInstance.learningObject;
   const [waitlistPosition, setWaitlistPosition] = useState("");
-  const [selectedInstanceInfo, setSelectedInstanceInfo] = useState({} as any);
-  const [selectedLoList,setSelectedLoList ] = useState({} as any);
+  const [courseInstanceMapping, setCourseInstanceMapping] = useState<{
+    [key: string]: any;
+  }>({}); // For flex lp instance mapping
+  const [selectedLoList, setSelectedLoList] = useState({} as any);
   const dispatch = useDispatch();
+  const isCertification =
+    training?.loType === CERTIFICATION || trainingId.includes("certification");
+  const isCourse = training?.loType === COURSE;
 
-  const sendInstanceId = useCallback(
+  const setSelectedInstanceInfo = useCallback(
     (
       selectedInstanceId: string,
       courseId: string,
       courseName: string,
-      isbuttonChange: boolean,
+      isInstanceUpdated: boolean,
       instanceName: string,
       contentModuleDuration: number,
-      isCompleted= false,
+      isInstanceSwitchAllowed = true
     ) => {
-      setSelectedInstanceInfo((prevSelectedInstanceInfo: any) => {
+      setCourseInstanceMapping((prevSelectedInstanceInfo: any) => {
         return {
           ...prevSelectedInstanceInfo,
           [courseId]: {
             instanceId: selectedInstanceId,
             name: courseName,
-            isbuttonChange: isbuttonChange,
+            isInstanceUpdated: isInstanceUpdated,
             instanceName: instanceName,
             courseDuration: contentModuleDuration,
+            isInstanceSwitchAllowed: isInstanceSwitchAllowed,
           },
         };
       });
-
-      if(isCompleted){
-        // Initialisation - checking completed lists
-        const temp2 = {...selectedLoList};
-        temp2[courseId] = {
-          instanceId: selectedInstanceId,
-          name: courseName,
-          isbuttonChange: isbuttonChange,
-          instanceName: instanceName,
-          courseDuration: contentModuleDuration,
-        };
-        setSelectedLoList({ ...temp2 });
-      }
     },
-    [selectedInstanceInfo]
+    [courseInstanceMapping]
   );
   const setInstancesForFlexLPOnLoad = useCallback(
-    (selectedInstancesInfo) => {
-      setSelectedInstanceInfo({ ...selectedInstancesInfo });
+    selectedInstancesInfo => {
+      setCourseInstanceMapping({ ...selectedInstancesInfo });
     },
-    [selectedInstanceInfo]
+    [courseInstanceMapping]
   );
 
-  useEffect(() => {
-    if (training && training.enrollment) {
-      const temporary = { ...selectedInstanceInfo };
-      training.subLOs?.forEach((item: any) => {
-        if (item.enrollment && item.enrollment.loInstance && item.loType === COURSE) {
-          temporary[item.id] = {
-            instanceId: item.enrollment?.loInstance.id,
-            name: item.localizedMetadata[0].name,
-            isbuttonChange: false,
-            instanceName: item.enrollment?.loInstance.localizedMetadata[0].name,
-            courseDuration: item.duration,
-          };
-        }
-      });
-      setSelectedInstanceInfo({ ...temporary });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, refreshSelectedInstances]);
-
-  const [
-    renderTrainingOverviewAttributes,
-    setRenderTrainingOverviewAttributes,
-  ] = useState(false);
+  const [renderTrainingOverviewAttributes, setRenderTrainingOverviewAttributes] = useState(false);
 
   useEffect(() => {
     if (training && !renderTrainingOverviewAttributes) {
@@ -171,36 +180,47 @@ export const useTrainingPage = (
   useEffect(() => {
     if (!trainingId) return;
     const getTrainingInstance = async () => {
+      const loType = determineLoType(trainingId);
       try {
         let queryParam: QueryParams = {};
         queryParam["include"] = params.include || DEFAULT_INCLUDE_LO_OVERVIEW;
         queryParam["useCache"] = true;
         queryParam["filter.ignoreEnhancedLP"] = false;
         const account = await getALMAccount();
-
-        const response = await APIServiceInstance.getTraining(
-          trainingId,
-          queryParam
-        );
+        const response = await APIServiceInstance.getTraining(trainingId, queryParam);
 
         if (response) {
+          if (response.enrollmentType === ADMIN_ENROLL && !response.enrollment) {
+            const errorMessage = loType && getErrorMessage(loType);
+            errorMessage && navigateToCatalogPageHandler(errorMessage);
+            return;
+          }
           const trainingInstance = filterTrainingInstance(response, instanceId);
+          let courseInstanceMap = {};
+          if (response.loType !== COURSE && !response.enrollment) {
+            fetchCourseInstanceMapping(response, trainingInstance.id, courseInstanceMap);
+          }
           setCurrentState({
             trainingInstance,
             isPreviewEnabled: account.enableModulePreview || false,
+            isFlexLPValidationEnabled: account.flexLPValidationsEnabled || false,
             isLoading: false,
             errorCode: "",
+            courseInstanceMap,
           });
-          setRefreshSelectedInstances((prevState) => !prevState);
         }
       } catch (error: any) {
         console.log("Error while loading training " + error);
         setCurrentState({
           trainingInstance: {} as PrimeLearningObjectInstance,
           isPreviewEnabled: false,
+          isFlexLPValidationEnabled: false,
           isLoading: false,
           errorCode: error.status,
+          courseInstanceMap: {},
         });
+        const errorMessage = loType && getErrorMessage(loType);
+        errorMessage && navigateToCatalogPageHandler(errorMessage);
       }
     };
     if (!shouldSkipLOCalls) {
@@ -228,11 +248,7 @@ export const useTrainingPage = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trainingInstance]);
 
-  const getWaitlistPosition = async ({
-    enrollmentId,
-  }: {
-    enrollmentId: string;
-  }) => {
+  const getWaitlistPosition = async ({ enrollmentId }: { enrollmentId: string }) => {
     try {
       let response = await RestAdapter.ajax({
         url: `${baseApiUrl}/enrollments/${enrollmentId}/waitlistPosition`,
@@ -246,6 +262,11 @@ export const useTrainingPage = (
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const navigateToCatalogPageHandler = (errorMessage: string) => {
+    almAlert(true, errorMessage, AlertType.error);
+    getALMObject().navigateToCatalogPage({ timeOut: 300 });
   };
 
   const enrollmentHandler = useCallback(
@@ -263,22 +284,19 @@ export const useTrainingPage = (
       };
       const emptyResponse = {} as PrimeLearningObjectInstanceEnrollment;
       try {
-        const response = await APIServiceInstance.enrollToTraining(
-          queryParam,
-          headers
-        );
+        const response = await APIServiceInstance.enrollToTraining(queryParam, headers);
         if (!isSupplementaryLO) {
           //Refresh the training data
-          setRefreshTraining((prevState) => !prevState);
-          setRefreshNotes((prevState) => !prevState);
+          setRefreshTraining(prevState => !prevState);
+          setRefreshNotes(prevState => !prevState);
         }
         if (response) {
           return response.learningObjectInstanceEnrollment;
         }
         return emptyResponse;
-      } catch (error) {
-        almAlert(true, GetTranslation("alm.enrollment.error"), AlertType.error);
-        return emptyResponse;
+      } catch (error: any) {
+        const errorId = JSON.parse(error.responseText).errorId;
+        throw new Error(errorId);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -313,8 +331,8 @@ export const useTrainingPage = (
 
         if (!isSupplementaryLO) {
           //Refresh the training data
-          setRefreshTraining((prevState) => !prevState);
-          setRefreshNotes((prevState) => !prevState);
+          setRefreshTraining(prevState => !prevState);
+          setRefreshNotes(prevState => !prevState);
         }
         if (response) {
           return response.learningObjectInstanceEnrollment;
@@ -329,27 +347,19 @@ export const useTrainingPage = (
   );
 
   const unEnrollmentHandler = useCallback(
-    async ({
-      enrollmentId,
-      isFlexLp = false,
-      isSupplementaryLO = false,
-    } = {}) => {
+    async ({ enrollmentId, isFlexLp = false, isSupplementaryLO = false } = {}) => {
       try {
         await APIServiceInstance.unenrollFromTraining(enrollmentId);
         if (!isSupplementaryLO) {
           //just to refresh the training data
-          setRefreshTraining((prevState) => !prevState);
+          setRefreshTraining(prevState => !prevState);
           if (isFlexLp) {
-            setSelectedInstanceInfo({});
+            setCourseInstanceMapping({});
           }
           return true;
         }
       } catch (error) {
-        almAlert(
-          true,
-          GetTranslation("alm.unenrollment.error"),
-          AlertType.error
-        );
+        throw new Error();
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -357,11 +367,7 @@ export const useTrainingPage = (
   );
 
   const updateEnrollmentHandler = useCallback(
-    async ({
-      enrollmentId,
-      instanceEnrollList,
-      isFlexLp = false,
-    }) => {
+    async ({ enrollmentId, instanceEnrollList, isFlexLp = false }) => {
       const baseApiUrl = getALMConfig().primeApiURL;
       const headers = { "content-type": "application/json" };
 
@@ -372,11 +378,8 @@ export const useTrainingPage = (
           body: JSON.stringify(instanceEnrollList),
           headers: headers,
         });
-        if (isFlexLp) {
-          setSelectedInstanceInfo({});
-        }
-        setRefreshTraining((prevState) => !prevState);
-        setRefreshNotes((prevState) => !prevState);
+        setRefreshTraining(prevState => !prevState);
+        setRefreshNotes(prevState => !prevState);
       } catch (error) {
         almAlert(true, GetTranslation("alm.enrollment.error"), AlertType.error);
       }
@@ -397,33 +400,53 @@ export const useTrainingPage = (
     }
   }, [trainingInstance]);
 
+  const addToCartNativeHandler = useCallback(async (): Promise<{
+    redirectionUrl: string;
+    error: any;
+  }> => {
+    try {
+      return await APIServiceInstance.addProductToCartNative(trainingInstance.id);
+    } catch (error) {
+      return { redirectionUrl: "", error: error };
+    }
+  }, [trainingInstance]);
+
+  const buyNowNativeHandler = useCallback(async (): Promise<{
+    redirectionUrl: string;
+    error: any;
+  }> => {
+    try {
+      return await APIServiceInstance.buyNowNative(trainingInstance.id);
+    } catch (error) {
+      return { redirectionUrl: "", error: error };
+    }
+  }, [trainingInstance]);
+
   const getContentLocales = async () => {
     const account = await getALMAccount();
     const contentLocales = account.contentLocales;
     return contentLocales;
   };
 
-  const jobAidClickHandler = useCallback(
-    (supplymentaryLo: PrimeLearningObject) => {
-      if (isJobaidContentTypeUrl(supplymentaryLo)) {
-        window.open(getJobaidUrl(supplymentaryLo), "_blank");
-      } else {
-        LaunchPlayer({ trainingId: supplymentaryLo.id });
-      }
-    },
-    []
-  );
+  const jobAidClickHandler = useCallback((supplymentaryLo: PrimeLearningObject) => {
+    if (isJobaidContentTypeUrl(supplymentaryLo)) {
+      window.open(getJobaidUrl(supplymentaryLo), "_blank");
+    } else {
+      LaunchPlayer({ trainingId: supplymentaryLo.id });
+    }
+  }, []);
 
   const getPlayerLoState = async ({
     loId,
     loInstanceId,
+    loType,
   }: {
     loId: string;
     loInstanceId: string;
+    loType: string;
   }) => {
     try {
-      const userResponse = await getALMUser();
-      const userId = userResponse?.user?.id;
+      const userId = user.id;
       const response = await RestAdapter.ajax({
         url: `${baseApiUrl}/users/${userId}/playerLOState?loId=${loId}&loInstanceId=${loInstanceId}`,
         method: "GET",
@@ -431,8 +454,40 @@ export const useTrainingPage = (
 
       if (typeof response === "string") {
         const parsedResponse = JSON.parse(response);
-        setLastPlayingLoResourceId(parsedResponse.lastPlayingLoResourceId);
+        if (loType === COURSE) {
+          setLastPlayingLoResourceId(parsedResponse.lastPlayingLoResourceId);
+        } else if (parsedResponse.lastPlayingCourse) {
+          const lastPlayingCourseId = `course:${parsedResponse.lastPlayingCourse}`;
+          setLastPlayingCourseId(lastPlayingCourseId);
+          const loInstanceId = findPrimaryEnrolledInstance(training, lastPlayingCourseId);
+          if (loInstanceId) {
+            setLastPlayingCourseInstanceId(loInstanceId);
+            getPlayerLoState({
+              loId: lastPlayingCourseId,
+              loInstanceId: loInstanceId,
+              loType: COURSE,
+            });
+          }
+        }
       }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const updatePlayerLoState = async ({ body }: { body: any }) => {
+    try {
+      const userId = user.id;
+      const loId = trainingId;
+      const loInstanceId =
+        instanceId || trainingInstance.id || training?.enrollment?.loInstance?.id;
+
+      await RestAdapter.ajax({
+        url: `${baseApiUrl}/users/${userId}/playerLOState?loId=${loId}&loInstanceId=${loInstanceId}`,
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: { ...headers, "content-type": "application/json" },
+      });
     } catch (e) {
       console.log(e);
     }
@@ -443,21 +498,26 @@ export const useTrainingPage = (
       getPlayerLoState({
         loId: trainingId,
         loInstanceId: instanceId || trainingInstance.id,
+        loType: training?.loType,
       });
 
       if (trainingInstance.enrollment.state === WAITING) {
         getWaitlistPosition({ enrollmentId: trainingInstance.enrollment.id });
       }
+    } else if (training && training.loType !== COURSE && training.enrollment) {
+      // For LP and Certification, we don't get enrollment inside instance, check from public api
+      // Checking primary enrollment for LP and Certification
+      getPlayerLoState({
+        loId: trainingId,
+        loInstanceId: training.enrollment.loInstance.id,
+        loType: training?.loType,
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trainingInstance]);
 
   useEffect(() => {
-    if (
-      training?.loType === COURSE &&
-      trainingInstance?.enrollment &&
-      !shouldSkipLOCalls
-    ) {
+    if (training?.loType === COURSE && trainingInstance?.enrollment && !shouldSkipLOCalls) {
       getNotes();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -474,12 +534,11 @@ export const useTrainingPage = (
       isResetRequired,
     } = {}) => {
       const refreshTrainingandNotes = () => {
-        setRefreshTraining((prevState) => !prevState);
-        setRefreshNotes((prevState) => !prevState);
+        setRefreshTraining(prevState => !prevState);
+        setRefreshNotes(prevState => !prevState);
       };
       const loId = id || trainingId;
-      let loInstanceId =
-        trainingInstanceId || instanceId || trainingInstance.id;
+      let loInstanceId = trainingInstanceId || instanceId || trainingInstance.id;
 
       LaunchPlayer({
         trainingId: loId,
@@ -497,28 +556,37 @@ export const useTrainingPage = (
 
   const alternateLanguages = useMemo(async () => {
     let alternateLanguages = new Set<string>();
-    getLocale(trainingInstance, alternateLanguages, locale);
+    const userResponse = await getALMUser();
+    const userContentLocale = userResponse?.user.contentLocale;
+    const currentLocale = userContentLocale || locale;
+    getLocale(trainingInstance, alternateLanguages, "");
     if (training && training.subLOs) {
-      training.subLOs.forEach((subLo) => {
-        subLo.instances?.forEach((instance) => {
-          getLocale(instance, alternateLanguages, locale);
+      training.subLOs.forEach(subLo => {
+        subLo.instances?.forEach(instance => {
+          getLocale(instance, alternateLanguages, "");
         });
       });
     }
     if (training && training.subLOs) {
-      training.subLOs.forEach((subLo) =>
-        subLo.subLOs?.forEach((subLo) => {
-          subLo.instances?.forEach((instances) => {
-            getLocale(instances, alternateLanguages, locale);
+      training.subLOs.forEach(subLo =>
+        subLo.subLOs?.forEach(subLo => {
+          subLo.instances?.forEach(instances => {
+            getLocale(instances, alternateLanguages, "");
           });
         })
       );
     }
+
     let alternateLocales: string[] = [];
     var contentLocale = await getContentLocales();
-
-    if (alternateLanguages && alternateLanguages.size) {
-      contentLocale?.forEach((contentLocale) => {
+    // If there's only on language we don't show anything
+    if (alternateLanguages.size == 1) {
+      return alternateLocales;
+    }
+    if (alternateLanguages && alternateLanguages.size && alternateLanguages.size > 1) {
+      // Remove the current locale from the alternate languages
+      alternateLanguages.delete(currentLocale);
+      contentLocale?.forEach(contentLocale => {
         if (alternateLanguages.has(contentLocale.locale)) {
           alternateLocales.push(contentLocale.name);
         }
@@ -533,7 +601,7 @@ export const useTrainingPage = (
     description = "",
     overview = "",
     richTextOverview = "",
-  } = useLocalizedMetaData(training, locale);
+  } = useLocalizedMetaData(training, contentLocale);
 
   const { cardIconUrl, color, bannerUrl, cardBgStyle } = useCardIcon(training);
 
@@ -541,12 +609,7 @@ export const useTrainingPage = (
   const instanceBadge = useBadge(trainingInstance);
 
   const updateFileSubmissionUrl = useCallback(
-    async (
-      fileUrl: string,
-      loId: string,
-      loInstanceId: string,
-      loResourceId: string
-    ) => {
+    async (fileUrl: string, loId: string, loInstanceId: string, loResourceId: string) => {
       const body = {
         data: {
           id: loResourceId,
@@ -565,7 +628,8 @@ export const useTrainingPage = (
           headers: headers,
         });
         const params: QueryParams = {};
-        params["include"] = "instances.loResources.resources";
+        params["include"] =
+          "instances.loResources.resources,enrollment.loInstance.loResources.resources";
 
         let response = await RestAdapter.ajax({
           url: `${baseApiUrl}/learningObjects/${loId}`,
@@ -573,14 +637,12 @@ export const useTrainingPage = (
           headers: headers,
           params: params,
         });
-        setRefreshTraining((prevState) => !prevState);
+        setRefreshTraining(prevState => !prevState);
         const parsedResponse = JsonApiParse(response);
-        const loInstance = parsedResponse.learningObject.instances?.filter(
-          (instance) => {
-            return instance.id === loInstanceId;
-          }
-        );
-        const loResource = loInstance[0].loResources?.filter((resource) => {
+        const loInstance = parsedResponse.learningObject.instances?.filter(instance => {
+          return instance.id === loInstanceId;
+        });
+        const loResource = loInstance[0].loResources?.filter(resource => {
           return resource.id === loResourceId;
         });
         return loResource[0].submissionUrl;
@@ -590,6 +652,32 @@ export const useTrainingPage = (
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    [dispatch]
+  );
+  useEffect(() => {
+    if (trainingInstance.state === RETIRED) {
+      registerInterestHandler(GET_REQUEST);
+    }
+  }, [trainingInstance.state]);
+  const registerInterestHandler = useCallback(
+    async (methodReq: IRestAdapterAjaxOptions["method"]) => {
+      try {
+        const response = await RestAdapter.ajax({
+          url: `${baseApiUrl}/learningObjects/${trainingId}/interest`,
+          method: methodReq,
+          headers,
+          params: params,
+        });
+        if (methodReq == GET_REQUEST) {
+          const parsedResponse = JsonApiParse(response);
+          setIsRegisterInterestEnabled(parsedResponse.loInterest.interested);
+        } else {
+          setIsRegisterInterestEnabled(prevState => !prevState);
+        }
+      } catch (e) {
+        throw new Error();
+      }
+    },
     [dispatch]
   );
 
@@ -602,13 +690,18 @@ export const useTrainingPage = (
       };
 
       try {
-        await RestAdapter.ajax({
+        const response = await RestAdapter.ajax({
           url: `${baseApiUrl}enrollments/${loInstanceId}_${userId}/rate`,
           method: "PATCH",
           body: JSON.stringify(body),
           headers: headers,
         });
-        setRefreshTraining((prevState) => !prevState);
+        const ratingResponseObject: RatingResponse = JSON.parse(
+          response as string
+        ) as RatingResponse;
+        Object.keys(ratingResponseObject).length != 0 &&
+          setAwardedPoints(ratingResponseObject.awardedPoints);
+        setRefreshTraining(prevState => !prevState);
       } catch (e) {
         almAlert(true, GetTranslation("alm.enrollment.error"), AlertType.error);
         console.log(e);
@@ -649,7 +742,7 @@ export const useTrainingPage = (
           body: JSON.stringify(body),
           headers: headers,
         });
-        setRefreshNotes((prevState) => !prevState);
+        setRefreshNotes(prevState => !prevState);
       } catch (e) {
         almAlert(true, GetTranslation("alm.enrollment.error"), AlertType.error);
         console.log(e);
@@ -666,7 +759,7 @@ export const useTrainingPage = (
           method: "DELETE",
           headers: headers,
         });
-        setRefreshNotes((prevState) => !prevState);
+        setRefreshNotes(prevState => !prevState);
       } catch (e) {
         almAlert(true, GetTranslation("alm.enrollment.error"), AlertType.error);
         console.log(e);
@@ -676,23 +769,25 @@ export const useTrainingPage = (
     [dispatch]
   );
   const downloadNotes = useCallback(
-    async (loId: string, loInstanceId: string) => {
+    async (loId: string, loInstanceId: string, loName: string, loInstanceName: string) => {
       const url = `${
         getALMConfig().primeApiURL
       }learningObjects/${loId}/instances/${loInstanceId}/note/download`;
-      try {
-        const headers = {
-          Authorization: `oauth ${getAccessToken()}`,
-        };
 
-        const response = await fetch(url, { headers });
-        const blob = await response.blob();
+      try {
+        const response = (await RestAdapter.get({
+          url: url,
+          headers: { "content-type": "application/pdf" },
+          responseType: "blob",
+        })) as Blob;
+        const blob = new Blob([response as Blob], { type: "application/pdf" });
         const blobUrl = URL.createObjectURL(blob);
 
         const link = document.createElement("a");
         link.href = blobUrl;
         link.style.display = "none";
-        link.setAttribute("download", "");
+        const fileName = `${loName} - ${loInstanceName}(${GetTranslation("alm.text.notes")}).pdf`;
+        link.setAttribute("download", fileName);
 
         document.body.appendChild(link);
         link.click();
@@ -741,7 +836,6 @@ export const useTrainingPage = (
     try {
     } catch (error) {}
   };
-
   const getAllNotes = useCallback(async () => {
     try {
       let url = "";
@@ -761,19 +855,60 @@ export const useTrainingPage = (
     } catch (e) {
       console.log(e);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, instanceId, training]);
+
+  useEffect(() => {
+    getRelatedLOs();
+  }, [trainingId]);
+
+  const getRelatedLOs = async () => {
+    const getRelatedCourses = await getRelatedLoList(RECOMMENDATIONS);
+    setRelatedCourses(getRelatedCourses || []);
+    if (!isCertification) {
+      const getRelatedLPs = await getRelatedLoList(LEARNING_PROGRAMS);
+      setRelatedLPs(getRelatedLPs || []);
+    }
+    try {
+    } catch (error) {}
+  };
+  const getRelatedLoList = useCallback(
+    async (type: string, limit = 3) => {
+      try {
+        let url = "";
+        const params: QueryParams = {};
+        params["limit"] = limit;
+        params["type"] = type;
+        params["include"] = SKILLS_INCLUDE;
+        url = `${baseApiUrl}learningObjects/${trainingId}/relatedLOs`;
+        let response = await RestAdapter.ajax({
+          url: url,
+          method: "GET",
+          headers,
+          params: params,
+        });
+        const parsedResponse = JsonApiParse(response);
+        return parsedResponse.learningObjectList;
+      } catch (e) {
+        console.log(e);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [trainingId]
+  );
   const updateCertificationProofUrl = useCallback(
-    async (fileUrl: string, loId: string, loInstanceId: string) => {
+    async (fileUrl: string, loId: string, loInstanceId: string, dateCompleted = "") => {
       const userResponse = await getALMUser();
       const userId = userResponse?.user?.id;
+      const fileAttributes = {
+        url: fileUrl,
+        ...(dateCompleted && { dateCompleted: dateCompleted }),
+      };
+
       const body = {
         data: {
           id: loInstanceId + "_" + userId,
           type: "learningObjectInstanceEnrollment",
-          attributes: {
-            url: fileUrl,
-          },
+          attributes: fileAttributes,
         },
       };
 
@@ -795,9 +930,15 @@ export const useTrainingPage = (
         });
         const parsedResponse = JsonApiParse(response);
         return parsedResponse.learningObject.enrollment.url || "";
-      } catch (e) {
-        almAlert(true, GetTranslation("alm.enrollment.error"), AlertType.error);
-        console.log(e);
+      } catch (error : any) {
+        let errorMessage = GetTranslation("alm.enrollment.error");
+        if(error?.responseText){
+          const errorInfo = JSON.parse(error.responseText)?.source?.info || "";
+          if (errorInfo.includes("Failed to upload file")) {
+            errorMessage = GetTranslation("alm.enrollment.error.fileUpload");
+          }
+        }
+        throw new Error(errorMessage);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -819,14 +960,59 @@ export const useTrainingPage = (
     [dispatch]
   );
 
+  const updateLearningObject = useCallback(async (loId: string) => {
+    try {
+      const response = await getTraining(loId);
+      return response!;
+    } catch (e) {
+      throw new Error();
+    }
+  }, []);
+
   // Removing current LO data from parent path stack
   useEffect(() => {
     if (trainingInstance?.id) {
       const id = training?.id || trainingId;
-      popFromParentPathStack(id);
+
+      const { currentTrainingId: prevTrainingId } = getBreadcrumbPath(PREVIOUS_BREADCRUMB_PATH);
+      if (prevTrainingId && prevTrainingId === id) {
+        // Case - when user navigates back from related LO or from a copied (url) training
+        // previous trainings breadcrumb should restore
+        restorePreviousBreadcrumbPath();
+        return;
+      }
+
+      // Handle back-button case by popping the breadcrumb path
+      popFromBreadcrumbPath(id);
+
+      // Clearing the breadcrumb path details if the current path is not the same as the training id
+      // Case - when other training is opened via url copy-paste
+      const { currentTrainingId } = getBreadcrumbPath();
+      if (currentTrainingId && currentTrainingId !== id) {
+        clearBreadcrumbPathDetails(id);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trainingInstance]);
+
+  useEffect(() => {
+    isCourse && getIfCourseIsEnrollable();
+  }, [trainingId, isCourse]);
+  const getIfCourseIsEnrollable = useCallback(async () => {
+    try {
+      const url = `${baseApiUrl}learningObjects/${trainingId}/enrollmentMeta`;
+      const response = await RestAdapter.get({
+        url: url,
+      });
+      const parsedResponse = JsonApiParse(response);
+      const loEnrollmentMeta = parsedResponse?.loEnrollmentMeta;
+      setIsCourseEnrollable(loEnrollmentMeta?.enrollable);
+      setIsCourseEnrolled(loEnrollmentMeta?.enrolled);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [trainingId]);
+
   return {
     name,
     description,
@@ -843,12 +1029,15 @@ export const useTrainingPage = (
     instanceBadge,
     instanceSummary,
     isPreviewEnabled,
+    isFlexLPValidationEnabled,
     enrollmentHandler,
     launchPlayerHandler,
     updateEnrollmentHandler,
     unEnrollmentHandler,
     jobAidClickHandler,
     addToCartHandler,
+    addToCartNativeHandler,
+    buyNowNativeHandler,
     errorCode,
     updateRating,
     updateFileSubmissionUrl,
@@ -858,17 +1047,33 @@ export const useTrainingPage = (
     trainingOverviewAttributes,
     flexLpEnrollHandler,
     notes,
+    relatedCourses,
+    relatedLPs,
     updateNote,
     deleteNote,
     downloadNotes,
     sendNotesOnMail,
     lastPlayingLoResourceId,
+    lastPlayingCourseId,
+    lastPlayingCourseInstanceId,
     waitlistPosition,
-    sendInstanceId,
-    selectedInstanceInfo,
+    setSelectedInstanceInfo,
+    courseInstanceMapping,
     setInstancesForFlexLPOnLoad,
     setSelectedLoList,
-    selectedLoList
+    selectedLoList,
+    setCourseInstanceMapping,
+    updatePlayerLoState,
+    enrollViaModuleClick,
+    setEnrollViaModuleClick,
+    getPlayerLoState,
+    registerInterestHandler,
+    isRegisterInterestEnabled,
+    awardedPoints,
+    updateLearningObject,
+    isCourseEnrollable,
+    isCourseEnrolled,
+    courseInstanceMap,
   };
   //date create, published, duration
 };

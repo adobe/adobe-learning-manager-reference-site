@@ -10,158 +10,160 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 .primeConfirmationDialog {
-    z-index: 2;
-    width: 700px;
+  z-index: 2;
+  width: 700px;
 }
 
 @import "../../../styles/variables.css";
 .primeDialogHeaderContainer {
-    width: auto;
-    display: flex;
-    margin-bottom: 15px;
-    height: 15px;
+  width: auto;
+  display: flex;
+  margin-bottom: 15px;
+  height: 15px;
 }
 
 .primeDialogHeader {
-    display: flex;
-    margin-right: 30px;
-    border: none;
-    background: none;
-    fill: #306EB5;
-    color: #306EB5;
+  display: flex;
+  margin-right: 30px;
+  border: none;
+  background: none;
+  fill: #306eb5;
+  color: #306eb5;
 }
 
 .primeDialogHeader:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .primeDialogHeaderText {
-    margin-left: 5px;
-    color: currentColor;
-    font-size: var(--prime-font-size-12);
-    font-weight: 500;
+  margin-left: 5px;
+  color: currentColor;
+  font-size: var(--prime-font-size-12);
+  font-weight: 500;
 }
 
 .primeOptionContainer {
-    width: auto;
-    display: flex;
-    margin-bottom: 5px;
-    fill: #A9A9A9;
-    color: #A9A9A9;
+  width: auto;
+  display: flex;
+  margin-bottom: 5px;
+  fill: #a9a9a9;
+  color: #a9a9a9;
 }
 
-.primeOption, .primeStatus{
-    display: flex;
+.primeOption,
+.primeStatus {
+  display: flex;
 }
 
 .primeOption:hover {
-    fill: #000!important;
-    color: #000 !important;
-    cursor: pointer;
+  fill: #000 !important;
+  color: #000 !important;
+  cursor: pointer;
 }
 
-.primeDialogHeaderSvg, .primeOptionSvg {
-    width: 18px;
-    fill: currentColor;
+.primeDialogHeaderSvg,
+.primeOptionSvg {
+  width: 18px;
+  fill: currentColor;
 }
 
 .primeStatusSvg {
-    background: none;
-    border: none;
-    width: 30px;
-    fill: currentColor;
+  background: none;
+  border: none;
+  width: 30px;
+  fill: currentColor;
 }
 
 .primeOptionSvgFilled {
-    width: 18px;
-    fill: #306EB5!important;
+  width: 18px;
+  fill: #306eb5 !important;
 }
 
 .primeOptionText {
-    margin-left: 10px;
-    color: currentColor;
-    font-size: var(--prime-font-size-12);
-    font-weight: 500;
+  margin-left: 10px;
+  color: currentColor;
+  font-size: var(--prime-font-size-12);
+  font-weight: 500;
 }
 
 .primeStatusText {
-    color: currentColor;
-    font-size: var(--prime-font-size-12);
-    font-weight: 500;
-    margin-right:10px;
+  color: currentColor;
+  font-size: var(--prime-font-size-12);
+  font-weight: 500;
+  margin-right: 10px;
 }
 
 .primeOptionTextFilled {
-    margin-left: 10px;
-    color: #306EB5 !important;
-    font-size: var(--prime-font-size-12);
-    font-weight: 500;
+  margin-left: 10px;
+  color: #306eb5 !important;
+  font-size: var(--prime-font-size-12);
+  font-weight: 500;
 }
 
 .primeFileUploadInput {
-    display: none;
+  display: none;
 }
 
 .primeStatusSvg:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .primeCommunityPollInputContainer {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .primeCommunityPollInput {
-    padding: 5px;
-    font-size: 12px;
-    width: 35%;
+  padding: 5px;
+  font-size: 12px;
+  width: 35%;
 }
 
 .primeCommunityAddOptionButton {
-    margin-top: 10px;
-    border: none;
-    background: none;
-    color: #306EB5 !important;
-    font-weight: 550;
-    font-size: 12px;
+  margin-top: 10px;
+  border: none;
+  background: none;
+  color: #306eb5 !important;
+  font-weight: 550;
+  font-size: 12px;
 }
 
 .primeCommunityAddOptionButton:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .primePostButtonGroup {
-    display: flex;
+  display: flex;
 }
 
 @media (max-width: 450px) {
-    .primeCommunityPollInput {
-        width: 60%;
-    }
-    .primeCommunityRemoveOption{
-        margin-top: -5px;
-        margin-left: -10px;
-    }
-    .primeConfirmationDialog {
-        max-height: 500px;
-    }
+  .primeCommunityPollInput {
+    width: 60%;
+  }
+  .primeCommunityRemoveOption {
+    margin-top: -5px;
+    margin-left: -10px;
+  }
+  .primeConfirmationDialog {
+    max-height: 500px;
+  }
 }
 
 .primeCommunityRemoveOption {
-    padding-left: 0px;
-    padding-bottom: 4px;
-    border: none!important;
-    background: none!important;
-    color: #808080!important;
+  padding-left: 0px;
+  padding-bottom: 4px;
+  border: none !important;
+  background: none !important;
+  color: #808080 !important;
 }
 
 .primeCommunityRemoveOption:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-.button{
-    margin-right: 10px;
+.button {
+  margin-right: 10px;
 }
 
 .primeOverflowStyle {
-    max-height: inherit;
+  max-height: inherit;
 }

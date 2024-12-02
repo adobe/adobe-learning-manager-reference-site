@@ -89,7 +89,6 @@ export interface SelectedPostState {
   item: PrimePost;
 }
 
-
 export interface BoardState {
   items: PrimeBoard[];
   // paginating: boolean;
@@ -149,17 +148,14 @@ export interface SocialState {
   selectedComment: PrimeComment;
   comments: { items: PrimeComment[]; paginating: boolean; next: string };
   replies: { items: PrimeReply[]; paginating: boolean; next: string };
-  userFavBoards : PrimeBoard[];
+  userFavBoards: PrimeBoard[];
 
   // createComment: PrimeCommentCreationAttributes;
   // createReply: PrimeReplyCreationAttributes;
   // createPost: CreatePostDetails;
 }
 
-const selectedTab: Reducer<string, AnyAction> = (
-  state: string | undefined,
-  action: AnyAction
-) => {
+const selectedTab: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
   switch (action.type) {
     case LOAD_SOCIAL_BOARDS:
       return action.socialTab ?? "MyBoards";
@@ -170,10 +166,7 @@ const selectedTab: Reducer<string, AnyAction> = (
   }
 };
 
-const item: Reducer<PrimeBoard, AnyAction> = (
-  state: PrimeBoard | undefined,
-  action: AnyAction
-) => {
+const item: Reducer<PrimeBoard, AnyAction> = (state: PrimeBoard | undefined, action: AnyAction) => {
   switch (action.type) {
     case LOAD_SOCIAL_BOARD:
       return action.payload.item;
@@ -204,15 +197,13 @@ const items: Reducer<PrimeBoard[], AnyAction> = (
     case CHANGE_SOCIAL_TAB:
       return null;
     case PAGINATE_SOCIAL_BOARDS:
-      return action.payload.items
-        ? [...state!, ...action.payload.items]
-        : state;
+      return action.payload.items ? [...state!, ...action.payload.items] : state;
     case SOCIAL_ADD_BOARD_FAVORITE_SUCCESS: {
       if (state === null || state!.length === 0) {
         return [];
       }
       // eslint-disable-next-line no-case-declarations
-      const index = state!.findIndex((item) => item.id === action.payload.id);
+      const index = state!.findIndex(item => item.id === action.payload.id);
       if (index >= 0) {
         state![index].isFavorite = true;
       }
@@ -223,7 +214,7 @@ const items: Reducer<PrimeBoard[], AnyAction> = (
         return [];
       }
       // eslint-disable-next-line no-case-declarations
-      const index = state!.findIndex((item) => item.id === action.payload.id);
+      const index = state!.findIndex(item => item.id === action.payload.id);
       if (index >= 0) {
         state![index].isFavorite = false;
       }
@@ -232,7 +223,7 @@ const items: Reducer<PrimeBoard[], AnyAction> = (
     case SOCIAL_REMOVE_BOARD_FROM_LIST: {
       return state === null || state!.length === 0
         ? []
-        : state?.filter((item) => item.id !== action.payload.id);
+        : state?.filter(item => item.id !== action.payload.id);
     }
     case SOCIAL_BOARD_DELETE_SUCCESS: {
       return state?.filter((item: PrimeBoard) => item.id !== action.payload.id);
@@ -242,10 +233,7 @@ const items: Reducer<PrimeBoard[], AnyAction> = (
   }
 };
 
-const next: Reducer<string, AnyAction> = (
-  state: string | undefined,
-  action: AnyAction
-) => {
+const next: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
   switch (action.type) {
     case LOAD_SOCIAL_BOARDS:
     case PAGINATE_SOCIAL_BOARDS:
@@ -270,10 +258,7 @@ const next: Reducer<string, AnyAction> = (
 //       return state || false;
 //   }
 // };
-const open: Reducer<boolean, AnyAction> = (
-  state: boolean | undefined,
-  action: AnyAction
-) => {
+const open: Reducer<boolean, AnyAction> = (state: boolean | undefined, action: AnyAction) => {
   switch (action.type) {
     case OPEN_BOARD_OPTIONS:
       return true;
@@ -287,10 +272,7 @@ const open: Reducer<boolean, AnyAction> = (
       return state || false;
   }
 };
-const id: Reducer<string, AnyAction> = (
-  state: string | undefined,
-  action: AnyAction
-) => {
+const id: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
   switch (action.type) {
     case OPEN_BOARD_OPTIONS:
       return action.boardId;
@@ -338,9 +320,7 @@ const postsItems: Reducer<PrimePost[], AnyAction> = (
     case LOAD_BOARD_DETAILS:
       return action.payload.items || [];
     case PAGINATE_SOCIAL_BOARD_POSTS:
-      return action.payload.items
-        ? [...state!, ...action.payload.items]
-        : state;
+      return action.payload.items ? [...state!, ...action.payload.items] : state;
     case LOAD_COMMENTS:
       if (!action.payload.selectedPostId) {
         return state;
@@ -349,9 +329,7 @@ const postsItems: Reducer<PrimePost[], AnyAction> = (
         return [];
       }
       // eslint-disable-next-line no-case-declarations
-      const index = state?.findIndex(
-        (item) => item.id === action.payload.selectedPostId
-      );
+      const index = state?.findIndex(item => item.id === action.payload.selectedPostId);
       if (index < 0) return state;
       // eslint-disable-next-line no-case-declarations
       const post = state[index];
@@ -363,7 +341,7 @@ const postsItems: Reducer<PrimePost[], AnyAction> = (
         return [];
       }
       // eslint-disable-next-line no-case-declarations
-      const index = state?.findIndex((item) => item.id === action.post.id);
+      const index = state?.findIndex(item => item.id === action.post.id);
       if (index < 0) return state;
       // eslint-disable-next-line no-case-declarations
       const post = state[index];
@@ -376,9 +354,7 @@ const postsItems: Reducer<PrimePost[], AnyAction> = (
         return [];
       }
       // eslint-disable-next-line no-case-declarations
-      const index = state?.findIndex(
-        (item) => item.id === action.payload.item.id
-      );
+      const index = state?.findIndex(item => item.id === action.payload.item.id);
       if (index < 0) return state;
       //uncomment below if else
       // if (state[index].previewData) {
@@ -402,7 +378,7 @@ const postsItems: Reducer<PrimePost[], AnyAction> = (
         return [];
       }
       // eslint-disable-next-line no-case-declarations
-      const index = state?.findIndex((item) => item.id === action.payload.id);
+      const index = state?.findIndex(item => item.id === action.payload.id);
       if (index < 0) return state;
 
       // eslint-disable-next-line no-case-declarations
@@ -416,10 +392,7 @@ const postsItems: Reducer<PrimePost[], AnyAction> = (
   }
 };
 
-const postsNext: Reducer<string, AnyAction> = (
-  state: string | undefined,
-  action: AnyAction
-) => {
+const postsNext: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
   switch (action.type) {
     case LOAD_BOARD_DETAILS:
     case PAGINATE_SOCIAL_BOARD_POSTS:
@@ -677,22 +650,15 @@ const commentsItems: Reducer<PrimeComment[], AnyAction> = (
     case LOAD_COMMENTS:
       //Keep only comments of other posts
       state = state
-        ?.filter(
-          (item: PrimeComment) =>
-            item.parent.id !== action.payload.selectedPostId
-        )
-        .map((comment) => comment);
+        ?.filter((item: PrimeComment) => item.parent.id !== action.payload.selectedPostId)
+        .map(comment => comment);
       //if current post has comments, merge it with state
       if (action.payload.items) {
-        return state
-          ? state.concat(action.payload.items)
-          : action.payload.items;
+        return state ? state.concat(action.payload.items) : action.payload.items;
       }
       return [];
     case PAGINATE_COMMENTS:
-      return action.payload.items
-        ? [...state!, ...action.payload.items]
-        : state;
+      return action.payload.items ? [...state!, ...action.payload.items] : state;
     case LOAD_REPLIES:
       if (!action.payload.selectedCommentId) {
         return state;
@@ -701,9 +667,7 @@ const commentsItems: Reducer<PrimeComment[], AnyAction> = (
         return [];
       }
       // eslint-disable-next-line no-case-declarations
-      const index = state?.findIndex(
-        (item) => item.id === action.payload.selectedCommentId
-      );
+      const index = state?.findIndex(item => item.id === action.payload.selectedCommentId);
       if (index < 0) return state;
       // eslint-disable-next-line no-case-declarations
       const cmt = state[index];
@@ -715,9 +679,7 @@ const commentsItems: Reducer<PrimeComment[], AnyAction> = (
         return [];
       }
       // eslint-disable-next-line no-case-declarations
-      const index = state?.findIndex(
-        (item) => item.id === action.payload.item.id
-      );
+      const index = state?.findIndex(item => item.id === action.payload.item.id);
       if (index < 0) return state;
       //uncomment below if else
       // if (state[index].previewData) {
@@ -732,16 +694,14 @@ const commentsItems: Reducer<PrimeComment[], AnyAction> = (
       return state;
     }
     case SOCIAL_CMT_DELETE_SUCCESS: {
-      return state?.filter(
-        (item: PrimeComment) => item.id !== action.payload.id
-      );
+      return state?.filter((item: PrimeComment) => item.id !== action.payload.id);
     }
     case UPDATE_CMT_PREVIEW_DATA: {
       if (!state) {
         return [];
       }
       // eslint-disable-next-line no-case-declarations
-      const index = state?.findIndex((item) => item.id === action.payload.id);
+      const index = state?.findIndex(item => item.id === action.payload.id);
       if (index < 0) return state;
 
       // eslint-disable-next-line no-case-declarations
@@ -766,10 +726,7 @@ const commentsItems: Reducer<PrimeComment[], AnyAction> = (
 //     }
 // };
 
-const commentsNext: Reducer<string, AnyAction> = (
-  state: string | undefined,
-  action: AnyAction
-) => {
+const commentsNext: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
   switch (action.type) {
     case LOAD_COMMENTS:
     case PAGINATE_COMMENTS:
@@ -817,30 +774,21 @@ const replyItems: Reducer<PrimeReply[], AnyAction> = (
     case LOAD_REPLIES:
       //Keep only replies of other comments
       state = state
-        ?.filter(
-          (item: PrimeReply) =>
-            item.parent.id !== action.payload.selectedCommentId
-        )
-        .map((comment) => comment);
+        ?.filter((item: PrimeReply) => item.parent.id !== action.payload.selectedCommentId)
+        .map(comment => comment);
       //if current comment has replies, merge it with state
       if (action.payload.items) {
-        return state
-          ? state.concat(action.payload.items)
-          : action.payload.items;
+        return state ? state.concat(action.payload.items) : action.payload.items;
       }
       return [];
     case PAGINATE_REPLIES:
-      return action.payload.items
-        ? [...state!, ...action.payload.items]
-        : state;
+      return action.payload.items ? [...state!, ...action.payload.items] : state;
     case UPDATE_REPLY: {
       if (!state) {
         return [];
       }
       // eslint-disable-next-line no-case-declarations
-      const index = state?.findIndex(
-        (item) => item.id === action.payload.item.id
-      );
+      const index = state?.findIndex(item => item.id === action.payload.item.id);
       if (index < 0) return state;
       //uncomment below if else
       // if (state[index].previewData) {
@@ -862,7 +810,7 @@ const replyItems: Reducer<PrimeReply[], AnyAction> = (
         return [];
       }
       // eslint-disable-next-line no-case-declarations
-      const index = state?.findIndex((item) => item.id === action.payload.id);
+      const index = state?.findIndex(item => item.id === action.payload.id);
       if (index < 0) return state;
 
       // eslint-disable-next-line no-case-declarations
@@ -875,10 +823,7 @@ const replyItems: Reducer<PrimeReply[], AnyAction> = (
   }
 };
 
-const replyNext: Reducer<string, AnyAction> = (
-  state: string | undefined,
-  action: AnyAction
-) => {
+const replyNext: Reducer<string, AnyAction> = (state: string | undefined, action: AnyAction) => {
   switch (action.type) {
     case LOAD_REPLIES:
     case PAGINATE_REPLIES:
@@ -915,7 +860,6 @@ const replies: Reducer<
 });
 //Reducers for replies ends
 
-
 const userFavBoards: Reducer<PrimeBoard[], AnyAction> = (
   state: PrimeBoard[] | undefined,
   action: AnyAction
@@ -924,7 +868,7 @@ const userFavBoards: Reducer<PrimeBoard[], AnyAction> = (
     case LOAD_FAV_BOARDS: {
       return action?.payload || [];
     }
-    
+
     default:
       return state || [];
   }
