@@ -159,19 +159,22 @@
                 return window.ALM.isAlmLoggedIn;
             }
             else {
-                return this.getAccessToken() ? true : false;
+                return !!this.getAccessToken();
             }
         }
 
         async setAccessToken () {
-        try {
-              const resp = await this.makeAjaxRequest(PROXY_ALM_LOGIN_URL, "POST", {});
-              if (resp && resp.response && resp.status === 200)  {
-                  window.ALM.almAccessToken = resp.response.access_token;
-              } } catch (error) {
-                  console.error("Error in checking logged in");
-                  window.ALM.almAccessToken = "";
-              }
+            if (window.ALM.isProxyEnabled()) {
+                try {
+                    const resp = await this.makeAjaxRequest(PROXY_ALM_LOGIN_URL, "POST", {});
+                    if (resp && resp.response && resp.status === 200) {
+                        window.ALM.almAccessToken = resp.response.access_token;
+                    } 
+                } catch (error) {
+                        console.error("Error in checking logged in");
+                        window.ALM.almAccessToken = "";
+                }
+            }
         }
 
         async handlePrimeLogIn() {
@@ -232,16 +235,20 @@
 
         async handlePageLoad() {
             let isLoggedIn;
-            try {
-                const resp = await this.makeAjaxRequest(PROXY_ALM_LOGIN_URL, "POST", {});
-                if (resp && resp.response && resp.status === 200)  {
-                    isLoggedIn = true;
-                    window.ALM.almAccessToken = resp.response.access_token;
+            if (window.ALM.isProxyEnabled()) {
+                try {
+                    const resp = await this.makeAjaxRequest(PROXY_ALM_LOGIN_URL, "POST", {});
+                    if (resp && resp.response && resp.status === 200)  {
+                        isLoggedIn = true;
+                        window.ALM.almAccessToken = resp.response.access_token;
+                    }
+                } catch (error) {
+                    console.error("Error in checking logged in");
+                    isLoggedIn = false;
+                    window.ALM.almAccessToken = "";
                 }
-            } catch (error) {
-                console.error("Error in checking logged in");
-                isLoggedIn = false;
-                window.ALM.almAccessToken = "";
+            } else {
+                isLoggedIn = this.isLoggedIn();
             }
             window.ALM.isAlmLoggedIn = isLoggedIn;
 
@@ -286,16 +293,20 @@
 
         async handlePageLoad() {
             let isLoggedIn;
-            try {
-                const resp = await this.makeAjaxRequest(PROXY_ALM_LOGIN_URL, "POST", {});
-                if (resp && resp.response && resp.status === 200)  {
-                    isLoggedIn = true;
-                    window.ALM.almAccessToken = resp.response.access_token;
+            if (window.ALM.isProxyEnabled()) {
+                try {
+                    const resp = await this.makeAjaxRequest(PROXY_ALM_LOGIN_URL, "POST", {});
+                    if (resp && resp.response && resp.status === 200)  {
+                        isLoggedIn = true;
+                        window.ALM.almAccessToken = resp.response.access_token;
+                    }
+                } catch (error) {
+                    console.error("Error in checking logged in");
+                    isLoggedIn = false;
+                    window.ALM.almAccessToken = "";
                 }
-            } catch (error) {
-                console.error("Error in checking logged in");
-                isLoggedIn = false;
-                window.ALM.almAccessToken = "";
+            } else {
+                isLoggedIn = this.isLoggedIn();
             }
             window.ALM.isAlmLoggedIn = isLoggedIn;
 
@@ -389,16 +400,20 @@
 
         async handlePageLoad() {
             let isALMLoggedIn;
-            try {
-                const resp = await this.makeAjaxRequest(PROXY_ALM_LOGIN_URL, "POST", {});
-                if (resp && resp.response && resp.status === 200)  {
-                    isALMLoggedIn = true;
-                    window.ALM.almAccessToken = resp.response.access_token;
+            if (window.ALM.isProxyEnabled()) {
+                try {
+                    const resp = await this.makeAjaxRequest(PROXY_ALM_LOGIN_URL, "POST", {});
+                    if (resp && resp.response && resp.status === 200)  {
+                        isALMLoggedIn = true;
+                        window.ALM.almAccessToken = resp.response.access_token;
+                    }
+                } catch (error) {
+                    console.error("Error in checking logged in");
+                    isALMLoggedIn = false;
+                    window.ALM.almAccessToken = "";
                 }
-            } catch (error) {
-                console.error("Error in checking logged in");
-                isALMLoggedIn = false;
-                window.ALM.almAccessToken = "";
+            } else {
+                isALMLoggedIn = this.isLoggedIn();
             }
             window.ALM.isAlmLoggedIn = isALMLoggedIn;
 

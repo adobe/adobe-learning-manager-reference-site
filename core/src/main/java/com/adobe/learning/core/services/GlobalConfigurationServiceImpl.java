@@ -16,8 +16,8 @@ import com.adobe.learning.core.utils.Constants;
 import com.day.cq.commons.inherit.HierarchyNodeInheritanceValueMap;
 import com.day.cq.commons.inherit.InheritanceValueMap;
 import com.day.cq.wcm.api.Page;
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +41,7 @@ public class GlobalConfigurationServiceImpl implements GlobalConfigurationServic
   private static final String SUBSERVICE_NAME = "alm-components-configuration";
 
   private static final Map<String, Object> authInfo =
-      ImmutableMap.of(ResourceResolverFactory.SUBSERVICE, SUBSERVICE_NAME);
+      Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, SUBSERVICE_NAME);
 
   @Reference private ResourceResolverFactory resolverFactory;
 

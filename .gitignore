@@ -97,3 +97,5 @@ node/
 
 # Tests
 coverage/
+
+.DS_Store
