@@ -16,7 +16,7 @@
     <parent>
         <groupId>com.adobe.learning</groupId>
         <artifactId>aem-learning</artifactId>
-        <version>1.0.7</version>
+        <version>1.0.8</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>aem-learning-core</artifactId>
@@ -27,6 +27,7 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
+                <version>3.3.0</version>
                 <extensions>true</extensions>
                 <executions>
                     <execution>
@@ -73,6 +74,7 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
+                <version>3.3.0</version>
                 <configuration>
                     <instructions>
                         <Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment>
@@ -125,6 +127,7 @@
                         <plugin>
                         <groupId>org.apache.felix</groupId>
                         <artifactId>maven-bundle-plugin</artifactId>
+                        <version>3.3.0</version>
                         <extensions>true</extensions>
                         <executions>
                             <execution>

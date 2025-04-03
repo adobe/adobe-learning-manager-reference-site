@@ -4,9 +4,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.adobe.granite.ui.components.ExpressionResolver;
-import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -48,11 +49,14 @@ public class ConfigurationColumnPreviewTest {
     context.addModelsForClasses(ConfigurationColumnPreview.class);
 
     Map<String, Object> columnPreviewProps =
-        ImmutableMap.of(
-            "sling:resourceType",
-            "learning/configuration/columnpreview",
-            "path",
-            CONFIGURATION_PATH);
+        Collections.unmodifiableMap(
+            new HashMap<String, Object>() {
+              {
+                put("sling:resourceType", "learning/configuration/columnpreview");
+                put("path", "CONFIGURATION_PATH");
+              }
+            });
+
     columnPreview = context.create().resource("/libs/something/columnpreview", columnPreviewProps);
   }
 
