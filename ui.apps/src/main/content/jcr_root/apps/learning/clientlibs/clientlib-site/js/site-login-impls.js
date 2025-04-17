@@ -418,16 +418,20 @@
             window.ALM.isAlmLoggedIn = isALMLoggedIn;
 
             let isCommerceLoggedIn;
-            try {
-                const resp = await super.makeAjaxRequest(PROXY_ALM_COMMERCE_LOGIN_URL, "POST", {});
-                if (resp && resp.response && resp.status === 200)  {
-                    isCommerceLoggedIn = true;
-                    window.ALM.almCommerceToken = resp.response.access_token;
+            if (window.ALM.isProxyEnabled()) {
+                try {
+                    const resp = await super.makeAjaxRequest(PROXY_ALM_COMMERCE_LOGIN_URL, "POST", {});
+                    if (resp && resp.response && resp.status === 200)  {
+                        isCommerceLoggedIn = true;
+                        window.ALM.almCommerceToken = resp.response.access_token;
+                    }
+                } catch (error) {
+                    console.error("Error in checking logged in");
+                    isCommerceLoggedIn = false;
+                    window.ALM.almCommerceToken = "";
                 }
-            } catch (error) {
-                console.error("Error in checking logged in");
-                isCommerceLoggedIn = false;
-                window.ALM.almCommerceToken = "";
+            } else {
+                isCommerceLoggedIn = this.isCommerceLoggedIn();
             }
             window.ALM.isCommerceLoggedIn = isCommerceLoggedIn;
 
