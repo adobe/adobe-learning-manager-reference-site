@@ -32,7 +32,7 @@ const Badgr = (props: any) => {
           <img className={styles.badgrIcon} src={icon} alt="" />
           {formatMessage({ id: "alm.badgr.configureBadgr" })}
         </ActionButton>
-        {(close) => (
+        {(close: () => void) => (
           <div className={styles.dialog}>
             <Dialog
               UNSAFE_className={styles.dialogBox}

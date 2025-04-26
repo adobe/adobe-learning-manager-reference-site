@@ -4,11 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.lenient;
 
 import com.day.cq.wcm.api.Page;
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.sling.api.resource.LoginException;
@@ -26,7 +26,7 @@ public class GlobalConfigurationServiceImplTest {
 
   private static final String SUBSERVICE_NAME = "alm-components-configuration";
   private static final Map<String, Object> SERVICE_PARAMS =
-      ImmutableMap.of(ResourceResolverFactory.SUBSERVICE, SUBSERVICE_NAME);
+      Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, SUBSERVICE_NAME);
 
   @Mock private Page currentPage;
 
