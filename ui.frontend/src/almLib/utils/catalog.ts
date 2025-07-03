@@ -72,7 +72,7 @@ export const getOrUpdateCatalogFilters = async (): Promise<
     }
     const config = getALMConfig();
     const catalogPromise = await RestAdapter.get({
-      url: `${config.primeApiURL}catalogs`,
+      url: `${config.primeApiURL}catalogs?page[limit]=100`
     });
     setItemToStorage(PRIME_CATALOG_FILTER, catalogPromise);
     return JsonApiParse(catalogPromise)?.catalogList;
@@ -86,7 +86,7 @@ const getCatalogParamsForAPi = async (
   const catalogFilterFromState = catalogState.split(",");
   let returnValue = "";
   catalogFilterFromStorage?.forEach((item) => {
-    if (catalogFilterFromState.indexOf(item.name) > -1) {
+    if (catalogFilterFromState.indexOf(item.name) > -1 || catalogFilterFromState.indexOf(item.id) > -1) {
       returnValue += returnValue ? "," + item.id : item.id;
     }
   });
