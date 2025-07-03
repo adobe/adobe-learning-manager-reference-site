@@ -1,3 +1,13 @@
+## 🚨 Disclaimer 🚨
+
+> **⚠️ IMPORTANT:**  
+> _The Adobe Learning Manager (ALM) packages for AEM Sites provide a quick-start code block for implementation._  
+> This package is designed for **headless deployments**.  
+> Upon implementation of the provided codebase, **ongoing maintenance** and **further development** shall be the responsibility of the **implementing party**, as is standard practice with headless applications based on Adobe Learning Manager.
+
+> **By using this package, you agree to these terms.**  
+> _Please ensure you understand the responsibilities involved before proceeding._
+
 #  Sample AEM project template 
 
 This is a project template for AEM-based applications. It is intended as a best-practice set of examples as well as a potential starting point to develop your own functionality.
