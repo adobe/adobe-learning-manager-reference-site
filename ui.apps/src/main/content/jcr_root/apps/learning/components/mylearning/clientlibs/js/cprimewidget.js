@@ -121,7 +121,7 @@ governing permissions and limitations under the License.
           break;
 
         case "catalogPage":{
-          const catalogIds = e.route.match(almLinksMapObj[2])[1];
+          const catalogIds = e.catalogs || '';
           if(catalogIds){
             window.ALM.navigateToCatalogPage(catalogIds);
           }else{
