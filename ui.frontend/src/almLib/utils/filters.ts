@@ -247,7 +247,7 @@ export const updateFilterList = (
     : [];
 
   list?.forEach((item: any) => {
-    if (filtersFromUrlTypeSplitArray?.includes(item.value)) {
+    if (filtersFromUrlTypeSplitArray?.includes(item.value) || filtersFromUrlTypeSplitArray?.includes(item.id)) {
       item.checked = true;
     }
   });

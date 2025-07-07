@@ -225,6 +225,7 @@ class ALMCustomHooks implements ICustomHooks {
       value: item.name,
       label: item.name,
       checked: false,
+      id: item.id,
     }));
     catalogList = updateFilterList(catalogList, queryParams, "catalogs");
     const defaultFiltersState = getDefaultFiltersState();

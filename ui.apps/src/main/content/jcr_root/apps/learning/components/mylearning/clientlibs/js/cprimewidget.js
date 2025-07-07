@@ -26,7 +26,7 @@ governing permissions and limitations under the License.
     .set("catalogOverviewPageLink", ["catalogOverview", "catalog", new RegExp(/selectedListableCatalogIds=(\d+)/i)])
     .set("courseInstancePreviewPageLink", ["loInstancePreview", "course", new RegExp(/course\/(\d+)\/instance\/(\d+)\/preview\??(.*)/i)])
     .set("courseInstancePreviewPageShowLink", ["loInstancePreview", "course", new RegExp(/course\/(\d+)\/instance\/(\d+)\/preview\??(.*)/i)])
-    .set("catalogPageLink", ["catalogPage"])
+    .set("catalogPageLink", ["catalogPage","catalog", new RegExp(/catalogs=(\d+)/i)])
     .set("myLearningPageLink", ["myLearningPage"])
     .set("postsLink", ["postsPage", new RegExp(/board\/(\d+)/i)])
     .set("allboardsPageLink", ["boardsPage"])
@@ -120,9 +120,15 @@ governing permissions and limitations under the License.
           window.ALM.navigateToCatalogPage(catalogIds);
           break;
 
-        case "catalogPage":
-          window.ALM.navigateToExplorePage();
+        case "catalogPage":{
+          const catalogIds = e.catalogs || '';
+          if(catalogIds){
+            window.ALM.navigateToCatalogPage(catalogIds);
+          }else{
+            window.ALM.navigateToExplorePage();
+          }
           break;
+        }
 
         case "myLearningPage":
           window.ALM.navigateToCatalogPageForStates("enrolled");
