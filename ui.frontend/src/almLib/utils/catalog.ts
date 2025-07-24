@@ -124,7 +124,7 @@ export async function getParamsForCatalogApi(filterState: CatalogFilterState) {
     if (filterState.skillLevel && catalogAttributes?.skillLevel === "true") {
       params["filter.skill.level"] = filterState.skillLevel;
     }
-    if (filterState.catalogs && catalogAttributes?.catalogs === "true") {
+    if (filterState.catalogs) {
       params["filter.catalogIds"] = await getCatalogParamsForAPi(
         filterState.catalogs
       );
