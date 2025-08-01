@@ -84,7 +84,7 @@ const PrimeCommunityPosts = (props: any) => {
       setUser(response?.user || ({} as PrimeUser));
       const moderators = await fetchBoardModerators(board.id);
       let moderatorIds = [] as string[];
-      moderators.userList.forEach((element) => {
+      moderators.userList?.forEach((element) => {
         moderatorIds.push(element.id);
       });
       setBoardModerators(moderatorIds);

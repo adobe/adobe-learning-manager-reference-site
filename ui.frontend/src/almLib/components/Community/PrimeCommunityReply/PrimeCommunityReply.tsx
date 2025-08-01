@@ -18,6 +18,7 @@ import { useRef, useEffect, useState } from "react";
 import styles from "./PrimeCommunityReply.module.css";
 import { useIntl } from "react-intl";
 import { DOWN, DOWNVOTE, REPLY, UP, UPVOTE } from "../../../utils/constants";
+import { formatMention } from "../../../utils/mentionUtils";
 
 const PrimeCommunityReply = (props: any) => {
   const { formatMessage } = useIntl();
@@ -83,9 +84,10 @@ const PrimeCommunityReply = (props: any) => {
   };
 
   const updateReply = (value: any) => {
+    const formattedValue = formatMention(value);
     if (typeof props.updateReply === "function") {
-      props.updateReply(reply.id, value);
-      setReplyText(value);
+      props.updateReply(reply.id, formattedValue);
+      setReplyText(formattedValue);
       setShowEditReplyView(false);
     }
   };

@@ -26,6 +26,7 @@ import {
   UP,
   UPVOTE,
 } from "../../../utils/constants";
+import { formatMention } from "../../../utils/mentionUtils";
 
 const PrimeCommunityComment = (props: any) => {
   const { formatMessage } = useIntl();
@@ -133,7 +134,8 @@ const PrimeCommunityComment = (props: any) => {
 
   const saveReplyHandler = async (value: any) => {
     try {
-      await addReply(comment.id, value);
+      const formattedValue = formatMention(value);
+      await addReply(comment.id, formattedValue);
       setReplyCount(replyCount + 1);
       fetchReplies(comment.id);
       showReplySection();

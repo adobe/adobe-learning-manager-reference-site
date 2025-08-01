@@ -20,6 +20,7 @@ import { useRef, useEffect, useState } from "react";
 import { useConfirmationAlert } from "../../../common/Alert/useConfirmationAlert";
 import { DOWN, DOWNVOTE, POST, UP, UPVOTE } from "../../../utils/constants";
 import styles from "./PrimeCommunityPost.module.css";
+import { formatMention } from "../../../utils/mentionUtils";
 
 const PrimeCommunityPost = (props: any) => {
   const { formatMessage } = useIntl();
@@ -120,7 +121,8 @@ const PrimeCommunityPost = (props: any) => {
 
   const saveCommentHandler = async (value: any) => {
     try {
-      await addComment(post.id, value);
+      const formattedValue = formatMention(value);
+      await addComment(post.id, formattedValue);
       setCommentCount(commentCount + 1);
       fetchComments(post.id);
       showCommentsSection();
