@@ -89,7 +89,7 @@ p {
 
 .primePostDescriptionText {
   margin-top: 15px;
-  padding: 10px 0px;
+  padding: 10px 0px !important;
   text-align: justify;
   margin-right: 5px;
   word-wrap: break-word;
