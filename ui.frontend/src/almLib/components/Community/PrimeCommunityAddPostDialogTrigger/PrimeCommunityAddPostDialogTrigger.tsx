@@ -120,6 +120,7 @@ const PrimeCommunityAddPostDialogTrigger = (props: any) => {
                 setMobileDialogOpen((prevState) => !prevState)
               }
             }}
+            boardId={props.boardId}
           ></PrimeCommunityAddPostDialog>
         )}
       </DialogTrigger>

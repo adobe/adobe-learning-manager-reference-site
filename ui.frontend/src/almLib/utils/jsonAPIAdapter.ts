@@ -74,6 +74,9 @@ export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
       if (data?.length === 0) {
         data = filterResponse(jsonApiResponse, "post");
       }
+      if (data?.length === 0) {
+        data = filterResponse(jsonApiResponse, "user");
+      }
     }
     result = [];
     let oneObj;

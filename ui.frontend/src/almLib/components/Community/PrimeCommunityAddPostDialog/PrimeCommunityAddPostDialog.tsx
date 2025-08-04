@@ -32,6 +32,7 @@ import {
 import { cancelUploadFile, uploadFile } from "../../../utils/uploadUtils";
 import { PrimeCommunityObjectInput } from "../PrimeCommunityObjectInput";
 import styles from "./PrimeCommunityAddPostDialog.module.css";
+import { formatMention, processMention } from "../../../utils/mentionUtils";
 
 const PrimeCommunityAddPostDialog = (props: any) => {
   const ref = useRef<any>();
@@ -59,6 +60,15 @@ const PrimeCommunityAddPostDialog = (props: any) => {
   const COMMENT_CHAR_LIMIT = 4000;
   const [resource, setResource] = useState({});
   const [isResourceModified, setIsResourceModified] = useState(false);
+  let processedDescription = props.description;
+  const boardId = props.boardId;
+  if(props?.post){
+    const { userMentions } = props.post;
+    const description = props.description || "";
+    if(description && userMentions){
+      processedDescription = processMention(description, userMentions);
+    }
+  }
 
   useEffect(() => {
     if (props.mode === UPDATE) {
@@ -118,13 +128,15 @@ const PrimeCommunityAddPostDialog = (props: any) => {
   };
 
   const savePostHandler = (close: any) => {
-    if (ref.current.value === "") {
+    const postText = ref.current.getSemanticHTML();
+    if (postText === "") {
       return;
     }
+    const formattedPostText = formatMention(postText);
     if (typeof props.saveHandler === "function") {
       props.saveHandler(
         close,
-        ref.current.value,
+        formattedPostText,
         postingType,
         resource,
         isResourceModified,
@@ -266,7 +278,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
             defaultMessage: "Write or paste something here...",
           })}
           characterLimit={COMMENT_CHAR_LIMIT}
-          defaultValue={props.description}
+          defaultValue={processedDescription}
           enablePrimaryAction={() => {
             enableSaveButton();
           }}
@@ -274,6 +286,8 @@ const PrimeCommunityAddPostDialog = (props: any) => {
             setSaveEnabled(false);
           }}
           concisedToolbarOptions={false}
+          object={props.post}
+          boardId={boardId}
         ></PrimeCommunityObjectInput>
         {textMode && (
           <div className={styles.primeOptionsArea}>

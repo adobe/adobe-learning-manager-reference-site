@@ -30,6 +30,8 @@ import {
   VIDEO,
 } from "../../../utils/constants";
 import { FULLSCREEN_SVG, FULLSCREEN_EXIT_SVG } from "../../../utils/inline_svg";
+import { PrimeUser } from "../../../models";
+import { processMention } from "../../../utils/mentionUtils";
 
 const PrimeCommunityObjectBody = (props: any) => {
   const { formatMessage } = useIntl();
@@ -46,37 +48,48 @@ const PrimeCommunityObjectBody = (props: any) => {
     return url;
   };
 
+  const userMentions = object.userMentions || [];
+
   const isValidUrl = (input: string) => {
     return (
       input.match(urlRegex) || (input.indexOf(".") > -1 && !input.endsWith("."))
     );
   };
 
-  const getFormattedDescription = (description: string) => {
+  const getFormattedDescription = (
+    description: string,
+    userMentions: PrimeUser[],
+  ) => {
     if (description && description !== "") {
       description = linkifyHtml(description);
+      description = processMention(description, userMentions);
       description = description.replace(
         /<a\b/g,
-        `<a class="${styles.objectbodyLink}" target="_blank" rel="noopener noreferrer"`
+        `<a class="${styles.objectbodyLink}" target="_blank" rel="noopener noreferrer"`,
       );
     }
     return description;
   };
-  const getDescription = () => {
+  const getDescription = (userMentions: PrimeUser[]) => {
     switch (entityType) {
       case BOARD:
-        return getFormattedDescription(object.richTextdescription);
+        return getFormattedDescription(
+          object.richTextdescription,
+          userMentions,
+        );
       case POST:
-        return getFormattedDescription(props.description);
+        return getFormattedDescription(props.description, userMentions);
       case COMMENT:
-        return getFormattedDescription(props.text);
+        return getFormattedDescription(props.text, userMentions);
       case REPLY:
-        return getFormattedDescription(props.text);
+        return getFormattedDescription(props.text, userMentions);
       default:
         return "";
     }
   };
-  const [fullDescription, setFullDescription] = useState(getDescription());
+  const [fullDescription, setFullDescription] = useState(
+    getDescription(userMentions)
+  );
   const primeConfig = getALMConfig();
   const iframeSrc = `${
     primeConfig.almBaseURL
@@ -115,7 +128,7 @@ const PrimeCommunityObjectBody = (props: any) => {
 
   useEffect(() => {
     if (props.description) {
-      const fullDesc = getDescription();
+      const fullDesc = getDescription(userMentions);
       setFullDescription(fullDesc);
       setCurrentDescription(
         fullDesc.length > MAX_CHAR_SHOWN

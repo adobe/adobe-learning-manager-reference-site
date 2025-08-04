@@ -55,6 +55,7 @@ const PrimeCommunityAddPostButton = (props: any) => {
           );
         }}
         inMobileView={props.inMobileView}
+        boardId={props.boardId}
       ></PrimeCommunityAddPostDialogTrigger>
     </>
   );

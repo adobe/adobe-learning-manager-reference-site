@@ -87,6 +87,7 @@ const PrimeCommunityAddPost = (props: any) => {
                   pollOptions
                 )
               }
+              boardId={boardId}
             ></PrimeCommunityAddPostButton>
           </div>
         </div>
