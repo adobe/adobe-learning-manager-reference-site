@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 import ReactDOM from "react-dom";
 import { Suspense } from "react";
-import 'react-quill/dist/quill.snow.css';
+import 'quill/dist/quill.snow.css';
 
 
 const withSuspense = (Component: any) => {
