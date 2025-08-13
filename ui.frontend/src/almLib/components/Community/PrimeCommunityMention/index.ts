@@ -1,0 +1,1 @@
+export { PrimeCommunityMention } from './PrimeCommunityMention'; 

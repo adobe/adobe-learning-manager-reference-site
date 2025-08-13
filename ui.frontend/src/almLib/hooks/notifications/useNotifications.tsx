@@ -67,6 +67,12 @@ const channels = [
   "author::added",
   "integrationAdmin::added",
   "announcement::received",
+  'social::addedAsModerator',
+  'social::postLive',
+  'social::postRejected',
+  'social::commentedOnPost',
+  'social::commentedOnComment',
+  'social::userTaggedOnPostCommentReply',
 ];
 export const useNotifications = () => {
   const { notifications, next , announcements } = useSelector(

@@ -26,12 +26,13 @@ import {
   UP,
   UPVOTE,
 } from "../../../utils/constants";
-import { formatMention } from "../../../utils/mentionUtils";
+import { formatMention, processMention } from "../../../utils/mentionUtils";
 
 const PrimeCommunityComment = (props: any) => {
   const { formatMessage } = useIntl();
   const ref = useRef<any>();
-  const comment = props.comment;
+  const {comment} = props;
+  const {userMentions} = comment;
   const parentPost = props.parentPost;
   const { voteComment, deleteCommentVote } = useComment();
   const { addReply, fetchReplies } = useReplies(comment.id);
@@ -58,6 +59,7 @@ const PrimeCommunityComment = (props: any) => {
   const [replyCount, setReplyCount] = useState(comment.replyCount);
   const [showEditCommentView, setShowEditCommentView] = useState(false);
   const [commentText, setCommentText] = useState(comment.richText);
+  const processedCommentText = userMentions ? processMention(commentText, userMentions) : commentText;
 
   const viewButtonClickHandler = () => {
     if (!showReplies) {
@@ -241,7 +243,7 @@ const PrimeCommunityComment = (props: any) => {
             id: "alm.community.comment.commentHere",
             defaultMessage: "Comment here",
           })}
-          defaultValue={comment.richText}
+          defaultValue={processedCommentText}
           primaryActionHandler={(value: any) => updateComment(value)}
           secondaryActionHandler={() => setShowEditCommentView(false)}
           concisedToolbarOptions={true}

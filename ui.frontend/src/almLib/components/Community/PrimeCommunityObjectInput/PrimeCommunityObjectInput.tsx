@@ -190,6 +190,21 @@ const QuillEditor = forwardRef<Quill, QuillEditorProps>(
         }
       });
 
+      // Handle copy-paste of mentions - convert to plain text
+      quill.clipboard.addMatcher('a.ql-mention.mention', function (node: Node, delta: any) {
+        const element = node as HTMLElement;
+        const dataValue = element.getAttribute('data-value');
+        const Delta = Quill.import('delta');
+        
+        if (dataValue) {
+          // Insert the user name as plain text
+          return new Delta().insert(dataValue);
+        }
+
+        // Fallback to text content if data-value is missing
+        return new Delta().insert(element.textContent || '');
+      });
+
       return () => {
         if (ref && typeof ref === "object" && "current" in ref) {
           (ref as MutableRefObject<Quill | null>).current = null;
@@ -233,6 +248,11 @@ const PrimeCommunityObjectInput = React.forwardRef<Quill, any>((props, ref) => {
     setUserInputText(emptyString);
     setCharactersRemaining(objectTextLimit);
     setShowLinkPreview(false);
+
+    // Clear the Quill editor content
+    if (quillRef.current) {
+      quillRef.current.setContents([]);
+    }
   };
 
   const primaryActionHandler = () => {
@@ -354,6 +374,7 @@ const PrimeCommunityObjectInput = React.forwardRef<Quill, any>((props, ref) => {
     allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
     mentionDenotationChars: ["@"],
     dataAttributes: ["id", "value", "type"],
+    spaceAfterInsert: false, // Prevent automatic space insertion after mention
     source: async (
       searchTerm: string,
       renderList: (
@@ -437,6 +458,17 @@ const PrimeCommunityObjectInput = React.forwardRef<Quill, any>((props, ref) => {
       };
       console.log("mentionData", mentionData);
       insertItem(mentionData);
+      
+      // Restore focus and cursor visibility after mention insertion
+      setTimeout(() => {
+        if (quillRef.current) {
+          quillRef.current.focus();
+          const range = quillRef.current.getSelection();
+          if (range) {
+            quillRef.current.setSelection(range.index, 0);
+          }
+        }
+      }, 10);
     },
   };
 
@@ -573,6 +605,20 @@ const PrimeCommunityObjectInput = React.forwardRef<Quill, any>((props, ref) => {
 
         .ql-mention.mention {
           background-color: unset !important;
+        }
+
+        /* Fix cursor height issues */
+        .ql-editor {
+          line-height: 1.42 !important;
+        }
+        
+        .ql-editor .ql-cursor {
+          height: 1.2em !important;
+          line-height: 1.2em !important;
+        }
+        
+        .ql-editor p {
+          line-height: 1.42 !important;
         }
       `}</style>
         <div className={styles.primeTextAreaCountRemaining}>

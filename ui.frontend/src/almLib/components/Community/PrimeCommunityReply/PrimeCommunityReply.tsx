@@ -18,12 +18,13 @@ import { useRef, useEffect, useState } from "react";
 import styles from "./PrimeCommunityReply.module.css";
 import { useIntl } from "react-intl";
 import { DOWN, DOWNVOTE, REPLY, UP, UPVOTE } from "../../../utils/constants";
-import { formatMention } from "../../../utils/mentionUtils";
+import { formatMention, processMention } from "../../../utils/mentionUtils";
 
 const PrimeCommunityReply = (props: any) => {
   const { formatMessage } = useIntl();
   const ref = useRef<any>();
-  const reply = props.reply;
+  const { reply } = props;
+  const { userMentions } = reply;
   const { voteReply, deleteReplyVote } = useReply();
   const myVoteStatus = reply.myVoteStatus ? reply.myVoteStatus : "";
   const [myUpVoteStatus, setMyUpVoteStatus] = useState(myVoteStatus === UPVOTE);
@@ -36,6 +37,7 @@ const PrimeCommunityReply = (props: any) => {
   const firstRunForDownvote = useRef(true);
   const [showEditReplyView, setShowEditReplyView] = useState(false);
   const [replyText, setReplyText] = useState(reply.richText);
+  const processedReplyText = userMentions ? processMention(replyText, userMentions) : replyText;
 
   useEffect(() => {
     if (firstRunForUpvote.current) {
@@ -130,7 +132,7 @@ const PrimeCommunityReply = (props: any) => {
             id: "alm.community.comment.replyHere",
             defaultMessage: "Reply here",
           })}
-          defaultValue={reply.richText}
+          defaultValue={processedReplyText}
           primaryActionHandler={(value: any) => updateReply(value)}
           secondaryActionHandler={() => setShowEditReplyView(false)}
           concisedToolbarOptions={true}
