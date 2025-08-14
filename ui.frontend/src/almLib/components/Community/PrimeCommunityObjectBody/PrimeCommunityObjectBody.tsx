@@ -30,8 +30,7 @@ import {
   VIDEO,
 } from "../../../utils/constants";
 import { FULLSCREEN_SVG, FULLSCREEN_EXIT_SVG } from "../../../utils/inline_svg";
-import { PrimeUser } from "../../../models";
-import { processMention } from "../../../utils/mentionUtils";
+import { PrimeCommunityMention } from "../PrimeCommunityMention";
 
 const PrimeCommunityObjectBody = (props: any) => {
   const { formatMessage } = useIntl();
@@ -56,13 +55,9 @@ const PrimeCommunityObjectBody = (props: any) => {
     );
   };
 
-  const getFormattedDescription = (
-    description: string,
-    userMentions: PrimeUser[],
-  ) => {
+  const getFormattedDescription = (description: string) => {
     if (description && description !== "") {
       description = linkifyHtml(description);
-      description = processMention(description, userMentions);
       description = description.replace(
         /<a\b/g,
         `<a class="${styles.objectbodyLink}" target="_blank" rel="noopener noreferrer"`,
@@ -70,25 +65,22 @@ const PrimeCommunityObjectBody = (props: any) => {
     }
     return description;
   };
-  const getDescription = (userMentions: PrimeUser[]) => {
+  const getDescription = () => {
     switch (entityType) {
       case BOARD:
-        return getFormattedDescription(
-          object.richTextdescription,
-          userMentions,
-        );
+        return getFormattedDescription(object.richTextdescription);
       case POST:
-        return getFormattedDescription(props.description, userMentions);
+        return getFormattedDescription(props.description);
       case COMMENT:
-        return getFormattedDescription(props.text, userMentions);
+        return getFormattedDescription(props.text);
       case REPLY:
-        return getFormattedDescription(props.text, userMentions);
+        return getFormattedDescription(props.text);
       default:
         return "";
     }
   };
   const [fullDescription, setFullDescription] = useState(
-    getDescription(userMentions)
+    getDescription()
   );
   const primeConfig = getALMConfig();
   const iframeSrc = `${
@@ -128,7 +120,7 @@ const PrimeCommunityObjectBody = (props: any) => {
 
   useEffect(() => {
     if (props.description) {
-      const fullDesc = getDescription(userMentions);
+      const fullDesc = getDescription();
       setFullDescription(fullDesc);
       setCurrentDescription(
         fullDesc.length > MAX_CHAR_SHOWN
@@ -187,10 +179,11 @@ const PrimeCommunityObjectBody = (props: any) => {
             <Question />
           </div>
         )}
-        <div
+        <PrimeCommunityMention
+          htmlString={currentDescription}
+          userMentions={userMentions}
           className={`${styles.primePostDescriptionText} ql-editor`}
-          dangerouslySetInnerHTML={{ __html: currentDescription }}
-        ></div>
+        />
       </div>
       {viewMore && (
         <div className={styles.viewMoreDiv}>

@@ -50,7 +50,7 @@ const PrimeCommunityBoard = (props: any) => {
   const ref = useRef<any>();
 
   const boardSkills = board.skills?.map((skill: any, index: any) => {
-    return (index ? ", " : "") + skill.name;
+    return (index ? ", " : "") + (skill.name || '');
   });
 
   useEffect(() => {

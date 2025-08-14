@@ -47,7 +47,24 @@ const PrimeCommunityAddPostDialog = (props: any) => {
   const [pollTypeSelected, setPollTypeSelected] = useState(false);
 
   const isInputFilled = () => {
-    return ref?.current?.value?.trim() !== "" ? true : false;
+    if (!ref?.current) return false;
+    
+    // Check if it's a Quill editor instance
+    if (typeof ref.current.getSemanticHTML === 'function') {
+      const html = ref.current.getSemanticHTML();
+      // Remove HTML tags and check if there's meaningful content
+      const textContent = html.replace(/<[^>]*>/g, '').trim();
+      // Also check if there are mentions (even if no text)
+      const hasMentions = html.includes('ql-mention');
+      return textContent !== "" || hasMentions;
+    }
+    
+    // Check if it's a standard HTML input/textarea element
+    if (ref.current.value !== undefined) {
+      return ref.current.value.trim() !== "";
+    }
+    
+    return false;
   };
 
   const [saveEnabled, setSaveEnabled] = useState(isInputFilled());
@@ -280,10 +297,10 @@ const PrimeCommunityAddPostDialog = (props: any) => {
           characterLimit={COMMENT_CHAR_LIMIT}
           defaultValue={processedDescription}
           enablePrimaryAction={() => {
-            enableSaveButton();
+            setSaveEnabled(isInputFilled());
           }}
           disablePrimaryAction={() => {
-            setSaveEnabled(false);
+            setSaveEnabled(isInputFilled());
           }}
           concisedToolbarOptions={false}
           object={props.post}
