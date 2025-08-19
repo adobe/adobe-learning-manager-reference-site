@@ -246,12 +246,6 @@ const UserCard: React.FC = () => {
           {user.bio}
         </Text>
       )}
-      <div className={styles.userCardFooter}>
-        <Link href={`#user/${user.id}`} UNSAFE_className={styles.moreDetailsLink}>
-          More details
-        </Link>
-        <span className={styles.moreDetailsIcon}>&#8250;</span>
-      </div>
     </div>
   );
 };

@@ -66,7 +66,6 @@ const channels = [
   "admin::added",
   "author::added",
   "integrationAdmin::added",
-  "announcement::received",
   'social::addedAsModerator',
   'social::postLive',
   'social::postRejected',

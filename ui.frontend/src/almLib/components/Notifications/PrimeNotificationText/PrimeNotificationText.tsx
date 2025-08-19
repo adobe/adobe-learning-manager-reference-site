@@ -14,6 +14,7 @@ import { modifyTimeDDMMYY, modifyTimeForSessionReminderNotif } from "../../../ut
 import { ReplaceLoTypeWithAccountTerminology } from "../../../utils/translationService";
 import styles from "./PrimeNotificationText.module.css";
 import { PrimeUserNotification } from "../../../models";
+import { getALMObject } from "../../../utils/global";
 
 
 
@@ -22,18 +23,19 @@ const feedbackChannels: Array<string> = [
   "learningProgram::l1Feedback",
 ];
 
+const customChannels: Array<string> = [
+  "social::postLive",
+  "social::commentedOnPost",
+  "social::commentedOnComment",
+  "social::userTaggedOnPostCommentReply"
+];
+
 const loReminderChannels: Array<string> = [
   "course::sessionReminder",
   "course::completionReminder",
   "certification::completionReminder",
   "learningProgram::completionReminder"
 ]
-
-const name1Var3Brace: String = "{{{name1}}}";
-const name1Var2Brace: String = "{{name1}}";
-
-const name0Var3Brace: String = "{{{name0}}}";
-const name0Var2Brace: String = "{{name0}}";
 
 const dateTimeStr: any = ["date", "time"];
 const learningObjType: any = "learningObject";
@@ -53,84 +55,45 @@ const PrimeNotificationText : React.FC<{
   const setAnnouncementData= props?.setAnnouncementData;
   let clickHandler = props.redirectOverviewPage;
   
-  let message = notif.message
+    let message = notif.message
     .replace("course", ReplaceLoTypeWithAccountTerminology("course"))
     .replace("program", ReplaceLoTypeWithAccountTerminology("learningProgram"))
     .replace(
       "certification",
       ReplaceLoTypeWithAccountTerminology("certification")
     );
-  let name1 = -1,
-    name0 = -1,
-    endname0 = -1,
-    endname1 = -1;
-  /*
-  Find indexs of name0 and name1 strings. 
-  */
-  if (message.includes(name1Var3Brace) || message.includes(name1Var2Brace)) {
-    if (feedbackChannels.includes(notif.channel)) {
-      message = message.replace("\n{{{name1}}}", "");
-      message = message.replace("\n{{name1}}", "");
-    } else {
-      name1 = message.indexOf(name1Var3Brace);
-      endname1 = name1 + name1Var3Brace.length;
-      if (name1 < 0) {
-        name1 = message.indexOf(name1Var2Brace);
-        endname1 = name1 + name1Var2Brace.length;
-      }
-    }
+
+  // Handle feedback channels
+  if (feedbackChannels.includes(notif.channel)) {
+    message = message.replace("\n{{{name1}}}", "").replace("\n{{name1}}", "");
   }
-  if (message.includes(name0Var3Brace) || message.includes(name0Var2Brace)) {
-    name0 = message.indexOf(name0Var3Brace);
-    endname0 = name0 + name0Var3Brace.length;
-    if (name0 < 0) {
-      name0 = message.indexOf(name0Var2Brace);
-      endname0 = name0 + name0Var2Brace.length;
-    }
-  }
-  let subStrPart1;
-  let loStr1;
-  let str1Type;
-  let subStrPart2;
-  let loStr2;
-  let str2Type;
-  let subStrPart3;
 
-  /*
-  Find 3 substrings from start to name0 , name0 to name1, name1 to end. 
-  Find modeltypes of names0 and name1. to check if they contain the dates/times that needs to be formated. 
-
-  */
-
-  if (name1 > name0 || name1 === -1) {
-    subStrPart1 = name0 > 0 ? message.substring(0, name0) : null;
-    loStr1 = notif.modelNames[0] + " ";
-    str1Type = notif.modelTypes[0];
-    subStrPart2 = message.substring(
-      endname0,
-      name1 > 0 ? name1 : message.length
-    );
-    loStr2 = notif.modelNames[1] + " ";
-    str2Type = notif.modelTypes[1];
-    subStrPart3 =
-      name1 !== -1 ? message.substring(endname1, message.length) : "";
+  // Prepare name values based on channel type
+  const name0Value = notif.modelNames[0] || "";
+  let name1Value: string = "";
+  let name2Value: string = "";
+  // Handle custom channels - use modelNames instead of modelIds
+  if (customChannels.includes(notif.channel)) {
+    name1Value = notif.modelNames[1] || "";
+    name2Value = notif.modelNames[2] || "";
   } else {
-    subStrPart1 = name1 > 0 ? message.substring(0, name1) : "";
-    loStr1 = notif.modelNames[1] + " ";
-    str1Type = notif.modelTypes[1];
-    subStrPart2 = message.substring(
-      endname1,
-      name0 > 0 ? name0 : message.length
-    );
-    loStr2 = notif.modelNames[0] + " ";
-    str2Type = notif.modelTypes[0];
-    subStrPart3 =
-      name0 !== -1 ? message.substring(endname0, message.length) : "";
+    name1Value = notif.modelIds[1] || "";
+  }
+
+  // Split message using regex to find placeholders
+  const parts = message.split(/\{\{\{name[012]\}\}\}|\{\{name[012]\}\}/);
+  const placeholders: string[] = [];
+  let match;
+  const regex = /\{\{\{name([012])\}\}\}|\{\{name([012])\}\}/g;
+
+  while ((match = regex.exec(message)) !== null) {
+    const index = match[1] || match[2]; // match[1] for triple brace, match[2] for double
+    placeholders.push(index);
   }
 
   const getLearningObjClass = (value: string) => {
     let className = styles.loLink;
-    return value === learningObjType ? className : "";
+    return value === learningObjType || value ==="board" || value === "post" ? className : "";
   };
   if(notif.announcement){
     
@@ -142,20 +105,59 @@ const PrimeNotificationText : React.FC<{
 
   }
 
-  const formattedNotificationText = (strType: string, loStr: string) => {
+  // Handle social::userTaggedOnPostCommentReply navigation
+  if(notif.channel === "social::userTaggedOnPostCommentReply"){
+    clickHandler = () =>{
+      // Navigate to the board where the post exists
+      // From the data structure: modelIds[1] is boardId, modelIds[2] is postId
+      const boardId = notif.modelIds[1];
+      if(boardId){
+        getALMObject().navigateToBoardDetailsPage(boardId);
+        setShowNotifications(false);
+      }
+    }
+  }
 
+  const formattedNotificationText = (strType: string, loStr: string, placeholderIndex: string) => {
     // Date Time formatting for session reminder channels
     if((dateTimeStr.includes(strType) && loReminderChannels.includes(notif.channel))){
       return modifyTimeForSessionReminderNotif(notif.modelIds[1], locale);
     }
-    return (dateTimeStr.includes(strType) && !loReminderChannels.includes(notif.channel)) ? (
-      modifyTimeDDMMYY(loStr, locale)
-    ) : (
+    
+    if (dateTimeStr.includes(strType) && !loReminderChannels.includes(notif.channel)) {
+      return modifyTimeDDMMYY(loStr, locale);
+    }
+
+    // Handle specific click behavior for social::userTaggedOnPostCommentReply
+    let specificClickHandler = clickHandler;
+    if (notif.channel === "social::userTaggedOnPostCommentReply") {
+      if (strType === "board" && placeholderIndex === "1") {
+        // Click on board name should navigate to board
+        specificClickHandler = () => {
+          const boardId = notif.modelIds[1];
+          if (boardId) {
+            getALMObject().navigateToBoardDetailsPage(boardId);
+            setShowNotifications(false);
+          }
+        };
+      } else if (strType === "post" && placeholderIndex === "2") {
+        // Click on post should also navigate to board (since posts are viewed in board context)
+        specificClickHandler = () => {
+          const boardId = notif.modelIds[1];
+          if (boardId) {
+            getALMObject().navigateToBoardDetailsPage(boardId);
+            setShowNotifications(false);
+          }
+        };
+      }
+    }
+
+    return (
       <span
         role="link"
         className={getLearningObjClass(strType)}
         onClick={() => {
-          clickHandler(notif);
+          specificClickHandler(notif);
         }}
       >
         {loStr}
@@ -163,18 +165,28 @@ const PrimeNotificationText : React.FC<{
     );
   };
 
+  // Build the result using the parsed parts and placeholders
+  const renderNotificationContent = () => {
+    const result = [];
+    for (let i = 0; i < parts.length; i++) {
+      result.push(<span key={`part-${i}`}>{parts[i]}</span>);
+      if (i < placeholders.length) {
+        const placeholderIndex = placeholders[i];
+        if (placeholderIndex === '0') {
+          result.push(<span key={`name0-${i}`}>{formattedNotificationText(notif.modelTypes[0], name0Value + " ", placeholderIndex)}</span>);
+        } else if (placeholderIndex === '1') {
+          result.push(<span key={`name1-${i}`}>{formattedNotificationText(notif.modelTypes[1], name1Value + " ", placeholderIndex)}</span>);
+        } else if (placeholderIndex === '2') {
+          result.push(<span key={`name2-${i}`}>{formattedNotificationText(notif.modelTypes[2], name2Value + " ", placeholderIndex)}</span>);
+        }
+      }
+    }
+    return result;
+  };
+
   return (
     <div>
-      
-     
-      {subStrPart1}
-      {formattedNotificationText(str1Type, loStr1)}
-      {subStrPart2}
-      {name1 > 0 ? formattedNotificationText(str2Type, loStr2) : null}
-      {subStrPart3}
-  
-  
-      
+      {renderNotificationContent()}
     </div>
   );
 };
