@@ -52,7 +52,7 @@ const PrimeCommunityFeatureDialog: React.FC<PrimeCommunityFeatureDialogProps> = 
             <h2 className={styles.featureDialogTitle}>
               {formatMessage({
                 id: "alm.community.feature.title",
-                defaultMessage: "Tag users in comments",
+                defaultMessage: "Tag users in posts",
               })}
             </h2>
             <p className={styles.featureDialogDescription}>
