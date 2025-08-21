@@ -16,12 +16,14 @@ import { SKILL } from "../../../utils/constants";
 import { getQueryParamsFromUrl } from "../../../utils/global";
 import { ALMErrorBoundary } from "../../Common/ALMErrorBoundary";
 import { ALMLoader } from "../../Common/ALMLoader";
+import { useDialog } from "../../../contextProviders/ALMDialogContextProvider";
 import { PrimeCommunityBoardFilters } from "../PrimeCommunityBoardFilters";
 import { PrimeCommunityBoardsContainer } from "../PrimeCommunityBoardsContainer";
 import { PrimeCommunityMobileBackBanner } from "../PrimeCommunityMobileBackBanner";
 import { PrimeCommunityMobileScrollToTop } from "../PrimeCommunityMobileScrollToTop";
 import { PrimeCommunityPost } from "../PrimeCommunityPost";
 import { PrimeCommunitySearch } from "../PrimeCommunitySearch";
+import { PrimeCommunityFeatureDialog } from "../PrimeCommunityFeatureDialog";
 import styles from "./PrimeCommunityBoardList.module.css";
 
 const PrimeCommunityBoardList = () => {
@@ -36,9 +38,12 @@ const PrimeCommunityBoardList = () => {
     hasMoreItems,
     skills,
     currentSkill,
+    fetchMentionFeaturePopupFlag,
+    setSocialMentionFeaturePopupState,
   } = useBoards(DEFAULT_SORT_VALUE, DEFAULT_SKILL);
   const { posts } = usePosts();
   const { formatMessage } = useIntl();
+  const { openDialog, closeDialog, isOpen } = useDialog();
   const [selectedSortFilter, setSelectedSortFilter] =
     useState(DEFAULT_SORT_VALUE);
   const [selectedSkill, setSelectedSkill] = useState(currentSkill);
@@ -46,6 +51,8 @@ const PrimeCommunityBoardList = () => {
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [searchResult, setSearchResult] = useState(0);
   const [searchString, setSearchString] = useState("");
+  
+  const FEATURE_DIALOG_ID = "community-feature-dialog";
 
   useEffect(() => {
     if (items) {
@@ -53,8 +60,23 @@ const PrimeCommunityBoardList = () => {
     }
   }, [items]);
 
+  useEffect(() => {
+    checkAndShowFeatureDialog();
+  }, []);
+
   const showLoaderHandler = (value: boolean) => {
     setShowLoader(value);
+  };
+
+  const checkAndShowFeatureDialog = async () => {
+    try {
+      const shouldShow = await fetchMentionFeaturePopupFlag();
+      if (shouldShow) {
+        openDialog(FEATURE_DIALOG_ID);
+      }
+    } catch (error) {
+      console.error("Error checking feature dialog flag:", error);
+    }
   };
 
   const searchCountHandler = (results: any, queryString: string) => {
@@ -93,6 +115,19 @@ const PrimeCommunityBoardList = () => {
     setShowLoader(true);
     await fetchBoards(sortFilter, skillFilter);
     setShowLoader(false);
+  };
+
+  const handleFeatureDialogClose = async () => {
+    try {
+      const shouldShow = await setSocialMentionFeaturePopupState();
+      if(!shouldShow) {
+        closeDialog(FEATURE_DIALOG_ID);
+      }
+    } catch (error) {
+      console.error("Error updating feature popup flag:", error);
+      // Still close the dialog even if the API call fails
+      closeDialog(FEATURE_DIALOG_ID);
+    }
   };
 
   return (
@@ -183,6 +218,14 @@ const PrimeCommunityBoardList = () => {
               defaultMessage: "No boards found",
             })}
           </div>
+        )}
+        
+        {/* Feature Dialog */}
+        {isOpen(FEATURE_DIALOG_ID) && (
+          <PrimeCommunityFeatureDialog
+            id={FEATURE_DIALOG_ID}
+            onClose={handleFeatureDialogClose}
+          />
         )}
       </div>
     </ALMErrorBoundary>

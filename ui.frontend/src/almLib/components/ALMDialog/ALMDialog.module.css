@@ -1,0 +1,247 @@
+.almDialogOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.almDialog {
+  width: -webkit-fill-available;
+  max-width: 500px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: fixed; /* Changed from relative to fixed */
+  bottom: 0; /* Ensure it sticks to the bottom */
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow: hidden;
+  z-index: 1500;
+  background: white;
+  animation-duration: 0.3s;
+  animation-fill-mode: forwards;
+}
+
+.almDialogTop {
+  align-self: flex-start;
+  animation-name: slideInFromTop;
+}
+
+.almDialogBottom {
+  align-self: flex-end;
+  animation-name: slideInFromBottom;
+}
+
+.almDialogLeft {
+  align-self: flex-start;
+  animation-name: slideInFromLeft;
+}
+
+.almDialogRight {
+  align-self: flex-end;
+  animation-name: slideInFromRight;
+}
+
+.almDialogCenter {
+  align-self: center;
+  animation-name: fadeIn;
+}
+
+@keyframes slideInFromTop {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToTop {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes slideOutToBottom {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes slideOutToLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes slideOutToRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.almDialogHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 20px;
+  border-bottom: 1px solid var(--prime-color-lightgray);
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
+  width: 100%;
+}
+
+.almDialogNotch {
+  display: none;
+  position: absolute;
+  top: 8px; /* Adjust position to be near the top */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px; /* Width of the notch */
+  height: 4px; /* Height of the notch */
+  background-color: #ccc; /* Notch color */
+  border-radius: 2px; /* Rounded corners */
+}
+
+.almDialogTitle {
+  font-size: var(--prime-font-size-18);
+  margin: 0;
+  font-weight: bold;
+}
+
+.almDialogClose {
+  background: none;
+  font-size: var(--prime-font-size-24);
+  cursor: pointer;
+  border-color: white;
+}
+
+.almDialogContent {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
+.almDialogFooter {
+  display: flex;
+  padding: 10px 20px;
+  border-top: 1px solid var(--prime-color-lightgray);
+  position: sticky;
+  bottom: 0;
+  background: var(--prime-color-white);
+  z-index: 1;
+  gap: 10px;
+}
+
+.almDialogFooterAlignLeft {
+  justify-content: flex-start;
+}
+
+.almDialogFooterAlignCenter {
+  justify-content: center;
+}
+
+.almDialogFooterAlignRight {
+  justify-content: flex-end;
+}
+
+/* Border radius classes */
+.almDialogBorderRadiusAll {
+  border-radius: 16px;
+}
+
+.almDialogBorderRadiusTop {
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.almDialogBorderRadiusBottom {
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.almDialogBorderRadiusLeft {
+  border-top-left-radius: 16px;
+  border-bottom-left-radius: 16px;
+}
+
+.almDialogBorderRadiusRight {
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.noScroll {
+  overflow: hidden;
+}
+
+@media screen and (max-width: 450px) {
+  .almDialogNotch {
+    display: block;
+  }
+}

@@ -12,6 +12,8 @@ governing permissions and limitations under the License.
 import React from "react";
 import { Provider as ReduxProvider } from "react-redux"; //
 import store from "../store/APIStore";
+import { DialogProvider } from "../almLib/contextProviders/ALMDialogContextProvider";
+import { DeviceTypeProvider } from "../almLib/contextProviders/DeviceContextProvider";
 
 /**
  * List of context providers that are required to run Learning
@@ -22,8 +24,12 @@ import store from "../store/APIStore";
 
 export const AppContextProvider = (props: React.PropsWithChildren<{}>) => {
   return (
-    <ReduxProvider store={store}>
-      <>{props.children}</>
-    </ReduxProvider>
+    <DeviceTypeProvider>
+      <ReduxProvider store={store}>
+        <DialogProvider>
+          <>{props.children}</>
+        </DialogProvider>
+      </ReduxProvider>
+    </DeviceTypeProvider>
   );
 };

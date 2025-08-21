@@ -95,4 +95,9 @@ export const AUTUMN_THEME = "Autumn";
 export const CHECKLIST = "CHECKLIST";
 export const PENDING = "PENDING";
 export const PASSED = "passed";
-export const FAILED = "failed"
+export const FAILED = "failed";
+
+export const BREAKPOINTS = {
+    MOBILE: 450,
+    TABLET: 1024,
+};
