@@ -15,7 +15,7 @@ import APIServiceInstance from "../../common/APIService";
 import { PrimeBoard } from "../../models/PrimeModels";
 import { loadBoards, paginateBoards } from "../../store/actions/social/action";
 import { State } from "../../store/state";
-import { getALMConfig } from "../../utils/global";
+import { getALMConfig, getALMUser } from "../../utils/global";
 import { JsonApiParse } from "../../utils/jsonAPIAdapter";
 import { QueryParams, RestAdapter } from "../../utils/restAdapter";
 import { useState } from "react";
@@ -99,6 +99,63 @@ export const useBoards = (sortFilter: string, skillName: string) => {
     );
   }, [dispatch, next]);
 
+  const fetchMentionFeaturePopupFlag = useCallback(async () => {
+    try {
+      const userResponse = await getALMUser();
+      const userId = userResponse?.user?.id;
+      const baseApiUrl = getALMConfig().primeApiURL;
+      const accountId = userResponse?.user?.account?.id;
+      const response = await RestAdapter.get({
+        url: `${baseApiUrl}/account/${accountId}/user/${userId}/socialProfile`,
+      });
+      const parsedResponse = JsonApiParse(response) as any;
+      return parsedResponse?.userProfile?.taggedFeaturePopupFlag;
+    } catch (error) {
+      console.error("Error fetching mention feature popup flag:", error);
+      return false;
+    }
+  }, []);
+
+  const setSocialMentionFeaturePopupState = useCallback(async (): Promise<boolean> => {
+    try {
+      const userResponse = await getALMUser();
+      const userId = userResponse?.user?.id;
+      const baseApiUrl = getALMConfig().primeApiURL;
+      const accountId = userResponse?.user?.account?.id;
+
+      const requestData = {
+        data: {
+          id: userId?.toString(),
+          type: 'userProfile',
+          attributes: {
+            id: userId?.toString(),
+            userId: userId,
+            accountId: accountId,
+            visibility: 'PUBLIC',
+            isSubscribed: false,
+            taggedFeaturePopupFlag: false,
+          },
+        },
+      };
+
+      const response = await RestAdapter.put({
+        url: `${baseApiUrl}/account/${accountId}/user/${userId}/socialProfile`,
+        method: "PUT",
+        headers: {
+          "content-type": "application/json;charset=UTF-8",
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      const parsedResponse = JsonApiParse(response) as any;
+      return parsedResponse?.userProfile?.taggedFeaturePopupFlag;
+    } catch (error) {
+      console.error("Error updating mention feature popup flag:", error);
+      return false;
+    }
+  }, []);
+
+
   return {
     items,
     loadMoreBoards,
@@ -107,5 +164,7 @@ export const useBoards = (sortFilter: string, skillName: string) => {
     isBoardsLoading,
     currentSkill,
     hasMoreItems: Boolean(next),
+    fetchMentionFeaturePopupFlag,
+    setSocialMentionFeaturePopupState,
   };
 };

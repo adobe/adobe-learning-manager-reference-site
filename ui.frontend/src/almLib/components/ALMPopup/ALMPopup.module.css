@@ -1,0 +1,75 @@
+.almPopup {
+  position: fixed;
+  z-index: 1000;
+  background: white;
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    0 6px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 1s ease-in-out;
+}
+
+.almPopupContent {
+  padding: 16px;
+}
+
+.almPopupBottom {
+  margin: 1rem;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.almPopupTop {
+  margin: 1rem;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.almPopupLeft {
+  margin: 1rem;
+  bottom: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.almPopupRight {
+  margin: 1rem;
+  bottom: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.almPopupCenter {
+  margin: 1rem;
+  bottom: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+/* Border radius classes */
+.almPopupBorderRadiusAll {
+  border-radius: 16px;
+}
+
+.almPopupBorderRadiusTop {
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.almPopupBorderRadiusBottom {
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.almPopupBorderRadiusLeft {
+  border-top-left-radius: 16px;
+  border-bottom-left-radius: 16px;
+}
+
+.almPopupBorderRadiusRight {
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
