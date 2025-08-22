@@ -50,10 +50,9 @@ export const PrimeCommunityMention: React.FC<PrimeCommunityMentionProps> = ({
     // Parse HTML and replace mention placeholders with React components
     return parse(processedContent, {
       replace: (domNode: any) => {
-        if (domNode.name === 'mention' && domNode.attribs?.['data-user-id']) {
+        if ((domNode.name === 'mention' || domNode.name === 'a') && domNode.attribs?.['data-user-id']) {
           const id = domNode.attribs['data-user-id'];
           const type = domNode.attribs['data-type'];
-          const value = domNode.attribs['data-value'];
           const userId = `${type}:${id}`;
           const user = userMap[userId];
 
@@ -65,7 +64,7 @@ export const PrimeCommunityMention: React.FC<PrimeCommunityMentionProps> = ({
                     href={`#user/${user.id}`} 
                     marginEnd="size-100"
                     UNSAFE_className="ql-mention mention"
-                    data-id={user.id}
+                    data-user-id={user.id}
                     data-type={user.type}
                     data-value={user.name}
                   >

@@ -821,3 +821,48 @@ export function Warning_ICON(){
     </svg>
   )
 }
+
+export function SOCIAL_FEATURE_CARD_SVG() {
+  return (
+    <svg viewBox="0 0 385 141" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g clipPath="url(#clip0_3005_13820)">
+        <path d="M0 16.5C0 7.66344 7.16344 0.5 16 0.5H369C377.837 0.5 385 7.66344 385 16.5V140.5H0V16.5Z" fill="#FC7D00"/>
+        <mask id="mask0_3005_13820" style={{maskType: 'alpha'}} maskUnits="userSpaceOnUse" x="-378" y="-166" width="833" height="404">
+          <ellipse cx="38.4655" cy="35.9775" rx="415.682" ry="201.543" fill="url(#paint0_radial_3005_13820)"/>
+        </mask>
+        <g mask="url(#mask0_3005_13820)">
+          <ellipse cx="38.4655" cy="35.9775" rx="415.682" ry="201.543" fill="#EB1000"/>
+        </g>
+        <mask id="mask1_3005_13820" style={{maskType: 'alpha'}} maskUnits="userSpaceOnUse" x="123" y="-65" width="391" height="190">
+          <ellipse cx="318.758" cy="30.3982" rx="194.95" ry="94.5213" fill="url(#paint1_radial_3005_13820)"/>
+        </mask>
+        <g mask="url(#mask1_3005_13820)">
+          <ellipse cx="318.758" cy="30.3982" rx="194.95" ry="94.5213" fill="#8480FE"/>
+        </g>
+        <mask id="mask2_3005_13820" style={{maskType: 'alpha'}} maskUnits="userSpaceOnUse" x="-185" y="-96" width="618" height="193">
+          <path d="M80.871 90.604C105.893 98.1111 137.595 98.1571 162.71 90.7227L413.903 16.3612C438.505 9.07832 438.546 -8.11206 413.978 -15.4225L164.444 -89.6786C139.367 -97.1398 107.665 -97.131 82.6091 -89.652L-166.41 -15.3265C-190.848 -8.03162 -190.893 9.06268 -166.485 16.3851L80.871 90.604Z" fill="url(#paint2_linear_3005_13820)"/>
+        </mask>
+        <g mask="url(#mask2_3005_13820)">
+          <path d="M166.743 90.604C141.721 98.1111 110.018 98.1571 84.9037 90.7227L-166.289 16.3612C-190.891 9.07832 -190.932 -8.11205 -166.364 -15.4225L83.1694 -89.6785C108.247 -97.1398 139.949 -97.1309 165.005 -89.6519L414.024 -15.3264C438.462 -8.03158 438.506 9.06272 414.099 16.3851L166.743 90.604Z" fill="#8480FE"/>
+        </g>
+      </g>
+      <defs>
+        <radialGradient id="paint0_radial_3005_13820" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(38.4655 35.9775) rotate(90) scale(201.543 415.682)">
+          <stop/>
+          <stop offset="1" stopOpacity="0"/>
+        </radialGradient>
+        <radialGradient id="paint1_radial_3005_13820" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(318.758 30.3982) rotate(90) scale(94.5213 194.95)">
+          <stop offset="0.166667"/>
+          <stop offset="1" stopOpacity="0"/>
+        </radialGradient>
+        <linearGradient id="paint2_linear_3005_13820" x1="287.105" y1="-78.467" x2="5.20336" y2="275.265" gradientUnits="userSpaceOnUse">
+          <stop offset="0.15625"/>
+          <stop offset="0.599632" stopOpacity="0"/>
+        </linearGradient>
+        <clipPath id="clip0_3005_13820">
+          <path d="M0 16.5C0 7.66344 7.16344 0.5 16 0.5H369C377.837 0.5 385 7.66344 385 16.5V140.5H0V16.5Z" fill="white"/>
+        </clipPath>
+      </defs>
+    </svg>
+  );
+}

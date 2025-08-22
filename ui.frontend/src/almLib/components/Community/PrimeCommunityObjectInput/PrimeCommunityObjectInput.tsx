@@ -43,7 +43,7 @@ class ALMMentionBlot extends Embed {
 
     node.setAttribute("href", `#/userProfile/${data.id}`);
     node.setAttribute("target", "_self");
-    node.setAttribute("data-id", data.id);
+    node.setAttribute("data-user-id", data.id);
     node.setAttribute("data-value", data.value);
     node.setAttribute("data-type", data.type);
     node.setAttribute("contenteditable", "false");
@@ -62,7 +62,7 @@ class ALMMentionBlot extends Embed {
 
   static value(domNode: HTMLElement) {
     return {
-      id: domNode.getAttribute("data-id"),
+      id: domNode.getAttribute("data-user-id"),
       value: domNode.getAttribute("data-value"),
       type: domNode.getAttribute("data-type"),
       href: domNode.getAttribute("href"),
@@ -183,7 +183,7 @@ const QuillEditor = forwardRef<Quill, QuillEditorProps>(
         const target = e.target as HTMLElement;
         if (target && target.classList.contains("ql-mention")) {
           e.preventDefault();
-          const userId = target.getAttribute("data-id");
+          const userId = target.getAttribute("data-user-id");
           const userName = target.getAttribute("data-value");
           console.log("Mention clicked:", { userId, userName });
           // Add your navigation logic here
@@ -371,10 +371,9 @@ const PrimeCommunityObjectInput = React.forwardRef<Quill, any>((props, ref) => {
 
   // Mention module configuration with custom renderItem following reference pattern
   const mentionModule = {
-    allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+    allowedChars: /^[^\s].*$/,
     mentionDenotationChars: ["@"],
     dataAttributes: ["id", "value", "type"],
-    spaceAfterInsert: false, // Prevent automatic space insertion after mention
     source: async (
       searchTerm: string,
       renderList: (

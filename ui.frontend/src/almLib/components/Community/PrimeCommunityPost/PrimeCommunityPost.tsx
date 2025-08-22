@@ -17,15 +17,18 @@ import { PrimeCommunityComments } from "../PrimeCommunityComments";
 import { useIntl } from "react-intl";
 import { useComments, usePost } from "../../../hooks/community";
 import { useRef, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useConfirmationAlert } from "../../../common/Alert/useConfirmationAlert";
 import { DOWN, DOWNVOTE, POST, UP, UPVOTE } from "../../../utils/constants";
 import styles from "./PrimeCommunityPost.module.css";
-import { formatMention } from "../../../utils/mentionUtils";
+import { formatMention, processMention } from "../../../utils/mentionUtils";
+import { State } from "../../../store/state";
 
 const PrimeCommunityPost = (props: any) => {
   const { formatMessage } = useIntl();
   const ref = useRef<any>();
-  const post = props.post;
+  const [post, setPost] = useState(props.post);
+  const { items: postItems } = useSelector((state: State) => state.social.posts);
   const { addComment, votePost, deletePostVote, patchPost, submitPollVote } =
     usePost();
   const { fetchComments } = useComments();
@@ -173,7 +176,17 @@ const PrimeCommunityPost = (props: any) => {
         defaultMessage: "Ok",
       }),
       EMPTY,
-      () => setPostText(input)
+      () => {
+        // Find the post from postItems by post.id
+        const foundPost = postItems?.find((item) => item.id === post.id);
+        if (foundPost && foundPost.richText && (foundPost as any).userMentions) {
+          const processedDescription = processMention(foundPost.richText, (foundPost as any).userMentions);
+          setPostText(processedDescription);
+          setPost(foundPost);
+        } else {
+          setPostText(input);
+        }
+      }
     );
   };
 

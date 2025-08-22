@@ -10,6 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+import { useIntl } from "react-intl";
 import { PrimeUser } from "../models";
 import { getALMConfig } from "./global";
 import { JsonApiParse } from "./jsonAPIAdapter";
@@ -25,7 +26,6 @@ export const loadMentionedUsers = async (
       url: `${baseApiUrl}/social/board/${boardId}/user/search?${encodeURIComponent("query")}=${searchTerm}&include=model`,
     });
     const parsedResponse = JsonApiParse(response).userList;
-    console.log("parsedResponse", parsedResponse);
     return parsedResponse;
   } catch (error) {
     console.error("Error loading mentioned users:", error);
@@ -39,7 +39,7 @@ export function formatMention(text: string): string {
   const mentions = doc.getElementsByClassName('ql-mention mention');
 
   Array.from(mentions).forEach(mention => {
-    const id = mention.getAttribute('data-id');
+    const id = mention.getAttribute('data-user-id');
     const type = mention.getAttribute('data-type');
 
     if (id && type) {
@@ -75,11 +75,15 @@ export function processMention(text: string, users: PrimeUser[]): string {
   textWithPlaceholders = textWithPlaceholders.replace(mentionRegex, (match, type, id) => {
     const user = users.find(u => u.id.toString() === id && u.type === type);
     if (user) {
-      const mentionHtml = `<a href="#" class="ql-mention mention" data-id="${id}" data-type="${type}" data-value="${user.name}">${user.name}</a>`;
+      const mentionHtml = `<a href="javascript:void(0)" class="ql-mention mention" data-user-id="${id}" data-type="${type}" data-value="${user.name}">${user.name}</a>`;
       mentionTemplates.push(mentionHtml);
       return `%%MENTION_${mentionTemplates.length - 1}%%`;
     }
-    return "Anonymous"; // Fallback for unknown users
+    const { formatMessage } = useIntl();
+    return formatMessage({
+      id: "alm.community.board.anonymous.label",
+      defaultMessage: "Anonymous",
+    }); // Fallback for unknown users
   });
 
   // 2. Replace placeholders with mention HTML
