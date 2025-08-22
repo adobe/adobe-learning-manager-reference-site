@@ -32,6 +32,15 @@ import {
 import { FULLSCREEN_SVG, FULLSCREEN_EXIT_SVG } from "../../../utils/inline_svg";
 import { PrimeCommunityMention } from "../PrimeCommunityMention";
 
+// Utility function to get text content from HTML string
+const getTextContentFromHtml = (htmlString: string): string => {
+  if (!htmlString) return '';
+  // Create a temporary DOM element to parse HTML and extract text
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = htmlString;
+  return tempDiv.textContent || tempDiv.innerText || '';
+};
+
 const PrimeCommunityObjectBody = (props: any) => {
   const { formatMessage } = useIntl();
   const object = props.object;
@@ -92,25 +101,30 @@ const PrimeCommunityObjectBody = (props: any) => {
   const MAX_CHAR_SHOWN = 450;
   const DEFAULT_INDEX_VALUE = 2;
   const [viewIndex, setViewIndex] = useState(DEFAULT_INDEX_VALUE);
+  // Count only visible text characters for viewMore logic
+  const textContentLength = getTextContentFromHtml(fullDescription);
   const [viewMore, setViewMore] = useState(
-    fullDescription?.length > MAX_CHAR_SHOWN
+    textContentLength.length > MAX_CHAR_SHOWN
   );
   const [currentDescription, setCurrentDescription] = useState(
-    fullDescription?.length > MAX_CHAR_SHOWN
+    textContentLength.length > MAX_CHAR_SHOWN
       ? fullDescription.substring(0, MAX_CHAR_SHOWN)
       : fullDescription
   );
 
   const getTruncatedDescription = () => {
     const supportedCharacterLength = MAX_CHAR_SHOWN * viewIndex;
-    if (fullDescription?.length <= supportedCharacterLength) {
+    const textContentLength = getTextContentFromHtml(fullDescription);
+    
+    if (textContentLength.length <= supportedCharacterLength) {
       setViewMore(false);
       setCurrentDescription(fullDescription);
       setViewIndex(DEFAULT_INDEX_VALUE);
-    } else
+    } else {
       setCurrentDescription(
         fullDescription.substring(0, supportedCharacterLength)
       );
+    }
     setViewIndex(viewIndex + 1);
   };
 
@@ -121,13 +135,15 @@ const PrimeCommunityObjectBody = (props: any) => {
   useEffect(() => {
     if (props.description) {
       const fullDesc = getDescription();
+      const textContentLength = getTextContentFromHtml(fullDesc);
+      
       setFullDescription(fullDesc);
       setCurrentDescription(
-        fullDesc.length > MAX_CHAR_SHOWN
+        textContentLength.length > MAX_CHAR_SHOWN
           ? fullDesc.substring(0, MAX_CHAR_SHOWN)
           : fullDesc
       );
-      setViewMore(props.description?.length > MAX_CHAR_SHOWN);
+      setViewMore(textContentLength.length > MAX_CHAR_SHOWN);
     }
   }, [props.description]);
 

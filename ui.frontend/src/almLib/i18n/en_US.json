@@ -461,5 +461,9 @@
   "alm.overview.checklistReviewPending": "Reviewer evaluation is pending",
   "alm.overview.checklistReviewComplete": "Reviewer evaluation is complete. Status -",
   "alm.overview.document.not.accessible.disclaimer": "Document is not accessible after {days} days from last submission date",
-  "alm.overview.document.not.accessible.note": "Last submission not accessible"
+  "alm.overview.document.not.accessible.note": "Last submission not accessible",
+  "alm.community.feature.title": "Tag users in posts",
+  "alm.community.feature.description": "Enter @ followed by at least 3 characters to find and tag users in any post or comment to get quicker attention. They'll get notified right away.",
+  "alm.community.feature.close": "Close",
+  "alm.community.feature.okay": "Okay"
 }

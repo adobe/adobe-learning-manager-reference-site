@@ -17,6 +17,10 @@ governing permissions and limitations under the License.
   padding: 0 !important;
 }
 
+.almDialogFooter {
+  padding: 20px !important;
+}
+
 .featureDialogButton {
   background: var(--prime-color-primary) !important;
   color: var(--prime-color-white) !important;

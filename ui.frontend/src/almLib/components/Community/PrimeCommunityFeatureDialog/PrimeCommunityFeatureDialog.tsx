@@ -13,7 +13,7 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 import { ALMDialog, ALMDialogContent, ALMDialogFooter, ALMDialogHeader } from '../../ALMDialog';
 import { Button } from '@adobe/react-spectrum';
-import SocialFeatureCardSvg from '../../../assets/images/social_feature_card.svg';
+import { SOCIAL_FEATURE_CARD_SVG } from '../../../utils/inline_svg';
 import styles from './PrimeCommunityFeatureDialog.module.css';
 
 interface PrimeCommunityFeatureDialogProps {
@@ -31,19 +31,15 @@ const PrimeCommunityFeatureDialog: React.FC<PrimeCommunityFeatureDialogProps> = 
     <ALMDialog
       id={id}
       direction="center"
-      height={34}
+      height={40}
       overlayClose={true}
       borderRadius="all"
       className={styles.almDialogBorderRadiusAll}
     >
       <ALMDialogHeader className={styles.almDialogHeader}>
-      <div className={styles.featureDialogImageContainer}>
-            <img 
-              src={SocialFeatureCardSvg} 
-              alt="Social Feature" 
-              className={styles.featureDialogImage}
-            />
-          </div>
+        <div className={styles.featureDialogImageContainer}>
+          <SOCIAL_FEATURE_CARD_SVG />
+        </div>
       </ALMDialogHeader>
       <ALMDialogContent>
         <div className={styles.featureDialogContainer}>
