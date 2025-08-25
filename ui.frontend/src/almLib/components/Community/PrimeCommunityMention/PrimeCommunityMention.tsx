@@ -15,6 +15,7 @@ import parse from 'html-react-parser';
 import { Link } from '@adobe/react-spectrum';
 import { PrimeUser } from '../../../models';
 import { ALMHoverPopover } from '../../Common/ALMHoverPopover';
+import { useIntl } from 'react-intl';
 
 interface PrimeCommunityMentionProps {
   htmlString: string;
@@ -29,6 +30,7 @@ export const PrimeCommunityMention: React.FC<PrimeCommunityMentionProps> = ({
 }) => {
   // Create a map for quick user lookup
   const userMap: Record<string, PrimeUser> = {};
+  const { formatMessage } = useIntl();
   userMentions.forEach(user => {
     userMap[`${user.type}:${user.id}`] = user;
   });
@@ -56,7 +58,7 @@ export const PrimeCommunityMention: React.FC<PrimeCommunityMentionProps> = ({
           const userId = `${type}:${id}`;
           const user = userMap[userId];
 
-          if (user) {
+          if (user && user.name && user.state === 'ACTIVE') {
             return (
               <ALMHoverPopover.Root key={`mention-${userId}`} user={user}>
                 <ALMHoverPopover.Trigger>
@@ -78,6 +80,15 @@ export const PrimeCommunityMention: React.FC<PrimeCommunityMentionProps> = ({
                 </ALMHoverPopover.Portal>
               </ALMHoverPopover.Root>
             );
+          } else {
+            return (
+              <span>
+                {formatMessage({
+                  id: "alm.community.board.anonymous.label",
+                  defaultMessage: "Anonymous",
+                })}
+              </span>
+            ); // Fallback for unknown users
           }
         }
       }
