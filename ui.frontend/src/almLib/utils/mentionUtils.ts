@@ -74,7 +74,7 @@ export function processMention(text: string, users: PrimeUser[]): string {
   // 1. Replace mentions with placeholders and store templates
   textWithPlaceholders = textWithPlaceholders.replace(mentionRegex, (match, type, id) => {
     const user = users.find(u => u.id.toString() === id && u.type === type);
-    if (user) {
+    if (user && user.name && user.state === 'ACTIVE') {
       const mentionHtml = `<a href="javascript:void(0)" class="ql-mention mention" data-user-id="${id}" data-type="${type}" data-value="${user.name}">${user.name}</a>`;
       mentionTemplates.push(mentionHtml);
       return `%%MENTION_${mentionTemplates.length - 1}%%`;
