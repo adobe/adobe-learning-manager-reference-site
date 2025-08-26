@@ -112,7 +112,7 @@ export const useBoards = (sortFilter: string, skillName: string) => {
       return parsedResponse?.userProfile?.taggedFeaturePopupFlag;
     } catch (error) {
       console.error("Error fetching mention feature popup flag:", error);
-      return false;
+      return true;
     }
   }, []);
 
@@ -133,7 +133,7 @@ export const useBoards = (sortFilter: string, skillName: string) => {
             accountId: accountId,
             visibility: 'PUBLIC',
             isSubscribed: false,
-            taggedFeaturePopupFlag: false,
+            taggedFeaturePopupFlag: true,
           },
         },
       };
