@@ -70,8 +70,8 @@ const PrimeCommunityBoardList = () => {
 
   const checkAndShowFeatureDialog = async () => {
     try {
-      const shouldShow = await fetchMentionFeaturePopupFlag();
-      if (shouldShow) {
+      const socialMentionFeaturePopupFlag = await fetchMentionFeaturePopupFlag();
+      if (!socialMentionFeaturePopupFlag) {
         openDialog(FEATURE_DIALOG_ID);
       }
     } catch (error) {
