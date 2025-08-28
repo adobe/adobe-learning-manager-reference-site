@@ -15,8 +15,10 @@ import { PrimeCommunityObjectActions } from "../PrimeCommunityObjectActions";
 import { PrimeCommunityObjectInput } from "../PrimeCommunityObjectInput";
 import { PrimeCommunityReplies } from "../PrimeCommunityReplies";
 import { useIntl } from "react-intl";
+import { useSelector } from "react-redux";
 import { useComment, useReplies } from "../../../hooks/community";
 import { useRef, useEffect, useState } from "react";
+import { State } from "../../../store/state";
 import styles from "./PrimeCommunityComment.module.css";
 import {
   COMMENT,
@@ -31,7 +33,10 @@ import { formatMention, processMention } from "../../../utils/mentionUtils";
 const PrimeCommunityComment = (props: any) => {
   const { formatMessage } = useIntl();
   const ref = useRef<any>();
-  const {comment} = props;
+  let comment = useSelector((state: State) => state.social.comments.items.find((item: any) => item.id === props.comment.id)) as any;
+  if(!comment) {
+    comment = props.comment;
+  }
   const {userMentions} = comment;
   const parentPost = props.parentPost;
   const { voteComment, deleteCommentVote } = useComment();
@@ -146,9 +151,10 @@ const PrimeCommunityComment = (props: any) => {
     }
   };
 
-  const updateComment = (value: any) => {
+  const updateComment = async (value: any) => {
     if (typeof props.updateComment === "function") {
-      props.updateComment(comment.id, value);
+      const formattedValue = formatMention(value);
+      await props.updateComment(comment.id, formattedValue);
       setCommentText(value);
       setShowEditCommentView(false);
     }
