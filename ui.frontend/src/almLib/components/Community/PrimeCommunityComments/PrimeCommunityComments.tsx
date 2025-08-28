@@ -14,7 +14,6 @@ import { PrimeCommunityComment } from "../PrimeCommunityComment";
 import styles from "./PrimeCommunityComments.module.css";
 import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
-import { formatMention } from "../../../utils/mentionUtils";
 
 const PrimeCommunityComments = (props: any) => {
   const { formatMessage } = useIntl();
@@ -48,8 +47,7 @@ const PrimeCommunityComments = (props: any) => {
 
   const updateComment = async (commentId: any, value: any) => {
     try {
-      const formattedValue = formatMention(value);
-      await patchComment(commentId, formattedValue);
+      await patchComment(commentId, value);
     } catch (exception) {
       console.log("error while updating comment");
     }
