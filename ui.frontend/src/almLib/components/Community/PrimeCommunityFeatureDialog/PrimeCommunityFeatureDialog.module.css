@@ -36,14 +36,13 @@ governing permissions and limitations under the License.
 
 .featureDialogImageContainer {
   width: 100%;
-  display: flex;
-  justify-content: center;
+  max-height: 120px;
+  overflow: hidden;
 }
 
-.featureDialogImage {
+.featureDialogImageContainer svg {
   width: 100%;
-  height: 150px;
-  object-fit: cover;
+  height: 100%;
 }
 
 .featureDialogContent {

@@ -31,7 +31,6 @@ const PrimeCommunityFeatureDialog: React.FC<PrimeCommunityFeatureDialogProps> = 
     <ALMDialog
       id={id}
       direction="center"
-      height={40}
       overlayClose={true}
       borderRadius="all"
       className={styles.almDialogBorderRadiusAll}

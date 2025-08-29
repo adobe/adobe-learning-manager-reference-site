@@ -15,15 +15,20 @@ import { PrimeCommunityObjectActions } from "../PrimeCommunityObjectActions";
 import { PrimeCommunityObjectInput } from "../PrimeCommunityObjectInput";
 import { useReply } from "../../../hooks/community";
 import { useRef, useEffect, useState } from "react";
-import styles from "./PrimeCommunityReply.module.css";
 import { useIntl } from "react-intl";
 import { DOWN, DOWNVOTE, REPLY, UP, UPVOTE } from "../../../utils/constants";
 import { formatMention, processMention } from "../../../utils/mentionUtils";
+import { useSelector } from "react-redux";
+import { State } from "../../../store/state";
+import styles from "./PrimeCommunityReply.module.css";
 
 const PrimeCommunityReply = (props: any) => {
   const { formatMessage } = useIntl();
   const ref = useRef<any>();
-  const { reply } = props;
+  let reply = useSelector((state: State) => state.social.replies.items.find((item: any) => item.id === props.reply.id)) as any;
+  if(!reply) {
+    reply = props.reply;
+  }
   const { userMentions } = reply;
   const { voteReply, deleteReplyVote } = useReply();
   const myVoteStatus = reply.myVoteStatus ? reply.myVoteStatus : "";
@@ -85,11 +90,12 @@ const PrimeCommunityReply = (props: any) => {
     }
   };
 
-  const updateReply = (value: any) => {
+  const updateReply = async (value: any) => {
     const formattedValue = formatMention(value);
     if (typeof props.updateReply === "function") {
-      props.updateReply(reply.id, formattedValue);
-      setReplyText(formattedValue);
+      await props.updateReply(reply.id, formattedValue);
+      // update the reply without formatted text, it will go through redux and come back with the formatted text
+      setReplyText(value);
       setShowEditReplyView(false);
     }
   };

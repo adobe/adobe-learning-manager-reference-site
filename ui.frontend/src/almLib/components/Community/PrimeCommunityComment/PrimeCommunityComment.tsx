@@ -155,6 +155,7 @@ const PrimeCommunityComment = (props: any) => {
     if (typeof props.updateComment === "function") {
       const formattedValue = formatMention(value);
       await props.updateComment(comment.id, formattedValue);
+      // update the comment without formatted text, it will go through redux and come back with the formatted text
       setCommentText(value);
       setShowEditCommentView(false);
     }
