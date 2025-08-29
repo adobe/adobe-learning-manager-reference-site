@@ -119,8 +119,8 @@ const PrimeCommunityBoardList = () => {
 
   const handleFeatureDialogClose = async () => {
     try {
-      const shouldShow = await setSocialMentionFeaturePopupState();
-      if(!shouldShow) {
+      const socialMentionFeaturePopupFlag = await setSocialMentionFeaturePopupState();
+      if(socialMentionFeaturePopupFlag) {
         closeDialog(FEATURE_DIALOG_ID);
       }
     } catch (error) {
