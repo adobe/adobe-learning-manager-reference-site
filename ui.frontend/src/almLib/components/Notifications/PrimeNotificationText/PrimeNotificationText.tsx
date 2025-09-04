@@ -23,7 +23,7 @@ const feedbackChannels: Array<string> = [
   "learningProgram::l1Feedback",
 ];
 
-const customChannels: Array<string> = [
+const socialChannels: Array<string> = [
   "social::postLive",
   "social::commentedOnPost",
   "social::commentedOnComment",
@@ -73,7 +73,7 @@ const PrimeNotificationText : React.FC<{
   let name1Value: string = "";
   let name2Value: string = "";
   // Handle custom channels - use modelNames instead of modelIds
-  if (customChannels.includes(notif.channel)) {
+  if (notif.channel && socialChannels.includes(notif.channel)) {
     name1Value = notif.modelNames[1] || "";
     name2Value = notif.modelNames[2] || "";
   } else {
@@ -106,7 +106,7 @@ const PrimeNotificationText : React.FC<{
   }
 
   // Handle social::userTaggedOnPostCommentReply navigation
-  if(notif.channel === "social::userTaggedOnPostCommentReply"){
+  if(notif.channel && socialChannels.includes(notif.channel)){
     clickHandler = () =>{
       // Navigate to the board where the post exists
       // From the data structure: modelIds[1] is boardId, modelIds[2] is postId
@@ -130,7 +130,7 @@ const PrimeNotificationText : React.FC<{
 
     // Handle specific click behavior for social::userTaggedOnPostCommentReply
     let specificClickHandler = clickHandler;
-    if (notif.channel === "social::userTaggedOnPostCommentReply") {
+    if (notif.channel && socialChannels.includes(notif.channel)) {
       if (strType === "board" && placeholderIndex === "1") {
         // Click on board name should navigate to board
         specificClickHandler = () => {
