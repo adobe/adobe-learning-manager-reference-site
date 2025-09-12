@@ -92,6 +92,7 @@ export interface CatalogFilterState {
   catalogs: string;
   price: string;
   cities: string;
+  bookmarks: string;
 }
 
 export interface CatalogState {
@@ -193,6 +194,18 @@ const cities: Reducer<string, AnyAction> = (
       return action.payload;
     case UPDATE_FILTERS_ON_LOAD:
       return action.payload.cities;
+    default:
+      return state || "";
+  }
+};
+
+const bookmarks: Reducer<string, AnyAction> = (
+  state: string | undefined,
+  action: AnyAction
+) => {
+  switch (action.type) {
+    case UPDATE_FILTERS_ON_LOAD:
+      return action.payload.bookmarks;
     default:
       return state || "";
   }
@@ -378,6 +391,7 @@ const filterState: Reducer<CatalogFilterState, AnyAction> = combineReducers({
   catalogs,
   price,
   cities,
+  bookmarks
 });
 
 const catalog: Reducer<CatalogState, AnyAction> = combineReducers({
