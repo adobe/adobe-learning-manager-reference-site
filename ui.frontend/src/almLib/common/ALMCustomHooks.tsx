@@ -222,7 +222,7 @@ class ALMCustomHooks implements ICustomHooks {
     citiesList = updateFilterList(citiesList, queryParams, "cities");
 
     let catalogList = catalogPromise?.map((item: any) => ({
-      value: item.name,
+      value: item.id,
       label: item.name,
       checked: false,
       id: item.id,
