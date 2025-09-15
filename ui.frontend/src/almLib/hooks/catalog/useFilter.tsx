@@ -53,11 +53,24 @@ export const useFilter = () => {
     filters: FilterType,
     payload: string
   ) => {
-    updateURLParams({ [data.filterType as string]: payload });
+    // When any filter other than bookmarks is updated, remove bookmarks from URL
+    const urlParams = { [data.filterType as string]: payload };
+    if (data.filterType !== "bookmarks") {
+      urlParams["bookmarks"] = ""; // This will delete the bookmarks parameter from URL
+    }
+
+    updateURLParams(urlParams);
     setFilterState({ ...filterState, [data.filterType]: { ...filters } });
     const action = ACTION_MAP[data.filterType as keyof ActionMap];
 
     if (action && action instanceof Function) dispatch(action(payload));
+    
+    // If a non-bookmarks filter was updated, also clear bookmarks from Redux state
+    if (data.filterType !== "bookmarks") {
+      // Dispatch updateFiltersOnLoad to clear bookmarks in Redux state
+      const currentFilters = { ...filtersFromState, [data.filterType]: payload, bookmarks: "" };
+      dispatch(updateFiltersOnLoad(currentFilters));
+    }
   };
 
   const updateFilters = (data: UpdateFiltersEvent, setToFalse?: boolean) => {

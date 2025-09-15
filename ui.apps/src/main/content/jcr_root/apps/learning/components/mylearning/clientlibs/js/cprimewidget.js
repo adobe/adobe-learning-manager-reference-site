@@ -120,15 +120,24 @@ governing permissions and limitations under the License.
           window.ALM.navigateToCatalogPage(catalogIds);
           break;
 
-        case "catalogPage":{
-          const catalogIds = e.catalogs || '';
-          if(catalogIds){
-            window.ALM.navigateToCatalogPage(catalogIds);
-          }else{
-            window.ALM.navigateToExplorePage();
+          case "catalogPage": {
+            let isBookmarks = false;
+            if (e.route) {
+              isBookmarks = e.route.includes("bookmarks=true");
+            }
+  
+            if (isBookmarks) {
+              window.ALM.navigateToCatalogPage("", true);
+            } else {
+              const catalogIds = e.catalogs || "";
+              if (catalogIds) {
+                window.ALM.navigateToCatalogPage(catalogIds);
+              } else {
+                window.ALM.navigateToExplorePage();
+              }
+            }
+            break;
           }
-          break;
-        }
 
         case "myLearningPage":
           window.ALM.navigateToCatalogPageForStates("enrolled");

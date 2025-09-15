@@ -18,7 +18,7 @@
     <groupId>com.adobe.learning</groupId>
     <artifactId>aem-learning</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.10</version>
+    <version>1.0.11</version>
     <description>Learning Site</description>
 
     <modules>
@@ -135,8 +135,8 @@
                     <artifactId>frontend-maven-plugin</artifactId>
                     <version>${frontend-maven-plugin.version}</version>
                     <configuration>
-                        <nodeVersion>v14.18.2</nodeVersion>
-                        <npmVersion>6.14.15</npmVersion>
+                        <nodeVersion>v18.20.4</nodeVersion>
+                        <npmVersion>10.7.0</npmVersion>
                     </configuration>
                     <executions>
                         <execution>
