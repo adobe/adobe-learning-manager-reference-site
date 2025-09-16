@@ -604,6 +604,11 @@ const PrimeCommunityObjectInput = React.forwardRef<Quill, any>((props, ref) => {
 
         .ql-mention.mention {
           background-color: unset !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          span {
+            margin: 0 !important;
+          }
         }
 
         /* Fix cursor height issues */
