@@ -67,7 +67,7 @@ export function getRootParentId(obj: any) {
 }
 
 export function processMention(text: string, users: PrimeUser[]): string {
-  const mentionRegex = /@\[(user|usergroup):(\d+)\]/g;
+  const mentionRegex = /@\[(user|usergroup):(-1|\d+)\]/g;
   const mentionTemplates: string[] = [];
   let textWithPlaceholders = text;
 
