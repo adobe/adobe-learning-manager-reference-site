@@ -38,7 +38,7 @@ export const PrimeCommunityMention: React.FC<PrimeCommunityMentionProps> = ({
   // Parse the HTML string and replace mentions with React components
   const parseContent = (content: string): React.ReactNode => {
     // First replace @[user:123] patterns with placeholder elements
-    const processedContent = content.replace(/@\[(user|usergroup):(\d+)\]/g, (match, type, id) => {
+    const processedContent = content.replace(/@\[(user|usergroup):(-1|\d+)\]/g, (match, type, id) => {
       const userId = `${type}:${id}`;
       const user = userMap[userId];
       
