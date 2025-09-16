@@ -73,10 +73,16 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     let { communityBoardDetailsPath } = getALMConfig();
     window.location = getUrl(communityBoardDetailsPath, { boardId: boardId });
   };
-
-  const navigateToCatalogPage = (catalogIds) => {
+  const navigateToCatalogPage = (catalogIds, isBookmarks = false) => {
     let { catalogPath } = getALMConfig();
-    let catalogUrl = catalogPath + "?catalogs=" + catalogIds;
+    let catalogUrl;
+
+    if (isBookmarks) {
+      catalogUrl = catalogPath + "?bookmarks=true";
+    } else {
+      catalogUrl = catalogPath + "?catalogs=" + catalogIds;
+    }
+
     window.location = catalogUrl;
   };
 

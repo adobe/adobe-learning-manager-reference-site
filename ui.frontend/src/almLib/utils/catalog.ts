@@ -138,6 +138,9 @@ export async function getParamsForCatalogApi(filterState: CatalogFilterState) {
     if (filterState.cities && catalogAttributes?.cities === "true") {
       params["filter.cityName"] = filterState.cities;
     }
+    if (filterState.bookmarks) {
+      params["filter.bookmarks"] = filterState.bookmarks;
+    }
   }
   return params;
 }
