@@ -42,10 +42,13 @@ export const PrimeCommunityMention: React.FC<PrimeCommunityMentionProps> = ({
       const userId = `${type}:${id}`;
       const user = userMap[userId];
       
-      if (user) {
+      if (user && user.name && user.state === 'ACTIVE') {
         return `<mention data-user-id="${id}" data-type="${type}" data-value="${user.name}"></mention>`;
       } else {
-        return match; // Keep original if user not found
+        return formatMessage({
+          id: "alm.community.board.anonymous.label",
+          defaultMessage: "Anonymous"
+        })// Show Anonymous if user not found
       }
     });
 
