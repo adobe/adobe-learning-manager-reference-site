@@ -72,7 +72,7 @@ export const getOrUpdateCatalogFilters = async (): Promise<
     }
     const config = getALMConfig();
     const catalogPromise = await RestAdapter.get({
-      url: `${config.primeApiURL}catalogs?page[limit]=1`
+      url: `${config.primeApiURL}catalogs?page[limit]=100`
     });
     setItemToStorage(PRIME_CATALOG_FILTER, catalogPromise);
     return JsonApiParse(catalogPromise)?.catalogList;
