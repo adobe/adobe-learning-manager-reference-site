@@ -64,7 +64,7 @@ const PrimeCommunityComment = (props: any) => {
   const [replyCount, setReplyCount] = useState(comment.replyCount);
   const [showEditCommentView, setShowEditCommentView] = useState(false);
   const [commentText, setCommentText] = useState(comment.richText);
-  const processedCommentText = userMentions ? processMention(commentText, userMentions) : commentText;
+  const processedCommentText = processMention(commentText, userMentions || []);
 
   const viewButtonClickHandler = () => {
     if (!showReplies) {

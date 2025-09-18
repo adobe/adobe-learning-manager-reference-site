@@ -69,7 +69,7 @@ export function getRootParentId(obj: any) {
 export function processMention(text: string, users: PrimeUser[]): string {
   const mentionRegex = /@\[(user|usergroup):(-1|\d+)\]/g;
   const mentionTemplates: string[] = [];
-  let textWithPlaceholders = text;
+  let textWithPlaceholders = text || "";
 
   // 1. Replace mentions with placeholders and store templates
   textWithPlaceholders = textWithPlaceholders.replace(mentionRegex, (match, type, id) => {

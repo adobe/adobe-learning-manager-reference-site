@@ -180,7 +180,7 @@ const PrimeCommunityPost = (props: any) => {
         // Find the post from postItems by post.id
         const foundPost = postItems?.find((item) => item.id === post.id);
         if (foundPost && foundPost.richText && (foundPost as any).userMentions) {
-          const processedDescription = processMention(foundPost.richText, (foundPost as any).userMentions);
+          const processedDescription = processMention(foundPost.richText, (foundPost as any).userMentions || []);
           setPostText(processedDescription);
           setPost(foundPost);
         } else {
