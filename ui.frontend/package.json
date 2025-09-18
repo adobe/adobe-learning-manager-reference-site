@@ -113,11 +113,6 @@
     "copy-webpack-plugin": "^11.0.0",
     "sinon": "^7.5.0"
   },
-  "overrides": {
-    "aem-clientlib-generator": {
-      "yargs": "16.2.0"
-    }
-  },
   "proxy": "http://localhost:4502",
   "browserslist": [
     "defaults"
