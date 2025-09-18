@@ -42,7 +42,7 @@ const PrimeCommunityReply = (props: any) => {
   const firstRunForDownvote = useRef(true);
   const [showEditReplyView, setShowEditReplyView] = useState(false);
   const [replyText, setReplyText] = useState(reply.richText);
-  const processedReplyText = userMentions ? processMention(replyText, userMentions) : replyText;
+  const processedReplyText = processMention(replyText, userMentions || []);
 
   useEffect(() => {
     if (firstRunForUpvote.current) {

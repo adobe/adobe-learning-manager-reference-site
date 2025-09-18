@@ -82,9 +82,7 @@ const PrimeCommunityAddPostDialog = (props: any) => {
   if(props?.post){
     const { userMentions } = props.post;
     const description = props.description || "";
-    if(description && userMentions){
-      processedDescription = processMention(description, userMentions);
-    }
+    processedDescription = processMention(description, userMentions || []);
   }
 
   useEffect(() => {
