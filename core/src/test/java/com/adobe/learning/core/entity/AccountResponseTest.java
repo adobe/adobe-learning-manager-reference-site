@@ -99,6 +99,35 @@ public class AccountResponseTest {
   }
 
   @Test
+  public void testIsPrlEnabled_FilterPanelSettingFallback() {
+    // When prlCriteria is absent (admin/author token never receives it), the account API still
+    // returns filterPanelSetting.recommendationProduct/Role — that drives the catalog dialog.
+    AccountResponse response = new AccountResponse();
+
+    FilterPanelSetting fps = new FilterPanelSetting();
+    fps.setRecommendationProduct(true);
+    fps.setRecommendationRole(false);
+    response.setFilterPanelSetting(fps);
+
+    assertTrue(response.isPrlProductsEnabled());
+    assertFalse(response.isPrlRolesEnabled());
+
+    fps.setRecommendationProduct(false);
+    fps.setRecommendationRole(true);
+    assertFalse(response.isPrlProductsEnabled());
+    assertTrue(response.isPrlRolesEnabled());
+
+    // prlCriteria, when present, takes precedence over filterPanelSetting
+    fps.setRecommendationProduct(true);
+    fps.setRecommendationRole(true);
+    PrlCriteria prl = new PrlCriteria();
+    prl.setEnabled(false);
+    response.setPrlCriteria(prl);
+    assertFalse(response.isPrlProductsEnabled());
+    assertFalse(response.isPrlRolesEnabled());
+  }
+
+  @Test
   public void testAccountTerminologiesDefensiveCopying() {
     AccountResponse response = new AccountResponse();
 

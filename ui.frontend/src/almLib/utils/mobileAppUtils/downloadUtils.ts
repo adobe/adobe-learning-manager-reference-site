@@ -48,10 +48,7 @@ import { OfflineLink, OfflineResource } from '../../models/custom';
 import { GetTranslation } from '../translationService';
 import { QueryParams, RestAdapter } from '../restAdapter';
 import { JsonApiParse } from '../jsonAPIAdapter';
-import {
-  checkIfEnrollmentDeadlineNotPassed,
-  getInstanceIdsForOfflineDownload,
-} from '../instance';
+import { checkIfEnrollmentDeadlineNotPassed, getInstanceIdsForOfflineDownload } from '../instance';
 // import {
 //   fetchSubLoChildrenForDownload,
 //   forceDownload,
@@ -325,7 +322,9 @@ export function generatePlayerLinksForCourse(
   //   const notes = state.learningObject.notes;
   const hostName = getALMConfig().primeApiURL;
   let playerLinks: string[] = [];
-  playerLinks.push(`${hostName}${PLAYER_API_CONSTS.LO_INFO}?${CMI_ENFORCED_FIELDS_QP}`.replace('{loId}', loId)); // 5
+  playerLinks.push(
+    `${hostName}${PLAYER_API_CONSTS.LO_INFO}?${CMI_ENFORCED_FIELDS_QP}`.replace('{loId}', loId)
+  ); // 5
   playerLinks.push(`${hostName}${PLAYER_API_CONSTS.LO_INFO_PREVIEW}`.replace('{loId}', loId)); // 6
   playerLinks.push(
     `${hostName}${PLAYER_API_CONSTS.LO_INFO_MULTI_ENROLLMENT}`.replace('{loId}', loId)
@@ -341,7 +340,10 @@ export function generatePlayerLinksForCourse(
       .replace('{showLoContentSource}', 'true')
   ); // 11
   playerLinks.push(
-    `${hostName}${PLAYER_API_CONSTS.LO_INFO_WITH_ROOM_SOURCE}${CMI_ENFORCED_FIELDS_QP}`.replace('{loId}', loId)
+    `${hostName}${PLAYER_API_CONSTS.LO_INFO_WITH_ROOM_SOURCE}${CMI_ENFORCED_FIELDS_QP}`.replace(
+      '{loId}',
+      loId
+    )
   ); // 12
   playerLinks.push(`${hostName}${PLAYER_API_CONSTS.LO_INFO_NEW}`.replace('{loId}', loId)); // 13
   playerLinks.push(`${hostName}${PLAYER_API_CONSTS.COURSE_NOTES}`.replace('{courseId}', courseId)); // 14
@@ -425,9 +427,7 @@ export function generatePlayerLinksForCourse(
 
     const gradesSource =
       loInstance?.enrollment?.loResourceGrades ?? lo.enrollment?.loResourceGrades;
-    const resourceGrade = gradesSource?.find(
-      grade => grade.loResource?.id === loResource.id
-    );
+    const resourceGrade = gradesSource?.find(grade => grade.loResource?.id === loResource.id);
 
     if (resourceGrade?.id) {
       playerLinks.push(
@@ -464,7 +464,10 @@ export function generatePlayerLinksForLP(
   let playerLinks: string[] = [];
   playerLinks.push(`${hostName}${PLAYER_API_CONSTS.LO_INFO_FOR_LP}`.replace('{loId}', loId)); // 1
   playerLinks.push(
-    `${hostName}${PLAYER_API_CONSTS.LO_INFO_WITH_GRADES_FOR_LP}${CMI_ENFORCED_FIELDS_QP}`.replace('{loId}', loId)
+    `${hostName}${PLAYER_API_CONSTS.LO_INFO_WITH_GRADES_FOR_LP}${CMI_ENFORCED_FIELDS_QP}`.replace(
+      '{loId}',
+      loId
+    )
   ); // 2
   playerLinks.push(
     `${hostName}${PLAYER_API_CONSTS.LO_INFO_PREVIEW_FOR_LP}`.replace('{loId}', loId)

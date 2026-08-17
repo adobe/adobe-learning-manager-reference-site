@@ -58,6 +58,7 @@ const ALMSidebar = ({ menuItems, showIcons = true, className = '' }: ALMSidebarP
       almObject.navigateToCatalogPage();
       return true;
     }
+
     return false;
   }, []);
 

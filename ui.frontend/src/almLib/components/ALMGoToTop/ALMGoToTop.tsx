@@ -44,7 +44,7 @@ const ALMGoToTop = () => {
   const classes = useMemo(() => {
     return showGoToTopButton
       ? `${styles.goToTopButton} ${styles.show} fixedButton`
-      : styles.goToTopButton;
+      : `${styles.goToTopButton} fixedButton`;
   }, [showGoToTopButton]);
 
   return (

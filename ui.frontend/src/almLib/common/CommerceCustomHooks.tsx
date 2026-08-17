@@ -123,9 +123,12 @@ const getTransformedFilter = async (filterState: CatalogFilterState) => {
 
   if (filterState.skillName) {
     const options = filterMap.get(ALMToCommerceTypes['skillName']) || [];
-    filter[ALM_SKILLS] = {
-      in: getIndividualFiltersForCommerce(options, filterState, 'skillName'),
-    };
+    const skillNameValues = getIndividualFiltersForCommerce(options, filterState, 'skillName');
+    if (skillNameValues.length) {
+      filter[ALM_SKILLS] = {
+        in: skillNameValues,
+      };
+    }
   }
   if (filterState.skillLevel) {
     const skillLevelOptions = filterMap.get(ALMToCommerceTypes['skillLevel']) || [];
@@ -138,9 +141,12 @@ const getTransformedFilter = async (filterState: CatalogFilterState) => {
 
   if (filterState.tagName) {
     const tagNameOptions = filterMap.get(ALMToCommerceTypes['tagName']) || [];
-    filter[ALM_TAGS] = {
-      in: getIndividualFiltersForCommerce(tagNameOptions, filterState, 'tagName'),
-    };
+    const tagNameValues = getIndividualFiltersForCommerce(tagNameOptions, filterState, 'tagName');
+    if (tagNameValues.length) {
+      filter[ALM_TAGS] = {
+        in: tagNameValues,
+      };
+    }
   }
 
   if (filterState.price) {
@@ -305,6 +311,24 @@ class CommerceCustomHooks implements ICustomHooks {
     }
     if (isUserLoggedIn()) {
       return ALMCustomHooksInstance.unenrollFromTraining(enrollmentId);
+    }
+  }
+
+  async enrollToPersonalizedPath(id: string) {
+    if (redirectToLoginAndAbort()) {
+      return;
+    }
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.enrollToPersonalizedPath(id);
+    }
+  }
+
+  async deletePersonalizedPath(id: string) {
+    if (redirectToLoginAndAbort()) {
+      return;
+    }
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.deletePersonalizedPath(id);
     }
   }
 
@@ -539,6 +563,34 @@ class CommerceCustomHooks implements ICustomHooks {
       return ALMCustomHooksInstance.getSearchFilterList(query, type, selectedItemsFromStore);
     }
     return [];
+  }
+
+  async getExternalLearningSettings() {
+    return ALMCustomHooksInstance.getExternalLearningSettings();
+  }
+
+  async getExternalLearnings(params: QueryParams) {
+    return ALMCustomHooksInstance.getExternalLearnings(params);
+  }
+
+  async getExternalLearningsByUrl(url: string) {
+    return ALMCustomHooksInstance.getExternalLearningsByUrl(url);
+  }
+
+  async getExternalLearningById(id: string) {
+    return ALMCustomHooksInstance.getExternalLearningById(id);
+  }
+
+  async submitExternalLearning(payload: object) {
+    return ALMCustomHooksInstance.submitExternalLearning(payload);
+  }
+
+  async updateExternalLearning(id: string, payload: object) {
+    return ALMCustomHooksInstance.updateExternalLearning(id, payload);
+  }
+
+  async getUserById(userId: string) {
+    return ALMCustomHooksInstance.getUserById(userId);
   }
 }
 

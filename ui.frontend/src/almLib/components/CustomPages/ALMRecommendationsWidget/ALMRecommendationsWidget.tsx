@@ -30,7 +30,11 @@ import {
   AOI_VIEW_TYPE_CONSOLIDATED,
   AOI_VIEW_TYPE_INDIVIDUAL,
 } from '../../../utils/widgets/common';
-import { BASE_AOI_STRIP_COUNT, MAX_AOI_STRIP_COUNT, getHeading } from '../../../utils/widgets/utils';
+import {
+  BASE_AOI_STRIP_COUNT,
+  MAX_AOI_STRIP_COUNT,
+  getHeading,
+} from '../../../utils/widgets/utils';
 
 export const WIDGET_NAME = 'recommendations';
 let MAX_STRIPS_TO_SHOW = 12;
@@ -222,9 +226,7 @@ const ALMRecommendationsWidget: React.FC<{
               widget={strip}
               disableLinks={disableLinks}
               isInspectMode={isInspectMode}
-              onMetaReceived={(meta) =>
-                handleAoiStripMeta(strip.attributes?.stripNum, meta)
-              }
+              onMetaReceived={meta => handleAoiStripMeta(strip.attributes?.stripNum, meta)}
             />
           </div>
         ))}

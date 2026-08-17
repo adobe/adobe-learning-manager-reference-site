@@ -424,6 +424,55 @@ describe('PrimeTrainingList', () => {
     });
   });
 
+  describe('Title and thumbnail: anchor vs button', () => {
+    it('nonJobAid_rendersTitleAndThumbnailAsAnchorsWithHref', () => {
+      renderComponent({ loType: 'course' });
+
+      const titleEl = screen.getByText('Test Training').closest('a, button');
+      expect(titleEl?.tagName).toBe('A');
+      expect(titleEl).toHaveAttribute('href', '/training/training1');
+
+      const imageContainer = document.querySelector(`[data-automationid="Test Training-imageContainer"]`);
+      expect(imageContainer?.tagName).toBe('A');
+      expect(imageContainer).toHaveAttribute('href', '/training/training1');
+    });
+
+    it('jobAid_rendersTitleAndThumbnailAsButtonsWithoutHref', () => {
+      (useTrainingCard as jest.Mock).mockReturnValue({
+        ...defaultTrainingCardReturn(),
+        type: 'jobAid',
+      });
+      renderComponent({ loType: 'jobAid' });
+
+      const titleEl = screen.getByText('Test Training').closest('a, button');
+      expect(titleEl?.tagName).toBe('BUTTON');
+      expect(titleEl).toHaveAttribute('type', 'button');
+      expect(titleEl).not.toHaveAttribute('href');
+
+      const imageContainer = document.querySelector(`[data-automationid="Test Training-imageContainer"]`);
+      expect(imageContainer?.tagName).toBe('BUTTON');
+      expect(imageContainer).toHaveAttribute('type', 'button');
+      expect(imageContainer).not.toHaveAttribute('href');
+    });
+
+    it('jobAid_clickTitleButton_invokesEnrollAndHandleJobAidClickNotCardClickHandler', async () => {
+      (useTrainingCard as jest.Mock).mockReturnValue({
+        ...defaultTrainingCardReturn(),
+        type: 'jobAid',
+      });
+      renderComponent({ loType: 'jobAid' }, { guest: false });
+
+      const titleEl = screen.getByText('Test Training').closest('button')!;
+      userEvent.click(titleEl);
+
+      await waitFor(() => {
+        expect(mockEnroll).toHaveBeenCalledTimes(1);
+        expect(mockHandleJobAidClick).toHaveBeenCalledTimes(1);
+      });
+      expect(mockCardClickHandler).not.toHaveBeenCalled();
+    });
+  });
+
   describe('Skills display', () => {
     it('skills_withSkillNames_rendersFirstSkillFromList', () => {
       (splitStringIntoArray as jest.Mock).mockReturnValue(['JavaScript', 'React']);

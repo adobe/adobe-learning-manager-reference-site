@@ -455,6 +455,46 @@ describe('PrimeTrainingItemContainerHeader', () => {
 
       expect(screen.queryByText('Complete prerequisite')).toBeNull();
     });
+
+    it('isOrderLocked_true_prevCourseNotPassed_prereqLinkHidden', () => {
+      const { arePrerequisitesEnforcedAndCompleted } = require('../../../almLib/utils/overview');
+      const { checkIsLockedForDisplay } = require('../../../almLib/utils/lo-utils');
+      arePrerequisitesEnforcedAndCompleted.mockReturnValue(false);
+      checkIsLockedForDisplay.mockReturnValue(true);
+      mockUser.account.shouldPreReqConsiderPassStatus = true;
+
+      const training = makeTraining({ enrollment: { id: 'e1', state: 'STARTED', progressPercent: 0 } });
+      renderComponent({
+        training,
+        isPartOfCertification: true,
+        isParentLOEnrolled: true,
+        parentHasSubLoOrderEnforced: true,
+        isTrainingLocked: true,
+        isOrderLocked: true,
+      });
+
+      expect(screen.queryByText('Complete prerequisite')).toBeNull();
+    });
+
+    it('isOrderLocked_false_prevCoursePassed_prereqLinkShown', () => {
+      const { arePrerequisitesEnforcedAndCompleted } = require('../../../almLib/utils/overview');
+      const { checkIsLockedForDisplay } = require('../../../almLib/utils/lo-utils');
+      arePrerequisitesEnforcedAndCompleted.mockReturnValue(false);
+      checkIsLockedForDisplay.mockReturnValue(true);
+      mockUser.account.shouldPreReqConsiderPassStatus = true;
+
+      const training = makeTraining({ enrollment: { id: 'e1', state: 'STARTED', progressPercent: 0 } });
+      renderComponent({
+        training,
+        isPartOfCertification: true,
+        isParentLOEnrolled: true,
+        parentHasSubLoOrderEnforced: true,
+        isTrainingLocked: true,
+        isOrderLocked: false,
+      });
+
+      expect(screen.getByText('Complete prerequisite')).toBeInTheDocument();
+    });
   });
 
   describe('Accessibility', () => {

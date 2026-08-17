@@ -16,6 +16,7 @@ import {
   LOAD_ANNOUNCEMENT,
   PAGINATE_NOTIFICATIONS,
   UPDATE_NOTIFICATION,
+  UPDATE_UNREAD_COUNT,
 } from './actionTypes';
 
 export const loadNotifications = (payload: any): AnyAction => ({
@@ -33,6 +34,11 @@ export const paginateNotifications = (payload: {
 }): AnyAction => ({
   type: PAGINATE_NOTIFICATIONS,
   payload,
+});
+
+export const updateUnreadCount = (unreadCount: number): AnyAction => ({
+  type: UPDATE_UNREAD_COUNT,
+  payload: { unreadCount },
 });
 
 export const updateNotification = (

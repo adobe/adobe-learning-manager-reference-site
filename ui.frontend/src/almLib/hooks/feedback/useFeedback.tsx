@@ -73,8 +73,9 @@ export const useFeedback = (widget?: Widget) => {
         closeFeedbackPopUp();
       }
     });
+    if (!response) return undefined;
     const parsedResponse = JsonApiParse(response);
-    return parsedResponse.learningObject;
+    return parsedResponse?.learningObject;
   };
 
   const submitL1Feedback = async (

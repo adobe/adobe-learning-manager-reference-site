@@ -40,6 +40,7 @@ jest.mock('@utils/global', () => ({
   getSkuId: (id: string) => mockGetSkuId(id),
   sendEvent: (...args: unknown[]) => mockSendEvent(...args),
   isAccAltCompletionEnabled: jest.fn(() => false),
+  isStructuredLocationEnabled: jest.fn(() => false),
 }));
 
 jest.mock('@utils/jsonAPIAdapter', () => ({
@@ -68,6 +69,7 @@ jest.mock('@utils/catalog', () => ({
     result.status === 'fulfilled' ? result.value : null
   ),
   getSnippetTypes: jest.fn(() => 'course'),
+  getStructuredLocationList: jest.fn(() => []),
   isAttributeEnabled: jest.fn(() => true),
   isMyLearningPage: jest.fn(() => false),
 }));
@@ -196,6 +198,25 @@ describe('ALMCustomHooks', () => {
 
       expect(window.postMessage).toHaveBeenCalledWith('almLoNotFound');
     });
+
+    it('should propagate errors for personalized paths instead of swallowing them', async () => {
+      mockRestAdapterGet.mockRejectedValue({ status: 403 });
+
+      await expect(ALMCustomHooksInstance.getTraining('personalizedPath:123', {})).rejects.toEqual({
+        status: 403,
+      });
+    });
+
+    it('should send LoNotFound event and still propagate a 400 for personalized paths', async () => {
+      mockRestAdapterGet.mockRejectedValue({ status: 400 });
+      window.postMessage = jest.fn();
+
+      await expect(ALMCustomHooksInstance.getTraining('personalizedPath:123', {})).rejects.toEqual({
+        status: 400,
+      });
+
+      expect(window.postMessage).toHaveBeenCalledWith('almLoNotFound');
+    });
   });
 
   describe('getTrainingInstanceSummary', () => {
@@ -248,6 +269,30 @@ describe('ALMCustomHooks', () => {
         url: `${PRIME_API_URL}enrollments/`,
         method: 'DELETE',
       });
+    });
+  });
+
+  describe('enrollToPersonalizedPath', () => {
+    it('should call POST /personalizedPaths/{id}/enrollment', async () => {
+      const pathId = 'path123';
+
+      await ALMCustomHooksInstance.enrollToPersonalizedPath(pathId);
+
+      expect(mockRestAdapterPost).toHaveBeenCalledWith({
+        url: `${PRIME_API_URL}personalizedPaths/${pathId}/enrollment`,
+        method: 'POST',
+      });
+    });
+
+    it('should parse and return the response', async () => {
+      const pathId = 'path123';
+      const raw = { data: { id: 'enrollment1', type: 'learningObjectEnrollment' } };
+      mockRestAdapterPost.mockResolvedValueOnce(raw);
+
+      const result = await ALMCustomHooksInstance.enrollToPersonalizedPath(pathId);
+
+      expect(mockJsonApiParse).toHaveBeenCalledWith(raw);
+      expect(result).toBeDefined();
     });
   });
 

@@ -120,9 +120,11 @@ jest.mock('@components/Widgets/ALMPrimeStrip/ALMPrimeStrip.helper', () => ({
   })),
   isAnnouncementRecoUGWLinkEnable: jest.fn(() => false),
   showActionElement: (...args: any[]) => mockShowActionElement(...args),
+  showAddToMyLearning: jest.fn(() => true),
   showAuthorInfo: jest.fn(() => false),
   showDontRecommend: jest.fn(() => false),
   showEffectivenessIndex: jest.fn(() => false),
+  showNavIcons: jest.fn(() => true),
   showPRLInfo: jest.fn(() => false),
   showProgressBar: jest.fn(() => false),
   showRating: jest.fn(() => false),
@@ -239,6 +241,8 @@ describe('ALMPrimeStrip', () => {
     helpers.showRating.mockReturnValue(false);
     helpers.showRecommendedReason.mockReturnValue(false);
     helpers.showSkills.mockReturnValue(false);
+    helpers.showAddToMyLearning.mockReturnValue(true);
+    helpers.showNavIcons.mockReturnValue(true);
 
     const cardHelper = require('@components/Catalog/PrimeTrainingCardV2/PrimeTrainingCardV2.helper');
     cardHelper.canShowPrice.mockReturnValue(false);

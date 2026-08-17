@@ -80,6 +80,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
   parentHasSubLoOrderEnforced: boolean;
   isPartOfFirstChildTraining?: boolean;
   isTrainingLocked: boolean;
+  isOrderLocked?: boolean;
 }> = props => {
   const {
     name,
@@ -102,6 +103,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
     parentHasSubLoOrderEnforced,
     isPartOfFirstChildTraining = false,
     isTrainingLocked,
+    isOrderLocked,
   } = props;
   const { formatMessage } = useIntl();
   const { user } = useUserContext();
@@ -137,6 +139,9 @@ const PrimeTrainingItemContainerHeader: React.FC<{
     user?.account
   );
 
+  const isLockedByParentOrder =
+    (isOrderLocked ?? isTrainingLocked) && isPartOfParentLO && parentHasSubLoOrderEnforced;
+
   // If training is part of flex LP but locked due to subLO order enforced, then it should not be disabled
   // Navigation are prohibited for locked trainings
   const isTrainingDisabled = isLocked && !isParentFlexLP;
@@ -147,6 +152,10 @@ const PrimeTrainingItemContainerHeader: React.FC<{
   const enrolledWithNoInstance = primaryEnrollment && !primaryEnrollment.loInstance;
 
   const shouldConsiderPassStatus = user.account?.shouldPreReqConsiderPassStatus;
+
+  const isGenuinelyLockedByOrder =
+    isLockedByParentOrder &&
+    !arePrerequisitesEnforcedAndCompleted(training, user?.account, shouldConsiderPassStatus);
 
   const handleDisabledLoClick = () => {
     if (training.loType !== COURSE) {
@@ -284,6 +293,7 @@ const PrimeTrainingItemContainerHeader: React.FC<{
       isPartOfParentLO &&
       isParentLOEnrolled &&
       !isprerequisiteLO &&
+      !isGenuinelyLockedByOrder &&
       primaryEnrollment?.state !== COMPLETED &&
       !arePrerequisitesEnforcedAndCompleted(training, user?.account)
     );

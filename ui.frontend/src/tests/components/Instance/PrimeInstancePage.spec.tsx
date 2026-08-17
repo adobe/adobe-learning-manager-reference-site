@@ -39,6 +39,7 @@ jest.mock('@utils/global', () => ({
   getTokenForNativeExtensions: jest.fn(),
   isEnrolled: () => false,
   isExtensionAllowed: jest.fn(),
+  isStructuredLocationEnabled: jest.fn(() => false),
   containsElement: () => false,
   containsSubstr: () => false,
 }));
@@ -51,7 +52,7 @@ jest.mock('@utils/instance', () => ({
   filterInstanceList: (list: any[]) => list,
   getLanguageDropdownObject: () => ({ all: 'All' }),
   getLoInstanceLocales: () => new Set([undefined]),
-  getResourceBasedOnLocale: () => ({}),
+  getResourceBasedOnLocale: jest.fn(() => ({})),
 }));
 jest.mock('@utils/breadcrumbUtils', () => ({
   getBreadcrumbPath: jest.fn(),
@@ -107,7 +108,8 @@ import { useTrainingPage } from '@hooks';
 import { useTrainingCard } from '@hooks/catalog/useTrainingCard';
 import { useUserContext } from '@contextProviders/userContextProvider';
 import { useDeviceTypeContext } from '@contextProviders/DeviceContextProvider';
-import { getALMConfig, getALMObject, getPathParams } from '@utils/global';
+import { getALMConfig, getALMObject, getPathParams, isStructuredLocationEnabled } from '@utils/global';
+import { getResourceBasedOnLocale } from '@utils/instance';
 import { getBreadcrumbPath } from '@utils/breadcrumbUtils';
 
 const mockUseInstancePage = useInstancePage as jest.MockedFunction<typeof useInstancePage>;
@@ -119,6 +121,8 @@ const mockGetALMConfig = getALMConfig as jest.MockedFunction<typeof getALMConfig
 const mockGetALMObject = getALMObject as jest.MockedFunction<typeof getALMObject>;
 const mockGetPathParams = getPathParams as jest.MockedFunction<typeof getPathParams>;
 const mockGetBreadcrumbPath = getBreadcrumbPath as jest.MockedFunction<typeof getBreadcrumbPath>;
+const mockGetResourceBasedOnLocale = getResourceBasedOnLocale as jest.MockedFunction<any>;
+const mockIsStructuredLocationEnabled = isStructuredLocationEnabled as jest.MockedFunction<any>;
 
 const baseCourseTraining = {
   id: 'course:123',
@@ -385,6 +389,33 @@ describe('PrimeInstancePage', () => {
       await wait(() => {
         expect(screen.getByTestId('instance-card-mobile').tagName.toLowerCase()).toBe('div');
       });
+    });
+
+    it('builds the structured geography location for classroom instances', async () => {
+      // A classroom course triggers showStartDateAndInstructor, which builds the
+      // per-instance location string from the (structured) room geography.
+      const classroomInstance = {
+        ...activeInstance,
+        loResources: [{ id: 'r1', resourceType: 'Classroom' }, { id: 'r2', resourceType: 'Classroom' }],
+      };
+      mockIsStructuredLocationEnabled.mockReturnValue(true);
+      mockGetResourceBasedOnLocale.mockImplementation((lo: any) =>
+        lo.id === 'r1'
+          ? { room: { roomName: 'Berlin Hall', city: 'Munich', countryName: 'Germany', stateName: 'Bavaria' }, instructorNames: ['John Doe'] }
+          : { contentType: 'Classroom' } // no room → exercises the null-geography branch
+      );
+      mockUseInstancePage.mockReturnValue({
+        ...baseInstancePageReturn,
+        training: { ...baseCourseTraining, loFormat: 'Classroom' },
+        activeInstances: [classroomInstance],
+      } as any);
+
+      render(<PrimeInstancePage />);
+
+      await wait(() => {
+        expect(screen.getByTestId('instance-item')).toBeInTheDocument();
+      });
+      expect(mockGetResourceBasedOnLocale).toHaveBeenCalled();
     });
   });
 });

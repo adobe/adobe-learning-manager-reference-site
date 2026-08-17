@@ -230,6 +230,10 @@ const getApiOptions = async (query: string, widget: Widget) => {
       params['sort'] = '-date';
       endpoint = loEndPoint;
       break;
+    case WidgetType.PERSONALIZED_PATH_STRIP:
+      endpoint = '/personalizedPaths';
+      params['include'] = ['skills.skillLevel.skill', 'enrollment'];
+      break;
     default:
       break;
   }
@@ -351,6 +355,13 @@ export const usePrimeStrip = (widget: Widget, account: PrimeAccount) => {
       parsedResponse.catalogList?.filter(item => !item.isDefault) ||
       [];
 
+    let isPrimeLearningObjectListForStrip = !!parsedResponse.learningObjectList;
+    if (widget.widgetRef === WidgetType.PERSONALIZED_PATH_STRIP && items.length === 0) {
+      if ((parsedResponse as any).personalizedPathList) {
+        items = (parsedResponse as any).personalizedPathList;
+        isPrimeLearningObjectListForStrip = true;
+      }
+    }
     if (shouldShuffleResults(widget, account)) {
       items = [...shuffleResults(items)];
     }
@@ -371,7 +382,7 @@ export const usePrimeStrip = (widget: Widget, account: PrimeAccount) => {
       maxStripCount: tempMaxStripCount,
       skillName: skillName,
       firstFetchDone: !firstFetchDone || true,
-      isPrimeLearningObjectList: !!parsedResponse.learningObjectList,
+      isPrimeLearningObjectList: isPrimeLearningObjectListForStrip,
     }));
   };
   const hasMoreResults = (): boolean => {

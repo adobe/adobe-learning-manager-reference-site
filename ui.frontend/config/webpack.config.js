@@ -741,5 +741,14 @@ module.exports = function (webpackEnv) {
     // Turn off performance processing because we utilize
     // our own hints via the FileSizeReporter
     performance: false,
+    // Ignore warnings originating from third-party code in node_modules
+    // (e.g. postcss-calc lexical errors in @react-spectrum bundled CSS).
+    // Project-code warnings still surface and are treated as errors when CI=true.
+    ignoreWarnings: [
+      warning => {
+        const message = (warning && (warning.message || warning.toString())) || "";
+        return /node_modules/.test(message) || /postcss-calc/.test(message);
+      },
+    ],
   };
 };

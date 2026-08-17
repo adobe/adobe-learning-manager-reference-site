@@ -18,3 +18,4 @@ export * from './notifications';
 export * from './profile';
 export * from './social';
 export * from './widgets';
+export * from './training';

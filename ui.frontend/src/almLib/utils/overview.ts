@@ -381,11 +381,13 @@ const getPreviousRequiredSections = (sections: PrimeSections[], currentSectionId
 
 export const notifyParentToCleanModuleParams = () => {
   const hash = window.location.hash || '';
-  const cleanedHash = hash
-    .replace(/[?&]moduleId=[^&#]*/g, '')
-    .replace(/\/module\/[^/?&#]*/g, '');
+  const cleanedHash = hash.replace(/[?&]moduleId=[^&#]*/g, '').replace(/\/module\/[^/?&#]*/g, '');
   if (cleanedHash !== hash) {
-    window.history.replaceState(null, '', window.location.pathname + window.location.search + cleanedHash);
+    window.history.replaceState(
+      null,
+      '',
+      window.location.pathname + window.location.search + cleanedHash
+    );
   }
   window.parent.postMessage({ type: 'ALM_CLEAR_MODULE_ID' }, '*');
 };

@@ -85,12 +85,14 @@ export function JsonApiParse(jsonApiResponse: any): JsonApiResponse {
   if (Array.isArray(data)) {
     if (data.length && data[0]['type'] === 'searchResult') {
       if (data[0]?.attributes?.modelType === 'learningObject') {
+        // Default to [] when `included` is missing, else `data` is undefined and the loop below throws.
         data =
-          jsonApiResponse.included &&
-          filterResponse(jsonApiResponse, data[0]?.attributes?.modelType);
+          (jsonApiResponse.included &&
+            filterResponse(jsonApiResponse, data[0]?.attributes?.modelType)) ||
+          [];
       }
       if (data?.length === 0) {
-        data = filterResponse(jsonApiResponse, 'post');
+        data = filterResponse(jsonApiResponse, 'post') || [];
       }
     }
     result = [];
@@ -340,6 +342,21 @@ const getIntRating = (rating: string) => {
   return numRating;
 };
 
+// Commerce returns multi-value attributes (authors, tags) as comma-separated strings; the model
+// expects string[]. Normalize so a scalar/empty value never breaks array operations downstream.
+const toStringArray = (value: unknown): string[] => {
+  if (Array.isArray(value)) {
+    return value;
+  }
+  if (typeof value === 'string' && value.trim()) {
+    return value
+      .split(',')
+      .map(entry => entry.trim())
+      .filter(Boolean);
+  }
+  return [];
+};
+
 export function parseCommerceResponse(
   response: CommercePrimeLearningObject[],
   filtersFromStorage: any = []
@@ -362,9 +379,9 @@ export function parseCommerceResponse(
 
     lo.id = item.sku;
     lo.duration = item.almduration;
-    lo.authorNames = item.almauthor;
+    lo.authorNames = toStringArray(item.almauthor);
     lo.datePublished = item.almpublishdate;
-    lo.tags = item.almtags;
+    lo.tags = toStringArray(item.almtags);
     lo.imageUrl = item.almthumbnailurl;
     localizedData = {
       _transient: '',

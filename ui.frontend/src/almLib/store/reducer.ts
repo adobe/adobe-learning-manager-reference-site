@@ -25,6 +25,7 @@ import {
   badge,
   authorTrainings,
   appState,
+  channels,
 } from './reducers';
 
 const reducer = combineReducers({
@@ -42,5 +43,6 @@ const reducer = combineReducers({
   badge,
   authorTrainings,
   appState,
+  channels,
 });
 export default reducer;

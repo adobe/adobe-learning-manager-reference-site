@@ -33,8 +33,10 @@ import {
   getTokenForNativeExtensions,
   isEnrolled,
   isExtensionAllowed,
+  isStructuredLocationEnabled,
   setTrainingsLayout,
 } from '../../../utils/global';
+import { formatStructuredGeography } from '../../../utils/locationCompound';
 import { SORT_ORDER_SVG } from '../../../utils/inline_svg';
 import {
   filterInstanceList,
@@ -228,7 +230,8 @@ const PrimeInstancePage = (props: PrimeInstancePageProps) => {
           if (showStartDateAndInstructor) {
             let [location, instructorsName] = getInstanceLocationAndInstructorsName(
               instance.loResources,
-              locale
+              locale,
+              isStructuredLocationEnabled(account)
             );
             item.instructorsName = instructorsName;
             item.location = location;
@@ -839,7 +842,8 @@ const isClassroomOrVC = (loResource: any) => {
 
 const getInstanceLocationAndInstructorsName = (
   loResources: PrimeLearningObjectResource[],
-  locale: string
+  locale: string,
+  structuredEnabled: boolean
 ) => {
   let location = new Set();
   let instructorNames = new Set();
@@ -849,8 +853,11 @@ const getInstanceLocationAndInstructorsName = (
     }
     const resource = getResourceBasedOnLocale(loResource, locale);
 
-    if (resource.room?.city) {
-      location.add(resource.room.city);
+    const geographyLine = resource.room
+      ? formatStructuredGeography(resource.room, structuredEnabled)
+      : null;
+    if (geographyLine) {
+      location.add(geographyLine);
     } else if (resource.room?.roomName) {
       location.add(resource.room.roomName);
     } else if (resource.roomLocation) {

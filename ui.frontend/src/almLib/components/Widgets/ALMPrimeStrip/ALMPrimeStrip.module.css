@@ -323,3 +323,6 @@ governing permissions and limitations under the License.
   color: var(--prime-color-link);
   text-decoration: none;
 }
+.stripHeaderDescription {
+  font-size: var(--prime-font-size-14);
+}

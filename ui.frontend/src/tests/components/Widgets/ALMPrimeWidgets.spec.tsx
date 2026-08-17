@@ -293,4 +293,58 @@ describe('ALMPrimeWidgets', () => {
       expect(mockSendMessageToParent).not.toHaveBeenCalled();
     });
   });
+
+  describe('Add Personalized Path Widget', () => {
+    const PLP_WIDGET_REF = 'com.adobe.captivateprime.lostrip.personalizedpathstrip';
+    const PLP_WIDGET_TEST_ID = `widget-${PLP_WIDGET_REF.replace(/\./g, '-')}`;
+
+    const layoutWithMyLearning = {
+      widgets: [[{ widgetRef: 'com.adobe.captivateprime.lostrip.mylearning', id: 'mylearning' }]],
+    };
+    const widgetConfigWithMyLearning = {
+      attributes: {
+        layoutConfig: JSON.stringify(layoutWithMyLearning),
+        widgetOverrides: {},
+      },
+    };
+
+    it('adds personalized path widget when personalizedPathEnabled is true', async () => {
+      const { getALMUser } = require('../../../almLib/utils/global');
+      (getALMUser as jest.Mock).mockResolvedValueOnce({
+        user: { account: { personalizedPathEnabled: true } },
+      });
+
+      render(<ALMPrimeWidgets widgetConfig={widgetConfigWithMyLearning as any} />);
+
+      await screen.findByTestId('layout-engine', {}, { timeout: 3000 });
+
+      expect(screen.getByTestId(PLP_WIDGET_TEST_ID)).toBeInTheDocument();
+    });
+
+    it('does not add personalized path widget when personalizedPathEnabled is false', async () => {
+      const { getALMUser } = require('../../../almLib/utils/global');
+      (getALMUser as jest.Mock).mockResolvedValueOnce({
+        user: { account: { personalizedPathEnabled: false } },
+      });
+
+      render(<ALMPrimeWidgets widgetConfig={widgetConfigWithMyLearning as any} />);
+
+      await screen.findByTestId('layout-engine', {}, { timeout: 3000 });
+
+      expect(screen.queryByTestId(PLP_WIDGET_TEST_ID)).not.toBeInTheDocument();
+    });
+
+    it('does not add personalized path widget when personalizedPathEnabled is undefined', async () => {
+      const { getALMUser } = require('../../../almLib/utils/global');
+      (getALMUser as jest.Mock).mockResolvedValueOnce({
+        user: { account: {} },
+      });
+
+      render(<ALMPrimeWidgets widgetConfig={widgetConfigWithMyLearning as any} />);
+
+      await screen.findByTestId('layout-engine', {}, { timeout: 3000 });
+
+      expect(screen.queryByTestId(PLP_WIDGET_TEST_ID)).not.toBeInTheDocument();
+    });
+  });
 });

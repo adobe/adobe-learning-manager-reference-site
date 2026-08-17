@@ -1,0 +1,239 @@
+/**
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+@import '../../../styles/variables.css';
+
+.summaryBanner {
+  border: 1px solid var(--light-grey-4);
+  border-radius: 14px;
+  padding: 16px 20px;
+  background-color: var(--prime-color-white);
+  overflow: hidden;
+}
+
+.summaryBanner[data-variant='NOT_STARTED'],
+.summaryBanner[data-variant='IN_PROGRESS'] {
+  background-color: var(--light-grey-4);
+}
+
+.summaryBanner[data-variant='PASSED'] {
+  background-color: rgb(84 178 110 / 10%);
+}
+
+.summaryBanner[data-variant='FAILED'] {
+  background-color: rgb(215 55 63 / 10%);
+}
+
+/* Variant 4 (Figma 997-64168): metrics only — no divider gap above scores */
+.summaryBannerMetricsOnly .summaryMetrics {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.summaryTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.passingCriteria {
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-black);
+  flex: 1;
+  min-width: 0;
+}
+
+.passingCriteriaLabel {
+  font-weight: var(--prime-font-weight-600);
+  margin-right: 4px;
+}
+
+.passingCriteriaSpacer {
+  flex: 1;
+  min-width: 0;
+}
+
+.completionPendingPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 8px 24px 8px 14px;
+  border-radius: 8px;
+  font-size: var(--prime-font-size-12);
+  font-weight: var(--prime-font-weight-600);
+  line-height: 1.2;
+  white-space: nowrap;
+  background-color: var(--dark-grey-5);
+  color: var(--prime-color-white);
+  margin-right: -28px;
+}
+
+.completionPendingPill[data-variant='NOT_STARTED'],
+.completionPendingPill[data-variant='IN_PROGRESS'] {
+  background-color: var(--dark-grey-8);
+}
+
+.completionPendingPill[data-variant='PASSED'] {
+  background-color: var(--prime-success-color);
+}
+
+.completionPendingPill[data-variant='FAILED'] {
+  background-color: var(--prime-error-color);
+}
+
+.completionPendingIconWrap {
+  display: inline-flex;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.completionPendingIconWrap svg {
+  width: 16px;
+  height: 16px;
+  color: var(--prime-color-white);
+}
+
+.summaryMetrics {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 16px;
+  gap: 24px;
+}
+
+.metricBlock {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.metricDivider {
+  width: 2px;
+  margin: 0 20px;
+  background-color: var(--dark-grey-6);
+  flex-shrink: 0;
+}
+
+.metricValue {
+  font-size: 22px;
+  font-weight: var(--prime-font-weight-700);
+  color: var(--prime-color-black);
+  line-height: 1.2;
+}
+
+.metricValueWithInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 22px;
+  font-weight: var(--prime-font-weight-700);
+  color: var(--prime-color-black);
+  line-height: 1.2;
+}
+
+.metricSub {
+  margin-top: 6px;
+  font-size: var(--prime-font-size-12);
+  color: var(--dark-grey-5);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.aggregateTooltipWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.aggregateInfoBtn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  color: var(--dark-grey-5);
+  line-height: 0;
+}
+
+.aggregateInfoBtn:focus-visible {
+  outline: 2px solid var(--prime-color-primary, #4283d0);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.aggregateInfoBtn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.aggregatePopoverSurface {
+  position: fixed;
+  z-index: 9999;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: min(300px, 92vw);
+  min-width: 0;
+  margin: 0;
+  padding: 12px 14px;
+  background-color: var(--prime-color-white);
+  color: var(--prime-color-body);
+  border: 1px solid var(--light-grey-4);
+  border-radius: 8px;
+  font-size: var(--prime-font-size-12);
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  left: 0;
+}
+
+.aggregateTooltipPara {
+  display: block;
+  margin: 0;
+}
+
+/* Narrow viewports: keep criteria and pill on one row; metrics span full width at 50% each */
+@media screen and (max-width: 640px) {
+  .summaryBanner {
+    padding: 14px 16px;
+  }
+
+  .summaryTop {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .summaryMetrics {
+    margin-top: 12px;
+    gap: 16px;
+  }
+
+  .metricDivider {
+    margin: 0 12px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .metricValue,
+  .metricValueWithInfo {
+    font-size: 18px;
+  }
+}
