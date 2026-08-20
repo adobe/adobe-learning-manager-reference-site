@@ -17,6 +17,7 @@ import {
   Dimensions,
   PrimeEvent,
   Attributes,
+  WidgetType,
   WidgetTypeNew,
 } from '../../../utils/widgets/common';
 import {
@@ -66,6 +67,19 @@ const ALMPrimeWidgets: React.FC<{
 
   const [extraStripList_lxpv, setExtraStripList_lxpv] = useState<Array<number>>([]);
   const [initDone_lxpv, setInitDone_lxpv] = useState(false);
+  const [personalizedPathRefreshKey, setPersonalizedPathRefreshKey] = useState(0);
+
+  useEffect(() => {
+    function handlePathCreatedMessage(event: MessageEvent) {
+      if (event.data?.type === 'ALM_CHAT_PERSONALIZED_PATH_CREATED') {
+        setPersonalizedPathRefreshKey(k => k + 1);
+      }
+    }
+    window.addEventListener('message', handlePathCreatedMessage);
+    return () => {
+      window.removeEventListener('message', handlePathCreatedMessage);
+    };
+  }, []);
 
   useEffect(() => {
     document.body.classList.add('home-bg-class-transparent');
@@ -120,6 +134,7 @@ const ALMPrimeWidgets: React.FC<{
     layoutConfigObj['widgets'] = layoutWidgetConfig;
 
     addVirtualCoachWidget_lxpv(layoutWidgetConfig, user?.account);
+    addPersonalizedPathWidget_lxpv(layoutWidgetConfig, user?.account);
     const config = addBookmarkswidget_lxpv(layoutWidgetConfig);
 
     if (config && config.length > 0) {
@@ -338,6 +353,31 @@ const ALMPrimeWidgets: React.FC<{
       }
     }
   };
+
+  const addPersonalizedPathWidget_lxpv = (
+    widgets: Array<Array<{ widgetRef: string; id: string }>>,
+    account?: PrimeAccount
+  ) => {
+    if (!account?.personalizedPathEnabled) {
+      return;
+    }
+    const alreadyPresent = widgets.some(wl =>
+      wl.find(w => w.widgetRef === WidgetType.PERSONALIZED_PATH_STRIP)
+    );
+    if (alreadyPresent) {
+      return;
+    }
+    const myLearningIndex = widgets.findIndex(wl =>
+      wl.find(w => w.widgetRef === WidgetType.MYLEARNING)
+    );
+    const insertAfter = myLearningIndex >= 0 ? myLearningIndex : widgets.length - 1;
+    widgets.splice(insertAfter + 1, 0, [
+      {
+        id: 'alm.strip.personalizedpathstrip',
+        widgetRef: WidgetType.PERSONALIZED_PATH_STRIP as string,
+      },
+    ]);
+  };
   const { homePageLayoutConfig } = getALMConfig();
   return (
     <>
@@ -351,6 +391,7 @@ const ALMPrimeWidgets: React.FC<{
                 aoiStripCount={extraStripList_lxpv.length}
                 account={account!}
                 user={user!}
+                personalizedPathRefreshKey={personalizedPathRefreshKey}
               />
             </div>
           )}

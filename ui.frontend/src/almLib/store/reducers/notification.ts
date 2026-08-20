@@ -17,6 +17,7 @@ import {
   LOAD_NOTIFICATIONS,
   PAGINATE_NOTIFICATIONS,
   UPDATE_NOTIFICATION,
+  UPDATE_UNREAD_COUNT,
 } from '../actions/notification/actionTypes';
 import { GetTranslation } from '../../utils/translationService';
 
@@ -84,6 +85,9 @@ const unreadCount: Reducer<number, AnyAction> = (state: number | undefined, acti
       // Calculate unread count from notifications if not provided
       const notifications = action.payload.notifications || [];
       return notifications.filter((n: PrimeUserNotification) => !n.read).length;
+    }
+    case UPDATE_UNREAD_COUNT: {
+      return action.payload.unreadCount;
     }
     default:
       return state || 0;

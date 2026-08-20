@@ -22,6 +22,7 @@ import { UserRecommendationPreferenceState } from './reducers/userRecommendation
 import { RecommendationState } from './reducers/recommendation';
 import { authorState } from './reducers/author';
 import { AppState } from './reducers/appState';
+import { ChannelsState } from './reducers/channels';
 
 export interface Authentication {
   accessToken: string;
@@ -43,4 +44,5 @@ export interface State {
   recommendation: RecommendationState;
   authorTrainings: authorState;
   appState: AppState;
+  channels: ChannelsState;
 }

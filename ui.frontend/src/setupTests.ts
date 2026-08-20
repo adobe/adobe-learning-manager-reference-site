@@ -281,6 +281,12 @@ const mockALMObject = {
 // Stub out window methods not implemented in jsdom
 window.scrollTo = jest.fn();
 
+// CSS.supports not implemented in jsdom
+Object.defineProperty(global, 'CSS', {
+  value: { supports: jest.fn(() => false) },
+  writable: true,
+});
+
 // Set window.ALM
 (global as any).window = (global as any).window || {};
 (global as any).window.ALM = mockALMObject;

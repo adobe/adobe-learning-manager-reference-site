@@ -1,0 +1,482 @@
+/*
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+@import '../../styles/variables.css';
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  font-size: var(--prime-font-size-14);
+  max-width: 585px;
+  min-width: 0;
+}
+
+.breadcrumbLink {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: var(--prime-color-black, #2c2c2c);
+  font-size: var(--prime-font-size-14);
+  cursor: pointer;
+}
+
+.breadcrumbSeparator {
+  color: var(--prime-color-black, #2c2c2c);
+  font-size: var(--prime-font-size-14);
+}
+
+.breadcrumbCurrent {
+  color: var(--prime-color-black, #2c2c2c);
+  font-size: var(--prime-font-size-14);
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.description {
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-black, #2c2c2c);
+  margin: 8px 0 0;
+  line-height: 1.5;
+  width: 834px;
+}
+
+.pageContainer {
+  max-width: var(--prime-catalog-container-max-width-desktop);
+  margin: 0 auto;
+}
+
+.headerContainer {
+  margin-bottom: 15px;
+  padding-top: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.label {
+  font-size: var(--prime-font-size-24);
+  letter-spacing: 0px;
+  color: var(--prime-color-black);
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cancelButton {
+  background: transparent;
+  color: var(--prime-color-black, #2c2c2c);
+  border-color: var(--prime-color-black, #2c2c2c);
+}
+
+.submitButton {
+  padding: 8px 24px;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.formSection {
+  display: flex;
+  gap: 40px;
+  padding: 24px 0;
+}
+
+.fieldsColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex-shrink: 0;
+}
+
+.attachmentsColumn {
+  flex-shrink: 0;
+  width: 585px;
+}
+
+.attachmentsColumn .fieldContainer {
+  max-width: 585px;
+}
+
+.attachmentsColumn .fileUploadZone {
+  width: 585px;
+  height: 327px;
+}
+
+.fieldContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 580px;
+}
+
+.fieldLabel {
+  font-size: var(--prime-font-size-14);
+  font-weight: 600;
+  color: var(--prime-color-black, #2c2c2c);
+}
+
+.fieldDescription {
+  font-size: var(--prime-font-size-12);
+}
+
+.dateFieldDescription {
+  font-size: var(--prime-font-size-12);
+  margin-left: 25px;
+}
+
+.fieldLabelRequired::after {
+  content: ' *';
+  color: var(--prime-error-color, #d31510);
+}
+
+.fieldInput :global(.spectrum-Textfield) {
+  border: 2px solid #dadada !important;
+}
+
+.fieldInput :global(.spectrum-Textfield-input::placeholder) {
+  color: #909090;
+  opacity: 1;
+}
+
+.formSection .fileUploadZoneError {
+  border-color: var(--prime-error-color, #d31510);
+}
+
+.timestampContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/*
+ * Date pickers must size to their content, not a fixed px width. A hardcoded
+ * width clips the editable date segments in Safari at non-100% zoom (sub-pixel
+ * rounding pushes the content past the box). min-width gives a sensible floor
+ * while fit-content lets the field grow instead of overflowing.
+ */
+.datePicker {
+  min-width: 239px !important;
+  width: fit-content !important;
+  margin-inline-start: 25px;
+}
+
+.dateRangePicker {
+  min-width: 260px !important;
+  width: fit-content !important;
+  margin-inline-start: 25px;
+}
+
+.durationContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.durationInputRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scoreRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.scoreInput {
+  max-width: 100px;
+}
+
+.scoreText {
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-black, #2c2c2c);
+}
+
+.durationValueInput {
+  max-width: 100px;
+}
+
+.durationPicker {
+  max-width: 160px;
+}
+
+.customFieldDropdown {
+  max-width: 260px;
+}
+
+.fileUploadZone {
+  border: 2px dashed #dadada;
+  border-radius: 4px;
+  padding: 45px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.fileUploadDragOver {
+  border-color: var(--prime-color-blue, #1473e6);
+  background: #e8f0fe;
+}
+
+.fileInput {
+  display: none;
+}
+
+.fileUploadText {
+  font-size: var(--prime-font-size-14);
+  font-weight: 700;
+}
+
+.fileUploadTextBlock {
+  text-align: center;
+}
+
+.fileUploadOrText {
+  font-size: var(--prime-font-size-14);
+  margin: 0 0 4px;
+}
+
+.fileUploadFormats {
+  font-size: var(--prime-font-size-12);
+  margin: 0;
+}
+
+.browseFilesButton {
+  width: auto;
+  height: 24px;
+  border-radius: 12px;
+  background: #e0e0e0;
+  color: var(--prime-color-black, #2c2c2c);
+  border: none;
+  font-size: var(--prime-font-size-12);
+  cursor: pointer;
+  padding: 0 12px;
+  font-weight: 700;
+}
+
+.uploadingButton {
+  width: auto;
+  height: 24px;
+  border-radius: 12px;
+  background: #e0e0e0;
+  color: var(--prime-color-black, #2c2c2c);
+  border: none;
+  font-size: var(--prime-font-size-12);
+  padding: 0 12px;
+  cursor: not-allowed;
+}
+
+.loadingIconWrapper {
+  display: inline-flex;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.browseButton {
+  display: inline-block;
+}
+
+.fileList {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  text-align: center;
+  font-weight: 600;
+}
+
+.fileName {
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-black, #2c2c2c);
+  padding: 4px 0;
+}
+
+.fileName:last-child {
+  border-bottom: none;
+}
+
+.errorText {
+  font-size: var(--prime-font-size-12);
+  color: var(--prime-error-color, #d31510);
+}
+
+.timestampContainer .errorText {
+  margin-left: 25px;
+}
+
+.successToast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border-left: 4px solid #4b75ff;
+  border-radius: 4px;
+  padding: 14px 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  z-index: 1002;
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-black, #2c2c2c);
+  white-space: nowrap;
+  animation: toastSlideIn 0.25s ease-out;
+}
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.fileUploadingText {
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-blue, #1473e6);
+  margin: 8px 0 0;
+}
+
+.confirmBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.confirmDialog {
+  top: 50% !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%);
+  width: 480px;
+  margin: 0 !important;
+}
+
+.confirmHeader {
+  font-size: var(--prime-font-size-18);
+  font-weight: 700;
+  color: var(--prime-color-black, #2c2c2c);
+  margin: 0;
+}
+
+.confirmBody {
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-black, #2c2c2c);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.confirmActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.pageContainerStickyOffset {
+  padding-bottom: 100px;
+}
+
+@media screen and (max-width: 1024px) {
+  .pageContainer {
+    max-width: var(--prime-container-max-width-tablet);
+    padding: 0;
+  }
+
+  .confirmDialog {
+    width: auto;
+  }
+
+  .description {
+    width: 100%;
+  }
+
+  .formSection {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .fieldsColumn {
+    width: 100%;
+  }
+
+  .fieldContainer {
+    width: 100%;
+  }
+
+  .attachmentsColumn {
+    width: 100%;
+  }
+
+  .attachmentsColumn .fieldContainer {
+    max-width: 100%;
+  }
+
+  .attachmentsColumn .fileUploadZone {
+    width: 100%;
+    height: auto;
+    min-height: 200px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .pageContainer {
+    width: 100%;
+    max-width: var(--prime-container-max-width-mobile);
+    padding: 0 20px;
+  }
+
+  .headerContainer {
+    margin-bottom: 10px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}

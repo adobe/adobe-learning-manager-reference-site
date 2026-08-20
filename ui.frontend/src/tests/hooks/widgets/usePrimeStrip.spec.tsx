@@ -1350,5 +1350,29 @@ describe('usePrimeStrip', () => {
       expect(mockGetTraining).toHaveBeenCalledWith('lo-1', expect.any(String));
     });
   });
+
+  describe('fetchMore - PERSONALIZED_PATH_STRIP Widget', () => {
+    it('should call /personalizedPaths endpoint with skills and enrollment includes', async () => {
+      const plpWidget = {
+        widgetRef: 'com.adobe.captivateprime.lostrip.personalizedpathstrip',
+        attributes: {},
+      };
+
+      mockRestAdapterGet.mockResolvedValue({ data: [], links: {} });
+      (JsonApiParse as jest.Mock).mockReturnValue({ learningObjectList: [], links: {} } as any);
+
+      const { result } = renderHook(() => usePrimeStrip(plpWidget as any, mockAccount as any));
+
+      await act(async () => {
+        await result.current.fetchMore();
+        await new Promise(resolve => setTimeout(resolve, 0));
+      });
+
+      const callArgs = mockRestAdapterGet.mock.calls[0][0];
+      expect(callArgs.url).toContain('/personalizedPaths');
+      expect(callArgs.params['include']).toContain('skills.skillLevel.skill');
+      expect(callArgs.params['include']).toContain('enrollment');
+    });
+  });
 });
 

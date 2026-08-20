@@ -47,27 +47,35 @@ governing permissions and limitations under the License.
   display: flex;
 }
 .title {
-  width: 70%;
+  flex: 1;
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   color: var(--prime-color-black);
+  padding-right: 20px;
 }
 .cursor {
   cursor: pointer;
 }
 .headerWrapper {
-  width: 90%;
+  flex: 1;
+  min-width: 0;
   line-height: 1.25rem;
 }
 .resourceType {
-  display: flex;
+  display: inline-flex;
   flex-wrap: wrap;
   align-items: inherit;
 }
 .headerIcon {
   display: flex;
   padding: 10px;
+}
+.resourceAndDurationContent {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .ltiBanner {
@@ -176,7 +184,41 @@ a.details {
   justify-content: space-between;
   color: var(--prime-color-neutral-1);
   font-size: var(--prime-font-size-12);
+  align-items: flex-start;
+}
+
+.weightageAndDuration {
+  display: flex;
   align-items: center;
+  gap: 4px;
+}
+
+.weightageBadge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: var(--prime-font-size-12);
+  line-height: 1.2;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.weightageBadgeWeighted {
+  background-color: var(--prime-color-light-blue);
+  border: 1px solid var(--prime-color-link);
+  color: var(--body-color);
+}
+
+.weightageBadgeNeutral {
+  background-color: var(--light-grey-4);
+  border: 1px solid var(--dark-grey-6);
+  color: var(--dark-grey-5);
+}
+
+.durationUnderWeight {
+  font-size: var(--prime-font-size-12);
+  color: var(--prime-color-neutral-1);
+  text-align: right;
 }
 
 .moduleLocked,
@@ -260,7 +302,18 @@ a.details {
 .titleContainer {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
   padding-bottom: 4px;
+}
+
+.titleLeft {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
 }
 
 .progressArea {
@@ -285,10 +338,14 @@ a.details {
 }
 
 .fileSubmissionParent {
-  display: flex;
+  display: inline-flex;
   flex-wrap: wrap;
 }
 
+.moduleScoring {
+  display: inline-flex;
+  flex-wrap: wrap;
+}
 .accessLimitContainer {
   border: 1px solid var(--prime-color-primary);
   margin: 5px 0px;
@@ -588,4 +645,10 @@ a.details {
 
 .reviewerOnlyBold {
   font-weight: var(--prime-font-weight-700);
+}
+
+.weightageAndDurationContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }

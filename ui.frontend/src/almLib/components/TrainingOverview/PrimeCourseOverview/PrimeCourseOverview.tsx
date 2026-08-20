@@ -17,9 +17,8 @@ import {
   PrimeLearningObject,
   PrimeLearningObjectInstance,
   PrimeLearningObjectResource,
-  PrimeNote,
-  PrimeAccount,
   PrimeLocalizationMetadata,
+  PrimeNote,
 } from '../../../models/PrimeModels';
 import {
   CONTENT,
@@ -29,9 +28,15 @@ import {
   MAX_DISCUSSION_COMMENT_LENGTH,
   MIN_DISCUSSION_COMMENT_LENGTH,
   EXTERNAL_STR,
+  COURSE_OVERVIEW_TAB_KEYS,
 } from '../../../utils/constants';
 import { calculateSecondsToTime } from '../../../utils/dateTime';
-import { filterLoReourcesBasedOnResourceType, getDuration } from '../../../utils/hooks';
+import {
+  filterLoReourcesBasedOnResourceType,
+  getDuration,
+  getEnrollment,
+} from '../../../utils/hooks';
+import { checkIsEnrolled } from '../../../utils/overview';
 import { getPreferredLocalizedMetadata, GetTranslation } from '../../../utils/translationService';
 import { PrimeModuleList } from '../PrimeModuleList';
 import { PrimeNoteList } from '../PrimeNoteList';
@@ -42,7 +47,13 @@ import { Content, InlineAlert, Key } from '@adobe/react-spectrum';
 import { useUserContext } from '../../../contextProviders/userContextProvider';
 import { GetTranslationsReplaced } from '../../../utils/translationService';
 import { PrimeDiscussionList } from '../PrimeDiscussionList';
+import { PrimeGradebook } from '../PrimeGradebook';
 import { ALMLoader } from '../../Common/ALMLoader';
+import { PrimeTrainingGradebookBanner } from '../PrimeTrainingGradebookBanner';
+import { useCourseGradebook } from '../../../hooks/training';
+
+type CourseOverviewTabKey =
+  (typeof COURSE_OVERVIEW_TAB_KEYS)[keyof typeof COURSE_OVERVIEW_TAB_KEYS];
 
 const PrimeCourseOverview: React.FC<{
   training: PrimeLearningObject;
@@ -178,6 +189,21 @@ const PrimeCourseOverview: React.FC<{
     return getIds();
   }, [moduleResources]);
 
+  const isEnrolled = checkIsEnrolled(getEnrollment(training, trainingInstance));
+
+  const { gradebookOrderedResources, showGradebook } = useCourseGradebook({
+    moduleResources,
+    training,
+    account: user?.account,
+    isEnrolled,
+  });
+
+  const showGradebookInCourse = showGradebook && !isPartOfParentLO;
+
+  const [courseOverviewTab, setCourseOverviewTab] = useState<CourseOverviewTabKey>(
+    COURSE_OVERVIEW_TAB_KEYS.MODULES
+  );
+
   const notesWithoutBookmarks = useMemo(() => {
     return notes.filter((note: PrimeNote) => note.text !== 'bookmark');
   }, [notes]);
@@ -305,27 +331,35 @@ const PrimeCourseOverview: React.FC<{
       setIsMoreDiscussionLoading(false);
     }
   };
-  const tabSelectionChangeHandler = (key: any) => {
-    if (key === 'Discussion') {
+  const tabSelectionChangeHandler = (key: Key) => {
+    setCourseOverviewTab(key as CourseOverviewTabKey);
+    if (key === COURSE_OVERVIEW_TAB_KEYS.DISCUSSION) {
       getDiscussionList();
-    } else if (key === 'Notes') {
+    } else if (key === COURSE_OVERVIEW_TAB_KEYS.NOTES) {
       getNotes && getNotes();
     }
   };
+
   return (
     <Tabs
       aria-label={GetTranslation('alm.text.moduleList', true)}
       UNSAFE_className={`
         ${isPartOfParentLO && styles.isPartOfParentLO}
           ${isTrainingDisabled && styles.tabsDisabled}`}
+      selectedKey={courseOverviewTab}
       onSelectionChange={tabSelectionChangeHandler}
     >
       <TabList id="tabList" UNSAFE_className={classNames}>
-        <Item key="Modules">
+        <Item key={COURSE_OVERVIEW_TAB_KEYS.MODULES}>
           {isPartOfParentLO
             ? GetTranslation('alm.text.curriculum')
             : GetTranslation('alm.training.modules', true)}
         </Item>
+        {showGradebookInCourse && (
+          <Item key={COURSE_OVERVIEW_TAB_KEYS.GRADEBOOK}>
+            {GetTranslation('alm.text.gradebook', true)}
+          </Item>
+        )}
         {showTestout && <Item key="Testout">{GetTranslation('alm.text.testout', true)}</Item>}
         {showNotesTab && <Item key="Notes">{GetTranslation('alm.text.notes')}</Item>}
         {showDiscussionTab && (
@@ -333,7 +367,12 @@ const PrimeCourseOverview: React.FC<{
         )}
       </TabList>
       <TabPanels UNSAFE_className={styles.tabPanels}>
-        <Item key="Modules">
+        <Item key={COURSE_OVERVIEW_TAB_KEYS.MODULES}>
+          {showGradebookInCourse && (
+            <PrimeTrainingGradebookBanner
+              onViewGradebook={() => setCourseOverviewTab(COURSE_OVERVIEW_TAB_KEYS.GRADEBOOK)}
+            />
+          )}
           {preWorkResources?.length > 0 && (
             <>
               <div className={styles.overviewcontainer} data-automationid="preWorkResources">
@@ -424,8 +463,17 @@ const PrimeCourseOverview: React.FC<{
             </InlineAlert>
           )}
         </Item>
+        {showGradebookInCourse && (
+          <Item key={COURSE_OVERVIEW_TAB_KEYS.GRADEBOOK}>
+            <PrimeGradebook
+              training={training}
+              trainingInstance={trainingInstance}
+              loResources={gradebookOrderedResources}
+            />
+          </Item>
+        )}
         {showTestout && (
-          <Item key="Testout">
+          <Item key={COURSE_OVERVIEW_TAB_KEYS.TESTOUT}>
             <PrimeModuleList
               launchPlayerHandler={launchPlayerHandler}
               loResources={testOutResources}
@@ -454,7 +502,7 @@ const PrimeCourseOverview: React.FC<{
           </Item>
         )}
         {showNotesTab && (
-          <Item key="Notes">
+          <Item key={COURSE_OVERVIEW_TAB_KEYS.NOTES}>
             {isLoadingNotes ? (
               <ALMLoader />
             ) : Object.keys(notesWithoutBookmarks[0] || {}).length ? (
@@ -521,7 +569,7 @@ const PrimeCourseOverview: React.FC<{
           </Item>
         )}
 
-        <Item key="Discussion">
+        <Item key={COURSE_OVERVIEW_TAB_KEYS.DISCUSSION}>
           {isDiscussionLoading ? (
             <ALMLoader />
           ) : (

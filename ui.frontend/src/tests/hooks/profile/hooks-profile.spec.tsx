@@ -602,6 +602,7 @@ describe('hooks/profile', () => {
     it('should save user recommendations', async () => {
       const store = createMockStore(initialState);
       mockRestAdapter.post = jest.fn().mockResolvedValue({ success: true });
+      mockRestAdapter.get = jest.fn().mockResolvedValue({});
 
       const { result } = renderHook(() => useRecommendations(), {
         wrapper: createWrapper(store),
@@ -621,6 +622,49 @@ describe('hooks/profile', () => {
         headers: { 'content-type': 'application/json' } as any,
       });
       expect(response.success).toBe(true);
+    });
+
+    it('should refresh from the POST response without a second round-trip', async () => {
+      const store = createMockStore(initialState);
+      mockRestAdapter.post = jest.fn().mockResolvedValue({ data: { id: 'pref-1' } });
+      mockRestAdapter.get = jest.fn().mockResolvedValue({});
+      (mockJsonApiParse.mockReturnValue as any)({
+        userRecommendationPreferences: { id: 'pref-1', products: [], roles: [] } as any,
+        links: { next: '' } as any,
+      });
+
+      const { result } = renderHook(() => useRecommendations(), {
+        wrapper: createWrapper(store),
+      });
+
+      await act(async () => {
+        await result.current.saveUserRecommedations({ preferences: ['product-1'] });
+      });
+
+      expect(mockJsonApiParse).toHaveBeenCalledWith({ data: { id: 'pref-1' } });
+      expect(mockRestAdapter.get).not.toHaveBeenCalled();
+    });
+
+    it('should fall back to a re-fetch when the POST returns no body (204)', async () => {
+      const store = createMockStore(initialState);
+      mockRestAdapter.post = jest.fn().mockResolvedValue('');
+      mockRestAdapter.get = jest.fn().mockResolvedValue({});
+      (mockJsonApiParse.mockReturnValue as any)({
+        userRecommendationPreferences: { id: 'pref-1' } as any,
+        links: { next: '' } as any,
+      });
+
+      const { result } = renderHook(() => useRecommendations(), {
+        wrapper: createWrapper(store),
+      });
+
+      await act(async () => {
+        await result.current.saveUserRecommedations({ preferences: [] });
+      });
+
+      expect(mockRestAdapter.get).toHaveBeenCalledWith({
+        url: 'https://test.api.com//users/user-123/recommendationPreferences',
+      });
     });
 
     it('should throw error on save failure', async () => {

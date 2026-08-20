@@ -88,6 +88,7 @@ governing permissions and limitations under the License.
   white-space: normal !important;
   height: auto !important;
   font-family: var(--prime-font-family);
+  font-synthesis: style;
 }
 .instancesContainer {
   opacity: 1;

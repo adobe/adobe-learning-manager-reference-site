@@ -466,6 +466,23 @@ describe('PrimeTrainingPage', () => {
       const { container } = renderComponent();
       expect(container.querySelector('[data-automationid="Test Training-duration"]')).toBeNull();
     });
+
+    it('should strip moduleId query param from trainingId when path param contains it', () => {
+      const mockGlobal = jest.requireMock('@utils/global');
+      const origGetPathParams = mockGlobal.getPathParams;
+      mockGlobal.getPathParams = () => ({
+        trainingId: 'training1?moduleId=12345',
+        trainingInstanceId: 'instance1',
+      });
+
+      const { useTrainingPage } = require('@hooks/catalog/useTrainingPage');
+      renderComponent({ trainingId: undefined, trainingInstanceId: undefined });
+
+      const lastCallArgs = (useTrainingPage as jest.Mock).mock.calls.slice(-1)[0];
+      expect(lastCallArgs[0]).toBe('training1');
+
+      mockGlobal.getPathParams = origGetPathParams;
+    });
   });
 
   describe('Gamification', () => {

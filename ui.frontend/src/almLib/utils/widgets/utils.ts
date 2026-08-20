@@ -51,7 +51,6 @@ import { RestAdapter } from '../restAdapter';
 import { GetTranslation, GetTranslationReplaced } from '../translationService';
 import { getALMObject, getALMUser } from '../global';
 import { CPENEW, MODE, VIEW } from '../constants';
-import { VIRTUAL_COACH_STRIP_ICON } from '../inline_svg';
 import { ReactNode } from 'react';
 export const COURSE = 'course';
 export const LEARNING_PROGRAM = 'learningProgram';
@@ -714,7 +713,11 @@ export function getHeading(
       automationid = 'primelxp-browsevirtualcoach';
       seeAllLink = link;
       showNewTag = true;
-      icon = VIRTUAL_COACH_STRIP_ICON();
+      break;
+    case WidgetType.PERSONALIZED_PATH_STRIP:
+      name =
+        GetTranslation('alm.strip.personalizedpath.title', true) || 'Personalized Learning Paths';
+      automationid = 'primelxp-personalizedpathstrip';
       break;
   }
   // this.widgetName = name;

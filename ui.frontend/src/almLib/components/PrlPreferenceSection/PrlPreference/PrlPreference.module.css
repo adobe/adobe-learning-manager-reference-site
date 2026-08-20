@@ -19,11 +19,6 @@ governing permissions and limitations under the License.
   width: 100%;
   padding: 16px 0 0px 0;
 }
-.prlPHeader {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
 .prlPHeading {
   font-size: var(--prime-font-size-14);
   color: var(--prime-color-black);

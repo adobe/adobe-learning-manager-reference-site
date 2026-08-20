@@ -21,6 +21,8 @@ import { PrimeCourseItemContainer } from '../PrimeCourseItemContainer';
 import { PrimeLPItemContainer } from '../PrimeLPItemContainer';
 import { checkIsTrainingLocked } from '../../../utils/overview';
 import { useUserContext } from '../../../contextProviders/userContextProvider';
+import styles from './PrimeTrainingOverview.module.css';
+import { EXTERNAL_LEARNING_OBJECT } from '../../../utils/constants';
 
 const COURSE = 'course';
 const LEARNING_PROGRAM = 'learningProgram';
@@ -228,6 +230,25 @@ const PrimeTrainingOverview: React.FC<{
               discussionUtils={discussionUtils}
               courseInstanceMap={courseInstanceMap}
             ></PrimeLPItemContainer>
+          );
+        } else if (loType === EXTERNAL_LEARNING_OBJECT) {
+          const name = training.localizedMetadata?.[0]?.name || '';
+          const imageUrl = training.imageUrl;
+          const contentUrl = (training as any).contentUrl as string | undefined;
+          if (!contentUrl) {
+            return <></>;
+          }
+          return (
+            <a
+              key={training.id}
+              href={contentUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.externalLoItem}
+            >
+              {imageUrl && <img src={imageUrl} alt={name} className={styles.externalLoThumbnail} />}
+              <span className={styles.externalLoName}>{name}</span>
+            </a>
           );
         }
         return <></>;

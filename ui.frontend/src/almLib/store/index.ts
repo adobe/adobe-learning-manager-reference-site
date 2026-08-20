@@ -14,3 +14,4 @@ export { default as reducer } from './reducer';
 export * from './state';
 
 export * from './actions';
+export { default as channels } from './reducers/channels';

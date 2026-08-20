@@ -28,6 +28,7 @@ import {
   GET_ABSTRACT_COM,
   LEARNING_PROGRAM,
   LINKED_IN_LEARNING,
+  PERSONALIZED_PATH,
   SELF_ENROLL,
 } from '../../../utils/constants';
 import {
@@ -36,6 +37,7 @@ import {
   GetCoursePageLink,
   GetLPInstancePageLink,
   GetLPPageLink,
+  GetPersonalizedPathPageLink,
   GetPlayerOpenLink,
   SendLinkEvent,
   SendMessageToParent,
@@ -63,7 +65,7 @@ export const hasSingleActiveInstance = (training: PrimeLearningObject): boolean 
 };
 
 export const getActionTextForDisabledLinks = (widget: Widget): string => {
-  return widget?.attributes?.disableLinks ? '' : GetTranslation('locard.explore');
+  return widget?.attributes?.disableLinks ? '' : GetTranslation('text.explore');
 };
 
 export const isLinkedinLO = (training: PrimeLearningObject): boolean => {
@@ -177,6 +179,8 @@ export const getLoViewRefLink = (training: PrimeLearningObject): string => {
         : `${GetLPInstancePageLink()}?lpId=${id}`;
     case CERTIFICATION:
       return `${GetCertPageLink()}?certId=${id}`;
+    case PERSONALIZED_PATH:
+      return `${GetPersonalizedPathPageLink()}?personalizedPathId=${id}`;
     default:
       return '';
   }
@@ -220,6 +224,11 @@ export const handleRedirectionForLoggedIn = (
   const trainingId = training.id;
   const loType = training.loType;
   let instanceId;
+
+  if (loType === PERSONALIZED_PATH) {
+    alm.navigateToTrainingOverviewPage(trainingId);
+    return;
+  }
 
   //handling enrolled case
   if (training.enrollment) {

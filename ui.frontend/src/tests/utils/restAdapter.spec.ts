@@ -423,6 +423,55 @@ describe('RestAdapter', () => {
 
       expect(xhrInstances[0]?.withCredentials).toBe(false);
     });
+
+    it('should open the request for a non-logged-in commerce (aem-commerce) user', () => {
+      mockGetALMObject.mockReturnValue({
+        isPrimeUserLoggedIn: jest.fn().mockReturnValue(false),
+      } as any);
+      mockGetALMConfig.mockReturnValue({
+        usageType: 'aem-commerce',
+      } as any);
+
+      RestAdapter.get({ url: 'https://api.example.com/trainings' });
+
+      // Regression: aem-commerce guests must open() the XHR before send(). Previously this
+      // branch was skipped (only aem-es / mobile were handled), so send() threw InvalidStateError.
+      expect(xhrInstances[0]?.open).toHaveBeenCalledWith(
+        'GET',
+        'https://api.example.com/trainings'
+      );
+      expect(xhrInstances[0]?.withCredentials).toBe(false);
+    });
+
+    it('should open the request for a non-logged-in ES (aem-es) user', () => {
+      mockGetALMObject.mockReturnValue({
+        isPrimeUserLoggedIn: jest.fn().mockReturnValue(false),
+      } as any);
+      mockGetALMConfig.mockReturnValue({
+        usageType: 'aem-es',
+      } as any);
+
+      RestAdapter.get({ url: 'https://api.example.com/trainings' });
+
+      expect(xhrInstances[0]?.open).toHaveBeenCalledWith(
+        'GET',
+        'https://api.example.com/trainings'
+      );
+      expect(xhrInstances[0]?.withCredentials).toBe(false);
+    });
+
+    it('should not open the request for a non-logged-in aem-sites user (login required)', () => {
+      mockGetALMObject.mockReturnValue({
+        isPrimeUserLoggedIn: jest.fn().mockReturnValue(false),
+      } as any);
+      mockGetALMConfig.mockReturnValue({
+        usageType: 'aem-sites',
+      } as any);
+
+      RestAdapter.get({ url: 'https://api.example.com/trainings' });
+
+      expect(xhrInstances[0]?.open).not.toHaveBeenCalled();
+    });
   });
 
   // ==========================================

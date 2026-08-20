@@ -567,6 +567,7 @@ const PrimeCourseItemContainer: React.FC<{
             parentHasSubLoOrderEnforced={parentHasSubLoOrderEnforced}
             isPartOfFirstChildTraining={isPartOfFirstChildTraining}
             isTrainingLocked={isLocked()}
+            isOrderLocked={isTrainingLocked}
           />
           {isParentFlexLP && (
             <>

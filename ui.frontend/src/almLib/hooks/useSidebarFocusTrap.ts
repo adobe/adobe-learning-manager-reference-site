@@ -12,8 +12,10 @@ governing permissions and limitations under the License.
 import { useCallback } from 'react';
 import { useFocusTrap, UseFocusTrapOptions } from './useFocusTrap';
 
-interface UseSidebarFocusTrapOptions
-  extends Omit<UseFocusTrapOptions, 'onKeyDown' | 'onArrowNavigation'> {
+interface UseSidebarFocusTrapOptions extends Omit<
+  UseFocusTrapOptions,
+  'onKeyDown' | 'onArrowNavigation'
+> {
   preventArrowScroll?: boolean;
 }
 

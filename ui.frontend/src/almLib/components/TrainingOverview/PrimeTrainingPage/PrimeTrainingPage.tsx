@@ -31,6 +31,7 @@ import {
   FLEX_LP_COURSE_INFO,
   LEARNING_PROGRAM,
   PENDING_APPROVAL,
+  PERSONALIZED_PATH,
   REJECTED,
   RETIRED,
   TRAINING_ID_STR,
@@ -133,7 +134,7 @@ const PrimeTrainingPage = (props: any) => {
       TRAINING_INSTANCE_ID_STR,
     ]);
     if (!trainingId) {
-      trainingId = customEncode(pathParams[TRAINING_ID_STR]);
+      trainingId = customEncode(pathParams[TRAINING_ID_STR]?.split('?')[0]);
     }
     if (!trainingInstanceId) {
       trainingInstanceId = customEncode(pathParams[TRAINING_INSTANCE_ID_STR]?.split('?')[0]);
@@ -159,6 +160,8 @@ const PrimeTrainingPage = (props: any) => {
     launchPlayerHandler,
     updateEnrollmentHandler,
     unEnrollmentHandler,
+    deletePersonalizedPathHandler,
+    personalizedPathEnrollmentHandler,
     jobAidClickHandler,
     addToCartHandler,
     addToCartNativeHandler,
@@ -484,6 +487,10 @@ const PrimeTrainingPage = (props: any) => {
   // Navigating to instance page in case of multiple instances
   useEffect(() => {
     if (training) {
+      if (training.loType === PERSONALIZED_PATH) {
+        setIsInstancePageLoading(false);
+        return;
+      }
       const enrollmentCount = getEnrolledInstancesCount(training);
       const hasMultipleInstances = !hasSingleActiveInstance(training);
 
@@ -541,6 +548,9 @@ const PrimeTrainingPage = (props: any) => {
       if (!playerLaunchedId) {
         return;
       }
+      if (training?.loType === PERSONALIZED_PATH) {
+        return;
+      }
       const response = updateLearningObject && (await updateLearningObject(playerLaunchedId));
       if (HUNDERED_PERCENT !== response?.enrollment?.progressPercent) {
         return;
@@ -588,7 +598,7 @@ const PrimeTrainingPage = (props: any) => {
           duration += subLO.duration;
         }
       } else {
-        duration += getSubLOsDuration(subLO, subLO.instances[0].isFlexible);
+        duration += getSubLOsDuration(subLO, subLO.instances?.[0]?.isFlexible ?? false);
       }
     });
     return duration;
@@ -634,6 +644,8 @@ const PrimeTrainingPage = (props: any) => {
   const isFlexible = trainingInstance.isFlexible;
   const isRootLoCompleted = enrollment?.progressPercent === 100 || enrollment?.state === COMPLETED; //For ongoing session, once you complete the training, enrollment state takes around 10 mins to update to COMPLETED. For that case, we will be checking progress percent.
   const hasPreview = training.hasPreview;
+  const isPartOfLP = loType === LEARNING_PROGRAM;
+  const isPartOfPersonalizedPath = loType === PERSONALIZED_PATH;
 
   const isFlexLPOrContainsFlexLP = isFlexible || hasFlexibleChildLP(training);
 
@@ -1104,7 +1116,7 @@ const PrimeTrainingPage = (props: any) => {
     <ALMErrorBoundary>
       <Provider theme={lightTheme} colorScheme={'light'}>
         {showGamificationPointsModal && openGamificationModal()}
-        {shouldLaunchFeedback && (
+        {shouldLaunchFeedback && training?.loType !== PERSONALIZED_PATH && (
           <PrimeFeedbackWrapper
             trainingId={trainingId}
             trainingInstanceId={trainingInstanceId}
@@ -1243,7 +1255,7 @@ const PrimeTrainingPage = (props: any) => {
                       overview={overview}
                       richTextOverview={richTextOverview}
                       launchPlayerHandler={launchPlayerHandler}
-                      isPartOfLP={loType === LEARNING_PROGRAM}
+                      isPartOfLP={isPartOfLP || isPartOfPersonalizedPath}
                       showMandatoryLabel={showMandatoryLabel}
                       isprerequisiteLO={true}
                       isPreviewEnabled={isPreviewEnabled}
@@ -1329,7 +1341,7 @@ const PrimeTrainingPage = (props: any) => {
                   courseInstanceMap={courseInstanceMap}
                 />
               )}
-              {loType === LEARNING_PROGRAM && (
+              {(isPartOfLP || isPartOfPersonalizedPath) && (
                 <>
                   {/* Adding header to separate subLOs and prerequisites inside LP */}
                   {prerequisiteLOs && (
@@ -1342,7 +1354,7 @@ const PrimeTrainingPage = (props: any) => {
                       {GetTranslation('alm.text.coreContent', true)}
                     </header>
                   )}
-                  {sections.map((section, index) => {
+                  {sections?.map((section, index) => {
                     //Flex LP case - If all LO instances inside section is either selected or completed
                     if (showUnselectedLOs && areAllInstancesOfSectionSelected(section)) {
                       return;
@@ -1362,7 +1374,7 @@ const PrimeTrainingPage = (props: any) => {
                         <PrimeTrainingOverview
                           trainings={subLOs}
                           launchPlayerHandler={launchPlayerHandler}
-                          isPartOfLP={loType === LEARNING_PROGRAM}
+                          isPartOfLP={isPartOfLP || isPartOfPersonalizedPath}
                           showMandatoryLabel={
                             section.mandatory && section.mandatoryLOCount === section.loIds?.length
                           }
@@ -1416,6 +1428,8 @@ const PrimeTrainingPage = (props: any) => {
                 enrollmentHandler={enrollmentHandler}
                 launchPlayerHandler={launchPlayerHandler}
                 unEnrollmentHandler={unEnrollmentHandler}
+                deletePersonalizedPathHandler={deletePersonalizedPathHandler}
+                personalizedPathEnrollmentHandler={personalizedPathEnrollmentHandler}
                 addToCartHandler={addToCartHandler}
                 addToCartNativeHandler={addToCartNativeHandler}
                 buyNowNativeHandler={buyNowNativeHandler}

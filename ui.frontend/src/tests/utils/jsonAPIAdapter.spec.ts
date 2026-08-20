@@ -66,6 +66,20 @@ describe('jsonAPIAdapter', () => {
       expect(Array.isArray(result.learningObjectList)).toBe(true);
       expect(result.learningObjectList).toHaveLength(2);
     });
+
+    it('should not throw when searchResult response is missing the included array', () => {
+      // Missing `included`: must not crash; parses to no items but keeps links.next.
+      const response = {
+        data: [{ type: 'searchResult', id: 'lo:1', attributes: { modelType: 'learningObject' } }],
+        links: { next: 'https://test.adobe.com/next-page' },
+      };
+      let result: any;
+      expect(() => {
+        result = JsonApiParse(response);
+      }).not.toThrow();
+      expect(result.learningObjectList || []).toEqual([]);
+      expect(result.links?.next).toBe('https://test.adobe.com/next-page');
+    });
   });
 
   describe('ObjectWrapper', () => {
@@ -142,6 +156,46 @@ describe('jsonAPIAdapter', () => {
       // ALMToCommerceTypes['skillName'] maps to 'almskill'; the filter data uses 'almskillname' which
       // does not match, so no skill labels are resolved and skillNames is an empty array
       expect(result[0].skillNames).toEqual([]);
+    });
+
+    // Commerce returns almauthor/almtags as scalar strings; the model expects string[].
+    const baseItem = {
+      sku: 'sku1',
+      name: 'Test',
+      description: { html: 'Desc' },
+      almavgrating: '',
+      almratingscount: '',
+    };
+
+    it('should split a comma-separated almauthor into an authorNames array', () => {
+      const result = parseCommerceResponse([
+        { ...baseItem, almauthor: 'John Doe,Jane Smith' },
+      ] as any);
+      expect(result[0].authorNames).toEqual(['John Doe', 'Jane Smith']);
+    });
+
+    it('should wrap a single almauthor string into a one-element array', () => {
+      const result = parseCommerceResponse([
+        { ...baseItem, almauthor: 'LinkedIn Learning' },
+      ] as any);
+      expect(result[0].authorNames).toEqual(['LinkedIn Learning']);
+    });
+
+    it('should default authorNames to an empty array when almauthor is missing', () => {
+      const result = parseCommerceResponse([{ ...baseItem }] as any);
+      expect(result[0].authorNames).toEqual([]);
+    });
+
+    it('should drop empty entries from trailing/duplicate commas in almauthor', () => {
+      const result = parseCommerceResponse([
+        { ...baseItem, almauthor: 'John,,Jane,' },
+      ] as any);
+      expect(result[0].authorNames).toEqual(['John', 'Jane']);
+    });
+
+    it('should split a comma-separated almtags into a tags array', () => {
+      const result = parseCommerceResponse([{ ...baseItem, almtags: 'tag1,tag2' }] as any);
+      expect(result[0].tags).toEqual(['tag1', 'tag2']);
     });
   });
 });

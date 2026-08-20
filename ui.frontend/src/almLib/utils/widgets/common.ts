@@ -387,6 +387,7 @@ export const enum WidgetType {
   CUSTOM_CONTENT_BOX = 'com.adobe.captivateprime.custom.content.box',
   IFRAME = 'com.adobe.captivateprime.iframe',
   VIRTUAL_COACH = 'com.adobe.captivateprime.lostrip.virtualcoach',
+  PERSONALIZED_PATH_STRIP = 'com.adobe.captivateprime.lostrip.personalizedpathstrip',
 }
 
 export const enum WidgetTypeNew {
@@ -422,6 +423,7 @@ export const enum WidgetTypeNew {
   HTML,
   CUSTOM_CONTENT_BOX,
   VIRTUAL_COACH,
+  PERSONALIZED_PATH_STRIP,
 }
 export const WIDGET_REF_TO_TYPE = {
   'com.adobe.captivateprime.calendar': WidgetTypeNew.CALENDAR,
@@ -462,4 +464,5 @@ export const WIDGET_REF_TO_TYPE = {
   'com.adobe.captivateprime.html': WidgetTypeNew.HTML,
   'com.adobe.captivateprime.custom.content.box': WidgetTypeNew.CUSTOM_CONTENT_BOX,
   'com.adobe.captivateprime.lostrip.virtualcoach': WidgetTypeNew.VIRTUAL_COACH,
+  'com.adobe.captivateprime.lostrip.personalizedpathstrip': WidgetTypeNew.PERSONALIZED_PATH_STRIP,
 };

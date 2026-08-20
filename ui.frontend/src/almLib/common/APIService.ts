@@ -80,6 +80,14 @@ class APIService {
   public async unenrollFromTraining(enrollmentId: string = '') {
     return this.customHooks?.unenrollFromTraining(enrollmentId);
   }
+
+  public async enrollToPersonalizedPath(id: string) {
+    return this.customHooks?.enrollToPersonalizedPath(id);
+  }
+
+  public async deletePersonalizedPath(id: string) {
+    return this.customHooks?.deletePersonalizedPath(id);
+  }
   public async getFilters(): Promise<any> {
     return this.customHooks?.getFilters();
   }
@@ -178,6 +186,27 @@ class APIService {
     selectedItemsFromStore: { [key: string]: boolean }
   ) {
     return this.customHooks?.getSearchFilterList(query, type, selectedItemsFromStore);
+  }
+  public async getExternalLearningSettings() {
+    return this.customHooks?.getExternalLearningSettings();
+  }
+  public async getExternalLearnings(params: QueryParams) {
+    return this.customHooks?.getExternalLearnings(params);
+  }
+  public async getExternalLearningsByUrl(url: string) {
+    return this.customHooks?.getExternalLearningsByUrl(url);
+  }
+  public async getExternalLearningById(id: string) {
+    return this.customHooks?.getExternalLearningById(id);
+  }
+  public async submitExternalLearning(payload: object) {
+    return this.customHooks?.submitExternalLearning(payload);
+  }
+  public async updateExternalLearning(id: string, payload: object) {
+    return this.customHooks?.updateExternalLearning(id, payload);
+  }
+  public async getUserById(userId: string) {
+    return this.customHooks?.getUserById(userId);
   }
 }
 

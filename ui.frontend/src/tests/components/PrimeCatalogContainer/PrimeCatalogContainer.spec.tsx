@@ -82,16 +82,19 @@ jest.mock('@utils/global', () => ({
   updateURLParams: jest.fn(),
   GetPrimeEmitEventLinks: jest.fn(() => []),
   getWindowObject: () => globalThis,
+  canShowExternalLearning: jest.fn(() => false),
 }));
 
 jest.mock('@utils/inline_svg', () => ({
   CLOSE_SVG: () => <svg data-testid="close-icon" />,
+  EXTERNAL_LEARNING_ICON: () => <svg data-testid="external-learning-icon" />,
 }));
 
 jest.mock('@utils/catalog', () => ({
   getInitialView: jest.fn(),
   splitStringIntoArray: jest.fn(),
   debounce: (fn: Function) => fn,
+  isMyLearningPage: jest.fn(() => false),
 }));
 
 jest.mock('@utils/filters', () => ({
@@ -124,8 +127,9 @@ import {
   getQueryParamsFromUrl,
   getSelectedOptionsForMobile,
   setTrainingsLayout,
+  canShowExternalLearning,
 } from '@utils/global';
-import { getInitialView, splitStringIntoArray } from '@utils/catalog';
+import { getInitialView, isMyLearningPage, splitStringIntoArray } from '@utils/catalog';
 import { getAvailableSortOptions } from '@utils/sort';
 import { getFilterLabel } from '@utils/filters';
 import { DeviceTypeProvider } from '@contextProviders/DeviceContextProvider';
@@ -501,6 +505,27 @@ describe('PrimeCatalogContainer', () => {
       renderCatalog();
       expect(mockDispatch).toHaveBeenCalled();
     });
+
+    it('resets the sort to the context default when the stored sort is invalid for the context', () => {
+      // Stored 'relevance' is not among the available (catalog) options -> must be reset
+      jest.spyOn(store, 'getState').mockReturnValue({
+        catalog: { sort: 'relevance', filterState: {}, selectedCatalogs: {} },
+      } as any);
+      mockGetAvailableSortOptions.mockReturnValue({
+        availableSortOptions: [
+          { id: 'name', name: 'Name' },
+          { id: 'date', name: 'Date' },
+        ],
+        defaultOption: 'name',
+      } as any);
+
+      renderCatalog();
+
+      // Mount effect dispatches the sort once; because the stored 'relevance' isn't a
+      // valid option here, the re-sync effect dispatches a second time to reset it.
+      // (A sort valid for the context would leave it at a single mount dispatch.)
+      expect(mockDispatch).toHaveBeenCalledTimes(2);
+    });
   });
 
   describe('Focus handler', () => {
@@ -509,6 +534,100 @@ describe('PrimeCatalogContainer', () => {
       mockDispatch.mockClear();
       fireEvent.focusIn(container.querySelector('[data-automationid="catalogFiltersAndListContainer"]') as HTMLElement);
       expect(mockDispatch).toHaveBeenCalled();
+    });
+  });
+
+  describe('Sort and layout position (desktop)', () => {
+    it('sort picker is inside catalogTrainingsContainer on desktop', () => {
+      const { container } = renderCatalog({}, 'desktop');
+      const trainingsContainer = container.querySelector('[data-automationid="catalogTrainingsContainer"]');
+      expect(trainingsContainer?.querySelector('[data-automationid="sortType"]')).not.toBeNull();
+    });
+
+    it('view toggle buttons are inside catalogTrainingsContainer on desktop', () => {
+      const { container } = renderCatalog({}, 'desktop');
+      const trainingsContainer = container.querySelector('[data-automationid="catalogTrainingsContainer"]');
+      expect(trainingsContainer?.querySelector('[data-automationid="trainingsTileView"]')).not.toBeNull();
+      expect(trainingsContainer?.querySelector('[data-automationid="trainingsListView"]')).not.toBeNull();
+    });
+
+    it('sort picker is not inside catalogTrainingsContainer on mobile', () => {
+      const { container } = renderCatalog({}, 'mobile');
+      const trainingsContainer = container.querySelector('[data-automationid="catalogTrainingsContainer"]');
+      expect(trainingsContainer?.querySelector('[data-automationid="sortType"]')).toBeNull();
+    });
+
+    it('sort picker is not inside catalogDescription area on desktop', () => {
+      const { container } = renderCatalog({}, 'desktop');
+      const descriptionDiv = container.querySelector('[data-automationid="catalogDescription"]');
+      // sort was previously a sibling of catalogDescription — it must no longer be in that area
+      const descParent = descriptionDiv?.parentElement;
+      expect(descParent?.querySelector('[data-automationid="sortType"]')).toBeNull();
+    });
+  });
+
+  describe('Description HTML rendering', () => {
+    it('renders HTML tags inside a string description', () => {
+      const { container } = renderCatalog({ description: 'Navigate to <b>External Learning</b> here' });
+      expect(container.querySelector('b')?.textContent).toBe('External Learning');
+    });
+
+    it('renders plain text string description without escaping', () => {
+      renderCatalog({ description: 'Plain text catalog description' });
+      expect(screen.getByText('Plain text catalog description')).toBeInTheDocument();
+    });
+  });
+
+  describe('External Learning button placement', () => {
+    beforeEach(() => {
+      (isMyLearningPage as jest.Mock).mockReturnValue(true);
+      (canShowExternalLearning as jest.Mock).mockReturnValue(true);
+      mockGetALMObject.mockReturnValue({
+        navigateToSocial: jest.fn(),
+        navigateToExternalLearningPage: jest.fn(),
+        isPrimeUserLoggedIn: jest.fn(() => false),
+      } as any);
+    });
+
+    it('renders external learning button on desktop', () => {
+      renderCatalog({}, 'desktop');
+      expect(screen.getByTestId('external-learning-icon')).toBeInTheDocument();
+    });
+
+    it('external learning button is inside descriptionContainer not catalogTrainingsContainer on desktop', () => {
+      const { container } = renderCatalog({}, 'desktop');
+      const trainingsContainer = container.querySelector('[data-automationid="catalogTrainingsContainer"]');
+      // the button contains the icon — it must not be inside the trainings container
+      expect(trainingsContainer?.querySelector('[data-testid="external-learning-icon"]')).toBeNull();
+      // but it must exist somewhere on the page
+      expect(screen.getByTestId('external-learning-icon')).toBeInTheDocument();
+    });
+
+    it('external learning button is a sibling of catalogDescription on desktop', () => {
+      const { container } = renderCatalog({}, 'desktop');
+      const descriptionDiv = container.querySelector('[data-automationid="catalogDescription"]');
+      const descParent = descriptionDiv?.parentElement;
+      expect(descParent?.querySelector('[data-testid="external-learning-icon"]')).not.toBeNull();
+    });
+
+    it('clicking external learning button calls navigateToExternalLearningPage', () => {
+      const navigateToExternalLearningPage = jest.fn();
+      mockGetALMObject.mockReturnValue({
+        navigateToSocial: jest.fn(),
+        navigateToExternalLearningPage,
+        isPrimeUserLoggedIn: jest.fn(() => false),
+      } as any);
+      renderCatalog({}, 'desktop');
+      userEvent.click(screen.getByTestId('external-learning-icon').closest('button')!);
+      expect(navigateToExternalLearningPage).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not render desktop external learning button on mobile', () => {
+      renderCatalog({}, 'mobile');
+      // on mobile the button is in mobileExternalLearning, not as a sibling of catalogDescription
+      const descriptionDiv = screen.queryByTestId('external-learning-icon')
+        ?.closest('[data-automationid="catalogDescription"]');
+      expect(descriptionDiv).toBeNull();
     });
   });
 });

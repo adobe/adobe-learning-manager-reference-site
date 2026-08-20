@@ -23,3 +23,4 @@ export { default as search } from './search';
 export * from './badge';
 export { default as authorTrainings } from './author';
 export * from './appState';
+export { default as channels } from './channels';
