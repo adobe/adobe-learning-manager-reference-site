@@ -26,7 +26,9 @@ public class GlobalConfigurationUtilsTest {
     assertNull(globalConfig.get("clientSecret"));
     assertNull(globalConfig.get("authorRefreshToken"));
     assertNull(globalConfig.get("refreshToken"));
+    assertNull(globalConfig.get("adminRefreshToken"));
     assertNotNull(globalConfig.get("almBaseURL"));
+    assertNotNull(globalConfig.get("useAdminRefreshToken"));
   }
 
   private JsonObject getAdminConfigs() {
@@ -38,6 +40,8 @@ public class GlobalConfigurationUtilsTest {
     adminConfigs.addProperty("commerceURL", "https://learningmanagerstage1.adobe.com");
     adminConfigs.addProperty("customerTokenLifetime", "3600");
     adminConfigs.addProperty("authorRefreshToken", "xxxxxx");
+    adminConfigs.addProperty("adminRefreshToken", "xxxxxx");
+    adminConfigs.addProperty("useAdminRefreshToken", "true");
     return adminConfigs;
   }
 }
