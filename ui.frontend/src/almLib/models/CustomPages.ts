@@ -158,6 +158,7 @@ export interface WidgetTrainingFilters {
   excludeIgnoredRecommendations?: boolean;
   enforcedFieldsLO?: string;
   recommendationConfig?: WidgetRecommendationConfigFilters;
+  includeEnrolledChildLOs?: boolean;
 }
 
 export interface WidgetRecommendationFilters {

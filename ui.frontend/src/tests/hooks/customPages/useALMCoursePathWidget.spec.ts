@@ -26,6 +26,7 @@ governing permissions and limitations under the License.
 // Mock dependencies BEFORE imports
 jest.mock('../../../almLib/utils/global', () => ({
   getALMConfig: jest.fn(),
+  getALMAccount: jest.fn(),
 }));
 
 jest.mock('../../../almLib/utils/restAdapter', () => ({
@@ -68,7 +69,7 @@ import { act } from '@testing-library/react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { useCoursePathWidget } from '../../../almLib/hooks/customPages/useALMCoursePathWidget';
-import { getALMConfig } from '../../../almLib/utils/global';
+import { getALMConfig, getALMAccount } from '../../../almLib/utils/global';
 import { RestAdapter } from '../../../almLib/utils/restAdapter';
 import { enrollTraining, getTraining } from '../../../almLib/utils/lo-utils';
 import { GetTranslation } from '../../../almLib/utils/translationService';
@@ -381,6 +382,36 @@ describe('useCoursePathWidget', () => {
       const callArgs = mockGetCoursePathWidgetTrainings.mock.calls[0];
       expect(callArgs[0]).toHaveProperty('learnerState', ['enrolled', 'started']);
       expect(callArgs[0]).toHaveProperty('sort', '-dateEnrolled');
+    });
+
+    it('should request enrolled child LOs only for the Courses & Paths widget', async () => {
+      mockGetCoursePathWidgetTrainings.mockResolvedValue({
+        trainings: mockTrainings,
+        next: '',
+        meta: {},
+      });
+
+      (getALMAccount as jest.Mock).mockResolvedValue({});
+
+      const refs: [string, boolean][] = [
+        ['com.adobe.captivateprime.courses.and.paths', true],
+        ['com.adobe.captivateprime.lostrip.mylearning', false],
+        ['com.adobe.captivateprime.lostrip.discovery', false],
+        ['com.adobe.captivateprime.lostrip.mybookmarks', false],
+      ];
+
+      for (const [widgetRef, expected] of refs) {
+        mockGetCoursePathWidgetTrainings.mockClear();
+        const widget = { ...mockWidget, widgetRef };
+        const { result } = renderHook(() => useCoursePathWidget(widget as any));
+
+        await act(async () => {
+          await result.current.fetchMore();
+        });
+
+        const filters = mockGetCoursePathWidgetTrainings.mock.calls[0][0];
+        expect(filters.includeEnrolledChildLOs).toBe(expected ? true : undefined);
+      }
     });
 
     it('should call getCoursePathWidgetTrainings with correct pagination', async () => {
