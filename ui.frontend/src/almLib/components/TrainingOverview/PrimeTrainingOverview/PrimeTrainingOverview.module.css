@@ -9,7 +9,6 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-@import '../../styles/variables.css';
 .overviewcontainer {
   display: flex;
   width: 50%;
@@ -36,4 +35,26 @@ governing permissions and limitations under the License.
 
 .tablist div[role='presentation'] {
   height: 4px;
+}
+
+.externalLoItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--prime-color-lightgray);
+}
+
+.externalLoThumbnail {
+  width: 120px;
+  height: 68px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.externalLoName {
+  font-size: 14px;
+  color: var(--prime-color-body);
+  flex: 1;
 }

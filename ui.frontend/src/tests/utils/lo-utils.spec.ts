@@ -101,6 +101,7 @@ import {
   doesFirstTrainingHavePrerequisites,
   getAllCoursesOfTraining,
   shouldShowContinueButton,
+  shouldShowCreditDuration,
   areAllMandatoryCoursesCompleted,
   getCertificationProofPendingMessage,
   getAllJobAidsInTraining,
@@ -479,6 +480,37 @@ describe('utils/lo-utils.ts', () => {
     });
   });
 
+  describe('shouldShowCreditDuration', () => {
+    it('should return false when the account flag is off', () => {
+      const account = { enableCreditDuration: false } as any;
+      const loResource = { creditDuration: 45 } as PrimeLearningObjectResource;
+      expect(shouldShowCreditDuration(account, loResource)).toBe(false);
+    });
+
+    it('should return false when the account is undefined', () => {
+      const loResource = { creditDuration: 45 } as PrimeLearningObjectResource;
+      expect(shouldShowCreditDuration(undefined, loResource)).toBe(false);
+    });
+
+    it('should return true when the flag is on and creditDuration is greater than zero', () => {
+      const account = { enableCreditDuration: true } as any;
+      const loResource = { creditDuration: 45 } as PrimeLearningObjectResource;
+      expect(shouldShowCreditDuration(account, loResource)).toBe(true);
+    });
+
+    it('should return true when the flag is on and creditDuration is zero (zero is valid)', () => {
+      const account = { enableCreditDuration: true } as any;
+      const loResource = { creditDuration: 0 } as PrimeLearningObjectResource;
+      expect(shouldShowCreditDuration(account, loResource)).toBe(true);
+    });
+
+    it('should return false when the flag is on but creditDuration is not set', () => {
+      const account = { enableCreditDuration: true } as any;
+      const loResource = { creditDuration: undefined } as PrimeLearningObjectResource;
+      expect(shouldShowCreditDuration(account, loResource)).toBe(false);
+    });
+  });
+
   describe('isSuccessfullyCompleted', () => {
     it('should return true if completed and succeeded', () => {
       const grade = { completed: true, dateSuccess: '2024-01-01' } as any;
@@ -652,6 +684,10 @@ describe('utils/lo-utils.ts', () => {
       expect(determineLoType('learningProgram:123')).toBe('learningProgram');
     });
 
+    it('should determine personalized path type', () => {
+      expect(determineLoType('personalizedPath:123')).toBe('personalizedPath');
+    });
+
     it('should return empty for invalid', () => {
       expect(determineLoType('invalid')).toBeUndefined(); // Returns undefined when no match
     });
@@ -661,6 +697,11 @@ describe('utils/lo-utils.ts', () => {
     it('should return error message for course', () => {
       const result = getErrorMessage('course');
       expect(typeof result).toBe('string');
+    });
+
+    it('should return error message for personalized path', () => {
+      const result = getErrorMessage('personalizedPath');
+      expect(result).toBeDefined();
     });
   });
 
@@ -787,6 +828,16 @@ describe('utils/lo-utils.ts', () => {
 
     it('should return empty for undefined', () => {
       expect(getTrainingTypeLabel(undefined)).toBe('');
+    });
+
+    it('should return translation result for personalizedPath', () => {
+      expect(getTrainingTypeLabel('personalizedPath')).toBe('alm.training.personalizedPath');
+    });
+
+    it('should return empty string for personalizedPath when translation returns falsy', () => {
+      const { GetTranslation } = require('@almLib/utils/translationService');
+      (GetTranslation as jest.Mock).mockReturnValueOnce('');
+      expect(getTrainingTypeLabel('personalizedPath')).toBe('');
     });
   });
 

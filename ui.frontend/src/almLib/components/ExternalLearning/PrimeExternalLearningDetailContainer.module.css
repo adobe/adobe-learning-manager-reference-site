@@ -1,0 +1,345 @@
+/*
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+@import '../../styles/variables.css';
+
+.pageContainer {
+  max-width: var(--prime-catalog-container-max-width-desktop);
+  margin: 0 auto;
+}
+
+.headerContainer {
+  padding-top: 20px;
+}
+
+/* Header: title+badge on left, action buttons on right */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 585px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.editActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cancelButton {
+  background: transparent;
+  color: var(--prime-color-black, #2c2c2c);
+  border-color: var(--prime-color-black, #2c2c2c);
+}
+
+.editButton {
+  width: 72px;
+  height: 32px;
+  padding: 0;
+}
+
+.label {
+  font-size: var(--prime-font-size-24);
+  letter-spacing: 0px;
+  color: var(--prime-color-black);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: var(--prime-font-size-14);
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.statusApproved {
+  background: #007a4d;
+}
+.statusRejected {
+  background: #d31510;
+}
+.statusPending {
+  background: #f68511;
+}
+
+.stickyEditButton {
+  width: 100%;
+}
+
+.stickyActionButton {
+  flex: 1;
+}
+
+.pageContainerStickyOffset {
+  padding-bottom: 100px;
+}
+
+.mobileBadge {
+  margin: 6px 0 30px;
+}
+
+.mobileSideColumn {
+  margin-top: 24px;
+}
+
+.mobileReviewerDivider {
+  margin-top: 40px;
+  margin-bottom: 12px;
+}
+
+.submittedLine {
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-black, #2c2c2c);
+  margin: 8px 0 20px;
+}
+
+.submittedLabel {
+  font-weight: 600;
+}
+
+.submittedDate {
+  font-weight: 400;
+}
+
+.divider {
+  border: none;
+  border-bottom: 1px solid #dadada;
+  margin-bottom: 24px;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+/* Two-column body below divider */
+.contentBody {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.fieldsColumn {
+  flex: 0 0 585px;
+  width: 585px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow: hidden;
+}
+
+.sideColumn {
+  flex: 0 0 585px;
+  width: 585px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow: hidden;
+}
+
+/* Shared field item — used in both columns */
+.fieldItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldLabel {
+  font-size: var(--prime-font-size-14);
+  font-weight: 700;
+  color: var(--prime-color-black, #2c2c2c);
+}
+
+.fieldValue {
+  font-size: var(--prime-font-size-14);
+  font-weight: 400;
+  color: var(--prime-color-black, #2c2c2c);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.reviewedByLine {
+  font-size: var(--prime-font-size-14);
+  font-style: italic;
+  color: #909090;
+}
+
+/* Attachment row */
+.attachmentRow {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.attachmentName {
+  font-size: var(--prime-font-size-14);
+  font-weight: 400;
+  color: var(--prime-color-black, #2c2c2c);
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+.attachmentActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.attachmentAction {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-blue, #1473e6);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.attachmentAction:hover {
+  opacity: 0.8;
+}
+
+.previewDialog {
+  width: 80vw !important;
+  max-width: 1000px !important;
+}
+
+.previewDialog :global(h2) {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.previewContent {
+  padding: 0 !important;
+  overflow: hidden;
+  position: relative;
+  height: 75vh;
+}
+
+.hidden {
+  display: none;
+}
+
+.previewLoader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.previewImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.previewIframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.previewError {
+  margin: auto;
+  padding: 24px;
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-black, #2c2c2c);
+  text-align: center;
+}
+
+.loadErrorContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 48px 24px;
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-black, #2c2c2c);
+  text-align: center;
+}
+
+@media screen and (max-width: 1024px) {
+  .pageContainer {
+    max-width: var(--prime-container-max-width-tablet);
+    padding: 0;
+  }
+
+  .contentBody {
+    flex-direction: column;
+  }
+
+  .fieldsColumn {
+    flex: none;
+    width: 100%;
+  }
+
+  .sideColumn {
+    width: 100%;
+    gap: 0;
+  }
+
+  .attachmentRow {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .pageContainer {
+    width: 100%;
+    max-width: var(--prime-container-max-width-mobile);
+    padding: 0 20px;
+  }
+
+  .header {
+    flex-wrap: wrap;
+  }
+
+  .label {
+    font-size: var(--prime-font-size-22);
+  }
+
+  .divider {
+    margin-bottom: 12px;
+  }
+}

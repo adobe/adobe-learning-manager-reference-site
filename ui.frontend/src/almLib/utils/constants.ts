@@ -44,6 +44,10 @@ export const PREVIEW = 'PREVIEW';
 export const ENROLL = 'ENROLL';
 export const ADD_TO_CART = 'ADD_TO_CART';
 export const LEARNING_PROGRAM = 'learningProgram';
+export const PERSONALIZED_PATH = 'personalizedPath';
+export const PERSONALIZED_PATH_INCLUDE =
+  'enrollment,subLOs,subLOs.enrollment.loResourceGrades,subLOs.instances.loResources.resources';
+export const EXTERNAL_LEARNING_OBJECT = 'externalLearningObject';
 export const LEARNING_PROGRAMS = 'learningPrograms';
 export const TRAINING_ID_STR = 'trainingId';
 export const TRAINING_INSTANCE_ID_STR = 'trainingInstanceId';
@@ -110,6 +114,12 @@ export const DOC = 'DOC';
 export const PPT = 'PPT';
 export const XLS = 'XLS';
 export const QUIZ = 'QUIZ';
+export const SCORM12 = 'SCORM12';
+export const SCORM2004 = 'SCORM2004';
+export const TINCAN = 'TINCAN';
+export const AICC = 'AICC';
+export const CR = 'CR';
+export const VC = 'VC';
 
 export const SKILLS = 'skills';
 export const FOLLOW = 'follow';
@@ -198,6 +208,7 @@ export const LO_OVERVIEW_PAGE_LINKS = [
   `${PRIME_LINK}:coursePageLink`,
   `${PRIME_LINK}:certPageLink`,
   `${PRIME_LINK}:lpPageLink`,
+  `${PRIME_LINK}:personalizedPathPageLink`,
 ];
 export const LO_PREVIEW_PAGE_LINKS = [
   `${PRIME_LINK}:courseInstancePreviewPageLink`,
@@ -344,7 +355,16 @@ export const MIN_DISCUSSION_COMMENT_LENGTH = 10;
 
 export const CONTENT_TYPES = {
   LTI: 'LTI',
-};
+  SCORM12,
+  SCORM2004,
+  TINCAN,
+  AICC,
+  AI_COACH: 'AI_COACH',
+  ACTIVITY: 'ACTIVITY',
+  CP,
+  PR,
+  QUIZ,
+} as const;
 
 export const DEFAULT_SEARCH_SNIPPETTYPE =
   'loMetadata,skillName,skillDescription,note,badgeName,courseTag,moduleTag,jobAidTag,lpTag,certificationTag,embedLpTag,discussion';
@@ -392,6 +412,8 @@ export const ALM_PAGE_TITLE_UPDATE = 'ALM_PAGE_TITLE_UPDATE';
 export const COMPACT_CARD_LAYOUT = 'compact';
 export const BADGES_EXL_URL =
   'https://experienceleague.adobe.com/en/docs/learning-manager/using/learner/badges';
+
+export const GRADEBOOK_LEARN_MORE_GO_URL = 'https://www.adobe.com/go/alm_learner_gradebook_en';
 
 export const MOBILE_IMMERSIVE_NOTIFICATION_CHANNELS = [
   'jobAid::adminEnrollment',
@@ -442,6 +464,7 @@ export const BADGE_DOWNLOAD_PDF_ENDPOINT =
 export const BADGE_DOWNLOAD_IMG_ENDPOINT =
   '/downloadapi/bl/v1/account/{accountId}/user/{userId}/downloadbadges';
 export const CATALOG_PAGE_PATH = '/catalog';
+export const CHANNELS_PAGE_ROUTE = '/channels';
 export const MENU_INSIDE_HEADER = 'insideHeader';
 export const MENU_BELOW_HEADER = 'belowHeader';
 export const PAGE = 'page';
@@ -449,3 +472,44 @@ export const MENU = 'menu';
 export const MENU_ITEM = 'menuitem';
 
 export const NOTE_SLIDE_PREFIX_STR = 'SLIDE__';
+
+export const GRADEBOOK_STATES = {
+  NOT_STARTED: 'NOT_STARTED',
+  FAILED: 'FAILED',
+  PASSED: 'PASSED',
+  IN_PROGRESS: 'IN_PROGRESS',
+} as const;
+
+/** Decimal places for FE-calculated gradebook percents (module score %, contribution). */
+export const CALCULATED_PERCENT_DECIMALS = 2;
+
+export const COURSE_OVERVIEW_TAB_KEYS = {
+  MODULES: 'Modules',
+  GRADEBOOK: 'Gradebook',
+  TESTOUT: 'Testout',
+  NOTES: 'Notes',
+  DISCUSSION: 'Discussion',
+} as const;
+
+export const MODULE_SCORING_TYPES = {
+  HIGHEST: 'HIGHEST',
+  LATEST: 'LATEST',
+} as const;
+// ── EVC Channels ──────────────────────────────────────────────────────────────
+
+/** Tab identifiers for the Channels view. */
+export const CHANNEL_TAB = {
+  ALL: 'all',
+  SUBSCRIBED: 'subscribed',
+  NEW: 'new',
+  LIKED: 'liked',
+} as const;
+
+export type ChannelTab = (typeof CHANNEL_TAB)[keyof typeof CHANNEL_TAB];
+
+/** Activity types returned by the /primeapi/v2/channels JSON:API feed. */
+export const EVC_ACTIVITY_TYPE = {
+  RECENTLY_ADDED: 'RECENTLY_ADDED',
+  DELETED: 'DELETED',
+  NEW: 'NEW',
+} as const;

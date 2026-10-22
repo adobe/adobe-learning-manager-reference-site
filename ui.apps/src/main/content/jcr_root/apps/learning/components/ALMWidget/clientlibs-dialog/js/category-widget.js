@@ -139,15 +139,14 @@ governing permissions and limitations under the License.
     }
 
     /**
-     * Reset category fields when switching away from Category widget
-     * Clears sourceIds and resets radio to "all"
-     * @public
+     * Clear the selected sourceIds (autocomplete) values without touching the radio.
+     * @private
      */
-    function resetFields() {
+    function clearSourceIds() {
         // Get the clear function from the original/hidden field (where autocomplete stores it)
         const $originalField = $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.sourceIds"]');
         const clearFn = $originalField.data('autocomplete-clear');
-        
+
         if (clearFn && typeof clearFn === 'function') {
             // Clear autocomplete properly (clears selectedItems, tags, hidden input, display field)
             clearFn();
@@ -156,7 +155,17 @@ governing permissions and limitations under the License.
             $originalField.val('');
             $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.sourceIds_display"]').val('');
         }
-        
+    }
+
+    /**
+     * Reset category fields when switching away from Category widget
+     * Clears sourceIds and resets radio to "all"
+     * @public
+     */
+    function resetFields() {
+        // Clear any selected sourceIds
+        clearSourceIds();
+
         // Reset radio to "all"
         $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.selectionMode"][value="all"]').prop('checked', true);
         $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.selectionMode"][value="select"]').prop('checked', false);
@@ -180,6 +189,12 @@ governing permissions and limitations under the License.
         $(document).on('change.almCategoryWidget', CP_DIALOG_REL + ' [name="./widgetConfig.attributes.selectionMode"]', function() {
             const selectedWidget = $('.selector-widget coral-select-item:selected').val();
             if (selectedWidget === 'com.adobe.captivateprime.category') {
+                // When switching to "all", clear any previously selected sourceIds so
+                // they aren't persisted on save while the autocomplete is hidden.
+                const selectionMode = $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.selectionMode"]:checked').val();
+                if (selectionMode === 'all') {
+                    clearSourceIds();
+                }
                 handleUI();
             }
         });

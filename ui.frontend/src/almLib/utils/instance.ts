@@ -33,8 +33,7 @@ export const getInstanceIdsForOfflineDownload = (
   const downloadInstanceIds = (lo.instances ?? [])
     .filter(
       inst =>
-        inst.enrollment?.state &&
-        OFFLINE_DOWNLOAD_ENROLLMENT_STATES.has(inst.enrollment.state)
+        inst.enrollment?.state && OFFLINE_DOWNLOAD_ENROLLMENT_STATES.has(inst.enrollment.state)
     )
     .map(inst => inst.id);
   const uniqueDownloadInstanceIds = [...new Set(downloadInstanceIds)];

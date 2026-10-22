@@ -11,10 +11,7 @@ governing permissions and limitations under the License.
 */
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  PrimeUserRecommendationCriteria,
-  PrimeUserRecommendationPreference,
-} from '../../models/PrimeModels';
+import { PrimeUserRecommendationCriteria } from '../../models/PrimeModels';
 import {
   loadRecommendationLevels,
   loadRecommendationProducts,
@@ -47,12 +44,7 @@ export const useRecommendations = () => {
       };
       dispatch(loadUserRecommendationPreference(data));
     } catch (e) {
-      dispatch(
-        loadUserRecommendationPreference({
-          items: {} as PrimeUserRecommendationPreference,
-          next: '',
-        })
-      );
+      // Keep existing preference on failure so the section doesn't vanish.
       console.log('Error while loading user recommendation preferences ' + e);
     }
   }, [dispatch]);
@@ -134,6 +126,19 @@ export const useRecommendations = () => {
         body: JSON.stringify(request),
         headers,
       });
+      // Use the persisted preference from the POST response; fall back to a
+      // re-fetch only if the server sent no body (204).
+      const parsed = response ? JsonApiParse(response) : null;
+      if (parsed?.userRecommendationPreferences) {
+        dispatch(
+          loadUserRecommendationPreference({
+            items: parsed.userRecommendationPreferences,
+            next: parsed.links?.next || '',
+          })
+        );
+      } else {
+        await getUserRecommendationPreferences();
+      }
       return response;
     } catch (error) {
       throw new Error('ERROR IN API');

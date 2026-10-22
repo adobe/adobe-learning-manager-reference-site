@@ -77,8 +77,10 @@ jest.mock('@components/TrainingOverview/PrimeTrainingItemContainerHeader', () =>
 }));
 
 jest.mock('@components/TrainingOverview/PrimeCourseOverview', () => ({
-  PrimeCourseOverview: ({ training }: any) => (
-    <div data-testid="course-overview">{training.localizedMetadata[0].name}</div>
+  PrimeCourseOverview: ({ training, showNotes }: any) => (
+    <div data-testid="course-overview" data-show-notes={showNotes ? 'true' : 'false'}>
+      {training.localizedMetadata[0].name}
+    </div>
   ),
 }));
 
@@ -297,6 +299,98 @@ describe('PrimeCourseItemContainer', () => {
 
       expect(container.querySelector('hr')).toBeNull();
       expect(getCollapseButton(container)).not.toBeNull();
+    });
+  });
+
+  describe('Flex LP: collapse button', () => {
+    it('does not render the collapse control when no instance is selected', () => {
+      const { container } = renderComponent({ isParentFlexLP: true });
+
+      expect(getCollapseButton(container)).toBeNull();
+    });
+  });
+
+  describe('Initial expand/collapse from lastPlayingCourseId', () => {
+    it('renders the course overview expanded when lastPlayingCourseId matches this training', () => {
+      renderComponent({ lastPlayingCourseId: 'training1' });
+
+      expect(screen.getByTestId('course-overview')).toHaveTextContent('Test Course');
+    });
+
+    it('keeps the course overview collapsed when lastPlayingCourseId is a different training', () => {
+      renderComponent({ lastPlayingCourseId: 'other-course' });
+
+      expect(screen.queryByTestId('course-overview')).toBeNull();
+    });
+  });
+
+  describe('List row visibility with showUnselectedLOs (flex LP)', () => {
+    it('does not render the list row when showUnselectedLOs is true and the training is in courseInstanceMapping', () => {
+      const { container } = renderComponent({
+        isParentFlexLP: true,
+        showUnselectedLOs: true,
+        courseInstanceMapping: {
+          training1: { instanceId: 'instance1', instanceName: 'Instance 1' },
+        },
+      });
+
+      expect(container.querySelector('li')).toBeNull();
+    });
+
+    it('renders the list row when showUnselectedLOs is false, even if courseInstanceMapping includes this training', () => {
+      const { container } = renderComponent({
+        isParentFlexLP: true,
+        showUnselectedLOs: false,
+        courseInstanceMapping: {
+          training1: { instanceId: 'instance1', instanceName: 'Instance 1' },
+        },
+      });
+
+      expect(container.querySelector('li')).not.toBeNull();
+    });
+  });
+
+  describe('Flex LP: enrolled label', () => {
+    it('shows the enrolled label when the parent LO is enrolled on the matching instance', () => {
+      const training = createMockTraining({
+        enrollment: {
+          state: 'ENROLLED',
+          loInstance: {
+            id: 'instance1',
+            localizedMetadata: [{ locale: 'en-US', name: 'Instance 1' }],
+          },
+        },
+      });
+      const { container } = renderComponent({
+        training,
+        isParentFlexLP: true,
+        isParentLOEnrolled: true,
+      });
+
+      expect(
+        container.querySelector('[data-automationid="Test Course-enrolled-label"]')
+      ).not.toBeNull();
+    });
+
+    it('does not show the enrolled label when the parent LO is not enrolled', () => {
+      const training = createMockTraining({
+        enrollment: {
+          state: 'ENROLLED',
+          loInstance: {
+            id: 'instance1',
+            localizedMetadata: [{ locale: 'en-US', name: 'Instance 1' }],
+          },
+        },
+      });
+      const { container } = renderComponent({
+        training,
+        isParentFlexLP: true,
+        isParentLOEnrolled: false,
+      });
+
+      expect(
+        container.querySelector('[data-automationid="Test Course-enrolled-label"]')
+      ).toBeNull();
     });
   });
 });

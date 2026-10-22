@@ -14,6 +14,7 @@ package com.adobe.learning.core.services;
 
 import com.adobe.learning.core.entity.AccountResponse;
 import com.adobe.learning.core.entity.AccountTerminology;
+import com.adobe.learning.core.entity.FilterPanelSetting;
 import com.adobe.learning.core.entity.PrlCriteria;
 import com.adobe.learning.core.utils.Constants;
 import com.adobe.learning.core.utils.RequestUtils;
@@ -291,6 +292,14 @@ public class AccountServiceImpl implements AccountService {
           PrlCriteria prlCriteria =
               gson.fromJson(attributesObj.getAsJsonObject("prlCriteria"), PrlCriteria.class);
           accountResponse.setPrlCriteria(prlCriteria);
+        }
+
+        if (attributesObj.has("filterPanelSetting")
+            && !attributesObj.get("filterPanelSetting").isJsonNull()) {
+          FilterPanelSetting filterPanelSetting =
+              gson.fromJson(
+                  attributesObj.getAsJsonObject("filterPanelSetting"), FilterPanelSetting.class);
+          accountResponse.setFilterPanelSetting(filterPanelSetting);
         }
       }
 

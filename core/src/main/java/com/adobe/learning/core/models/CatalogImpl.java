@@ -109,4 +109,18 @@ public class CatalogImpl implements Catalog {
   public String getCitiesFilter() {
     return citiesFilter;
   }
+
+  @ValueMapValue private String productsFilter;
+
+  @Override
+  public String getProductsFilter() {
+    return productsFilter;
+  }
+
+  @ValueMapValue private String rolesFilter;
+
+  @Override
+  public String getRolesFilter() {
+    return rolesFilter;
+  }
 }

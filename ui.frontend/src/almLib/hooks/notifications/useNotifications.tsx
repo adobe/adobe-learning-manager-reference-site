@@ -9,7 +9,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import APIServiceInstance from '../../common/APIService';
 import { PrimeUserNotification } from '../../models';
@@ -17,6 +17,7 @@ import {
   loadNotifications,
   paginateNotifications,
   loadAnnouncements,
+  updateUnreadCount,
 } from '../../store/actions/notification/action';
 import { State } from '../../store/state';
 import { getALMConfig, getALMObject, getALMUser } from '../../utils/global';
@@ -154,19 +155,11 @@ export const useNotifications = () => {
       });
       const parsedResponse = JsonApiParse(response);
       const unreadCount = parsedResponse?.userNotificationList?.length || 0;
-      // Update Redux store with new unread count
-      dispatch(
-        loadNotifications({
-          notifications: notifications || [],
-          next,
-          unreadCount,
-          isUpdate: true,
-        })
-      );
+      dispatch(updateUnreadCount(unreadCount));
     } catch (error) {
       console.error('Error while polling unread notifications:', error);
     }
-  }, [config.primeApiURL, dispatch, notifications, next]);
+  }, [config.primeApiURL, dispatch]);
 
   const loadMoreNotifications = useCallback(async () => {
     if (!next) {

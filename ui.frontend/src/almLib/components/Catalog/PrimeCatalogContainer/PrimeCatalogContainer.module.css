@@ -19,6 +19,31 @@ governing permissions and limitations under the License.
   justify-content: space-between;
   align-items: center;
 }
+.externalLearningBtn {
+  display: flex;
+  align-items: center;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  padding: 7px 12px;
+  gap: 8px;
+  min-width: fit-content;
+  height: 32px;
+  border-radius: 16px;
+  justify-content: space-around;
+  border: 2px solid var(--prime-color-black);
+  color: var(--prime-color-black);
+}
+.mobileExternalLearning {
+  padding: 8px 0 4px;
+}
+.mobileExternalLearning .externalLearningBtn {
+  gap: 6px;
+  padding-right: 6px;
+  padding-left: 6px;
+}
 .label {
   font-size: var(--prime-font-size-28);
   letter-spacing: 0px;
@@ -118,6 +143,7 @@ governing permissions and limitations under the License.
   font-size: var(--prime-font-size-14);
   letter-spacing: 0;
   padding-right: 1rem;
+  max-width: 980px;
 }
 .searchLink {
   font-size: var(--prime-font-size-16);
@@ -137,7 +163,7 @@ governing permissions and limitations under the License.
 .sortAndChangeLayoutContainer {
   display: flex;
   justify-content: flex-end;
-  align-items: flex-start;
+  padding-bottom: 10px;
 }
 .sortContainer {
   display: flex;
@@ -167,7 +193,7 @@ governing permissions and limitations under the License.
 .descriptionContainer {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   padding: 6px 0;
 }
 .changeLayoutContainer {

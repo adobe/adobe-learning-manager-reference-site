@@ -71,7 +71,14 @@ export interface PrimeAccount {
   templatesConfig?: string;
   searchEnrolledChildLo?: boolean;
   alternateCompletionEnabled?: boolean;
+  enableExternalLearning?: boolean;
+  hasExternalLearningSubmissions?: boolean;
   enableAiCoach?: boolean;
+  gradebookVisibleLearner?: boolean;
+  structuredLocationEnabled?: boolean;
+  evcEnabled?: boolean;
+  personalizedPathEnabled?: boolean;
+  enableCreditDuration?: boolean;
 }
 
 export interface CssInjection {
@@ -150,6 +157,27 @@ export interface PrimeAnnouncement {
   sentDate: string;
   sticky: boolean;
   thumbnailUrl: string;
+}
+
+export interface PrimeExternalLearningSubmissionField {
+  id: string;
+  value: any;
+  type: string;
+}
+
+export interface PrimeExternalLearningSubmission {
+  id: string;
+  _transient: any;
+  createdAt: string;
+  creationSource: string;
+  fields: PrimeExternalLearningSubmissionField[];
+  modifiedAt: string;
+  reviewedAt: string;
+  reviewerComment: string;
+  reviewerUserId?: { id: string };
+  status: string;
+  submissionUrl: string;
+  title: string;
 }
 
 export interface PrimeBadge {
@@ -468,6 +496,11 @@ export interface PrimeLearningObject {
   downloadable: boolean;
   isAlternateComplete: boolean;
   alternateCompletions: PrimeLearningObject[];
+  gradebookEnabled?: boolean;
+  gradebookVisibleLearner?: boolean;
+  gradebookAllModules?: boolean;
+  gradebookPassingScore?: number | null;
+  createdByUserId?: number;
 }
 
 export interface PrimeLearningObjectInstance {
@@ -526,6 +559,7 @@ export interface PrimeLearningObjectInstanceEnrollment {
   previousExpiryDate: string;
 }
 
+type ModuleScoring = 'HIGHEST' | 'LATEST';
 export interface MultipleAttempt {
   attemptDuration: number;
   attemptEndCriteria: string;
@@ -533,6 +567,7 @@ export interface MultipleAttempt {
   maxAttemptCount: number;
   stopAttemptOnSuccessfulComplete: boolean;
   timeBetweenAttempts: number;
+  moduleScoring?: ModuleScoring;
 }
 
 export interface LearnerAttemptInfo {
@@ -570,12 +605,16 @@ export interface PrimeLearningObjectResource {
   isChecklistMandatory: boolean;
   isExpiredSubmission?: boolean;
   vcHostingSystem: string;
+  vcConnectorId?: string;
   timeSlot: PrimeModuleAccessLimit;
   checklistComment?: string;
   showChecklistComment?: boolean;
   showReviewerNameToLearner?: boolean;
   checklistReviewedBy?: PrimeUser;
   submissionDate?: string;
+  /** course_module.weight — Module weight for weighted / gradebook scoring (0–100 per LLD). */
+  weight?: number | null;
+  creditDuration?: number | null;
 }
 
 export interface PrimeModuleAccessLimit {
@@ -591,6 +630,7 @@ export interface PrimeSessionRecordingInfo {
   startTime: string;
   url: string;
   transcriptUrl: string;
+  isHidden?: boolean;
 }
 
 export interface PrimeLearningObjectResourceGrade {
@@ -606,6 +646,8 @@ export interface PrimeLearningObjectResourceGrade {
   score: number;
   type: string;
   loResource: PrimeLearningObjectResource;
+  highestScore: number; // For multiple attempts, this is the highest score achieved
+  maxScore: number; // The maximum score possible for the resource
 }
 
 export interface PrimeLearningObjectSkill {
@@ -687,6 +729,7 @@ export interface PrimeMultipleAttempt {
   maxAttemptCount: number;
   stopAttemptOnSuccessfulComplete: boolean;
   timeBetweenAttempts: number;
+  moduleScoring?: ModuleScoring;
 }
 
 export interface PrimeNote {
@@ -874,6 +917,10 @@ export interface PrimeRoom {
   seatLimit: number;
   url: string;
   city: string;
+  // Present on the included room only when structured location is enabled on the
+  // account. Used to render the "country > state > city" geography breadcrumb.
+  countryName?: string;
+  stateName?: string;
 }
 
 export interface PrimeSearchResult {
@@ -1179,6 +1226,8 @@ export interface JsonApiResponse {
   discussionPostList: PrimeDiscussionPost[];
   dnd: PrimeDnd;
   dndList: PrimeDnd[];
+  externalLearning: PrimeExternalLearningSubmission;
+  externalLearningList: PrimeExternalLearningSubmission[];
   externalProfile: PrimeExternalProfile;
   externalProfileList: PrimeExternalProfile[];
   feedback: PrimeFeedback;

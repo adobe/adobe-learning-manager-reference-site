@@ -31,7 +31,8 @@ const ALMSimpleRowLayoutEngine: React.FC<{
   aoiStripCount: any;
   account: PrimeAccount;
   user: PrimeUser;
-}> = ({ config, doRefresh, aoiStripCount, account, user }) => {
+  personalizedPathRefreshKey?: number;
+}> = ({ config, doRefresh, aoiStripCount, account, user, personalizedPathRefreshKey = 0 }) => {
   // Define before useEffect so TypeScript knows the explicit signature
   const sendSkipLinksData = (event?: CustomEvent) => {
     const recommendationsStripList: Widget[] = event?.detail?.recommendationsStripList || [];
@@ -127,12 +128,23 @@ const ALMSimpleRowLayoutEngine: React.FC<{
               user={user}
             />
           ) : null;
+        case WidgetTypeNew.PERSONALIZED_PATH_STRIP:
+          return (
+            <ALMPrimeStrip
+              key={`self-learning-paths-${personalizedPathRefreshKey}`}
+              widget={widget}
+              doRefresh={doRefresh}
+              aoiStripCount={aoiStripCount}
+              account={account}
+              user={user}
+            />
+          );
         default:
           console.error('Widget not supported', widget.widgetRef);
           return null;
       }
     },
-    [doRefresh, aoiStripCount, account]
+    [doRefresh, aoiStripCount, account, user, personalizedPathRefreshKey]
   );
 
   return config.widgets.map((widgetRow: any, index: number) => {

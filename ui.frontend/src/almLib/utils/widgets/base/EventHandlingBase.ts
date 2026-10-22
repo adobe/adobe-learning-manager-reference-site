@@ -119,7 +119,10 @@ export async function SendLinkEvent(refLink_lxpv: string | null) {
     keys.add('userId');
     let values = Array.from(searchParams.values());
     for (let ii = 0; ii < values.length; ++ii) {
-      values[ii] = values[ii].replace(/course:|certification:|learningProgram:/, '');
+      values[ii] = values[ii].replace(
+        /course:|certification:|learningProgram:|personalizedPath:/,
+        ''
+      );
     }
     const userResponse = await getALMUser();
     values.push(userResponse?.user?.account.id!);
@@ -265,6 +268,14 @@ const LP_PAGE_LINK = {
 };
 export function GetLPPageLink() {
   return addToPrimeLinksMap(LP_PAGE_LINK);
+}
+
+const PERSONALIZED_PATH_PAGE_LINK = {
+  refLink_lxpv: 'primelink:personalizedPathPageLink',
+  desktopLink_lxpv: LEARNER_PREFIX + '#/personalizedPath/${personalizedPathId}/overview',
+};
+export function GetPersonalizedPathPageLink() {
+  return addToPrimeLinksMap(PERSONALIZED_PATH_PAGE_LINK);
 }
 
 const COURSE_INSTANCE_PAGE_LINK = {

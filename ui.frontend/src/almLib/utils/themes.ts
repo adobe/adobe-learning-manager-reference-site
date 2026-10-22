@@ -347,7 +347,7 @@ export function GetTileColor(id: string): string {
 
 export function GetTileColorFromIndex(index: number): string {
   const theme = getALMConfig().themeData;
-  return theme.tileColors[index];
+  return theme?.tileColors?.[index] ?? '';
 }
 
 export function GetTextColor(color: string): string {

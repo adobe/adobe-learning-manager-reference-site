@@ -51,6 +51,11 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
     trainingInstanceId = "",
     queryParams = ""
   ) => {
+    const loType = trainingId?.split(':')[0];
+    if (loType === 'jobAid') {
+      window.ALM.handleLogIn();
+      return;
+    }
     let { trainingOverviewPath } = getALMConfig();
 
     trainingOverviewPath = getUrl(trainingOverviewPath, {
@@ -65,6 +70,11 @@ window.ALM.ALMConfig = window.ALM.ALMConfig || {};
   };
 
   const navigateToInstancePage = (trainingId) => {
+    const loType = trainingId?.split(':')[0];
+    if (loType === 'jobAid') {
+      window.ALM.handleLogIn();
+      return;
+    }
     let { instancePath } = getALMConfig();
     window.location = getUrl(instancePath, { trainingId: trainingId });
   };

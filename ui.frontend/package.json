@@ -97,10 +97,12 @@
     "start": "node scripts/start.js",
     "build": "node scripts/test.js --watchAll=false && node scripts/build.js && clientlib && (cd alm-commerce && npm run build)",
     "build:skip-tests": "node scripts/build.js && clientlib && (cd alm-commerce && npm run build)",
+    "pr.build": "npm run prettier:check && npm run coverage:ci && CI=true npm run build:skip-tests",
     "sync": "aemsync -d -w ../ui.apps/src/main/content",
     "postinstall": "(cd alm-commerce && npm install)",
     "test": "node scripts/test.js --watchAll ",
     "coverage": "node scripts/test.js --coverage --collectCoverage  --watchAll",
+    "coverage:ci": "node scripts/test-ci.js",
     "prettier": "prettier --write \"**/*.{ts,css,scss,jsx,tsx}\"",
     "prettier:check": "prettier --check \"**/*.{ts,css,scss,jsx,tsx}\"",
     "check:tests": "node scripts/checkTestQuality.js"
@@ -134,67 +136,5 @@
     "presets": [
       "react-app"
     ]
-  },
-  "jest": {
-    "roots": [
-      "<rootDir>/src"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!src/**/*.d.ts"
-    ],
-    "setupFiles": [
-      "react-app-polyfill/jsdom"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/setupTests.ts"
-    ],
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-      "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
-    ],
-    "testEnvironment": "jsdom",
-    "transform": {
-      "^.+\\.(js|jsx|mjs|cjs|ts|tsx)$": "<rootDir>/config/jest/babelTransform.js",
-      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
-    },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\](?!(three|three-spritetext)[/\\\\]).+\\.(js|jsx|mjs|cjs|ts|tsx)$",
-      "^.+\\.module\\.(css|sass|scss)$"
-    ],
-    "modulePaths": [],
-    "moduleNameMapper": {
-      "^react-native$": "react-native-web",
-      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
-      "^@almLib/(.*)$": "<rootDir>/src/almLib/$1",
-      "^@components/(.*)$": "<rootDir>/src/almLib/components/$1",
-      "^@hooks$": "<rootDir>/src/almLib/hooks/index.ts",
-      "^@hooks/(.*)$": "<rootDir>/src/almLib/hooks/$1",
-      "^@utils/(.*)$": "<rootDir>/src/almLib/utils/$1",
-      "^@models$": "<rootDir>/src/almLib/models/index.ts",
-      "^@models/(.*)$": "<rootDir>/src/almLib/models/$1",
-      "^@almStore/(.*)$": "<rootDir>/src/almLib/store/$1",
-      "^@contextProviders/(.*)$": "<rootDir>/src/almLib/contextProviders/$1",
-      "^@common/(.*)$": "<rootDir>/src/almLib/common/$1",
-      "^@styles/(.*)$": "<rootDir>/src/almLib/styles/$1"
-    },
-    "moduleFileExtensions": [
-      "web.js",
-      "js",
-      "web.ts",
-      "ts",
-      "web.tsx",
-      "tsx",
-      "json",
-      "web.jsx",
-      "jsx",
-      "node"
-    ],
-    "watchPlugins": [
-      "jest-watch-typeahead/filename",
-      "jest-watch-typeahead/testname"
-    ],
-    "resetMocks": true
   }
 }

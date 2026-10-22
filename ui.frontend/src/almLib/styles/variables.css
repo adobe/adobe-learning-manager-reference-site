@@ -73,6 +73,31 @@ governing permissions and limitations under the License.
   --prime-layout-container-width: 1232px;
 
   --prime-card-v2-width: 288px;
+
+  /* Channels (EVC) feature tokens */
+  --prime-channels-accent: #5a4fcf;
+  --prime-channels-like-active-bg: #fff0f0;
+  --prime-channels-thread-bg: linear-gradient(160deg, #eef3ff 0%, #f8f0ff 45%, #fff7ed 100%);
+  --prime-channels-liked-color: #d73b3e;
+
+  /* EVC channel card palette */
+  --evc-palette-0: #1473e6;
+  --evc-palette-1: #e34850;
+  --evc-palette-2: #2d9d78;
+  --evc-palette-3: #d2691e;
+  --evc-palette-4: #7b61ff;
+  --evc-palette-5: #e68619;
+  --evc-palette-6: #1da1f2;
+  --evc-palette-7: #6e6e6e;
+  --evc-palette-0-title-bg: #0d5bca;
+  --evc-palette-1-title-bg: #b82025;
+  --evc-palette-2-title-bg: #1a7a5a;
+  --evc-palette-3-title-bg: #a84f15;
+  --evc-palette-4-title-bg: #5b45d6;
+  --evc-palette-5-title-bg: #b86b12;
+  --evc-palette-6-title-bg: #1580c7;
+  --evc-palette-7-title-bg: #4a4a4a;
+  --evc-palette-title-text: #ffffff;
 }
 body {
   margin: 0;

@@ -1,0 +1,305 @@
+/*
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+@import '../../styles/variables.css';
+
+.description {
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-black, #2c2c2c);
+  margin: 8px 0 0;
+  line-height: 1.5;
+}
+
+.pageContainer {
+  max-width: var(--prime-catalog-container-max-width-desktop);
+  margin: 0 auto;
+}
+
+.headerContainer {
+  margin-bottom: 30px;
+  padding-top: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.label {
+  font-size: var(--prime-font-size-28);
+  letter-spacing: 0px;
+  color: var(--prime-color-black);
+  margin: 0;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.loadMoreLoader {
+  margin: 20px 0;
+}
+
+.emptyContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.emptyIcon {
+  margin-bottom: 20px;
+}
+
+.emptyTitle {
+  width: 380px;
+  max-width: 100%;
+  font-size: var(--prime-font-size-22);
+  font-weight: 700;
+  color: var(--prime-color-black, #2c2c2c);
+}
+
+.emptyDescription {
+  width: 380px;
+  max-width: 100%;
+  font-size: var(--prime-font-size-14);
+  font-weight: 400;
+  color: var(--prime-color-black, #2c2c2c);
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+
+.addButton {
+  display: flex;
+  gap: 6px;
+  padding: 8px 24px;
+  font-weight: 700;
+}
+
+/* No-new-requests info banner */
+.infoBanner {
+  width: 100%;
+  max-width: 1212px;
+  min-height: 79px;
+  background: #e5f0fe;
+  border-radius: 4px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 15px;
+  box-sizing: border-box;
+  margin-bottom: 30px;
+  gap: 16px;
+}
+
+.infoBannerContent {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.infoBannerTitle {
+  font-size: var(--prime-font-size-14);
+  font-weight: 700;
+  color: var(--prime-color-black, #2c2c2c);
+  margin: 0;
+}
+
+.infoBannerDescription {
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-black, #2c2c2c);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.infoBannerIcon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Submissions table */
+.table {
+  width: 1212px;
+}
+
+.tableHeader {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  background: #dadada;
+  border-top: 1px solid #dadada;
+  border-bottom: 1px solid #dadada;
+}
+
+.tableRow {
+  display: flex;
+  align-items: center;
+  height: 48px;
+}
+
+.rowSeparator {
+  height: 1px;
+  background: #dadada;
+}
+
+.colTitle {
+  width: 763px;
+  flex-shrink: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-black, #2c2c2c);
+  box-sizing: border-box;
+}
+
+.tableHeader .colTitle,
+.tableHeader .colMeta {
+  font-weight: 700;
+}
+
+.tableRow .colTitle,
+.tableRow .colMeta {
+  font-weight: 400;
+}
+
+.titleLink {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: var(--prime-font-size-14);
+  font-weight: 400;
+  color: var(--prime-color-blue, #1473e6);
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.colMeta {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-black, #2c2c2c);
+  box-sizing: border-box;
+}
+
+.statusCell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.statusDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background-color: currentColor;
+}
+
+.statusText {
+  font-size: var(--prime-font-size-14);
+  /* Keep the label in normal body text color; only the dot uses the status color. */
+  color: var(--prime-color-black, #2c2c2c);
+}
+
+.statusApproved {
+  color: #007a4d;
+}
+
+.statusRejected {
+  color: #d31510;
+}
+
+.statusPending {
+  color: #fc7d00;
+}
+
+/* Sticky add bar (mobile/tablet) */
+.stickyAddButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.pageContainerStickyOffset {
+  padding-bottom: 100px;
+}
+
+/* Mobile card list */
+.cardList {
+  width: 100%;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 0;
+}
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--prime-font-size-14);
+  color: var(--prime-color-black, #2c2c2c);
+}
+
+.cardMetaLabel {
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.cardMetaValue {
+  padding-left: 10px;
+}
+
+@media screen and (max-width: 1024px) {
+  .pageContainer {
+    max-width: var(--prime-container-max-width-tablet);
+    padding: 0;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .pageContainer {
+    width: 100%;
+    max-width: var(--prime-container-max-width-mobile);
+    padding: 0 20px;
+  }
+
+  .headerContainer {
+    margin-bottom: 10px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .label {
+    margin-bottom: 20px;
+  }
+}

@@ -183,6 +183,24 @@ class ESCustomHooks implements ICustomHooks {
     }
   }
 
+  async enrollToPersonalizedPath(id: string) {
+    if (redirectToLoginAndAbort()) {
+      return;
+    }
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.enrollToPersonalizedPath(id);
+    }
+  }
+
+  async deletePersonalizedPath(id: string) {
+    if (redirectToLoginAndAbort()) {
+      return;
+    }
+    if (isUserLoggedIn()) {
+      return ALMCustomHooksInstance.deletePersonalizedPath(id);
+    }
+  }
+
   async getFilters() {
     if (isUserLoggedIn()) {
       return ALMCustomHooksInstance.getFilters();
@@ -543,6 +561,34 @@ class ESCustomHooks implements ICustomHooks {
       return ALMCustomHooksInstance.getSearchFilterList(query, type, selectedItemsFromStore);
     }
     return await getESSearchFilterList(query, type, selectedItemsFromStore);
+  }
+
+  async getExternalLearningSettings() {
+    return ALMCustomHooksInstance.getExternalLearningSettings();
+  }
+
+  async getExternalLearnings(params: QueryParams) {
+    return ALMCustomHooksInstance.getExternalLearnings(params);
+  }
+
+  async getExternalLearningsByUrl(url: string) {
+    return ALMCustomHooksInstance.getExternalLearningsByUrl(url);
+  }
+
+  async getExternalLearningById(id: string) {
+    return ALMCustomHooksInstance.getExternalLearningById(id);
+  }
+
+  async submitExternalLearning(payload: object) {
+    return ALMCustomHooksInstance.submitExternalLearning(payload);
+  }
+
+  async updateExternalLearning(id: string, payload: object) {
+    return ALMCustomHooksInstance.updateExternalLearning(id, payload);
+  }
+
+  async getUserById(userId: string) {
+    return ALMCustomHooksInstance.getUserById(userId);
   }
 }
 

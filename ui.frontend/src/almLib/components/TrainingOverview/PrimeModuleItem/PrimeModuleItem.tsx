@@ -42,6 +42,7 @@ import {
   ENGLISH_LOCALE,
   FAILED,
   MOBILE_SCREEN_WIDTH,
+  MODULE_SCORING_TYPES,
   PASSED,
   PENDING,
   PENDING_APPROVAL,
@@ -54,13 +55,20 @@ import {
   VIRTUAL_CLASSROOM,
 } from '../../../utils/constants';
 import { convertSecondsToHourAndMinsText, GetFormattedDate } from '../../../utils/dateTime';
+import {
+  buildRecordingLaunchUrl,
+  isALMVC,
+  resolveVcConnectorId,
+} from '../../../utils/almvc-recording-utils';
 import { getALMObject, navigateToLoggedInLO } from '../../../utils/global';
 import { getEnrolledInstancesCount, getEnrollment, useResource } from '../../../utils/hooks';
 import {
   checkIfLinkedInLearningCourse,
   getALMConfig,
+  isStructuredLocationEnabled,
   launchContentUrlInNewWindow,
 } from '../../../utils/global';
+import { formatStructuredGeography } from '../../../utils/locationCompound';
 import {
   ACTIVITY_SVG,
   AUDIO_SVG,
@@ -92,6 +100,7 @@ import {
   MODULE_FAILED_ICON,
   MODULE_IN_PROGRESS,
   VIRTUAL_COACH_MODULE_ICON,
+  CREDIT_DURATION_SVG,
 } from '../../../utils/inline_svg';
 import {
   arePrerequisitesEnforcedAndCompleted,
@@ -116,9 +125,15 @@ import {
   isReattemptAllowed,
   isRevisitAllowed,
   shouldResetAttempt,
+  shouldShowCreditDuration,
 } from '../../../utils/lo-utils';
 import { useConfirmationAlert } from '../../../common/Alert/useConfirmationAlert';
 import { useUserContext } from '../../../contextProviders/userContextProvider';
+import {
+  getModuleGradebookWeight,
+  isGradebookVisibleToLearner,
+  isGradebookWeightApplicable,
+} from '../../../utils/gradebookUtils';
 import {
   formatTimeRangeWithTimezone,
   getUserTimezoneInfo,
@@ -151,6 +166,10 @@ const moduleIconMap = {
   SCORM2004: { icon: SCORM_SVG(), title: 'alm.text.scorm2004' },
   TINCAN: { icon: SCORM_SVG(), title: 'alm.text.tincan' },
   AI_COACH: { icon: VIRTUAL_COACH_MODULE_ICON(), title: 'alm.text.aiCoach' },
+};
+
+const moduleAriaLabelMap: { [key: string]: string } = {
+  AI_COACH: 'alm.text.aiCoach',
 };
 
 const FIFTEEN_MINUTES = 15 * 60 * 1000;
@@ -369,16 +388,48 @@ const PrimeModuleItem: React.FC<{
     return convertSecondsToHourAndMinsText(duration);
   };
 
+  const durationText = getDurationText();
+
+  const showCreditDuration = shouldShowCreditDuration(account, loResource);
+
+  const moduleWeight = getModuleGradebookWeight(loResource);
+
+  const showModuleWeightage = training.gradebookEnabled && isGradebookWeightApplicable(loResource);
+  const hasModuleWeight = moduleWeight !== undefined && moduleWeight !== null && moduleWeight !== 0;
+
+  const getWeightageLabel = () => {
+    if (!hasModuleWeight) {
+      return GetTranslation('alm.overview.weightage.none', true);
+    }
+    return GetTranslationsReplaced(
+      'alm.overview.weightage.percent',
+      { percent: moduleWeight },
+      true
+    );
+  };
+
   const moduleIcon = moduleIconMap[resource.contentType as keyof ActionMap]?.icon ?? SCORM_SVG();
   const moduleIconTitle = GetTranslation(
     moduleIconMap[resource.contentType as keyof ActionMap]?.title ?? 'alm.text.scorm12',
     true
   );
+  const moduleTypeAriaLabel = moduleAriaLabelMap[resource.contentType]
+    ? GetTranslation(moduleAriaLabelMap[resource.contentType])
+    : resource.contentType;
+
+  const sessionRecordingInfo = React.useMemo(() => {
+    const recordings = loResource.sessionRecordingInfo;
+    if (!recordings) {
+      return recordings;
+    }
+    // Honor isHidden — hidden recordings should not surface to learners
+    return recordings.filter(rec => !rec.isHidden);
+  }, [loResource.sessionRecordingInfo]);
 
   const showSessionTranscript = (): boolean => {
-    if (loResource.sessionRecordingInfo?.length > 0) {
-      for (let i = 0; i < loResource.sessionRecordingInfo.length; i++) {
-        if (loResource.sessionRecordingInfo[i].transcriptUrl) {
+    if (sessionRecordingInfo?.length > 0) {
+      for (let i = 0; i < sessionRecordingInfo.length; i++) {
+        if (sessionRecordingInfo[i].transcriptUrl) {
           return true;
         }
       }
@@ -406,6 +457,7 @@ const PrimeModuleItem: React.FC<{
     isEnforcedPrerequisiteIncomplete,
     isModuleLocked,
     almConfirmationAlert,
+    sessionRecordingInfo,
     user
   );
 
@@ -441,7 +493,7 @@ const PrimeModuleItem: React.FC<{
     });
   };
 
-  const enrollOnModuleClick = (isAutoPlay = false) => {
+  const enrollOnModuleClick = (isAutoPlay = false, skipPlayerLaunch = false) => {
     const isMultienrolled = getEnrolledInstancesCount(training) > 1;
     setEnrollViaModuleClick({
       id: training.id,
@@ -449,6 +501,7 @@ const PrimeModuleItem: React.FC<{
       instanceId: trainingInstance.id,
       isMultienrolled: isMultienrolled,
       isAutoPlay: isAutoPlay,
+      skipPlayerLaunch: skipPlayerLaunch,
     });
     updatePlayerState();
   };
@@ -503,6 +556,7 @@ const PrimeModuleItem: React.FC<{
         trainingInstanceId: trainingInstance.id,
         isMultienrolled: isMultienrolled,
         isResetRequired: isResetReattemptRequired,
+        isAutoPlay: isAutoPlay,
       });
       if (isAutoPlay) {
         notifyParentToCleanModuleParams();
@@ -522,16 +576,18 @@ const PrimeModuleItem: React.FC<{
   const isParentEnrollmentValid = (isPartOfParentLO && isParentLOEnrolled) || !isPartOfParentLO;
 
   const formatLabel =
-    loResource.resourceType && formatMap[loResource.resourceType]
-      ? GetTranslation(
-          `${
-            loResource.resourceSubType !== CHECKLIST
-              ? formatMap[loResource.resourceType]
-              : formatMap[capitalizeFirstChar(loResource.resourceSubType)]
-          }`,
-          true
-        )
-      : '';
+    resource.contentType === CONTENT_TYPES.AI_COACH
+      ? GetTranslation('alm.catalog.card.virtualcoach', true)
+      : loResource.resourceType && formatMap[loResource.resourceType]
+        ? GetTranslation(
+            `${
+              loResource.resourceSubType !== CHECKLIST
+                ? formatMap[loResource.resourceType]
+                : formatMap[capitalizeFirstChar(loResource.resourceSubType)]
+            }`,
+            true
+          )
+        : '';
 
   const gradeHasPassed = (): boolean => {
     if (!enrollment) {
@@ -662,7 +718,11 @@ const PrimeModuleItem: React.FC<{
           className={checklistStatusCheck(PASSED) ? styles.passStatus : styles.failStatus}
           data-automationid={`${name}-checklist-status`}
         >
-          {capitalizeFirstChar(loResource.checklistEvaluationStatus.toLowerCase())}
+          {GetTranslation(
+            checklistStatusCheck(PASSED)
+              ? 'alm.overview.checklistReview.passed'
+              : 'alm.overview.checklistReview.failed'
+          )}
         </span>
       </>
     );
@@ -922,12 +982,14 @@ const PrimeModuleItem: React.FC<{
       }
 
       // if training is not enrolled and module is locked, it means subLOs order is enforced
-      if (!isModuleLocked) {
+      // for deep links (isAutoPlay), bypass the lock check so enrollment still happens;
+      // when locked, skipPlayerLaunch=true is passed so the player won't open after enrollment
+      if (!isModuleLocked || isAutoPlay) {
         if (trainingInstance.state === RETIRED) {
           return;
         }
         if (!training.hasPreview) {
-          enrollOnModuleClick(isAutoPlay);
+          enrollOnModuleClick(isAutoPlay, isModuleLocked && isAutoPlay);
           return;
         }
       }
@@ -938,7 +1000,6 @@ const PrimeModuleItem: React.FC<{
       moduleLockedBetweenAttempt();
 
     const canLaunch = (allowLaunch && !isLockedBetweenAttempts) || loResourceGrade.completed;
-
     if (canLaunch) {
       itemClickHandler(event, false, isAutoPlay);
     } else {
@@ -966,6 +1027,17 @@ const PrimeModuleItem: React.FC<{
     autoPlayTriggered.current = true;
     resourceClickHandler(new Event('autoplay'), true);
   }, [loResource.id]);
+
+  // After deep link enrollment for a locked module, show the same dialog as enrolled+locked click
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    if (isEnrolled && isModuleLocked && autoPlayTriggered.current) {
+      setShowDialog(true);
+      timer = setTimeout(() => setShowDialog(false), 3000);
+    }
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEnrolled]); // intentionally fires only on enrollment change, not on every isModuleLocked change
 
   // Fallback cleanup on unmount: covers error cases (prereq/locked/ordered) where
   // notifyParentToCleanModuleParams was never called, so back navigation doesn't re-trigger autoplay.
@@ -1283,36 +1355,40 @@ const PrimeModuleItem: React.FC<{
           </div>
           <div className={styles.headerWrapper}>
             <div className={styles.titleContainer}>
-              <span
-                className={styles.title}
-                data-automationid={`${name}-module-title`}
-                title={name}
-              >
-                <span aria-label={resource.contentType}></span>
-                {name} {showPreWorkLabel ? GetTranslation('alm.module.prework', true) : ''}
-              </span>
-              {isLastPlayedModule ? (
-                <span className={styles.lastVisitedMssg}>
-                  {formatMessage({ id: 'alm.module.lastVisited' })}
-                </span>
-              ) : (
-                ''
-              )}
-              {isModulePreviewAble && (
+              <div className={styles.titleLeft}>
                 <span
-                  className={`${styles.previewable} ${styles.link}`}
-                  data-automationid={`${name}-preview`}
+                  className={styles.title}
+                  data-automationid={`${name}-module-title`}
+                  title={name}
                 >
-                  {formatMessage({
-                    id: 'alm.module.session.preview',
-                    defaultMessage: 'Preview',
-                  })}
-                  <Visibility aria-hidden="true" />
+                  <span aria-label={moduleTypeAriaLabel}></span>
+                  {name} {showPreWorkLabel ? GetTranslation('alm.module.prework', true) : ''}
+                </span>
+
+                {isModulePreviewAble && (
+                  <span
+                    className={`${styles.previewable} ${styles.link}`}
+                    data-automationid={`${name}-preview`}
+                  >
+                    {formatMessage({
+                      id: 'alm.module.session.preview',
+                      defaultMessage: 'Preview',
+                    })}
+                    <Visibility aria-hidden="true" />
+                  </span>
+                )}
+              </div>
+              {showModuleWeightage && (
+                <span
+                  className={`${styles.weightageBadge} ${hasModuleWeight ? styles.weightageBadgeWeighted : styles.weightageBadgeNeutral}`}
+                  data-automationid={`${name}-weightage`}
+                >
+                  {getWeightageLabel()}
                 </span>
               )}
             </div>
             <div className={styles.resourceAndDuration}>
-              <div>
+              <div className={styles.resourceAndDurationContent}>
                 <span className={styles.resourceType} data-automationid={`${name}-resource-type`}>
                   <span className={styles.moduleFormat} title={formatLabel}>
                     {formatLabel}
@@ -1347,8 +1423,48 @@ const PrimeModuleItem: React.FC<{
                     {GetTranslation('alm.overview.checklistFailInfo', true)}
                   </span>
                 )}
+                {loResource.multipleAttemptEnabled && multipleAttempt?.moduleScoring && (
+                  <span className={styles.moduleScoring}>
+                    {getSeparatorDot()}
+                    {multipleAttempt.moduleScoring === MODULE_SCORING_TYPES.HIGHEST
+                      ? GetTranslation('alm.overview.moduleScoring.highest', true)
+                      : GetTranslation('alm.overview.moduleScoring.latest', true)}
+                  </span>
+                )}
               </div>
-              <span data-automationid={`${name}-duration`}>{getDurationText()}</span>
+              <div className={styles.weightageAndDurationContainer}>
+                {isLastPlayedModule ? (
+                  <span className={styles.lastVisitedMssg}>
+                    {formatMessage({ id: 'alm.module.lastVisited' })}
+                  </span>
+                ) : (
+                  ''
+                )}
+                <div className={styles.weightageAndDuration}>
+                  {isLastPlayedModule && durationText !== '' && getSeparatorDot()}
+                  <span
+                    className={styles.durationUnderWeight}
+                    data-automationid={`${name}-duration`}
+                  >
+                    {durationText}
+                  </span>
+                  {showCreditDuration && !(isClassroomOrVC && hasSessionDetails) && (
+                    <>
+                      {getSeparatorDot()}
+                      <span
+                        className={styles.durationUnderWeight}
+                        data-automationid={`${name}-creditDuration`}
+                      >
+                        {GetTranslationsReplaced(
+                          'alm.overview.session.creditDuration.compactValue',
+                          { value: loResource.creditDuration! },
+                          true
+                        )}
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
             {isUploading && (
               <div className={styles.progressArea}>
@@ -1495,6 +1611,7 @@ const getSessionsTemplate = (
   isEnforcedPrerequisiteIncomplete: boolean,
   isModuleLocked: boolean,
   almConfirmationAlert: Function,
+  sessionRecordingInfo: PrimeLearningObjectResource['sessionRecordingInfo'],
   user?: any
 ) => {
   if (!isClassroomOrVC || (isClassroomOrVC && !hasSessionDetails)) {
@@ -1551,10 +1668,20 @@ const getSessionsTemplate = (
     window.open(resource.location, '_blank', 'noreferrer');
   };
 
+  const vcConnectorId = resolveVcConnectorId(loResource.vcConnectorId, resource.location);
+  const isAlmVc = !!(vcConnectorId && isALMVC(vcConnectorId));
+
   const metadataClass = `${styles.metadata} ${styles.metadataLineSeparator}`;
 
   const timeInfo = getTimeInfo(resource, formatMessage, locale, user);
   const showSeatLimit = resource.seatLimit >= 0;
+  // Line 3 of the location block: "country > state > city" when structured location is
+  // on, else the legacy city string. Null when there is nothing to show (row hidden).
+  const geographyLine = formatStructuredGeography(
+    resource.room,
+    isStructuredLocationEnabled(user?.account)
+  );
+  const showCreditDuration = shouldShowCreditDuration(user?.account, loResource);
   const isConnectorTypeModule = loResource.vcHostingSystem === CONNECTOR;
   const linkDisabled = isConnectorTypeModule && !canStartVcModule();
   return (
@@ -1588,6 +1715,22 @@ const getSessionsTemplate = (
           <span data-automationid={`${moduleName}-duration`}>{getDurationText()}</span>
         </div>
       </div>
+      {showCreditDuration && (
+        <div className={metadataClass} data-automationid={`${moduleName}-creditDuration`}>
+          {getSessionMetaDataIcon(CREDIT_DURATION_SVG(), `${moduleName}-creditDuration-icon`)}
+          <div className={styles.details}>
+            <span
+              className={styles.detailsHeader}
+              data-automationid={`${moduleName}-creditDuration-header`}
+            >
+              {GetTranslation('alm.overview.session.creditDuration.header', true)}
+            </span>
+            <span data-automationid={`${moduleName}-creditDuration`}>
+              {loResource.creditDuration}
+            </span>
+          </div>
+        </div>
+      )}
       {showSeatLimit && (
         <div className={metadataClass} data-automationid={`${moduleName}-seat-limit`}>
           {getSessionMetaDataIcon(SEATS_SVG(), `${moduleName}-seatLimit-icon`)}
@@ -1632,7 +1775,7 @@ const getSessionsTemplate = (
       </div>
       {isVC && (isEnrolled || isParentFlexLP) && (
         <>
-          {loResource.sessionRecordingInfo?.length > 0 && (
+          {sessionRecordingInfo?.length > 0 && (
             <>
               <div className={metadataClass} data-automationid={`${moduleName}-recordings`}>
                 {getSessionMetaDataIcon(MOVIE_CAMERA_SVG(), `${moduleName}-recordings-icon`)}
@@ -1643,13 +1786,21 @@ const getSessionsTemplate = (
                   >
                     {GetTranslation('alm.overview.vc.sessionRecordingInfo')}
                   </span>
-                  {loResource.sessionRecordingInfo.map(sessionRecordingInfo => {
+                  {sessionRecordingInfo.map(sessionRecordingInfo => {
+                    const resolvedUrl =
+                      isAlmVc && sessionRecordingInfo.url
+                        ? buildRecordingLaunchUrl(
+                            sessionRecordingInfo.url,
+                            vcConnectorId!,
+                            getALMConfig().almBaseURL
+                          )
+                        : sessionRecordingInfo.url;
                     return (
                       <React.Fragment key={sessionRecordingInfo.name}>
                         <span>
                           <a
                             className={styles.link}
-                            href={sessionRecordingInfo.url}
+                            href={resolvedUrl}
                             target="_blank"
                             rel="noreferrer"
                             data-automationid={`${moduleName}-recording-link`}
@@ -1685,10 +1836,12 @@ const getSessionsTemplate = (
                     >
                       {GetTranslation('alm.overview.session.transcript.header')}
                     </span>
-                    {loResource.sessionRecordingInfo.map(
+                    {sessionRecordingInfo.map(
                       sessionRecordingInfo =>
                         sessionRecordingInfo.transcriptUrl && (
                           <span key={sessionRecordingInfo.name}>
+                            {/* Transcript files are pre-signed download URLs served directly
+                                from storage — they do not need the /ctr/app/launchrecording proxy */}
                             <a
                               className={styles.link}
                               href={sessionRecordingInfo.transcriptUrl}
@@ -1761,9 +1914,11 @@ const getSessionsTemplate = (
             >
               {resource.room.roomInfo}
             </span>
-            <span className={styles.city} data-automationid={`${moduleName}-city`}>
-              {resource.room.city}
-            </span>
+            {geographyLine && (
+              <span className={styles.city} data-automationid={`${moduleName}-city`}>
+                {geographyLine}
+              </span>
+            )}
             {resource.room.url && (
               <span className={styles.roomUrl}>
                 <a

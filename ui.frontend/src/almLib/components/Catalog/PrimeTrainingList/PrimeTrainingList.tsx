@@ -501,7 +501,9 @@ const PrimeTrainingList: React.FC<{
     return null;
   };
 
-  const redirectActionHandler = (event: React.MouseEvent<HTMLAnchorElement | HTMLDivElement>) => {
+  const redirectActionHandler = (
+    event: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement | HTMLDivElement>
+  ) => {
     //getTrainingUrl is provided by the wrapper app then only check for ctrlKey or metaKey
     if (getALMObject().getTrainingUrl && (event.ctrlKey || event.metaKey)) {
       // Let the default behavior happen (open in new tab)
@@ -535,26 +537,58 @@ const PrimeTrainingList: React.FC<{
     <>
       <li className={styles.listItem}>
         <div className={styles.detailsContainer}>
-          <a
-            className={styles.imageContainer}
-            style={{ ...listThumbnailBgStyle }}
-            href={getTrainingLink(training.id, account.id)}
-            onClick={redirectActionHandler}
-            tabIndex={0}
-            aria-label={imageContainerAriaLabel}
-          >
-            {priceHtml}
-            {training.loType !== JOBAID && completionStatusHtml}
-          </a>
-          <div className={styles.loDetailsContainer}>
+          {/* Job aids have no dedicated page (they open/download in place), so
+              the thumbnail and title render as <button>s instead of <a>s —
+              this removes the browser's "Open in new tab" option that would
+              otherwise navigate to a non-existent job aid route. Other LO
+              types keep the <a> with an href for normal navigation. */}
+          {type === JOBAID ? (
+            <button
+              type="button"
+              className={`${styles.imageContainer} ${styles.imageContainerButton}`}
+              style={{ ...listThumbnailBgStyle }}
+              onClick={redirectActionHandler}
+              data-automationid={`${name}-imageContainer`}
+              aria-label={imageContainerAriaLabel}
+            >
+              {priceHtml}
+            </button>
+          ) : (
             <a
-              className={styles.title}
+              className={styles.imageContainer}
+              style={{ ...listThumbnailBgStyle }}
               href={getTrainingLink(training.id, account.id)}
               onClick={redirectActionHandler}
-              aria-label={name}
+              tabIndex={0}
+              data-automationid={`${name}-imageContainer`}
+              aria-label={imageContainerAriaLabel}
             >
-              {name}
+              {priceHtml}
+              {training.loType !== JOBAID && completionStatusHtml}
             </a>
+          )}
+          <div className={styles.loDetailsContainer}>
+            {type === JOBAID ? (
+              <button
+                type="button"
+                className={`${styles.title} ${styles.titleButton}`}
+                onClick={redirectActionHandler}
+                data-automationid={`${name}-title`}
+                aria-label={name}
+              >
+                {name}
+              </button>
+            ) : (
+              <a
+                className={styles.title}
+                href={getTrainingLink(training.id, account.id)}
+                onClick={redirectActionHandler}
+                data-automationid={`${name}-title`}
+                aria-label={name}
+              >
+                {name}
+              </a>
+            )}
             <div className={styles.extraDetails}>
               <span className={styles.details} title={trainingTypeLabel}>
                 {trainingTypeLabel}

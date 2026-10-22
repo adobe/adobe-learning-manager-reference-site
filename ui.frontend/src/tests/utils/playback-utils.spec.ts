@@ -181,6 +181,12 @@ describe('LaunchPlayer', () => {
   beforeEach(() => {
     setupDefaultMocks();
     document.body.innerHTML = '';
+    // jsdom does not implement CSS.supports — stub it so overlay height logic doesn't throw.
+    Object.defineProperty(global, 'CSS', {
+      value: { supports: jest.fn(() => false) },
+      writable: true,
+      configurable: true,
+    });
   });
 
   afterEach(() => {

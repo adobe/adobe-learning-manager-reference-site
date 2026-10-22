@@ -57,6 +57,7 @@ import {
   CPENEW,
   JOBAID,
   LEARNING_PROGRAM,
+  PERSONALIZED_PATH,
   OTHER,
   VIEW,
   HUNDERED_PERCENT,
@@ -82,7 +83,11 @@ import {
   showToast,
 } from './PrimeTrainingCardV2.helper';
 import { getALMObject, getWidgetConfig, isAccAltCompletionEnabled } from '../../../utils/global';
-import { fetchJobAidResource, getTrainingLink } from '../../../utils/lo-utils';
+import {
+  fetchJobAidResource,
+  getTrainingLink,
+  getTrainingTypeLabel,
+} from '../../../utils/lo-utils';
 import { ALMEffectivenessDialog } from '../../Common/ALMEffectivenessDialog';
 import { GetPrimeObj } from '../../../utils/widgets/windowWrapper';
 import { getFormattedPrice } from '../../../utils/price';
@@ -151,6 +156,8 @@ const PrimeTrainingCardV2: React.FC<{
   removeTrainingFromListById?: Function;
   disableLinks?: boolean;
   isAuthorPage?: boolean;
+  showAddToMyLearning?: boolean;
+  showSaveAction?: boolean;
 }> = ({
   widget,
   training,
@@ -183,6 +190,8 @@ const PrimeTrainingCardV2: React.FC<{
   removeTrainingFromListById,
   disableLinks = false,
   isAuthorPage = false,
+  showAddToMyLearning = true,
+  showSaveAction: showSaveActionProp,
 }) => {
   const contentLocale = user?.contentLocale || ENGLISH_LOCALE;
   const { format, type, skillNames, name, description, cardBgStyle, enrollment, overview } =
@@ -227,21 +236,34 @@ const PrimeTrainingCardV2: React.FC<{
     showPublishedDueDateInfo = true,
     showDescriptionInfo = true,
     showAuthorNameInfo = true,
-    showSaveAction = true,
+    showSaveAction: showSaveActionConfig = true,
     showCompletionStatusInfo = true,
   } = templateConfig?.loCardConfig || {};
+  const showSaveAction = showSaveActionProp ?? showSaveActionConfig;
 
   const formatLabel = useMemo(() => {
-    return format ? GetTranslation(`${formatMap[format]}`, true) : '';
-  }, [format]);
+    if (widget?.type === WidgetTypeNew.PERSONALIZED_PATH_STRIP) {
+      return '';
+    }
+    if (format) {
+      return GetTranslation(`${formatMap[format]}`, true) || '';
+    }
+    return '';
+  }, [format, widget?.type]);
   const formatIcon = useMemo(() => {
     return format ? FORMAT_ICON_MAP[format] : null;
   }, [format]);
   const isTrainingDownloadable = training.downloadable;
   const dueDateorPublishedDate = useMemo(() => {
     let translationKey = 'alm.card.published.date';
-    let dateText =
-      training?.loType === LEARNING_PROGRAM ? training?.dateUpdated : training?.datePublished;
+    const useUpdatedDate =
+      training?.loType === LEARNING_PROGRAM || training?.loType === PERSONALIZED_PATH;
+    let dateText = useUpdatedDate
+      ? training?.dateUpdated || training?.datePublished
+      : training?.datePublished || training?.dateUpdated;
+    if (!dateText && (training as any)?.dateCreated) {
+      dateText = (training as any).dateCreated;
+    }
     let id = 'primelxp-datePublished';
 
     if (enrollment) {
@@ -268,6 +290,9 @@ const PrimeTrainingCardV2: React.FC<{
     if (!showActionButton) {
       return '';
     }
+    if (widget?.type === WidgetTypeNew.PERSONALIZED_PATH_STRIP) {
+      return GetTranslation('lo.strip.view');
+    }
     if (isEnrollExtensionPresent && !enrollment) {
       return getActionTextForDisabledLinks(widget!);
     }
@@ -276,12 +301,12 @@ const PrimeTrainingCardV2: React.FC<{
     }
     return enrollment
       ? enrollment.state === COMPLETED
-        ? GetTranslation('locard.revisit')
+        ? GetTranslation('text.revisit')
         : canStart(training, isEnrollExtensionPresent, account)
-          ? GetTranslation('continueCaps')
+          ? GetTranslation('text.continue')
           : getActionTextForDisabledLinks(widget!)
       : canStart(training, isEnrollExtensionPresent, account)
-        ? GetTranslation('locard.start')
+        ? GetTranslation('text.start')
         : getActionTextForDisabledLinks(widget!);
   }, [training, enrollment, widget]);
 
@@ -794,6 +819,10 @@ const PrimeTrainingCardV2: React.FC<{
   const actionClickHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     event.stopPropagation();
+    if (widget?.type === WidgetTypeNew.PERSONALIZED_PATH_STRIP) {
+      getALMObject().navigateToTrainingOverviewPage(training.id);
+      return;
+    }
     const alm = getALMObject();
     const activeInstances = getActiveInstances(training);
     if (!alm.isPrimeUserLoggedIn()) {
@@ -935,9 +964,7 @@ const PrimeTrainingCardV2: React.FC<{
 
   const saveLabel = useMemo(() => GetTranslation('text.save'), []);
   const unSaveLabel = useMemo(() => GetTranslation('text.unsave'), []);
-  const trainingTypeLabel = useMemo(() => {
-    return type ? GetTranslation(`alm.training.${type}`, true) : '';
-  }, [type]);
+  const trainingTypeLabel = useMemo(() => getTrainingTypeLabel(type), [type]);
   const progressBarClass = showProgressBar && !isJobAid ? styles.enrolled : '';
   const duration = training.duration ? convertSecondsToHourAndMinsText(training.duration) : null;
   return (
@@ -1087,19 +1114,41 @@ const PrimeTrainingCardV2: React.FC<{
 
           {/* Title Row Starts */}
           <div className={styles.titleContainer}>
-            <a
-              tabIndex={widget?.attributes?.disableLinks || showExtraActions ? -1 : 0}
-              id="title"
-              href={disableLinks ? JAVASCRIPT_VOID_0 : getTrainingLink(training.id, account.id)}
-              className={styles.title}
-              data-automationid={`${name}-title`}
-              onClick={handleClickWithDisableCheck(cardClickHandler)}
-              aria-label={`${trainingTypeLabel}, ${name}`}
-            >
-              <span title={name}>{name}</span>
-            </a>
-            {showAddToMyLearningAction && isJobAid && jobAidIconTemplate()}
-            {showAddToMyLearningAction && !isJobAid && !enrollment && getIconTemplate()}
+            {/* Job aids have no dedicated page (they open/download in place), so they
+                render as a <button> — this removes the browser's "Open in new tab"
+                option that would otherwise navigate to a non-existent job aid route.
+                Other LO types keep the <a> with an href for normal navigation. */}
+            {isJobAid ? (
+              <button
+                type="button"
+                tabIndex={widget?.attributes?.disableLinks || showExtraActions ? -1 : 0}
+                id="title"
+                className={`${styles.title} ${styles.titleButton}`}
+                data-automationid={`${name}-title`}
+                onClick={handleClickWithDisableCheck(cardClickHandler)}
+                aria-label={`${trainingTypeLabel}, ${name}`}
+              >
+                <span title={name}>{name}</span>
+              </button>
+            ) : (
+              <a
+                tabIndex={widget?.attributes?.disableLinks || showExtraActions ? -1 : 0}
+                id="title"
+                href={disableLinks ? JAVASCRIPT_VOID_0 : getTrainingLink(training.id, account.id)}
+                className={styles.title}
+                data-automationid={`${name}-title`}
+                onClick={handleClickWithDisableCheck(cardClickHandler)}
+                aria-label={`${trainingTypeLabel}, ${name}`}
+              >
+                <span title={name}>{name}</span>
+              </a>
+            )}
+            {showAddToMyLearningAction && showAddToMyLearning && isJobAid && jobAidIconTemplate()}
+            {showAddToMyLearningAction &&
+              showAddToMyLearning &&
+              !isJobAid &&
+              !enrollment &&
+              getIconTemplate()}
             {showSaveAction && showBookmarkHTML()}
           </div>
           {/* Title Row Ends */}
@@ -1156,7 +1205,9 @@ const PrimeTrainingCardV2: React.FC<{
                     id={actionButtonId}
                     disabled={showExtraActions}
                   >
-                    {GetTranslation('alm.jobAid.view.button')}
+                    {format === AI_COACH
+                      ? GetTranslation('text.start')
+                      : GetTranslation('alm.jobAid.view.button')}
                   </button>
                 )}
                 {(isTrainingDownloadable || showDontRecommend) && (

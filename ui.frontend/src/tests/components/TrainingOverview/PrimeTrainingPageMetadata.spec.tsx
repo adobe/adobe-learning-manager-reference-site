@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import React from 'react';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, fireEvent, act, within } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
@@ -43,6 +43,11 @@ const mockALMConfig = {
   primeApiURL: 'https://test.example.com/primeapi/v2',
 };
 
+// Referenced by the delete-personalized-path success flow (setTimeout(() =>
+// getALMObject().navigateToHomePage(), 300)); declared here so the "delete path" test
+// below can flush and assert on it deterministically instead of leaking a real timer.
+const mockNavigateToHomePage = jest.fn();
+
 Object.defineProperty(window, 'ALM', {
   value: {
     getALMConfig: () => mockALMConfig,
@@ -52,6 +57,7 @@ Object.defineProperty(window, 'ALM', {
     handleLogOut: () => {},
     storage: { getItem: () => null, setItem: () => {}, removeItem: () => {} },
     ALMConfig: mockALMConfig,
+    navigateToHomePage: mockNavigateToHomePage,
   },
   writable: true,
   configurable: true,
@@ -116,6 +122,7 @@ jest.mock('@contextProviders/DeviceContextProvider', () => ({
 // ─── Hook / utility mocks ─────────────────────────────────────────────────────
 
 jest.mock('@hooks', () => ({
+  ...jest.requireActual('@hooks'),
   useProfile: () => ({ updateProfileSettings: jest.fn() }),
 }));
 
@@ -123,8 +130,9 @@ jest.mock('@common/Alert/useAlert', () => ({
   useAlert: () => [jest.fn()],
 }));
 
+const mockConfirmationAlert = jest.fn();
 jest.mock('@common/Alert/useConfirmationAlert', () => ({
-  useConfirmationAlert: () => [jest.fn()],
+  useConfirmationAlert: () => [mockConfirmationAlert],
   VariantType: { WARNING: 'warning', ERROR: 'error' },
 }));
 
@@ -138,7 +146,7 @@ jest.mock('@utils/hooks', () => ({
   getCoursesInsideFlexLP: () => [],
   getCourseInstanceMapping: () => ({}),
   checkIfEntityIsValid: () => false,
-  getConflictingSessions: () => Promise.resolve([]),
+  getConflictingSessions: jest.fn(() => Promise.resolve([])),
   isValidSubLoForFlexLpToLaunch: () => false,
   isEnrolledInstanceAutoInstance: () => false,
   getTrainingUrl: (url: string) => url,
@@ -196,7 +204,7 @@ jest.mock('@utils/lo-utils', () => ({
   isRevisitAllowed: () => true,
   getCourseIdAndInstanceIdFromResourceId: () => ({ courseId: '', instanceId: '' }),
   getInstanceIdToLaunch: () => '',
-  getModuleIdToLaunch: () => '',
+  getModuleIdToLaunch: jest.fn().mockReturnValue(''),
 }));
 
 jest.mock('@utils/instance', () => ({
@@ -340,6 +348,8 @@ describe('PrimeTrainingPageMetaData', () => {
 
     const overview = require('@utils/overview');
     overview.checkIsEnrolled.mockReturnValue(false);
+
+    const almHooks = require('../../../almLib/hooks');
   });
 
   describe('Skills Section', () => {
@@ -658,6 +668,7 @@ describe('PrimeTrainingPageMetaData', () => {
         moduleId: 'resource1',
         trainingInstanceId: 'instance1',
         isMultienrolled: false,
+        isAutoPlay: true,
       });
       expect(overview.notifyParentToCleanModuleParams).toHaveBeenCalled();
     });
@@ -685,6 +696,441 @@ describe('PrimeTrainingPageMetaData', () => {
       await act(async () => {});
 
       expect(overview.notifyParentToCleanModuleParams).toHaveBeenCalled();
+    });
+  });
+
+  describe('Deep Link Auto-Play (enrollViaModuleClick with isAutoPlay)', () => {
+    it('should skip confirmation dialog when isAutoPlay is true and enrollOnClick is false', async () => {
+      const mockSetEnrollViaModuleClick = jest.fn();
+      const mockEnrollHandler = jest.fn(() => Promise.resolve({ id: 'enrollment1' }));
+
+      renderComponent({
+        enrollViaModuleClick: {
+          id: 'course1',
+          moduleId: 'resource1',
+          instanceId: 'instance1',
+          isMultienrolled: false,
+          isAutoPlay: true,
+        },
+        setEnrollViaModuleClick: mockSetEnrollViaModuleClick,
+        enrollmentHandler: mockEnrollHandler,
+        isCourseEnrollable: true,
+      });
+
+      await act(async () => {});
+      expect(mockEnrollHandler).toHaveBeenCalled();
+    });
+
+    it('should not auto-enroll when course is not enrollable', () => {
+      const mockEnrollHandler = jest.fn(() => Promise.resolve({ id: 'enrollment1' }));
+
+      renderComponent({
+        enrollViaModuleClick: {
+          id: 'course1',
+          moduleId: 'resource1',
+          instanceId: 'instance1',
+          isMultienrolled: false,
+          isAutoPlay: true,
+        },
+        enrollmentHandler: mockEnrollHandler,
+        isCourseEnrollable: false,
+      });
+
+      expect(mockEnrollHandler).not.toHaveBeenCalled();
+    });
+
+    it('should not auto-enroll when enrollViaModuleClick has no id', () => {
+      const mockEnrollHandler = jest.fn(() => Promise.resolve({ id: 'enrollment1' }));
+
+      renderComponent({
+        enrollViaModuleClick: {},
+        enrollmentHandler: mockEnrollHandler,
+      });
+
+      expect(mockEnrollHandler).not.toHaveBeenCalled();
+    });
+
+    it('should clear enrollViaModuleClick state on enrollment error', async () => {
+      const mockSetEnrollViaModuleClick = jest.fn();
+      const mockEnrollHandler = jest.fn(() => Promise.reject(new Error('enrollment_failed')));
+
+      renderComponent({
+        enrollViaModuleClick: {
+          id: 'course1',
+          moduleId: 'resource1',
+          instanceId: 'instance1',
+          isMultienrolled: false,
+          isAutoPlay: true,
+        },
+        setEnrollViaModuleClick: mockSetEnrollViaModuleClick,
+        enrollmentHandler: mockEnrollHandler,
+        isCourseEnrollable: true,
+      });
+
+      await act(async () => {});
+      expect(mockSetEnrollViaModuleClick).toHaveBeenCalledWith([]);
+    });
+
+    it('should not trigger enrollment when instance is retired', () => {
+      const mockEnrollHandler = jest.fn(() => Promise.resolve({ id: 'enrollment1' }));
+
+      renderComponent({
+        trainingInstance: {
+          ...defaultProps.trainingInstance,
+          state: 'Retired',
+        },
+        enrollViaModuleClick: {
+          id: 'course1',
+          moduleId: 'resource1',
+          instanceId: 'instance1',
+          isMultienrolled: false,
+          isAutoPlay: true,
+        },
+        enrollmentHandler: mockEnrollHandler,
+        isCourseEnrollable: false,
+      });
+
+      expect(mockEnrollHandler).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Deep Link URL cleanup after enrollment (enrollViaModuleClick)', () => {
+    afterEach(() => {
+      window.location.hash = '';
+    });
+
+    it('should launch player and clean URL on successful auto-play enrollment', async () => {
+      window.location.hash = '#/course/12345/instance/67890?moduleId=resource1';
+      const mockLaunchPlayer = jest.fn();
+      const mockEnrollHandler = jest.fn(() => Promise.resolve({ id: 'enrollment1' }));
+      const overview = require('@utils/overview');
+      overview.checkIsEnrolled.mockReturnValue(true);
+
+      renderComponent({
+        enrollViaModuleClick: {
+          id: 'course1',
+          moduleId: 'resource1',
+          instanceId: 'instance1',
+          isMultienrolled: false,
+          isAutoPlay: true,
+        },
+        launchPlayerHandler: mockLaunchPlayer,
+        enrollmentHandler: mockEnrollHandler,
+        isCourseEnrollable: true,
+      });
+
+      await act(async () => {});
+
+      expect(mockLaunchPlayer).toHaveBeenCalledWith({
+        id: 'course1',
+        moduleId: 'resource1',
+        trainingInstanceId: 'instance1',
+        isMultienrolled: false,
+        isAutoPlay: true,
+      });
+      expect(overview.notifyParentToCleanModuleParams).toHaveBeenCalled();
+    });
+
+    it('should call notifyParentToCleanModuleParams even when no moduleId in hash', async () => {
+      window.location.hash = '#/course/12345/instance/67890';
+      const mockEnrollHandler = jest.fn(() => Promise.resolve({ id: 'enrollment1' }));
+      const overview = require('@utils/overview');
+      overview.checkIsEnrolled.mockReturnValue(true);
+
+      renderComponent({
+        enrollViaModuleClick: {
+          id: 'course1',
+          moduleId: 'resource1',
+          instanceId: 'instance1',
+          isMultienrolled: false,
+          isAutoPlay: true,
+        },
+        enrollmentHandler: mockEnrollHandler,
+        isCourseEnrollable: true,
+      });
+
+      await act(async () => {});
+
+      expect(overview.notifyParentToCleanModuleParams).toHaveBeenCalled();
+    });
+
+    it('should not launch player but clean URL when skipPlayerLaunch=true and isAutoPlay=true', async () => {
+      const mockLaunchPlayer = jest.fn();
+      const mockEnrollHandler = jest.fn(() => Promise.resolve({ id: 'enrollment1' }));
+      const overview = require('@utils/overview');
+      overview.checkIsEnrolled.mockReturnValue(true);
+
+      renderComponent({
+        enrollViaModuleClick: {
+          id: 'course1',
+          moduleId: 'resource1',
+          instanceId: 'instance1',
+          isMultienrolled: false,
+          isAutoPlay: true,
+          skipPlayerLaunch: true,
+        },
+        launchPlayerHandler: mockLaunchPlayer,
+        enrollmentHandler: mockEnrollHandler,
+        isCourseEnrollable: true,
+      });
+
+      await act(async () => {});
+
+      expect(mockLaunchPlayer).not.toHaveBeenCalled();
+      expect(overview.notifyParentToCleanModuleParams).toHaveBeenCalled();
+    });
+
+    it('should not launch player and not clean URL when skipPlayerLaunch=true and isAutoPlay=false', async () => {
+      const mockLaunchPlayer = jest.fn();
+      const mockEnrollHandler = jest.fn(() => Promise.resolve({ id: 'enrollment1' }));
+      const overview = require('@utils/overview');
+      overview.checkIsEnrolled.mockReturnValue(true);
+      overview.notifyParentToCleanModuleParams.mockClear();
+
+      renderComponent({
+        enrollViaModuleClick: {
+          id: 'course1',
+          moduleId: 'resource1',
+          instanceId: 'instance1',
+          isMultienrolled: false,
+          isAutoPlay: false,
+          skipPlayerLaunch: true,
+        },
+        launchPlayerHandler: mockLaunchPlayer,
+        enrollmentHandler: mockEnrollHandler,
+        isCourseEnrollable: true,
+      });
+
+      await act(async () => {});
+
+      expect(mockLaunchPlayer).not.toHaveBeenCalled();
+      expect(overview.notifyParentToCleanModuleParams).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Personalized Path (PLP)', () => {
+    const loUtils = require('@utils/lo-utils');
+
+    const makePlpTraining = (subLOs: any[]) => ({
+      ...defaultProps.training,
+      loType: 'personalizedPath',
+      createdByUserId: 'user123',
+      subLOs,
+    });
+
+    const subLoWith = (id: string, state: string, instanceId: string) => ({
+      id,
+      loType: 'course',
+      enrollment: { state, loInstance: null },
+      instances: [{ id: instanceId }],
+    });
+
+    beforeEach(() => {
+      loUtils.getModuleIdToLaunch.mockReturnValue('module1');
+    });
+
+    describe('launchFirstIncompleteSubLoForPersonalizedPath', () => {
+      beforeEach(() => {
+        // PLP must be enrolled (action === CONTINUE) for the Continue button to render.
+        // action is driven by getEnrollment(), not training.enrollment.
+        require('@utils/hooks').getEnrollment.mockReturnValue({ id: 'plp-enroll', state: 'STARTED' });
+      });
+
+      it('launches the first incomplete sub-LO when Continue is clicked', () => {
+        const mockLaunchPlayer = jest.fn();
+        const training = makePlpTraining([
+          subLoWith('lo1', 'COMPLETED', 'inst1'),
+          subLoWith('lo2', 'STARTED', 'inst2'),
+        ]);
+
+        const { container } = renderComponent({ training, launchPlayerHandler: mockLaunchPlayer });
+        const continueBtn = container.querySelector(
+          '[data-automationid="alm.overview.button.continue"]'
+        );
+        expect(continueBtn).toBeTruthy();
+        fireEvent.click(continueBtn!);
+
+        expect(mockLaunchPlayer).toHaveBeenCalledWith({
+          id: 'lo2',
+          moduleId: 'module1',
+          trainingInstanceId: 'inst2',
+        });
+      });
+
+      it('falls back to the first sub-LO when all are completed', () => {
+        const mockLaunchPlayer = jest.fn();
+        const training = makePlpTraining([
+          subLoWith('lo1', 'COMPLETED', 'inst1'),
+          subLoWith('lo2', 'COMPLETED', 'inst2'),
+        ]);
+
+        const { container } = renderComponent({ training, launchPlayerHandler: mockLaunchPlayer });
+        fireEvent.click(
+          container.querySelector('[data-automationid="alm.overview.button.continue"]')!
+        );
+
+        expect(mockLaunchPlayer).toHaveBeenCalledWith({
+          id: 'lo1',
+          moduleId: 'module1',
+          trainingInstanceId: 'inst1',
+        });
+      });
+
+      it('does not call launchPlayerHandler when there are no sub-LOs', () => {
+        const mockLaunchPlayer = jest.fn();
+        const { container } = renderComponent({
+          training: makePlpTraining([]),
+          launchPlayerHandler: mockLaunchPlayer,
+        });
+
+        fireEvent.click(
+          container.querySelector('[data-automationid="alm.overview.button.continue"]')!
+        );
+        expect(mockLaunchPlayer).not.toHaveBeenCalled();
+      });
+
+      it('does not call launchPlayerHandler when instanceId cannot be resolved', () => {
+        const mockLaunchPlayer = jest.fn();
+        const training = makePlpTraining([
+          { id: 'lo1', loType: 'course', enrollment: null, instances: [] },
+        ]);
+
+        const { container } = renderComponent({ training, launchPlayerHandler: mockLaunchPlayer });
+        fireEvent.click(
+          container.querySelector('[data-automationid="alm.overview.button.continue"]')!
+        );
+
+        expect(mockLaunchPlayer).not.toHaveBeenCalled();
+      });
+
+      it('does not call launchPlayerHandler when moduleId cannot be resolved', () => {
+        loUtils.getModuleIdToLaunch.mockReturnValue('');
+        const mockLaunchPlayer = jest.fn();
+
+        const { container } = renderComponent({
+          training: makePlpTraining([subLoWith('lo1', 'STARTED', 'inst1')]),
+          launchPlayerHandler: mockLaunchPlayer,
+        });
+
+        fireEvent.click(
+          container.querySelector('[data-automationid="alm.overview.button.continue"]')!
+        );
+        expect(mockLaunchPlayer).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('Delete Path button', () => {
+      it('shows Delete Path button instead of bookmark for PLPs', () => {
+        const { container } = renderComponent({ training: makePlpTraining([]) });
+
+        expect(container.querySelector('[data-automationid="delete-path"]')).toBeTruthy();
+        expect(container.querySelector('[data-automationid="bookmark"]')).toBeFalsy();
+      });
+
+      it('calls deletePersonalizedPathHandler after confirmation', async () => {
+        // Fake timers so the post-success setTimeout(..., 300) that navigates home is
+        // flushed and asserted on here, instead of firing as a real background timer
+        // that can land on — and crash — whatever test happens to run 300ms later.
+        // try/finally ensures real timers are restored even if an assertion throws.
+        jest.useFakeTimers();
+        try {
+          const mockDeleteHandler = jest.fn(() => Promise.resolve());
+          mockConfirmationAlert.mockImplementation((_title, _msg, _confirm, _cancel, onConfirm) =>
+            onConfirm()
+          );
+
+          const { container } = renderComponent({
+            training: makePlpTraining([]),
+            deletePersonalizedPathHandler: mockDeleteHandler,
+          });
+
+          const deleteBtn = container.querySelector('[data-automationid="delete-path"]');
+          expect(deleteBtn).toBeTruthy();
+          await act(async () => {
+            fireEvent.click(deleteBtn!);
+          });
+
+          expect(mockDeleteHandler).toHaveBeenCalledWith(defaultProps.training.id);
+
+          act(() => {
+            jest.runOnlyPendingTimers();
+          });
+          expect(mockNavigateToHomePage).toHaveBeenCalledTimes(1);
+        } finally {
+          jest.useRealTimers();
+        }
+      });
+    });
+
+    describe('Enroll button', () => {
+      const { storeActionInNonLoggedMode } = require('@utils/overview');
+      const { getConflictingSessions } = require('@utils/hooks');
+
+      it('shows Enroll button for unenrolled PLP recipient', () => {
+        const training = { ...makePlpTraining([]), enrollment: null };
+        const { container } = renderComponent({ training });
+
+        const enrollBtn = container.querySelector(
+          '[data-automationid="alm.overview.button.enroll"]'
+        );
+        expect(enrollBtn).toBeTruthy();
+      });
+
+      it('calls personalizedPathEnrollmentHandler when Enroll is clicked', async () => {
+        const mockEnroll = jest.fn(() => Promise.resolve());
+        const training = { ...makePlpTraining([]), enrollment: null };
+
+        const { container } = renderComponent({
+          training,
+          personalizedPathEnrollmentHandler: mockEnroll,
+        });
+
+        const enrollBtn = container.querySelector(
+          '[data-automationid="alm.overview.button.enroll"]'
+        );
+        expect(enrollBtn).toBeTruthy();
+        await act(async () => {
+          fireEvent.click(enrollBtn!);
+        });
+
+        expect(mockEnroll).toHaveBeenCalledWith(defaultProps.training.id);
+      });
+
+      it('calls storeActionInNonLoggedMode before enrolling', async () => {
+        const mockEnroll = jest.fn(() => Promise.resolve());
+        const training = { ...makePlpTraining([]), enrollment: null };
+
+        const { container } = renderComponent({
+          training,
+          personalizedPathEnrollmentHandler: mockEnroll,
+        });
+
+        await act(async () => {
+          fireEvent.click(
+            container.querySelector('[data-automationid="alm.overview.button.enroll"]')!
+          );
+        });
+
+        expect(storeActionInNonLoggedMode).toHaveBeenCalledWith('ENROLL');
+      });
+
+      it('does not call getConflictingSessions when Enroll is clicked on a PLP', async () => {
+        const mockEnroll = jest.fn(() => Promise.resolve());
+        const training = { ...makePlpTraining([]), enrollment: null };
+
+        const { container } = renderComponent({
+          training,
+          personalizedPathEnrollmentHandler: mockEnroll,
+        });
+
+        await act(async () => {
+          fireEvent.click(
+            container.querySelector('[data-automationid="alm.overview.button.enroll"]')!
+          );
+        });
+
+        expect(getConflictingSessions).not.toHaveBeenCalled();
+      });
     });
   });
 });

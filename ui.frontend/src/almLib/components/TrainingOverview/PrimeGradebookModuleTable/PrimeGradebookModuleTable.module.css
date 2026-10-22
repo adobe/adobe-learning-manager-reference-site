@@ -1,0 +1,345 @@
+/**
+Copyright 2021 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+@import '../../../styles/variables.css';
+
+.tableScrollWrapper {
+  position: relative;
+}
+
+@media screen and (max-width: 768px) {
+  /* Hints that the table scrolls horizontally. Hidden via .hideScrollFade
+     (toggled from PrimeGradebookModuleTable.tsx) once the user has scrolled
+     to the end, since there's nothing left to reveal at that point. */
+  .tableScrollWrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 48px;
+    background: linear-gradient(to right, transparent, var(--prime-color-white));
+    pointer-events: none;
+    border-radius: 0 10px 10px 0;
+  }
+
+  .tableScrollWrapper.hideScrollFade::after {
+    display: none;
+  }
+}
+
+.tableScroll {
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+.table {
+  /* At least ~36rem so columns stay readable; narrower viewports scroll horizontally */
+  width: max(100%, 36rem);
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: var(--prime-font-size-14);
+}
+
+@media screen and (max-width: 768px) {
+  .table {
+    table-layout: auto;
+    width: auto;
+    min-width: max-content;
+  }
+
+  .thModule,
+  .cellModule {
+    width: auto;
+    max-width: none;
+  }
+
+  .moduleTitle {
+    max-width: 70vw;
+  }
+
+  .table td,
+  .table th {
+    width: auto !important;
+  }
+}
+
+.table thead tr {
+  border-bottom: 2px solid var(--dark-grey-7);
+}
+
+.table th {
+  font-weight: var(--prime-font-weight-600);
+  color: var(--prime-color-black);
+  text-align: left;
+  padding: 16px;
+  vertical-align: bottom;
+  /* Truncate header labels that don't fit the fixed column width (e.g. longer
+     translations) instead of letting them visually spill into the next column. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.thModule {
+  width: 38%;
+  min-width: 0;
+  border-top-left-radius: 10px;
+}
+
+.thStatus {
+  width: 20%;
+  min-width: 6.5rem;
+  text-align: center !important;
+}
+
+.thNumeric {
+  text-align: right;
+}
+
+.thScore {
+  text-align: left;
+}
+
+.thContribution {
+  width: 124px;
+  padding-right: 12px;
+  border-top-right-radius: 10px;
+  background-color: var(--light-grey-4);
+}
+
+.contributionHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+}
+
+.contributionLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.contributionTooltipWrap {
+  display: inline-flex;
+  flex-shrink: 0;
+  line-height: 0;
+  /* Stack above .tableScrollWrapper::after (the mobile scroll fade above) so the
+     info icon stays visible even while the fade is still shown mid-scroll. */
+  position: relative;
+  z-index: 1;
+}
+
+.row {
+  border-bottom: 1px solid var(--dark-grey-6);
+}
+
+.footerRow {
+  border-top: 2px solid var(--dark-grey-7);
+}
+
+.row td {
+  padding: 16px;
+  vertical-align: top;
+}
+
+.cellModule {
+  width: 38%;
+  min-width: 0;
+  max-width: 420px;
+}
+
+.moduleTitle {
+  font-weight: var(--prime-font-weight-600);
+  color: var(--prime-color-black);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.moduleMeta {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.moduleType {
+  font-size: var(--prime-font-size-12);
+  color: var(--prime-color-neutral-1);
+}
+
+.moduleMetaSep {
+  font-size: var(--prime-font-size-12);
+  color: var(--prime-color-neutral-1);
+  line-height: 1;
+}
+
+.optionalInline {
+  font-size: var(--prime-font-size-12);
+  color: var(--prime-color-neutral-1);
+}
+
+.moduleScoringLabel {
+  font-size: var(--prime-font-size-12);
+  color: var(--prime-color-neutral-1);
+}
+
+.cellStatus {
+  width: 20%;
+  min-width: 6.5rem;
+  text-align: center;
+}
+
+.cellNumeric {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.cellWeight {
+  width: 15%;
+  min-width: 4.5rem;
+  color: var(--prime-color-black);
+}
+
+.cellScore {
+  width: 10%;
+  min-width: 88px;
+}
+
+.scoreStack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.scorePrimary {
+  font-weight: var(--prime-font-weight-600);
+  color: var(--prime-color-black);
+}
+
+.scoreSecondary {
+  font-size: var(--prime-font-size-12);
+  color: var(--prime-color-neutral-1);
+}
+
+.scoreDash {
+  color: var(--prime-color-neutral-1);
+}
+
+.cellContribution {
+  background-color: var(--light-grey-4);
+}
+
+.footerRow td {
+  font-weight: var(--prime-font-weight-600);
+  padding: 16px;
+}
+
+.footerLabel {
+  text-align: left;
+  color: var(--prime-color-black);
+  background-color: var(--light-grey-4);
+  border-bottom-left-radius: 10px;
+}
+
+.footerAggregate {
+  font-weight: var(--prime-font-weight-700);
+  border-left: 1px solid var(--dark-grey-6);
+  border-bottom-right-radius: 10px;
+  background-color: var(--dark-grey-6);
+}
+
+.pillRequired {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: var(--prime-font-size-12);
+  line-height: 1.2;
+  white-space: nowrap;
+  background-color: var(--prime-error-color);
+  border: 1px solid var(--prime-error-color);
+  color: var(--prime-color-white);
+  font-weight: var(--prime-font-weight-600);
+}
+
+.statusPill {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: var(--prime-font-size-12);
+  line-height: 1.2;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.statusPillSuccess {
+  background-color: color-mix(in srgb, var(--prime-success-color) 12%, var(--prime-color-white));
+  border: 1px solid var(--prime-success-color);
+  color: var(--prime-success-color);
+}
+
+.statusPillDanger {
+  background-color: color-mix(in srgb, var(--prime-error-color) 10%, var(--prime-color-white));
+  border: 1px solid var(--prime-error-color);
+  color: var(--prime-error-color);
+}
+
+.statusPillInProgress {
+  background-color: color-mix(in srgb, var(--prime-color-link) 12%, var(--prime-color-white));
+  border: 1px solid var(--prime-color-link);
+  color: var(--prime-color-link);
+}
+
+.statusPillNeutral {
+  background-color: color-mix(in srgb, var(--dark-grey-5) 10%, var(--light-grey-4));
+  border: 1px solid var(--dark-grey-6);
+  color: var(--dark-grey-5);
+}
+
+.contributionTooltipTrigger {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  min-width: 14px;
+  min-height: 14px;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.contributionTooltipTrigger:focus-visible {
+  outline: 2px solid var(--prime-color-primary, #4283d0);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.contributionTooltipTrigger svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+  color: var(--prime-color-neutral-1);
+}

@@ -17,7 +17,13 @@ governing permissions and limitations under the License.
 }
 .prlPsContainer {
   max-width: 950px;
-  margin: 48px 0;
+  margin: 30px 0;
+}
+.prlPsHeadingRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
 }
 .prlPsHeading {
   font-size: var(--prime-font-size-18);
@@ -27,7 +33,10 @@ governing permissions and limitations under the License.
   line-height: 1.1;
   letter-spacing: normal;
   color: var(--prime-color-black);
-  margin-bottom: 12px;
+}
+.prlPsHeadingActions {
+  display: flex;
+  align-items: center;
 }
 .prlPsSubHeading {
   font-size: var(--prime-font-size-14);
@@ -45,4 +54,31 @@ governing permissions and limitations under the License.
   display: flex;
   z-index: 100;
   margin-top: 40px;
+}
+.prlPsSaveButton {
+  width: 105px;
+  height: 32px;
+  background: var(--prime-color-primary);
+  border: none;
+  border-radius: 20px;
+  color: var(--prime-color-white);
+  cursor: pointer;
+}
+.prlPsSaveButton[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.prlPsTextButton {
+  font-size: var(--prime-font-size-14);
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  cursor: pointer;
+  background: none;
+  color: var(--prime-color-link);
+  border: 0;
+  padding: 0;
+  margin-right: 24px;
 }

@@ -67,6 +67,8 @@ import {
   showRating,
   showRecommendedReason,
   showSkills,
+  showAddToMyLearning,
+  showNavIcons,
 } from './ALMPrimeStrip.helper';
 import {
   COMPACT_CARD_LAYOUT,
@@ -200,6 +202,7 @@ const ALMPrimeStrip = (props: any) => {
       WidgetTypeNew.CATALOG_BROWSER,
       WidgetTypeNew.CATALOG,
       WidgetTypeNew.VIRTUAL_COACH,
+      WidgetTypeNew.PERSONALIZED_PATH_STRIP,
     ].includes(type as WidgetTypeNew);
 
     if (firstFetchDone && numberOfCardsLoaded === 0 && canHideList) {
@@ -233,6 +236,9 @@ const ALMPrimeStrip = (props: any) => {
       }
     }
 
+    if (!stripMetaInfo) {
+      return;
+    }
     const lastUpdated = new Date();
     widget.attributes!.heading = stripMetaInfo.name;
     setState(prevState => ({
@@ -638,6 +644,7 @@ const ALMPrimeStrip = (props: any) => {
                     title={heading?.description}
                     data-automationid={`${headingId}-description`}
                     aria-label={heading?.description}
+                    className={styles.stripHeaderDescription}
                   >
                     {heading?.description}
                   </div>
@@ -686,6 +693,7 @@ const ALMPrimeStrip = (props: any) => {
     const rightNavIconDisabled = isRightNavIconDisabled();
     const leftNavIconDisabled = isLeftNavIconDisabled();
     const headingName = heading?.headerAriaLabel || heading?.name;
+    if (!showNavIcons(widget, getWidgetConfig()?.isMobile)) return null;
     if (rightNavIconDisabled && leftNavIconDisabled) return null;
     return (
       <div>
@@ -924,6 +932,8 @@ const ALMPrimeStrip = (props: any) => {
         handleActionClick={handleActionClick}
         handlePlayerLaunch={launchPlayerHandler}
         handleL1FeedbackLaunch={handleL1FeedbackLaunch}
+        showAddToMyLearning={showAddToMyLearning(widget)}
+        showSaveAction={widget.widgetRef !== WidgetType.PERSONALIZED_PATH_STRIP}
       ></PrimeTrainingCardV2>
     );
   };

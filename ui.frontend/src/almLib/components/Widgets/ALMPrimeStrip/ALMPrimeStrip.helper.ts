@@ -70,6 +70,7 @@ export function showSkills(widget: Widget): boolean {
       WidgetTypeNew.DISCOVERY_RECO,
       WidgetTypeNew.AOI_RECO,
       WidgetTypeNew.TRENDING_RECO,
+      WidgetTypeNew.PERSONALIZED_PATH_STRIP,
     ];
     return skillEnabledWidgetTypes.includes(widget.type!);
   };
@@ -165,6 +166,7 @@ export function showActionElement(widget: Widget, account: PrimeAccount): boolea
     WidgetTypeNew.CATALOG_BROWSER,
     WidgetTypeNew.AOI_RECO,
     WidgetTypeNew.VIRTUAL_COACH,
+    WidgetTypeNew.PERSONALIZED_PATH_STRIP,
   ];
   if (
     widget.attributes?.disableLinks ||
@@ -174,6 +176,15 @@ export function showActionElement(widget: Widget, account: PrimeAccount): boolea
     return false;
   }
   return getALMConfig()?._cardProperties.showActionElement;
+}
+
+export function showAddToMyLearning(widget: Widget): boolean {
+  const widgetTypes = [WidgetTypeNew.VIRTUAL_COACH];
+  return !widgetTypes.includes(widget.type!);
+}
+
+export function showNavIcons(widget: Widget, isMobile?: boolean): boolean {
+  return !(widget.type === WidgetTypeNew.VIRTUAL_COACH && isMobile);
 }
 
 export function getMaxItemsToFetchForWidget(widget: Widget): number | undefined {

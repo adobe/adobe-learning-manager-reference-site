@@ -41,6 +41,7 @@ import {
   LO_TYPES,
   OTHER,
   PENDING_APPROVAL,
+  PERSONALIZED_PATH,
   PLAYER_CLOSE,
   REJECTED,
   SNIPPET_TYPES,
@@ -471,6 +472,22 @@ export function shouldShowContinueButton(
   }
 }
 
+// Single source of truth for the credit-duration gate, shared between PrimeModuleItem's
+// component body (compact block) and getSessionsTemplate (session block). creditDuration:
+// 0 is a valid value and must still render.
+//
+// The two blocks are mutually exclusive by design: getSessionsTemplate renders its own
+// credit-duration block only for a classroom/VC module that also hasSessionDetails, and
+// returns '' otherwise; the compact block guards on !(isClassroomOrVC && hasSessionDetails)
+// so it only fills in when the session template's block did not render. Keep that inverse
+// relationship in sync if either guard changes.
+export function shouldShowCreditDuration(
+  account: PrimeAccount | undefined,
+  loResource: PrimeLearningObjectResource
+): boolean {
+  return !!account?.enableCreditDuration && loResource.creditDuration != null;
+}
+
 export function areAllMandatoryCoursesCompleted(
   training: PrimeLearningObject,
   account: PrimeAccount
@@ -680,6 +697,8 @@ export function determineLoType(trainingId: string) {
       return CERTIFICATION;
     case checkIncludes(trainingId, JOBAID):
       return JOBAID;
+    case checkIncludes(trainingId, PERSONALIZED_PATH):
+      return PERSONALIZED_PATH;
   }
 }
 
@@ -697,6 +716,8 @@ export function getErrorMessage(loType: string) {
       return GetTranslation('alm.no.permission.error.text.cert', true);
     case JOBAID:
       return GetTranslation('alm.no.permission.error.text.jobAid', true);
+    case PERSONALIZED_PATH:
+      return GetTranslation('alm.personalizedPath.no.access.error', true);
   }
 }
 //If authorDetails has ExternalAuthor as name then course is not external
@@ -803,6 +824,8 @@ export const getTrainingTypeLabel = (loType: string | undefined): string => {
       return GetTranslation('alm.training.course', true);
     case LEARNING_PROGRAM:
       return GetTranslation('alm.training.learningProgram', true);
+    case PERSONALIZED_PATH:
+      return GetTranslation('alm.training.personalizedPath', true);
     case CERTIFICATION:
       return GetTranslation('alm.training.certification', true);
     default:

@@ -16,6 +16,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useCatalog } from '../../../hooks/catalog/useCatalog';
 import {
+  canShowExternalLearning,
   getALMConfig,
   getALMObject,
   getALMUser,
@@ -24,7 +25,7 @@ import {
   setTrainingsLayout,
   updateURLParams,
 } from '../../../utils/global';
-import { CLOSE_SVG } from '../../../utils/inline_svg';
+import { CLOSE_SVG, EXTERNAL_LEARNING_ICON } from '../../../utils/inline_svg';
 import {
   GetTranslation,
   GetTranslationReplaced,
@@ -56,7 +57,7 @@ import { ALMDialog, ALMDialogHeader } from '../../ALMDialog';
 import store from '../../../../store/APIStore';
 import { State } from '../../../store/state';
 import { useUserContext } from '../../../contextProviders/userContextProvider';
-import { getInitialView, splitStringIntoArray } from '../../../utils/catalog';
+import { getInitialView, isMyLearningPage, splitStringIntoArray } from '../../../utils/catalog';
 import { getFilterLabel } from '../../../utils/filters';
 import { useJobAids } from '../../../hooks/useJobAids';
 import { PrimeEvent } from '../../../utils/widgets/common';
@@ -155,6 +156,17 @@ const PrimeCatalogContainer = (props: any) => {
     hydrateSelectedCatalogs();
   }, []);
 
+  // On catalog<->search switch, reset the stored sort if it isn't valid for the new context (e.g. relevance in catalog, recommendationScore in search)
+  useEffect(() => {
+    const isCurrentSortValid = sortOptions.availableSortOptions.some(
+      option => option.id === currentSelectedSortFromStore
+    );
+    if (!isCurrentSortValid) {
+      dispatch(updateSortOrder(sortOptions.defaultOption));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query]);
+
   const handleJobAidParam = () => {
     launchJobAid(`${JOBAID}:${params[JOB_AID_ID]}`);
     document.removeEventListener(PrimeEvent.ALM_TRAININGS_LOADED, handleJobAidParam);
@@ -163,6 +175,11 @@ const PrimeCatalogContainer = (props: any) => {
   const defaultCatalogDescription = useMemo(() => {
     const catalogSummary = GetTranslation('alm.text.catalog.summary', true);
     return isTranslated(catalogSummary) ? catalogSummary : '';
+  }, []);
+
+  const defaultMyLearningDescription = useMemo(() => {
+    const myLearningSummary = GetTranslation('alm.text.myLearning.summary', true);
+    return isTranslated(myLearningSummary) ? myLearningSummary : '';
   }, []);
 
   const listContainerCss = `${styles.listContainer} ${
@@ -465,8 +482,13 @@ const PrimeCatalogContainer = (props: any) => {
     </>
   );
 
+  const isMyLearning = isMyLearningPage();
   const isQueryPresent = Boolean(query);
-  const description = isQueryPresent ? null : (props.description ?? defaultCatalogDescription);
+  const defaultDescription =
+    isMyLearning && canShowExternalLearning(account)
+      ? defaultMyLearningDescription
+      : defaultCatalogDescription;
+  const description = isQueryPresent ? null : (props.description ?? defaultDescription);
   const searchDescription = isQueryPresent ? renderSearchResultsDescription() : null;
   const headerCssForSearch = isQueryPresent ? styles.searchHeader : '';
 
@@ -508,21 +530,32 @@ const PrimeCatalogContainer = (props: any) => {
 
             <div className={styles.descriptionContainer}>
               <div className={styles.catalogDescription} data-automationid="catalogDescription">
-                {description}
+                <span dangerouslySetInnerHTML={{ __html: description }} />
                 {searchDescription}
               </div>
-              {deviceContext.isDesktop ? (
-                <div className={styles.sortAndChangeLayoutContainer}>
-                  <div className={styles.sortContainer}>
-                    <div className={styles.sortText}>{GetTranslation('alm.picker.sortBy')}</div>
-                    <div className={styles.picker} data-automationid="sortType">
-                      {renderSortPickerHTML()}
-                    </div>
-                  </div>
-                  {renderChangeLayoutHTML()}
-                </div>
-              ) : null}
+              {deviceContext.isDesktop && isMyLearning && canShowExternalLearning(account) && (
+                <button
+                  className={styles.externalLearningBtn}
+                  onClick={() => getALMObject().navigateToExternalLearningPage()}
+                >
+                  {EXTERNAL_LEARNING_ICON()}
+                  {GetTranslation('alm.text.externalLearning', true)}
+                </button>
+              )}
             </div>
+            {(deviceContext.isMobile || deviceContext.isTablet) &&
+              isMyLearning &&
+              canShowExternalLearning(account) && (
+                <div className={styles.mobileExternalLearning}>
+                  <button
+                    className={styles.externalLearningBtn}
+                    onClick={() => getALMObject().navigateToExternalLearningPage()}
+                  >
+                    {EXTERNAL_LEARNING_ICON()}
+                    {GetTranslation('alm.text.externalLearning', true)}
+                  </button>
+                </div>
+              )}
             {deviceContext.isMobile || deviceContext.isTablet ? (
               <>
                 <div className={styles.mobileButtonsContainer}>
@@ -564,6 +597,17 @@ const PrimeCatalogContainer = (props: any) => {
               aria-hidden={isOpen('alm-filters-dialog') ? 'true' : 'false'}
               data-automationid="catalogTrainingsContainer"
             >
+              {deviceContext.isDesktop && (
+                <div className={styles.sortAndChangeLayoutContainer}>
+                  <div className={styles.sortContainer}>
+                    <div className={styles.sortText}>{GetTranslation('alm.picker.sortBy')}</div>
+                    <div className={styles.picker} data-automationid="sortType">
+                      {renderSortPickerHTML()}
+                    </div>
+                  </div>
+                  {renderChangeLayoutHTML()}
+                </div>
+              )}
               {deviceContext.isDesktop && (
                 <PrimeSelectedFiltersList
                   updateFilters={updateFilters}

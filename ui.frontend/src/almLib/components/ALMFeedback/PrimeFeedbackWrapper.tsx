@@ -40,7 +40,7 @@ const PrimeFeedbackWrapper: React.FC<{
   fetchCurrentLo: (
     trainingId: string,
     closeFeedbackPopUp: Function
-  ) => Promise<PrimeLearningObject>;
+  ) => Promise<PrimeLearningObject | undefined>;
   getFilteredNotificationForFeedback: (
     notificationParams: QueryParams
   ) => Promise<PrimeUserNotification[]>;
@@ -99,7 +99,7 @@ const PrimeFeedbackWrapper: React.FC<{
       }
       if (subLo.loType === LEARNING_PROGRAM) {
         const lo = await fetchCurrentLo(subLo.id, closeFeedbackPopUp);
-        const fetchedSubLOs = lo.subLOs || [];
+        const fetchedSubLOs = lo?.subLOs || [];
         fetchedSubLOs.forEach(fetchedSubLo => {
           if (shouldShowFeedbackPopup(fetchedSubLo)) {
             feedbackEnabledSubLOs.push(fetchedSubLo);

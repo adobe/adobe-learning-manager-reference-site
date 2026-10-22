@@ -401,13 +401,24 @@ describe('useBadges', () => {
 
   describe('PDF Download', () => {
     it('should initiate PDF download and poll for completion', async () => {
+      jest.useFakeTimers();
+
       (APIServiceInstance.getUsersBadges as jest.Mock).mockResolvedValue({
         badgeList: [],
         links: {},
       });
 
       mockRestAdapter.post = jest.fn().mockResolvedValue({});
-      mockJsonApiParse.mockReturnValueOnce({ job: { id: 'job-123' } } as any);
+      mockRestAdapter.get = jest.fn().mockResolvedValue({});
+      mockJsonApiParse.mockReturnValueOnce({ job: { id: 'job-123' } } as any).mockReturnValueOnce({
+        job: {
+          id: 'job-123',
+          status: {
+            code: COMPLETED_IC,
+            data: { s3Url: 'https://s3.amazonaws.com/badge.pdf' },
+          },
+        },
+      } as any);
 
       const mockLink = {
         href: '',
@@ -468,6 +479,21 @@ describe('useBadges', () => {
           'content-type': 'application/json',
         },
       });
+
+      // Advance the poll interval so the job resolves as COMPLETED and the hook
+      // clears its own interval. Without this the interval leaks and can fire
+      // during a later test, causing flaky failures under CI load.
+      await act(async () => {
+        jest.advanceTimersByTime(2000);
+      });
+
+      await waitFor(() => {
+        expect(mockRestAdapter.get).toHaveBeenCalledWith({
+          url: 'https://test.api.com/jobs/job-123',
+        });
+      });
+
+      jest.useRealTimers();
     });
 
     it('should poll and download when job completes', async () => {

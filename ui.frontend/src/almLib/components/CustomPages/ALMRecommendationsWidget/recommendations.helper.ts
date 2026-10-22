@@ -172,11 +172,7 @@ export const isAoiRecoWidget = (widget: any): boolean =>
 /**
  * Creates a child AOI strip widget config for rendering by ALMCoursePathWidget
  */
-export const createAoiStripWidget = (
-  parentWidget: any,
-  stripNum: number,
-  view: string
-) => ({
+export const createAoiStripWidget = (parentWidget: any, stripNum: number, view: string) => ({
   widgetRef: WidgetType.AOI_RECO,
   type: WidgetTypeNew.AOI_RECO,
   id: `${parentWidget.id}-aoi-strip-${stripNum}`,
@@ -197,4 +193,3 @@ export const createInitialAoiStrips = (parentWidget: any): any[] => {
   }
   return strips;
 };
-

@@ -19,41 +19,23 @@ import {
   useMemo,
 } from 'react';
 import { PrimeUser } from '../models';
-import { getALMUser, updateALMUser } from '../utils/global';
+import { getALMAccount, getALMUser, updateALMUser } from '../utils/global';
 import { PrimeEvent } from '../utils/widgets/common';
 
-/**
- * User context value interface
- */
 interface UserContextValue {
   user: PrimeUser;
   setUser: (user: PrimeUser) => void;
 }
 
-/**
- * User context provider props interface
- */
 interface UserContextProviderProps {
   children: ReactNode;
 }
 
-/**
- * Context for managing user state across the application
- */
 const UserContext = createContext<UserContextValue | undefined>(undefined);
 
-/**
- * Provider component for user context
- *
- * @param props - Provider configuration
- * @param props.children - Child components to render
- */
 const Provider = ({ children }: UserContextProviderProps) => {
   const [user, setUser] = useState<PrimeUser>({} as PrimeUser);
 
-  /**
-   * Updates user profile when ALM_USER_PROFILE_UPDATED event is triggered
-   */
   const updateUser = useCallback(async () => {
     const response = await updateALMUser();
     const updatedUser = response?.user;
@@ -62,16 +44,19 @@ const Provider = ({ children }: UserContextProviderProps) => {
     }
   }, []);
 
-  // Fetch user data on mount if needed
   useEffect(() => {
     (async () => {
       const response = await getALMUser();
       const fetchedUser = response?.user;
-      setUser(fetchedUser || ({} as PrimeUser));
+      if (fetchedUser) {
+        setUser(fetchedUser);
+      } else {
+        const account = await getALMAccount();
+        setUser({ account } as PrimeUser);
+      }
     })();
   }, []);
 
-  // Listen for user profile update events
   useEffect(() => {
     document.addEventListener(PrimeEvent.ALM_USER_PROFILE_UPDATED, updateUser);
     return () => {
@@ -79,7 +64,6 @@ const Provider = ({ children }: UserContextProviderProps) => {
     };
   }, [updateUser]);
 
-  // Check if user account details are available for NL experience, or wait for user in logged-in apps
   const nlAccountLoaded = user?.account?.id;
   const shouldRenderChildren = nlAccountLoaded || user?.id;
 
@@ -93,12 +77,6 @@ const Provider = ({ children }: UserContextProviderProps) => {
   );
 };
 
-/**
- * Hook to access user context
- *
- * @throws Error if used outside of UserContextProvider
- * @returns User context value containing user state and setter
- */
 const useUserContext = (): UserContextValue => {
   const context = useContext(UserContext);
   if (!context) {

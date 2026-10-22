@@ -413,6 +413,12 @@ const defaultAccountTerminologies = [
     name: 'Social',
     pluralName: 'Social',
   },
+  {
+    entityType: 'CREDIT_DURATION',
+    locale: 'en-US',
+    name: 'Credit Duration',
+    pluralName: 'Credit Duration',
+  },
 ] as PrimeAccountTerminology[];
 
 export const formatMap: any = {

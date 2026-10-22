@@ -212,6 +212,38 @@ public class AccountServiceImplTest {
     assertNull(result.getRecommendationAccountType());
   }
 
+  @Test
+  public void testParseAccountResponse_FilterPanelSettingFallback() throws Exception {
+    Method method =
+        AccountServiceImpl.class.getDeclaredMethod("parseAccountResponse", String.class);
+    method.setAccessible(true);
+
+    // CPENEW account: no prlCriteria, but filterPanelSetting has the PRL flags (real 69745 shape)
+    String json =
+        "{\"data\":{\"id\":\"69745\",\"type\":\"account\",\"attributes\":{"
+            + "\"locale\":\"en-US\",\"recommendationAccountType\":\"CPENEW\","
+            + "\"filterPanelSetting\":{\"recommendationProduct\":true,\"recommendationRole\":true}"
+            + "}}}";
+    AccountResponse result = (AccountResponse) method.invoke(accountService, json);
+
+    assertNotNull(result);
+    assertNull(result.getPrlCriteria());
+    assertNotNull(result.getFilterPanelSetting());
+    assertTrue(result.getFilterPanelSetting().getRecommendationProduct());
+    assertTrue(result.getFilterPanelSetting().getRecommendationRole());
+    assertTrue(result.isPrlProductsEnabled());
+    assertTrue(result.isPrlRolesEnabled());
+
+    // recommendationProduct/Role false → both gated off
+    String jsonFalse =
+        "{\"data\":{\"id\":\"11043\",\"type\":\"account\",\"attributes\":{\"locale\":\"en-US\","
+            + "\"filterPanelSetting\":{\"recommendationProduct\":false,\"recommendationRole\":false}"
+            + "}}}";
+    AccountResponse resultFalse = (AccountResponse) method.invoke(accountService, jsonFalse);
+    assertFalse(resultFalse.isPrlProductsEnabled());
+    assertFalse(resultFalse.isPrlRolesEnabled());
+  }
+
   // --- getRefreshToken tests (private) ---
 
   @Test

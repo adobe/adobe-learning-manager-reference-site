@@ -436,7 +436,7 @@ export const useFilter = (props?: any) => {
 
   const clearFilterSearch = async (filterType: string) => {
     const baseApiUrl = getALMConfig().primeApiURL;
-    const guest = getALMConfig().guest;
+    const guest = !getALMObject().isPrimeUserLoggedIn();
     setFilterState({
       ...filterState,
       [filterType as keyof typeof filterState]: {

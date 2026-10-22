@@ -98,6 +98,7 @@ import {
   PAPI_ERROR_CODES,
   EXTERNAL_AUTHOR,
   ENGLISH_LOCALE,
+  PERSONALIZED_PATH,
 } from '../../../utils/constants';
 import { modifyTime, modifyTimeDDMMYY } from '../../../utils/dateTime';
 import { debounce } from '../../../utils/catalog';
@@ -240,6 +241,8 @@ const PrimeTrainingPageMetaData: React.FC<{
   }>;
   updateEnrollmentHandler: Function;
   unEnrollmentHandler: Function;
+  deletePersonalizedPathHandler: (id: string) => Promise<unknown>;
+  personalizedPathEnrollmentHandler: (id: string) => Promise<void>;
   jobAidClickHandler: Function;
   isPreviewEnabled: boolean;
   waitlistPosition: string;
@@ -277,6 +280,8 @@ const PrimeTrainingPageMetaData: React.FC<{
   buyNowNativeHandler,
   updateEnrollmentHandler,
   unEnrollmentHandler,
+  deletePersonalizedPathHandler,
+  personalizedPathEnrollmentHandler,
   jobAidClickHandler,
   flexLpEnrollHandler,
   isPreviewEnabled,
@@ -328,6 +333,11 @@ const PrimeTrainingPageMetaData: React.FC<{
   const isCourse = loType === COURSE;
   const isLP = loType === LEARNING_PROGRAM;
   const isCertification = loType === CERTIFICATION;
+  const isPersonalizedPath = loType === PERSONALIZED_PATH;
+  const isCreatedByCurrentUser =
+    isPersonalizedPath &&
+    training.createdByUserId != null &&
+    String(training.createdByUserId) === user?.id;
   const isExternalCertification = isCertification && training.isExternal;
   const subLOs = training.subLOs;
   const sections = training.sections;
@@ -761,7 +771,7 @@ const PrimeTrainingPageMetaData: React.FC<{
     let type;
     if (isCertification) {
       type = 'cert';
-    } else if (isLP) {
+    } else if (isLP || isPersonalizedPath) {
       type = 'lp';
     } else if (hasMultipleInstances && isMultiEnrollmentEnabled && enrolledInstancesCount > 1) {
       type = 'instance';
@@ -1303,7 +1313,10 @@ const PrimeTrainingPageMetaData: React.FC<{
   const alm = getALMObject();
 
   const handleEnrollment = async () => {
-    if (isFlexLPOrContainsFlexLP) {
+    if (isPersonalizedPath) {
+      storeActionInNonLoggedMode(ENROLL);
+      await personalizedPathEnrollmentHandler(training.id);
+    } else if (isFlexLPOrContainsFlexLP) {
       storeActionInNonLoggedMode(ENROLL);
       flexLpEnrollmentConfirmationClickHandler();
     } else if (hasMultipleInstances && primaryEnrollment) {
@@ -1399,7 +1412,32 @@ const PrimeTrainingPageMetaData: React.FC<{
     }
   };
 
+  const launchFirstIncompleteSubLoForPersonalizedPath = () => {
+    const pathSubLOs = training.subLOs || [];
+    // Falls back to the first sub-LO when all are completed, restarting from the beginning
+    const firstIncomplete =
+      pathSubLOs.find(lo => lo.enrollment?.state !== COMPLETED) || pathSubLOs[0];
+    if (!firstIncomplete) return;
+    const instanceId =
+      checkIfEntityIsValid(firstIncomplete.enrollment) &&
+      checkIfEntityIsValid(firstIncomplete.enrollment?.loInstance)
+        ? firstIncomplete.enrollment.loInstance.id
+        : firstIncomplete.instances?.[0]?.id;
+    if (!instanceId) return;
+    const moduleId = getModuleIdToLaunch(firstIncomplete, instanceId);
+    if (!moduleId) return;
+    launchPlayerHandler({
+      id: firstIncomplete.id,
+      moduleId,
+      trainingInstanceId: instanceId,
+    });
+  };
+
   const playerHandler = (newEnrollment?: PrimeLearningObjectInstanceEnrollment) => {
+    if (isPersonalizedPath) {
+      launchFirstIncompleteSubLoForPersonalizedPath();
+      return;
+    }
     if (guest) {
       navigateToLoggedInLO();
       return;
@@ -1408,6 +1446,10 @@ const PrimeTrainingPageMetaData: React.FC<{
       return launchContentUrlInNewWindow(training, coreContentModules[0]);
     }
     if (isFlexLPOrContainsFlexLP) {
+      if (enrollViaModuleClick.skipPlayerLaunch) {
+        if (enrollViaModuleClick.isAutoPlay) notifyParentToCleanModuleParams();
+        return;
+      }
       const sectionSubLOs = getSectionLOsOrder(training);
       let subLoToLaunch;
 
@@ -1454,15 +1496,20 @@ const PrimeTrainingPageMetaData: React.FC<{
       });
     } else if (enrollViaModuleClick.id) {
       // for enrollment done via module click, open that course module in player
-      const { id, moduleId, instanceId, isAutoPlay } = enrollViaModuleClick;
-      const isMultienrolled = getEnrolledInstancesCount(training) > 1;
-      launchPlayerHandler({
-        id: id,
-        moduleId: moduleId,
-        trainingInstanceId: instanceId,
-        isMultienrolled: isMultienrolled,
-      });
-      if (isAutoPlay) {
+      const { id, moduleId, instanceId, isAutoPlay, skipPlayerLaunch } = enrollViaModuleClick;
+      if (!skipPlayerLaunch) {
+        const isMultienrolled = getEnrolledInstancesCount(training) > 1;
+        launchPlayerHandler({
+          id: id,
+          moduleId: moduleId,
+          trainingInstanceId: instanceId,
+          isMultienrolled: isMultienrolled,
+          isAutoPlay: isAutoPlay,
+        });
+        if (isAutoPlay) {
+          notifyParentToCleanModuleParams();
+        }
+      } else if (isAutoPlay) {
         notifyParentToCleanModuleParams();
       }
     } else if (isMultiEnrollmentEnabled) {
@@ -1674,7 +1721,7 @@ const PrimeTrainingPageMetaData: React.FC<{
   const supplementaryLOs = training.supplementaryLOs;
   const jobAidsForCourse = isCourse && supplementaryLOs?.length;
   const jobAidsForLp =
-    isLP &&
+    (isLP || isPersonalizedPath) &&
     (supplementaryLOs?.length ||
       training.subLOs?.some(item => item.supplementaryLOs !== undefined));
   const showJobAids = (jobAidsForCourse || jobAidsForLp) && isPrimeUserLoggedIn;
@@ -1856,7 +1903,7 @@ const PrimeTrainingPageMetaData: React.FC<{
           completionCount += 1;
         }
       });
-    } else if (isLP) {
+    } else if (isLP || isPersonalizedPath) {
       training.subLOs.forEach(subLO => {
         if (subLO.enrollment?.state === COMPLETED || subLO.enrollment?.progressPercent === 100) {
           completionCount += 1;
@@ -1867,8 +1914,8 @@ const PrimeTrainingPageMetaData: React.FC<{
   }, [coreContentModules?.length, isEnrolled, enrollment?.loResourceGrades, loType]);
 
   const alternateCompletedCount = useMemo(() => {
-    // show completed via alternate status only for LP and if enabled at account level
-    if (!isEnrolled || !isLP || !isAccAltCompletionEnabled(user?.account)) {
+    // show completed via alternate status for LP-like trainings when enabled at account level
+    if (!isEnrolled || !(isLP || isPersonalizedPath) || !isAccAltCompletionEnabled(user?.account)) {
       return 0;
     }
     return (
@@ -1876,7 +1923,7 @@ const PrimeTrainingPageMetaData: React.FC<{
         subLO => subLO.isAlternateComplete && subLO.enrollment?.state !== COMPLETED
       ).length || 0
     );
-  }, [isEnrolled, isLP, training.subLOs]);
+  }, [isEnrolled, isLP, isPersonalizedPath, training.subLOs]);
 
   function parseURLForHTTP(url: string) {
     const pattern = /^(ftp|http|https):\/\//;
@@ -1931,6 +1978,10 @@ const PrimeTrainingPageMetaData: React.FC<{
   };
 
   const checkConflictingSessions = async () => {
+    if (isPersonalizedPath) {
+      handleEnrollment();
+      return;
+    }
     const conflictingSessions = await getConflictingSessions(training.id, trainingInstance.id);
     if (!conflictingSessions || conflictingSessions.length === 0) {
       handleEnrollment();
@@ -2218,7 +2269,8 @@ const PrimeTrainingPageMetaData: React.FC<{
             'This feature is currently not available on teams app, please login to ALM to access this feature.',
         })
       : '';
-  const showCoreContent = isEnrolled && (isCourse ? coreContentModules : isLP);
+  const showCoreContent =
+    isEnrolled && (isCourse ? coreContentModules : isLP || isPersonalizedPath);
   const getTranslatedStringsForCompletionCriteria = (
     text: string,
     minimiumCount: number,
@@ -2276,14 +2328,23 @@ const PrimeTrainingPageMetaData: React.FC<{
     );
   };
   const isCompletionStatusAvailable = useCallback(() => {
-    //Adding true/false because it was rendering the number on UI
-    return showMandatoryModulesCount || showCoreContent || (isLP && alternateCompletedCount > 0)
+    // Adding true/false because it was rendering the number on UI
+    return showMandatoryModulesCount ||
+      showCoreContent ||
+      ((isLP || isPersonalizedPath) && alternateCompletedCount > 0)
       ? true
       : false;
-  }, [mandatoryModulesCount, coreContentCompleted, isLP, alternateCompletedCount]);
-  const showMetaDataContainer = isCompletionStatusAvailable() || doLoSkillsExist || isCertification;
+  }, [
+    mandatoryModulesCount,
+    coreContentCompleted,
+    isLP,
+    isPersonalizedPath,
+    alternateCompletedCount,
+  ]);
+
   const showCompletionStatus = () => {
     const totalCount = !isCourse ? training?.subLOs.length : coreContentModules?.length;
+
     const mandatoryModules = showMandatoryModulesCount && (
       <div>
         {getCompletionStatus(
@@ -2297,12 +2358,12 @@ const PrimeTrainingPageMetaData: React.FC<{
       <div>
         {getCompletionStatus(
           coreContentCompleted,
-          GetTranslation('alm.catalog.card.complete.label'),
+          GetTranslation('alm.catalog.card.completion.status'),
           totalCount
         )}
       </div>
     );
-    const alternateCompleted = isLP && alternateCompletedCount > 0 && (
+    const alternateCompleted = (isLP || isPersonalizedPath) && alternateCompletedCount > 0 && (
       <div>
         {getCompletionStatus(
           alternateCompletedCount,
@@ -2311,10 +2372,7 @@ const PrimeTrainingPageMetaData: React.FC<{
         )}
       </div>
     );
-    // Return null if neither mandatoryModules nor coreContent nor alternateCompleted is available
-    if (!mandatoryModules && !coreContent && !alternateCompleted) {
-      return null;
-    }
+
     return (
       <div>
         {mandatoryModules}
@@ -3035,19 +3093,69 @@ const PrimeTrainingPageMetaData: React.FC<{
     );
   };
 
-  const showBookmarkButtonHTML = () => {
-    return !guest && !isCourseNotEnrollable ? (
-      <div className={`${styles.backgroundButton}`}>
-        <button
-          className={`almButton mobile secondary ${styles.bookmarkButton}`}
-          onClick={toggle}
-          data-automationid="bookmark"
-          title={bookmarkTitle}
-        >
-          {getBookMarkStatus()}
-        </button>
-      </div>
-    ) : null;
+  const handleDeletePath = () => {
+    almConfirmationAlert(
+      GetTranslation('alm.personalizedPath.delete.confirmation.title', true),
+      GetTranslation('alm.personalizedPath.delete.confirmation.message', true),
+      GetTranslation('alm.personalizedPath.delete.button', true),
+      GetTranslation('alm.overview.cancel', true),
+      async () => {
+        try {
+          await deletePersonalizedPathHandler(training.id);
+          almAlert(
+            true,
+            GetTranslation('alm.personalizedPath.delete.success', true),
+            AlertType.success
+          );
+          // Brief delay lets the success alert render before navigation replaces the page
+          setTimeout(() => getALMObject().navigateToHomePage(), 300);
+        } catch (e) {
+          console.error('Failed to delete personalized path', e);
+          almAlert(
+            true,
+            GetTranslation('alm.personalizedPath.delete.error', true),
+            AlertType.error
+          );
+        }
+      }
+    );
+  };
+
+  const showActionButtonHTML = (
+    children: React.ReactNode,
+    onClick: () => void,
+    automationId: string,
+    title?: string
+  ) => (
+    <div className={styles.backgroundButton}>
+      <button
+        className={`almButton mobile secondary ${styles.bookmarkButton}`}
+        onClick={onClick}
+        data-automationid={automationId}
+        title={title}
+      >
+        {children}
+      </button>
+    </div>
+  );
+
+  const showDeletePathButtonHTML = () =>
+    showActionButtonHTML(
+      GetTranslation('alm.personalizedPath.delete.button', true),
+      handleDeletePath,
+      'delete-path'
+    );
+
+  const showBookmarkButtonHTML = () =>
+    !guest && !isCourseNotEnrollable
+      ? showActionButtonHTML(getBookMarkStatus(), toggle, 'bookmark', bookmarkTitle)
+      : null;
+
+  const showPathActionButtonHTML = () => {
+    if (isPersonalizedPath) {
+      return isCreatedByCurrentUser ? showDeletePathButtonHTML() : null;
+    }
+    return showBookmarkButtonHTML();
   };
 
   const showPreviewButtonHTML = () => {
@@ -3334,7 +3442,7 @@ const PrimeTrainingPageMetaData: React.FC<{
       )}
       {showPreviewButton && (
         <div className={` ${styles.actionContainer} ${styles.crsStsButtonPreBookSection}`}>
-          {(isDesktop || isTablet) && showBookmarkButtonHTML()}
+          {(isDesktop || isTablet) && showPathActionButtonHTML()}
           {(isDesktop || isTablet) && showPreviewButtonHTML()}
         </div>
       )}
@@ -3347,15 +3455,29 @@ const PrimeTrainingPageMetaData: React.FC<{
         : ''}
       {!guest && !showPreviewButton && !isCourseNotEnrollable && (isDesktop || isTablet) && (
         <div className={styles.actionContainer}>
-          <button className={styles.bookMark} onClick={toggle} title={bookmarkTitle}>
-            {getBookMarkStatus()}
-          </button>
+          {isPersonalizedPath ? (
+            isCreatedByCurrentUser ? (
+              <button
+                className={styles.bookMark}
+                onClick={handleDeletePath}
+                data-automationid="delete-path"
+              >
+                <span className={styles.bookMarkText}>
+                  {GetTranslation('alm.personalizedPath.delete.button', true)}
+                </span>
+              </button>
+            ) : null
+          ) : (
+            <button className={styles.bookMark} onClick={toggle} title={bookmarkTitle}>
+              {getBookMarkStatus()}
+            </button>
+          )}
         </div>
       )}
       {/* Show leaderboard stats*/}
       {showLeaderBoard()}
       {/* Rating Container*/}
-      {useCanShowRating(training) && isEnrolled && displayratingDialog}
+      {!isPersonalizedPath && useCanShowRating(training) && isEnrolled && displayratingDialog}
 
       <section className={` ${styles.borderContainer} ${styles.container} ${styles.emptySection}`}>
         {/* purchase details for LO container*/}
@@ -3385,9 +3507,9 @@ const PrimeTrainingPageMetaData: React.FC<{
               <div className={styles.metadataIcons}>{MODULE_COMPLETION_STATUS_ICON()}</div>
               <div
                 className={styles.headerText}
-                data-automationid={GetTranslation('alm.module.completion.status')}
+                data-automationid={GetTranslation('alm.module.completion.requirement')}
               >
-                {GetTranslation('alm.module.completion.status', true)}
+                {GetTranslation('alm.module.completion.requirement', true)}
               </div>
             </div>
 
@@ -3449,7 +3571,7 @@ const PrimeTrainingPageMetaData: React.FC<{
       </section>
 
       {/* UnEnroll button container */}
-      {canUnenroll && !isUnenrollmentDeadlinePassed && (
+      {canUnenroll && !isUnenrollmentDeadlinePassed && !isPersonalizedPath && (
         <div className={styles.commonContainer}>
           <div className={styles.bottomContainer}>
             <button
@@ -3504,7 +3626,7 @@ const PrimeTrainingPageMetaData: React.FC<{
               >
                 {showLoActionHTML()}
                 {downloadButtonDisplay()}
-                {!showPreviewButton && !isCourseNotEnrollable && showBookmarkButtonHTML()}
+                {!showPreviewButton && !isCourseNotEnrollable && showPathActionButtonHTML()}
                 {showPreviewButton && showPreviewButtonHTML()}
                 {shareButtonHTML()}
               </Flex>

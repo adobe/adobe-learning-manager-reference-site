@@ -26,6 +26,7 @@ jest.mock('@utils/global', () => ({
   setItemToStorage: jest.fn(),
   isBookmarksEnabled: jest.fn(),
   isAccAltCompletionEnabled: jest.fn(),
+  isStructuredLocationEnabled: jest.fn(() => false),
 }));
 
 jest.mock('@utils/instance', () => ({
@@ -76,6 +77,7 @@ import {
   getSnippetTypes,
   fetchRecommendationData,
   getFilterNames,
+  getStructuredLocationList,
   getCatalogList,
   getAnnouncedGroupsList,
   getSettledValue,
@@ -100,6 +102,7 @@ import {
   setItemToStorage,
   isBookmarksEnabled,
   isAccAltCompletionEnabled,
+  isStructuredLocationEnabled,
 } from '@utils/global';
 import { checkIfCompletionDeadlineNotPassed } from '@utils/instance';
 import { JsonApiParse } from '@utils/jsonAPIAdapter';
@@ -117,6 +120,7 @@ const mockGetQueryParamsFromUrl = getQueryParamsFromUrl as jest.MockedFunction<
 >;
 const mockIsBookmarksEnabled = isBookmarksEnabled as jest.MockedFunction<typeof isBookmarksEnabled>;
 const mockIsAccAltCompletionEnabled = isAccAltCompletionEnabled as jest.MockedFunction<typeof isAccAltCompletionEnabled>;
+const mockIsStructuredLocationEnabled = isStructuredLocationEnabled as jest.MockedFunction<typeof isStructuredLocationEnabled>;
 const mockCheckIfCompletionDeadlineNotPassed =
   checkIfCompletionDeadlineNotPassed as jest.MockedFunction<
     typeof checkIfCompletionDeadlineNotPassed
@@ -387,6 +391,55 @@ describe('catalog utilities', () => {
     it('should return null if no data', () => {
       mockJsonApiParse.mockReturnValue(null as any);
       expect(getFilterNames('promise-data')).toBeUndefined();
+    });
+  });
+
+  describe('getStructuredLocationList', () => {
+    const buildPayload = (value: any[], rowId = 'locationId') => ({
+      data: { attributes: { filters: [{ id: rowId, name: 'Locations', value }] } },
+    });
+
+    it('should return null for an empty promise', () => {
+      expect(getStructuredLocationList(undefined)).toBeNull();
+    });
+
+    it('maps the locationId row to { value(code), label(compound) }', () => {
+      const payload = buildPayload([
+        {
+          id: 'india|karnataka|bengaluru',
+          city: 'Bengaluru',
+          state: 'Karnataka',
+          country: 'India',
+        },
+        { id: 'usa|california|san francisco', city: 'San Francisco', state: null, country: 'Usa' },
+      ]);
+      expect(getStructuredLocationList(payload)).toEqual([
+        { id: 'india|karnataka|bengaluru', name: 'Bengaluru, Karnataka, India' },
+        { id: 'usa|california|san francisco', name: 'San Francisco, Usa' },
+      ]);
+    });
+
+    it('parses a raw JSON string payload', () => {
+      const payload = JSON.stringify(
+        buildPayload([{ id: 'india|mh|pune', city: 'Pune', state: 'MH', country: 'India' }])
+      );
+      expect(getStructuredLocationList(payload)).toEqual([
+        { id: 'india|mh|pune', name: 'Pune, MH, India' },
+      ]);
+    });
+
+    it('drops rows with a missing/empty id', () => {
+      const payload = buildPayload([
+        { id: '', city: 'NoId', country: 'IN' },
+        { id: '  ', city: 'Blank', country: 'IN' },
+        { id: 'ok', city: 'Delhi', country: 'IN' },
+      ]);
+      expect(getStructuredLocationList(payload)).toEqual([{ id: 'ok', name: 'Delhi, IN' }]);
+    });
+
+    it('returns null when locationId row is absent', () => {
+      const payload = buildPayload([{ id: 'x', city: 'Delhi', country: 'IN' }], 'someOtherId');
+      expect(getStructuredLocationList(payload)).toBeNull();
     });
   });
 
@@ -767,6 +820,49 @@ describe('catalog utilities', () => {
 
       expect(result).toEqual([]);
     });
+
+    // skillName/tagName are stored as boolean maps ({ [label]: boolean }), not comma-strings.
+    // Regression: calling .split on the object used to throw "e.split is not a function".
+    it('should resolve only the true keys when skillName is a boolean map (object)', () => {
+      const options = [
+        { label: 'Java', value: 'java_val' },
+        { label: 'Python', value: 'python_val' },
+      ];
+      const filterState = createMockFilterState({ skillName: { Java: true, Python: false } });
+
+      const result = getIndividualFiltersForCommerce(options, filterState, 'skillName');
+
+      expect(result).toEqual(['java_val']);
+    });
+
+    it('should handle tagName given as a boolean map (object)', () => {
+      const options = [
+        { label: 'Beginner', value: 'beginner_val' },
+        { label: 'Advanced', value: 'advanced_val' },
+      ];
+      const filterState = createMockFilterState({ tagName: { Beginner: true, Advanced: true } });
+
+      const result = getIndividualFiltersForCommerce(options, filterState, 'tagName');
+
+      expect(result).toEqual(['beginner_val', 'advanced_val']);
+    });
+
+    it('should return an empty array for an empty boolean map without throwing', () => {
+      const options = [{ label: 'Java', value: 'java_val' }];
+      const filterState = createMockFilterState({ skillName: {} });
+
+      expect(() =>
+        getIndividualFiltersForCommerce(options, filterState, 'skillName')
+      ).not.toThrow();
+      expect(getIndividualFiltersForCommerce(options, filterState, 'skillName')).toEqual([]);
+    });
+
+    it('should return an empty array when all boolean-map values are false', () => {
+      const options = [{ label: 'Java', value: 'java_val' }];
+      const filterState = createMockFilterState({ skillName: { Java: false } });
+
+      expect(getIndividualFiltersForCommerce(options, filterState, 'skillName')).toEqual([]);
+    });
   });
 
   describe('getParamsForCatalogApi', () => {
@@ -846,6 +942,31 @@ describe('catalog utilities', () => {
       const params = await getParamsForCatalogApi(filterState, mockUser, 'date');
 
       expect(params['filter.price']).toBeUndefined();
+    });
+
+    it('sends city names via filter.cityName when structured location is disabled', async () => {
+      mockGetALMAttribute.mockReturnValue({ showFilters: 'true', cities: 'true' });
+      mockIsStructuredLocationEnabled.mockReturnValue(false);
+      const filterState = createMockFilterState({ cities: 'New York,San Francisco' });
+      const params = await getParamsForCatalogApi(filterState, mockUser, 'date');
+
+      expect(params['filter.cityName']).toEqual(['New York', 'San Francisco']);
+      expect(params['filter.lo.locationId']).toBeUndefined();
+    });
+
+    it('sends location ids as an array via filter.lo.locationId when structured location is enabled', async () => {
+      mockGetALMAttribute.mockReturnValue({ showFilters: 'true', cities: 'true' });
+      mockIsStructuredLocationEnabled.mockReturnValue(true);
+      const filterState = createMockFilterState({
+        cities: 'india|karnataka|bengaluru,usa|california|san francisco',
+      });
+      const params = await getParamsForCatalogApi(filterState, mockUser, 'date');
+
+      expect(params['filter.lo.locationId']).toEqual([
+        'india|karnataka|bengaluru',
+        'usa|california|san francisco',
+      ]);
+      expect(params['filter.cityName']).toBeUndefined();
     });
 
     it('should handle PRL criteria with products', async () => {

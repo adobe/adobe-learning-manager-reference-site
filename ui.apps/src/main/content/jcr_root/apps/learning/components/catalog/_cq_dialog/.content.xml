@@ -54,13 +54,13 @@ trackingFeature="learning:catalog">
                                                 required="{Boolean}false" 
                                                 value="true" 
                                                 uncheckedValue="false"/>  
-                                            <skillsFilter 
-                                                jcr:primaryType="nt:unstructured" 
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox" 
-                                                text="Products" 
-                                                name="./skillsFilter" 
-                                                required="{Boolean}false" 
-                                                value="true" 
+                                            <skillsFilter
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                text="Skills"
+                                                name="./skillsFilter"
+                                                required="{Boolean}false"
+                                                value="true"
                                                 uncheckedValue="false"/>  
                                             <skillsLevelFilter 
                                                 jcr:primaryType="nt:unstructured" 
@@ -118,14 +118,40 @@ trackingFeature="learning:catalog">
                                                 required="{Boolean}false" 
                                                 value="true" 
                                                 uncheckedValue="false"/>
-                                            <citiesFilter 
-                                                jcr:primaryType="nt:unstructured" 
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox" 
+                                            <citiesFilter
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                 text="Cities"
-                                                name="./citiesFilter" 
-                                                required="{Boolean}false" 
-                                                value="true" 
-                                                uncheckedValue="false"/> 
+                                                name="./citiesFilter"
+                                                required="{Boolean}false"
+                                                value="true"
+                                                uncheckedValue="false"/>
+                                            <productsFilter
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                text="Products"
+                                                name="./productsFilter"
+                                                required="{Boolean}false"
+                                                value="true"
+                                                uncheckedValue="false">
+                                                <granite:rendercondition
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="learning/components/catalog/prlfilter/rendercondition"
+                                                    prlType="products"/>
+                                            </productsFilter>
+                                            <rolesFilter
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                text="Roles"
+                                                name="./rolesFilter"
+                                                required="{Boolean}false"
+                                                value="true"
+                                                uncheckedValue="false">
+                                                <granite:rendercondition
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="learning/components/catalog/prlfilter/rendercondition"
+                                                    prlType="roles"/>
+                                            </rolesFilter>
                                         </items>
                                     </column>
                                 </items>

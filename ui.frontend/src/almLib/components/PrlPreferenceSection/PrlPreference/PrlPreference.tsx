@@ -15,79 +15,47 @@ import { PrimeUserRecommendationCriteria } from '../../../models';
 import { ADVANCED } from '../../../utils/widgets/common';
 import { PrlChips } from '../PrlChips';
 import { PrlLevelSelector } from '../PrlLevelSelector';
-import { ALMDialog, ALMDialogHeader } from '../../ALMDialog';
-import { useDialog } from '../../../contextProviders/ALMDialogContextProvider';
 
 import styles from './PrlPreference.module.css';
-import { Heading } from '@adobe/react-spectrum';
 
 const PrlPreference = (props: any) => {
   const { formatMessage } = useIntl();
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [updatedSelectedCriteria, setUpdatedSelectedCriteria] = useState([props.selectedCriteria]);
+  const [updatedSelectedCriteria, setUpdatedSelectedCriteria] = useState<any[]>(
+    props.selectedCriteria || []
+  );
   const [isLevelsScreen, setIsLevelsScreen] = useState(false);
-  const { isOpen, openDialog, closeDialog } = useDialog();
-  const DIALOG_ID = 'alm-prl-dialog';
 
   useEffect(() => {
-    if (props.selectedCriteria) {
-      setUpdatedSelectedCriteria(props.selectedCriteria);
+    setUpdatedSelectedCriteria(props.selectedCriteria || []);
+  }, [props.selectedCriteria]);
+
+  // Reset levels screen whenever the section exits edit mode
+  useEffect(() => {
+    if (!props.isEditMode) {
+      setIsLevelsScreen(false);
     }
-  }, [props]);
+  }, [props.isEditMode]);
 
   const addSelected = (item: PrimeUserRecommendationCriteria) => {
-    setUpdatedSelectedCriteria([
+    const newCriteria = [
       ...updatedSelectedCriteria,
       {
         id: item.id,
         name: item.name,
         levels: props.isLevelsEnabled ? [ADVANCED] : undefined,
       },
-    ]);
+    ];
+    setUpdatedSelectedCriteria(newCriteria);
+    props.onSelectionChange?.(newCriteria);
   };
+
   const removeSelected = (item: PrimeUserRecommendationCriteria) => {
-    setUpdatedSelectedCriteria(
-      updatedSelectedCriteria.filter((criteria: any) => criteria.id !== item.id)
-    );
+    const newCriteria = updatedSelectedCriteria.filter((criteria: any) => criteria.id !== item.id);
+    setUpdatedSelectedCriteria(newCriteria);
+    props.onSelectionChange?.(newCriteria);
   };
 
-  const showMobileView = () => {
-    return window.innerWidth < 768;
-  };
-
-  const toggleEditMode = () => {
-    const currentMode = isEditMode;
-    setIsEditMode(isEditMode => {
-      if (showMobileView()) {
-        if (isEditMode) {
-          closeDialog(DIALOG_ID);
-        } else {
-          openDialog(DIALOG_ID);
-        }
-      }
-      return !isEditMode;
-    });
-    setUpdatedSelectedCriteria(props.selectedCriteria);
-    if (showMobileView()) {
-      if (currentMode) {
-        closeDialog(DIALOG_ID);
-      } else {
-        openDialog(DIALOG_ID);
-      }
-      setIsLevelsScreen(false);
-    }
-  };
-
-  const handleCritiaSave = () => {
-    if (typeof props.onUpdate === 'function') {
-      props.onUpdate({
-        detail: {
-          criteria: updatedSelectedCriteria,
-        },
-      });
-      toggleEditMode();
-    }
-  };
+  const showMobileView = () => window.innerWidth < 768;
 
   const updateLevel = (event: CustomEvent) => {
     const item = event.detail?.item;
@@ -97,170 +65,83 @@ const PrlPreference = (props: any) => {
     }
     const index = updatedSelectedCriteria.findIndex((criteria: any) => criteria.id === item.id);
     if (index > -1) {
-      updatedSelectedCriteria[index] = item;
-      setUpdatedSelectedCriteria([...updatedSelectedCriteria]);
+      const newCriteria = [...updatedSelectedCriteria];
+      newCriteria[index] = item;
+      setUpdatedSelectedCriteria(newCriteria);
+      props.onSelectionChange?.(newCriteria);
     }
   };
 
   const getPrlChips = () => {
     return (
-      <>
-        <div className={styles.prlPCriteriaSection}>
-          {(!showMobileView() || (showMobileView() && !isLevelsScreen)) && (
-            <PrlChips
-              className={styles.prlPPrlChips}
-              options={props.allCriteria}
-              selectedOptions={
-                new Map(
-                  updatedSelectedCriteria.map((obj: PrimeUserRecommendationCriteria) => [
-                    obj.id,
-                    obj.name,
-                  ])
-                )
-              }
-              onAdd={addSelected}
-              onRemove={removeSelected}
+      <div className={styles.prlPCriteriaSection}>
+        {(!showMobileView() || !isLevelsScreen) && (
+          <PrlChips
+            className={styles.prlPPrlChips}
+            options={props.allCriteria}
+            selectedOptions={
+              new Map(
+                updatedSelectedCriteria.map((obj: PrimeUserRecommendationCriteria) => [
+                  obj.id,
+                  obj.name,
+                ])
+              )
+            }
+            onAdd={addSelected}
+            onRemove={removeSelected}
+          />
+        )}
+        {props.isLevelsEnabled && (!showMobileView() || isLevelsScreen) && (
+          <div className={styles.levelSelectorContainer}>
+            <PrlLevelSelector
+              options={updatedSelectedCriteria}
+              levels={props.levels}
+              onChangeHandler={updateLevel}
             />
-          )}
-          {props.isLevelsEnabled && (!showMobileView() || (showMobileView() && isLevelsScreen)) && (
-            <div className={styles.levelSelectorContainer}>
-              <PrlLevelSelector
-                options={updatedSelectedCriteria}
-                levels={props.levels}
-                onChangeHandler={updateLevel}
-              />
-            </div>
-          )}
-        </div>
-      </>
-    );
-  };
-
-  const renderCriteria = () => {
-    if (isEditMode) {
-      return showMobileView() ? getMobileView() : getPrlChips();
-    }
-    return getFormattedCriterias();
-  };
-
-  const getFormattedCriterias = () => {
-    return (
-      <div className={styles.prlPCriteria}>
-        {props.selectedCriteria?.map((item: any) => item.name).join(', ')}
+          </div>
+        )}
       </div>
     );
   };
 
-  const isMobileAndLevelsEnabled = () => {
-    return showMobileView() && props.isLevelsEnabled;
-  };
-
-  const isMobileAndLevelsDisabled = () => {
-    return showMobileView() && !props.isLevelsEnabled;
-  };
-
-  const isMobileLevelsScreen = () => {
-    return isMobileAndLevelsEnabled() && isLevelsScreen;
-  };
-
-  const isMobileCriteriaScreen = () => {
-    return isMobileAndLevelsEnabled() && !isLevelsScreen;
-  };
-
-  const getUpdateActionButtons = () => {
-    const shouldDisableSave = updatedSelectedCriteria?.length === 0 || props.isSaving;
+  const getMobileLevelsNavigation = () => {
+    if (!showMobileView() || !props.isLevelsEnabled) return null;
     return (
-      <div className={showMobileView() ? styles.updateActionsButton : ''}>
-        {(!showMobileView() || isMobileAndLevelsDisabled() || isMobileCriteriaScreen()) && (
-          <button className={styles.prlPSecondaryButton} onClick={toggleEditMode}>
-            {formatMessage({
-              id: 'alm.text.cancel',
-              defaultMessage: 'Cancel',
-            })}
-          </button>
-        )}
-        {isMobileCriteriaScreen() && (
+      <div className={styles.updateActionsButton}>
+        {!isLevelsScreen ? (
           <button
             className={styles.prlPPrimaryButton}
             onClick={() => setIsLevelsScreen(true)}
-            disabled={shouldDisableSave}
+            disabled={updatedSelectedCriteria.length === 0}
           >
-            {formatMessage({
-              id: 'prl.next.text',
-              defaultMessage: 'Next',
-            })}
+            {formatMessage({ id: 'prl.next.text', defaultMessage: 'Next' })}
           </button>
-        )}
-        {isMobileLevelsScreen() && (
+        ) : (
           <button className={styles.prlPSecondaryButton} onClick={() => setIsLevelsScreen(false)}>
-            {formatMessage({
-              id: 'alm.author.back.label',
-              defaultMessage: 'Back',
-            })}
-          </button>
-        )}
-        {(!showMobileView() || isMobileAndLevelsDisabled() || isMobileLevelsScreen()) && (
-          <button
-            className={styles.prlPPrimaryButton}
-            onClick={handleCritiaSave}
-            disabled={shouldDisableSave}
-          >
-            {formatMessage({
-              id: 'alm.text.save',
-              defaultMessage: 'Save',
-            })}
+            {formatMessage({ id: 'alm.author.back.label', defaultMessage: 'Back' })}
           </button>
         )}
       </div>
     );
   };
-  const renderActionButtons = () => {
-    if (isEditMode) {
-      return !showMobileView() && getUpdateActionButtons();
-    }
-    return (
-      <button className={styles.prlPSecondaryButton} onClick={toggleEditMode}>
-        {formatMessage({
-          id: 'alm.text.edit',
-          defaultMessage: 'Edit',
-        })}
-      </button>
-    );
-  };
 
-  const getHeading = () => {
-    return `${formatMessage({ id: 'alm.prl.selectPrefered', defaultMessage: 'Select Prefered' })} ${isLevelsScreen ? formatMessage({ id: 'levels', defaultMessage: 'Levels' }) : props.heading}`;
-  };
-
-  const getMobileView = () => {
+  if (!props.isEditMode) {
     return (
-      <>
-        {isOpen(DIALOG_ID) && (
-          <ALMDialog id={DIALOG_ID} overlayClose={false}>
-            <ALMDialogHeader>
-              <Heading level={3} UNSAFE_className={styles.almDialogTitle}>
-                {getHeading()}
-              </Heading>
-            </ALMDialogHeader>
-            {isEditMode && getPrlChips()}
-            {isEditMode && getUpdateActionButtons()}
-          </ALMDialog>
-        )}
-        {getFormattedCriterias()}
-      </>
+      <div className={styles.prlPContainer}>
+        <div className={styles.prlPHeading}>{props.heading}</div>
+        <div className={styles.prlPCriteria}>
+          {(props.selectedCriteria || []).map((item: any) => item.name).join(', ')}
+        </div>
+      </div>
     );
-  };
+  }
 
   return (
-    <>
-      <div className={styles.prlPContainer}>
-        <div className={styles.prlPHeader}>
-          <div className={styles.prlPHeading}>{props.heading}</div>
-          {renderActionButtons()}
-        </div>
-        {renderCriteria()}
-      </div>
-    </>
+    <div className={styles.prlPContainer}>
+      <div className={styles.prlPHeading}>{props.heading}</div>
+      {getPrlChips()}
+      {getMobileLevelsNavigation()}
+    </div>
   );
 };
 export default PrlPreference;

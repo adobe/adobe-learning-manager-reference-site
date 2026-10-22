@@ -69,6 +69,8 @@ governing permissions and limitations under the License.
   letter-spacing: 0.4px;
   margin-left: auto;
   text-align: center;
+  flex-shrink: 0;
+  align-self: flex-start;
 }
 
 .overview {
@@ -80,6 +82,7 @@ governing permissions and limitations under the License.
   white-space: normal !important;
   height: auto !important;
   font-family: var(--prime-font-family);
+  font-synthesis: style;
 }
 
 img {

@@ -186,6 +186,9 @@ export interface ALM {
   navigateToSocial: Function;
   navigateToMyLearningPage: Function;
   navigateToLeaderboardPage: Function;
+  navigateToExternalLearningPage: Function;
+  navigateToAddExternalLearningPage: Function;
+  navigateToExternalLearningDetailPage: Function;
   navigateToSkillsPage: Function;
   handleLpLeaderBoardSeeAllModal: Function;
   handleInstanceNavigationAfterEnroll: Function;
@@ -426,7 +429,7 @@ export const getALMAccount = async (displayType?: string) => {
 
   const accountDataStr = getALMConfig().accountData;
   const accountData = accountDataStr ? JSON.parse(accountDataStr) : null;
-  const account = (accountData?.data?.attributes || {}) as PrimeAccount;
+  const account = { id: accountData?.data?.id, ...accountData?.data?.attributes } as PrimeAccount;
   return account;
 };
 
@@ -452,7 +455,7 @@ export const getComputedDisplayType = async (): Promise<string> => {
     //if we get displayType from widgetConfig
     if (widgetConfig.displayType) {
       displayType = widgetConfig.displayType;
-    } else {
+    } else if (getALMObject().isPrimeUserLoggedIn()) {
       const account = await getALMAccountInternal(displayType);
       if (account?.prlCriteria?.enabled) {
         displayType = 'DESKTOP_HOME_PRL_PG';
@@ -629,6 +632,14 @@ export function addHttpsToHref(htmlString: string): string {
 
   return modifiedHTML;
 }
+
+export const canShowExternalLearning = (account: PrimeAccount): boolean => {
+  return !!(account?.enableExternalLearning || account?.hasExternalLearningSubmissions);
+};
+
+export const canAddExternalLearning = (account: PrimeAccount): boolean => {
+  return !!account?.enableExternalLearning;
+};
 
 export const launchContentUrlInNewWindow = async (
   training: PrimeLearningObject,
@@ -807,4 +818,8 @@ export const customEncode = (str: string) => {
 
 export const isAccAltCompletionEnabled = (account: PrimeAccount): boolean => {
   return account?.alternateCompletionEnabled || false;
+};
+
+export const isStructuredLocationEnabled = (account?: PrimeAccount): boolean => {
+  return !!account?.structuredLocationEnabled;
 };

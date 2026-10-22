@@ -45,6 +45,7 @@ import {
   EXTERNAL_STR,
   INTERNAL_STR,
   LEARNING_PROGRAM,
+  PERSONALIZED_PATH,
   PENDING_APPROVAL,
   REJECTED,
   TRAINING_INSTANCE_ID_STR,
@@ -61,6 +62,7 @@ import {
   getCertificationProofPendingMessage,
   getCertificationStatusMessage,
   getTrainingLink,
+  getTrainingTypeLabel,
 } from '../../../utils/lo-utils';
 import { ratingFormatter } from '../../Catalog/PrimeTrainingCardV2/PrimeTrainingCardV2.helper';
 import { useUserContext } from '../../../contextProviders/userContextProvider';
@@ -240,11 +242,13 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
         return format ? getCourseFormat().toUpperCase() : '';
       case LEARNING_PROGRAM:
         return GetTranslation(`alm.training.learningProgram`, true);
+      case PERSONALIZED_PATH:
+        return getTrainingTypeLabel(PERSONALIZED_PATH);
       case CERTIFICATION:
         const certType = isExternalCertification ? EXTERNAL_STR : INTERNAL_STR;
         return certType + ' ' + GetTranslation('alm.training.certification', true);
     }
-  }, [format]);
+  }, [format, training.loType, isExternalCertification]);
 
   const toggle = () => {
     setIsBookMarked((prevState: any) => !prevState);
@@ -435,6 +439,9 @@ const PrimeTrainingOverviewHeader = (props: trainingOverviewProps) => {
   const hasMultipleInstances = !hasSingleActiveInstance(training);
 
   const showParentBreadCrumbs = () => {
+    if (training.loType === PERSONALIZED_PATH) {
+      return;
+    }
     const { parentPath } = getBreadcrumbPath();
     if (parentPath.length === 0) {
       return;

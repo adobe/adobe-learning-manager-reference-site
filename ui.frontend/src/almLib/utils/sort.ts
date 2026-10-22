@@ -22,7 +22,7 @@ import {
   SORT_RELEVANCE_PARAM,
   SORT_Z_TO_A_PARAM,
 } from './constants';
-import { getALMConfig, getQueryParamsFromUrl } from './global';
+import { getALMConfig, getALMObject, getQueryParamsFromUrl } from './global';
 
 interface SortOption {
   id: string;
@@ -117,7 +117,7 @@ export const getAvailableSortOptions = (account: PrimeAccount, GetTranslation: F
   const immersiveLayout = account.learnerLayout === 'IMMERSIVE';
   const isMostRecommendedDefault = isPrlEnabled || (isCPENew && immersiveLayout);
   const isMyLearning = isMyLearningPage();
-  const isGuest = getALMConfig().guest;
+  const isGuest = !getALMObject().isPrimeUserLoggedIn();
 
   let sortType: string[];
   let defaultOption: string;
@@ -151,7 +151,9 @@ export const getAvailableSortOptions = (account: PrimeAccount, GetTranslation: F
     sortType = sortType.filter(shouldKeep);
   }
   const sortTypeFromURL = getQueryParamsFromUrl()?.sort;
-  defaultOption = sortTypeFromURL ? sortTypeFromURL : defaultOption;
+  // Only honor the URL sort if it's valid for the current context (e.g. keep catalog-only '-recommendationScore' out of search)
+  defaultOption =
+    sortTypeFromURL && sortType.includes(sortTypeFromURL) ? sortTypeFromURL : defaultOption;
 
   const availableSortOptions = allSortOptions(GetTranslation).filter(option =>
     sortType.includes(option.id)

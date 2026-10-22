@@ -20,6 +20,7 @@ import {
   LOAD_NOTIFICATIONS,
   PAGINATE_NOTIFICATIONS,
   UPDATE_NOTIFICATION,
+  UPDATE_UNREAD_COUNT,
 } from '@almLib/store/actions/notification/actionTypes';
 import { PrimeUserNotification, PrimeAdminAnnouncement } from '@models/PrimeModels';
 
@@ -292,6 +293,26 @@ describe('notification reducer', () => {
       state = notification(state, { type: 'UNKNOWN_ACTION' });
 
       expect(state.unreadCount).toBe(3);
+    });
+
+    it('should set unreadCount on UPDATE_UNREAD_COUNT without touching notifications', () => {
+      const loadAction = {
+        type: LOAD_NOTIFICATIONS,
+        payload: {
+          notifications: [{ id: 'notif:1', read: false } as PrimeUserNotification],
+          unreadCount: 1,
+        },
+      };
+      let state = notification(undefined, loadAction);
+
+      const updateAction = {
+        type: UPDATE_UNREAD_COUNT,
+        payload: { unreadCount: 7 },
+      };
+      state = notification(state, updateAction);
+
+      expect(state.unreadCount).toBe(7);
+      expect(state.notifications).toHaveLength(1);
     });
   });
 

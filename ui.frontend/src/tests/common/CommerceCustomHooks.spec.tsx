@@ -27,6 +27,7 @@ governing permissions and limitations under the License.
  */
 
 import CommerceCustomHooksInstance from '../../almLib/common/CommerceCustomHooks';
+import { getIndividualFiltersForCommerce } from '../../almLib/utils/catalog';
 
 // Mock dependencies
 const mockGetALMConfig = jest.fn();
@@ -250,6 +251,48 @@ describe('CommerceCustomHooks', () => {
 
         expect(result).toBeNull();
       });
+    });
+  });
+
+  describe('getTrainings filter transform (guest)', () => {
+    const mockGetIndividualFilters = getIndividualFiltersForCommerce as jest.Mock;
+
+    beforeEach(() => {
+      mockIsUserLoggedIn.mockReturnValue(false);
+      // Cached commerce filters so getTransformedFilter resolves without an Apollo round-trip
+      // (and the skillName/tagName boolean maps don't break the internal .forEach).
+      mockGetItemFromStorage.mockReturnValue([]);
+      mockGetIndividualFilters.mockReturnValue([]);
+      mockApolloClient.query.mockResolvedValue({
+        data: { products: { items: [], page_info: { current_page: 1, total_pages: 1 } } },
+      });
+    });
+
+    it('omits skill/tag filters when nothing is selected (empty boolean map)', async () => {
+      await CommerceCustomHooksInstance.getTrainings(
+        { skillName: {}, tagName: {} } as any,
+        'name',
+        '',
+        false
+      );
+
+      const { variables } = mockApolloClient.query.mock.calls[0][0];
+      expect(variables.filter).not.toHaveProperty('almskill');
+      expect(variables.filter).not.toHaveProperty('almtags');
+    });
+
+    it('includes the skill filter when a skill is selected', async () => {
+      mockGetIndividualFilters.mockReturnValueOnce(['java_val']);
+
+      await CommerceCustomHooksInstance.getTrainings(
+        { skillName: { Java: true } } as any,
+        'name',
+        '',
+        false
+      );
+
+      const { variables } = mockApolloClient.query.mock.calls[0][0];
+      expect(variables.filter.almskill).toEqual({ in: ['java_val'] });
     });
   });
 

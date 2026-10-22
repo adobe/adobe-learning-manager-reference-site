@@ -10,6 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 import {
+  JsonApiResponse,
   MaxPrice,
   PaginationParams,
   PrimeCatalog,
@@ -35,17 +36,22 @@ import {
   getParamsForCatalogApi,
   getSettledValue,
   getSnippetTypes,
+  getStructuredLocationList,
   isAttributeEnabled,
   isMyLearningPage,
 } from '../utils/catalog';
 import {
   ALM_LEARNER_ADD_TO_SEARCH,
   CERTIFICATION,
+  COMPLETED,
   COMPLETED_VIA_ALTERNATE,
+  ENGLISH_LOCALE,
   FILTER,
   LEARNING_PROGRAM,
   LEVEL,
   NOT_ENROLLED,
+  PERSONALIZED_PATH,
+  PERSONALIZED_PATH_INCLUDE,
   PRODUCT,
   ROLE,
   COURSE,
@@ -68,6 +74,7 @@ import {
   getSkuId,
   setALMAttribute,
   isAccAltCompletionEnabled,
+  isStructuredLocationEnabled,
 } from '../utils/global';
 import { JsonApiParse } from '../utils/jsonAPIAdapter';
 import { canShowPriceFilter } from '../utils/price';
@@ -552,6 +559,9 @@ class ALMCustomHooks implements ICustomHooks {
   };
 
   async getTraining(id: string, params: QueryParams): Promise<PrimeLearningObject> {
+    if (id.startsWith(`${PERSONALIZED_PATH}:`)) {
+      return this.getPersonalizedPath(id);
+    }
     let response;
     try {
       params['enforcedFields[learningObject]'] = includeParams;
@@ -577,6 +587,55 @@ class ALMCustomHooks implements ICustomHooks {
     return JsonApiParse(response).learningObject;
   }
 
+  private async getPersonalizedPath(id: string): Promise<PrimeLearningObject> {
+    let response;
+    try {
+      response = await RestAdapter.get({
+        url: `${this.primeApiURL}personalizedPaths/${id}`,
+        params: { include: PERSONALIZED_PATH_INCLUDE },
+      });
+    } catch (e: any) {
+      if (e.status === 400) {
+        this.sendLoNotFoundEvent();
+      }
+      throw e;
+    }
+    const parsed = JsonApiParse(response) as any;
+    const pp = parsed?.personalizedPath;
+    if (!pp) return undefined as unknown as PrimeLearningObject;
+    const locale = pp.localizedMetadata?.[0];
+    const subLOs: any[] = pp.subLOs || [];
+    const completedCount = subLOs.filter(lo => lo.enrollment?.state === COMPLETED).length;
+    const progressPercent =
+      subLOs.length > 0 ? Math.round((completedCount / subLOs.length) * 100) : 0;
+    if (pp.enrollment) {
+      pp.enrollment.progressPercent = progressPercent;
+    }
+    return {
+      id: pp.id,
+      loType: PERSONALIZED_PATH,
+      name: locale?.name || '',
+      description: locale?.overview || '',
+      localizedMetadata: pp.localizedMetadata || [],
+      sections: pp.sections || [],
+      subLOs,
+      instances: [],
+      enrollment: pp.enrollment,
+      skills: pp.skills || [],
+      tags: [],
+      rating: undefined,
+      imageUrl: '',
+      isExternal: pp.isExternal || false,
+      state: pp.state || 'Active',
+      loFormat: 'Self Paced',
+      dateCreated: pp.dateCreated,
+      createdByUserId: pp.createdByUserId,
+      enrollmentType: pp.enrollmentType,
+      unenrollmentAllowed: pp.unenrollmentAllowed,
+      isSubLoOrderEnforced: pp.isSubLoOrderEnforced,
+    } as unknown as PrimeLearningObject;
+  }
+
   async getTrainingInstanceSummary(trainingId: string, instanceId: string) {
     const response = await RestAdapter.get({
       url: `${this.primeApiURL}learningObjects/${trainingId}/instances/${instanceId}/summary`,
@@ -600,6 +659,22 @@ class ALMCustomHooks implements ICustomHooks {
     return response;
   }
 
+  async enrollToPersonalizedPath(id: string) {
+    const response = await RestAdapter.post({
+      url: `${this.primeApiURL}personalizedPaths/${id}/enrollment`,
+      method: 'POST',
+    });
+    return JsonApiParse(response);
+  }
+
+  async deletePersonalizedPath(id: string) {
+    const response = await RestAdapter.ajax({
+      url: `${this.primeApiURL}personalizedPaths/${id}`,
+      method: 'DELETE',
+    });
+    return response;
+  }
+
   async getFilters() {
     const config = getALMConfig();
     const queryParams = getQueryParamsFromUrl();
@@ -615,6 +690,7 @@ class ALMCustomHooks implements ICustomHooks {
 
     const catalogAttributes = getALMAttribute('catalogAttributes') || {};
     const showPrice = canShowPriceFilter(account);
+    const structuredLocationEnabled = isStructuredLocationEnabled(account);
     const promises = [
       fetchFilterData(
         isAttributeEnabled(catalogAttributes.skillName) && !isMyLearning,
@@ -629,7 +705,7 @@ class ALMCustomHooks implements ICustomHooks {
       isAttributeEnabled(catalogAttributes.catalogs) ? getOrUpdateCatalogFilters() : [],
 
       fetchFilterData(
-        isAttributeEnabled(catalogAttributes.cities),
+        isAttributeEnabled(catalogAttributes.cities) && !structuredLocationEnabled,
         `${dataEndpoint}?filter.cityName=true`
       ),
 
@@ -658,6 +734,13 @@ class ALMCustomHooks implements ICustomHooks {
         isAttributeEnabled(catalogAttributes.skillName) && isMyLearning,
         `${dataEndpoint}?filter.enrolled.skillName=true`
       ),
+
+      fetchFilterData(
+        isAttributeEnabled(catalogAttributes.cities) && structuredLocationEnabled,
+        `${dataEndpoint}/filters?type=structuredLocations&language=${encodeURIComponent(
+          config.locale || ENGLISH_LOCALE
+        )}`
+      ),
     ];
 
     const results = await Promise.allSettled(promises);
@@ -673,13 +756,15 @@ class ALMCustomHooks implements ICustomHooks {
       announcedGroupsPromise,
       pricePromise,
       userSkillsPromise,
+      structuredLocationPromise,
     ] = results.map(getSettledValue);
     const rolesData = getFilterNames(rolesPromise);
     const levelsData = getFilterNames(levelsPromise);
     const productsData = getFilterNames(productsPromise);
     const skillsData = getFilterNames(skillsPromise);
     const tagsData = getFilterNames(tagsPromise);
-    const citiesData = getFilterNames(citiesPromise);
+    const citiesData =
+      getStructuredLocationList(structuredLocationPromise) || getFilterNames(citiesPromise);
     const announcedGroupsData = getAnnouncedGroupsList(announcedGroupsPromise);
 
     let userSkills = getFilterNames(userSkillsPromise);
@@ -1012,6 +1097,58 @@ class ALMCustomHooks implements ICustomHooks {
     selectedItemsFromStore: { [key: string]: boolean }
   ): Promise<FilterListObject[]> {
     return await getSearchFilterList(query, type, selectedItemsFromStore);
+  }
+
+  async getExternalLearningSettings(): Promise<any> {
+    const response = await RestAdapter.get({
+      url: `${this.primeApiURL}externalLearningSettings`,
+    });
+    return JSON.parse(response as string);
+  }
+
+  async getExternalLearnings(params: QueryParams): Promise<JsonApiResponse> {
+    const response = await RestAdapter.get({
+      url: `${this.primeApiURL}externalLearnings`,
+      params,
+    });
+    return JsonApiParse(response) as JsonApiResponse;
+  }
+
+  async getExternalLearningsByUrl(url: string): Promise<JsonApiResponse> {
+    const response = await RestAdapter.get({ url });
+    return JsonApiParse(response) as JsonApiResponse;
+  }
+
+  async getExternalLearningById(id: string): Promise<JsonApiResponse> {
+    const response = await RestAdapter.get({
+      url: `${this.primeApiURL}externalLearnings/${id}`,
+    });
+    return JsonApiParse(response) as JsonApiResponse;
+  }
+
+  async submitExternalLearning(payload: object): Promise<void> {
+    await RestAdapter.ajax({
+      url: `${this.primeApiURL}externalLearnings`,
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  async updateExternalLearning(id: string, payload: object): Promise<void> {
+    await RestAdapter.ajax({
+      url: `${this.primeApiURL}externalLearnings/${id}`,
+      method: 'PUT',
+      body: JSON.stringify(payload),
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  async getUserById(userId: string): Promise<JsonApiResponse> {
+    const response = await RestAdapter.get({
+      url: `${this.primeApiURL}users/${userId}`,
+    });
+    return JsonApiParse(response) as JsonApiResponse;
   }
 }
 

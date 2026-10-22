@@ -42,6 +42,7 @@ jest.mock('../../../almLib/utils/global', () => ({
 jest.mock('../../../almLib/utils/lo-utils', () => ({
   getTrainingLink: jest.fn(() => '#'),
   fetchJobAidResource: jest.fn(),
+  getTrainingTypeLabel: jest.fn(() => 'Course'),
 }));
 
 jest.mock('../../../almLib/utils/catalog', () => ({
@@ -149,6 +150,7 @@ import { useAlert } from '../../../almLib/common/Alert/useAlert';
 import { getALMObject, getWidgetConfig, isAccAltCompletionEnabled } from '../../../almLib/utils/global';
 import { getActiveInstances, splitStringIntoArray } from '../../../almLib/utils/catalog';
 import { useRatingsTemplate, getConflictingSessions } from '../../../almLib/utils/hooks';
+import { WidgetTypeNew } from '../../../almLib/utils/widgets/common';
 import {
   canStart,
   hasSingleActiveInstance,
@@ -283,6 +285,57 @@ describe('PrimeTrainingCardV2', () => {
       const titleLink = document.querySelector('[data-automationid="Test Course-title"]');
       expect(titleLink?.textContent).toContain('Test Course');
     });
+
+    it('renders the title as an anchor with an href for non-jobAid trainings', () => {
+      wrap(<PrimeTrainingCardV2 {...defaultProps} />);
+      const title = document.querySelector('[data-automationid="Test Course-title"]');
+      expect(title?.tagName).toBe('A');
+      expect(title).toHaveAttribute('href', '#');
+    });
+
+    it('renders the title as a button (no href) for jobAid trainings so "open in new tab" is not offered', () => {
+      const jobAidTraining = { ...mockTraining, loType: 'jobAid' };
+      mockUseTrainingCard.mockReturnValue({ ...baseCardState, format: 'jobAid', type: 'jobAid' });
+
+      wrap(<PrimeTrainingCardV2 {...defaultProps} training={jobAidTraining} />);
+
+      const title = document.querySelector('[data-automationid="Test Course-title"]');
+      expect(title?.tagName).toBe('BUTTON');
+      expect(title).toHaveAttribute('type', 'button');
+      expect(title).not.toHaveAttribute('href');
+    });
+
+    it('sets tabIndex -1 on the jobAid title button when links are disabled via widget', () => {
+      const jobAidTraining = { ...mockTraining, loType: 'jobAid' };
+      mockUseTrainingCard.mockReturnValue({ ...baseCardState, format: 'jobAid', type: 'jobAid' });
+
+      wrap(
+        <PrimeTrainingCardV2
+          {...defaultProps}
+          training={jobAidTraining}
+          widget={{ attributes: { disableLinks: true } } as any}
+        />
+      );
+
+      const title = document.querySelector('[data-automationid="Test Course-title"]');
+      expect(title?.tagName).toBe('BUTTON');
+      expect(title).toHaveAttribute('tabindex', '-1');
+    });
+
+    it('uses a javascript:void(0) href and tabIndex -1 on the anchor title when links are disabled', () => {
+      wrap(
+        <PrimeTrainingCardV2
+          {...defaultProps}
+          disableLinks={true}
+          widget={{ attributes: { disableLinks: true } } as any}
+        />
+      );
+
+      const title = document.querySelector('[data-automationid="Test Course-title"]');
+      expect(title?.tagName).toBe('A');
+      expect(title).toHaveAttribute('href', 'javascript:void(0)');
+      expect(title).toHaveAttribute('tabindex', '-1');
+    });
   });
 
   describe('description', () => {
@@ -294,6 +347,50 @@ describe('PrimeTrainingCardV2', () => {
     it('hidden when showDescriptionInfo is false', () => {
       wrap(<PrimeTrainingCardV2 {...defaultProps} account={accountWith({ showDescriptionInfo: false })} />);
       expect(document.querySelector('[data-automationid="Test Course-description"]')).toBeNull();
+    });
+
+    it('should show "View" button text for non-AI Coach jobAid', () => {
+      const jobAidTraining = {
+        ...mockTraining,
+        loType: 'jobAid',
+      };
+
+      mockUseTrainingCard.mockReturnValue({
+        format: 'jobAid',
+        type: 'jobAid',
+        skillNames: '',
+        name: 'Test Course',
+        description: 'Test Description',
+        cardBgStyle: {},
+        enrollment: null,
+        overview: 'Overview',
+      });
+
+      wrap(<PrimeTrainingCardV2 {...defaultProps} training={jobAidTraining} />);
+
+      expect(screen.getByRole('button', { name: 'alm.jobAid.view.button' })).toBeInTheDocument();
+    });
+
+    it('should show "Start" button text for AI Coach (roleplay/virtual coach) jobAid', () => {
+      const jobAidTraining = {
+        ...mockTraining,
+        loType: 'jobAid',
+      };
+
+      mockUseTrainingCard.mockReturnValue({
+        format: 'Ai Coach',
+        type: 'jobAid',
+        skillNames: '',
+        name: 'Test Course',
+        description: 'Test Description',
+        cardBgStyle: {},
+        enrollment: null,
+        overview: 'Overview',
+      });
+
+      wrap(<PrimeTrainingCardV2 {...defaultProps} training={jobAidTraining} />);
+
+      expect(screen.getByRole('button', { name: 'text.start' })).toBeInTheDocument();
     });
   });
 
@@ -487,15 +584,27 @@ describe('PrimeTrainingCardV2', () => {
   });
 
   describe('action button', () => {
-    it('shows locard.start text when unenrolled and canStart is true', () => {
+    it('shows text.start text when unenrolled and canStart is true', () => {
       wrap(<PrimeTrainingCardV2 {...defaultProps} showActionButton={true} />);
       const actionBtn = document.querySelector('[data-automationid="Test Course-view"]');
-      expect(actionBtn?.textContent).toBe('locard.start');
+      expect(actionBtn?.textContent).toBe('text.start');
     });
 
     it('no action button rendered when showActionButton is false', () => {
       wrap(<PrimeTrainingCardV2 {...defaultProps} showActionButton={false} />);
       expect(document.querySelector('[data-automationid="Test Course-view"]')).toBeNull();
+    });
+
+    it('shows lo.strip.view text when widget type is PERSONALIZED_PATH_STRIP', () => {
+      wrap(
+        <PrimeTrainingCardV2
+          {...defaultProps}
+          showActionButton={true}
+          widget={{ type: WidgetTypeNew.PERSONALIZED_PATH_STRIP } as any}
+        />
+      );
+      const actionBtn = document.querySelector('[data-automationid="Test Course-view"]');
+      expect(actionBtn?.textContent).toBe('lo.strip.view');
     });
   });
 

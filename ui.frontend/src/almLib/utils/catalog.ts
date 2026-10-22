@@ -42,8 +42,10 @@ import {
   getQueryParamsFromUrl,
   isAccAltCompletionEnabled,
   isBookmarksEnabled,
+  isStructuredLocationEnabled,
   setItemToStorage,
 } from './global';
+import { formatLocationCompound, StructuredLocationRow } from './locationCompound';
 import { checkIfCompletionDeadlineNotPassed } from './instance';
 import { JsonApiParse } from './jsonAPIAdapter';
 import { RestAdapter } from './restAdapter';
@@ -296,7 +298,12 @@ export async function getParamsForCatalogApi(
       params['filter.priceRange'] = splitStringIntoArray(priceRange);
     }
     if (cities && isAttributeEnabled(catalogAttributes?.cities)) {
-      params['filter.cityName'] = splitStringIntoArray(cities);
+      // filter.lo.locationId is the public-API key; filter.lo.countryStateCity is BL-internal and rejected.
+      if (isStructuredLocationEnabled(user.account)) {
+        params['filter.lo.locationId'] = splitStringIntoArray(cities);
+      } else {
+        params['filter.cityName'] = splitStringIntoArray(cities);
+      }
     }
 
     if (prlCriteria?.enabled) {
@@ -487,8 +494,13 @@ export function getIndividualFiltersForCommerce(
       optionsMap[element.label] = element.value;
     }
   });
-  //  add if condition for skill and tags
-  const loTypes = splitStringIntoArray(filterState[type as keyof CatalogFilterState] as string);
+  // skillName/tagName are boolean maps, not comma-strings — flatten to a string before splitting.
+  const rawValue = filterState[type as keyof CatalogFilterState];
+  const selectedValues =
+    typeof rawValue === 'string'
+      ? rawValue
+      : getTruePropertiesAsString((rawValue as { [key: string]: boolean }) || {}) || '';
+  const loTypes = splitStringIntoArray(selectedValues);
   let value: any[] = [];
   loTypes.forEach(element => {
     if (optionsMap[element]) {
@@ -583,6 +595,30 @@ export const fetchRecommendationData = async (recommendationCriteria: string, ur
 
 export const getFilterNames = (promise: any) => {
   return promise ? JsonApiParse(promise)?.data?.names : null;
+};
+type StructuredLocationFilterPayload = {
+  data?: { attributes?: { filters?: Array<{ id?: string; value?: unknown }> } };
+};
+
+// Raw-parsed (not JsonApiParse): this endpoint's JSON:API type isn't "data", so the flattening proxy doesn't apply.
+export const getStructuredLocationList = (
+  raw: string | StructuredLocationFilterPayload | null | undefined
+): Array<{ id: string; name: string }> | null => {
+  if (!raw) return null;
+
+  let payload: StructuredLocationFilterPayload;
+  try {
+    payload = typeof raw === 'string' ? JSON.parse(raw) : raw;
+  } catch {
+    return null;
+  }
+
+  const row = payload?.data?.attributes?.filters?.find(r => r?.id === 'locationId');
+  if (!row || !Array.isArray(row.value)) return null;
+
+  return (row.value as StructuredLocationRow[])
+    .filter(item => typeof item?.id === 'string' && item.id.trim() !== '')
+    .map(item => ({ id: item.id as string, name: formatLocationCompound(item) }));
 };
 export const getCatalogList = (catalogs: any) => {
   if (!catalogs) {

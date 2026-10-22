@@ -159,7 +159,7 @@ const PrimeTrainingCard: React.FC<{
     type !== JOBAID ? (
       <div className={styles.completed}>
         {formatMessage({
-          id: 'alm.catalog.card.complete.label',
+          id: 'alm.catalog.card.completion.status',
           defaultMessage: 'Complete',
         })}
       </div>

@@ -24,6 +24,7 @@ public class AccountResponse {
   private List<AccountTerminology> accountTerminologies;
   private String recommendationAccountType;
   private PrlCriteria prlCriteria;
+  private FilterPanelSetting filterPanelSetting;
 
   public AccountResponse() {}
 
@@ -80,6 +81,14 @@ public class AccountResponse {
     this.prlCriteria = prlCriteria;
   }
 
+  public FilterPanelSetting getFilterPanelSetting() {
+    return filterPanelSetting;
+  }
+
+  public void setFilterPanelSetting(FilterPanelSetting filterPanelSetting) {
+    this.filterPanelSetting = filterPanelSetting;
+  }
+
   /**
    * Determines the effective account type based on prlCriteria and recommendationAccountType. If
    * prlCriteria.enabled is true, returns "PRL". Otherwise, returns the recommendationAccountType
@@ -92,19 +101,33 @@ public class AccountResponse {
     return recommendationAccountType;
   }
 
-  /** Returns true if PRL is enabled and the products feature is enabled. */
+  /**
+   * Returns true if the products PRL filter is enabled. Prefers prlCriteria (learner/user context);
+   * falls back to filterPanelSetting.recommendationProduct, which is the only PRL signal the
+   * admin/author token receives on the account API (used by the catalog dialog render condition).
+   */
   public boolean isPrlProductsEnabled() {
-    return prlCriteria != null
-        && Boolean.TRUE.equals(prlCriteria.getEnabled())
-        && prlCriteria.getProducts() != null
-        && Boolean.TRUE.equals(prlCriteria.getProducts().getEnabled());
+    if (prlCriteria != null) {
+      return Boolean.TRUE.equals(prlCriteria.getEnabled())
+          && prlCriteria.getProducts() != null
+          && Boolean.TRUE.equals(prlCriteria.getProducts().getEnabled());
+    }
+    return filterPanelSetting != null
+        && Boolean.TRUE.equals(filterPanelSetting.getRecommendationProduct());
   }
 
-  /** Returns true if PRL is enabled and the roles feature is enabled. */
+  /**
+   * Returns true if the roles PRL filter is enabled. Prefers prlCriteria (learner/user context);
+   * falls back to filterPanelSetting.recommendationRole, which is the only PRL signal the
+   * admin/author token receives on the account API (used by the catalog dialog render condition).
+   */
   public boolean isPrlRolesEnabled() {
-    return prlCriteria != null
-        && Boolean.TRUE.equals(prlCriteria.getEnabled())
-        && prlCriteria.getRoles() != null
-        && Boolean.TRUE.equals(prlCriteria.getRoles().getEnabled());
+    if (prlCriteria != null) {
+      return Boolean.TRUE.equals(prlCriteria.getEnabled())
+          && prlCriteria.getRoles() != null
+          && Boolean.TRUE.equals(prlCriteria.getRoles().getEnabled());
+    }
+    return filterPanelSetting != null
+        && Boolean.TRUE.equals(filterPanelSetting.getRecommendationRole());
   }
 }

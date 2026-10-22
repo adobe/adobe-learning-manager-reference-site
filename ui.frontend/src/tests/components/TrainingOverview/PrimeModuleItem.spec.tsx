@@ -15,6 +15,7 @@ import userEvent from '@testing-library/user-event';
 import { IntlProvider } from 'react-intl';
 import '@testing-library/jest-dom';
 import PrimeModuleItem from '@components/TrainingOverview/PrimeModuleItem/PrimeModuleItem';
+import { ELEARNING } from '@utils/constants';
 
 // Module-level mocks — all wrapped so resetMocks:true is neutralized via beforeEach restoration
 const mockUseAlert = jest.fn();
@@ -39,6 +40,7 @@ const mockDisplayPendingRequirements = jest.fn();
 const mockIsReattemptAllowed = jest.fn();
 const mockIsRevisitAllowed = jest.fn();
 const mockAlmAlert = jest.fn();
+const mockIsStructuredLocationEnabled = jest.fn();
 
 jest.mock('@common/Alert/useAlert', () => ({
   useAlert: () => mockUseAlert(),
@@ -64,6 +66,7 @@ jest.mock('@utils/global', () => ({
   checkIfLinkedInLearningCourse: (...args: any[]) => mockCheckIfLinkedIn(...args),
   launchContentUrlInNewWindow: (...args: any[]) => mockLaunchContentUrlInNewWindow(...args),
   navigateToLoggedInLO: (...args: any[]) => mockNavigateToLoggedInLO(...args),
+  isStructuredLocationEnabled: (...args: any[]) => mockIsStructuredLocationEnabled(...args),
 }));
 
 jest.mock('@utils/overview', () => ({
@@ -100,6 +103,12 @@ jest.mock('@utils/lo-utils', () => ({
   isReattemptAllowed: (...args: any[]) => mockIsReattemptAllowed(...args),
   isRevisitAllowed: (...args: any[]) => mockIsRevisitAllowed(...args),
   shouldResetAttempt: (...args: any[]) => mockShouldResetAttempt(...args),
+  // Pure boolean gate — inlined rather than jest.requireActual'd, since lo-utils.ts
+  // transitively imports ESCustomHooks (which calls getALMConfig at module-eval time),
+  // and requireActual would eagerly evaluate that before this file's own
+  // mockGetALMConfig const has initialized.
+  shouldShowCreditDuration: (account: any, loResource: any) =>
+    !!account?.enableCreditDuration && loResource.creditDuration != null,
 }));
 
 jest.mock('@utils/dateTime', () => ({
@@ -177,6 +186,7 @@ jest.mock('@utils/inline_svg', () => ({
   SEATS_SVG: makeInlineSvgMock('seats-svg'),
   LINK_SVG: makeInlineSvgMock('link-svg'),
   MOVIE_CAMERA_SVG: makeInlineSvgMock('camera-svg'),
+  CREDIT_DURATION_SVG: makeInlineSvgMock('credit-duration-svg'),
   TRANSCRIPT_SVG: makeInlineSvgMock('transcript-svg'),
   NOTICE_ICON: makeInlineSvgMock('notice-icon'),
   VIDEO_SVG: makeInlineSvgMock('video-svg'),
@@ -304,6 +314,7 @@ describe('PrimeModuleItem', () => {
     mockCheckIfLinkedIn.mockReturnValue(false);
     mockIsReattemptAllowed.mockReturnValue(true);
     mockIsRevisitAllowed.mockReturnValue(true);
+    mockIsStructuredLocationEnabled.mockReturnValue(false);
 
     Object.defineProperty(window, 'innerWidth', {
       writable: true,
@@ -393,6 +404,7 @@ describe('PrimeModuleItem', () => {
 
       expect(screen.queryByTestId('checkmark-icon')).not.toBeInTheDocument();
     });
+
   });
 
   describe('Preview indicator', () => {
@@ -491,6 +503,7 @@ describe('PrimeModuleItem', () => {
         trainingInstanceId: 'instance-1',
         isMultienrolled: false,
         isResetRequired: false,
+        isAutoPlay: false,
       });
     });
 
@@ -532,6 +545,7 @@ describe('PrimeModuleItem', () => {
         instanceId: 'instance-1',
         isMultienrolled: false,
         isAutoPlay: false,
+        skipPlayerLaunch: false,
       });
     });
 
@@ -808,7 +822,12 @@ describe('PrimeModuleItem', () => {
       expect(screen.getByText('Reviewer evaluation is pending')).toBeInTheDocument();
     });
 
-    it('checklistPassed_showsCapitalizedStatus', () => {
+    it('checklistPassed_showsPassedStatus', () => {
+      mockGetTranslation.mockImplementation((key: string) => {
+        if (key === 'alm.overview.checklistReview.passed') return 'Passed';
+        return key;
+      });
+
       renderWithIntl(
         <PrimeModuleItem
           {...checklistProps}
@@ -816,8 +835,23 @@ describe('PrimeModuleItem', () => {
         />
       );
 
-      // capitalizeFirstChar('passed') = 'Passed'
       expect(screen.getByText('Passed')).toBeInTheDocument();
+    });
+
+    it('checklistFailed_showsFailedStatus', () => {
+      mockGetTranslation.mockImplementation((key: string) => {
+        if (key === 'alm.overview.checklistReview.failed') return 'Failed';
+        return key;
+      });
+
+      renderWithIntl(
+        <PrimeModuleItem
+          {...checklistProps}
+          loResource={{ ...mockLoResource, checklistEvaluationStatus: 'FAILED' }}
+        />
+      );
+
+      expect(screen.getByText('Failed')).toBeInTheDocument();
     });
 
     it('noChecklistStatus_checklistTextNotShown', () => {
@@ -1174,6 +1208,7 @@ describe('PrimeModuleItem', () => {
         instanceId: 'instance-1',
         isMultienrolled: false,
         isAutoPlay: true,
+        skipPlayerLaunch: false,
       });
     });
 
@@ -1199,6 +1234,7 @@ describe('PrimeModuleItem', () => {
         trainingInstanceId: 'instance-1',
         isMultienrolled: false,
         isResetRequired: false,
+        isAutoPlay: true,
       });
       expect(overview.notifyParentToCleanModuleParams).toHaveBeenCalled();
     });
@@ -1320,6 +1356,7 @@ describe('PrimeModuleItem', () => {
         instanceId: 'instance-1',
         isMultienrolled: false,
         isAutoPlay: true,
+        skipPlayerLaunch: false,
       });
     });
 
@@ -1343,6 +1380,7 @@ describe('PrimeModuleItem', () => {
         instanceId: 'instance-1',
         isMultienrolled: false,
         isAutoPlay: true,
+        skipPlayerLaunch: false,
       });
     });
 
@@ -1369,7 +1407,9 @@ describe('PrimeModuleItem', () => {
 
       await act(async () => {});
       overview.notifyParentToCleanModuleParams.mockClear();
-      act(() => { unmount(); });
+      act(() => {
+        unmount();
+      });
 
       expect(overview.notifyParentToCleanModuleParams).toHaveBeenCalledTimes(1);
     });
@@ -1401,9 +1441,374 @@ describe('PrimeModuleItem', () => {
         <PrimeModuleItem {...defaultProps} loResource={deepLinkLoResource} />
       );
 
-      act(() => { unmount(); });
+      act(() => {
+        unmount();
+      });
 
       expect(overview.notifyParentToCleanModuleParams).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Weightage badge', () => {
+    beforeEach(() => {
+      mockUseUserContext.mockReturnValue({
+        user: { ...mockUser, account: { ...mockUser.account, gradebookVisibleLearner: true } },
+      });
+    });
+
+    it('shows the weight percent label when the gradebook is enabled and the module has positive weight', () => {
+      renderWithIntl(
+        <PrimeModuleItem
+          {...defaultProps}
+          training={{ ...mockTraining, gradebookEnabled: true, gradebookVisibleLearner: true }}
+          loResource={{
+            ...mockLoResource,
+            weight: 40,
+            resources: [{ contentType: 'SCORM2004' }],
+          }}
+        />
+      );
+      const badge = document.querySelector('[data-automationid="Test Module-weightage"]');
+      expect(badge).not.toBeNull();
+      expect(badge?.textContent).toContain('alm.overview.weightage.percent');
+    });
+
+    it('shows the weight percent label when the gradebook is enabled and the module has positive weight for Video', () => {
+      mockUseResource.mockReturnValue({ ...mockResource, contentType: 'VIDEO' });
+      renderWithIntl(
+        <PrimeModuleItem
+          {...defaultProps}
+          training={{ ...mockTraining, gradebookEnabled: true, gradebookVisibleLearner: true }}
+          loResource={{
+            ...mockLoResource,
+            resourceType: ELEARNING,
+            weight: 40,
+            resources: [{ contentType: 'SCORM2004' }],
+          }}
+        />
+      );
+      const badge = document.querySelector('[data-automationid="Test Module-weightage"]');
+      expect(badge).not.toBeNull();
+      expect(badge?.textContent).toContain('alm.overview.weightage.percent');
+    });
+
+    it('shows the no-weightage label when the gradebook is enabled and module weight is unset', () => {
+      renderWithIntl(
+        <PrimeModuleItem
+          {...defaultProps}
+          training={{ ...mockTraining, gradebookEnabled: true, gradebookVisibleLearner: true }}
+          loResource={{ ...mockLoResource, weight: undefined }}
+        />
+      );
+      const badge = document.querySelector('[data-automationid="Test Module-weightage"]');
+      expect(badge).not.toBeNull();
+      expect(badge?.textContent).toBe('alm.overview.weightage.none');
+    });
+
+    it('shows the zero percent label when the gradebook is enabled and module weight is zero', () => {
+      renderWithIntl(
+        <PrimeModuleItem
+          {...defaultProps}
+          training={{ ...mockTraining, gradebookEnabled: true, gradebookVisibleLearner: true }}
+          loResource={{
+            ...mockLoResource,
+            resourceType: ELEARNING,
+            weight: 0,
+            resources: [{ contentType: 'SCORM2004' }],
+          }}
+        />
+      );
+      const badge = document.querySelector('[data-automationid="Test Module-weightage"]');
+      expect(badge).not.toBeNull();
+      expect(badge?.textContent).toBe('alm.overview.weightage.none');
+    });
+
+    it.each(['Pre Work', 'Test Out'])(
+      'does not render the weightage badge for %s modules',
+      loResourceType => {
+        renderWithIntl(
+          <PrimeModuleItem
+            {...defaultProps}
+            training={{ ...mockTraining, gradebookEnabled: true, gradebookVisibleLearner: true }}
+            loResource={{ ...mockLoResource, loResourceType, weight: 40 }}
+          />
+        );
+        expect(document.querySelector('[data-automationid="Test Module-weightage"]')).toBeNull();
+      }
+    );
+
+    it('does not render the weightage badge when the gradebook is disabled', () => {
+      renderWithIntl(
+        <PrimeModuleItem
+          {...defaultProps}
+          training={{ ...mockTraining, gradebookEnabled: false, gradebookVisibleLearner: true }}
+          loResource={{
+            ...mockLoResource,
+            weight: 40,
+            resources: [{ contentType: 'SCORM2004' }],
+          }}
+        />
+      );
+      expect(document.querySelector('[data-automationid="Test Module-weightage"]')).toBeNull();
+    });
+  });
+
+  describe('Module scoring label', () => {
+    it.each([
+      ['HIGHEST', 'alm.overview.moduleScoring.highest'],
+      ['LATEST', 'alm.overview.moduleScoring.latest'],
+    ])(
+      'shows %s scoring label when multipleAttemptEnabled and moduleScoring is set',
+      (moduleScoring, expectedKey) => {
+        renderWithIntl(
+          <PrimeModuleItem
+            {...defaultProps}
+            loResource={{
+              ...mockLoResource,
+              multipleAttemptEnabled: true,
+              multipleAttempt: {
+                moduleScoring,
+                maxAttemptCount: 3,
+                infiniteAttempts: false,
+              },
+            }}
+          />
+        );
+        expect(screen.getByText(expectedKey)).toBeInTheDocument();
+      }
+    );
+
+    it('hides scoring label when multipleAttemptEnabled is false even if moduleScoring is set', () => {
+      renderWithIntl(
+        <PrimeModuleItem
+          {...defaultProps}
+          loResource={{
+            ...mockLoResource,
+            multipleAttemptEnabled: false,
+            multipleAttempt: {
+              moduleScoring: 'LATEST',
+              maxAttemptCount: 3,
+              infiniteAttempts: false,
+            },
+          }}
+        />
+      );
+      expect(screen.queryByText('alm.overview.moduleScoring.highest')).not.toBeInTheDocument();
+      expect(screen.queryByText('alm.overview.moduleScoring.latest')).not.toBeInTheDocument();
+    });
+
+    it('does not load highest or latest scoring labels when module scoring is not defined', () => {
+      renderWithIntl(
+        <PrimeModuleItem
+          {...defaultProps}
+          loResource={{
+            ...mockLoResource,
+            multipleAttemptEnabled: true,
+            multipleAttempt: { maxAttemptCount: 3, infiniteAttempts: false },
+          }}
+        />
+      );
+      expect(screen.queryByText('alm.overview.moduleScoring.highest')).not.toBeInTheDocument();
+      expect(screen.queryByText('alm.overview.moduleScoring.latest')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Session location geography (line 3)', () => {
+    // A classroom module with session details renders the location block.
+    const classroomResource = {
+      ...mockResource,
+      contentType: 'Classroom',
+      dateStart: '2024-01-01T10:00:00Z',
+      completionDeadline: '2024-01-01T11:00:00Z',
+      room: {
+        roomName: 'Berlin Workshop Hall',
+        roomInfo: 'Main workshop space',
+        city: 'Munich',
+        countryName: 'Germany',
+        stateName: 'Bavaria',
+        url: 'https://rooms.example.com/berlin',
+      },
+    };
+    const classroomLoResource = { ...mockLoResource, resourceType: 'Classroom' };
+
+    const renderClassroom = () => {
+      mockUseResource.mockReturnValue(classroomResource);
+      renderWithIntl(<PrimeModuleItem {...defaultProps} loResource={classroomLoResource} />);
+    };
+
+    it('renders the country > state > city breadcrumb when structured location is enabled', () => {
+      mockIsStructuredLocationEnabled.mockReturnValue(true);
+      renderClassroom();
+      expect(screen.getByText('Germany > Bavaria > Munich')).toBeInTheDocument();
+    });
+
+    it('renders only the city when structured location is disabled', () => {
+      mockIsStructuredLocationEnabled.mockReturnValue(false);
+      renderClassroom();
+      expect(screen.getByText('Munich')).toBeInTheDocument();
+      expect(screen.queryByText(/Germany >/)).not.toBeInTheDocument();
+    });
+
+    it('hides the geography line when there is no location data', () => {
+      mockIsStructuredLocationEnabled.mockReturnValue(true);
+      mockUseResource.mockReturnValue({
+        ...classroomResource,
+        room: { roomName: 'Berlin Workshop Hall', roomInfo: '', city: '', url: '' },
+      });
+      renderWithIntl(<PrimeModuleItem {...defaultProps} loResource={classroomLoResource} />);
+      // Room block still renders (room name shown) but no geography row.
+      expect(screen.getByText('Berlin Workshop Hall')).toBeInTheDocument();
+      expect(screen.queryByText(/Munich|Germany/)).not.toBeInTheDocument();
+    });
+
+    it('renders the room block without crashing when structured location is off and no city', () => {
+      // Legacy account, room has no city → geography row hidden, no error.
+      mockIsStructuredLocationEnabled.mockReturnValue(false);
+      mockUseResource.mockReturnValue({
+        ...classroomResource,
+        room: { roomName: 'Berlin Workshop Hall', roomInfo: 'Main space', city: '', url: '' },
+      });
+      renderWithIntl(<PrimeModuleItem {...defaultProps} loResource={classroomLoResource} />);
+      expect(screen.getByText('Berlin Workshop Hall')).toBeInTheDocument();
+      expect(screen.queryByText(/Germany >/)).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Credit duration', () => {
+    // Credit duration is gated by the account-level enableCreditDuration flag.
+    // For a classroom/VC module with session details it renders inside the sessions
+    // metadata template (with the credit-duration icon); for every other module type
+    // it renders as a compact line (no icon) beside the module duration.
+    const withCreditDurationFlag = (enabled: boolean) =>
+      mockUseUserContext.mockReturnValue({
+        user: { ...mockUser, account: { ...mockUser.account, enableCreditDuration: enabled } },
+      });
+
+    const classroomResource = {
+      ...mockResource,
+      contentType: 'Classroom',
+      dateStart: '2024-01-01T10:00:00Z',
+      completionDeadline: '2024-01-01T11:00:00Z',
+    };
+    const classroomLoResource = { ...mockLoResource, resourceType: 'Classroom' };
+
+    describe('when enableCreditDuration is on', () => {
+      beforeEach(() => withCreditDurationFlag(true));
+
+      it('renders the session credit duration block when creditDuration is greater than zero', () => {
+        mockUseResource.mockReturnValue(classroomResource);
+
+        renderWithIntl(
+          <PrimeModuleItem
+            {...defaultProps}
+            loResource={{ ...classroomLoResource, creditDuration: 60 }}
+          />
+        );
+
+        expect(screen.getByTestId('credit-duration-svg')).toBeInTheDocument();
+        expect(screen.getByText('alm.overview.session.creditDuration.header')).toBeInTheDocument();
+        expect(screen.getByText('60')).toBeInTheDocument();
+      });
+
+      it('renders the credit duration when creditDuration is zero (zero is a valid value)', () => {
+        mockUseResource.mockReturnValue(classroomResource);
+
+        renderWithIntl(
+          <PrimeModuleItem
+            {...defaultProps}
+            loResource={{ ...classroomLoResource, creditDuration: 0 }}
+          />
+        );
+
+        expect(screen.getByTestId('credit-duration-svg')).toBeInTheDocument();
+        expect(screen.getByText('0')).toBeInTheDocument();
+      });
+
+      it('renders the compact credit duration for a self-paced (elearning) module', () => {
+        // Elearning has no sessions metadata template, so credit duration appears as
+        // the compact line beside the duration — without the session icon.
+        renderWithIntl(
+          <PrimeModuleItem
+            {...defaultProps}
+            loResource={{ ...mockLoResource, resourceType: ELEARNING, creditDuration: 45 }}
+          />
+        );
+
+        const compact = document.querySelector('[data-automationid="Test Module-creditDuration"]');
+        expect(compact).not.toBeNull();
+        expect(compact!.textContent).toContain('45');
+        expect(screen.queryByTestId('credit-duration-svg')).not.toBeInTheDocument();
+      });
+
+      it('does not render the credit duration when creditDuration is not set', () => {
+        mockUseResource.mockReturnValue(classroomResource);
+
+        renderWithIntl(
+          <PrimeModuleItem
+            {...defaultProps}
+            loResource={{ ...classroomLoResource, creditDuration: undefined }}
+          />
+        );
+
+        expect(screen.queryByTestId('credit-duration-svg')).not.toBeInTheDocument();
+        expect(
+          document.querySelector('[data-automationid="Test Module-creditDuration"]')
+        ).toBeNull();
+      });
+
+      it('renders the compact credit duration for a classroom/VC module without session details', () => {
+        // isClassroomOrVC && !hasSessionDetails: getSessionsTemplate bails out early and
+        // renders '', so the compact block (guarded on the inverse condition) must be
+        // the one to fill in here — the trickiest edge of the two mutually exclusive
+        // render paths.
+        mockUseResource.mockReturnValue({
+          ...classroomResource,
+          dateStart: null,
+          completionDeadline: null,
+        });
+
+        renderWithIntl(
+          <PrimeModuleItem
+            {...defaultProps}
+            loResource={{ ...classroomLoResource, creditDuration: 45 }}
+          />
+        );
+
+        const compact = document.querySelector('[data-automationid="Test Module-creditDuration"]');
+        expect(compact).not.toBeNull();
+        expect(compact!.textContent).toContain('45');
+        expect(screen.queryByTestId('credit-duration-svg')).not.toBeInTheDocument();
+      });
+    });
+
+    describe('when enableCreditDuration is off', () => {
+      beforeEach(() => withCreditDurationFlag(false));
+
+      it('does not render the session credit duration even when creditDuration is set', () => {
+        mockUseResource.mockReturnValue(classroomResource);
+
+        renderWithIntl(
+          <PrimeModuleItem
+            {...defaultProps}
+            loResource={{ ...classroomLoResource, creditDuration: 60 }}
+          />
+        );
+
+        expect(screen.queryByTestId('credit-duration-svg')).not.toBeInTheDocument();
+      });
+
+      it('does not render the compact credit duration for a self-paced module even when creditDuration is set', () => {
+        renderWithIntl(
+          <PrimeModuleItem
+            {...defaultProps}
+            loResource={{ ...mockLoResource, resourceType: ELEARNING, creditDuration: 45 }}
+          />
+        );
+
+        expect(
+          document.querySelector('[data-automationid="Test Module-creditDuration"]')
+        ).toBeNull();
+      });
     });
   });
 });

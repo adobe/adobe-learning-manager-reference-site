@@ -384,6 +384,18 @@ governing permissions and limitations under the License.
 .title[tabindex]:not([tabindex='0']) {
   cursor: default;
 }
+/* Job aids render the title as a <button> (they have no dedicated page, so
+   right-click "Open in new tab" would hit a non-existent route). Reset the
+   native button chrome so it matches the <a> title used for other LO types. */
+.titleButton {
+  background: transparent;
+  border: none;
+  padding: 0;
+  text-align: left;
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+}
 .saveUnsaveContainer {
   top: 4px;
   align-self: flex-start;

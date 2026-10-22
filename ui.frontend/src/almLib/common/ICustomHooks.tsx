@@ -61,6 +61,8 @@ export default interface ICustomHooks {
     headers: Record<string, string>
   ): Promise<JsonApiResponse | undefined>;
   unenrollFromTraining(enrollmentId: string): Promise<unknown | null>;
+  enrollToPersonalizedPath(id: string): Promise<JsonApiResponse | undefined>;
+  deletePersonalizedPath(id: string): Promise<unknown>;
   addProductToCart(sku: string): Promise<{ items: any; totalQuantity: Number; error: any }>;
   addProductToCartNative(
     trainingId: string
@@ -103,4 +105,11 @@ export default interface ICustomHooks {
     type: string,
     selectedItemsFromStore: { [key: string]: boolean }
   ): Promise<FilterListObject[]>;
+  getExternalLearningSettings(): Promise<any>;
+  getExternalLearnings(params: QueryParams): Promise<JsonApiResponse>;
+  getExternalLearningsByUrl(url: string): Promise<JsonApiResponse>;
+  getExternalLearningById(id: string): Promise<JsonApiResponse>;
+  submitExternalLearning(payload: object): Promise<void>;
+  updateExternalLearning(id: string, payload: object): Promise<void>;
+  getUserById(userId: string): Promise<JsonApiResponse>;
 }

@@ -36,6 +36,7 @@ import {
   ENGLISH_LOCALE,
   GET_REQUEST,
   LEARNING_PROGRAMS,
+  PERSONALIZED_PATH,
   PREVIOUS_BREADCRUMB_PATH,
   RECOMMENDATIONS,
   RETIRED,
@@ -227,6 +228,18 @@ export const useTrainingPage = (
         const response = await APIServiceInstance.getTraining(trainingId, queryParam);
 
         if (response) {
+          if (response.loType === PERSONALIZED_PATH) {
+            setCurrentState({
+              trainingInstance: { learningObject: response } as PrimeLearningObjectInstance,
+              isPreviewEnabled: false,
+              isFlexLPValidationEnabled: false,
+              isLoading: false,
+              errorCode: '',
+              courseInstanceMap: {},
+            });
+            return;
+          }
+          const account = await getALMAccount();
           if (response.enrollmentType === ADMIN_ENROLL && !response.enrollment) {
             const errorMessage = loType && getErrorMessage(loType);
             errorMessage && navigateToCatalogPageHandler(errorMessage);
@@ -257,7 +270,11 @@ export const useTrainingPage = (
           courseInstanceMap: {},
         });
         const errorMessage = loType && getErrorMessage(loType);
-        errorMessage && navigateToCatalogPageHandler(errorMessage);
+        if (errorMessage) {
+          loType === PERSONALIZED_PATH
+            ? navigateToHomePageHandler(errorMessage)
+            : navigateToCatalogPageHandler(errorMessage);
+        }
       }
     };
     if (!shouldSkipLOCalls) {
@@ -307,6 +324,11 @@ export const useTrainingPage = (
   const navigateToCatalogPageHandler = (errorMessage: string) => {
     almAlert(true, errorMessage, AlertType.error);
     getALMObject().navigateToCatalogPage({ timeOut: 300 });
+  };
+
+  const navigateToHomePageHandler = (errorMessage: string) => {
+    almAlert(true, errorMessage, AlertType.error);
+    setTimeout(() => getALMObject().navigateToHomePage(), 3000);
   };
 
   const enrollmentHandler = useCallback(
@@ -384,6 +406,21 @@ export const useTrainingPage = (
     },
     [trainingId, trainingInstance.id]
   );
+
+  const deletePersonalizedPathHandler = useCallback(async (id: string) => {
+    await APIServiceInstance.deletePersonalizedPath(id);
+  }, []);
+
+  const personalizedPathEnrollmentHandler = useCallback(async (id: string) => {
+    try {
+      const response = await APIServiceInstance.enrollToPersonalizedPath(id);
+      if (response) {
+        setRefreshTraining(prevState => !prevState);
+      }
+    } catch (error) {
+      almAlert(true, GetTranslation('alm.enrollment.error'), AlertType.error);
+    }
+  }, []);
 
   const unEnrollmentHandler = useCallback(
     async ({ enrollmentId, isFlexLp = false, isSupplementaryLO = false } = {}) => {
@@ -565,7 +602,12 @@ export const useTrainingPage = (
       if (trainingInstance.enrollment.state === WAITING) {
         getWaitlistPosition({ enrollmentId: trainingInstance.enrollment.id });
       }
-    } else if (training && training.loType !== COURSE && training.enrollment) {
+    } else if (
+      training &&
+      training.loType !== COURSE &&
+      training.loType !== PERSONALIZED_PATH &&
+      training.enrollment
+    ) {
       // For LP and Certification, we don't get enrollment inside instance, check from public api
       // Checking primary enrollment for LP and Certification
       getPlayerLoState({
@@ -586,6 +628,7 @@ export const useTrainingPage = (
       note_id,
       note_position,
       isResetRequired,
+      isAutoPlay,
     } = {}) => {
       const refreshTrainingandNotes = () => {
         setRefreshTraining(prevState => !prevState);
@@ -604,6 +647,7 @@ export const useTrainingPage = (
         note_position: note_position,
         isResetRequired: isResetRequired,
         lo: training,
+        isAutoPlay: isAutoPlay,
       });
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
     [trainingId, training]
@@ -987,7 +1031,7 @@ export const useTrainingPage = (
   }, [alternateLo, contentLocale]);
 
   useEffect(() => {
-    if (training?.id) {
+    if (training?.id && training?.loType !== PERSONALIZED_PATH) {
       getRelatedLOs();
     }
   }, [training?.id]);
@@ -1222,6 +1266,8 @@ export const useTrainingPage = (
     launchPlayerHandler,
     updateEnrollmentHandler,
     unEnrollmentHandler,
+    deletePersonalizedPathHandler,
+    personalizedPathEnrollmentHandler,
     jobAidClickHandler,
     addToCartHandler,
     addToCartNativeHandler,

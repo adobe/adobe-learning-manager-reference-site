@@ -12,6 +12,9 @@ governing permissions and limitations under the License.
 
 package com.adobe.learning.core.models;
 
+import org.osgi.annotation.versioning.ProviderType;
+
+@ProviderType
 public interface Catalog {
 
   String getShowFilters();
@@ -37,4 +40,8 @@ public interface Catalog {
   String getTagsFilter();
 
   String getCitiesFilter();
+
+  String getProductsFilter();
+
+  String getRolesFilter();
 }

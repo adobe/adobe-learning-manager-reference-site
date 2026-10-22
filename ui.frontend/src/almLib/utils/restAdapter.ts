@@ -99,7 +99,9 @@ export class RestAdapter {
     }
     return new Promise(function (resolve, reject) {
       const nonLoggedInUser =
-        getALMConfig().learnerMobileApp || getALMConfig().usageType === 'aem-es';
+        getALMConfig().learnerMobileApp ||
+        getALMConfig().usageType === 'aem-es' ||
+        getALMConfig().usageType === 'aem-commerce';
       if (getALMObject().isPrimeUserLoggedIn()) {
         if (getALMConfig().csrfToken) {
           const location = new URL(options.url);

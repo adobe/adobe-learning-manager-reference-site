@@ -95,6 +95,12 @@ export function LaunchPlayer(props: any) {
       playerAuth.value = almConfig.csrfToken || almObject.getAccessToken();
       playerAuth.type = almConfig.csrfToken ? 'authType:csrfToken' : 'authType:accessToken';
       playerIframe?.contentWindow?.postMessage(playerAuth, '*');
+    } else if (
+      event.data?.type === 'MODULE_LOADED' &&
+      event.data?.contentType === 'VIDEO' &&
+      props.isAutoPlay
+    ) {
+      playerIframe?.contentWindow?.postMessage({ type: 'play' }, '*');
     }
   };
 
@@ -109,7 +115,7 @@ export function LaunchPlayer(props: any) {
   overlay.style.display = 'grid';
   overlay.style.position = 'fixed';
   overlay.style.width = '100%';
-  overlay.style.height = '100%';
+  overlay.style.height = CSS.supports('height', '100dvh') ? '100dvh' : '100%';
   overlay.style.top = '0';
   overlay.style.left = '0';
   overlay.style.right = '0';
@@ -127,7 +133,6 @@ export function LaunchPlayer(props: any) {
   document.body.style.overscrollBehavior = 'none';
   playerIframe = document.createElement('iframe');
   playerIframe.style.display = 'flex';
-  playerIframe.src = playeURL;
   playerIframe.id = 'pplayer_iframe';
   playerIframe.name = 'pfplayer_frame';
   playerIframe.setAttribute('allowtransparency', 'true');
@@ -137,6 +142,12 @@ export function LaunchPlayer(props: any) {
   playerIframe.setAttribute('allowfullscreen', 'true');
   playerIframe.setAttribute('title', GetTranslation('pplayer.iframe.title'));
   playerIframe.setAttribute('aria-label', GetTranslation('pplayer.iframe.aria'));
+  // allow must be set before src so the permissions policy is locked in before navigation starts
+  playerIframe.setAttribute(
+    'allow',
+    'camera *; microphone *; display-capture *; autoplay *; encrypted-media *'
+  );
+  playerIframe.src = playeURL;
   playerIframe.width = iframeDimension;
   playerIframe.height = iframeDimension;
   playerIframe.style.margin = 'auto';

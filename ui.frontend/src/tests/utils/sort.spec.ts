@@ -15,6 +15,7 @@ jest.mock('@almLib/utils/catalog', () => ({
 }));
 jest.mock('@almLib/utils/global', () => ({
   getALMConfig: jest.fn(() => ({ effectivenessDataConfig: '', guest: false })),
+  getALMObject: jest.fn(() => ({ isPrimeUserLoggedIn: jest.fn(() => true) })),
   getQueryParamsFromUrl: jest.fn(() => ({})),
 }));
 jest.mock('@almLib/utils/translationService', () => ({
@@ -24,7 +25,7 @@ jest.mock('@almLib/utils/translationService', () => ({
 import { allSortOptions, getAvailableSortOptions } from '@almLib/utils/sort';
 import { GetTranslation } from '@almLib/utils/translationService';
 import { getSearchOrCatalog, isMyLearningPage } from '@almLib/utils/catalog';
-import { getALMConfig } from '@almLib/utils/global';
+import { getALMConfig, getALMObject, getQueryParamsFromUrl } from '@almLib/utils/global';
 
 describe('sort', () => {
   beforeEach(() => {
@@ -33,6 +34,8 @@ describe('sort', () => {
     (GetTranslation as jest.Mock).mockClear();
     (GetTranslation as jest.Mock).mockImplementation((k: string) => k);
     (getALMConfig as jest.Mock).mockReturnValue({ effectivenessDataConfig: '', guest: false });
+    (getALMObject as jest.Mock).mockReturnValue({ isPrimeUserLoggedIn: jest.fn(() => true) });
+    (getQueryParamsFromUrl as jest.Mock).mockReturnValue({});
   });
 
   it('allSortOptions', () => {
@@ -95,5 +98,48 @@ describe('sort', () => {
     // search page default is relevance
     expect(Array.isArray(result.availableSortOptions)).toBe(true);
     expect(result.defaultOption).toBe('relevance');
+  });
+
+  it('should ignore a catalog-only URL sort (recommendationScore) in search and fall back to relevance', () => {
+    (getSearchOrCatalog as jest.Mock).mockReturnValue('search');
+    (getQueryParamsFromUrl as jest.Mock).mockReturnValue({ sort: '-recommendationScore' });
+
+    const account = {
+      prlCriteria: { enabled: true },
+      recommendationAccountType: 'CPE_NEW',
+      learnerLayout: '',
+    } as any;
+    const result = getAvailableSortOptions(account, GetTranslation);
+
+    expect(result.defaultOption).toBe('relevance');
+  });
+
+  it('should ignore a search-only URL sort (relevance) in catalog and fall back to the catalog default', () => {
+    (getSearchOrCatalog as jest.Mock).mockReturnValue('catalog');
+    (getQueryParamsFromUrl as jest.Mock).mockReturnValue({ sort: 'relevance' });
+
+    const account = {
+      prlCriteria: { enabled: false },
+      recommendationAccountType: '',
+      learnerLayout: '',
+    } as any;
+    const result = getAvailableSortOptions(account, GetTranslation);
+
+    expect(result.defaultOption).toBe('-date');
+  });
+
+  it('should honor a URL sort that is valid for the current context', () => {
+    (getSearchOrCatalog as jest.Mock).mockReturnValue('search');
+    (getQueryParamsFromUrl as jest.Mock).mockReturnValue({ sort: '-date' });
+
+    const account = {
+      prlCriteria: { enabled: false },
+      recommendationAccountType: '',
+      learnerLayout: '',
+    } as any;
+    const result = getAvailableSortOptions(account, GetTranslation);
+
+    // '-date' is a valid search option, so the URL value wins over the default
+    expect(result.defaultOption).toBe('-date');
   });
 });

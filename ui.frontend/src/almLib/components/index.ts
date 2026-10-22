@@ -15,6 +15,7 @@ export * from './PrlWizard';
 export * from './Badges/BadgesPage';
 export * from './CategoryBrowser';
 export * from './Catalog/PrimeCatalogContainer';
+export * from './ExternalLearning';
 export * from './Community/PrimeAlertDialog';
 export * from './Community/PrimeCommunityAddPost';
 export * from './Community/PrimeCommunityAddPostButton';
