@@ -177,6 +177,11 @@ export const useCoursePathWidget = (widget: Widget) => {
       case WidgetType.BOOKMARKS:
         trainingFilters.bookmarks = true;
         break;
+
+      case WidgetType.COURSES_AND_PATHS:
+        trainingFilters.loTypes = [LO_TYPES.COURSE];
+        break;
+      
       case WidgetType.DISCOVERY_RECO:
       case WidgetType.RECOMMENDATIONS_STRIP:
         const products: PrimeRecommendations[] = widget.attributes?.recommendationConfig?.products;
