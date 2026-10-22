@@ -199,6 +199,7 @@ class ALMCustomHooks implements ICustomHooks {
       loTypes,
       include,
       recommendationConfig,
+      includeEnrolledChildLOs,
     } = filters;
     const { cursor, offset, pageLimit } = pagination;
 
@@ -238,6 +239,13 @@ class ALMCustomHooks implements ICustomHooks {
     // Apply standard filters
     body['filter.loTypes'] = loTypes || [COURSE, LEARNING_PROGRAM, CERTIFICATION, 'jobAid'];
     body['filter.ignoreEnhancedLP'] = false;
+
+    // API rejects other filters alongside filter.bookmarks
+    if (includeEnrolledChildLOs && !bookmarks) {
+      const userResponse = await getALMUser();
+      body['filter.ignoreHigherOrderLOEnrollment'] =
+        userResponse?.user?.account?.searchEnrolledChildLo || false;
+    }
 
     // Apply learner state filter if provided
     if (learnerState && learnerState.length > 0) {

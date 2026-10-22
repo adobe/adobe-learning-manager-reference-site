@@ -600,6 +600,85 @@ describe('ALMCustomHooks', () => {
       expect(body.ids).toEqual(['course:1']);
       expect(body).not.toHaveProperty('filter.skillName');
     });
+
+    it('accountSettingOn_sendsIgnoreHigherOrderLOEnrollmentTrue', async () => {
+      mockGetALMUser.mockResolvedValue({ user: { account: { searchEnrolledChildLo: true } } });
+
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        {
+          source: 'SKILLS',
+          sourceDetails: 'Sales',
+          sort: '-date',
+          includeEnrolledChildLOs: true,
+        } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.ignoreHigherOrderLOEnrollment']).toBe(true);
+    });
+
+    it('accountSettingOff_sendsIgnoreHigherOrderLOEnrollmentFalse', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        {
+          source: 'SKILLS',
+          sourceDetails: 'Sales',
+          sort: '-date',
+          includeEnrolledChildLOs: true,
+        } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.ignoreHigherOrderLOEnrollment']).toBe(false);
+    });
+
+    it('accountSettingMissing_sendsIgnoreHigherOrderLOEnrollmentFalse', async () => {
+      mockGetALMUser.mockResolvedValue({ user: {} });
+
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        {
+          source: 'SKILLS',
+          sourceDetails: 'Sales',
+          sort: '-date',
+          includeEnrolledChildLOs: true,
+        } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.ignoreHigherOrderLOEnrollment']).toBe(false);
+    });
+
+    it('loIds_withIncludeEnrolledChildLOs_sendsIgnoreHigherOrderLOEnrollment', async () => {
+      mockGetALMUser.mockResolvedValue({ user: { account: { searchEnrolledChildLo: true } } });
+
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { loIds: ['course:1'], sort: '-date', includeEnrolledChildLOs: true } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.ignoreHigherOrderLOEnrollment']).toBe(true);
+    });
+
+    it('includeEnrolledChildLOsNotSet_omitsIgnoreHigherOrderLOEnrollment', async () => {
+      mockGetALMUser.mockResolvedValue({ user: { account: { searchEnrolledChildLo: true } } });
+
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'SKILLS', sourceDetails: 'Sales', sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()).not.toHaveProperty('filter.ignoreHigherOrderLOEnrollment');
+    });
+
+    it('bookmarks_omitsIgnoreHigherOrderLOEnrollment', async () => {
+      mockGetALMUser.mockResolvedValue({ user: { account: { searchEnrolledChildLo: true } } });
+
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { bookmarks: true, sort: '-date', includeEnrolledChildLOs: true } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()).not.toHaveProperty('filter.ignoreHigherOrderLOEnrollment');
+    });
   });
 
   describe('fetchCourseInstanceMapping', () => {

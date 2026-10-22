@@ -153,6 +153,7 @@ export const useCoursePathWidget = (widget: Widget) => {
       sourceDetails,
       learnerState: learnerStateMap[widget.widgetRef] || undefined,
       sort: sortMap[widget.widgetRef] || SORT_MOST_RECOMMENDED_PARAM,
+      includeEnrolledChildLOs: widget.widgetRef === WidgetType.COURSES_AND_PATHS || undefined,
     };
     let recommendationFilters: WidgetRecommendationFilters = {
       recommendationType: '',
