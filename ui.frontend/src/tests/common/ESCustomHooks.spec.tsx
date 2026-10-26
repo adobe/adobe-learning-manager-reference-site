@@ -448,6 +448,26 @@ describe('ESCustomHooks', () => {
         expect.objectContaining({ url: expect.stringContaining(ES_BASE_URL) })
       );
     });
+
+    it('getCoursePathWidgetTrainings_withLoTypes_includesLoTypeInRequestBody', async () => {
+      await ESCustomHooksInstance.getCoursePathWidgetTrainings(
+        { loIds: ['course:1'], loTypes: ['course', 'learningPath'] } as any,
+        { page: 0, pageLimit: 10 }
+      );
+
+      const body = JSON.parse(mockRestAdapterPost.mock.calls[0][0].body);
+      expect(body.filters.terms.loType).toEqual(['course', 'learningPath']);
+    });
+
+    it('getCoursePathWidgetTrainings_withEmptyLoTypes_omitsLoTypeFromRequestBody', async () => {
+      await ESCustomHooksInstance.getCoursePathWidgetTrainings(
+        { loIds: ['course:1'], loTypes: [] } as any,
+        { page: 0, pageLimit: 10 }
+      );
+
+      const body = JSON.parse(mockRestAdapterPost.mock.calls[0][0].body);
+      expect(body.filters.terms.loType).toBeUndefined();
+    });
   });
 
   describe('getCategoryWidgetData', () => {

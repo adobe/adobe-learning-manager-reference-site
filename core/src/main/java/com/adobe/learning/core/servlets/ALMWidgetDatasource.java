@@ -210,7 +210,8 @@ public class ALMWidgetDatasource extends SlingAllMethodsServlet {
                   itemType,
                   hideOption,
                   multiSelect,
-                  dataSource));
+                  dataSource,
+                  option.getDraggable()));
           break;
 
         case "radio":
@@ -477,7 +478,8 @@ public class ALMWidgetDatasource extends SlingAllMethodsServlet {
       String itemType,
       boolean hideOption,
       boolean multiple,
-      String dataSource) {
+      String dataSource,
+      boolean draggable) {
     // Use textfield as a reliable base - can be enhanced with custom JS later
     String resourceType = "granite/ui/components/coral/foundation/form/textfield";
     ValueMap vm = new ValueMapDecorator(new HashMap<String, Object>());
@@ -494,6 +496,7 @@ public class ALMWidgetDatasource extends SlingAllMethodsServlet {
               // Create the granite:data child node with data attributes
               ValueMap dataVm = new ValueMapDecorator(new HashMap<String, Object>());
               dataVm.put("autocomplete-multiple", String.valueOf(multiple));
+              dataVm.put("autocomplete-draggable", String.valueOf(draggable));
 
               if (dataSource != null && !dataSource.isEmpty()) {
                 dataVm.put("autocomplete-source", dataSource);

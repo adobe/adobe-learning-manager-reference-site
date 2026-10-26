@@ -130,7 +130,7 @@ export const useCoursePathWidget = (widget: Widget) => {
 
     setState(prevState => ({ ...prevState, fetchingData: true }));
 
-    const { source, loIds } = widgetInfo;
+    const { source, loIds, loTypes } = widgetInfo;
     const sourceDetails = (widgetInfo as any).sourceDetails;
     const isSelectedLoIds = loIds && loIds.length > 0 ? true : false;
 
@@ -153,6 +153,7 @@ export const useCoursePathWidget = (widget: Widget) => {
       sourceDetails,
       learnerState: learnerStateMap[widget.widgetRef] || undefined,
       sort: sortMap[widget.widgetRef] || SORT_MOST_RECOMMENDED_PARAM,
+      loTypes: loTypes && loTypes.length > 0 ? loTypes : undefined,
     };
     let recommendationFilters: WidgetRecommendationFilters = {
       recommendationType: '',

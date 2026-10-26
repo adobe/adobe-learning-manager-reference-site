@@ -325,6 +325,17 @@
         "emptyText": "Add manually (up to 25)",
         "multiSelect": true,
         "mandatory": false
+      },
+      {
+        "name": "Learning Object type",
+        "ref": "widgetConfig.attributes.loTypes",
+        "description": "Filter by learning object type",
+        "type": "autocomplete",
+        "dataSource": "loType",
+        "emptyText": "All types",
+        "multiSelect": true,
+        "draggable": false,
+        "mandatory": false
       }
     ]
   },

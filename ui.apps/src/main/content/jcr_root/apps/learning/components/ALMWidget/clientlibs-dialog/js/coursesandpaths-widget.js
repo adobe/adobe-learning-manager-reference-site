@@ -123,19 +123,22 @@ governing permissions and limitations under the License.
         const $sourceWrapper = $sourceDropdown.closest('.coral-Form-fieldwrapper');
         const $sourceDetailsWrapper = $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.sourceDetails"]').closest('.coral-Form-fieldwrapper');
         const $loIdsWrapper = $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.loIds"]').closest('.coral-Form-fieldwrapper');
-        
+        const $loTypesWrapper = $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.loTypes"]').closest('.coral-Form-fieldwrapper');
+
         // Check radio selection
         const isSourceSelected = $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.isSourceSelected"]:checked').val();
-        
+
         if (isSourceSelected === 'true') {
-            // Show source and sourceDetails, hide loIds
+            // Show source, sourceDetails and loTypes; hide loIds
             $sourceWrapper.removeAttr('hidden');
             $sourceDetailsWrapper.removeAttr('hidden');
+            $loTypesWrapper.removeAttr('hidden');
             $loIdsWrapper.attr('hidden', '');
         } else {
-            // Hide source and sourceDetails, show loIds
+            // Hide source, sourceDetails and loTypes; show loIds
             $sourceWrapper.attr('hidden', '');
             $sourceDetailsWrapper.attr('hidden', '');
+            $loTypesWrapper.attr('hidden', '');
             $loIdsWrapper.removeAttr('hidden');
         }
         validateFields();
@@ -236,6 +239,55 @@ governing permissions and limitations under the License.
     }
 
     /**
+     * Clear loTypes field
+     * @private
+     */
+    function clearLoTypes() {
+        // loTypes is an autocomplete field (datasource "loType"), so prefer its clear method
+        const $originalField = $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.loTypes"]');
+        const clearFn = $originalField.data('autocomplete-clear');
+
+        if (clearFn && typeof clearFn === 'function') {
+            clearFn();
+        } else {
+            // Fallback for a Coral.Select rendering
+            const el = $originalField[0];
+            if (el) {
+                $(el).find('coral-select-item[selected]').removeAttr('selected');
+                $(el).find('coral-select-item').each(function() {
+                    this.selected = false;
+                    this.removeAttribute('aria-selected');
+                });
+            }
+            $originalField.val('');
+            $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.loTypes_display"]').val('');
+        }
+        $originalField.trigger('change');
+    }
+
+    /**
+     * Clear source field
+     * @private
+     */
+    function clearSource() {
+        const $sourceField = $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.coursesAndPaths.source"]');
+        const el = $sourceField[0];
+
+        if (el && typeof el.clear === 'function') {
+            el.clear();
+        }
+        if (el) {
+            $(el).find('coral-select-item[selected]').removeAttr('selected');
+            $(el).find('coral-select-item').each(function() {
+                this.selected = false;
+                this.removeAttribute('aria-selected');
+            });
+            el.value = 'CATALOGS';
+        }
+        $sourceField.val('CATALOGS');
+    }
+
+    /**
      * Reset Courses & Paths fields when switching away
      * @public
      */
@@ -243,7 +295,8 @@ governing permissions and limitations under the License.
         // Clear both autocomplete fields
         clearSourceDetails();
         clearLoIds();
-        
+        clearLoTypes();
+
         $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.isSourceSelected"][value="true"]').prop('checked', true);
         $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.isSourceSelected"][value="false"]').prop('checked', false);
         
@@ -328,13 +381,12 @@ governing permissions and limitations under the License.
         $(document).on('change.almCoursesAndPathsWidget', CP_DIALOG_REL + ' [name="./widgetConfig.attributes.isSourceSelected"]', function() {
             const selectedWidget = $('.selector-widget coral-select-item:selected').val();
             if (selectedWidget === WIDGET_REF) {
-                const isSourceSelected = $(this).val();
-                // Clear the field that's being hidden
-                if (isSourceSelected === 'true') {
-                    clearLoIds();
-                } else {
-                    clearSourceDetails();
-                }
+                // const isSourceSelected = $(this).val();
+                // Clear all dependent fields when the selection mode changes
+                clearSourceDetails();
+                clearLoIds();
+                clearLoTypes();
+                clearSource();
                 handleUI();
             }
         });

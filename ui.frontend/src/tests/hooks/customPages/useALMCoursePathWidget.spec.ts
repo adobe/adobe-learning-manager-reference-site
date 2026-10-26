@@ -333,6 +333,73 @@ describe('useCoursePathWidget', () => {
       expect(callArgs[0]).toHaveProperty('sort', '-recommendationScore');
     });
 
+    it('should pass loTypes through to getCoursePathWidgetTrainings when configured', async () => {
+      const loTypesWidget = {
+        ...mockWidget,
+        attributes: {
+          ...mockWidget.attributes,
+          loTypes: ['course', 'learningProgram'],
+        },
+      };
+
+      mockGetCoursePathWidgetTrainings.mockResolvedValue({
+        trainings: mockTrainings,
+        next: '',
+        meta: {},
+      });
+
+      const { result } = renderHook(() => useCoursePathWidget(loTypesWidget as any));
+
+      await act(async () => {
+        await result.current.fetchMore();
+      });
+
+      const callArgs = mockGetCoursePathWidgetTrainings.mock.calls[0];
+      expect(callArgs[0]).toHaveProperty('loTypes', ['course', 'learningProgram']);
+    });
+
+    it('should omit loTypes from getCoursePathWidgetTrainings filters when not configured', async () => {
+      mockGetCoursePathWidgetTrainings.mockResolvedValue({
+        trainings: mockTrainings,
+        next: '',
+        meta: {},
+      });
+
+      const { result } = renderHook(() => useCoursePathWidget(mockWidget as any));
+
+      await act(async () => {
+        await result.current.fetchMore();
+      });
+
+      const callArgs = mockGetCoursePathWidgetTrainings.mock.calls[0];
+      expect(callArgs[0]).toHaveProperty('loTypes', undefined);
+    });
+
+    it('should omit loTypes from getCoursePathWidgetTrainings filters when configured as an empty array', async () => {
+      const emptyLoTypesWidget = {
+        ...mockWidget,
+        attributes: {
+          ...mockWidget.attributes,
+          loTypes: [],
+        },
+      };
+
+      mockGetCoursePathWidgetTrainings.mockResolvedValue({
+        trainings: mockTrainings,
+        next: '',
+        meta: {},
+      });
+
+      const { result } = renderHook(() => useCoursePathWidget(emptyLoTypesWidget as any));
+
+      await act(async () => {
+        await result.current.fetchMore();
+      });
+
+      const callArgs = mockGetCoursePathWidgetTrainings.mock.calls[0];
+      expect(callArgs[0]).toHaveProperty('loTypes', undefined);
+    });
+
     it('should pass SKILLS source and sourceDetails through to getCoursePathWidgetTrainings', async () => {
       const skillsWidget = {
         ...mockWidget,

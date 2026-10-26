@@ -997,6 +997,40 @@ governing permissions and limitations under the License.
          * Accepts either {query: string} for search OR {ids: Array} for prepopulation
          */
         window.ALM.ALMWidget.Autocomplete.registerDataSource('lo', getLearningObjects);
+
+        /**
+         * ========================================
+         * LO TYPE DATA SOURCE
+         * ========================================
+         * Static, fixed 4-value list (course/certification/learningProgram/jobAid).
+         * Labels come from the account-aware Nomenclature singleton (not hardcoded
+         * English) so a renamed entity type (e.g. "Course" -> "Class") is reflected here too.
+         * Accepts either {query: string} for local filtering OR {ids: Array} for prepopulation
+         */
+        function getLoTypeOptions() {
+            var N = window.ALM.ALMWidget.Nomenclature;
+            return [
+                { value: 'course', text: N.COURSE.plural },
+                { value: 'certification', text: N.CERTIFICATION.plural },
+                { value: 'learningProgram', text: N.LEARNING_PATH.plural },
+                { value: 'jobAid', text: N.JOB_AID.plural }
+            ];
+        }
+
+        function getLoTypes(options, callback) {
+            var items = getLoTypeOptions();
+
+            if (options.ids && Array.isArray(options.ids) && options.ids.length > 0) {
+                callback(items.filter(function(item) {
+                    return options.ids.indexOf(item.value) !== -1;
+                }));
+                return;
+            }
+
+            callback(filterItems(items, options.query));
+        }
+
+        window.ALM.ALMWidget.Autocomplete.registerDataSource('loType', getLoTypes);
     });
 
 })(document, window, jQuery);

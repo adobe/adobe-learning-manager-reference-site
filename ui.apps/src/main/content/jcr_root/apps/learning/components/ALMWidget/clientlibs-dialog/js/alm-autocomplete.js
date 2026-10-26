@@ -88,6 +88,7 @@ governing permissions and limitations under the License.
         this.selectedOrder = []; // Maintain order of selections
         this.currentFocus = -1;
         this.isMultiple = $field.data('autocomplete-multiple') === true || $field.data('autocomplete-multiple') === 'true';
+        this.isDraggable = $field.data('autocomplete-draggable') !== false && $field.data('autocomplete-draggable') !== 'false';
         this.maxSelections = parseInt($field.data('autocomplete-max-selections')) || DEFAULT_MAX_SELECTIONS;
         this.dataSourceName = $field.data('autocomplete-source') || 'default';
         this.dataSource = getDataSource(this.dataSourceName);
@@ -271,9 +272,11 @@ governing permissions and limitations under the License.
             if (this.isMultiple) {
                 this.$selectionListContainer = $('<div class="' + AUTOCOMPLETE_SELECTION_LIST_CLASS + '"></div>');
                 this.$fieldContainer.after(this.$selectionListContainer);
-                
-                // Bind drag events for sortable list
-                this.bindDragEvents();
+
+                // Bind drag events for sortable list, unless dragging is disabled for this field
+                if (this.isDraggable) {
+                    this.bindDragEvents();
+                }
             }
         },
 
@@ -658,15 +661,18 @@ governing permissions and limitations under the License.
                 }
                 
                 const text = self.selectedItems[value];
-                const $item = $('<div class="' + AUTOCOMPLETE_SELECTION_ITEM_CLASS + '" draggable="true"></div>');
+                const $item = $('<div class="' + AUTOCOMPLETE_SELECTION_ITEM_CLASS + '"></div>');
                 $item.attr('data-value', value);
-                
-                // Drag handle
-                const $handle = $('<span class="alm-drag-handle" title="Drag to reorder">⋮⋮</span>');
-                
+
+                // Drag handle - only for fields where dragging is enabled
+                if (self.isDraggable) {
+                    $item.attr('draggable', 'true');
+                    $item.append($('<span class="alm-drag-handle" title="Drag to reorder">⋮⋮</span>'));
+                }
+
                 // Text
                 const $text = $('<span class="alm-selection-text">' + text + '</span>');
-                
+
                 // Remove button
                 const $remove = $('<button class="alm-remove-btn" title="Remove" type="button">×</button>');
                 $remove.on('click', function(e) {
@@ -674,8 +680,8 @@ governing permissions and limitations under the License.
                     e.stopPropagation();
                     self.removeSelection(value);
                 });
-                
-                $item.append($handle, $text, $remove);
+
+                $item.append($text, $remove);
                 self.$selectionListContainer.append($item);
             });
         },

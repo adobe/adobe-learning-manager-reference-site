@@ -51,6 +51,7 @@ export interface CoursesAndPathWidgetAttributes extends BaseWidgetAttributes {
   sourceIds?: string[]; //If sourceType is ALM_DEFINED, then this is mandatory
   loIds?: string[]; //If sourceType is Manual, then this is mandatory
   //need to handle PAPI id format here.
+  loTypes?: string[]; //Optional filter by learning object type; empty/undefined means no filter
 }
 
 export enum ElementAlignmentValues {

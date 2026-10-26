@@ -33,6 +33,7 @@ public class ALMWidgetOptions {
   private boolean mandatory;
   private boolean hidden;
   private boolean multiSelect;
+  private boolean draggable = true;
 
   private List<Map<String, String>> options;
 
@@ -108,6 +109,14 @@ public class ALMWidgetOptions {
 
   public void setMultiSelect(boolean multiSelect) {
     this.multiSelect = multiSelect;
+  }
+
+  public boolean getDraggable() {
+    return draggable;
+  }
+
+  public void setDraggable(boolean draggable) {
+    this.draggable = draggable;
   }
 
   public String getEmptyText() {

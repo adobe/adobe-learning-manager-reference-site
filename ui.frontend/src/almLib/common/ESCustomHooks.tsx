@@ -413,7 +413,7 @@ class ESCustomHooks implements ICustomHooks {
       return ALMCustomHooksInstance.getCoursePathWidgetTrainings(filters, pagination);
     }
 
-    const { loIds, source, sourceDetails } = filters;
+    const { loIds, source, sourceDetails, loTypes } = filters;
     const { page = 0, pageLimit } = pagination;
 
     if (!this.esBaseUrl) {
@@ -442,6 +442,10 @@ class ESCustomHooks implements ICustomHooks {
       } else if (source === WIDGET_SOURCE.CATALOG_SOURCE && sourceDetails?.name) {
         requestObject.filters.terms.catalogNames = [sourceDetails.name];
       }
+    }
+
+    if (loTypes && loTypes.length > 0) {
+      requestObject.filters.terms.loType = loTypes;
     }
 
     const response: any = await RestAdapter.post({
