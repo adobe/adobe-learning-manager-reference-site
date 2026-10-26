@@ -146,14 +146,32 @@ export const useCoursePathWidget = (widget: Widget) => {
       page: callNumber,
     };
 
+    // Source-based filters authored for Courses and Paths; other strips keep their fixed values
+    const useSourceFilters = widget.widgetRef === WidgetType.COURSES_AND_PATHS && !loIds?.length;
+    const authoredSort = useSourceFilters ? widgetInfo.sort : undefined;
+    const authoredLearnerState = useSourceFilters ? widgetInfo.learnerState : undefined;
+    const authoredTagName = useSourceFilters ? widgetInfo.tagName : undefined;
+    const authoredPartitionOrder = useSourceFilters
+      ? widgetInfo.preferredSortPartitionOrder
+      : undefined;
+
     let trainingFilters: WidgetTrainingFilters = {
       loIds: paginatedLoIds,
       source,
       sourceDetails,
-      learnerState: learnerStateMap[widget.widgetRef] || undefined,
-      sort: sortMap[widget.widgetRef] || SORT_MOST_RECOMMENDED_PARAM,
+      learnerState: authoredLearnerState?.length
+        ? authoredLearnerState
+        : learnerStateMap[widget.widgetRef] || undefined,
+      sort: authoredSort || sortMap[widget.widgetRef] || SORT_MOST_RECOMMENDED_PARAM,
       loTypes: loTypes && loTypes.length > 0 ? loTypes : undefined,
+      includeEnrolledChildLOs: widget.widgetRef === WidgetType.COURSES_AND_PATHS || undefined,
     };
+    if (authoredTagName?.length) {
+      trainingFilters.tagName = authoredTagName;
+    }
+    if (authoredPartitionOrder?.length) {
+      trainingFilters.preferredSortPartitionOrder = authoredPartitionOrder;
+    }
     let recommendationFilters: WidgetRecommendationFilters = {
       recommendationType: '',
       sort: sortMap[widget.widgetRef] || SORT_MOST_RECOMMENDED_PARAM,

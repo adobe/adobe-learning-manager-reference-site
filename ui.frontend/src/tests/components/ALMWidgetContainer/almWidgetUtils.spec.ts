@@ -49,6 +49,24 @@ describe('handleCommaSeparatedValues', () => {
     expect(result.sourceIds).toEqual(['1', '2']);
   });
 
+  it('splits the Courses and Paths filter lists', () => {
+    const result = handleCommaSeparatedValues(WidgetType.COURSES_AND_PATHS, {
+      learnerState: 'enrolled, started',
+      preferredSortPartitionOrder: 'started, enrolled',
+      tagName: 'a, b',
+    });
+
+    expect(result.learnerState).toEqual(['enrolled', 'started']);
+    expect(result.preferredSortPartitionOrder).toEqual(['started', 'enrolled']);
+    expect(result.tagName).toEqual(['a', 'b']);
+  });
+
+  it('keeps the sort as a single string', () => {
+    const result = handleCommaSeparatedValues(WidgetType.COURSES_AND_PATHS, { sort: '-name' });
+
+    expect(result.sort).toBe('-name');
+  });
+
   it('does not split sourceDetails for other widgets', () => {
     const result = handleCommaSeparatedValues(WidgetType.CATEGORY, {
       sourceDetails: 'Sales, Marketing',

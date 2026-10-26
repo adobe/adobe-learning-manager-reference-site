@@ -52,6 +52,10 @@ export interface CoursesAndPathWidgetAttributes extends BaseWidgetAttributes {
   loIds?: string[]; //If sourceType is Manual, then this is mandatory
   //need to handle PAPI id format here.
   loTypes?: string[]; //Optional filter by learning object type; empty/undefined means no filter
+  sort?: string; //Optional sort order; defaults to most recommended
+  learnerState?: string[]; //Optional filter by learner state; empty/undefined means no filter
+  tagName?: string[]; //Optional filter by tag names; empty/undefined means no filter
+  preferredSortPartitionOrder?: string[]; //Ordered learner states; only used when sort is 'progress'
 }
 
 export enum ElementAlignmentValues {
@@ -156,6 +160,8 @@ export interface WidgetTrainingFilters {
   sourceDetails?: CoursesAndPathSourceDetails | CoursesAndPathSourceDetails[];
   learnerState?: string[];
   sort: string;
+  tagName?: string[];
+  preferredSortPartitionOrder?: string[];
   bookmarks?: boolean;
   subLOsLang?: boolean;
   externalCertifications?: boolean;
@@ -165,6 +171,7 @@ export interface WidgetTrainingFilters {
   excludeIgnoredRecommendations?: boolean;
   enforcedFieldsLO?: string;
   recommendationConfig?: WidgetRecommendationConfigFilters;
+  includeEnrolledChildLOs?: boolean;
 }
 
 export interface WidgetRecommendationFilters {

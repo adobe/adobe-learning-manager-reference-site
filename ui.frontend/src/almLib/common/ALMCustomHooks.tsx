@@ -191,6 +191,8 @@ class ALMCustomHooks implements ICustomHooks {
       learnerState,
       bookmarks,
       sort,
+      tagName,
+      preferredSortPartitionOrder,
       subLOsLang,
       externalCertifications,
       enrollmentType,
@@ -199,6 +201,7 @@ class ALMCustomHooks implements ICustomHooks {
       loTypes,
       include,
       recommendationConfig,
+      includeEnrolledChildLOs,
     } = filters;
     const { cursor, offset, pageLimit } = pagination;
 
@@ -241,9 +244,19 @@ class ALMCustomHooks implements ICustomHooks {
     body['filter.loTypes'] = loTypes || [COURSE, LEARNING_PROGRAM, CERTIFICATION, 'jobAid'];
     body['filter.ignoreEnhancedLP'] = false;
 
+    // API rejects other filters alongside filter.bookmarks
+    if (includeEnrolledChildLOs && !bookmarks) {
+      const userResponse = await getALMUser();
+      body['filter.ignoreHigherOrderLOEnrollment'] =
+        userResponse?.user?.account?.searchEnrolledChildLo || false;
+    }
+
     // Apply learner state filter if provided
     if (learnerState && learnerState.length > 0) {
       body['filter.learnerState'] = learnerState;
+    }
+    if (tagName && tagName.length > 0) {
+      body['filter.tagName'] = tagName;
     }
     // Apply additional filters
     if (bookmarks) {
@@ -275,7 +288,16 @@ class ALMCustomHooks implements ICustomHooks {
     // Set up params
     params['enforcedFields[learningObject]'] = enforcedFieldsLO || includeParams;
     params['include'] = include || DEFUALT_LO_INCLUDE;
-    params['sort'] = sort;
+    // Sorting on progress with a preferred state order replaces the sort param
+    if (
+      sort === 'progress' &&
+      preferredSortPartitionOrder &&
+      preferredSortPartitionOrder.length > 0
+    ) {
+      params['preferredSortPartitionOrder'] = preferredSortPartitionOrder.join(',');
+    } else {
+      params['sort'] = sort;
+    }
     params['page[limit]'] = pageLimit;
 
     // Add pagination params

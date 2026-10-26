@@ -26,6 +26,7 @@ governing permissions and limitations under the License.
 // Mock dependencies BEFORE imports
 jest.mock('../../../almLib/utils/global', () => ({
   getALMConfig: jest.fn(),
+  getALMAccount: jest.fn(),
 }));
 
 jest.mock('../../../almLib/utils/restAdapter', () => ({
@@ -68,7 +69,7 @@ import { act } from '@testing-library/react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { useCoursePathWidget } from '../../../almLib/hooks/customPages/useALMCoursePathWidget';
-import { getALMConfig } from '../../../almLib/utils/global';
+import { getALMConfig, getALMAccount } from '../../../almLib/utils/global';
 import { RestAdapter } from '../../../almLib/utils/restAdapter';
 import { enrollTraining, getTraining } from '../../../almLib/utils/lo-utils';
 import { GetTranslation } from '../../../almLib/utils/translationService';
@@ -80,6 +81,7 @@ import {
 } from '../../../almLib/components/Widgets/ALMPrimeStrip/ALMPrimeStrip.helper';
 import APIServiceInstance from '../../../almLib/common/APIService';
 import { calculatePaginationState } from '../../../almLib/utils/widgets/utils';
+import { WidgetType } from '../../../almLib/utils/widgets/common';
 
 // Custom renderHook implementation for React Testing Library v9
 function renderHook<T>(hookCallback: () => T) {
@@ -453,6 +455,74 @@ describe('useCoursePathWidget', () => {
       expect(callArgs[0]).toHaveProperty('sourceDetails', ['Sales', 'Ops']);
     });
 
+    describe('authored Courses and Paths filters', () => {
+      const cpWidget = (attributes: any) => ({
+        ...mockWidget,
+        widgetRef: WidgetType.COURSES_AND_PATHS,
+        attributes: { source: 'CATALOGS', sourceDetails: ['catalog:1'], loIds: null, ...attributes },
+      });
+
+      const fetchFilters = async (widget: any) => {
+        mockGetCoursePathWidgetTrainings.mockResolvedValue({
+          trainings: mockTrainings,
+          next: '',
+          meta: {},
+        });
+        const { result } = renderHook(() => useCoursePathWidget(widget as any));
+        await act(async () => {
+          await result.current.fetchMore();
+        });
+        return mockGetCoursePathWidgetTrainings.mock.calls[0][0] as any;
+      };
+
+      it('passes authored sort, learnerState, tagName and partition order', async () => {
+        const filters = await fetchFilters(
+          cpWidget({
+            sort: 'progress',
+            learnerState: ['enrolled'],
+            tagName: ['t1'],
+            preferredSortPartitionOrder: ['enrolled', 'started'],
+          })
+        );
+
+        expect(filters.sort).toBe('progress');
+        expect(filters.learnerState).toEqual(['enrolled']);
+        expect(filters.tagName).toEqual(['t1']);
+        expect(filters.preferredSortPartitionOrder).toEqual(['enrolled', 'started']);
+      });
+
+      it('keeps the legacy defaults when no filters are authored', async () => {
+        const filters = await fetchFilters(cpWidget({}));
+
+        expect(filters.sort).toBe('-recommendationScore');
+        expect(filters.learnerState).toBeUndefined();
+        expect(filters).not.toHaveProperty('tagName');
+        expect(filters).not.toHaveProperty('preferredSortPartitionOrder');
+      });
+
+      it('ignores the authored filters when loIds are selected', async () => {
+        const filters = await fetchFilters(
+          cpWidget({ loIds: ['course:1'], sort: 'name', learnerState: ['enrolled'], tagName: ['t'] })
+        );
+
+        expect(filters.sort).toBe('-recommendationScore');
+        expect(filters.learnerState).toBeUndefined();
+        expect(filters).not.toHaveProperty('tagName');
+      });
+
+      it('does not apply the authored filters to other widgets', async () => {
+        const filters = await fetchFilters({
+          ...mockWidget,
+          widgetRef: WidgetType.MYLEARNING,
+          attributes: { sort: 'name', learnerState: ['completed'], tagName: ['t'] },
+        });
+
+        expect(filters.sort).toBe('-dateEnrolled');
+        expect(filters.learnerState).toEqual(['enrolled', 'started']);
+        expect(filters).not.toHaveProperty('tagName');
+      });
+    });
+
     it('should call getCoursePathWidgetTrainings with correct filters for MYLEARNING', async () => {
       const myLearningWidget = {
         ...mockWidget,
@@ -474,6 +544,36 @@ describe('useCoursePathWidget', () => {
       const callArgs = mockGetCoursePathWidgetTrainings.mock.calls[0];
       expect(callArgs[0]).toHaveProperty('learnerState', ['enrolled', 'started']);
       expect(callArgs[0]).toHaveProperty('sort', '-dateEnrolled');
+    });
+
+    it('should request enrolled child LOs only for the Courses & Paths widget', async () => {
+      mockGetCoursePathWidgetTrainings.mockResolvedValue({
+        trainings: mockTrainings,
+        next: '',
+        meta: {},
+      });
+
+      (getALMAccount as jest.Mock).mockResolvedValue({});
+
+      const refs: [string, boolean][] = [
+        ['com.adobe.captivateprime.courses.and.paths', true],
+        ['com.adobe.captivateprime.lostrip.mylearning', false],
+        ['com.adobe.captivateprime.lostrip.discovery', false],
+        ['com.adobe.captivateprime.lostrip.mybookmarks', false],
+      ];
+
+      for (const [widgetRef, expected] of refs) {
+        mockGetCoursePathWidgetTrainings.mockClear();
+        const widget = { ...mockWidget, widgetRef };
+        const { result } = renderHook(() => useCoursePathWidget(widget as any));
+
+        await act(async () => {
+          await result.current.fetchMore();
+        });
+
+        const filters = mockGetCoursePathWidgetTrainings.mock.calls[0][0];
+        expect(filters.includeEnrolledChildLOs).toBe(expected ? true : undefined);
+      }
     });
 
     it('should call getCoursePathWidgetTrainings with correct pagination', async () => {

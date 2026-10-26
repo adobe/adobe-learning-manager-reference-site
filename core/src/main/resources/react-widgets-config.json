@@ -337,6 +337,105 @@
         "multiSelect": true,
         "draggable": false,
         "mandatory": false
+      },
+      {
+        "name": "Learner state",
+        "ref": "widgetConfig.attributes.learnerState",
+        "description": "Show only items in the selected learner states. Leave empty to show all.",
+        "type": "autocomplete",
+        "dataSource": "learnerState",
+        "emptyText": "All states",
+        "multiSelect": true,
+        "draggable": false,
+        "mandatory": false
+      },
+      {
+        "name": "Tags",
+        "ref": "widgetConfig.attributes.tagName",
+        "description": "Show only items with the selected tags. Tags whose name contains a comma cannot be selected.",
+        "type": "autocomplete",
+        "dataSource": "tagName",
+        "emptyText": "Select tags",
+        "multiSelect": true,
+        "draggable": false,
+        "mandatory": false
+      },
+      {
+        "name": "Sort",
+        "ref": "widgetConfig.attributes.sort",
+        "description": "Sort order for the items",
+        "type": "select",
+        "options": [
+          {
+            "label": "Most recommended",
+            "value": "-recommendationScore"
+          },
+          {
+            "label": "Name (A-Z)",
+            "value": "name"
+          },
+          {
+            "label": "Name (Z-A)",
+            "value": "-name"
+          },
+          {
+            "label": "Recently published",
+            "value": "-date"
+          },
+          {
+            "label": "Date published (oldest first)",
+            "value": "date"
+          },
+          {
+            "label": "Recently created",
+            "value": "-dateCreated"
+          },
+          {
+            "label": "Date created (oldest first)",
+            "value": "dateCreated"
+          },
+          {
+            "label": "Recently enrolled",
+            "value": "-dateEnrolled"
+          },
+          {
+            "label": "Date enrolled (oldest first)",
+            "value": "dateEnrolled"
+          },
+          {
+            "label": "Due date",
+            "value": "dueDate"
+          },
+          {
+            "label": "Effectiveness",
+            "value": "effectiveness"
+          },
+          {
+            "label": "Highest rated",
+            "value": "-rating"
+          },
+          {
+            "label": "Lowest rated",
+            "value": "rating"
+          },
+          {
+            "label": "Progress",
+            "value": "progress"
+          }
+        ],
+        "default": "-recommendationScore",
+        "mandatory": false
+      },
+      {
+        "name": "Sort on progress",
+        "ref": "widgetConfig.attributes.preferredSortPartitionOrder",
+        "description": "Only used when Sort is Progress. Items are limited to the selected states and shown in the order of the states.",
+        "type": "autocomplete",
+        "dataSource": "learnerState",
+        "emptyText": "Select states in order",
+        "multiSelect": true,
+        "draggable": true,
+        "mandatory": false
       }
     ]
   },

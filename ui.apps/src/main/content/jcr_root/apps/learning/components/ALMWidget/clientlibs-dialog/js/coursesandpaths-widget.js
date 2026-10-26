@@ -24,6 +24,16 @@ governing permissions and limitations under the License.
     
     const CP_DIALOG_REL = ".cp-dialog-form-rel";
     const WIDGET_REF = 'com.adobe.captivateprime.courses.and.paths';
+    const ATTR_PREFIX = './widgetConfig.attributes.';
+    const SORT_DEFAULT = '-recommendationScore';
+    const SORT_PROGRESS = 'progress';
+    // Autocomplete filters that only apply in "Select source" mode
+    const SOURCE_MODE_AUTOCOMPLETE_FILTERS = ['learnerState', 'tagName'];
+    const PARTITION_ORDER_FIELD = 'preferredSortPartitionOrder';
+
+    function getFieldWrapper(attribute) {
+        return $(CP_DIALOG_REL).find('[name="' + ATTR_PREFIX + attribute + '"]').closest('.coral-Form-fieldwrapper');
+    }
 
     /**
      * Get source-specific labels using Nomenclature (auto-loaded with defaults)
@@ -121,21 +131,39 @@ governing permissions and limitations under the License.
         const $sourceDetailsWrapper = $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.sourceDetails"]').closest('.coral-Form-fieldwrapper');
         const $loIdsWrapper = $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.loIds"]').closest('.coral-Form-fieldwrapper');
         const $loTypesWrapper = $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.loTypes"]').closest('.coral-Form-fieldwrapper');
+        const $sortWrapper = getFieldWrapper('sort');
+        const $partitionOrderWrapper = getFieldWrapper(PARTITION_ORDER_FIELD);
 
         // Check radio selection
         const isSourceSelected = $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.isSourceSelected"]:checked').val();
+        const sort = $(CP_DIALOG_REL).find('[name="' + ATTR_PREFIX + 'sort"]').val();
 
         if (isSourceSelected === 'true') {
-            // Show source, sourceDetails and loTypes; hide loIds
+            // Show source, sourceDetails, loTypes and the filters; hide loIds
             $sourceWrapper.removeAttr('hidden');
             $sourceDetailsWrapper.removeAttr('hidden');
             $loTypesWrapper.removeAttr('hidden');
+            SOURCE_MODE_AUTOCOMPLETE_FILTERS.forEach(function(attribute) {
+                getFieldWrapper(attribute).removeAttr('hidden');
+            });
+            $sortWrapper.removeAttr('hidden');
+            // "Sort on progress" only applies when sorting by progress
+            if (sort === SORT_PROGRESS) {
+                $partitionOrderWrapper.removeAttr('hidden');
+            } else {
+                $partitionOrderWrapper.attr('hidden', '');
+            }
             $loIdsWrapper.attr('hidden', '');
         } else {
-            // Hide source, sourceDetails and loTypes; show loIds
+            // Hide source, sourceDetails, loTypes and the filters; show loIds
             $sourceWrapper.attr('hidden', '');
             $sourceDetailsWrapper.attr('hidden', '');
             $loTypesWrapper.attr('hidden', '');
+            SOURCE_MODE_AUTOCOMPLETE_FILTERS.forEach(function(attribute) {
+                getFieldWrapper(attribute).attr('hidden', '');
+            });
+            $sortWrapper.attr('hidden', '');
+            $partitionOrderWrapper.attr('hidden', '');
             $loIdsWrapper.removeAttr('hidden');
         }
         validateFields();
@@ -152,6 +180,10 @@ governing permissions and limitations under the License.
         if (selectedWidget === WIDGET_REF) {
             // Clear sourceDetails field (using autocomplete's clear method if available)
             clearSourceDetails();
+
+            // The other filters belong to the previous source, so reset them too
+            clearLoTypes();
+            clearSourceFilters();
             
             // Update UI with new source labels
             // The datasource will automatically use the new source value on next search
@@ -225,6 +257,45 @@ governing permissions and limitations under the License.
     }
 
     /**
+     * Clear an autocomplete filter field (learnerState, tagName, preferredSortPartitionOrder)
+     * @private
+     */
+    function clearAutocompleteField(attribute) {
+        const $originalField = $(CP_DIALOG_REL).find('[name="' + ATTR_PREFIX + attribute + '"]');
+        const clearFn = $originalField.data('autocomplete-clear');
+
+        if (clearFn && typeof clearFn === 'function') {
+            clearFn();
+        } else {
+            $originalField.val('');
+            $(CP_DIALOG_REL).find('[name="' + ATTR_PREFIX + attribute + '_display"]').val('');
+        }
+    }
+
+    /**
+     * Reset the sort dropdown to the default sort
+     * @private
+     */
+    function clearSort() {
+        const $sortField = $(CP_DIALOG_REL).find('[name="' + ATTR_PREFIX + 'sort"]');
+        const el = $sortField[0];
+        if (el) {
+            el.value = SORT_DEFAULT;
+        }
+        $sortField.val(SORT_DEFAULT);
+    }
+
+    /**
+     * Clear all the source-mode filters (learner state, tags, sort and sort on progress)
+     * @private
+     */
+    function clearSourceFilters() {
+        SOURCE_MODE_AUTOCOMPLETE_FILTERS.forEach(clearAutocompleteField);
+        clearAutocompleteField(PARTITION_ORDER_FIELD);
+        clearSort();
+    }
+
+    /**
      * Clear source field
      * @private
      */
@@ -255,6 +326,7 @@ governing permissions and limitations under the License.
         clearSourceDetails();
         clearLoIds();
         clearLoTypes();
+        clearSourceFilters();
 
         $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.isSourceSelected"][value="true"]').prop('checked', true);
         $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.isSourceSelected"][value="false"]').prop('checked', false);
@@ -345,11 +417,23 @@ governing permissions and limitations under the License.
                 clearSourceDetails();
                 clearLoIds();
                 clearLoTypes();
+                clearSourceFilters();
                 clearSource();
                 handleUI();
             }
         });
         
+        // "Sort on progress" only applies to the progress sort, so clear it when the sort changes away
+        $(document).on('change.almCoursesAndPathsWidget', CP_DIALOG_REL + ' [name="./widgetConfig.attributes.sort"]', function() {
+            const selectedWidget = $('.selector-widget coral-select-item:selected').val();
+            if (selectedWidget === WIDGET_REF) {
+                if ($(this).val() !== SORT_PROGRESS) {
+                    clearAutocompleteField(PARTITION_ORDER_FIELD);
+                }
+                handleUI();
+            }
+        });
+
         // Clear validation errors when user fills in the required field
         $(document).on('change.almCoursesAndPathsWidget', CP_DIALOG_REL + ' [name="./widgetConfig.attributes.sourceDetails"]', function() {
             const selectedWidget = $('.selector-widget coral-select-item:selected').val();

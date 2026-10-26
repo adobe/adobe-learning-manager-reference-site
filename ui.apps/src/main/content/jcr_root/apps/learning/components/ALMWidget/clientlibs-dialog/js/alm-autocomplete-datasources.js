@@ -843,13 +843,14 @@ governing permissions and limitations under the License.
         }
 
         /**
-         * Get Skills for Courses & Paths Widget
-         * Saves and displays skill NAME (not id). On dialog open, saved names are echoed
-         * back without an API lookup. Typeahead hits GET /search?filter.loTypes=skill.
+         * Get skill or tag NAMES for the Courses & Paths Widget
+         * Saves and displays the NAME (not id). On dialog open, saved names are echoed
+         * back without an API lookup. Typeahead hits GET /search?filter.loTypes=<type>.
+         * @param {string} loType - Search type: 'skill' or 'tag'
          * @param {Object} options - Options object: {query: string} OR {ids: Array}
          * @param {Function} callback - Callback function
          */
-        function getSkillsForCoursesAndPaths(options, callback) {
+        function getSearchNamesForCoursesAndPaths(loType, options, callback) {
             // Prepopulation on dialog open: saved values are names, echo them back.
             if (options.ids && Array.isArray(options.ids) && options.ids.length > 0) {
                 var echoed = options.ids.map(function(name) {
@@ -864,7 +865,7 @@ governing permissions and limitations under the License.
                 'page%5Blimit%5D=10',
                 'autoCompleteMode=true',
                 'sort=relevance',
-                'filter.loTypes=skill',
+                'filter.loTypes=' + loType,
                 'matchType=phrase'
             ];
             if (options.query && options.query.trim().length > 0) {
@@ -881,15 +882,29 @@ governing permissions and limitations under the License.
                     return;
                 }
 
-                var skills = [];
+                var names = [];
                 if (response && response.data && Array.isArray(response.data)) {
-                    skills = response.data.map(function(item) {
+                    names = response.data.map(function(item) {
                         var name = extractName(item);
                         return { value: name, text: name };
                     });
                 }
-                excludeValuesWithComma(options, callback)(skills);
+                excludeValuesWithComma(options, callback)(names);
             });
+        }
+
+        /**
+         * Get Skills for Courses & Paths Widget (saves the skill NAME)
+         */
+        function getSkillsForCoursesAndPaths(options, callback) {
+            getSearchNamesForCoursesAndPaths('skill', options, callback);
+        }
+
+        /**
+         * Get Tags for Courses & Paths Widget (saves the tag NAME)
+         */
+        function getTagsForCoursesAndPaths(options, callback) {
+            getSearchNamesForCoursesAndPaths('tag', options, callback);
         }
 
         /**
@@ -944,6 +959,12 @@ governing permissions and limitations under the License.
                 getCatalogs(options, callback);
             }
         });
+
+        /**
+         * Tags Data Source (Courses & Paths)
+         * Stores the tag NAME. Names that contain a comma are not offered.
+         */
+        window.ALM.ALMWidget.Autocomplete.registerDataSource('tagName', getTagsForCoursesAndPaths);
 
         /**
          * ========================================
@@ -1050,6 +1071,37 @@ governing permissions and limitations under the License.
         }
 
         window.ALM.ALMWidget.Autocomplete.registerDataSource('loType', getLoTypes);
+
+        /**
+         * ========================================
+         * LEARNER STATE DATA SOURCE
+         * ========================================
+         * Static list of learner states. Also used for the ordered "Sort on progress" field.
+         * Accepts either {query: string} for local filtering OR {ids: Array} for prepopulation
+         */
+        function getLearnerStateOptions() {
+            return [
+                { value: 'enrolled', text: 'Enrolled' },
+                { value: 'started', text: 'Started' },
+                { value: 'completed', text: 'Completed' },
+                { value: 'notenrolled', text: 'Not enrolled' }
+            ];
+        }
+
+        function getLearnerStates(options, callback) {
+            var items = getLearnerStateOptions();
+
+            if (options.ids && Array.isArray(options.ids) && options.ids.length > 0) {
+                callback(items.filter(function(item) {
+                    return options.ids.indexOf(item.value) !== -1;
+                }));
+                return;
+            }
+
+            callback(filterItems(items, options.query));
+        }
+
+        window.ALM.ALMWidget.Autocomplete.registerDataSource('learnerState', getLearnerStates);
     });
 
 })(document, window, jQuery);

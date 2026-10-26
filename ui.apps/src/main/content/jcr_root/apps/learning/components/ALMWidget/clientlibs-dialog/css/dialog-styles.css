@@ -20,6 +20,11 @@ coral-dialog[trackingfeature*="learning:almwidget"] .cq-dialog-content {
     overflow-y: auto !important;
 }
 
+/* Spacing between fields; scoped to the ALM Widget dialog only */
+coral-dialog[trackingfeature*="learning:almwidget"] .coral-Form--vertical .coral-Form-fieldwrapper {
+    margin-bottom: 16px;
+}
+
 /* ========================================
  * Radio Button Styles
  * Make radio buttons in RadioGroup display side-by-side
@@ -70,6 +75,9 @@ coral-radiogroup coral-radio {
     background: #fff;
     clear: both;
     transition: margin-top 0.2s ease;
+}
+.alm-selection-list:empty {
+    border-color: transparent;
 }
 
 .alm-selection-item {
