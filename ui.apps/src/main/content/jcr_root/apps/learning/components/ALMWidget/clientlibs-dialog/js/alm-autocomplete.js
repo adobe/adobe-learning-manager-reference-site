@@ -60,6 +60,48 @@ governing permissions and limitations under the License.
         return dataSources[name] || dataSources.default;
     }
 
+    /**
+     * Multi-select values are saved as one string: values joined with ", ".
+     * A value that contains a comma (or a backslash) is escaped so it is not split into two values:
+     *   "\" is written "\\" and "," is written "\,".
+     * Values without a comma or backslash are saved exactly as they are.
+     * Keep this rule in sync with almWidgetUtils.ts (splitEscapedList) and ALMWidgetDatasource.java.
+     */
+    function escapeListValue(value) {
+        return String(value).replace(/\\/g, '\\\\').replace(/,/g, '\\,');
+    }
+
+    function joinListValues(values) {
+        return values.map(escapeListValue).join(', ');
+    }
+
+    /**
+     * Splits a saved string on unescaped commas, trims each item and unescapes it.
+     * A backslash only escapes "," and "\"; any other backslash is kept as written.
+     */
+    function splitListValue(text) {
+        const items = [];
+        let current = '';
+        for (let i = 0; i < text.length; i++) {
+            const ch = text.charAt(i);
+            if (ch === '\\' && i + 1 < text.length && (text.charAt(i + 1) === ',' || text.charAt(i + 1) === '\\')) {
+                current += text.charAt(i + 1);
+                i++;
+            } else if (ch === ',') {
+                items.push(current);
+                current = '';
+            } else {
+                current += ch;
+            }
+        }
+        items.push(current);
+        return items.map(function(item) {
+            return item.trim();
+        }).filter(function(item) {
+            return item.length > 0;
+        });
+    }
+
     function debounce(func, wait) {
         let timeout;
         return function executedFunction() {
@@ -136,11 +178,7 @@ governing permissions and limitations under the License.
         parseExistingValues: function() {
             const self = this;
             if (this.originalValue) {
-                const values = this.originalValue.split(',').map(function(v) {
-                    return v.trim();
-                }).filter(function(v) {
-                    return v.length > 0;
-                });
+                const values = splitListValue(this.originalValue);
                 
                 // Store with placeholder text (will be updated when suggestions load)
                 values.forEach(function(value) {
@@ -692,11 +730,11 @@ governing permissions and limitations under the License.
             }
             
             if (this.isMultiple) {
-                // Multi-select: comma-separated values
+                // Multi-select: comma-separated values (commas inside a value are escaped)
                 const values = this.selectedOrder.filter(function(value) {
                     return this.selectedItems.hasOwnProperty(value);
                 }, this);
-                this.$hiddenInput.val(values.join(', '));
+                this.$hiddenInput.val(joinListValues(values));
             } else {
                 // Single-select: single value
                 const values = Object.keys(this.selectedItems);
@@ -896,7 +934,10 @@ governing permissions and limitations under the License.
     window.ALM.ALMWidget.Autocomplete = {
         registerDataSource: registerDataSource,
         getDataSource: getDataSource,
-        initialize: initializeAutocompleteFields
+        initialize: initializeAutocompleteFields,
+        escapeListValue: escapeListValue,
+        joinListValues: joinListValues,
+        splitListValue: splitListValue
     };
 
 })(document, window, jQuery);

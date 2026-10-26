@@ -189,6 +189,41 @@ public class ALMWidgetDatasourceTest {
     assertEquals("Sales, Ops", autocompleteValue(new String[] {"Sales", "Ops"}));
   }
 
+  @Test
+  public void testMultiSelectAutocomplete_savedEscapedString_isNotEscapedAgain() {
+    assertEquals("Sales\\, Marketing, Ops", autocompleteValue("Sales\\, Marketing, Ops"));
+  }
+
+  @Test
+  public void testMultiSelectAutocomplete_savedStringArray_escapesCommasInValues() {
+    assertEquals(
+        "Sales\\, Marketing, Ops", autocompleteValue(new String[] {"Sales, Marketing", "Ops"}));
+  }
+
+  @Test
+  public void testMultiSelectAutocomplete_savedSingleItemArray_escapesCommas() {
+    assertEquals("Sales\\, Marketing", autocompleteValue(new String[] {"Sales, Marketing"}));
+  }
+
+  @Test
+  public void testEscapeListValue() {
+    assertEquals("plain", ALMWidgetDatasource.escapeListValue("plain"));
+    assertEquals("catalog:123", ALMWidgetDatasource.escapeListValue("catalog:123"));
+    assertEquals("a\\, b", ALMWidgetDatasource.escapeListValue("a, b"));
+    assertEquals("a\\\\b", ALMWidgetDatasource.escapeListValue("a\\b"));
+    assertEquals("a\\\\\\, b", ALMWidgetDatasource.escapeListValue("a\\, b"));
+  }
+
+  @Test
+  public void testJoinListValues() {
+    assertEquals("a, b", ALMWidgetDatasource.joinListValues(new String[] {"a", "b"}));
+    assertEquals(
+        "Sales\\, Marketing, Ops",
+        ALMWidgetDatasource.joinListValues(new String[] {"Sales, Marketing", "Ops"}));
+    assertEquals("a, b", ALMWidgetDatasource.joinListValues(new String[] {"a", null, "b"}));
+    assertEquals("", ALMWidgetDatasource.joinListValues(new String[] {}));
+  }
+
   // --- filterWidgetsByAccountType tests (via reflection) ---
 
   @Test

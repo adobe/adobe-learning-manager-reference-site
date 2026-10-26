@@ -9,7 +9,10 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import { handleCommaSeparatedValues } from '@components/ALMWidgetContainer/almWidgetUtils';
+import {
+  handleCommaSeparatedValues,
+  splitEscapedList,
+} from '@components/ALMWidgetContainer/almWidgetUtils';
 import { WidgetType } from '@utils/widgets/common';
 
 describe('handleCommaSeparatedValues', () => {
@@ -80,5 +83,63 @@ describe('handleCommaSeparatedValues', () => {
     handleCommaSeparatedValues(WidgetType.COURSES_AND_PATHS, attributes);
 
     expect(attributes.sourceDetails).toBe('a, b');
+  });
+});
+
+describe('splitEscapedList', () => {
+  // The same vectors are used for alm-autocomplete.js and ALMWidgetDatasource.java
+  it.each([
+    ['a, b', ['a', 'b']],
+    ['a,b', ['a', 'b']],
+    ['Sales\\, Marketing, Ops', ['Sales, Marketing', 'Ops']],
+    ['a\\\\, b', ['a\\', 'b']],
+    ['a\\\\\\,b', ['a\\,b']],
+    ['A\\B', ['A\\B']],
+    ['C:\\temp\\x', ['C:\\temp\\x']],
+    ['trailing\\', ['trailing\\']],
+    ['a, ', ['a']],
+    [' , ,', []],
+    ['', []],
+    ['catalog:1, catalog:2', ['catalog:1', 'catalog:2']],
+    ['course, certification', ['course', 'certification']],
+  ])('splits %j', (input, expected) => {
+    expect(splitEscapedList(input)).toEqual(expected);
+  });
+
+  it('keeps values without a comma or backslash exactly as before', () => {
+    const legacy = 'course:123, course:456 , course:789';
+    expect(splitEscapedList(legacy)).toEqual(legacy.split(',').map(v => v.trim()));
+  });
+
+  it('gives exactly the old result for any value without a backslash', () => {
+    const oldSplit = (value: string) =>
+      value
+        .split(',')
+        .map(item => item.trim())
+        .filter(item => item.length > 0);
+    const pieces = ['a', 'B', ' ', ',', ', ', ':', '1', 'é', '"', '[', ']', '-', 'course:', 'x y'];
+    let seed = 42;
+    const next = () => {
+      seed = (seed * 1664525 + 1013904223) % 4294967296;
+      return seed;
+    };
+    for (let n = 0; n < 5000; n++) {
+      let value = '';
+      const length = next() % 12;
+      for (let i = 0; i < length; i++) {
+        value += pieces[next() % pieces.length];
+      }
+      expect(splitEscapedList(value)).toEqual(oldSplit(value));
+    }
+  });
+
+  it('splits an escaped skill name inside the container', () => {
+    const result = handleCommaSeparatedValues(WidgetType.COURSES_AND_PATHS, {
+      sourceDetails: 'Sales\\, Marketing',
+      tagName: 'one\\, two, three',
+    });
+
+    expect(result.sourceDetails).toEqual(['Sales, Marketing']);
+    expect(result.tagName).toEqual(['one, two', 'three']);
   });
 });

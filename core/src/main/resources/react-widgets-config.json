@@ -309,7 +309,7 @@
       {
         "name": "Source details",
         "ref": "widgetConfig.attributes.sourceDetails",
-        "description": "Select one or more source items. Roles, products and skills whose name contains a comma cannot be selected.",
+        "description": "Select one or more source items.",
         "type": "autocomplete",
         "dataSource": "coursesandpaths-source",
         "emptyText": "Select items",
@@ -352,7 +352,7 @@
       {
         "name": "Tags",
         "ref": "widgetConfig.attributes.tagName",
-        "description": "Show only items with the selected tags. Tags whose name contains a comma cannot be selected.",
+        "description": "Show only items with the selected tags.",
         "type": "autocomplete",
         "dataSource": "tagName",
         "emptyText": "Select tags",

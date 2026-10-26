@@ -202,7 +202,9 @@ public class ALMWidgetDatasource extends SlingAllMethodsServlet {
               createAutocompleteResource(
                   request,
                   name,
-                  multiSelect && values != null ? values : new String[] {value},
+                  multiSelect && values != null
+                      ? new String[] {joinListValues(values)}
+                      : new String[] {value},
                   emptyText,
                   required,
                   fieldLabel,
@@ -465,6 +467,25 @@ public class ALMWidgetDatasource extends SlingAllMethodsServlet {
         options,
         nomenclatureMap,
         null);
+  }
+
+  /**
+   * Multi-select values are saved as one string: values joined with ", ". A comma inside a value is
+   * escaped as "\\," and a backslash as "\\\\", so the value is not split into two. Values without
+   * a comma or backslash are unchanged. Keep in sync with alm-autocomplete.js and almWidgetUtils.ts.
+   */
+  static String escapeListValue(String value) {
+    return value.replace("\\", "\\\\").replace(",", "\\,");
+  }
+
+  static String joinListValues(String[] values) {
+    List<String> escaped = new ArrayList<>();
+    for (String value : values) {
+      if (value != null) {
+        escaped.add(escapeListValue(value));
+      }
+    }
+    return String.join(", ", escaped);
   }
 
   private Resource createAutocompleteResource(
