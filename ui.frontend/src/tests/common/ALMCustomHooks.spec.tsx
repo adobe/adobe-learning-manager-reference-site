@@ -585,6 +585,138 @@ describe('ALMCustomHooks', () => {
       expect(body).not.toHaveProperty('filter.catalogIds');
     });
 
+    it('CATALOGS_source_withStringSourceDetails_setsCatalogIds', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'CATALOGS', sourceDetails: 'catalog:1', sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.catalogIds']).toEqual(['catalog:1']);
+    });
+
+    it('CATALOGS_source_withObjectSourceDetails_usesId', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'CATALOGS', sourceDetails: { id: 'catalog:2', name: 'N' }, sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.catalogIds']).toEqual(['catalog:2']);
+    });
+
+    it('CATALOGS_source_emptySourceDetails_sendsEmptyCatalogIds', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'CATALOGS', sourceDetails: undefined, sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.catalogIds']).toEqual([]);
+    });
+
+    it.each([
+      ['PRODUCTS', 'filter.recommendationProducts'],
+      ['ROLES', 'filter.recommendationRoles'],
+    ])('%s_source_withStringSourceDetails_setsNameAndEmptyLevels', async (source, key) => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source, sourceDetails: 'Sales', sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()[key]).toEqual([{ name: 'Sales', levels: [] }]);
+    });
+
+    it.each([
+      ['PRODUCTS', 'filter.recommendationProducts'],
+      ['ROLES', 'filter.recommendationRoles'],
+    ])('%s_source_withObjectSourceDetails_usesName', async (source, key) => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source, sourceDetails: { name: 'Sales' }, sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()[key]).toEqual([{ name: 'Sales', levels: [] }]);
+    });
+
+    it.each([
+      ['PRODUCTS', 'filter.recommendationProducts'],
+      ['ROLES', 'filter.recommendationRoles'],
+    ])('%s_source_emptySourceDetails_keepsLegacyBodyWithoutName', async (source, key) => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source, sourceDetails: undefined, sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()[key]).toEqual([{ levels: [] }]);
+    });
+
+    it('CATALOGS_source_withMultipleSourceDetails_setsAllCatalogIds', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'CATALOGS', sourceDetails: ['catalog:1', 'catalog:2'], sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.catalogIds']).toEqual(['catalog:1', 'catalog:2']);
+    });
+
+    it.each([
+      ['PRODUCTS', 'filter.recommendationProducts'],
+      ['ROLES', 'filter.recommendationRoles'],
+    ])('%s_source_withMultipleSourceDetails_setsAllNames', async (source, key) => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source, sourceDetails: ['Sales', { name: 'Ops' }], sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()[key]).toEqual([
+        { name: 'Sales', levels: [] },
+        { name: 'Ops', levels: [] },
+      ]);
+    });
+
+    it('SKILLS_source_withMultipleSourceDetails_setsAllSkillNames', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'SKILLS', sourceDetails: ['Sales', 'E-Learning'], sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.skillName']).toEqual(['Sales', 'E-Learning']);
+    });
+
+    it('SKILLS_source_withEmptyListSourceDetails_omitsFilterSkillName', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'SKILLS', sourceDetails: [], sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()).not.toHaveProperty('filter.skillName');
+    });
+
+    it('CATALOGS_source_withEmptyListSourceDetails_matchesLegacyEmptyBody', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'CATALOGS', sourceDetails: [], sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.catalogIds']).toEqual([]);
+    });
+
+    it('PRODUCTS_source_withEmptyListSourceDetails_matchesLegacyBody', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'PRODUCTS', sourceDetails: [], sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.recommendationProducts']).toEqual([{ levels: [] }]);
+    });
+
+    it('SKILLS_source_withStringContainingComma_isNotSplit', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'SKILLS', sourceDetails: 'Sales, Marketing', sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.skillName']).toEqual(['Sales, Marketing']);
+    });
+
     it('loIds_takesPriority_overSkillsSource', async () => {
       await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
         {

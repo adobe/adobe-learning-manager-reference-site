@@ -309,11 +309,12 @@
       {
         "name": "Source details",
         "ref": "widgetConfig.attributes.sourceDetails",
-        "description": "Select source item",
+        "description": "Select one or more source items. Roles, products and skills whose name contains a comma cannot be selected.",
         "type": "autocomplete",
         "dataSource": "coursesandpaths-source",
-        "emptyText": "Select item",
-        "multiSelect": false,
+        "emptyText": "Select items",
+        "multiSelect": true,
+        "draggable": false,
         "mandatory": false
       },
       {

@@ -15,7 +15,7 @@ import { WidgetType } from '../../utils/widgets/common';
  * This config contains the widget references and the attributes that are multi-selectable.
  */
 const multiSelectConfig = {
-  [WidgetType.COURSES_AND_PATHS.toString()]: ['loIds', 'sourceIds', 'loTypes'],
+  [WidgetType.COURSES_AND_PATHS.toString()]: ['loIds', 'sourceIds', 'loTypes', 'sourceDetails'],
   [WidgetType.CATEGORY.toString()]: ['sourceIds'],
 };
 

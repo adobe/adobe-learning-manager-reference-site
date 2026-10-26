@@ -474,6 +474,25 @@ governing permissions and limitations under the License.
     }
 
     /**
+     * Wraps a datasource callback for fields that store the item NAME and save several values as one
+     * comma-separated string. A name that contains a comma would be split into two values on save,
+     * so such names are not offered for selection. Re-population by saved values is left untouched.
+     * @param {Object} options - Options object: {query: string} OR {ids: Array}
+     * @param {Function} callback - Callback function
+     * @returns {Function} Callback that drops items whose value contains a comma
+     */
+    function excludeValuesWithComma(options, callback) {
+        if (options.ids && Array.isArray(options.ids) && options.ids.length > 0) {
+            return callback;
+        }
+        return function(items) {
+            callback((items || []).filter(function(item) {
+                return String(item.value).indexOf(',') === -1;
+            }));
+        };
+    }
+
+    /**
      * Generic function to fetch cached resources (roles or products)
      * Supports both query-based filtering and ID-based fetching
      * @param {string} endpoint - API endpoint
@@ -802,7 +821,7 @@ governing permissions and limitations under the License.
                 'recommendationRole',
                 options,
                 TRANSFORM_STRATEGIES.NAME_AS_VALUE,
-                callback
+                excludeValuesWithComma(options, callback)
             );
         }
 
@@ -819,7 +838,7 @@ governing permissions and limitations under the License.
                 'recommendationProduct',
                 options,
                 TRANSFORM_STRATEGIES.NAME_AS_VALUE,
-                callback
+                excludeValuesWithComma(options, callback)
             );
         }
 
@@ -869,7 +888,7 @@ governing permissions and limitations under the License.
                         return { value: name, text: name };
                     });
                 }
-                callback(skills);
+                excludeValuesWithComma(options, callback)(skills);
             });
         }
 

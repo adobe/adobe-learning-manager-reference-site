@@ -427,6 +427,32 @@ describe('useCoursePathWidget', () => {
       expect(callArgs[0]).toHaveProperty('sourceDetails', 'Sales');
     });
 
+    it('should pass a list of sourceDetails through unchanged', async () => {
+      const multiWidget = {
+        ...mockWidget,
+        attributes: {
+          source: 'SKILLS',
+          sourceDetails: ['Sales', 'Ops'],
+          loIds: null,
+        },
+      };
+
+      mockGetCoursePathWidgetTrainings.mockResolvedValue({
+        trainings: mockTrainings,
+        next: '',
+        meta: {},
+      });
+
+      const { result } = renderHook(() => useCoursePathWidget(multiWidget as any));
+
+      await act(async () => {
+        await result.current.fetchMore();
+      });
+
+      const callArgs = mockGetCoursePathWidgetTrainings.mock.calls[0];
+      expect(callArgs[0]).toHaveProperty('sourceDetails', ['Sales', 'Ops']);
+    });
+
     it('should call getCoursePathWidgetTrainings with correct filters for MYLEARNING', async () => {
       const myLearningWidget = {
         ...mockWidget,

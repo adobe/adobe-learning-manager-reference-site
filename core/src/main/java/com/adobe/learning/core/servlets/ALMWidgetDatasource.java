@@ -202,7 +202,7 @@ public class ALMWidgetDatasource extends SlingAllMethodsServlet {
               createAutocompleteResource(
                   request,
                   name,
-                  multiSelect ? values : new String[] {value},
+                  multiSelect && values != null ? values : new String[] {value},
                   emptyText,
                   required,
                   fieldLabel,

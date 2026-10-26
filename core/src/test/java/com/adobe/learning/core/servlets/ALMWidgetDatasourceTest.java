@@ -138,6 +138,57 @@ public class ALMWidgetDatasourceTest {
     assertTrue(resourceNames.contains("./widgetConfig.attributes.title"));
   }
 
+  private String autocompleteValue(Object storedPropertyValue) {
+    ALMWidgetOptions multiOption = new ALMWidgetOptions();
+    multiOption.setName("Source details");
+    multiOption.setRef("widgetConfig.attributes.sourceDetails");
+    multiOption.setType("autocomplete");
+    multiOption.setDataSource("coursesandpaths-source");
+    multiOption.setMultiSelect(true);
+
+    ALMWidgetConfig multiWidget = new ALMWidgetConfig();
+    multiWidget.setName("Multi Widget");
+    multiWidget.setRef("com.adobe.learning.multi");
+    multiWidget.setType("widget");
+    multiWidget.setOptions(Collections.singletonList(multiOption));
+    lenient().when(widgetConfigService.getWidgetConfigs()).thenReturn(Arrays.asList(multiWidget));
+
+    Map<String, Object> props = new HashMap<>();
+    props.put("sling:resourceType", "learning/components/ALMWidget");
+    props.put("widgetRefSelected", "com.adobe.learning.multi");
+    props.put("widgetConfig.attributes.sourceDetails", storedPropertyValue);
+    ctx.create().resource("/widget/multi/jcr:content", props);
+    ctx.requestPathInfo().setSuffix("/widget/multi/jcr:content");
+
+    dsServlet.doGet(ctx.request(), ctx.response());
+
+    SimpleDataSource sds =
+        (SimpleDataSource) ctx.request().getAttribute(DataSource.class.getName());
+    Iterator<Resource> rsrcs = sds.iterator();
+    while (rsrcs.hasNext()) {
+      ValueMap map = rsrcs.next().getValueMap();
+      if ("./widgetConfig.attributes.sourceDetails".equals(map.get("name", String.class))) {
+        return map.get("value", String.class);
+      }
+    }
+    return null;
+  }
+
+  @Test
+  public void testMultiSelectAutocomplete_savedCommaSeparatedString_isPrefilled() {
+    assertEquals("Sales, Ops", autocompleteValue("Sales, Ops"));
+  }
+
+  @Test
+  public void testMultiSelectAutocomplete_savedSingleValue_isPrefilled() {
+    assertEquals("catalog:1", autocompleteValue("catalog:1"));
+  }
+
+  @Test
+  public void testMultiSelectAutocomplete_savedStringArray_isJoined() {
+    assertEquals("Sales, Ops", autocompleteValue(new String[] {"Sales", "Ops"}));
+  }
+
   // --- filterWidgetsByAccountType tests (via reflection) ---
 
   @Test

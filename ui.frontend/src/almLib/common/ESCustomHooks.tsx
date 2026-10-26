@@ -434,13 +434,18 @@ class ESCustomHooks implements ICustomHooks {
     if (loIds && loIds.length > 0) {
       requestObject.filters.terms.loId = loIds;
     } else {
+      // Only a single {name, id} object is supported here; strings and lists apply no source filter
+      const sourceName =
+        sourceDetails && !Array.isArray(sourceDetails) && typeof sourceDetails === 'object'
+          ? sourceDetails.name
+          : undefined;
       // Apply source-based filtering when loIds is not provided
-      if (source === WIDGET_SOURCE.PRODUCT_SOURCE && sourceDetails?.name) {
-        requestObject.filters.terms.recommendationProductNames = [sourceDetails.name];
-      } else if (source === WIDGET_SOURCE.ROLE_SOURCE && sourceDetails?.name) {
-        requestObject.filters.terms.recommendationRoleNames = [sourceDetails.name];
-      } else if (source === WIDGET_SOURCE.CATALOG_SOURCE && sourceDetails?.name) {
-        requestObject.filters.terms.catalogNames = [sourceDetails.name];
+      if (source === WIDGET_SOURCE.PRODUCT_SOURCE && sourceName) {
+        requestObject.filters.terms.recommendationProductNames = [sourceName];
+      } else if (source === WIDGET_SOURCE.ROLE_SOURCE && sourceName) {
+        requestObject.filters.terms.recommendationRoleNames = [sourceName];
+      } else if (source === WIDGET_SOURCE.CATALOG_SOURCE && sourceName) {
+        requestObject.filters.terms.catalogNames = [sourceName];
       }
     }
 

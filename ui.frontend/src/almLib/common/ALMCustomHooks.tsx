@@ -209,28 +209,30 @@ class ALMCustomHooks implements ICustomHooks {
     if (loIds && loIds.length > 0) {
       body['ids'] = loIds;
     } else {
+      // sourceDetails may be a string, a {name, id} object, or a list of either (AEM multi-select).
+      // A non-list value is handled as a single item so existing requests stay identical.
+      let sourceDetailItems: any[] = Array.isArray(sourceDetails)
+        ? sourceDetails.filter(Boolean)
+        : [sourceDetails];
+      if (sourceDetailItems.length === 0) {
+        sourceDetailItems = [undefined];
+      }
       if (source === WIDGET_SOURCE.PRODUCT_SOURCE) {
-        body['filter.recommendationProducts'] = [
-          {
-            name: sourceDetails?.name || sourceDetails,
-            levels: [],
-          },
-        ];
+        body['filter.recommendationProducts'] = sourceDetailItems.map(item => ({
+          name: item?.name || item,
+          levels: [],
+        }));
       } else if (source === WIDGET_SOURCE.ROLE_SOURCE) {
-        body['filter.recommendationRoles'] = [
-          {
-            name: sourceDetails?.name || sourceDetails,
-            levels: [],
-          },
-        ];
+        body['filter.recommendationRoles'] = sourceDetailItems.map(item => ({
+          name: item?.name || item,
+          levels: [],
+        }));
       } else if (source === WIDGET_SOURCE.CATALOG_SOURCE) {
-        const catalogIds =
-          sourceDetails?.id || sourceDetails ? [sourceDetails.id || sourceDetails] : [];
-        body['filter.catalogIds'] = catalogIds;
+        body['filter.catalogIds'] = sourceDetailItems.map(item => item?.id || item).filter(Boolean);
       } else if (source === WIDGET_SOURCE.SKILL_SOURCE) {
-        const skillName = sourceDetails?.name || sourceDetails;
-        if (skillName) {
-          body['filter.skillName'] = [skillName];
+        const skillNames = sourceDetailItems.map(item => item?.name || item).filter(Boolean);
+        if (skillNames.length > 0) {
+          body['filter.skillName'] = skillNames;
         }
       }
     }

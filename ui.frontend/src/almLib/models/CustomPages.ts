@@ -139,15 +139,21 @@ export interface CustomWidget {
 }
 
 /**
+ * A Courses and Paths source selection. `sourceDetails` can be one of these or a list of them
+ * when several sources are selected.
+ */
+export interface CoursesAndPathSourceDetails {
+  name?: string;
+  id?: string | string[];
+}
+
+/**
  * Filter parameters for widget training queries
  */
 export interface WidgetTrainingFilters {
   loIds?: string[];
   source?: string;
-  sourceDetails?: {
-    name?: string;
-    id?: string | string[];
-  };
+  sourceDetails?: CoursesAndPathSourceDetails | CoursesAndPathSourceDetails[];
   learnerState?: string[];
   sort: string;
   bookmarks?: boolean;

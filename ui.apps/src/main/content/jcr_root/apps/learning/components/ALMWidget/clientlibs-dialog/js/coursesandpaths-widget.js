@@ -35,7 +35,7 @@ governing permissions and limitations under the License.
         
         return {
             fieldLabel: 'Source details',
-            placeholder: 'Select ' + term.singular
+            placeholder: 'Select ' + term.plural
         };
     }
 
@@ -96,9 +96,6 @@ governing permissions and limitations under the License.
             
             $(CP_DIALOG_REL).find(`[name="./widgetConfig.attributes.isSourceSelected"][value="${defaultValue}"]`).prop('checked', true);
         }
-        
-        // Initialize catalog text display for saved values
-        initializeCatalogDisplay();
     }
 
     /**
@@ -142,44 +139,6 @@ governing permissions and limitations under the License.
             $loIdsWrapper.removeAttr('hidden');
         }
         validateFields();
-    }
-
-    /**
-     * Initialize catalog display for saved values
-     * Catalogs store ID but need to display name
-     * @private
-     */
-    function initializeCatalogDisplay() {
-        const selectedWidget = $('.selector-widget coral-select-item:selected').val();
-        
-        if (selectedWidget !== WIDGET_REF) {
-            return;
-        }
-        
-        // Small delay to ensure autocomplete is initialized
-        setTimeout(function() {
-            const source = $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.coursesAndPaths.source"]').val();
-            const sourceDetails = $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.sourceDetails"]').val();
-            
-            // Only for catalogs with a saved ID value
-            if (source === 'CATALOGS' && sourceDetails && sourceDetails.trim().length > 0) {
-                // Check if display field already has text (autocomplete already initialized it)
-                const $displayField = $(CP_DIALOG_REL).find('[name="./widgetConfig.attributes.sourceDetails_display"]');
-                if ($displayField.length > 0 && (!$displayField.val() || $displayField.val().trim().length === 0)) {
-                    // Fetch catalog name by ID
-                    if (window.ALM && window.ALM.ALMWidget && window.ALM.ALMWidget.Autocomplete && 
-                        window.ALM.ALMWidget.Autocomplete.fetchCatalogsByIds) {
-                        
-                        window.ALM.ALMWidget.Autocomplete.fetchCatalogsByIds([sourceDetails], function(catalogs) {
-                            if (catalogs && catalogs.length > 0) {
-                                // Update display field with catalog name
-                                $displayField.val(catalogs[0].text);
-                            }
-                        });
-                    }
-                }
-            }
-        }, 300);
     }
 
     /**
