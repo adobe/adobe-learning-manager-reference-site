@@ -174,7 +174,9 @@ governing permissions and limitations under the License.
          * Make an authenticated API call to ALM
          * @param {string} endpoint - API endpoint (relative to primeApiURL)
          * @param {Object} options - jQuery AJAX options (method, data, etc.)
-         * @param {Function} callback - Callback function(data, error)
+         * @param {Function} callback - Callback function(data, error). On an HTTP failure `error`
+         *     is {status, retryAfter, message}; it is not called when the request is aborted.
+         * @returns {Object|undefined} The jqXHR (has abort()), or undefined when no call was made
          */
         function makeApiCall(endpoint, options, callback) {
             var configAndToken = getConfigAndToken();
@@ -194,14 +196,21 @@ governing permissions and limitations under the License.
                     callback(response, null);
                 },
                 error: function(xhr, status, error) {
+                    if (status === 'abort') {
+                        return;
+                    }
                     console.error('ALM API call failed:', error);
                     console.error('Status:', status);
                     console.error('Response:', xhr.responseText);
-                    callback(null, error);
+                    callback(null, {
+                        status: xhr.status,
+                        retryAfter: xhr.getResponseHeader('Retry-After'),
+                        message: error
+                    });
                 }
             });
 
-            $.ajax(ajaxOptions);
+            return $.ajax(ajaxOptions);
         }
 
             /**
@@ -483,33 +492,52 @@ governing permissions and limitations under the License.
      * @param {string} transformStrategy - Value transformation strategy
      * @param {Function} callback - Callback function
      */
+    /**
+     * Resolve a cached resource list for one caller: filter by IDs when given, otherwise by query
+     */
+    function resolveCachedResource(items, options, transformStrategy, callback) {
+        var transformed = transformData(items, transformStrategy);
+
+        // If IDs are provided, filter by those IDs
+        if (options.ids && Array.isArray(options.ids) && options.ids.length > 0) {
+            callback(transformed.filter(function(item) {
+                return options.ids.indexOf(item.value) !== -1;
+            }));
+            return;
+        }
+
+        // Otherwise, filter by query
+        callback(filterItems(transformed, options.query));
+    }
+
     function fetchCachedResource(endpoint, cache, typePrefix, options, transformStrategy, callback) {
         // If data is already cached
         if (cache.value !== null) {
-            var transformed = transformData(cache.value, transformStrategy);
-            
-            // If IDs are provided, filter by those IDs
-            if (options.ids && Array.isArray(options.ids) && options.ids.length > 0) {
-                var filtered = transformed.filter(function(item) {
-                    return options.ids.indexOf(item.value) !== -1;
-                });
-                callback(filtered);
-                return;
-            }
-            
-            // Otherwise, filter by query
-            var filtered = filterItems(transformed, options.query);
-            callback(filtered);
+            resolveCachedResource(cache.value, options, transformStrategy, callback);
             return;
         }
+
+        // A fetch is already in flight (e.g. several fields opened together): wait for it
+        // instead of sending the same request again.
+        var waiter = { options: options, transformStrategy: transformStrategy, callback: callback };
+        if (cache.waiters) {
+            cache.waiters.push(waiter);
+            return;
+        }
+        cache.waiters = [waiter];
 
         // First call - fetch from API and cache the results
         ALMConfigHelper.makeApiCall(endpoint, {
             method: 'GET',
             dataType: 'json'
         }, function(response, error) {
+            var waiters = cache.waiters;
+            cache.waiters = null;
+
             if (error) {
-                callback([]);
+                waiters.forEach(function(w) {
+                    w.callback([], error);
+                });
                 return;
             }
 
@@ -527,21 +555,9 @@ governing permissions and limitations under the License.
             // Cache the results for future calls (always store with ID as value)
             cache.value = items;
 
-            // Transform based on strategy
-            var transformed = transformData(items, transformStrategy);
-            
-            // If IDs are provided, filter by those IDs
-            if (options.ids && Array.isArray(options.ids) && options.ids.length > 0) {
-                var filtered = transformed.filter(function(item) {
-                    return options.ids.indexOf(item.value) !== -1;
-                });
-                callback(filtered);
-                return;
-            }
-            
-            // Otherwise, filter by query
-            var filtered = filterItems(transformed, options.query);
-            callback(filtered);
+            waiters.forEach(function(w) {
+                resolveCachedResource(items, w.options, w.transformStrategy, w.callback);
+            });
         });
     }
 
@@ -716,37 +732,32 @@ governing permissions and limitations under the License.
             }
 
             // Otherwise, use query-based search with POST /search/query
+            var query = options.query ? options.query.trim() : '';
             var requestBody = {
                 'filter.loTypes': ['catalog'],
-                'query': options.query || null,
+                'query': query || null,
                 'sort': 'relevance',
                 'pageLimit': 10
             };
 
-            // Make API call using helper
-            ALMConfigHelper.makeApiCall('/search/query', {
-                method: 'POST',
-                data: JSON.stringify(requestBody),
-                dataType: 'json'
-            }, function(response, error) {
-                if (error) {
-                    callback([]);
-                    return;
-                }
-
-                // Parse response and extract catalog data
-                var catalogs = [];
-                if (response && response.data && Array.isArray(response.data)) {
-                    catalogs = response.data.map(function(item) {
+            return cachedSearch(
+                'catalog|' + query,
+                '/search/query',
+                { method: 'POST', data: JSON.stringify(requestBody), dataType: 'json' },
+                function(response) {
+                    if (!response || !response.data || !Array.isArray(response.data)) {
+                        return [];
+                    }
+                    return response.data.map(function(item) {
                         return {
                             value: item.id,
                             text: extractName(item)
                         };
                     });
-                }
-
-                callback(catalogs);
-            });
+                },
+                callback,
+                query.length === 0
+            );
         }
 
         /**
@@ -823,13 +834,130 @@ governing permissions and limitations under the License.
             );
         }
 
+        // Server-side typeahead sources (skills, tags, catalogs, learning objects) hit a
+        // rate-limited search, so they need a minimum length for typed text, a longer debounce
+        // and a cache (see alm-autocomplete.js for how these settings are applied). An empty
+        // box (focus, or cleared) runs one cached search that lists the first results.
+        var SEARCH_TYPEAHEAD_CONFIG = {
+            minSearchLength: 2,
+            debounceMs: 600,
+            searchOnFocus: true,
+            allowEmptyQuery: true
+        };
+        // Search results are cached until the widget dialog closes (see clearSearchCache).
+        var searchCache = {};
+        var searchInFlight = {};
+        var searchCacheGeneration = 0;
+
+        /**
+         * Run a typeahead search, serving repeated searches from the cache.
+         * Only successful results are cached.
+         * @param {string} cacheKey - Identifies the search (type + query)
+         * @param {string} endpoint - API endpoint (relative to primeApiURL)
+         * @param {Object} ajaxOptions - jQuery AJAX options (method, data, dataType)
+         * @param {Function} parse - function(response) returning the suggestions list
+         * @param {Function} callback - Callback function(suggestions[, error])
+         * @param {boolean} [shareInFlight] - Let concurrent callers wait for one request. Such a
+         *     request is shared, so no abort handle is returned.
+         * @returns {Object|undefined} Request handle with abort(), when a request was sent
+         */
+        function cachedSearch(cacheKey, endpoint, ajaxOptions, parse, callback, shareInFlight) {
+            var cached = searchCache[cacheKey];
+            if (cached) {
+                callback(cached.items);
+                return;
+            }
+
+            var waiters = null;
+            if (shareInFlight) {
+                if (searchInFlight[cacheKey]) {
+                    searchInFlight[cacheKey].push(callback);
+                    return;
+                }
+                waiters = searchInFlight[cacheKey] = [callback];
+            }
+
+            var generation = searchCacheGeneration;
+            var request = ALMConfigHelper.makeApiCall(endpoint, ajaxOptions, function(response, error) {
+                var callbacks = waiters || [callback];
+                if (waiters && searchInFlight[cacheKey] === waiters) {
+                    delete searchInFlight[cacheKey];
+                }
+
+                if (error) {
+                    callbacks.forEach(function(cb) {
+                        cb([], error);
+                    });
+                    return;
+                }
+
+                var items = parse(response);
+                // Don't cache a response that arrives after the dialog was closed.
+                if (generation === searchCacheGeneration) {
+                    searchCache[cacheKey] = { items: items };
+                }
+                callbacks.forEach(function(cb) {
+                    cb(items);
+                });
+            });
+
+            return shareInFlight ? undefined : request;
+        }
+
+        /**
+         * Forget all cached searches. Called when the widget dialog closes, so the next
+         * dialog sees newly created skills, tags, catalogs and learning objects.
+         */
+        window.ALM.ALMWidget.Autocomplete.clearSearchCache = function() {
+            searchCache = {};
+            searchInFlight = {};
+            searchCacheGeneration++;
+        };
+
+        // Searches are cached only for the life of one widget dialog, so clear when a dialog
+        // opens or closes. Native capture-phase listeners run before any jQuery handler, so
+        // another handler failing or stopping the event cannot prevent the clear.
+        var DIALOG_MARKER_DATA = 'almSearchCacheDialog';
+
+        function isWidgetDialog(element) {
+            if (!element || element.nodeName !== 'CORAL-DIALOG') {
+                return false;
+            }
+            return !!$(element).data(DIALOG_MARKER_DATA) ||
+                $(element).find('.selector-widget, .alm-autocomplete-field').length > 0;
+        }
+
+        function clearSearchCacheFor(reason) {
+            window.ALM.ALMWidget.Autocomplete.clearSearchCache();
+            console.debug('[ALM Widget] search cache cleared (' + reason + ')');
+        }
+
+        ['coral-overlay:open', 'coral-overlay:close'].forEach(function(eventName) {
+            document.addEventListener(eventName, function(e) {
+                if (isWidgetDialog(e.target)) {
+                    clearSearchCacheFor(eventName);
+                }
+            }, true);
+        });
+
+        // A dialog seen for the first time starts with an empty cache, even if its
+        // open/close events are never heard.
+        $(document).on('foundation-contentloaded', function(e) {
+            var $dialog = $(e.target).closest('coral-dialog');
+            if ($dialog.length && !$dialog.data(DIALOG_MARKER_DATA)) {
+                $dialog.data(DIALOG_MARKER_DATA, true);
+                clearSearchCacheFor('new dialog');
+            }
+        });
+
         /**
          * Get skill or tag NAMES for the Courses & Paths Widget
          * Saves and displays the NAME (not id). On dialog open, saved names are echoed
          * back without an API lookup. Typeahead hits GET /search?filter.loTypes=<type>.
          * @param {string} loType - Search type: 'skill' or 'tag'
          * @param {Object} options - Options object: {query: string} OR {ids: Array}
-         * @param {Function} callback - Callback function
+         * @param {Function} callback - Callback function(names[, error])
+         * @returns {Object|undefined} Request handle with abort(), when a request was sent
          */
         function getSearchNamesForCoursesAndPaths(loType, options, callback) {
             // Prepopulation on dialog open: saved values are names, echo them back.
@@ -841,7 +969,9 @@ governing permissions and limitations under the License.
                 return;
             }
 
-            // Typeahead: per-keystroke server-side search.
+            var query = options.query ? options.query.trim() : '';
+
+            // Typeahead: server-side search.
             var params = [
                 'page%5Blimit%5D=10',
                 'autoCompleteMode=true',
@@ -849,43 +979,40 @@ governing permissions and limitations under the License.
                 'filter.loTypes=' + loType,
                 'matchType=phrase'
             ];
-            if (options.query && options.query.trim().length > 0) {
-                params.push('query=' + encodeURIComponent(options.query));
+            if (query.length > 0) {
+                params.push('query=' + encodeURIComponent(query));
             }
-            var endpoint = '/search?' + params.join('&');
 
-            ALMConfigHelper.makeApiCall(endpoint, {
-                method: 'GET',
-                dataType: 'json'
-            }, function(response, error) {
-                if (error) {
-                    callback([]);
-                    return;
-                }
-
-                var names = [];
-                if (response && response.data && Array.isArray(response.data)) {
-                    names = response.data.map(function(item) {
+            return cachedSearch(
+                loType + '|' + query,
+                '/search?' + params.join('&'),
+                { method: 'GET', dataType: 'json' },
+                function(response) {
+                    if (!response || !response.data || !Array.isArray(response.data)) {
+                        return [];
+                    }
+                    return response.data.map(function(item) {
                         var name = extractName(item);
                         return { value: name, text: name };
                     });
-                }
-                callback(names);
-            });
+                },
+                callback,
+                query.length === 0
+            );
         }
 
         /**
          * Get Skills for Courses & Paths Widget (saves the skill NAME)
          */
         function getSkillsForCoursesAndPaths(options, callback) {
-            getSearchNamesForCoursesAndPaths('skill', options, callback);
+            return getSearchNamesForCoursesAndPaths('skill', options, callback);
         }
 
         /**
          * Get Tags for Courses & Paths Widget (saves the tag NAME)
          */
         function getTagsForCoursesAndPaths(options, callback) {
-            getSearchNamesForCoursesAndPaths('tag', options, callback);
+            return getSearchNamesForCoursesAndPaths('tag', options, callback);
         }
 
         /**
@@ -912,8 +1039,12 @@ governing permissions and limitations under the License.
                 getProducts(options, callback);
             } else {
                 // Default to catalogs for 'CATALOGS' or any other value
-                getCatalogs(options, callback);
+                return getCatalogs(options, callback);
             }
+        }, function() {
+            // Roles and products are cached lists; only catalogs use the rate-limited search.
+            var source = $('.cp-dialog-form-rel [name="./widgetConfig.attributes.source"]').val();
+            return source === 'ROLES' || source === 'PRODUCTS' ? null : SEARCH_TYPEAHEAD_CONFIG;
         });
 
         /**
@@ -934,18 +1065,24 @@ governing permissions and limitations under the License.
             } else if (source === 'PRODUCTS') {
                 getProductsForCoursesAndPaths(options, callback);
             } else if (source === 'SKILLS') {
-                getSkillsForCoursesAndPaths(options, callback);
+                return getSkillsForCoursesAndPaths(options, callback);
             } else {
                 // For catalogs: use same as category (stores ID)
-                getCatalogs(options, callback);
+                return getCatalogs(options, callback);
             }
+        }, function() {
+            // Skills and catalogs use the rate-limited search; roles and products are small cached lists.
+            var source = $('.cp-dialog-form-rel [name="./widgetConfig.attributes.coursesAndPaths.source"]').val();
+            return source === 'ROLES' || source === 'PRODUCTS' ? null : SEARCH_TYPEAHEAD_CONFIG;
         });
 
         /**
          * Tags Data Source (Courses & Paths)
          * Stores the tag NAME.
          */
-        window.ALM.ALMWidget.Autocomplete.registerDataSource('tagName', getTagsForCoursesAndPaths);
+        window.ALM.ALMWidget.Autocomplete.registerDataSource('tagName', getTagsForCoursesAndPaths, function() {
+            return SEARCH_TYPEAHEAD_CONFIG;
+        });
 
         /**
          * ========================================
@@ -975,6 +1112,7 @@ governing permissions and limitations under the License.
             }
 
             // Otherwise, use query-based search with POST /search/query
+            var query = options.query ? options.query.trim() : '';
             var requestBody = {
                 'filter.loTypes': [
                     'course',
@@ -982,42 +1120,39 @@ governing permissions and limitations under the License.
                     'jobAid',
                     'certification'
                 ],
-                'query': options.query || null,
+                'query': query || null,
                 'sort': 'relevance',
                 'pageLimit': 10
             };
 
-            // Make API call using helper (same endpoint as catalogs)
-            ALMConfigHelper.makeApiCall('/search/query', {
-                method: 'POST',
-                data: JSON.stringify(requestBody),
-                dataType: 'json'
-            }, function(response, error) {
-                if (error) {
-                    callback([]);
-                    return;
-                }
-
-                // Parse response and extract learning objects data
-                var learningObjects = [];
-                if (response && response.data && Array.isArray(response.data)) {
-                    learningObjects = response.data.map(function(item) {
+            // Same endpoint as catalogs
+            return cachedSearch(
+                'lo|' + query,
+                '/search/query',
+                { method: 'POST', data: JSON.stringify(requestBody), dataType: 'json' },
+                function(response) {
+                    if (!response || !response.data || !Array.isArray(response.data)) {
+                        return [];
+                    }
+                    return response.data.map(function(item) {
                         return {
                             value: item.id,  // e.g., "course:12075786"
                             text: extractName(item)
                         };
                     });
-                }
-                
-                callback(learningObjects);
-            });
+                },
+                callback,
+                query.length === 0
+            );
         }
 
         /**
          * Register 'lo' datasource for Learning Objects
          * Accepts either {query: string} for search OR {ids: Array} for prepopulation
          */
-        window.ALM.ALMWidget.Autocomplete.registerDataSource('lo', getLearningObjects);
+        window.ALM.ALMWidget.Autocomplete.registerDataSource('lo', getLearningObjects, function() {
+            return SEARCH_TYPEAHEAD_CONFIG;
+        });
 
         /**
          * ========================================
