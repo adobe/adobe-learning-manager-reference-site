@@ -1217,7 +1217,7 @@ const extractPaginationFromNextUrl = (
  */
 export const calculatePaginationState = (
   next: string,
-  isSelectedLoIds: boolean,
+  hasMoreSelectedIds: boolean,
   totalFetched: number,
   pageLimit: number,
   maxItemToFetch: number | undefined,
@@ -1231,7 +1231,8 @@ export const calculatePaginationState = (
   let tempCurrentOffset = currentOffset;
   let tempCursorBased = cursorBased;
 
-  if (!next || (maxItemToFetch && tempTotalFetched >= maxItemToFetch)) {
+  // Selected-id queries return no `next` link; keep going while unfetched id slices remain
+  if ((!next && !hasMoreSelectedIds) || (maxItemToFetch && tempTotalFetched >= maxItemToFetch)) {
     tempFetchedAll = true;
   } else {
     const paginationInfo = extractPaginationFromNextUrl(next, cursorBased);

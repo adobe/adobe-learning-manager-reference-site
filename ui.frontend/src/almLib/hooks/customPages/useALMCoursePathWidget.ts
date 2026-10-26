@@ -105,18 +105,17 @@ export const useCoursePathWidget = (widget: Widget) => {
   } = state;
 
   const incrementCallNumber = 1;
-  const optionNumberLimit = 10;
 
   const updateState = (newState: Partial<typeof state>) => {
     setState(prevState => ({ ...prevState, ...newState }));
   };
 
-  const handleFetchError = (isSelectedLoIds: boolean, error?: any) => {
+  const handleFetchError = (hasMoreSelectedLoIds: boolean, error?: any) => {
     if (error) {
       console.log('Result fetching failed', error);
     }
     setState(prevState => ({ ...prevState, callFailed: true, fetchingData: false }));
-    parseResponseFromAPI({ trainings: [], next: '' }, isSelectedLoIds);
+    parseResponseFromAPI({ trainings: [], next: '' }, hasMoreSelectedLoIds);
   };
 
   const fetchMore = async (query: string = '') => {
@@ -124,7 +123,7 @@ export const useCoursePathWidget = (widget: Widget) => {
       return;
     }
     let widgetInfo = widget.attributes as CoursesAndPathWidgetAttributes;
-    if (widgetInfo.loIds?.length && widgetInfo.loIds.length < optionNumberLimit * callNumber) {
+    if (widgetInfo.loIds?.length && widgetInfo.loIds.length <= pageLimit * callNumber) {
       return;
     }
 
@@ -132,7 +131,7 @@ export const useCoursePathWidget = (widget: Widget) => {
 
     const { source, loIds, loTypes } = widgetInfo;
     const sourceDetails = (widgetInfo as any).sourceDetails;
-    const isSelectedLoIds = loIds && loIds.length > 0 ? true : false;
+    const hasMoreSelectedLoIds = !!loIds?.length && pageLimit * (callNumber + 1) < loIds.length;
 
     // Prepare filter parameters
     let paginatedLoIds = undefined;
@@ -249,12 +248,12 @@ export const useCoursePathWidget = (widget: Widget) => {
           break;
       }
       if (response) {
-        parseResponseFromAPI(response, isSelectedLoIds);
+        parseResponseFromAPI(response, hasMoreSelectedLoIds);
       } else {
-        handleFetchError(isSelectedLoIds);
+        handleFetchError(hasMoreSelectedLoIds);
       }
     } catch (reason) {
-      handleFetchError(isSelectedLoIds, reason);
+      handleFetchError(hasMoreSelectedLoIds, reason);
     }
   };
 
@@ -264,7 +263,7 @@ export const useCoursePathWidget = (widget: Widget) => {
       next: string;
       meta?: any;
     },
-    isSelectedLoIds: boolean
+    hasMoreSelectedLoIds: boolean
   ) => {
     const { trainings, next, meta } = response;
 
@@ -285,7 +284,7 @@ export const useCoursePathWidget = (widget: Widget) => {
     // Calculate pagination state using helper function
     const paginationState = calculatePaginationState(
       next,
-      isSelectedLoIds,
+      hasMoreSelectedLoIds,
       totalFetched,
       pageLimit,
       maxItemToFetch,

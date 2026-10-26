@@ -496,6 +496,78 @@ describe('useCoursePathWidget', () => {
       expect(callArgs[0].loIds).toEqual(['course:1', 'course:2']);
     });
 
+    it.each([
+      [['course:1', 'course:2', 'course:3'], true],
+      [['course:1', 'course:2'], false],
+      [null, false],
+    ])(
+      'should tell calculatePaginationState whether selected loIds %j remain (%s)',
+      async (loIds, expected) => {
+        const widget = { ...mockWidget, attributes: { ...mockWidget.attributes, loIds } };
+
+        mockGetPageLimitForWidget.mockReturnValue(2);
+        mockGetCoursePathWidgetTrainings.mockResolvedValue({
+          trainings: mockTrainings,
+          next: '',
+          meta: {},
+        });
+
+        const { result } = renderHook(() => useCoursePathWidget(widget as any));
+
+        await act(async () => {
+          await result.current.fetchMore();
+        });
+
+        expect(mockCalculatePaginationState.mock.calls[0][1]).toBe(expected);
+      }
+    );
+
+    it('should fetch the next loIds slice when pageLimit is below 10', async () => {
+      const loIds = Array.from({ length: 8 }, (_, i) => `course:${i + 1}`);
+      const widget = { ...mockWidget, attributes: { ...mockWidget.attributes, loIds } };
+
+      mockGetPageLimitForWidget.mockReturnValue(5);
+      mockGetCoursePathWidgetTrainings.mockResolvedValue({
+        trainings: mockTrainings,
+        next: '',
+        meta: {},
+      });
+
+      const { result } = renderHook(() => useCoursePathWidget(widget as any));
+
+      await act(async () => {
+        await result.current.fetchMore();
+      });
+      await act(async () => {
+        await result.current.fetchMore();
+      });
+
+      expect(mockGetCoursePathWidgetTrainings).toHaveBeenCalledTimes(2);
+      expect(mockGetCoursePathWidgetTrainings.mock.calls[1][0].loIds).toEqual(loIds.slice(5));
+    });
+
+    it('should not fetch an empty loIds slice once all selected ids are consumed', async () => {
+      const loIds = ['course:1', 'course:2', 'course:3', 'course:4'];
+      const widget = { ...mockWidget, attributes: { ...mockWidget.attributes, loIds } };
+
+      mockGetPageLimitForWidget.mockReturnValue(2);
+      mockGetCoursePathWidgetTrainings.mockResolvedValue({
+        trainings: mockTrainings,
+        next: '',
+        meta: {},
+      });
+
+      const { result } = renderHook(() => useCoursePathWidget(widget as any));
+
+      for (let i = 0; i < 3; i++) {
+        await act(async () => {
+          await result.current.fetchMore();
+        });
+      }
+
+      expect(mockGetCoursePathWidgetTrainings).toHaveBeenCalledTimes(2);
+    });
+
     it('should set fetchingData to true while fetching', async () => {
       let resolveFetch: any;
       const fetchPromise = new Promise(resolve => {

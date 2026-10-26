@@ -64,17 +64,13 @@ export const useALMCategoryWidget = (widget: Widget) => {
   };
 
   const incrementCallNumber = 1;
-  const optionNumberLimit = 10;
 
   const fetchMore = async (query: string = '') => {
     if (!hasMoreResults() || fetchingData) {
       return;
     }
     let widgetInfo = widget.attributes as CategoryWidgetAttributes;
-    if (
-      widgetInfo.sourceIds?.length &&
-      widgetInfo.sourceIds.length < optionNumberLimit * callNumber
-    ) {
+    if (widgetInfo.sourceIds?.length && widgetInfo.sourceIds.length <= pageLimit * callNumber) {
       return;
     }
 
@@ -82,6 +78,8 @@ export const useALMCategoryWidget = (widget: Widget) => {
 
     const { source, sourceIds } = widgetInfo;
     const isSelectedSourceIds = sourceIds ? true : false;
+    const hasMoreSelectedSourceIds =
+      !!sourceIds?.length && pageLimit * (callNumber + 1) < sourceIds.length;
 
     // Prepare filter parameters
     let paginatedSourceIds = undefined;
@@ -108,23 +106,24 @@ export const useALMCategoryWidget = (widget: Widget) => {
     try {
       const response = await APIServiceInstance.getCategoryWidgetData(filters, pagination);
       if (response) {
-        parseResponseFromAPI(response, isSelectedSourceIds);
+        parseResponseFromAPI(response, isSelectedSourceIds, hasMoreSelectedSourceIds);
       } else {
         setState(prevState => ({ ...prevState, callFailed: true, fetchingData: false }));
         const dummyResponse = { categories: [], next: '' };
-        parseResponseFromAPI(dummyResponse, isSelectedSourceIds);
+        parseResponseFromAPI(dummyResponse, isSelectedSourceIds, hasMoreSelectedSourceIds);
       }
     } catch (reason) {
       console.log('Result fetching failed', reason);
       setState(prevState => ({ ...prevState, callFailed: true, fetchingData: false }));
       const dummyResponse = { categories: [], next: '' };
-      parseResponseFromAPI(dummyResponse, isSelectedSourceIds);
+      parseResponseFromAPI(dummyResponse, isSelectedSourceIds, hasMoreSelectedSourceIds);
     }
   };
 
   const parseResponseFromAPI = (
     response: { categories: PrimeRecommendation[]; next: string; meta?: any },
-    isSelectedSourceIds: boolean
+    isSelectedSourceIds: boolean,
+    hasMoreSelectedSourceIds: boolean
   ) => {
     const { categories, next, meta } = response;
 
@@ -148,7 +147,7 @@ export const useALMCategoryWidget = (widget: Widget) => {
       cursorBased: tempCursorBased,
     } = calculatePaginationState(
       next,
-      isSelectedSourceIds,
+      hasMoreSelectedSourceIds,
       totalFetched,
       pageLimit,
       maxItemToFetch,

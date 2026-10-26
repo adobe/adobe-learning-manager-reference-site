@@ -364,6 +364,79 @@ describe('useALMCategoryWidget', () => {
       expect(callArgs[0].sourceIds).toEqual(['cat:1', 'cat:2']);
     });
 
+    it.each([
+      [['cat:1', 'cat:2', 'cat:3'], true],
+      [['cat:1', 'cat:2'], false],
+      // Empty selection must still stop on the last page (CPRIME-110969)
+      [[], false],
+    ])(
+      'should tell calculatePaginationState whether selected sourceIds %j remain (%s)',
+      async (sourceIds, expected) => {
+        const widget = { ...mockWidget, attributes: { ...mockWidget.attributes, sourceIds } };
+
+        mockGetPageLimitForWidget.mockReturnValue(2);
+        mockGetCategoryWidgetData.mockResolvedValue({
+          categories: mockCategories,
+          next: '',
+          meta: {},
+        });
+
+        const { result } = renderHook(() => useALMCategoryWidget(widget as any));
+
+        await act(async () => {
+          await result.current.fetchMore();
+        });
+
+        expect(mockCalculatePaginationState.mock.calls[0][1]).toBe(expected);
+      }
+    );
+
+    it('should fetch the next sourceIds slice when pageLimit is below 10', async () => {
+      const sourceIds = Array.from({ length: 8 }, (_, i) => `cat:${i + 1}`);
+      const widget = { ...mockWidget, attributes: { ...mockWidget.attributes, sourceIds } };
+
+      mockGetPageLimitForWidget.mockReturnValue(5);
+      mockGetCategoryWidgetData.mockResolvedValue({
+        categories: mockCategories,
+        next: '',
+        meta: {},
+      });
+
+      const { result } = renderHook(() => useALMCategoryWidget(widget as any));
+
+      await act(async () => {
+        await result.current.fetchMore();
+      });
+      await act(async () => {
+        await result.current.fetchMore();
+      });
+
+      expect(mockGetCategoryWidgetData).toHaveBeenCalledTimes(2);
+      expect(mockGetCategoryWidgetData.mock.calls[1][0].sourceIds).toEqual(sourceIds.slice(5));
+    });
+
+    it('should not fetch an empty sourceIds slice once all selected ids are consumed', async () => {
+      const sourceIds = ['cat:1', 'cat:2', 'cat:3', 'cat:4'];
+      const widget = { ...mockWidget, attributes: { ...mockWidget.attributes, sourceIds } };
+
+      mockGetPageLimitForWidget.mockReturnValue(2);
+      mockGetCategoryWidgetData.mockResolvedValue({
+        categories: mockCategories,
+        next: '',
+        meta: {},
+      });
+
+      const { result } = renderHook(() => useALMCategoryWidget(widget as any));
+
+      for (let i = 0; i < 3; i++) {
+        await act(async () => {
+          await result.current.fetchMore();
+        });
+      }
+
+      expect(mockGetCategoryWidgetData).toHaveBeenCalledTimes(2);
+    });
+
     it('should set fetchingData to true while fetching', async () => {
       let resolveFetch: any;
       const fetchPromise = new Promise(resolve => {
@@ -435,7 +508,7 @@ describe('useALMCategoryWidget', () => {
         await result.current.fetchMore();
       });
 
-      // Should not call API when sourceIds.length < optionNumberLimit * callNumber
+      // Should not call API when sourceIds.length <= pageLimit * callNumber
       expect(mockGetCategoryWidgetData).not.toHaveBeenCalled();
     });
 
@@ -613,7 +686,7 @@ describe('useALMCategoryWidget', () => {
 
       expect(mockCalculatePaginationState).toHaveBeenCalledWith(
         'cursor-123',
-        false, // isSelectedSourceIds (false because mockWidget has sourceIds: null)
+        false, // hasMoreSelectedSourceIds (false because mockWidget has sourceIds: null)
         0, // totalFetched
         10, // pageLimit
         100, // maxItemToFetch
