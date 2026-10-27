@@ -1412,7 +1412,7 @@ describe('utils/widgets/utils.ts', () => {
         expect(result.fetchedAll).toBe(true);
       });
 
-      it('should mark fetched all when next URL is empty regardless of isSelectedLoIds', () => {
+      it('should not mark fetched all when next URL is empty but selected id slices remain', () => {
         const result = calculatePaginationState(
           '',
           true,
@@ -1424,9 +1424,57 @@ describe('utils/widgets/utils.ts', () => {
           undefined
         );
 
-        // isSelectedLoIds is not used by calculatePaginationState; empty next always means fetchedAll
+        // Selected-id queries return no next link; pagination continues through the remaining id slices
+        expect(result.fetchedAll).toBe(false);
+      });
+
+      it('should mark fetched all at maxItemToFetch even when selected id slices remain', () => {
+        const result = calculatePaginationState('', true, 10, 5, 15, null, null, undefined);
+
         expect(result.fetchedAll).toBe(true);
       });
+
+      it.each([
+        [5, 1],
+        [10, 1],
+        [20, 2],
+        [25, 3],
+      ])(
+        'should fetch all %i selected ids in %i non-empty slice(s) and then stop',
+        (idCount, expectedSlices) => {
+          // Mirrors the selected-id slicing in useALMCoursePathWidget / useALMCategoryWidget
+          const pageLimit = 10;
+          const ids = Array.from({ length: idCount }, (_, i) => `id${i}`);
+          const slices: string[][] = [];
+          let callNumber = 0;
+          let totalFetched = 0;
+          let fetchedAll = false;
+
+          while (!fetchedAll && callNumber < 100) {
+            if (ids.length < pageLimit * callNumber) break;
+            slices.push(ids.slice(pageLimit * callNumber, pageLimit * callNumber + pageLimit));
+            const hasMoreSelectedIds = pageLimit * (callNumber + 1) < ids.length;
+            const state = calculatePaginationState(
+              '',
+              hasMoreSelectedIds,
+              totalFetched,
+              pageLimit,
+              undefined,
+              null,
+              null,
+              undefined
+            );
+            totalFetched = state.totalFetched;
+            fetchedAll = state.fetchedAll;
+            callNumber++;
+          }
+
+          expect(slices).toHaveLength(expectedSlices);
+          expect(slices.every(slice => slice.length > 0)).toBe(true);
+          expect(slices.flat()).toHaveLength(idCount);
+          expect(fetchedAll).toBe(true);
+        }
+      );
 
       it('should handle invalid next URL gracefully', () => {
         const result = calculatePaginationState(

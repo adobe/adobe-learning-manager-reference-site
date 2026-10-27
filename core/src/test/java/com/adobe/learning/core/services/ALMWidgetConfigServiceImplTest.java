@@ -105,6 +105,65 @@ public class ALMWidgetConfigServiceImplTest {
     assertNull(calendar.getAllowedAccountTypes());
   }
 
+  private ALMWidgetOptions coursesAndPathsOption(String attribute) {
+    ALMWidgetConfig coursesAndPaths =
+        service.getWidgetConfigs().stream()
+            .filter(c -> "com.adobe.captivateprime.courses.and.paths".equals(c.getRef()))
+            .findFirst()
+            .orElse(null);
+    assertNotNull(coursesAndPaths, "Courses and Paths widget should exist");
+    return coursesAndPaths.getOptions().stream()
+        .filter(o -> ("widgetConfig.attributes." + attribute).equals(o.getRef()))
+        .findFirst()
+        .orElse(null);
+  }
+
+  @Test
+  public void testCoursesAndPathsSourceDetailsIsMultiSelect() {
+    ALMWidgetOptions sourceDetails = coursesAndPathsOption("sourceDetails");
+    assertNotNull(sourceDetails);
+    assertTrue(sourceDetails.getMultiSelect());
+    assertFalse(sourceDetails.getDraggable());
+  }
+
+  @Test
+  public void testCoursesAndPathsFilterOptions() {
+    ALMWidgetOptions learnerState = coursesAndPathsOption("learnerState");
+    assertNotNull(learnerState);
+    assertEquals("autocomplete", learnerState.getType());
+    assertTrue(learnerState.getMultiSelect());
+    assertTrue(learnerState.getDefaultValue() == null || learnerState.getDefaultValue().isEmpty());
+
+    ALMWidgetOptions tagName = coursesAndPathsOption("tagName");
+    assertNotNull(tagName);
+    assertTrue(tagName.getMultiSelect());
+    assertEquals("tagName", tagName.getDataSource());
+
+    ALMWidgetOptions partitionOrder = coursesAndPathsOption("preferredSortPartitionOrder");
+    assertNotNull(partitionOrder);
+    assertTrue(partitionOrder.getMultiSelect());
+    assertTrue(partitionOrder.getDraggable(), "Order matters for sort on progress");
+  }
+
+  @Test
+  public void testCoursesAndPathsSortDefaultKeepsExistingBehaviour() {
+    ALMWidgetOptions sort = coursesAndPathsOption("sort");
+    assertNotNull(sort);
+    assertEquals("select", sort.getType());
+    assertEquals("-recommendationScore", sort.getDefaultValue());
+    List<String> values =
+        sort.getOptions().stream().map(o -> o.get("value")).collect(Collectors.toList());
+    assertEquals(14, values.size());
+    assertEquals("-recommendationScore", values.get(0));
+    for (String legacy :
+        new String[] {
+          "name", "date", "dateCreated", "dateEnrolled", "-name", "-date", "dueDate",
+          "-dateCreated", "-dateEnrolled", "effectiveness", "rating", "-rating", "progress"
+        }) {
+      assertTrue(values.contains(legacy), "Missing sort option " + legacy);
+    }
+  }
+
   @Test
   public void testWidgetOptionsTypes() {
     List<ALMWidgetConfig> configs = service.getWidgetConfigs();

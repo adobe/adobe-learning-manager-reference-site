@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 <sly data-sly-use.widgetModel="com.adobe.learning.core.models.ALMWidgetModel">
   <sly data-sly-test="${widgetModel.hasWidgetConfig}">
     <div class="alm-widget-container" 
-         data-widget-props='${widgetModel.widgetConfigs @ context="unsafe"}'
+         data-sly-attribute.data-widget-props="${widgetModel.widgetConfigs}"
          style="margin: calc(var(--prime-layout-gutter-space, 10px) * 2) calc(var(--prime-layout-gutter-space) / 2);">
     </div>
   </sly>

@@ -13,10 +13,20 @@ package com.adobe.learning.core.models;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.adobe.learning.core.entity.ALMWidgetConfig;
+import com.adobe.learning.core.entity.ALMWidgetOptions;
+import com.adobe.learning.core.services.ALMWidgetConfigServiceImpl;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.testing.mock.sling.ResourceResolverType;
 import org.junit.jupiter.api.BeforeEach;
@@ -126,6 +136,76 @@ public class ALMWidgetModelTest {
     // Null ref → false
     setPrivateField(model, "selectedWidgetRef", null);
     assertFalse(model.hasWidgetConfig());
+  }
+
+  // --- getWidgetConfig tests ---
+
+  @Test
+  public void testGetWidgetConfigRoundTripsSpecialCharacters() throws Exception {
+    String skillName = "Dunkin' Food Safety* \"Q&A\" <b>, level\\1";
+    String title = "Dunkin's widget";
+
+    ALMWidgetOptions sourceDetails = new ALMWidgetOptions();
+    sourceDetails.setRef("widgetConfig.attributes.sourceDetails");
+    sourceDetails.setType("string");
+    ALMWidgetOptions titleOption = new ALMWidgetOptions();
+    titleOption.setRef("widgetConfig.attributes.title");
+    titleOption.setType("string");
+    ALMWidgetConfig widgetConfig = new ALMWidgetConfig();
+    widgetConfig.setOptions(Arrays.asList(sourceDetails, titleOption));
+
+    Map<String, Object> valueMap = new HashMap<>();
+    valueMap.put("widgetConfig.attributes.sourceDetails", skillName);
+    valueMap.put("widgetConfig.attributes.title", title);
+
+    setPrivateField(model, "widgetId", "alm-widget-123456");
+    Method method =
+        ALMWidgetModel.class.getDeclaredMethod(
+            "getWidgetConfig", Map.class, String.class, ALMWidgetConfig.class);
+    method.setAccessible(true);
+
+    String json = (String) method.invoke(model, valueMap, "com.adobe.learning.test", widgetConfig);
+
+    JsonObject parsed = JsonParser.parseString(json).getAsJsonObject();
+    JsonObject params = parsed.getAsJsonObject("params");
+    assertEquals("alm-widget-123456", parsed.get("widgetId").getAsString());
+    assertEquals(skillName, params.get("sourceDetails").getAsString());
+    assertEquals(title, params.get("title").getAsString());
+  }
+
+  @Test
+  public void testGetWidgetConfigIsValidJsonForEveryWidget() throws Exception {
+    String nasty = "O'Neil \"Q&A\" <b>, a\\b";
+    List<ALMWidgetConfig> widgets = new ALMWidgetConfigServiceImpl().getWidgetConfigs();
+    assertFalse(widgets.isEmpty());
+
+    Method method =
+        ALMWidgetModel.class.getDeclaredMethod(
+            "getWidgetConfig", Map.class, String.class, ALMWidgetConfig.class);
+    method.setAccessible(true);
+    setPrivateField(model, "widgetId", "alm-widget-123456");
+
+    for (ALMWidgetConfig widget : widgets) {
+      // Defaults only: nothing saved by the author yet
+      String defaultsJson = (String) method.invoke(model, new HashMap<>(), widget.getRef(), widget);
+      JsonObject defaults = JsonParser.parseString(defaultsJson).getAsJsonObject();
+      assertEquals(widget.getRef(), defaults.get("widgetRef").getAsString(), widget.getRef());
+
+      // Every text option saved with special characters
+      Map<String, Object> saved = new HashMap<>();
+      List<String> textKeys = new ArrayList<>();
+      for (ALMWidgetOptions option : widget.getOptions()) {
+        if (!"boolean".equalsIgnoreCase(option.getType())) {
+          saved.put(option.getRef(), nasty);
+          textKeys.add(option.getRef().substring(option.getRef().lastIndexOf('.') + 1));
+        }
+      }
+      String json = (String) method.invoke(model, saved, widget.getRef(), widget);
+      JsonObject params = JsonParser.parseString(json).getAsJsonObject().getAsJsonObject("params");
+      for (String key : textKeys) {
+        assertEquals(nasty, params.get(key).getAsString(), widget.getRef() + " / " + key);
+      }
+    }
   }
 
   private void setPrivateField(Object target, String fieldName, Object value) throws Exception {

@@ -105,18 +105,17 @@ export const useCoursePathWidget = (widget: Widget) => {
   } = state;
 
   const incrementCallNumber = 1;
-  const optionNumberLimit = 10;
 
   const updateState = (newState: Partial<typeof state>) => {
     setState(prevState => ({ ...prevState, ...newState }));
   };
 
-  const handleFetchError = (isSelectedLoIds: boolean, error?: any) => {
+  const handleFetchError = (hasMoreSelectedLoIds: boolean, error?: any) => {
     if (error) {
       console.log('Result fetching failed', error);
     }
     setState(prevState => ({ ...prevState, callFailed: true, fetchingData: false }));
-    parseResponseFromAPI({ trainings: [], next: '' }, isSelectedLoIds);
+    parseResponseFromAPI({ trainings: [], next: '' }, hasMoreSelectedLoIds);
   };
 
   const fetchMore = async (query: string = '') => {
@@ -124,15 +123,15 @@ export const useCoursePathWidget = (widget: Widget) => {
       return;
     }
     let widgetInfo = widget.attributes as CoursesAndPathWidgetAttributes;
-    if (widgetInfo.loIds?.length && widgetInfo.loIds.length < optionNumberLimit * callNumber) {
+    if (widgetInfo.loIds?.length && widgetInfo.loIds.length <= pageLimit * callNumber) {
       return;
     }
 
     setState(prevState => ({ ...prevState, fetchingData: true }));
 
-    const { source, loIds } = widgetInfo;
+    const { source, loIds, loTypes } = widgetInfo;
     const sourceDetails = (widgetInfo as any).sourceDetails;
-    const isSelectedLoIds = loIds && loIds.length > 0 ? true : false;
+    const hasMoreSelectedLoIds = !!loIds?.length && pageLimit * (callNumber + 1) < loIds.length;
 
     // Prepare filter parameters
     let paginatedLoIds = undefined;
@@ -147,13 +146,32 @@ export const useCoursePathWidget = (widget: Widget) => {
       page: callNumber,
     };
 
+    // Source-based filters authored for Courses and Paths; other strips keep their fixed values
+    const useSourceFilters = widget.widgetRef === WidgetType.COURSES_AND_PATHS && !loIds?.length;
+    const authoredSort = useSourceFilters ? widgetInfo.sort : undefined;
+    const authoredLearnerState = useSourceFilters ? widgetInfo.learnerState : undefined;
+    const authoredTagName = useSourceFilters ? widgetInfo.tagName : undefined;
+    const authoredPartitionOrder = useSourceFilters
+      ? widgetInfo.preferredSortPartitionOrder
+      : undefined;
+
     let trainingFilters: WidgetTrainingFilters = {
       loIds: paginatedLoIds,
       source,
       sourceDetails,
-      learnerState: learnerStateMap[widget.widgetRef] || undefined,
-      sort: sortMap[widget.widgetRef] || SORT_MOST_RECOMMENDED_PARAM,
+      learnerState: authoredLearnerState?.length
+        ? authoredLearnerState
+        : learnerStateMap[widget.widgetRef] || undefined,
+      sort: authoredSort || sortMap[widget.widgetRef] || SORT_MOST_RECOMMENDED_PARAM,
+      loTypes: loTypes && loTypes.length > 0 ? loTypes : undefined,
+      includeEnrolledChildLOs: widget.widgetRef === WidgetType.COURSES_AND_PATHS || undefined,
     };
+    if (authoredTagName?.length) {
+      trainingFilters.tagName = authoredTagName;
+    }
+    if (authoredPartitionOrder?.length) {
+      trainingFilters.preferredSortPartitionOrder = authoredPartitionOrder;
+    }
     let recommendationFilters: WidgetRecommendationFilters = {
       recommendationType: '',
       sort: sortMap[widget.widgetRef] || SORT_MOST_RECOMMENDED_PARAM,
@@ -248,12 +266,12 @@ export const useCoursePathWidget = (widget: Widget) => {
           break;
       }
       if (response) {
-        parseResponseFromAPI(response, isSelectedLoIds);
+        parseResponseFromAPI(response, hasMoreSelectedLoIds);
       } else {
-        handleFetchError(isSelectedLoIds);
+        handleFetchError(hasMoreSelectedLoIds);
       }
     } catch (reason) {
-      handleFetchError(isSelectedLoIds, reason);
+      handleFetchError(hasMoreSelectedLoIds, reason);
     }
   };
 
@@ -263,7 +281,7 @@ export const useCoursePathWidget = (widget: Widget) => {
       next: string;
       meta?: any;
     },
-    isSelectedLoIds: boolean
+    hasMoreSelectedLoIds: boolean
   ) => {
     const { trainings, next, meta } = response;
 
@@ -284,7 +302,7 @@ export const useCoursePathWidget = (widget: Widget) => {
     // Calculate pagination state using helper function
     const paginationState = calculatePaginationState(
       next,
-      isSelectedLoIds,
+      hasMoreSelectedLoIds,
       totalFetched,
       pageLimit,
       maxItemToFetch,

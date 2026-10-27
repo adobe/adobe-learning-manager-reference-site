@@ -191,6 +191,8 @@ class ALMCustomHooks implements ICustomHooks {
       learnerState,
       bookmarks,
       sort,
+      tagName,
+      preferredSortPartitionOrder,
       subLOsLang,
       externalCertifications,
       enrollmentType,
@@ -199,6 +201,7 @@ class ALMCustomHooks implements ICustomHooks {
       loTypes,
       include,
       recommendationConfig,
+      includeEnrolledChildLOs,
     } = filters;
     const { cursor, offset, pageLimit } = pagination;
 
@@ -209,28 +212,30 @@ class ALMCustomHooks implements ICustomHooks {
     if (loIds && loIds.length > 0) {
       body['ids'] = loIds;
     } else {
+      // sourceDetails may be a string, a {name, id} object, or a list of either (AEM multi-select).
+      // A non-list value is handled as a single item so existing requests stay identical.
+      let sourceDetailItems: any[] = Array.isArray(sourceDetails)
+        ? sourceDetails.filter(Boolean)
+        : [sourceDetails];
+      if (sourceDetailItems.length === 0) {
+        sourceDetailItems = [undefined];
+      }
       if (source === WIDGET_SOURCE.PRODUCT_SOURCE) {
-        body['filter.recommendationProducts'] = [
-          {
-            name: sourceDetails?.name || sourceDetails,
-            levels: [],
-          },
-        ];
+        body['filter.recommendationProducts'] = sourceDetailItems.map(item => ({
+          name: item?.name || item,
+          levels: [],
+        }));
       } else if (source === WIDGET_SOURCE.ROLE_SOURCE) {
-        body['filter.recommendationRoles'] = [
-          {
-            name: sourceDetails?.name || sourceDetails,
-            levels: [],
-          },
-        ];
+        body['filter.recommendationRoles'] = sourceDetailItems.map(item => ({
+          name: item?.name || item,
+          levels: [],
+        }));
       } else if (source === WIDGET_SOURCE.CATALOG_SOURCE) {
-        const catalogIds =
-          sourceDetails?.id || sourceDetails ? [sourceDetails.id || sourceDetails] : [];
-        body['filter.catalogIds'] = catalogIds;
+        body['filter.catalogIds'] = sourceDetailItems.map(item => item?.id || item).filter(Boolean);
       } else if (source === WIDGET_SOURCE.SKILL_SOURCE) {
-        const skillName = sourceDetails?.name || sourceDetails;
-        if (skillName) {
-          body['filter.skillName'] = [skillName];
+        const skillNames = sourceDetailItems.map(item => item?.name || item).filter(Boolean);
+        if (skillNames.length > 0) {
+          body['filter.skillName'] = skillNames;
         }
       }
     }
@@ -239,9 +244,19 @@ class ALMCustomHooks implements ICustomHooks {
     body['filter.loTypes'] = loTypes || [COURSE, LEARNING_PROGRAM, CERTIFICATION, 'jobAid'];
     body['filter.ignoreEnhancedLP'] = false;
 
+    // API rejects other filters alongside filter.bookmarks
+    if (includeEnrolledChildLOs && !bookmarks) {
+      const userResponse = await getALMUser();
+      body['filter.ignoreHigherOrderLOEnrollment'] =
+        userResponse?.user?.account?.searchEnrolledChildLo || false;
+    }
+
     // Apply learner state filter if provided
     if (learnerState && learnerState.length > 0) {
       body['filter.learnerState'] = learnerState;
+    }
+    if (tagName && tagName.length > 0) {
+      body['filter.tagName'] = tagName;
     }
     // Apply additional filters
     if (bookmarks) {
@@ -273,7 +288,16 @@ class ALMCustomHooks implements ICustomHooks {
     // Set up params
     params['enforcedFields[learningObject]'] = enforcedFieldsLO || includeParams;
     params['include'] = include || DEFUALT_LO_INCLUDE;
-    params['sort'] = sort;
+    // Sorting on progress with a preferred state order replaces the sort param
+    if (
+      sort === 'progress' &&
+      preferredSortPartitionOrder &&
+      preferredSortPartitionOrder.length > 0
+    ) {
+      params['preferredSortPartitionOrder'] = preferredSortPartitionOrder.join(',');
+    } else {
+      params['sort'] = sort;
+    }
     params['page[limit]'] = pageLimit;
 
     // Add pagination params

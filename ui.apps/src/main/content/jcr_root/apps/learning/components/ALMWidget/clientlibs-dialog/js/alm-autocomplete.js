@@ -34,6 +34,15 @@ governing permissions and limitations under the License.
     const MIN_SEARCH_LENGTH = 0; // Changed to 0 to show all on focus
     const DEBOUNCE_DELAY = 300;
     const DEFAULT_MAX_SELECTIONS = 25; // Default maximum selections for multi-select
+
+    // Per-source behaviour. A data source can override these through the optional
+    // config getter passed to registerDataSource (e.g. server-side typeahead sources).
+    const DEFAULT_SOURCE_CONFIG = {
+        minSearchLength: MIN_SEARCH_LENGTH,
+        debounceMs: DEBOUNCE_DELAY,
+        searchOnFocus: true,
+        allowEmptyQuery: false // an empty box may search even when minSearchLength > 0
+    };
     
     // Timeout constants
     const BLUR_DELAY = 200;
@@ -51,13 +60,66 @@ governing permissions and limitations under the License.
             callback([]);
         }
     };
+    const dataSourceConfigs = {};
 
-    function registerDataSource(name, fn) {
+    /**
+     * @param {string} name - Data source name
+     * @param {Function} fn - function(options, callback). callback(suggestions[, error]).
+     *     May return an object with abort() so a superseded request can be cancelled.
+     * @param {Function} [getConfig] - Optional function returning overrides for
+     *     DEFAULT_SOURCE_CONFIG, evaluated each time the user interacts with the field.
+     */
+    function registerDataSource(name, fn, getConfig) {
         dataSources[name] = fn;
+        if (typeof getConfig === 'function') {
+            dataSourceConfigs[name] = getConfig;
+        }
     }
 
     function getDataSource(name) {
         return dataSources[name] || dataSources.default;
+    }
+
+    /**
+     * Multi-select values are saved as one string: values joined with ", ".
+     * A value that contains a comma (or a backslash) is escaped so it is not split into two values:
+     *   "\" is written "\\" and "," is written "\,".
+     * Values without a comma or backslash are saved exactly as they are.
+     * Keep this rule in sync with almWidgetUtils.ts (splitEscapedList) and ALMWidgetDatasource.java.
+     */
+    function escapeListValue(value) {
+        return String(value).replace(/\\/g, '\\\\').replace(/,/g, '\\,');
+    }
+
+    function joinListValues(values) {
+        return values.map(escapeListValue).join(', ');
+    }
+
+    /**
+     * Splits a saved string on unescaped commas, trims each item and unescapes it.
+     * A backslash only escapes "," and "\"; any other backslash is kept as written.
+     */
+    function splitListValue(text) {
+        const items = [];
+        let current = '';
+        for (let i = 0; i < text.length; i++) {
+            const ch = text.charAt(i);
+            if (ch === '\\' && i + 1 < text.length && (text.charAt(i + 1) === ',' || text.charAt(i + 1) === '\\')) {
+                current += text.charAt(i + 1);
+                i++;
+            } else if (ch === ',') {
+                items.push(current);
+                current = '';
+            } else {
+                current += ch;
+            }
+        }
+        items.push(current);
+        return items.map(function(item) {
+            return item.trim();
+        }).filter(function(item) {
+            return item.length > 0;
+        });
     }
 
     function debounce(func, wait) {
@@ -70,8 +132,24 @@ governing permissions and limitations under the License.
                 func.apply(context, args);
             };
             clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
+            timeout = setTimeout(later, typeof wait === 'function' ? wait() : wait);
         };
+    }
+
+    /**
+     * Message shown in the dropdown when a search fails. A 429 carries the server's
+     * Retry-After (seconds) when the browser is allowed to read it.
+     */
+    function getSearchErrorMessage(error) {
+        if (error && error.status === 429) {
+            const seconds = parseInt(error.retryAfter, 10);
+            if (seconds > 0) {
+                return 'Too many searches. Please retry in ' + seconds + ' second' +
+                    (seconds !== 1 ? 's' : '') + '.';
+            }
+            return 'Too many searches. Please wait a moment and try again.';
+        }
+        return 'Could not load suggestions. Please try again.';
     }
 
     /**
@@ -88,6 +166,7 @@ governing permissions and limitations under the License.
         this.selectedOrder = []; // Maintain order of selections
         this.currentFocus = -1;
         this.isMultiple = $field.data('autocomplete-multiple') === true || $field.data('autocomplete-multiple') === 'true';
+        this.isDraggable = $field.data('autocomplete-draggable') !== false && $field.data('autocomplete-draggable') !== 'false';
         this.maxSelections = parseInt($field.data('autocomplete-max-selections')) || DEFAULT_MAX_SELECTIONS;
         this.dataSourceName = $field.data('autocomplete-source') || 'default';
         this.dataSource = getDataSource(this.dataSourceName);
@@ -95,6 +174,9 @@ governing permissions and limitations under the License.
         this.isOpen = false;
         this.$hiddenInput = $field; // Original field always becomes hidden input
         this.draggedItem = null;
+        this.requestSeq = 0; // Identifies the latest suggestion request; older responses are ignored
+        this.pendingRequest = null; // In-flight request handle (if the data source returns one)
+        this.statusMessage = null; // Message shown instead of "No suggestions found" (error / hint)
         
         this.init();
     }
@@ -135,11 +217,7 @@ governing permissions and limitations under the License.
         parseExistingValues: function() {
             const self = this;
             if (this.originalValue) {
-                const values = this.originalValue.split(',').map(function(v) {
-                    return v.trim();
-                }).filter(function(v) {
-                    return v.length > 0;
-                });
+                const values = splitListValue(this.originalValue);
                 
                 // Store with placeholder text (will be updated when suggestions load)
                 values.forEach(function(value) {
@@ -271,9 +349,11 @@ governing permissions and limitations under the License.
             if (this.isMultiple) {
                 this.$selectionListContainer = $('<div class="' + AUTOCOMPLETE_SELECTION_LIST_CLASS + '"></div>');
                 this.$fieldContainer.after(this.$selectionListContainer);
-                
-                // Bind drag events for sortable list
-                this.bindDragEvents();
+
+                // Bind drag events for sortable list, unless dragging is disabled for this field
+                if (this.isDraggable) {
+                    this.bindDragEvents();
+                }
             }
         },
 
@@ -289,7 +369,9 @@ governing permissions and limitations under the License.
             // Input event
             this.$field.on('input', debounce(function(e) {
                 self.handleInput(e);
-            }, DEBOUNCE_DELAY));
+            }, function() {
+                return self.getSourceConfig().debounceMs;
+            }));
 
             // Focus event
             this.$field.on('focus', function(e) {
@@ -415,11 +497,13 @@ governing permissions and limitations under the License.
 
         handleInput: function(e) {
             const query = this.$field.val().trim();
+            const config = this.getSourceConfig();
+            const isAllowedEmpty = query.length === 0 && config.allowEmptyQuery;
             
-            if (query.length >= MIN_SEARCH_LENGTH || query.length === 0) {
-                this.fetchSuggestions(query);
+            if (query.length < config.minSearchLength && !isAllowedEmpty) {
+                this.showSearchHint(config);
             } else {
-                this.closeSuggestions();
+                this.fetchSuggestions(query);
             }
         },
 
@@ -428,6 +512,12 @@ governing permissions and limitations under the License.
             this.$field.val('');
             this.$field.removeAttr('readonly');
             this.$field.css('background-color', '');
+            
+            const config = this.getSourceConfig();
+            if (!config.searchOnFocus) {
+                this.showSearchHint(config);
+                return;
+            }
             
             // Fetch all suggestions on focus
             this.fetchSuggestions('');
@@ -510,13 +600,55 @@ governing permissions and limitations under the License.
          * ========================================
          */
         
+        getSourceConfig: function() {
+            const getConfig = dataSourceConfigs[this.dataSourceName];
+            return $.extend({}, DEFAULT_SOURCE_CONFIG, getConfig ? getConfig() : null);
+        },
+
+        /**
+         * Invalidate the latest request: later responses are ignored and an
+         * in-flight request is aborted when the data source exposed a handle.
+         */
+        cancelPending: function() {
+            this.requestSeq++;
+            if (this.pendingRequest && typeof this.pendingRequest.abort === 'function') {
+                this.pendingRequest.abort();
+            }
+            this.pendingRequest = null;
+        },
+
+        showMessage: function(message) {
+            this.suggestions = [];
+            this.statusMessage = message;
+            this.renderSuggestions(this.suggestions);
+        },
+
+        showSearchHint: function(config) {
+            this.cancelPending();
+            this.showMessage('Type at least ' + config.minSearchLength + ' characters to search.');
+        },
+
         fetchSuggestions: function(query) {
             const self = this;
             
-            this.dataSource({ query: query }, function(suggestions) {
-                self.suggestions = suggestions;
-                self.renderSuggestions(suggestions);
+            this.cancelPending();
+            const requestId = this.requestSeq;
+            let completed = false;
+            
+            const request = this.dataSource({ query: query }, function(suggestions, error) {
+                if (requestId !== self.requestSeq) {
+                    return; // A newer request (or a cancel) superseded this one
+                }
+                completed = true;
+                self.pendingRequest = null;
+                self.suggestions = suggestions || [];
+                self.statusMessage = error ? getSearchErrorMessage(error) : null;
+                self.renderSuggestions(self.suggestions);
             });
+            
+            if (!completed && request && typeof request.abort === 'function') {
+                this.pendingRequest = request;
+            }
         },
 
         renderSuggestions: function(suggestions) {
@@ -527,7 +659,8 @@ governing permissions and limitations under the License.
 
             if (!suggestions || suggestions.length === 0) {
                 this.$list.append(
-                    '<div class="' + AUTOCOMPLETE_ITEM_CLASS + ' no-results">No suggestions found</div>'
+                    $('<div class="' + AUTOCOMPLETE_ITEM_CLASS + ' no-results"></div>')
+                        .text(this.statusMessage || 'No suggestions found')
                 );
                 this.openSuggestions();
                 return;
@@ -658,15 +791,18 @@ governing permissions and limitations under the License.
                 }
                 
                 const text = self.selectedItems[value];
-                const $item = $('<div class="' + AUTOCOMPLETE_SELECTION_ITEM_CLASS + '" draggable="true"></div>');
+                const $item = $('<div class="' + AUTOCOMPLETE_SELECTION_ITEM_CLASS + '"></div>');
                 $item.attr('data-value', value);
-                
-                // Drag handle
-                const $handle = $('<span class="alm-drag-handle" title="Drag to reorder">⋮⋮</span>');
-                
+
+                // Drag handle - only for fields where dragging is enabled
+                if (self.isDraggable) {
+                    $item.attr('draggable', 'true');
+                    $item.append($('<span class="alm-drag-handle" title="Drag to reorder">⋮⋮</span>'));
+                }
+
                 // Text
                 const $text = $('<span class="alm-selection-text">' + text + '</span>');
-                
+
                 // Remove button
                 const $remove = $('<button class="alm-remove-btn" title="Remove" type="button">×</button>');
                 $remove.on('click', function(e) {
@@ -674,8 +810,8 @@ governing permissions and limitations under the License.
                     e.stopPropagation();
                     self.removeSelection(value);
                 });
-                
-                $item.append($handle, $text, $remove);
+
+                $item.append($text, $remove);
                 self.$selectionListContainer.append($item);
             });
         },
@@ -686,11 +822,11 @@ governing permissions and limitations under the License.
             }
             
             if (this.isMultiple) {
-                // Multi-select: comma-separated values
+                // Multi-select: comma-separated values (commas inside a value are escaped)
                 const values = this.selectedOrder.filter(function(value) {
                     return this.selectedItems.hasOwnProperty(value);
                 }, this);
-                this.$hiddenInput.val(values.join(', '));
+                this.$hiddenInput.val(joinListValues(values));
             } else {
                 // Single-select: single value
                 const values = Object.keys(this.selectedItems);
@@ -738,6 +874,7 @@ governing permissions and limitations under the License.
         },
 
         closeSuggestions: function() {
+            this.cancelPending();
             this.$list.removeClass(AUTOCOMPLETE_VISIBLE_CLASS);
             this.$wrapper.removeClass(AUTOCOMPLETE_OPEN_CLASS);
             this.currentFocus = -1;
@@ -787,6 +924,7 @@ governing permissions and limitations under the License.
          * @public
          */
         destroy: function() {
+            this.cancelPending();
             // Remove DOM elements
             if (this.$list) {
                 this.$list.remove();
@@ -890,7 +1028,10 @@ governing permissions and limitations under the License.
     window.ALM.ALMWidget.Autocomplete = {
         registerDataSource: registerDataSource,
         getDataSource: getDataSource,
-        initialize: initializeAutocompleteFields
+        initialize: initializeAutocompleteFields,
+        escapeListValue: escapeListValue,
+        joinListValues: joinListValues,
+        splitListValue: splitListValue
     };
 
 })(document, window, jQuery);

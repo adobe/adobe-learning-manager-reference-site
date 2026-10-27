@@ -51,6 +51,11 @@ export interface CoursesAndPathWidgetAttributes extends BaseWidgetAttributes {
   sourceIds?: string[]; //If sourceType is ALM_DEFINED, then this is mandatory
   loIds?: string[]; //If sourceType is Manual, then this is mandatory
   //need to handle PAPI id format here.
+  loTypes?: string[]; //Optional filter by learning object type; empty/undefined means no filter
+  sort?: string; //Optional sort order; defaults to most recommended
+  learnerState?: string[]; //Optional filter by learner state; empty/undefined means no filter
+  tagName?: string[]; //Optional filter by tag names; empty/undefined means no filter
+  preferredSortPartitionOrder?: string[]; //Ordered learner states; only used when sort is 'progress'
 }
 
 export enum ElementAlignmentValues {
@@ -138,17 +143,25 @@ export interface CustomWidget {
 }
 
 /**
+ * A Courses and Paths source selection. `sourceDetails` can be one of these or a list of them
+ * when several sources are selected.
+ */
+export interface CoursesAndPathSourceDetails {
+  name?: string;
+  id?: string | string[];
+}
+
+/**
  * Filter parameters for widget training queries
  */
 export interface WidgetTrainingFilters {
   loIds?: string[];
   source?: string;
-  sourceDetails?: {
-    name?: string;
-    id?: string | string[];
-  };
+  sourceDetails?: CoursesAndPathSourceDetails | CoursesAndPathSourceDetails[];
   learnerState?: string[];
   sort: string;
+  tagName?: string[];
+  preferredSortPartitionOrder?: string[];
   bookmarks?: boolean;
   subLOsLang?: boolean;
   externalCertifications?: boolean;
@@ -158,6 +171,7 @@ export interface WidgetTrainingFilters {
   excludeIgnoredRecommendations?: boolean;
   enforcedFieldsLO?: string;
   recommendationConfig?: WidgetRecommendationConfigFilters;
+  includeEnrolledChildLOs?: boolean;
 }
 
 export interface WidgetRecommendationFilters {

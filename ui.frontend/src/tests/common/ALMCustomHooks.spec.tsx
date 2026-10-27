@@ -585,6 +585,308 @@ describe('ALMCustomHooks', () => {
       expect(body).not.toHaveProperty('filter.catalogIds');
     });
 
+    it('CATALOGS_source_withStringSourceDetails_setsCatalogIds', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'CATALOGS', sourceDetails: 'catalog:1', sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.catalogIds']).toEqual(['catalog:1']);
+    });
+
+    it('CATALOGS_source_withObjectSourceDetails_usesId', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'CATALOGS', sourceDetails: { id: 'catalog:2', name: 'N' }, sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.catalogIds']).toEqual(['catalog:2']);
+    });
+
+    it('CATALOGS_source_emptySourceDetails_sendsEmptyCatalogIds', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'CATALOGS', sourceDetails: undefined, sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.catalogIds']).toEqual([]);
+    });
+
+    it.each([
+      ['PRODUCTS', 'filter.recommendationProducts'],
+      ['ROLES', 'filter.recommendationRoles'],
+    ])('%s_source_withStringSourceDetails_setsNameAndEmptyLevels', async (source, key) => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source, sourceDetails: 'Sales', sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()[key]).toEqual([{ name: 'Sales', levels: [] }]);
+    });
+
+    it.each([
+      ['PRODUCTS', 'filter.recommendationProducts'],
+      ['ROLES', 'filter.recommendationRoles'],
+    ])('%s_source_withObjectSourceDetails_usesName', async (source, key) => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source, sourceDetails: { name: 'Sales' }, sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()[key]).toEqual([{ name: 'Sales', levels: [] }]);
+    });
+
+    it.each([
+      ['PRODUCTS', 'filter.recommendationProducts'],
+      ['ROLES', 'filter.recommendationRoles'],
+    ])('%s_source_emptySourceDetails_keepsLegacyBodyWithoutName', async (source, key) => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source, sourceDetails: undefined, sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()[key]).toEqual([{ levels: [] }]);
+    });
+
+    it('accountSettingOn_sendsIgnoreHigherOrderLOEnrollmentTrue', async () => {
+      mockGetALMUser.mockResolvedValue({ user: { account: { searchEnrolledChildLo: true } } });
+
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        {
+          source: 'SKILLS',
+          sourceDetails: 'Sales',
+          sort: '-date',
+          includeEnrolledChildLOs: true,
+        } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.ignoreHigherOrderLOEnrollment']).toBe(true);
+    });
+
+    it('accountSettingOff_sendsIgnoreHigherOrderLOEnrollmentFalse', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        {
+          source: 'SKILLS',
+          sourceDetails: 'Sales',
+          sort: '-date',
+          includeEnrolledChildLOs: true,
+        } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.ignoreHigherOrderLOEnrollment']).toBe(false);
+    });
+
+    it('accountSettingMissing_sendsIgnoreHigherOrderLOEnrollmentFalse', async () => {
+      mockGetALMUser.mockResolvedValue({ user: {} });
+
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        {
+          source: 'SKILLS',
+          sourceDetails: 'Sales',
+          sort: '-date',
+          includeEnrolledChildLOs: true,
+        } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.ignoreHigherOrderLOEnrollment']).toBe(false);
+    });
+
+    it('loIds_withIncludeEnrolledChildLOs_sendsIgnoreHigherOrderLOEnrollment', async () => {
+      mockGetALMUser.mockResolvedValue({ user: { account: { searchEnrolledChildLo: true } } });
+
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { loIds: ['course:1'], sort: '-date', includeEnrolledChildLOs: true } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.ignoreHigherOrderLOEnrollment']).toBe(true);
+    });
+
+    it('includeEnrolledChildLOsNotSet_omitsIgnoreHigherOrderLOEnrollment', async () => {
+      mockGetALMUser.mockResolvedValue({ user: { account: { searchEnrolledChildLo: true } } });
+
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'SKILLS', sourceDetails: 'Sales', sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()).not.toHaveProperty('filter.ignoreHigherOrderLOEnrollment');
+    });
+
+    it('bookmarks_omitsIgnoreHigherOrderLOEnrollment', async () => {
+      mockGetALMUser.mockResolvedValue({ user: { account: { searchEnrolledChildLo: true } } });
+
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { bookmarks: true, sort: '-date', includeEnrolledChildLOs: true } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()).not.toHaveProperty('filter.ignoreHigherOrderLOEnrollment');
+    });
+
+    it('defaultFilters_keepLegacyRequestShape', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'SKILLS', sourceDetails: 'Sales', sort: '-recommendationScore' } as any,
+        basePagination as any
+      );
+
+      const params = mockRestAdapterPost.mock.calls[0][0].params;
+      expect(params.sort).toBe('-recommendationScore');
+      expect(params).not.toHaveProperty('preferredSortPartitionOrder');
+      const body = getPostedBody();
+      expect(body).not.toHaveProperty('filter.tagName');
+      expect(body).not.toHaveProperty('filter.learnerState');
+      expect(body).not.toHaveProperty('sortLanguage');
+      expect(body).not.toHaveProperty('filter.ignoreHigherOrderLOEnrollment');
+      expect(body['filter.ignoreEnhancedLP']).toBe(false);
+    });
+
+    it('tagName_setsFilterTagNameList', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'CATALOGS', sourceDetails: 'catalog:1', tagName: ['a', 'b'], sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.tagName']).toEqual(['a', 'b']);
+    });
+
+    it('emptyTagName_omitsFilterTagName', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'CATALOGS', sourceDetails: 'catalog:1', tagName: [], sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()).not.toHaveProperty('filter.tagName');
+    });
+
+    it('learnerState_setsFilterLearnerState', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'CATALOGS', learnerState: ['enrolled', 'started'], sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.learnerState']).toEqual(['enrolled', 'started']);
+    });
+
+    it('progressSort_withPartitionOrder_sendsPartitionOrderInsteadOfSort', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        {
+          source: 'CATALOGS',
+          sort: 'progress',
+          preferredSortPartitionOrder: ['enrolled', 'started', 'notenrolled'],
+        } as any,
+        basePagination as any
+      );
+
+      const params = mockRestAdapterPost.mock.calls[0][0].params;
+      expect(params.preferredSortPartitionOrder).toBe('enrolled,started,notenrolled');
+      expect(params).not.toHaveProperty('sort');
+    });
+
+    it('progressSort_withoutPartitionOrder_sendsSort', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'CATALOGS', sort: 'progress' } as any,
+        basePagination as any
+      );
+
+      const params = mockRestAdapterPost.mock.calls[0][0].params;
+      expect(params.sort).toBe('progress');
+      expect(params).not.toHaveProperty('preferredSortPartitionOrder');
+    });
+
+    it('otherSort_ignoresPartitionOrder', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'CATALOGS', sort: 'name', preferredSortPartitionOrder: ['enrolled'] } as any,
+        basePagination as any
+      );
+
+      const params = mockRestAdapterPost.mock.calls[0][0].params;
+      expect(params.sort).toBe('name');
+      expect(params).not.toHaveProperty('preferredSortPartitionOrder');
+    });
+
+    it('nameSort_doesNotSendSortLanguage', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'CATALOGS', sort: 'name' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()).not.toHaveProperty('sortLanguage');
+      expect(mockRestAdapterPost.mock.calls[0][0].params.sort).toBe('name');
+    });
+
+    it('CATALOGS_source_withMultipleSourceDetails_setsAllCatalogIds', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'CATALOGS', sourceDetails: ['catalog:1', 'catalog:2'], sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.catalogIds']).toEqual(['catalog:1', 'catalog:2']);
+    });
+
+    it.each([
+      ['PRODUCTS', 'filter.recommendationProducts'],
+      ['ROLES', 'filter.recommendationRoles'],
+    ])('%s_source_withMultipleSourceDetails_setsAllNames', async (source, key) => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source, sourceDetails: ['Sales', { name: 'Ops' }], sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()[key]).toEqual([
+        { name: 'Sales', levels: [] },
+        { name: 'Ops', levels: [] },
+      ]);
+    });
+
+    it('SKILLS_source_withMultipleSourceDetails_setsAllSkillNames', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'SKILLS', sourceDetails: ['Sales', 'E-Learning'], sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.skillName']).toEqual(['Sales', 'E-Learning']);
+    });
+
+    it('SKILLS_source_withEmptyListSourceDetails_omitsFilterSkillName', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'SKILLS', sourceDetails: [], sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()).not.toHaveProperty('filter.skillName');
+    });
+
+    it('CATALOGS_source_withEmptyListSourceDetails_matchesLegacyEmptyBody', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'CATALOGS', sourceDetails: [], sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.catalogIds']).toEqual([]);
+    });
+
+    it('PRODUCTS_source_withEmptyListSourceDetails_matchesLegacyBody', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'PRODUCTS', sourceDetails: [], sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.recommendationProducts']).toEqual([{ levels: [] }]);
+    });
+
+    it('SKILLS_source_withStringContainingComma_isNotSplit', async () => {
+      await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: 'SKILLS', sourceDetails: 'Sales, Marketing', sort: '-date' } as any,
+        basePagination as any
+      );
+
+      expect(getPostedBody()['filter.skillName']).toEqual(['Sales, Marketing']);
+    });
+
     it('loIds_takesPriority_overSkillsSource', async () => {
       await ALMCustomHooksInstance.getCoursePathWidgetTrainings(
         {

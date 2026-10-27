@@ -414,6 +414,20 @@ describe('ESCustomHooks', () => {
       expect(body.filters.terms.catalogNames).toEqual(['TestCatalog']);
     });
 
+    it.each([
+      ['string', 'Sales'],
+      ['list', ['Sales', 'Ops']],
+      ['empty list', []],
+    ])('getCoursePathWidgetTrainings_roleSource_with%sSourceDetails_appliesNoSourceFilter', async (_label, sourceDetails) => {
+      await ESCustomHooksInstance.getCoursePathWidgetTrainings(
+        { source: WIDGET_SOURCE.ROLE_SOURCE, sourceDetails } as any,
+        { page: 0, pageLimit: 10 }
+      );
+
+      const body = JSON.parse(mockRestAdapterPost.mock.calls[0][0].body);
+      expect(body.filters.terms).not.toHaveProperty('recommendationRoleNames');
+    });
+
     it('getCoursePathWidgetTrainings_urlIncludesPageAndSize', async () => {
       await ESCustomHooksInstance.getCoursePathWidgetTrainings(
         { loIds: ['course:1'] } as any,
@@ -447,6 +461,26 @@ describe('ESCustomHooks', () => {
       expect(mockRestAdapterPost).toHaveBeenCalledWith(
         expect.objectContaining({ url: expect.stringContaining(ES_BASE_URL) })
       );
+    });
+
+    it('getCoursePathWidgetTrainings_withLoTypes_includesLoTypeInRequestBody', async () => {
+      await ESCustomHooksInstance.getCoursePathWidgetTrainings(
+        { loIds: ['course:1'], loTypes: ['course', 'learningPath'] } as any,
+        { page: 0, pageLimit: 10 }
+      );
+
+      const body = JSON.parse(mockRestAdapterPost.mock.calls[0][0].body);
+      expect(body.filters.terms.loType).toEqual(['course', 'learningPath']);
+    });
+
+    it('getCoursePathWidgetTrainings_withEmptyLoTypes_omitsLoTypeFromRequestBody', async () => {
+      await ESCustomHooksInstance.getCoursePathWidgetTrainings(
+        { loIds: ['course:1'], loTypes: [] } as any,
+        { page: 0, pageLimit: 10 }
+      );
+
+      const body = JSON.parse(mockRestAdapterPost.mock.calls[0][0].body);
+      expect(body.filters.terms.loType).toBeUndefined();
     });
   });
 
