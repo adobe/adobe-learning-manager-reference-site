@@ -85,9 +85,13 @@ coral-radiogroup coral-radio {
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #eee;
-    cursor: move;
+    cursor: default;
     background: #fff;
     transition: background-color 0.2s;
+}
+
+.alm-selection-item[draggable="true"] {
+    cursor: move;
 }
 
 .alm-selection-item:last-child {
