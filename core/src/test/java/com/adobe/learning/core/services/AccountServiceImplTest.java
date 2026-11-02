@@ -263,11 +263,25 @@ public class AccountServiceImplTest {
     result = (String) method.invoke(accountService, sitesAuthorConfig);
     assertEquals("author-rt-value", result);
 
-    // Commerce usage → returns refreshToken
+    // Commerce usage → always returns adminRefreshToken (flag not needed)
     JsonObject commerceConfig = createMinimalConfig();
     commerceConfig.addProperty("usageType", "aem-commerce");
     result = (String) method.invoke(accountService, commerceConfig);
-    assertEquals("commerce-rt-value", result);
+    assertEquals("admin-rt-value", result);
+
+    // ES usage + adminRT=true → returns adminRefreshToken
+    JsonObject esAdminConfig = createMinimalConfig();
+    esAdminConfig.addProperty("usageType", "aem-es");
+    esAdminConfig.addProperty("useAdminRefreshToken", true);
+    result = (String) method.invoke(accountService, esAdminConfig);
+    assertEquals("admin-rt-value", result);
+
+    // ES usage + adminRT=false → returns authorRefreshToken
+    JsonObject esConfig = createMinimalConfig();
+    esConfig.addProperty("usageType", "aem-es");
+    esConfig.addProperty("useAdminRefreshToken", false);
+    result = (String) method.invoke(accountService, esConfig);
+    assertEquals("author-rt-value", result);
   }
 
   // --- Helper methods ---

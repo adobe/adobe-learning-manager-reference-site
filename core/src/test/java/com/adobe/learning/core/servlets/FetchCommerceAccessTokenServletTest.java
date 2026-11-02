@@ -181,7 +181,7 @@ public class FetchCommerceAccessTokenServletTest {
                 configs.get("almBaseURL").getAsString(),
                 configs.get("clientId").getAsString(),
                 configs.get("clientSecret").getAsString(),
-                configs.get("refreshToken").getAsString(),
+                configs.get("adminRefreshToken").getAsString(),
                 "vaishnav@adobetest.com",
                 "Praful",
                 "vaishnav");
@@ -289,7 +289,7 @@ public class FetchCommerceAccessTokenServletTest {
     adminConfigs.addProperty("almBaseURL", "https://learningmanagerstage1.adobe.com");
     adminConfigs.addProperty("clientSecret", "xxxxx");
     adminConfigs.addProperty("clientId", "xxxxx");
-    adminConfigs.addProperty("refreshToken", "xxxxx");
+    adminConfigs.addProperty("adminRefreshToken", "xxxxx");
     adminConfigs.addProperty("commerceURL", "https://learningmanagerstage1.adobe.com");
     adminConfigs.addProperty("customerTokenLifetime", "3600");
     return adminConfigs;

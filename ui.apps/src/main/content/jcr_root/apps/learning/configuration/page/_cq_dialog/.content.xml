@@ -116,12 +116,21 @@
                         required="{Boolean}true"/>
                     <authorRefreshToken
                         cq:showOnCreate="{Boolean}true"
-                        granite:rel="aem-sites authorTkn"
+                        granite:rel="aem-sites aem-es authorTkn"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                         fieldDescription="Enter admin's learner scoped refresh token generated from Learning Manager account. Refer help section to learn more."                        
                         fieldLabel="Author refresh token"
                         name="./authorRefreshToken"
+                        required="{Boolean}true"/>
+                    <adminRefreshToken
+                        cq:showOnCreate="{Boolean}true"
+                        granite:rel="aem-sites aem-es aem-commerce adminTknLearnerTkn"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldDescription="Enter admin's admin scoped refresh token generated from Learning Manager account. Refer help section to learn more."
+                        fieldLabel="Admin refresh token"
+                        name="./adminRefreshToken"
                         required="{Boolean}true"/>
                     <almCdnBaseUrl
                         cq:showOnCreate="{Boolean}true"
@@ -131,15 +140,6 @@
                         fieldDescription="Enter cdn base url generated in integration admin from Learning Manager account. Refer help section to learn more."
                         fieldLabel="Adobe Learning Manager cdn base URL"
                         name="./almCdnBaseUrl"
-                        required="{Boolean}true"/>
-                    <adminRefreshToken
-                        cq:showOnCreate="{Boolean}true"
-                        granite:rel="aem-sites adminTknLearnerTkn"
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldDescription="Enter admin's admin scoped refresh token generated from Learning Manager account. Refer help section to learn more."
-                        fieldLabel="Admin refresh token"
-                        name="./adminRefreshToken"
                         required="{Boolean}true"/>
                     <commerceURL
                         cq:showOnCreate="{Boolean}true"
@@ -178,15 +178,6 @@
                         name="./customerTokenLifetime"
                         required="{Boolean}true"
                         value="3600"/>
-                    <refreshToken
-                        cq:showOnCreate="{Boolean}true"
-                        granite:rel="aem-commerce aem-es"
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldDescription="Enter admin's learner scoped refresh token for non-commerce and admin's admin scoped refresh token for commerce generated from Learning Manager account. Refer help section to learn more."
-                        fieldLabel="Admin refresh token"
-                        name="./refreshToken"
-                        required="{Boolean}true"/>
                     <esBase
                         cq:showOnCreate="{Boolean}true"
                         granite:rel="aem-es"
@@ -253,7 +244,7 @@
                     <useAdminRefreshToken
                         cq:showOnCreate="{Boolean}true"
                         jcr:primaryType="nt:unstructured"
-                        granite:rel="aem-sites useAdminRefreshToken-checkbox"
+                        granite:rel="aem-sites aem-es useAdminRefreshToken-checkbox"
                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                         name="./useAdminRefreshToken"
                         text="Use custom authentication"
