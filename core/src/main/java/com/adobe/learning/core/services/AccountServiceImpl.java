@@ -338,20 +338,16 @@ public class AccountServiceImpl implements AccountService {
    */
   private String getRefreshToken(JsonObject jsonConfigs) {
     String usageType = jsonConfigs.get(Constants.Config.USAGE_TYPE_NAME).getAsString();
+    // Commerce always uses the admin scoped token; sites/es only when opted in
+    boolean useAdminRefreshToken =
+        Constants.Config.COMMERCE_USAGE.equals(usageType)
+            || (jsonConfigs.get(Constants.Config.USE_ADMIN_RT_TO_LEARNER_AT) != null
+                && jsonConfigs.get(Constants.Config.USE_ADMIN_RT_TO_LEARNER_AT).getAsBoolean());
 
-    if (Constants.Config.SITES_USAGE.equals(usageType)) {
-      // Check if we should use admin refresh token
-      boolean useAdminRefreshToken =
-          jsonConfigs.get(Constants.Config.USE_ADMIN_RT_TO_LEARNER_AT) != null
-              && jsonConfigs.get(Constants.Config.USE_ADMIN_RT_TO_LEARNER_AT).getAsBoolean();
-
-      if (useAdminRefreshToken) {
-        return jsonConfigs.get(Constants.Config.ADMIN_REFRESH_TOKEN).getAsString();
-      } else {
-        return jsonConfigs.get(Constants.Config.SITES_AUTHOR_REFRESH_TOKEN_NAME).getAsString();
-      }
+    if (useAdminRefreshToken) {
+      return jsonConfigs.get(Constants.Config.ADMIN_REFRESH_TOKEN).getAsString();
     } else {
-      return jsonConfigs.get(Constants.Config.COMMERCE_ADMIN_REFRESH_TOKEN).getAsString();
+      return jsonConfigs.get(Constants.Config.SITES_AUTHOR_REFRESH_TOKEN_NAME).getAsString();
     }
   }
 }

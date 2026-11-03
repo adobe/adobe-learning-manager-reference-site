@@ -96,8 +96,7 @@ public class FetchCommerceAccessTokenServlet extends SlingAllMethodsServlet {
       String almURL = jsonConfigs.get(Constants.Config.ALM_BASE_URL).getAsString(),
           clientId = jsonConfigs.get(Constants.Config.CLIENT_ID).getAsString(),
           clientSecret = jsonConfigs.get(Constants.Config.CLIENT_SECRET).getAsString(),
-          refreshToken =
-              jsonConfigs.get(Constants.Config.COMMERCE_ADMIN_REFRESH_TOKEN).getAsString(),
+          refreshToken = jsonConfigs.get(Constants.Config.ADMIN_REFRESH_TOKEN).getAsString(),
           commerceURL = jsonConfigs.get(Constants.Config.COMMERCE_URL).getAsString();
       Integer customerTokenLifetime =
           Integer.valueOf(

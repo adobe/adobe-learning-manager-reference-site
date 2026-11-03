@@ -34,7 +34,9 @@ public class Constants {
     public static final String ACCOUNT_ID = "accountId";
     public static final String CLIENT_SECRET = "clientSecret";
     public static final String PAGE_LOCALE = "pageLocale";
-    public static final String COMMERCE_ADMIN_REFRESH_TOKEN = "refreshToken";
+    // Legacy key: older ES/commerce configs stored their token here. It is no longer read and is
+    // only kept so the stored value is still filtered out of the client-side config.
+    @Deprecated public static final String COMMERCE_ADMIN_REFRESH_TOKEN = "refreshToken";
     public static final String COMMERCE_URL = "commerceURL";
     public static final String COMMERCE_CUSTOMER_TOKEN_LIFETIME = "customerTokenLifetime";
     public static final String SITE_MAP = "siteMap";

@@ -13,7 +13,10 @@ package com.adobe.learning.core.servlets;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 import com.adobe.learning.core.services.CPTokenService;
 import com.adobe.learning.core.services.GlobalConfigurationService;
@@ -130,6 +133,47 @@ public class FetchCpAccessTokenServletTest {
     ctx.request().addRequestParameter("code", "xxxxx");
     cpServlet.doPost(ctx.request(), ctx.response());
     assertTrue("alm_cp_token".equals(ctx.response().getCookie("alm_cp_token").getName()));
+  }
+
+  @Test
+  public void testDoPostAuthorModeEsUsageWithAdminRefreshToken() throws Exception {
+    // ES uses ./adminRefreshToken and exchanges it for a learner token, like commerce.
+    // Email lookup fails against the mock HTTP client, so the response is 500 as in commerce.
+    JsonObject adminConfigs = getEsAdminConfigs();
+    adminConfigs.addProperty("useAdminRefreshToken", "true");
+    setUpConfigService(adminConfigs);
+    ctx.request().addRequestParameter("mode", "author");
+    ctx.request().addRequestParameter("pagePath", "/content/mypage");
+    cpServlet.doPost(ctx.request(), ctx.response());
+    verify(tokenService)
+        .getAccessToken(any(String.class), any(String.class), any(String.class), eq("admin-rt"));
+    assertTrue(ctx.response().getStatus() == 500);
+  }
+
+  @Test
+  public void testDoPostAuthorModeEsUsageWithoutAdminRefreshToken() throws Exception {
+    setUpConfigService(getEsAdminConfigs());
+    ctx.request().addRequestParameter("mode", "author");
+    ctx.request().addRequestParameter("pagePath", "/content/mypage");
+    cpServlet.doPost(ctx.request(), ctx.response());
+    verify(tokenService)
+        .getAccessToken(any(String.class), any(String.class), any(String.class), eq("es-rt"));
+    verify(tokenService, never())
+        .fetchLearnerToken(
+            any(String.class),
+            any(String.class),
+            any(String.class),
+            any(String.class),
+            any(String.class));
+    assertTrue("alm_cp_token".equals(ctx.response().getCookie("alm_cp_token").getName()));
+  }
+
+  private JsonObject getEsAdminConfigs() {
+    JsonObject adminConfigs = getAdminConfigs();
+    adminConfigs.addProperty("usageType", "aem-es");
+    adminConfigs.addProperty("authorRefreshToken", "es-rt");
+    adminConfigs.addProperty("adminRefreshToken", "admin-rt");
+    return adminConfigs;
   }
 
   private JsonObject getAdminConfigs() {

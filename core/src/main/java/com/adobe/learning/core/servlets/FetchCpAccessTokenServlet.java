@@ -95,22 +95,18 @@ public class FetchCpAccessTokenServlet extends SlingAllMethodsServlet {
       String mode = request.getParameter("mode");
 
       if (AUTHOR_MODE.equals(mode)) {
-        String refreshToken = "";
         String usageType = jsonConfigs.get(Constants.Config.USAGE_TYPE_NAME).getAsString();
-        if (Constants.Config.SITES_USAGE.equals(usageType)) {
-          refreshToken =
-              useAdminRefreshToken
-                  ? jsonConfigs.get(Constants.Config.ADMIN_REFRESH_TOKEN).getAsString()
-                  : jsonConfigs.get(Constants.Config.SITES_AUTHOR_REFRESH_TOKEN_NAME).getAsString();
-        } else {
-          refreshToken =
-              jsonConfigs.get(Constants.Config.COMMERCE_ADMIN_REFRESH_TOKEN).getAsString();
-        }
+        boolean useAdminScopedToken =
+            Constants.Config.COMMERCE_USAGE.equals(usageType) || useAdminRefreshToken;
+        String refreshToken =
+            useAdminScopedToken
+                ? jsonConfigs.get(Constants.Config.ADMIN_REFRESH_TOKEN).getAsString()
+                : jsonConfigs.get(Constants.Config.SITES_AUTHOR_REFRESH_TOKEN_NAME).getAsString();
 
         Pair<String, Integer> accessTokenResp =
             tokenService.getAccessToken(almURL, clientId, clientSecret, refreshToken);
 
-        if (Constants.Config.COMMERCE_USAGE.equals(usageType) || useAdminRefreshToken) {
+        if (useAdminScopedToken) {
           String email = getALMUserEmail(almURL, accessTokenResp.getLeft());
           if (StringUtils.isBlank(email)) {
             LOGGER.error("CPPrime:: Exception in fetching ALM User");

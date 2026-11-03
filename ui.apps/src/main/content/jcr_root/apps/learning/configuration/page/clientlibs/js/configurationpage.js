@@ -134,7 +134,9 @@ governing permissions and limitations under the License.
     }
     nomenclatureFetchingInProgress = true;
     const almBaseURL = $("input[name='./almBaseURL']").val();
-    const refreshToken = $("input[name='./refreshToken']").val();
+    const useAdminRefreshToken = $(USAGE_TYPE_INPUT_VALUE_SEL).attr("value") === "aem-commerce"
+      || $(USE_ADMIN_RT_LEARNER_AT_SEL).attr("checked") === 'checked';
+    const refreshToken = $(useAdminRefreshToken ? "input[name='./adminRefreshToken']" : "input[name='./authorRefreshToken']").val();
     const clientId = $("input[name='./clientId']").val();
     const clientSecret = $("input[name='./clientSecret']").val();
     let nomenclatureURL = NOMENCLAURE_URL.replace("{almURL}", almBaseURL);
@@ -233,7 +235,7 @@ governing permissions and limitations under the License.
 
   function showAdminRefreshTokenForAEMSites() {
       const selectedUsageOption = $(USAGE_TYPE_INPUT_VALUE_SEL).attr("value");
-      if (selectedUsageOption === "aem-sites") {
+      if (selectedUsageOption === "aem-sites" || selectedUsageOption === "aem-es") {
           if ($(USE_ADMIN_RT_LEARNER_AT_SEL).attr("checked") === 'checked') {
               $(".adminTknLearnerTkn").removeAttr("disabled");
               $(".authorTkn").attr("disabled", '');
