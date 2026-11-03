@@ -418,15 +418,14 @@ governing permissions and limitations under the License.
             
             // Click outside to close
             $(document).on('click.alm-autocomplete', function(e) {
-                if (!$(e.target).closest('.' + AUTOCOMPLETE_WRAPPER_CLASS).length) {
-                    // Close all open autocompletes
-                    $('.' + AUTOCOMPLETE_FIELD_CLASS).each(function() {
-                        const autocomplete = $(this).data('autocomplete-instance');
-                        if (autocomplete && autocomplete.closeSuggestions) {
-                            autocomplete.closeSuggestions();
-                        }
-                    });
-                }
+                // Close every autocomplete whose wrapper was not the click target
+                $('.' + AUTOCOMPLETE_FIELD_CLASS).each(function() {
+                    const autocomplete = $(this).data('autocomplete-instance');
+                    if (autocomplete && autocomplete.closeSuggestions &&
+                        !(autocomplete.$wrapper && $(e.target).closest(autocomplete.$wrapper).length)) {
+                        autocomplete.closeSuggestions();
+                    }
+                });
             });
         },
 
@@ -508,6 +507,15 @@ governing permissions and limitations under the License.
         },
 
         handleFocus: function(e) {
+            // Close lists belonging to other autocomplete fields
+            const self = this;
+            $('.' + AUTOCOMPLETE_FIELD_CLASS).each(function() {
+                const other = $(this).data('autocomplete-instance');
+                if (other && other !== self && other.closeSuggestions) {
+                    other.closeSuggestions();
+                }
+            });
+
             // Clear field for searching (both single and multi-select)
             this.$field.val('');
             this.$field.removeAttr('readonly');
@@ -537,7 +545,7 @@ governing permissions and limitations under the License.
                 }
                 
                 // Don't close if clicked inside wrapper
-                if ($(e.relatedTarget).closest('.' + AUTOCOMPLETE_WRAPPER_CLASS).length > 0) {
+                if (self.$wrapper && $(e.relatedTarget).closest(self.$wrapper).length > 0) {
                     return;
                 }
                 

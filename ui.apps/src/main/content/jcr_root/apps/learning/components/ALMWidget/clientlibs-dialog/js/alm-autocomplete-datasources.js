@@ -710,6 +710,27 @@ governing permissions and limitations under the License.
 
         Nomenclature.fetch();
 
+        // Account setting "searchEnrolledChildLo" (same source the learner-side widget uses).
+        // When true, courses the author is enrolled in only via a Learning Path must still be
+        // searchable, so search requests send filter.ignoreHigherOrderLOEnrollment=true.
+        var searchEnrolledChildLo = false;
+        ALMConfigHelper.getALMUser().then(function(response) {
+            if (!response) {
+                return;
+            }
+            var data = typeof response === 'string' ? JSON.parse(response) : response;
+            var account = null;
+            if (data && data.included && Array.isArray(data.included)) {
+                account = data.included.find(function(item) {
+                    return item.type === 'account';
+                });
+            }
+            searchEnrolledChildLo = !!(account && account.attributes &&
+                account.attributes.searchEnrolledChildLo);
+        }).catch(function(error) {
+            console.error('Error fetching account searchEnrolledChildLo setting:', error);
+        });
+
         /**
          * Fetches catalog data from ALM API with search query or ID filter support
          * - By IDs: GET /catalogs?ids=34396,35993 (comma-separated, max 10 per call)
@@ -1124,6 +1145,7 @@ governing permissions and limitations under the License.
                 'sort': 'relevance',
                 'pageLimit': 10
             };
+            requestBody['filter.ignoreHigherOrderLOEnrollment'] = searchEnrolledChildLo;
 
             // Same endpoint as catalogs
             return cachedSearch(
